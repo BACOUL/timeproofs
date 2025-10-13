@@ -1,29 +1,213 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vérifier une preuve – TimeProofs</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TimeProofs — Verify & Create Proof</title>
+  <link rel="icon" href="/favicon.ico" />
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; padding: 4em; background: #f9fafb; }
-    input { padding: 0.5em; width: 60%; max-width: 400px; }
-    button { margin-left: 0.5em; padding: 0.6em 1.2em; background: #111827; color: white; border: none; border-radius: 5px; cursor: pointer; }
-    p { margin-top: 1.5em; color: #555; }
+    :root { --bg:#0f172a; --panel:#111827; --muted:#94a3b8; --text:#e5e7eb; --accent:#22d3ee; --ok:#22c55e; --bad:#ef4444; }
+    *{ box-sizing:border-box }
+    body{ margin:0; font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--text); }
+    .wrap{ max-width:980px; margin:40px auto; padding:0 20px; }
+    h1{ margin:0 0 8px; font-size:28px }
+    p.lead{ margin:0 0 24px; color:var(--muted) }
+    .tabs{ display:flex; gap:8px; margin:12px 0 20px }
+    .tab{ padding:10px 14px; background:#0b1220; border:1px solid #1f2937; border-radius:10px; cursor:pointer; color:#cbd5e1 }
+    .tab.active{ background:var(--panel); color:var(--text); border-color:#263244 }
+    .card{ background:var(--panel); border:1px solid #1f2937; border-radius:14px; padding:18px; }
+    label{ display:block; font-size:13px; color:#a7b1c2; margin:8px 0 6px }
+    input[type="text"], textarea{ width:100%; background:#0b1220; color:var(--text); border:1px solid #1f2937; border-radius:10px; padding:10px 12px; }
+    textarea{ min-height:110px; resize:vertical }
+    .row{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    .row > *{ flex:1 1 240px }
+    .btn{ background:var(--accent); color:#06202a; border:none; padding:11px 16px; border-radius:10px; font-weight:700; cursor:pointer }
+    .btn:hover{ filter:brightness(1.05) }
+    .hint{ font-size:12px; color:#93a1b5 }
+    .pill{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; font-size:12px; margin-left:8px }
+    .ok{ background:#0f3b22; color:#b7f7ce; border:1px solid #1c6b3d }
+    .bad{ background:#3b0f12; color:#ffc1c6; border:1px solid #6b1c22 }
+    pre{ width:100%; overflow:auto; background:#0b1220; color:#a7f3d0; border:1px solid #1f2937; border-radius:10px; padding:12px; }
+    .grid{ display:grid; grid-template-columns:1fr; gap:16px }
+    @media(min-width:860px){ .grid{ grid-template-columns:1fr 1fr } }
+    footer{ margin:26px 0 0; text-align:center; color:#7c8aa5; font-size:12px }
   </style>
 </head>
 <body>
-  <h1>🔍 Vérifier une preuve</h1>
-  <input type="text" id="hash" placeholder="Entrez votre hash (SHA256)">
-  <button onclick="verifyProof()">Vérifier</button>
-  <p id="result"></p>
+  <div class="wrap">
+    <h1>🔐 TimeProofs — Verify & Create Proof</h1>
+    <p class="lead">Hash locally → timestamp & sign via API → verify publicly. No content ever leaves your device.</p>
+
+    <div class="tabs">
+      <button id="tab-create" class="tab active">Create Proof</button>
+      <button id="tab-verify" class="tab">Verify Proof</button>
+    </div>
+
+    <div class="grid">
+      <!-- CREATE PROOF -->
+      <div class="card" id="panel-create">
+        <label>Choose input</label>
+        <div class="row">
+          <button class="btn" id="choose-text">Text</button>
+          <button class="btn" id="choose-file">File</button>
+          <button class="btn" id="choose-hash">Raw hash</button>
+        </div>
+
+        <div id="input-text" style="margin-top:14px;">
+          <label>Text to hash (SHA-256 runs locally)</label>
+          <textarea id="text"></textarea>
+        </div>
+
+        <div id="input-file" style="display:none; margin-top:14px;">
+          <label>File to hash (processed locally)</label>
+          <input type="file" id="file"/>
+          <p class="hint">We only compute a hash in your browser. The file is never uploaded.</p>
+        </div>
+
+        <div id="input-hash" style="display:none; margin-top:14px;">
+          <label>Existing SHA-256 hash (hex)</label>
+          <input type="text" id="raw-hash" placeholder="e3b0c44298fc1c149a..."/>
+        </div>
+
+        <div class="row" style="margin-top:16px;">
+          <div>
+            <label>Type (optional)</label>
+            <input type="text" id="type" placeholder="prompt | gen | mail | webhook | file | other"/>
+          </div>
+          <div>
+            <label>Meta (optional JSON, kept tiny)</label>
+            <input type="text" id="meta" placeholder='{"model":"gpt-4o","mime":"text/plain"}'/>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:16px;">
+          <button class="btn" id="btn-create">Create Proof</button>
+          <span class="hint">Outputs: hash, timestamp, signature, verify URL</span>
+        </div>
+
+        <div id="create-status" style="margin-top:12px;"></div>
+        <pre id="create-output" style="margin-top:12px;"></pre>
+      </div>
+
+      <!-- VERIFY PROOF -->
+      <div class="card" id="panel-verify" style="display:none;">
+        <label>Hash to verify (SHA-256, hex)</label>
+        <input type="text" id="verify-hash" placeholder="Paste an existing hash"/>
+        <div class="row" style="margin-top:12px;">
+          <button class="btn" id="btn-verify">Verify</button>
+          <span class="hint">Checks existence, timestamp, and server signature.</span>
+        </div>
+        <div id="verify-status" style="margin-top:12px;"></div>
+        <pre id="verify-output" style="margin-top:12px;"></pre>
+      </div>
+    </div>
+
+    <footer>© 2025 TimeProofs — Proof of Existence. For Everything.</footer>
+  </div>
 
   <script>
-    async function verifyProof() {
-      const hash = document.getElementById('hash').value;
-      const res = await fetch(`https://timeproofs-api.workers.dev/verify?hash=${hash}`);
-      const data = await res.json();
-      document.getElementById('result').textContent = data.valid ? "✅ Preuve valide" : "❌ Preuve non trouvée";
+    // 👉 Set your API base when the Worker is live:
+    // Example: "https://timeproofs-api.workers.dev/api"
+    const API_BASE = "https://timeproofs-api.workers.dev/api";
+
+    // UI tabs
+    const tabCreate = document.getElementById('tab-create');
+    const tabVerify = document.getElementById('tab-verify');
+    const panelCreate = document.getElementById('panel-create');
+    const panelVerify = document.getElementById('panel-verify');
+
+    tabCreate.onclick = () => { tabCreate.classList.add('active'); tabVerify.classList.remove('active'); panelCreate.style.display='block'; panelVerify.style.display='none'; };
+    tabVerify.onclick = () => { tabVerify.classList.add('active'); tabCreate.classList.remove('active'); panelVerify.style.display='block'; panelCreate.style.display='none'; };
+
+    // Input mode toggles
+    const chooseText = document.getElementById('choose-text');
+    const chooseFile = document.getElementById('choose-file');
+    const chooseHash = document.getElementById('choose-hash');
+    const inputText = document.getElementById('input-text');
+    const inputFile = document.getElementById('input-file');
+    const inputHash = document.getElementById('input-hash');
+
+    chooseText.onclick = () => { inputText.style.display='block'; inputFile.style.display='none'; inputHash.style.display='none'; };
+    chooseFile.onclick = () => { inputText.style.display='none'; inputFile.style.display='block'; inputHash.style.display='none'; };
+    chooseHash.onclick = () => { inputText.style.display='none'; inputFile.style.display='none'; inputHash.style.display='block'; };
+
+    // Hash helpers (browser-native, no data leaves device)
+    async function sha256HexFromText(str){
+      const enc = new TextEncoder().encode(str || '');
+      const buf = await crypto.subtle.digest('SHA-256', enc);
+      return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
     }
+    async function sha256HexFromFile(file){
+      const buf = await file.arrayBuffer();
+      const digest = await crypto.subtle.digest('SHA-256', buf);
+      return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
+
+    // Create proof
+    const btnCreate = document.getElementById('btn-create');
+    const outCreate = document.getElementById('create-output');
+    const statusCreate = document.getElementById('create-status');
+    btnCreate.onclick = async () => {
+      outCreate.textContent = ''; statusCreate.innerHTML = '';
+      try {
+        let hash = '';
+        if (inputText.style.display !== 'none') {
+          const text = document.getElementById('text').value || '';
+          hash = await sha256HexFromText(text);
+        } else if (inputFile.style.display !== 'none') {
+          const file = document.getElementById('file').files[0];
+          if (!file) return alert('Select a file first.');
+          hash = await sha256HexFromFile(file);
+        } else {
+          hash = (document.getElementById('raw-hash').value || '').trim();
+          if (!/^[a-f0-9]{64}$/i.test(hash)) return alert('Enter a valid SHA-256 hex hash.');
+        }
+
+        const type = (document.getElementById('type').value || 'event').trim();
+        let meta = {};
+        const metaRaw = (document.getElementById('meta').value || '').trim();
+        if (metaRaw) {
+          try { meta = JSON.parse(metaRaw); } catch { return alert('Meta must be valid JSON.'); }
+        }
+
+        const r = await fetch(`${API_BASE}/timestamp`, {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json' },
+          body: JSON.stringify({ hash, type, meta })
+        });
+        const j = await r.json();
+        if (!r.ok || j.error) throw new Error(j.error || 'Request failed');
+
+        statusCreate.innerHTML = `<span class="pill ok">✅ Proof created</span>`;
+        outCreate.textContent = JSON.stringify(j, null, 2);
+      } catch(e){
+        statusCreate.innerHTML = `<span class="pill bad">❌ ${String(e.message || e)}</span>`;
+      }
+    };
+
+    // Verify proof
+    const btnVerify = document.getElementById('btn-verify');
+    const outVerify = document.getElementById('verify-output');
+    const statusVerify = document.getElementById('verify-status');
+    btnVerify.onclick = async () => {
+      outVerify.textContent=''; statusVerify.innerHTML='';
+      const hash = (document.getElementById('verify-hash').value || '').trim();
+      if (!hash) return alert('Paste a SHA-256 hash.');
+      try {
+        const r = await fetch(`${API_BASE}/verify?hash=${encodeURIComponent(hash)}`);
+        const j = await r.json();
+        if (j.found === false) {
+          statusVerify.innerHTML = `<span class="pill bad">❌ Not found</span>`;
+        } else if (j.ok === true || j.found === true) {
+          statusVerify.innerHTML = `<span class="pill ok">✅ Valid</span>`;
+        } else {
+          statusVerify.innerHTML = `<span class="pill bad">❌ Invalid</span>`;
+        }
+        outVerify.textContent = JSON.stringify(j, null, 2);
+      } catch(e){
+        statusVerify.innerHTML = `<span class="pill bad">❌ ${String(e.message || e)}</span>`;
+      }
+    };
   </script>
 </body>
-</html>
+            </html>
