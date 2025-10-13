@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vérifier une preuve – TimeProofs</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 4em; background: #f9fafb; }
+    input { padding: 0.5em; width: 60%; max-width: 400px; }
+    button { margin-left: 0.5em; padding: 0.6em 1.2em; background: #111827; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    p { margin-top: 1.5em; color: #555; }
+  </style>
+</head>
+<body>
+  <h1>🔍 Vérifier une preuve</h1>
+  <input type="text" id="hash" placeholder="Entrez votre hash (SHA256)">
+  <button onclick="verifyProof()">Vérifier</button>
+  <p id="result"></p>
+
+  <script>
+    async function verifyProof() {
+      const hash = document.getElementById('hash').value;
+      const res = await fetch(`https://timeproofs-api.workers.dev/verify?hash=${hash}`);
+      const data = await res.json();
+      document.getElementById('result').textContent = data.valid ? "✅ Preuve valide" : "❌ Preuve non trouvée";
+    }
+  </script>
+</body>
+</html>
