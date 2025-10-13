@@ -11,7 +11,7 @@
     body{ margin:0; font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--text); }
     .wrap{ max-width:980px; margin:40px auto; padding:0 20px; }
     h1{ margin:0 0 8px; font-size:28px }
-    p.lead{ margin:0 0 24px; color:var(--muted) }
+    p.lead{ margin:0 0 24px; color:#94a3b8 }
     .tabs{ display:flex; gap:8px; margin:12px 0 20px }
     .tab{ padding:10px 14px; background:#0b1220; border:1px solid #1f2937; border-radius:10px; cursor:pointer; color:#cbd5e1 }
     .tab.active{ background:var(--panel); color:var(--text); border-color:#263244 }
@@ -105,8 +105,11 @@
     <footer>© 2025 TimeProofs — Proof of Existence. For Everything.</footer>
   </div>
 
+  <!-- SDK (browser) -->
+  <script src="/sdk/timeproof.js"></script>
+
   <script>
-    // API base for your Worker (production)
+    // API base for your Worker
     const API_BASE = "https://timeproofs-api.jeason-bacoul.workers.dev/api";
 
     // UI tabs
@@ -114,7 +117,6 @@
     const tabVerify = document.getElementById('tab-verify');
     const panelCreate = document.getElementById('panel-create');
     const panelVerify = document.getElementById('panel-verify');
-
     tabCreate.onclick = () => { tabCreate.classList.add('active'); tabVerify.classList.remove('active'); panelCreate.style.display='block'; panelVerify.style.display='none'; };
     tabVerify.onclick = () => { tabVerify.classList.add('active'); tabCreate.classList.remove('active'); panelVerify.style.display='block'; panelCreate.style.display='none'; };
 
@@ -125,12 +127,11 @@
     const inputText = document.getElementById('input-text');
     const inputFile = document.getElementById('input-file');
     const inputHash = document.getElementById('input-hash');
-
     chooseText.onclick = () => { inputText.style.display='block'; inputFile.style.display='none'; inputHash.style.display='none'; };
     chooseFile.onclick = () => { inputText.style.display='none'; inputFile.style.display='block'; inputHash.style.display='none'; };
     chooseHash.onclick = () => { inputText.style.display='none'; inputFile.style.display='none'; inputHash.style.display='block'; };
 
-    // Hash helpers (browser-native, no data leaves device)
+    // Hash helpers
     async function sha256HexFromText(str){
       const enc = new TextEncoder().encode(str || '');
       const buf = await crypto.subtle.digest('SHA-256', enc);
@@ -207,6 +208,19 @@
         statusVerify.innerHTML = `<span class="pill bad">❌ ${String(e.message || e)}</span>`;
       }
     };
+
+    // SDK smoke test in console (optional)
+    (async () => {
+      try {
+        const tp = new TimeProofs({ baseUrl: API_BASE });
+        const proof = await tp.createFromText("sdk smoke test");
+        console.log("SDK proof:", proof);
+        const check = await tp.verify(proof.hash);
+        console.log("SDK verify:", check);
+      } catch (e) {
+        console.warn("SDK test error:", e);
+      }
+    })();
   </script>
 </body>
 </html>
