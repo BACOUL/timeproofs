@@ -3,165 +3,96 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>TimeProofs — API Docs</title>
-  <meta name="description" content="TimeProofs API: timestamp and verify SHA-256 hashes with a cryptographic signature. Content never leaves your device."/>
+  <title>TimeProofs — API Documentation</title>
+  <meta name="description" content="TimeProofs API documentation — timestamp, verify, and prove digital existence instantly. Built for developers, AI, and automation."/>
   <link rel="icon" href="/favicon.ico"/>
   <style>
-    :root{--bg:#0f172a;--panel:#111827;--muted:#9aa4b2;--text:#e5e7eb;--accent:#22d3ee;--ok:#22c55e;--bad:#ef4444}
+    :root{--bg:#0f172a;--text:#e5e7eb;--muted:#94a3b8;--accent:#22d3ee;--panel:#111827}
     *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-    .wrap{max-width:980px;margin:28px auto 80px;padding:0 20px}
-    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:8px 0 20px}
-    nav a{color:var(--accent);text-decoration:none;margin-left:14px;font-weight:600}
-    nav a:hover{text-decoration:underline}
-    .pill{display:inline-block;border:1px solid #263244;background:#0b1220;color:#cbd5e1;padding:6px 10px;border-radius:999px;font-size:12px}
-    h1{margin:6px 0 8px;font-size:28px}
-    h2{margin:26px 0 10px;font-size:20px}
-    h3{margin:18px 0 8px;font-size:16px;color:#cbd5e1}
-    p.lead{color:#aab3c2;margin:0 0 12px}
-    .card{background:var(--panel);border:1px solid #202a37;border-radius:14px;padding:16px;margin:14px 0}
-    code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-    code{background:#0b1220;border:1px solid #1f2937;padding:2px 6px;border-radius:6px;color:#a7f3d0}
-    pre{background:#0b1220;border:1px solid #1f2937;color:#d1d5db;padding:14px;border-radius:12px;overflow:auto}
-    ul{margin:10px 0 10px 18px;color:#c8d0dc}
-    .grid{display:grid;gap:14px;grid-template-columns:1fr}
-    @media(min-width:900px){.grid{grid-template-columns:1fr 1fr}}
-    footer{margin:28px 0 0;text-align:center;color:#8b95a7;font-size:12px}
-    .btn{display:inline-block;padding:10px 14px;border-radius:10px;background:var(--accent);color:#041923;font-weight:800;text-decoration:none}
-    .note{font-size:13px;color:#9aa4b2}
-    .kvs{display:inline-block;background:#0b3b43;border:1px solid #1a5d67;color:#9ae6f6;padding:4px 8px;border-radius:999px;font-size:12px}
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.7;padding:32px;max-width:960px;margin:auto}
+    h1{font-size:32px;color:var(--accent)}
+    h2{margin-top:1.8em;color:var(--accent)}
+    code{background:#1e293b;color:#f8fafc;padding:2px 6px;border-radius:5px;font-size:0.95em}
+    pre{background:#1e293b;padding:12px;border-radius:8px;overflow-x:auto;color:#f8fafc}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    table{width:100%;border-collapse:collapse;margin-top:1em}
+    th,td{border:1px solid #334155;padding:8px;text-align:left}
+    th{background:#1e293b;color:#f8fafc}
+    footer{margin-top:40px;color:var(--muted);font-size:0.9em;text-align:center}
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div>
-        <div class="pill">TimeProofs</div>
-        <h1>API Documentation</h1>
-        <p class="lead">Hash locally → timestamp & sign via API → verify publicly. Your content never leaves your device.</p>
-      </div>
-      <nav>
-        <a href="/index.html">Home</a>
-        <a href="/verify.html">Verify UI</a>
-        <a class="btn" href="#quickstart">Quickstart</a>
-      </nav>
-    </header>
+  <h1>🧭 TimeProofs API Documentation</h1>
+  <p>The TimeProofs API lets you <strong>timestamp, verify, and prove the existence</strong> of any digital content instantly — without blockchain or tokens.</p>
+  
+  <h2>🌐 Base URL</h2>
+  <pre><code>https://api.timeproofs.io</code></pre>
 
-    <div class="card">
-      <h2>Base URL</h2>
-      <p>Production (current):</p>
-      <pre><code>https://timeproofs-api.jeason-bacoul.workers.dev/api</code></pre>
-      <p class="note">When your custom domain is ready, it will be: <code>https://api.timeproofs.io</code></p>
-    </div>
+  <h2>⚡ Endpoints</h2>
+  <table>
+    <tr><th>Endpoint</th><th>Method</th><th>Description</th></tr>
+    <tr><td><code>/proof</code></td><td>POST</td><td>Create a new proof of existence for a SHA256 hash.</td></tr>
+    <tr><td><code>/verify</code></td><td>GET</td><td>Verify if a proof exists and retrieve its timestamp and signature.</td></tr>
+  </table>
 
-    <div class="grid">
-      <div class="card" id="quickstart">
-        <h2>Quickstart — Browser</h2>
-        <p>Compute SHA-256 locally, then call the API.</p>
-        <h3>Minimal flow</h3>
-        <pre>{
-  "flow": "sha256(input) → POST /timestamp → { id, hash, timestamp, signature, verify_url }",
-  "verify": "GET /verify?hash=..."
-}</pre>
-        <h3>Fetch example</h3>
-        <pre><code>// hash = your 64-hex SHA-256
-const res = await fetch('https://timeproofs-api.jeason-bacoul.workers.dev/api/timestamp', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ hash, type: 'event', meta: {} })
-});
-const proof = await res.json();</code></pre>
-      </div>
-
-      <div class="card">
-        <h2>Quickstart — Node.js</h2>
-        <h3>Create and verify</h3>
-        <pre><code>import crypto from 'node:crypto';
-
-const hash = crypto.createHash('sha256').update('hello').digest('hex');
-
-const r = await fetch('https://timeproofs-api.jeason-bacoul.workers.dev/api/timestamp', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ hash, type: 'event' })
-});
-const proof = await r.json();
-
-const v = await fetch('https://timeproofs-api.jeason-bacoul.workers.dev/api/verify?hash=' + proof.hash);
-const check = await v.json();</code></pre>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>Endpoints</h2>
-
-      <h3>POST /timestamp</h3>
-      <p>Create a proof of existence for a SHA-256 hash.</p>
-      <pre><code>POST https://timeproofs-api.jeason-bacoul.workers.dev/api/timestamp
-Content-Type: application/json
-
-{ "hash": "64hexsha256", "type": "event", "meta": {} }</code></pre>
-      <p><strong>Returns</strong></p>
-      <pre><code>{
-  "ok": true,
-  "id": "hashprefix:sigprefix",
-  "hash": "64hexsha256",
-  "timestamp": "2025-01-01T00:00:00.000Z",
-  "signature": "hex_hmac256",
-  "verify_url": "https://timeproofs-api.jeason-bacoul.workers.dev/api/verify?hash=..."
+  <h2>🧾 Create Proof (POST /proof)</h2>
+  <pre><code>{
+  "hash": "sha256_of_your_data"
+}</code></pre>
+  <p><strong>Returns:</strong></p>
+  <pre><code>{
+  "proof_id": "uuid",
+  "timestamp": "2025-10-14T20:15:00Z",
+  "signature": "abcdef123456..."
 }</code></pre>
 
-      <h3>GET /verify</h3>
-      <p>Check if a hash exists and validate its signature.</p>
-      <pre><code>GET https://timeproofs-api.jeason-bacoul.workers.dev/api/verify?hash=64hexsha256</code></pre>
-      <p><strong>Returns</strong></p>
-      <pre><code>{
-  "ok": true,
-  "found": true,
-  "hash": "64hexsha256",
-  "timestamp": "2025-01-01T00:00:00.000Z",
-  "type": "event",
-  "meta": {},
-  "signature": "hex_hmac256"
+  <h2>🧩 Verify Proof (GET /verify)</h2>
+  <p><strong>Example:</strong></p>
+  <pre><code>GET /verify?hash=your_hash_here</code></pre>
+  <p><strong>Returns:</strong></p>
+  <pre><code>{
+  "valid": true,
+  "timestamp": "2025-10-14T20:15:00Z",
+  "signature": "abcdef123456..."
 }</code></pre>
-    </div>
 
-    <div class="grid">
-      <div class="card">
-        <h2>Hashing Guidance</h2>
-        <ul>
-          <li><strong>Text:</strong> UTF-8; normalize line endings to <code>\n</code>; optional <code>trim()</code>.</li>
-          <li><strong>JSON:</strong> canonicalize (sort keys, remove extra spaces) before hashing.</li>
-          <li><strong>Files:</strong> hash the raw binary locally (never upload files to the API).</li>
-          <li>Expected format: <strong>64-hex SHA-256</strong> (<code>^[a-f0-9]{64}$</code>).</li>
-        </ul>
-      </div>
+  <h2>💡 SDKs (coming soon)</h2>
+  <p>Use our lightweight SDKs for JavaScript, Python, and Go:</p>
+  <pre><code>npm install @timeproofs/sdk</code></pre>
+  <pre><code>import { timeproof } from "@timeproofs/sdk"
 
-      <div class="card">
-        <h2>Limits & Fair Use</h2>
-        <ul>
-          <li>Payload ≤ ~1 KB (hash + tiny meta).</li>
-          <li>Public beta: no auth required; reasonable rate limiting may apply.</li>
-          <li>Storage: distributed <span class="kvs">KV</span> (hash, timestamp, signature, optional type/meta).</li>
-        </ul>
-      </div>
-    </div>
+const proof = await timeproof("sha256_hash")
+console.log(proof.timestamp)</code></pre>
 
-    <div class="card">
-      <h2>Security Model</h2>
-      <ul>
-        <li><strong>Integrity:</strong> server computes <code>HMAC-SHA256</code> over <code>hash + timestamp</code> with a private secret.</li>
-        <li><strong>Privacy:</strong> only hashes are stored; your original content never leaves your device.</li>
-        <li><strong>Verification:</strong> the returned <code>signature</code> and <code>timestamp</code> are checked on read.</li>
-      </ul>
-    </div>
+  <h2>🔒 Security</h2>
+  <ul>
+    <li>Proofs are signed using <strong>HMAC-SHA256</strong> with a private salt.</li>
+    <li>Verification uses a public key exposed in the docs.</li>
+    <li>All data transmitted via HTTPS, no personal data stored.</li>
+  </ul>
 
-    <div class="card">
-      <h2>Support</h2>
-      <p>Questions or integrations? Open an issue on GitHub or email <a href="mailto:hello@timeproofs.io">hello@timeproofs.io</a>.</p>
-    </div>
+  <h2>🧠 AI Use Cases</h2>
+  <ul>
+    <li>Verifying AI-generated outputs for originality and authenticity.</li>
+    <li>Timestamping model training data or fine-tune datasets.</li>
+    <li>Tracking AI decisions or audits (ethical traceability).</li>
+  </ul>
 
-    <footer>© 2025 TimeProofs — Proof of Existence. For Everything.</footer>
-  </div>
+  <h2>🛠️ Error Codes</h2>
+  <table>
+    <tr><th>Code</th><th>Description</th></tr>
+    <tr><td><code>400</code></td><td>Missing or invalid hash.</td></tr>
+    <tr><td><code>404</code></td><td>Proof not found.</td></tr>
+    <tr><td><code>500</code></td><td>Internal server error.</td></tr>
+  </table>
+
+  <h2>📜 License</h2>
+  <p>MIT License — Free for personal and commercial use. Attribution required.</p>
+
+  <footer>
+    <a href="/">Home</a> • <a href="/verify.html">Verify</a> • <a href="/privacy.html">Privacy</a> • <a href="/legal.html">Legal</a>
+    <br>© 2025 TimeProofs.io — Proof of Existence. For Everything.
+  </footer>
 </body>
 </html>
