@@ -3,106 +3,81 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Use Cases — TimeProofs</title>
-  <meta name="description" content="Discover the main use cases of TimeProofs: AI traceability, digital authenticity, timestamping, and compliance automation."/>
+  <title>Use Cases — TimeProofs · Proof of Existence for AI & Developers</title>
+  <meta name="description" content="Concrete TimeProofs use cases for AI teams, agents, and developers: provenance, datasets, audit trails, contracts, compliance, research."/>
   <link rel="icon" href="/favicon.ico"/>
-
-  <!-- SEO & Social -->
-  <meta property="og:title" content="Use Cases — TimeProofs"/>
-  <meta property="og:description" content="TimeProofs enables verifiable proofs for AI outputs, documents, datasets, and audits — instantly, without blockchain."/>
-  <meta property="og:image" content="/og.png"/>
-  <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="Use Cases — TimeProofs"/>
-  <meta name="twitter:description" content="Timestamp and verify AI and digital content in real-time. Secure and private."/>
-  <meta name="twitter:image" content="/og.png"/>
-
   <style>
     :root{
-      --bg:#0f172a; --panel:#0b1220; --line:#1e293b;
+      --bg:#0b1020; --panel:#0f172a; --line:#1e293b;
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
     }
-    *{box-sizing:border-box}
+    *{ box-sizing:border-box }
     body{
-      margin:0; background:var(--bg); color:var(--text);
+      margin:0; background:radial-gradient(1200px 500px at 65% -10%, rgba(34,211,238,.10), transparent 60%), var(--bg);
+      color:var(--text);
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
+    a{ color:var(--accent); text-decoration:none }
+    a:hover{ text-decoration:underline }
 
-    /* ===== Header (same as index) ===== */
+    /* Header (shared) */
     .tp-header{
-      position:fixed; top:0; left:0; right:0; height:56px;
-      background:var(--panel); border-bottom:1px solid var(--line);
-      display:flex; align-items:center; justify-content:space-between;
-      padding:0 16px; z-index:1000;
+      position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
+      background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between; padding:0 16px;
     }
-    .tp-brand{ color:var(--text); text-decoration:none; font-weight:800; font-size:1.05rem; letter-spacing:.2px }
+    .tp-brand{ color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none }
     .tp-brand:hover{ color:var(--accent) }
-
     .tp-burger{
-      display:inline-flex; align-items:center; justify-content:center;
-      width:40px; height:40px; border:1px solid var(--line);
-      border-radius:8px; background:#0d1628; color:var(--text); cursor:pointer;
+      display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
+      border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
     }
-    .tp-burger:hover{ filter:brightness(1.05) }
-
     .tp-nav a{
-      color:var(--text); text-decoration:none; font-weight:600;
-      margin-left:16px; display:inline-block; padding:6px 0;
+      color:var(--text); text-decoration:none; font-weight:700; margin-left:18px; padding:8px 0; display:inline-block;
     }
     .tp-nav a:hover{ color:var(--accent) }
-
-    @media (min-width: 860px){
+    @media (min-width: 900px){
       .tp-burger{ display:none }
-      .tp-nav{ display:flex; align-items:center; position:static; background:none; border:none }
+      .tp-nav{ display:flex; align-items:center }
     }
-    @media (max-width: 859px){
+    @media (max-width: 899px){
       .tp-nav{
-        position:fixed; top:56px; left:0; right:0;
-        background:#0c1424; border-top:1px solid var(--line);
-        display:flex; flex-direction:column; gap:8px;
-        padding:12px 16px; box-shadow:0 8px 20px rgba(0,0,0,.35);
-        transform:translateY(-8px); opacity:0; pointer-events:none;
-        transition:opacity .18s ease, transform .18s ease;
+        position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
+        display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
+        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
       }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
     }
 
-    /* ===== Content ===== */
-    main{ padding:96px 20px 40px; max-width:1080px; margin:0 auto; text-align:center }
+    /* Layout */
+    main{ padding:96px 20px 40px; max-width:1100px; margin:0 auto }
+    .kicker{ color:#a8c5d6; letter-spacing:.3px; font-size:.95rem }
+    h1{ font-size:2rem; margin:.2em 0 .6em }
+    p.lead{ color:var(--muted); max-width:880px; margin:0 0 1.2em }
+    .grid{ display:grid; gap:16px }
+    @media(min-width:900px){ .grid.two{ grid-template-columns:1fr 1fr } .grid.three{ grid-template-columns:1fr 1fr 1fr } }
 
-    h1{ font-size:2.2rem; color:var(--text); margin-bottom:.4em }
-    p.lead{ color:var(--muted); line-height:1.7; max-width:700px; margin:0 auto 1.4em }
+    .card{ background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:18px }
+    .card h3{ margin:.2em 0 .4em; color:#b9e7f5; font-size:1.1rem }
+    .card p{ color:#dbe7f3; margin:.25em 0 .6em }
+    .mini{ font-size:.92rem; color:#9fb3c6 }
+    pre{ background:#0b1220; border:1px solid #1f2937; color:#e5e7eb; border-radius:10px; padding:12px; overflow:auto; line-height:1.55; font-size:.92rem }
 
-    .grid{
-      display:grid; gap:20px; margin-top:32px;
-      grid-template-columns:1fr; text-align:left;
-    }
-    @media(min-width:900px){ .grid{ grid-template-columns:1fr 1fr } }
+    .pill{ display:inline-block; border:1px solid #214a57; background:#0d2330; color:#aee9f7; border-radius:999px; padding:4px 10px; margin:6px 8px 0 0; font-size:.78rem }
+    .cta-row{ margin-top:14px; display:flex; gap:10px; flex-wrap:wrap }
+    .cta{ display:inline-block; background:var(--accent); color:#06202a; font-weight:900; padding:10px 14px; border-radius:10px; text-decoration:none }
+    .ghost{ background:#0f1b30; color:#d7f7ff; border:1px solid var(--line) }
 
-    .case{
-      background:#0c1424; border:1px solid var(--line); border-radius:12px;
-      padding:22px 20px 26px; transition:transform .2s ease;
-    }
-    .case:hover{ transform:translateY(-4px) }
-    .case h2{ color:var(--accent); margin-top:0; margin-bottom:.4em; font-size:1.3rem }
-    .case p{ color:var(--text); margin:.2em 0 .8em; line-height:1.6 }
-    .case ul{ list-style:disc; padding-left:1.4em; color:var(--muted); margin:.4em 0 0 }
-
-    .cta{
-      display:inline-block; background:var(--accent); color:#0f172a;
-      font-weight:700; padding:.8em 1.4em; border-radius:10px; text-decoration:none;
-      transition:transform .15s ease, filter .15s ease; margin-top:32px;
-    }
-    .cta:hover{ transform:translateY(-1px); filter:brightness(1.05) }
-
-    footer{ margin-top:48px; color:#7b8aa7; font-size:.9rem; text-align:center; padding:20px }
-    footer a{ color:var(--muted); text-decoration:none; margin:0 8px }
+    footer{ border-top:1px solid var(--line); margin-top:42px; padding:20px; color:#7c8aa5; text-align:center }
+    footer a{ color:#a7b7cc; text-decoration:none; margin:0 8px }
     footer a:hover{ color:var(--accent) }
   </style>
 </head>
 <body>
-  <header class="tp-header" role="navigation">
+  <header class="tp-header" role="navigation" aria-label="Main">
     <a class="tp-brand" href="/index.html">TimeProofs</a>
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
       <span aria-hidden="true">☰</span>
@@ -119,84 +94,107 @@
   </header>
 
   <main>
-    <h1>Use Cases</h1>
-    <p class="lead">
-      TimeProofs brings instant, verifiable timestamping to AI outputs, digital assets, and audits.<br/>
-      No blockchain. No friction. Just cryptographic truth — at the speed of the web.
-    </p>
+    <p class="kicker">USE CASES</p>
+    <h1>Where TimeProofs becomes essential</h1>
+    <p class="lead">Add a cryptographic “moment in time” to anything that matters. Below are the fastest wins for AI teams, agents, and developers.</p>
 
-    <section class="grid">
-      <article class="case">
-        <h2>1. AI Output Provenance</h2>
-        <p>Ensure every AI-generated image, text, or decision is timestamped at creation. Perfect for compliance, transparency, and content authenticity.</p>
-        <ul>
-          <li>Trace any AI-generated result</li>
-          <li>Authenticate origin and timestamp</li>
-          <li>Link to model version or prompt data</li>
-        </ul>
-      </article>
+    <section class="grid three">
+      <div class="card">
+        <h3>AI output provenance</h3>
+        <p>Attach a proof to every LLM output or image. Share the public verify URL with users or auditors.</p>
+        <pre><code>// after generating output
+const hash = await sha256Hex(output);
+const proof = await fetch(API + "/timestamp", {
+  method:"POST", headers:{ "Content-Type":"application/json" },
+  body: JSON.stringify({ hash, type:"gen", meta:{ model:"gpt", app:"agentX" } })
+}).then(r=>r.json());</code></pre>
+        <div class="mini">Outcome: trust, anti-tampering, reproducibility.</div>
+      </div>
 
-      <article class="case">
-        <h2>2. Digital Documents & Contracts</h2>
-        <p>Certify that any file, agreement, or publication existed at a specific moment without revealing its content.</p>
-        <ul>
-          <li>Upload only hash — no sensitive data</li>
-          <li>Timestamp PDFs, images, or text</li>
-          <li>Proofs valid indefinitely</li>
-        </ul>
-      </article>
+      <div class="card">
+        <h3>Prompt & chain integrity</h3>
+        <p>Timestamp key prompts and intermediate chain states for audit and regression safety.</p>
+        <pre><code>await post("/timestamp", { hash: sha256Hex(prompt), type:"prompt", meta:{ env:"prod" }});</code></pre>
+        <div class="mini">Outcome: explainability, liability buffer.</div>
+      </div>
 
-      <article class="case">
-        <h2>3. Dataset & Model Tracking</h2>
-        <p>Timestamp and verify datasets or model checkpoints to ensure reproducibility and ethical traceability in AI research.</p>
-        <ul>
-          <li>Proofs for each dataset version</li>
-          <li>Public verification endpoint</li>
-          <li>Ideal for academic or enterprise compliance</li>
-        </ul>
-      </article>
+      <div class="card">
+        <h3>Dataset & fine-tune snapshots</h3>
+        <p>Prove the exact dataset used at T. Anchor training sets and versioned diffs.</p>
+        <pre><code>await post("/timestamp", { hash: sha256Hex(manifestJSON), type:"dataset", meta:{ version:"2025-01-10" }});</code></pre>
+        <div class="mini">Outcome: auditability, reproducible research.</div>
+      </div>
 
-      <article class="case">
-        <h2>4. Regulatory & Audit Trails</h2>
-        <p>Provide immutable cryptographic evidence of digital events, from compliance logs to content updates — fully GDPR-safe.</p>
-        <ul>
-          <li>Zero personal data stored</li>
-          <li>Edge-native & encrypted</li>
-          <li>Compatible with audit frameworks</li>
-        </ul>
-      </article>
+      <div class="card">
+        <h3>Contracts, emails, files</h3>
+        <p>Keep content private. Prove existence/integrity with only the SHA-256 hash.</p>
+        <pre><code>await post("/timestamp", { hash: fileSHA256, type:"file", meta:{ mime:"application/pdf" }});</code></pre>
+        <div class="mini">Outcome: lightweight legal evidence.</div>
+      </div>
+
+      <div class="card">
+        <h3>Webhooks & event logs</h3>
+        <p>Hash critical events and anchor them. Verify later without exposing payloads.</p>
+        <pre><code>await post("/timestamp", { hash: sha256Hex(eventJSON), type:"webhook", meta:{ src:"billing" }});</code></pre>
+        <div class="mini">Outcome: integrity trails, compliance.</div>
+      </div>
+
+      <div class="card">
+        <h3>Release & binary integrity</h3>
+        <p>Ship artifacts with a proof link. Users verify instantly before installing.</p>
+        <pre><code>await post("/timestamp", { hash: binarySHA256, type:"release", meta:{ tag:"v1.2.3" }});</code></pre>
+        <div class="mini">Outcome: supply-chain trust.</div>
+      </div>
     </section>
 
-    <a class="cta" href="/verify.html" aria-label="Try the API now">Try it now →</a>
+    <div class="cta-row">
+      <a class="cta" href="/verify.html">Try in the browser</a>
+      <a class="cta ghost" href="/docs.html">See full API docs</a>
+    </div>
 
-    <footer>
-      © 2025 TimeProofs — Proof of Existence. For Everything.
-      <div style="margin-top:6px">
-        <a href="/index.html">Home</a> •
-        <a href="/about.html">About</a> •
-        <a href="/use-cases.html">Use Cases</a> •
-        <a href="/verify.html">Verify</a> •
-        <a href="/docs.html">Docs</a> •
-        <a href="/pricing.html">Pricing</a> •
-        <a href="/privacy.html">Privacy</a> •
-        <a href="/legal.html">Legal</a>
+    <section style="margin-top:26px">
+      <h2>Why teams adopt it quickly</h2>
+      <div class="grid two">
+        <div class="card">
+          <p><strong>Zero content upload.</strong> Only hashes; privacy by design. Devs integrate in minutes.</p>
+          <p><strong>Edge-native.</strong> Global, low-latency, scales automatically.</p>
+          <p><strong>No blockchain.</strong> Instant, predictable cost, no gas.</p>
+        </div>
+        <div class="card">
+          <p><strong>Public verification.</strong> Anyone can check a proof URL.</p>
+          <p><strong>Legal-friendly.</strong> Strong technical evidence for existence/integrity at time T.</p>
+          <p><strong>Future-proof.</strong> Roadmap: SDKs, PDF certificate, dashboard, API keys.</p>
+        </div>
       </div>
-    </footer>
+    </section>
   </main>
+
+  <footer>
+    © 2025 TimeProofs — Proof of Existence. For Everything.
+    <div style="margin-top:6px">
+      <a href="/index.html">Home</a> •
+      <a href="/about.html">About</a> •
+      <a href="/use-cases.html">Use Cases</a> •
+      <a href="/verify.html">Verify</a> •
+      <a href="/docs.html">Docs</a> •
+      <a href="/pricing.html">Pricing</a> •
+      <a href="/roadmap.html">Roadmap</a> •
+      <a href="/privacy.html">Privacy</a> •
+      <a href="/legal.html">Legal</a>
+    </div>
+  </footer>
 
   <script>
     (function(){
       const burger = document.getElementById('tp-burger');
       const nav = document.getElementById('tp-nav');
-
       function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
       function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
       function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
-
       burger.addEventListener('click', toggleMenu);
-      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 860px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); });
+      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); });
       document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); });
-      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 860px)').matches) closeMenu(); });
+      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); });
     })();
   </script>
 </body>
