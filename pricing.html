@@ -1,126 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <!-- Core -->
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Pricing — TimeProofs</title>
-  <meta name="description" content="Simple, predictable pricing for TimeProofs. Free beta plan today. Pro and Team plans coming soon."/>
+  <meta name="description" content="Simple, predictable pricing for TimeProofs. Free during beta. Pro plans with higher limits, API keys, and PDF certificates coming soon."/>
   <link rel="icon" href="/favicon.ico"/>
 
-  <!-- Open Graph / Twitter -->
+  <!-- Social -->
   <meta property="og:title" content="Pricing — TimeProofs"/>
-  <meta property="og:description" content="Free during public beta. Pro and Team plans coming soon."/>
+  <meta property="og:description" content="Free during beta. Pro plans with higher limits, API keys, and PDF certificates coming soon."/>
   <meta property="og:type" content="website"/>
   <meta property="og:image" content="/og.png"/>
+  <meta property="og:url" content="https://timeproofs.io/pricing.html"/>
   <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="Pricing — TimeProofs"/>
-  <meta name="twitter:description" content="Free during public beta. Pro and Team plans coming soon."/>
-  <meta name="twitter:image" content="/og.png"/>
 
   <style>
     :root{
-      --bg:#0f172a; --panel:#0b1220; --line:#1e293b;
+      --bg:#0b1020; --panel:#0f172a; --line:#1e293b;
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --ok:#22c55e;
     }
-    *{box-sizing:border-box}
+    *{ box-sizing:border-box }
     body{
       margin:0; background:var(--bg); color:var(--text);
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
+    a{ color:var(--accent); text-decoration:none } a:hover{text-decoration:underline}
 
-    /* ===== Header (responsive, same as index) ===== */
+    /* Header (shared) */
     .tp-header{
-      position:fixed; top:0; left:0; right:0; height:56px;
-      background:var(--panel); border-bottom:1px solid var(--line);
-      display:flex; align-items:center; justify-content:space-between;
-      padding:0 16px; z-index:1000;
+      position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
+      background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between; padding:0 16px;
     }
-    .tp-brand{ color:var(--text); text-decoration:none; font-weight:800; letter-spacing:.2px; font-size:1.05rem }
+    .tp-brand{ color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none }
     .tp-brand:hover{ color:var(--accent) }
-
     .tp-burger{
-      display:inline-flex; align-items:center; justify-content:center;
-      width:40px; height:40px; border:1px solid var(--line);
-      border-radius:8px; background:#0d1628; color:var(--text); cursor:pointer;
+      display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
+      border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
     }
-    .tp-burger:hover{ filter:brightness(1.05) }
-
     .tp-nav a{
-      color:var(--text); text-decoration:none; font-weight:600;
-      margin-left:16px; display:inline-block; padding:6px 0;
+      color:var(--text); text-decoration:none; font-weight:700; margin-left:18px; padding:8px 0; display:inline-block;
     }
     .tp-nav a:hover{ color:var(--accent) }
-
-    @media (min-width: 860px){
-      .tp-burger{ display:none }
-      .tp-nav{
-        display:flex; align-items:center; position:static; height:auto;
-        background:transparent; border:none; padding:0; box-shadow:none;
-      }
+    @media (min-width: 900px){
+      .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center }
     }
-    @media (max-width: 859px){
+    @media (max-width: 899px){
       .tp-nav{
-        position:fixed; top:56px; left:0; right:0;
-        background:#0c1424; border-top:1px solid var(--line);
-        display:flex; flex-direction:column; gap:8px;
-        padding:12px 16px; box-shadow:0 8px 20px rgba(0,0,0,.35);
-        transform:translateY(-8px); opacity:0; pointer-events:none;
-        transition:opacity .18s ease, transform .18s ease;
+        position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
+        display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
+        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
       }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
     }
 
-    /* ===== Page content ===== */
-    main{ padding:96px 20px 40px; max-width:1080px; margin:0 auto }
+    /* Page */
+    .wrap{ max-width:1100px; margin:96px auto 40px; padding:0 20px; text-align:center }
+    h1{ font-size:clamp(1.8rem, 5vw, 2.6rem); margin:.2em 0 .3em }
+    .sub{ color:var(--muted); max-width:760px; margin:0 auto 24px; line-height:1.75 }
 
-    .hero h1{ font-size:2.2rem; margin:.2em 0 .2em; color:var(--text) }
-    .hero p{ color:var(--muted); margin:0 auto 1.2em; max-width:680px; line-height:1.7 }
-
-    .plans{
-      display:grid; gap:16px; margin-top:18px;
-      grid-template-columns:1fr; 
+    /* Plans */
+    .grid{ display:grid; gap:16px; grid-template-columns:1fr; margin-top:10px }
+    @media(min-width:900px){ .grid{ grid-template-columns:1fr 1fr 1fr } }
+    .plan{
+      background:#0c1424; border:1px solid var(--line); border-radius:16px; padding:20px; text-align:left;
+      display:flex; flex-direction:column; justify-content:space-between;
+      transition:transform .2s ease, box-shadow .2s ease;
     }
-    @media(min-width:900px){ .plans{ grid-template-columns:1fr 1fr 1fr } }
-
-    .card{
-      background:#0c1424; border:1px solid var(--line); border-radius:14px;
-      padding:18px; display:flex; flex-direction:column; justify-content:space-between;
-    }
-    .card h2{ margin:.2em 0 .3em; color:var(--accent); font-size:1.25rem }
-    .price{ font-size:1.6rem; font-weight:800; margin:.2em 0 .6em }
-    .period{ font-size:.95rem; color:var(--muted); font-weight:600 }
-
-    ul.features{ list-style:none; padding:0; margin:.4em 0 1em }
-    ul.features li{
-      margin:.45em 0; padding-left:1.2em; position:relative; color:var(--text);
-    }
-    ul.features li::before{
-      content:"✓"; position:absolute; left:0; color:var(--ok); font-weight:800;
-    }
-
+    .plan:hover{ transform:translateY(-3px); box-shadow:0 14px 30px rgba(0,0,0,.25) }
+    .plan h3{ margin:.2em 0 .2em; font-size:1.25rem; color:#c7f3ff }
+    .price{ font-weight:900; font-size:1.8rem; margin:.2em 0 .2em }
+    .period{ color:var(--muted); font-size:.95rem }
+    .feat{ margin:.6em 0; padding-left:18px }
+    .feat li{ margin:.35em 0; color:#dbe7f3 }
     .cta{
-      display:inline-block; background:var(--accent); color:#0f172a;
-      font-weight:800; padding:.8em 1.1em; border-radius:10px; text-decoration:none;
-      transition:transform .15s ease, filter .15s ease; text-align:center;
+      margin-top:14px; align-self:flex-start;
+      background:var(--accent); color:#06202a; border:none; padding:.8em 1.2em; border-radius:12px;
+      font-weight:900; text-decoration:none; box-shadow:0 8px 30px rgba(34,211,238,.15);
     }
-    .cta:hover{ transform:translateY(-1px); filter:brightness(1.05) }
+    .cta.secondary{ background:#111d33; color:#e2f6ff; border:1px solid var(--line) }
+    .badge{ display:inline-block; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; padding:3px 10px; font-size:.8rem; margin-left:8px }
 
-    .muted{ color:var(--muted) }
-    .note{ font-size:.92rem; color:var(--muted); margin-top:22px }
+    /* FAQ */
+    .faq{ margin:28px auto 0; text-align:left; max-width:900px }
+    .faq h2{ text-align:center; margin:10px 0 16px; color:#b9e7f5 }
+    .qa{ border:1px solid var(--line); background:#0c1424; border-radius:12px; padding:16px; margin:10px 0 }
+    .qa h4{ margin:0 0 6px; color:#e9f5ff }
+    .qa p{ margin:0; color:#cfe1ef; line-height:1.7 }
 
-    .faq{ margin-top:40px }
-    .faq h3{ color:var(--accent); margin-top:1.2em }
-    .faq p{ color:var(--text); margin:.25em 0; line-height:1.7 }
-
-    footer{ margin-top:48px; color:#7b8aa7; font-size:.9rem; text-align:center; padding:20px }
-    footer a{ color:var(--muted); text-decoration:none; margin:0 8px }
-    footer a:hover{ color:var(--accent) }
+    /* Footer */
+    footer{ border-top:1px solid var(--line); margin-top:42px; padding:20px; color:#7c8aa5; text-align:center }
+    footer .links a{ color:#a7b7cc; margin:0 8px } footer .links a:hover{ color:var(--accent) }
   </style>
 </head>
 <body>
-  <!-- Header (same as index) -->
+  <!-- Header -->
   <header class="tp-header" role="navigation" aria-label="Main">
     <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">TimeProofs</a>
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
@@ -131,112 +110,118 @@
       <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html">Verify</a>
       <a href="/docs.html">Docs</a>
-      <a href="/pricing.html">Pricing</a>
+      <a href="/pricing.html" aria-current="page">Pricing</a>
       <a href="/roadmap.html">Roadmap</a>
       <a href="/legal.html">Legal</a>
     </nav>
   </header>
 
-  <main>
-    <section class="hero" aria-labelledby="pricing-title">
-      <h1 id="pricing-title">Pricing — simple, transparent, predictable</h1>
-      <p>No blockchain, no gas, no friction. TimeProofs is optimized for instant, verifiable, privacy-first proofs — at internet scale.</p>
-    </section>
+  <main class="wrap">
+    <h1>Simple, predictable pricing</h1>
+    <p class="sub">Free during public beta. Pro plans unlock higher limits, API keys, dashboards, and PDF certificates. No blockchain, no gas, no surprises.</p>
 
-    <section class="plans" aria-label="Plans">
-      <!-- Free -->
-      <article class="card" aria-labelledby="plan-free">
+    <section class="grid" aria-label="Pricing plans">
+      <!-- Beta Free -->
+      <article class="plan">
         <div>
-          <h2 id="plan-free">Free (Public Beta)</h2>
-          <div class="price">€0 <span class="period">/ month</span></div>
-          <ul class="features">
-            <li>Up to <strong>1,000 proofs / month / IP</strong></li>
-            <li>Unlimited public verification</li>
+          <h3>Beta Free <span class="badge">current</span></h3>
+          <div class="price">€0<span class="period"> / mo</span></div>
+          <ul class="feat">
+            <li>Up to <strong>1,000 proofs / month</strong> (per IP)</li>
+            <li>Unlimited verification</li>
             <li>No API key required</li>
-            <li>Privacy-first: only the hash travels</li>
-            <li>Edge-native: Cloudflare Workers</li>
+            <li>Hash-only, privacy-first</li>
+            <li>Edge global infrastructure</li>
           </ul>
         </div>
-        <a class="cta" href="/verify.html" aria-label="Try the API now">Try the API</a>
+        <a class="cta" href="/verify.html">Start free</a>
       </article>
 
       <!-- Pro -->
-      <article class="card" aria-labelledby="plan-pro">
+      <article class="plan" style="border-color:#2aa2b7">
         <div>
-          <h2 id="plan-pro">Pro (Coming soon)</h2>
-          <div class="price">€9 <span class="period">/ month (indicative)</span></div>
-          <ul class="features">
-            <li><strong>10,000 proofs / month</strong></li>
-            <li>API key + dedicated rate limits</li>
+          <h3>Pro <span class="badge">coming soon</span></h3>
+          <div class="price">€9<span class="period"> / mo</span></div>
+          <ul class="feat">
+            <li><strong>10,000 proofs / month</strong> (burst friendly)</li>
+            <li>API key & usage quotas</li>
             <li>PDF proof certificate</li>
-            <li>Webhooks & dashboard usage</li>
-            <li>Support & early feature access</li>
+            <li>Webhooks & dashboard</li>
+            <li>Email support</li>
           </ul>
         </div>
-        <a class="cta" href="mailto:hello@timeproofs.io?subject=Pro%20Plan%20Early%20Access&body=Hi%20TimeProofs%2C%20I%27d%20like%20early%20access%20to%20the%20Pro%20plan." aria-label="Request Pro early access">Request early access</a>
+        <a class="cta secondary" href="mailto:hello@timeproofs.io?subject=Pro%20plan%20waitlist">Join waitlist</a>
       </article>
 
-      <!-- Team / Enterprise -->
-      <article class="card" aria-labelledby="plan-team">
+      <!-- Enterprise -->
+      <article class="plan">
         <div>
-          <h2 id="plan-team">Team / Enterprise</h2>
-          <div class="price">Custom <span class="period">/ month</span></div>
-          <ul class="features">
-            <li>Higher or unlimited quotas</li>
-            <li>SLA, audit & compliance options</li>
-            <li>Key rotation & environment isolation</li>
-            <li>SIEM / S3 / BigQuery integrations</li>
-            <li>Custom billing & onboarding</li>
+          <h3>Enterprise</h3>
+          <div class="price">Custom<span class="period"> / annual</span></div>
+          <ul class="feat">
+            <li>Higher volumes & SLAs</li>
+            <li>SOC2-ready processes</li>
+            <li>Custom retention & regions</li>
+            <li>Dedicated support & SSO</li>
+            <li>Private verifiers / mirror</li>
           </ul>
         </div>
-        <a class="cta" href="mailto:hello@timeproofs.io?subject=Team%2FEnterprise%20Plan&body=Hi%20TimeProofs%2C%20we%27re%20interested%20in%20a%20Team%2FEnterprise%20plan." aria-label="Contact sales">Contact sales</a>
+        <a class="cta secondary" href="mailto:hello@timeproofs.io?subject=Enterprise%20inquiry">Contact sales</a>
       </article>
     </section>
 
-    <p class="note">
-      Prices are indicative during beta and may adjust with usage patterns and edge infrastructure costs.
-    </p>
+    <!-- FAQ -->
+    <section class="faq" aria-label="Pricing FAQ">
+      <h2>FAQ</h2>
 
-    <section class="faq" aria-label="FAQ">
-      <h3>FAQ</h3>
-      <h3>Why no blockchain?</h3>
-      <p>We optimize for instant proofs, predictable cost, and privacy by default — no gas fees, no confirmation delays, no token lock-in.</p>
-      <h3>What do you store?</h3>
-      <p>Only the cryptographic fingerprint (SHA-256 hash) plus timestamp and server signature. Your content never leaves your device.</p>
-      <h3>Is the Free plan rate-limited?</h3>
-      <p>Yes — up to 1,000 proofs/month/IP in beta, with read-only public verification.</p>
-      <h3>When will Pro be available?</h3>
-      <p>Soon. Request early access above to help shape features and get priority onboarding.</p>
-    </section>
-
-    <footer>
-      © 2025 TimeProofs — Proof of Existence. For Everything.
-      <div style="margin-top:6px">
-        <a href="/index.html">Home</a> •
-        <a href="/about.html">About</a> •
-        <a href="/use-cases.html">Use Cases</a> •
-        <a href="/verify.html">Verify</a> •
-        <a href="/docs.html">Docs</a> •
-        <a href="/pricing.html">Pricing</a> •
-        <a href="/privacy.html">Privacy</a> •
-        <a href="/legal.html">Legal</a>
+      <div class="qa">
+        <h4>What happens after beta?</h4>
+        <p>Free plan remains with reasonable limits. Pro unlocks higher quotas, PDF certificates, webhooks, and a dashboard. You can upgrade or cancel anytime.</p>
       </div>
-    </footer>
+
+      <div class="qa">
+        <h4>Do you store my files?</h4>
+        <p>No. We only store the SHA-256 hash plus the timestamp, signature, and optional minimal metadata. Your content never leaves your device.</p>
+      </div>
+
+      <div class="qa">
+        <h4>Is there a per-request fee or gas?</h4>
+        <p>No blockchain, no gas. We aim for transparent, predictable pricing based on monthly volume.</p>
+      </div>
+
+      <div class="qa">
+        <h4>Do I need an API key?</h4>
+        <p>Not during beta for public endpoints. Pro introduces API keys and per-project quotas.</p>
+      </div>
+    </section>
   </main>
+
+  <footer>
+    © 2025 TimeProofs — Proof of Existence. For Everything.
+    <div class="links" style="margin-top:6px">
+      <a href="/index.html">Home</a> •
+      <a href="/about.html">About</a> •
+      <a href="/use-cases.html">Use Cases</a> •
+      <a href="/verify.html">Verify</a> •
+      <a href="/docs.html">Docs</a> •
+      <a href="/pricing.html">Pricing</a> •
+      <a href="/roadmap.html">Roadmap</a> •
+      <a href="/privacy.html">Privacy</a> •
+      <a href="/legal.html">Legal</a>
+    </div>
+  </footer>
 
   <script>
     (function(){
       const burger = document.getElementById('tp-burger');
       const nav = document.getElementById('tp-nav');
-
       function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
       function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
       function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
-
-      burger.addEventListener('click', toggleMenu);
-      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 860px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); });
+      burger?.addEventListener('click', toggleMenu);
+      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); });
       document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); });
-      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 860px)').matches) closeMenu(); });
+      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); });
     })();
   </script>
 </body>
