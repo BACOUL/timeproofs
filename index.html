@@ -4,18 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TimeProofs — Proof of Existence. For Everything.</title>
-  <link rel="icon" href="/favicon.ico" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <style>
     :root {
       --bg: #0f172a;
       --text: #f8fafc;
       --accent: #22d3ee;
+      --muted: #94a3b8;
     }
     * { box-sizing: border-box; }
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: system-ui, sans-serif;
+      font-family: "Inter", system-ui, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -23,35 +24,67 @@
       height: 100vh;
       margin: 0;
       text-align: center;
+      padding: 1em;
     }
-    h1 { font-size: 2.6em; margin: 0.2em 0; }
-    p { max-width: 480px; line-height: 1.6; color: #cbd5e1; }
+    img {
+      width: 120px;
+      height: auto;
+      margin-bottom: 1em;
+      filter: drop-shadow(0 0 6px rgba(34,211,238,0.4));
+    }
+    h1 {
+      font-size: 2.6em;
+      margin: 0.2em 0;
+      letter-spacing: -0.02em;
+    }
+    p {
+      max-width: 460px;
+      line-height: 1.6;
+      color: var(--muted);
+      margin-top: 0.4em;
+      font-size: 1.05em;
+    }
     button {
       background: var(--accent);
       border: none;
-      padding: 0.8em 1.4em;
-      border-radius: 8px;
+      padding: 0.9em 1.6em;
+      border-radius: 10px;
       color: #0f172a;
       font-weight: 600;
-      margin-top: 1.4em;
+      font-size: 1em;
+      margin-top: 1.6em;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
     }
-    button:hover { transform: scale(1.05); }
+    button:hover {
+      transform: scale(1.06);
+      background: #06b6d4;
+    }
     footer {
       position: absolute;
-      bottom: 20px;
-      font-size: 0.8em;
+      bottom: 18px;
+      font-size: 0.85em;
       color: #64748b;
+    }
+    @media (max-width: 480px) {
+      h1 { font-size: 2em; }
+      p { font-size: 0.95em; }
+      img { width: 100px; }
     }
   </style>
 </head>
 <body>
-  <img src="https://timeproofs.vercel.app/logo.png" alt="TimeProofs Logo" width="100" />
+  <!-- ✅ Logo (chemin local public/logo.png) -->
+  <img src="/logo.png" alt="TimeProofs Logo" width="120" />
+
   <h1>TimeProofs</h1>
-  <p>The universal proof layer for AI, developers, and the internet.<br>
-     Timestamp and verify digital truth — instantly.</p>
+  <p>
+    The universal proof layer for AI, developers, and the internet.<br>
+    Timestamp and verify digital truth — instantly.
+  </p>
+
   <button onclick="window.location.href='/verify.html'">Try the API</button>
+
   <footer>© 2025 TimeProofs — Proof of Existence. For Everything.</footer>
 </body>
 </html>
