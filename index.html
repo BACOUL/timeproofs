@@ -13,108 +13,179 @@
   <meta property="og:description" content="The universal proof layer for AI, developers, and the internet. Timestamp and verify digital truth — instantly." />
   <meta property="og:url" content="https://timeproofs.io" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="https://timeproofs.io/og.png" />
+  <meta property="og:image" content="/og.png" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="TimeProofs — Proof of Existence. For Everything." />
   <meta name="twitter:description" content="Timestamp and verify digital truth — instantly. The universal proof layer for AI & developers." />
-  <meta name="twitter:image" content="https://timeproofs.io/og.png" />
+  <meta name="twitter:image" content="/og.png" />
 
   <!-- Favicon -->
   <link rel="icon" href="/favicon.ico" />
 
   <style>
-    :root {
-      --bg: #0f172a;
-      --text: #f8fafc;
-      --accent: #22d3ee;
-      --muted: #94a3b8;
+    :root{
+      --bg:#0f172a; --panel:#0b1220; --line:#1e293b;
+      --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
     }
-    * { box-sizing: border-box; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: system-ui, sans-serif;
-      margin: 0;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
+    *{ box-sizing:border-box }
+
+    body{
+      margin:0; background:var(--bg); color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
 
-    /* Navigation bar */
-    header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 56px;
-      background: #0b1220;
-      border-bottom: 1px solid #1e293b;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 1rem;
-      z-index: 10;
+    /* ===== Header (responsive) ===== */
+    .tp-header{
+      position:fixed; top:0; left:0; right:0; height:56px;
+      background:var(--panel); border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 16px; z-index:1000;
     }
-    header a {
-      color: var(--text);
-      text-decoration: none;
-      font-weight: 600;
-      margin-left: 1rem;
-    }
-    header a:hover { color: var(--accent); }
-    .brand {
-      font-weight: 700;
-      font-size: 1.1rem;
-      letter-spacing: .3px;
-    }
-    main { margin-top: 80px; }
+    .tp-brand{ color:var(--text); text-decoration:none; font-weight:800; letter-spacing:.2px; font-size:1.05rem }
+    .tp-brand:hover{ color:var(--accent) }
 
-    h1 { font-size: 2.6em; margin: 0.2em 0; }
-    p { max-width: 480px; line-height: 1.6; color: var(--muted); }
-
-    button {
-      background: var(--accent);
-      border: none;
-      padding: 0.8em 1.4em;
-      border-radius: 8px;
-      color: #0f172a;
-      font-weight: 600;
-      margin-top: 1.4em;
-      cursor: pointer;
-      transition: all 0.2s ease;
+    .tp-burger{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:40px; height:40px; border:1px solid var(--line);
+      border-radius:8px; background:#0d1628; color:var(--text);
+      cursor:pointer;
     }
-    button:hover { transform: scale(1.05); }
+    .tp-burger:hover{ filter:brightness(1.05) }
 
-    footer {
-      margin-top: 60px;
-      font-size: 0.8em;
-      color: #64748b;
+    .tp-nav a{
+      color:var(--text); text-decoration:none; font-weight:600;
+      margin-left:16px; display:inline-block; padding:6px 0;
     }
+    .tp-nav a:hover{ color:var(--accent) }
+
+    @media (min-width: 860px){
+      .tp-burger{ display:none }
+      .tp-nav{
+        display:flex; align-items:center; position:static; height:auto;
+        background:transparent; border:none; padding:0; box-shadow:none;
+      }
+    }
+    @media (max-width: 859px){
+      .tp-nav{
+        position:fixed; top:56px; left:0; right:0;
+        background:#0c1424; border-top:1px solid var(--line);
+        display:flex; flex-direction:column; gap:8px;
+        padding:12px 16px; box-shadow:0 8px 20px rgba(0,0,0,.35);
+        transform:translateY(-8px); opacity:0; pointer-events:none;
+        transition:opacity .18s ease, transform .18s ease;
+      }
+      .tp-nav a{ margin:4px 0 }
+      .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
+    }
+
+    /* ===== Main hero ===== */
+    main{ padding:96px 20px 40px; display:flex; flex-direction:column; align-items:center; text-align:center; min-height:calc(100vh - 56px) }
+    h1{ font-size:2.6rem; margin:.2em 0 }
+    p.lead{ max-width:560px; line-height:1.7; color:var(--muted); margin:0 auto 1.2em }
+
+    .cta{
+      background:var(--accent); color:#0f172a; border:none;
+      padding:.85em 1.4em; border-radius:10px; font-weight:700; cursor:pointer;
+      transition:transform .15s ease, filter .15s ease; margin:.4em .35em 0;
+      text-decoration:none; display:inline-block;
+    }
+    .cta:hover{ transform:translateY(-1px); filter:brightness(1.05) }
+
+    .logo{ width:100px; height:auto; margin-bottom:.6em }
+
+    /* ===== Footer ===== */
+    footer{ margin-top:48px; color:#7b8aa7; font-size:.9rem; text-align:center; padding:20px }
+    footer a{ color:var(--muted); text-decoration:none; margin:0 8px }
+    footer a:hover{ color:var(--accent) }
   </style>
 </head>
 <body>
-  <header>
-    <a class="brand" href="/index.html">TimeProofs</a>
-    <nav>
+  <!-- Header -->
+  <header class="tp-header" role="navigation" aria-label="Main">
+    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">TimeProofs</a>
+
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
+      <span aria-hidden="true">☰</span>
+    </button>
+
+    <nav id="tp-nav" class="tp-nav" data-state="closed">
+      <a href="/about.html">About</a>
+      <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html">Verify</a>
       <a href="/docs.html">Docs</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/roadmap.html">Roadmap</a>
       <a href="/legal.html">Legal</a>
     </nav>
   </header>
 
+  <!-- Main -->
   <main>
-    <img src="/logo.png" alt="TimeProofs Logo" width="100" />
+    <img class="logo" src="/logo.png" alt="TimeProofs Logo" />
     <h1>TimeProofs</h1>
-    <p>The universal proof layer for AI, developers, and the internet.<br>
-       Timestamp and verify digital truth — instantly.</p>
-    <button onclick="window.location.href='/verify.html'">Try the API</button>
+    <p class="lead">
+      The universal proof layer for AI, developers, and the internet.<br/>
+      Timestamp and verify digital truth — instantly. No blockchain. No gas. No friction.
+    </p>
+    <p>
+      <a class="cta" href="/verify.html">Try the API</a>
+      <a class="cta" href="/docs.html">Read the Docs</a>
+    </p>
   </main>
 
-  <footer>© 2025 TimeProofs — Proof of Existence. For Everything.</footer>
+  <!-- Footer -->
+  <footer>
+    © 2025 TimeProofs — Proof of Existence. For Everything.
+    <div style="margin-top:6px">
+      <a href="/about.html">About</a> •
+      <a href="/use-cases.html">Use Cases</a> •
+      <a href="/verify.html">Verify</a> •
+      <a href="/docs.html">Docs</a> •
+      <a href="/pricing.html">Pricing</a> •
+      <a href="/privacy.html">Privacy</a> •
+      <a href="/legal.html">Legal</a>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const burger = document.getElementById('tp-burger');
+      const nav = document.getElementById('tp-nav');
+
+      function openMenu(){
+        nav.setAttribute('data-state','open');
+        burger.setAttribute('aria-expanded','true');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeMenu(){
+        nav.setAttribute('data-state','closed');
+        burger.setAttribute('aria-expanded','false');
+        document.body.style.overflow = '';
+      }
+      function toggleMenu(){
+        const isOpen = nav.getAttribute('data-state') === 'open';
+        isOpen ? closeMenu() : openMenu();
+      }
+
+      burger.addEventListener('click', toggleMenu);
+
+      document.addEventListener('click', (e)=>{
+        if (window.matchMedia('(min-width: 860px)').matches) return;
+        const withinHeader = e.target.closest('.tp-header');
+        if (!withinHeader && nav.getAttribute('data-state') === 'open') closeMenu();
+      });
+
+      document.addEventListener('keydown', (e)=>{
+        if (e.key === 'Escape' && nav.getAttribute('data-state') === 'open') closeMenu();
+      });
+
+      window.addEventListener('resize', ()=>{
+        if (window.matchMedia('(min-width: 860px)').matches) closeMenu();
+      });
+    })();
+  </script>
 </body>
 </html>
