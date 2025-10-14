@@ -35,6 +35,7 @@
       color:var(--text);
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      text-align:center;
     }
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
@@ -70,20 +71,26 @@
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
     }
 
-    /* Hero */
+    /* Hero (centré mobile & desktop) */
     .hero{
-      max-width:1200px; margin:0 auto; padding:120px 20px 36px; text-align:center;
+      max-width:1200px; margin:0 auto; padding:0 20px;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      min-height:calc(100svh - 64px - 80px); /* header fixed + marge footer */
+      margin-top:64px; /* compense le header fixed */
     }
-    .hero .label{
+    .label{
       display:inline-flex; gap:8px; align-items:center; padding:6px 12px; border:1px solid #214a57; background:#0d2330;
       color:#bff1ff; border-radius:999px; font-size:.85rem; margin-bottom:12px;
     }
     .title{
-      font-size:clamp(2rem, 5vw, 3rem); line-height:1.1; margin:.2em auto .2em; font-weight:900;
+      font-size:clamp(1.9rem, 6vw, 3rem); line-height:1.1; margin:.2em auto .2em; font-weight:900;
       text-shadow:0 2px 40px rgba(34,211,238,.12);
+      max-width:900px;
     }
     .subtitle{
       color:var(--muted); max-width:760px; margin:0 auto 18px; line-height:1.75;
+      font-size:clamp(1rem, 2.8vw, 1.125rem);
+      padding:0 6px;
     }
     .cta-wrap{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:14px }
     .cta{
@@ -98,14 +105,16 @@
     .trust{
       display:flex; gap:18px; justify-content:center; flex-wrap:wrap;
       margin:22px auto 0; color:#a3b7c7; font-size:.92rem;
+      padding:0 10px;
     }
     .trust .item{ display:inline-flex; gap:8px; align-items:center; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0e172a }
 
-    /* Feature grid */
+    /* Sections */
     .section{ max-width:1200px; margin:0 auto; padding:24px 20px }
-    .section h2{ color:#b9e7f5; font-size:1.5rem; margin:12px 0 10px; text-align:center }
+    .section h2{ color:#b9e7f5; font-size:clamp(1.25rem, 2.8vw, 1.5rem); margin:12px 0 10px; text-align:center }
+
     .features{
-      display:grid; gap:16px; margin-top:14px; grid-template-columns:1fr; 
+      display:grid; gap:16px; margin-top:14px; grid-template-columns:1fr;
     }
     @media(min-width:900px){ .features{ grid-template-columns:1fr 1fr 1fr } }
     .card{
@@ -119,12 +128,12 @@
     /* How it works */
     .how{ display:grid; gap:16px; grid-template-columns:1fr; margin-top:12px }
     @media(min-width:900px){ .how{ grid-template-columns:1fr 1fr } }
-    .step{ background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px }
+    .step{ background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px; text-align:left }
     .step .num{ display:inline-flex; width:28px; height:28px; align-items:center; justify-content:center; border-radius:999px; background:#0f3b22; color:#b7f7ce; font-weight:900; margin-right:8px }
-    .step h3{ color:#b9e7f5; margin:.2em 0 .4em; font-size:1.05rem }
+    .step h3{ color:#b9e7f5; margin:.2em 0 .4em; font-size:1.05rem; display:inline }
     .step p{ margin:.2em 0 .6em; color:#e5eef7 }
 
-    /* Quickstart */
+    /* Code blocks */
     pre{
       background:#0b1220; border:1px solid #1f2937; color:#e5e7eb; border-radius:12px; padding:14px; overflow:auto; line-height:1.6;
     }
@@ -155,11 +164,11 @@
   </header>
 
   <!-- Hero -->
-  <section class="hero">
+  <section class="hero" aria-labelledby="hero-title">
     <div class="label">🔐 Privacy-first • ⚡ Edge-native • 🧠 AI-ready</div>
-    <h1 class="title">The universal proof layer for AI, developers, and the internet.</h1>
+    <h1 id="hero-title" class="title">The universal proof layer for AI, developers, and the internet.</h1>
     <p class="subtitle">
-      Timestamp and verify the existence of any digital content — instantly.  
+      Timestamp and verify the existence of any digital content — instantly.<br>
       No blockchain. No gas. No friction. Just cryptographic truth.
     </p>
     <div class="cta-wrap">
@@ -210,7 +219,7 @@
     <h2 id="how">How it works</h2>
     <div class="how">
       <div class="step">
-        <div class="num">1</div><h3 style="display:inline">Hash locally</h3>
+        <div class="num">1</div><h3>Hash locally</h3>
         <p>Compute <code>SHA-256</code> in your browser or server. You never upload the file or content.</p>
         <pre><code>async function sha256HexFromText(str){
   const enc = new TextEncoder().encode(str || '');
@@ -219,7 +228,7 @@
 }</code></pre>
       </div>
       <div class="step">
-        <div class="num">2</div><h3 style="display:inline">Request a timestamp</h3>
+        <div class="num">2</div><h3>Request a timestamp</h3>
         <p>POST the hash to the API. The server returns <code>timestamp</code>, <code>signature</code>, and a public <code>verify_url</code>.</p>
         <pre><code>const r = await fetch("https://timeproofs-api.jeason-bacoul.workers.dev/api/timestamp", {
   method:"POST",
@@ -229,7 +238,7 @@
 const proof = await r.json();</code></pre>
       </div>
       <div class="step">
-        <div class="num">3</div><h3 style="display:inline">Verify anywhere</h3>
+        <div class="num">3</div><h3>Verify anywhere</h3>
         <p>Check existence via the public endpoint. Anyone can confirm the proof without seeing your content.</p>
         <pre><code>const res = await fetch(
   "https://timeproofs-api.jeason-bacoul.workers.dev/api/verify?hash=" + hash
@@ -237,7 +246,7 @@ const proof = await r.json();</code></pre>
 const check = await res.json();</code></pre>
       </div>
       <div class="step">
-        <div class="num">4</div><h3 style="display:inline">Share the proof</h3>
+        <div class="num">4</div><h3>Share the proof</h3>
         <p>Send the <code>verify_url</code> to colleagues, auditors, or customers. (PDF certificates coming soon.)</p>
       </div>
     </div>
