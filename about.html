@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>About TimeProofs — The Universal Proof Layer</title>
+  <meta name="description" content="TimeProofs provides instant, privacy-first proof of existence for AI and developers. Timestamp any hash and verify it publicly — no blockchain, no gas, no friction."/>
+  <link rel="icon" href="/favicon.ico"/>
+  <style>
+    :root{--bg:#0f172a;--text:#f8fafc;--muted:#94a3b8;--accent:#22d3ee}
+    *{box-sizing:border-box}
+    body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:0}
+    header{
+      position:fixed;top:0;left:0;right:0;height:56px;background:#0b1220;border-bottom:1px solid #1e293b;
+      display:flex;align-items:center;justify-content:space-between;padding:0 16px;z-index:10
+    }
+    header a{color:var(--text);text-decoration:none;font-weight:600}
+    header a:hover{color:var(--accent)}
+    .brand{font-weight:700;letter-spacing:.3px}
+    nav a{margin-left:16px}
+    main{max-width:980px;margin:80px auto 60px;padding:0 20px}
+    h1,h2{color:var(--accent)}
+    h1{font-size:2rem;margin:.2em 0 .8em}
+    section{margin-top:2.2rem}
+    p{line-height:1.7;color:var(--text)}
+    .muted{color:var(--muted)}
+    ul{margin:0;padding-left:1.2rem}
+    li{margin:.4rem 0}
+    .grid{display:grid;gap:16px}
+    @media(min-width:860px){ .grid.two{grid-template-columns:1fr 1fr} .grid.three{grid-template-columns:1fr 1fr 1fr} }
+    .card{border:1px solid #1e293b;border-radius:12px;padding:16px;background:#0c1424}
+    a.cta{display:inline-block;margin-top:12px;background:var(--accent);color:#0b1220;font-weight:700;padding:10px 14px;border-radius:8px;text-decoration:none}
+    a.cta:hover{filter:brightness(1.05)}
+    footer{margin-top:40px;color:var(--muted);font-size:.9em;text-align:center}
+    .kicker{font-size:.95rem;letter-spacing:.3px;color:#a8c5d6}
+    .pill{display:inline-block;border:1px solid #214a57;background:#0d2330;color:#aee9f7;border-radius:999px;padding:4px 10px;margin-right:8px;font-size:.8rem}
+  </style>
+</head>
+<body>
+  <header>
+    <a class="brand" href="/index.html">TimeProofs</a>
+    <nav>
+      <a href="/about.html">About</a>
+      <a href="/use-cases.html">Use Cases</a>
+      <a href="/verify.html">Verify</a>
+      <a href="/docs.html">Docs</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/legal.html">Legal</a>
+    </nav>
+  </header>
+
+  <main>
+    <p class="kicker">ABOUT</p>
+    <h1>The universal proof layer for AI & the web</h1>
+    <p class="muted">Prove a thing existed at a moment in time. Instant. Publicly verifiable. Privacy-first. No blockchain, no gas, no friction.</p>
+    <p>
+      <a class="cta" href="/verify.html">Try it in 10 seconds</a>
+      <a class="cta" href="/docs.html" style="margin-left:8px">Read the docs</a>
+    </p>
+
+    <section>
+      <h2>Why now</h2>
+      <p>Information is fluid. AI systems rewrite content in milliseconds, creators iterate continuously, and critical decisions stream through software. Proving that “something existed at T” is now essential for trust, attribution, audit, and compliance. Traditional options are heavy (blockchains, gas, delays), closed (silos), or intrusive (uploading your files). Teams either don’t timestamp—or do it too late.</p>
+    </section>
+
+    <section>
+      <h2>What TimeProofs does</h2>
+      <div class="grid three">
+        <div class="card"><strong>1) Hash locally</strong><br/><span class="muted">Compute a SHA-256 of any content: AI output, file, email, webhook, dataset.</span></div>
+        <div class="card"><strong>2) Timestamp via API</strong><br/><span class="muted">POST the hash to <code>/timestamp</code>. We return an ISO time and an HMAC signature.</span></div>
+        <div class="card"><strong>3) Verify publicly</strong><br/><span class="muted">Anyone can call <code>/verify?hash=…</code> to confirm existence + timestamp + signature.</span></div>
+      </div>
+      <p class="muted" style="margin-top:10px">
+        <span class="pill">No data leaves your device</span>
+        <span class="pill">Edge-native (Cloudflare)</span>
+        <span class="pill">Open & simple</span>
+      </p>
+    </section>
+
+    <section>
+      <h2>Why TimeProofs is different</h2>
+      <div class="grid two">
+        <div class="card">
+          <strong>No blockchain</strong>
+          <ul>
+            <li>Instant: no blocks, no confirmations, no gas fees</li>
+            <li>Cost-efficient and predictable</li>
+            <li>No token, no vendor lock-in</li>
+          </ul>
+        </div>
+        <div class="card">
+          <strong>Privacy-first</strong>
+          <ul>
+            <li>Only the hash (64-hex) is sent and stored</li>
+            <li>Your files/content never leave your device</li>
+            <li>HTTPS everywhere, no tracking cookies</li>
+          </ul>
+        </div>
+        <div class="card">
+          <strong>Edge-native</strong>
+          <ul>
+            <li>Cloudflare Workers global network</li>
+            <li>Typical latency &lt;100 ms</li>
+            <li>Scales automatically with demand</li>
+          </ul>
+        </div>
+        <div class="card">
+          <strong>Verifiable & open</strong>
+          <ul>
+            <li>HMAC-SHA256 signature over <code>hash + timestamp</code></li>
+            <li>Public verification endpoint</li>
+            <li>Minimal protocol, audit-friendly</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Who it’s for</h2>
+      <div class="grid two">
+        <div class="card">
+          <strong>AI teams & agents</strong>
+          <ul>
+            <li>Provenance for prompts & outputs</li>
+            <li>Audit trails for autonomous runs</li>
+            <li>Dataset & fine-tune integrity</li>
+          </ul>
+        </div>
+        <div class="card">
+          <strong>Creators, legal & research</strong>
+          <ul>
+            <li>Publication priority & content originality</li>
+            <li>Contract/email/file timestamps</li>
+            <li>Scientific or compliance evidence</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Security & privacy</h2>
+      <ul>
+        <li><strong>Input:</strong> <code>hash</code> (64-hex), optional <code>type</code> and small <code>meta</code></li>
+        <li><strong>Output:</strong> ISO <code>timestamp</code>, HMAC-SHA256 <code>signature</code>, <code>verify_url</code></li>
+        <li><strong>Storage:</strong> Cloudflare KV → (<code>hash</code>, <code>timestamp</code>, <code>signature</code>, optional <code>type</code>/<code>meta</code>)</li>
+        <li><strong>Transport:</strong> HTTPS; no cookies; minimal edge logs</li>
+        <li><strong>Verification:</strong> read-only, idempotent, public</li>
+      </ul>
+      <p class="muted">TimeProofs never sees your data—only its cryptographic fingerprint.</p>
+    </section>
+
+    <section>
+      <h2>Pricing (overview)</h2>
+      <div class="grid two">
+        <div class="card">
+          <strong>Beta — Free</strong>
+          <ul>
+            <li>Up to 1,000 proofs / month / IP</li>
+            <li>Unlimited public verification</li>
+            <li>No API key required</li>
+          </ul>
+        </div>
+        <div class="card">
+          <strong>Pro — Coming soon</strong>
+          <ul>
+            <li>10,000 proofs / month + API key</li>
+            <li>PDF certificate, webhooks, dashboard</li>
+            <li>From €9 / month (indicative)</li>
+          </ul>
+        </div>
+      </div>
+      <p><a class="cta" href="/pricing.html">See full pricing</a></p>
+    </section>
+
+    <section>
+      <h2>Roadmap</h2>
+      <ul>
+        <li>v0.2 — JS SDK, PDF certificate, “Copy as cURL/JSON” in Verify</li>
+        <li>v1.0 — API keys, quotas, dashboard usage & export</li>
+        <li>v2.0 — Light distributed validation (ProofChain), Python/Go SDKs</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>FAQ (short)</h2>
+      <div class="grid two">
+        <div class="card">
+          <strong>Why not a blockchain?</strong>
+          <p class="muted">We optimize for instant proofs, low cost, and privacy by default—no gas fees, no confirmation delays, no token.</p>
+        </div>
+        <div class="card">
+          <strong>Do you store my files?</strong>
+          <p class="muted">No. We only handle the SHA-256 hash. Your content never leaves your device.</p>
+        </div>
+        <div class="card">
+          <strong>Is it legally useful?</strong>
+          <p class="muted">It’s strong technical evidence of existence/integrity at time T. Legal weight depends on jurisdiction/context.</p>
+        </div>
+        <div class="card">
+          <strong>Can anyone verify?</strong>
+          <p class="muted">Yes. The <code>/verify</code> endpoint is public, read-only, and idempotent.</p>
+        </div>
+      </div>
+      <p><a class="cta" href="/docs.html">Go to API docs</a></p>
+    </section>
+
+    <section>
+      <h2>Our vision</h2>
+      <p>By 2030, AI-generated data will exceed all human content. TimeProofs aims to be the neutral timestamp backbone for this new era—a fast, open, privacy-first standard to anchor digital truth in time.</p>
+    </section>
+
+    <p>
+      <a class="cta" href="/verify.html">Try TimeProofs now</a>
+      <a class="cta" href="/docs.html" style="margin-left:8px">Integrate in minutes</a>
+    </p>
+
+    <footer>
+      <a href="/index.html">Home</a> • <a href="/use-cases.html">Use Cases</a> • <a href="/verify.html">Verify</a> • <a href="/docs.html">Docs</a> • <a href="/pricing.html">Pricing</a> • <a href="/privacy.html">Privacy</a> • <a href="/legal.html">Legal</a>
+      <br/>© 2025 TimeProofs.io — Proof of Existence. For Everything.
+    </footer>
+  </main>
+</body>
+  </html>
