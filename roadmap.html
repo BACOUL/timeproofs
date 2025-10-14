@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Roadmap — TimeProofs</title>
+  <meta name="description" content="TimeProofs product roadmap: upcoming milestones, priorities, and release notes for the universal proof layer."/>
+  <link rel="icon" href="/favicon.ico"/>
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="Roadmap — TimeProofs"/>
+  <meta property="og:description" content="See what's next: SDKs, PDF certificates, API keys, dashboard, and distributed validation."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:image" content="/og.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Roadmap — TimeProofs"/>
+  <meta name="twitter:description" content="Upcoming milestones for TimeProofs."/>
+  <meta name="twitter:image" content="/og.png"/>
+
+  <style>
+    :root{
+      --bg:#0f172a; --panel:#0b1220; --line:#1e293b;
+      --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --ok:#22c55e; --warn:#f59e0b;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; background:var(--bg); color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* ===== Header (same as other pages) ===== */
+    .tp-header{
+      position:fixed; top:0; left:0; right:0; height:56px;
+      background:var(--panel); border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 16px; z-index:1000;
+    }
+    .tp-brand{ color:var(--text); text-decoration:none; font-weight:800; letter-spacing:.2px; font-size:1.05rem }
+    .tp-brand:hover{ color:var(--accent) }
+
+    .tp-burger{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:40px; height:40px; border:1px solid var(--line);
+      border-radius:8px; background:#0d1628; color:var(--text); cursor:pointer;
+    }
+    .tp-burger:hover{ filter:brightness(1.05) }
+
+    .tp-nav a{
+      color:var(--text); text-decoration:none; font-weight:600;
+      margin-left:16px; display:inline-block; padding:6px 0;
+    }
+    .tp-nav a:hover{ color:var(--accent) }
+
+    @media (min-width: 860px){
+      .tp-burger{ display:none }
+      .tp-nav{ display:flex; align-items:center; position:static; background:none; border:none }
+    }
+    @media (max-width: 859px){
+      .tp-nav{
+        position:fixed; top:56px; left:0; right:0;
+        background:#0c1424; border-top:1px solid var(--line);
+        display:flex; flex-direction:column; gap:8px;
+        padding:12px 16px; box-shadow:0 8px 20px rgba(0,0,0,.35);
+        transform:translateY(-8px); opacity:0; pointer-events:none;
+        transition:opacity .18s ease, transform .18s ease;
+      }
+      .tp-nav a{ margin:4px 0 }
+      .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
+    }
+
+    /* ===== Content ===== */
+    main{ padding:96px 20px 40px; max-width:1080px; margin:0 auto }
+
+    .hero h1{ font-size:2.2rem; margin:.2em 0 .2em; color:var(--text) }
+    .hero p{ color:var(--muted); margin:0 auto 1.2em; max-width:760px; line-height:1.7 }
+
+    .badges{ display:flex; flex-wrap:wrap; gap:8px; margin-top:8px }
+    .badge{
+      display:inline-flex; align-items:center; gap:6px; padding:6px 10px;
+      border-radius:999px; font-size:.85rem; border:1px solid var(--line);
+      background:#0c1424; color:#cfe7f5;
+    }
+    .badge.ok{ border-color:#1d4f2b; background:#0f3b22; color:#b7f7ce }
+    .badge.warn{ border-color:#73530b; background:#2a1e05; color:#f7e3b0 }
+
+    .grid{ display:grid; gap:18px; margin-top:18px }
+    @media(min-width:900px){ .grid.two{ grid-template-columns:1fr 1fr } .grid.three{ grid-template-columns:1fr 1fr 1fr } }
+
+    .card{
+      background:#0c1424; border:1px solid var(--line); border-radius:14px;
+      padding:18px;
+    }
+    .card h2{ color:var(--accent); margin:.2em 0 .6em; font-size:1.25rem }
+    .card h3{ margin:1em 0 .4em; color:#b9e7f5; font-size:1.05rem }
+    .card p, .card li{ color:var(--text) }
+    .muted{ color:var(--muted) }
+
+    ul{ margin:.2em 0 .6em; padding-left:1.2rem }
+    li{ margin:.35em 0 }
+
+    .cta{
+      display:inline-block; background:var(--accent); color:#0f172a;
+      font-weight:800; padding:.8em 1.1em; border-radius:10px; text-decoration:none;
+      transition:transform .15s ease, filter .15s ease; text-align:center;
+      margin-top:12px;
+    }
+    .cta:hover{ transform:translateY(-1px); filter:brightness(1.05) }
+
+    .timeline{ border-left:2px solid var(--line); margin:8px 0 0 6px; padding-left:14px }
+    .titem{ margin:10px 0 }
+    .titem .when{ font-size:.88rem; color:var(--muted) }
+
+    footer{ margin-top:48px; color:#7b8aa7; font-size:.9rem; text-align:center; padding:20px }
+    footer a{ color:var(--muted); text-decoration:none; margin:0 8px }
+    footer a:hover{ color:var(--accent) }
+  </style>
+</head>
+<body>
+  <header class="tp-header" role="navigation" aria-label="Main">
+    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">TimeProofs</a>
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
+      <span aria-hidden="true">☰</span>
+    </button>
+    <nav id="tp-nav" class="tp-nav" data-state="closed">
+      <a href="/about.html">About</a>
+      <a href="/use-cases.html">Use Cases</a>
+      <a href="/verify.html">Verify</a>
+      <a href="/docs.html">Docs</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/roadmap.html">Roadmap</a>
+      <a href="/legal.html">Legal</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="roadmap-title">
+      <h1 id="roadmap-title">Roadmap</h1>
+      <p>What’s coming next for the universal proof layer: SDKs, certificates, API keys, quotas, dashboard, and a light distributed validation layer. Built openly, privacy-first, and edge-native.</p>
+      <div class="badges">
+        <span class="badge ok">Current: v0.1 (Public Beta)</span>
+        <span class="badge">Infra: Cloudflare Workers + KV</span>
+        <span class="badge warn">Focus: DX & reliability</span>
+      </div>
+    </section>
+
+    <section class="grid two" style="margin-top:22px">
+      <article class="card">
+        <h2>v0.2 — Developer Experience</h2>
+        <ul>
+          <li><strong>JavaScript SDK</strong> (browser & Node): <em>createFromText/File/Hash, verify</em></li>
+          <li><strong>PDF certificate</strong> generation (downloadable proof with timestamp & signature)</li>
+          <li><strong>Verify UX</strong>: buttons “Copy as cURL” & “Copy JSON”</li>
+          <li><strong>Docs refresh</strong>: Why TimeProofs? limits, examples</li>
+        </ul>
+        <p class="muted">Goal: integrate in minutes; proofs visible and portable for humans.</p>
+      </article>
+
+      <article class="card">
+        <h2>v1.0 — Productization</h2>
+        <ul>
+          <li><strong>API keys</strong> + usage <strong>quotas</strong> (Free/Pro/Team)</li>
+          <li><strong>Dashboard</strong> (usage analytics, CSV export, key rotation)</li>
+          <li><strong>Webhooks</strong> (success/failure callbacks)</li>
+          <li><strong>Billing</strong> (Stripe) — predictable, no “gas”</li>
+        </ul>
+        <p class="muted">Goal: reliable operations at scale with predictable pricing.</p>
+      </article>
+
+      <article class="card">
+        <h2>v2.0 — Validation Layer</h2>
+        <ul>
+          <li><strong>ProofChain</strong> (light distributed validation / anchoring)</li>
+          <li><strong>SDKs</strong>: Python & Go</li>
+          <li><strong>Advanced verify</strong> (proof bundles, offline verification)</li>
+        </ul>
+        <p class="muted">Goal: extra assurance without sacrificing speed or privacy.</p>
+      </article>
+
+      <article class="card">
+        <h2>Backlog / Ideas</h2>
+        <ul>
+          <li><strong>Signed agents</strong>: per-agent public key & attestations</li>
+          <li><strong>CLI</strong> for CI/CD pipelines</li>
+          <li><strong>S3 / GCS</strong> integration (hash on upload)</li>
+          <li><strong>Org features</strong>: roles, audit export, SIEM</li>
+          <li><strong>Trusted timestamping</strong> (RFC 3161 compatibility – research)</li>
+        </ul>
+        <p class="muted">Shaped by real-world usage and partner feedback.</p>
+      </article>
+    </section>
+
+    <section class="grid two" style="margin-top:22px">
+      <article class="card">
+        <h2>Principles</h2>
+        <ul>
+          <li><strong>Privacy-first</strong>: only hashes, never content</li>
+          <li><strong>Open & simple</strong>: minimal protocol, verifiable by anyone</li>
+          <li><strong>Edge-native</strong>: low latency, global scale</li>
+          <li><strong>Predictable cost</strong>: no gas, no chain fees</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h2>Changelog (highlights)</h2>
+        <div class="timeline">
+          <div class="titem">
+            <div><strong>v0.1</strong> — Public beta</div>
+            <div class="when">API timestamp & verify • Verify UI • Docs • Legal/Privacy</div>
+          </div>
+          <div class="titem">
+            <div><strong>Next</strong> — v0.2</div>
+            <div class="when">JS SDK • PDF certificate • Verify UX copy buttons</div>
+          </div>
+        </div>
+        <a class="cta" href="/docs.html" style="margin-top:14px">Read the Docs</a>
+      </article>
+    </section>
+
+    <section class="card" style="margin-top:22px">
+      <h2>Feedback & Early Access</h2>
+      <p class="muted">Your input shapes the roadmap. Tell us what you need to make TimeProofs your default proof layer.</p>
+      <a class="cta" href="mailto:hello@timeproofs.io?subject=TimeProofs%20Feedback&body=Hi%20TimeProofs%2C%20here%27s%20what%20we%27d%20love%20to%20see%3A">Send feedback</a>
+      <a class="cta" href="mailto:hello@timeproofs.io?subject=Pro%20Early%20Access&body=We%27d%20like%20Pro%20early%20access." style="margin-left:8px">Request Pro early access</a>
+    </section>
+
+    <footer>
+      © 2025 TimeProofs — Proof of Existence. For Everything.
+      <div style="margin-top:6px">
+        <a href="/index.html">Home</a> •
+        <a href="/about.html">About</a> •
+        <a href="/use-cases.html">Use Cases</a> •
+        <a href="/verify.html">Verify</a> •
+        <a href="/docs.html">Docs</a> •
+        <a href="/pricing.html">Pricing</a> •
+        <a href="/privacy.html">Privacy</a> •
+        <a href="/legal.html">Legal</a>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    (function(){
+      const burger = document.getElementById('tp-burger');
+      const nav = document.getElementById('tp-nav');
+
+      function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+      function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+      function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
+
+      burger.addEventListener('click', toggleMenu);
+      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 860px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); });
+      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); });
+      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 860px)').matches) closeMenu(); });
+    })();
+  </script>
+</body>
+</html>
+```0
