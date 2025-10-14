@@ -1,35 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TimeProofs — Verify & Create Proof</title>
-  <link rel="icon" href="/favicon.ico" />
+  <!-- Core -->
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Verify & Create Proof — TimeProofs</title>
+  <meta name="description" content="Verify and create cryptographic proofs of existence with TimeProofs. Hash locally, timestamp via API, and verify publicly — no blockchain."/>
+  <link rel="icon" href="/favicon.ico"/>
+
+  <!-- Social -->
+  <meta property="og:title" content="Verify & Create Proof — TimeProofs"/>
+  <meta property="og:description" content="Hash locally. Timestamp via API. Verify publicly. Privacy-first, edge-native."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:image" content="/og.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Verify & Create Proof — TimeProofs"/>
+  <meta name="twitter:description" content="Instant proof-of-existence for AI & developers."/>
+  <meta name="twitter:image" content="/og.png"/>
+
   <style>
-    :root {
-      --bg:#0f172a; --panel:#111827; --muted:#94a3b8; --text:#e5e7eb;
-      --accent:#22d3ee; --ok:#22c55e; --bad:#ef4444;
+    :root{
+      --bg:#0b1020; --panel:#0f172a; --line:#1e293b;
+      --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
+      --ok:#22c55e; --bad:#ef4444;
     }
     *{ box-sizing:border-box }
-
     body{
-      margin:0; background:var(--bg); color:var(--text);
-      font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      margin:0; background:radial-gradient(1000px 400px at 70% -10%, rgba(34,211,238,.10), transparent 60%), var(--bg);
+      color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+    a{ color:var(--accent); text-decoration:none }
+    a:hover{ text-decoration:underline }
+
+    /* Header (unifié) */
+    .tp-header{
+      position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
+      background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+    }
+    .tp-brand{ color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none }
+    .tp-brand:hover{ color:var(--accent) }
+    .tp-burger{
+      display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
+      border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
+    }
+    .tp-nav a{
+      color:var(--text); text-decoration:none; font-weight:700; margin-left:18px; padding:8px 0; display:inline-block;
+    }
+    .tp-nav a:hover{ color:var(--accent) }
+    @media (min-width: 900px){
+      .tp-burger{ display:none }
+      .tp-nav{ display:flex; align-items:center }
+    }
+    @media (max-width: 899px){
+      .tp-nav{
+        position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
+        display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
+        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
+      }
+      .tp-nav a{ margin:4px 0 }
+      .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
     }
 
-    /* Top nav (same look as index) */
-    header {
-      position: fixed; top:0; left:0; right:0; height:56px;
-      background:#0b1220; border-bottom:1px solid #1e293b;
-      display:flex; align-items:center; justify-content:space-between;
-      padding:0 16px; z-index:10;
-    }
-    header a { color:var(--text); text-decoration:none; font-weight:600; }
-    header a:hover { color:var(--accent); }
-    .brand { font-weight:700; letter-spacing:.3px }
-    nav a { margin-left:16px }
-
-    .wrap{ max-width:980px; margin:96px auto 40px; padding:0 20px; }
+    /* Layout */
+    .wrap{ max-width:980px; margin:100px auto 40px; padding:0 20px; }
     h1{ margin:0 0 8px; font-size:28px }
     p.lead{ margin:0 0 24px; color:var(--muted) }
 
@@ -37,14 +74,21 @@
     .tab{ padding:10px 14px; background:#0b1220; border:1px solid #1f2937; border-radius:10px; cursor:pointer; color:#cbd5e1 }
     .tab.active{ background:var(--panel); color:var(--text); border-color:#263244 }
 
-    .card{ background:var(--panel); border:1px solid #1f2937; border-radius:14px; padding:18px; }
+    .grid{ display:grid; grid-template-columns:1fr; gap:16px }
+    @media(min-width:860px){ .grid{ grid-template-columns:1fr 1fr } }
+
+    .card{
+      background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px;
+    }
     label{ display:block; font-size:13px; color:#a7b1c2; margin:8px 0 6px }
-    input[type="text"], textarea{ width:100%; background:#0b1220; color:var(--text); border:1px solid #1f2937; border-radius:10px; padding:10px 12px; }
+    input[type="text"], textarea{
+      width:100%; background:#0b1220; color:var(--text); border:1px solid #1f2937; border-radius:10px; padding:10px 12px;
+    }
     textarea{ min-height:110px; resize:vertical }
 
-    .row{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    .row{ display:flex; gap:12px; flex-wrap:wrap; align-items:center }
     .row > *{ flex:1 1 240px }
-    .btn{ background:var(--accent); color:#06202a; border:none; padding:11px 16px; border-radius:10px; font-weight:700; cursor:pointer }
+    .btn{ background:var(--accent); color:#06202a; border:none; padding:11px 16px; border-radius:10px; font-weight:800; cursor:pointer }
     .btn:hover{ filter:brightness(1.05) }
 
     .hint{ font-size:12px; color:#93a1b5 }
@@ -52,45 +96,53 @@
     .ok{ background:#0f3b22; color:#b7f7ce; border:1px solid #1c6b3d }
     .bad{ background:#3b0f12; color:#ffc1c6; border:1px solid #6b1c22 }
 
-    pre{ width:100%; overflow:auto; background:#0b1220; color:#a7f3d0; border:1px solid #1f2937; border-radius:10px; padding:12px; }
-    .grid{ display:grid; grid-template-columns:1fr; gap:16px }
-    @media(min-width:860px){ .grid{ grid-template-columns:1fr 1fr } }
+    pre{ width:100%; overflow:auto; background:#0b1220; color:#a7f3d0; border:1px solid #1f2937; border-radius:10px; padding:12px }
+    .actions{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap }
+    .ghost{ background:#111d33; color:#e2f6ff; border:1px solid var(--line) }
 
     footer{ margin:26px 0 0; text-align:center; color:#7c8aa5; font-size:12px }
   </style>
 </head>
 <body>
-  <header>
-    <a class="brand" href="/index.html">TimeProofs</a>
-    <nav>
+  <!-- Header -->
+  <header class="tp-header" role="navigation" aria-label="Main">
+    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">TimeProofs</a>
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
+      <span aria-hidden="true">☰</span>
+    </button>
+    <nav id="tp-nav" class="tp-nav" data-state="closed">
+      <a href="/about.html">About</a>
+      <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html">Verify</a>
       <a href="/docs.html">Docs</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/roadmap.html">Roadmap</a>
       <a href="/legal.html">Legal</a>
     </nav>
   </header>
 
   <div class="wrap">
-    <h1>🔐 TimeProofs — Verify & Create Proof</h1>
+    <h1>🔐 Verify & Create Proof</h1>
     <p class="lead">Hash locally → timestamp & sign via API → verify publicly. No content ever leaves your device.</p>
 
-    <div class="tabs">
-      <button id="tab-create" class="tab active">Create Proof</button>
-      <button id="tab-verify" class="tab">Verify Proof</button>
+    <div class="tabs" role="tablist" aria-label="Create or Verify">
+      <button id="tab-create" class="tab active" role="tab" aria-selected="true" aria-controls="panel-create">Create Proof</button>
+      <button id="tab-verify" class="tab" role="tab" aria-selected="false" aria-controls="panel-verify">Verify Proof</button>
     </div>
 
     <div class="grid">
       <!-- CREATE PROOF -->
-      <div class="card" id="panel-create">
+      <section class="card" id="panel-create" role="tabpanel" aria-labelledby="tab-create">
         <label>Choose input</label>
         <div class="row">
-          <button class="btn" id="choose-text">Text</button>
-          <button class="btn" id="choose-file">File</button>
-          <button class="btn" id="choose-hash">Raw hash</button>
+          <button class="btn ghost" id="choose-text">Text</button>
+          <button class="btn ghost" id="choose-file">File</button>
+          <button class="btn ghost" id="choose-hash">Raw hash</button>
         </div>
 
         <div id="input-text" style="margin-top:14px;">
           <label>Text to hash (SHA-256 runs locally)</label>
-          <textarea id="text"></textarea>
+          <textarea id="text" placeholder="Paste or type your text here..."></textarea>
         </div>
 
         <div id="input-file" style="display:none; margin-top:14px;">
@@ -122,10 +174,14 @@
 
         <div id="create-status" style="margin-top:12px;"></div>
         <pre id="create-output" style="margin-top:12px;"></pre>
-      </div>
+        <div class="actions" id="create-actions" style="display:none;">
+          <button class="btn ghost" id="copy-create-json">Copy JSON</button>
+          <button class="btn ghost" id="copy-create-curl">Copy cURL</button>
+        </div>
+      </section>
 
       <!-- VERIFY PROOF -->
-      <div class="card" id="panel-verify" style="display:none;">
+      <section class="card" id="panel-verify" role="tabpanel" aria-labelledby="tab-verify" style="display:none;">
         <label>Hash to verify (SHA-256, hex)</label>
         <input type="text" id="verify-hash" placeholder="Paste an existing hash"/>
         <div class="row" style="margin-top:12px;">
@@ -134,28 +190,42 @@
         </div>
         <div id="verify-status" style="margin-top:12px;"></div>
         <pre id="verify-output" style="margin-top:12px;"></pre>
-      </div>
+        <div class="actions" id="verify-actions" style="display:none;">
+          <button class="btn ghost" id="copy-verify-json">Copy JSON</button>
+          <button class="btn ghost" id="copy-verify-curl">Copy cURL</button>
+        </div>
+      </section>
     </div>
 
     <footer>© 2025 TimeProofs — Proof of Existence. For Everything.</footer>
   </div>
 
-  <!-- SDK (browser) -->
-  <script src="/sdk/timeproof.js"></script>
-
   <script>
-    // API base for your Worker (keep as is for now; swap to api.timeproofs.io at launch)
-    const API_BASE = "https://timeproofs-api.jeason-bacoul.workers.dev/api";
+    // ===== Header burger =====
+    (function(){
+      const burger = document.getElementById('tp-burger');
+      const nav = document.getElementById('tp-nav');
+      function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+      function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+      function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
+      burger.addEventListener('click', toggleMenu);
+      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); });
+      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); });
+      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); });
+    })();
 
-    // Tabs
+    // ===== Config =====
+    const API_BASE = "https://timeproofs-api.jeason-bacoul.workers.dev/api"; // swap to https://api.timeproofs.io at launch
+
+    // ===== Tabs =====
     const tabCreate = document.getElementById('tab-create');
     const tabVerify = document.getElementById('tab-verify');
     const panelCreate = document.getElementById('panel-create');
     const panelVerify = document.getElementById('panel-verify');
-    tabCreate.onclick = () => { tabCreate.classList.add('active'); tabVerify.classList.remove('active'); panelCreate.style.display='block'; panelVerify.style.display='none'; };
-    tabVerify.onclick = () => { tabVerify.classList.add('active'); tabCreate.classList.remove('active'); panelVerify.style.display='block'; panelCreate.style.display='none'; };
+    tabCreate.onclick = () => { tabCreate.classList.add('active'); tabVerify.classList.remove('active'); tabCreate.setAttribute('aria-selected','true'); tabVerify.setAttribute('aria-selected','false'); panelCreate.style.display='block'; panelVerify.style.display='none'; };
+    tabVerify.onclick = () => { tabVerify.classList.add('active'); tabCreate.classList.remove('active'); tabVerify.setAttribute('aria-selected','true'); tabCreate.setAttribute('aria-selected','false'); panelVerify.style.display='block'; panelCreate.style.display='none'; };
 
-    // Inputs
+    // ===== Input mode =====
     const chooseText = document.getElementById('choose-text');
     const chooseFile = document.getElementById('choose-file');
     const chooseHash = document.getElementById('choose-hash');
@@ -166,7 +236,7 @@
     chooseFile.onclick = () => { inputText.style.display='none'; inputFile.style.display='block'; inputHash.style.display='none'; };
     chooseHash.onclick = () => { inputText.style.display='none'; inputFile.style.display='none'; inputHash.style.display='block'; };
 
-    // Hash helpers
+    // ===== Hash helpers =====
     async function sha256HexFromText(str){
       const enc = new TextEncoder().encode(str || '');
       const buf = await crypto.subtle.digest('SHA-256', enc);
@@ -178,12 +248,14 @@
       return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
     }
 
-    // Create proof
+    // ===== Create proof =====
     const btnCreate = document.getElementById('btn-create');
     const outCreate = document.getElementById('create-output');
     const statusCreate = document.getElementById('create-status');
+    const createActions = document.getElementById('create-actions');
+
     btnCreate.onclick = async () => {
-      outCreate.textContent = ''; statusCreate.innerHTML = '';
+      outCreate.textContent = ''; statusCreate.innerHTML = ''; createActions.style.display='none';
       try {
         let hash = '';
         if (inputText.style.display !== 'none') {
@@ -215,28 +287,36 @@
 
         statusCreate.innerHTML = `<span class="pill ok">✅ Proof created</span>`;
         outCreate.textContent = JSON.stringify(j, null, 2);
+        createActions.style.display='flex';
+
+        // Copy handlers
+        document.getElementById('copy-create-json').onclick = () => copyToClipboard(outCreate.textContent);
+        document.getElementById('copy-create-curl').onclick = () => {
+          const curl = `curl -X POST '${API_BASE}/timestamp' -H 'Content-Type: application/json' -d '${JSON.stringify({hash, type, meta})}'`;
+          copyToClipboard(curl);
+        };
       } catch(e){
         statusCreate.innerHTML = `<span class="pill bad">❌ ${String(e.message || e)}</span>`;
       }
     };
 
-    // Verify proof
+    // ===== Verify proof =====
     const btnVerify = document.getElementById('btn-verify');
     const outVerify = document.getElementById('verify-output');
     const statusVerify = document.getElementById('verify-status');
+    const verifyActions = document.getElementById('verify-actions');
 
-    // Helper: read ?hash= from URL and prefill
+    // Prefill from ?hash=
     const params = new URLSearchParams(location.search);
     const preHash = params.get('hash');
     if (preHash) {
       document.getElementById('verify-hash').value = preHash;
-      // Auto-open Verify tab if hash present
       tabVerify.click();
       setTimeout(() => btnVerify.click(), 50);
     }
 
     btnVerify.onclick = async () => {
-      outVerify.textContent=''; statusVerify.innerHTML='';
+      outVerify.textContent=''; statusVerify.innerHTML=''; verifyActions.style.display='none';
       const hash = (document.getElementById('verify-hash').value || '').trim();
       if (!hash) return alert('Paste a SHA-256 hash.');
       try {
@@ -250,23 +330,29 @@
           statusVerify.innerHTML = `<span class="pill bad">❌ Invalid</span>`;
         }
         outVerify.textContent = JSON.stringify(j, null, 2);
+        verifyActions.style.display='flex';
+
+        // Copy handlers
+        document.getElementById('copy-verify-json').onclick = () => copyToClipboard(outVerify.textContent);
+        document.getElementById('copy-verify-curl').onclick = () => {
+          const curl = `curl '${API_BASE}/verify?hash=${encodeURIComponent(hash)}'`;
+          copyToClipboard(curl);
+        };
       } catch(e){
         statusVerify.innerHTML = `<span class="pill bad">❌ ${String(e.message || e)}</span>`;
       }
     };
 
-    // SDK smoke test (console)
-    (async () => {
-      try {
-        const tp = new TimeProofs({ baseUrl: API_BASE });
-        const proof = await tp.createFromText("sdk smoke test");
-        console.log("SDK proof:", proof);
-        const check = await tp.verify(proof.hash);
-        console.log("SDK verify:", check);
-      } catch (e) {
-        console.warn("SDK test error:", e);
+    // ===== Utils =====
+    async function copyToClipboard(text){
+      try{
+        await navigator.clipboard.writeText(text);
+        alert('Copied to clipboard');
+      }catch(e){
+        console.warn('Clipboard error:', e);
+        prompt('Copy manually:', text);
       }
-    })();
+    }
   </script>
 </body>
-</html>
+            </html>
