@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TimeProofs — Verify</title>
+  <link rel="icon" href="/favicon.ico"/>
+  <style>
+    :root{--bg:#0f172a;--panel:#0b1220;--muted:#94a3b8;--text:#e5e7eb;--accent:#22d3ee;--ok:#22c55e;--bad:#ef4444}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .wrap{max-width:880px;margin:32px auto;padding:0 16px}
+    h1{margin:0 0 8px;font-size:26px}
+    p.lead{margin:0 0 18px;color:var(--muted)}
+    .card{background:var(--panel);border:1px solid #1f2937;border-radius:14px;padding:16px}
+    label{display:block;font-size:13px;color:#a7b1c2;margin:8px 0 6px}
+    input,textarea{width:100%;background:#08101c;color:var(--text);border:1px solid #1f2937;border-radius:10px;padding:10px 12px}
+    textarea{min-height:110px;resize:vertical}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+    .row>*{flex:1 1 240px}
+    .btn{background:var(--accent);color:#06202a;border:none;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}
+    .hint{font-size:12px;color:#93a1b5}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;font-size:12px;margin-top:10px}
+    .ok{background:#0f3b22;color:#b7f7ce;border:1px solid #1c6b3d}
+    .bad{background:#3b0f12;color:#ffc1c6;border:1px solid #6b1c22}
+    pre{width:100%;overflow:auto;background:#08101c;color:#a7f3d0;border:1px solid #1f2937;border-radius:10px;padding:12px}
+    footer{margin:24px 0 0;text-align:center;color:#7c8aa5;font-size:12px}
+    .tabs{display:flex;gap:8px;margin:14px 0}
+    .tab{padding:10px 14px;background:#08101c;border:1px solid #1f2937;border-radius:10px;color:#cbd5e1}
+    .active{background:#0f172a;color:#fff}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>🔎 Verify / Create a Proof</h1>
+    <p class="lead">Hash locally → timestamp & sign via API → verify publicly. Your content never leaves your device.</p>
+
+    <div class="tabs">
+      <button id="t-verify" class="tab active">Verify Proof</button>
+      <button id="t-create" class="tab">Create Proof</button>
+    </div>
+
+    <!-- VERIFY -->
+    <div id="panel-verify" class="card">
+      <label>Hash to verify (SHA-256, hex)</label>
+      <input id="verify-hash" placeholder="Paste a 64-hex SHA-256 hash"/>
+      <div class="row">
+        <button class="btn" id="btn-verify">Verify</button>
+        <span class="hint">Checks existence, timestamp and server signature.</span>
+      </div>
+      <div id="verify-status"></div>
+      <pre id="verify-out"></pre>
+    </div>
+
+    <!-- CREATE -->
+    <div id="panel-create" class="card" style="display:none">
+      <label>Choose input</label>
+      <div class="row">
+        <button class="btn" id="choose-text">Text</button>
+        <button class="btn" id="choose-file">File</button>
+        <button class="btn" id="choose-hash">Raw hash</button>
+      </div>
+
+      <div id="box-text" style="margin-top:12px">
+        <label>Text to hash (runs locally)</label>
+        <textarea id="text"></textarea>
+      </div>
+
+      <div id="box-file" style="display:none;margin-top:12px">
+        <label>Select file (hashed locally in your browser)</label>
+        <input type="file" id="file"/>
+        <p class="hint">Only the hash is sent to the API — the file never leaves your device.</p>
+      </div>
+
+      <div id="box-hash" style="display:none;margin-top:12px">
+        <label>Existing SHA-256 hash (64 hex)</label>
+        <input id="raw-hash" placeholder="e3b0c44298fc1c149a..."/>
+      </div>
+
+      <div class="row">
+        <button class="btn" id="btn-create">Create Proof</button>
+        <span class="hint">Output: id, hash, timestamp, signature, verify URL.</span>
+      </div>
+      <div id="create-status"></div>
+      <pre id="create-out"></pre>
+    </div>
+
+    <footer>© 2025 TimeProofs — Proof of Existence. For Everything.</footer>
+  </div>
+
+  <script>
+    // 👇 Mets ici ton API base (actuelle) — on passera à https://api.timeproofs.io après DNS
+    const API_BASE = 'https://timeproofs-api.jeason-bacoul.workers.dev/api';
+
+    // Tabs
+    const tv = document.getElementById('t-verify');
+    const tc = document.getElementById('t-create');
+    const pv = document.getElementById('panel-verify');
+    const pc = document.getElementById('panel-create');
+    tv.onclick = ()=>{ tv.classList.add('active'); tc.classList.remove('active'); pv.style.display='block'; pc.style.display='none'; };
+    tc.onclick = ()=>{ tc.classList.add('active'); tv.classList.remove('active'); pc.style.display='block'; pv.style.display='none'; };
+
+    // Input mode
+    const chooseText = document.getElementById('choose-text');
+    const chooseFile = document.getElementById('choose-file');
+    const chooseHash = document.getElementById('choose-hash');
+    const boxText = document.getElementById('box-text');
+    const boxFile = document.getElementById('box-file');
+    const boxHash = document.getElementById('box-hash');
+    chooseText.onclick = ()=>{ boxText.style.display='block'; boxFile.style.display='none'; boxHash.style.display='none'; };
+    chooseFile.onclick = ()=>{ boxText.style.display='none'; boxFile.style.display='block'; boxHash.style.display='none'; };
+    chooseHash.onclick = ()=>{ boxText.style.display='none'; boxFile.style.display='none'; boxHash.style.display='block'; };
+
+    // Helpers (SHA-256 local)
+    async function sha256HexFromText(str){
+      const enc = new TextEncoder().encode(str||'');
+      const buf = await crypto.subtle.digest('SHA-256', enc);
+      return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
+    async function sha256HexFromFile(file){
+      const buf = await file.arrayBuffer();
+      const dig = await crypto.subtle.digest('SHA-256', buf);
+      return [...new Uint8Array(dig)].map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
+
+    // Verify
+    const vBtn = document.getElementById('btn-verify');
+    const vHash = document.getElementById('verify-hash');
+    const vOut  = document.getElementById('verify-out');
+    const vStatus = document.getElementById('verify-status');
+    vBtn.onclick = async ()=>{
+      vOut.textContent=''; vStatus.innerHTML='';
+      const hash = (vHash.value||'').trim();
+      if(!/^[a-f0-9]{64}$/i.test(hash)) { alert('Enter a valid SHA-256 (64 hex).'); return; }
+      try{
+        const r = await fetch(`${API_BASE}/verify?hash=${encodeURIComponent(hash)}`);
+        const j = await r.json();
+        vStatus.innerHTML = (j.ok===true||j.found===true)
+          ? `<span class="pill ok">✅ Valid</span>` : `<span class="pill bad">❌ Not found</span>`;
+        vOut.textContent = JSON.stringify(j,null,2);
+      }catch(e){ vStatus.innerHTML = `<span class="pill bad">❌ ${String(e)}</span>`; }
+    };
+
+    // Create
+    const cBtn = document.getElementById('btn-create');
+    const cOut = document.getElementById('create-out');
+    const cStatus = document.getElementById('create-status');
+    cBtn.onclick = async ()=>{
+      cOut.textContent=''; cStatus.innerHTML='';
+      let hash='';
+      if(boxText.style.display!=='none'){
+        const t = document.getElementById('text').value||'';
+        hash = await sha256HexFromText(t);
+      }else if(boxFile.style.display!=='none'){
+        const f = document.getElementById('file').files[0];
+        if(!f){ alert('Select a file first.'); return; }
+        hash = await sha256HexFromFile(f);
+      }else{
+        hash = (document.getElementById('raw-hash').value||'').trim();
+        if(!/^[a-f0-9]{64}$/i.test(hash)){ alert('Enter a valid SHA-256 (64 hex).'); return; }
+      }
+      try{
+        const r = await fetch(`${API_BASE}/timestamp`, {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ hash, type:'event', meta:{} })
+        });
+        const j = await r.json();
+        if(!r.ok||j.error){ throw new Error(j.error||'Request failed'); }
+        cStatus.innerHTML = `<span class="pill ok">✅ Proof created</span>`;
+        cOut.textContent = JSON.stringify(j,null,2);
+        // Auto-fill verify tab
+        vHash.value = j.hash || hash;
+      }catch(e){
+        cStatus.innerHTML = `<span class="pill bad">❌ ${String(e.message||e)}</span>`;
+      }
+    };
+  </script>
+</body>
+</html>
