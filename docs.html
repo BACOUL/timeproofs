@@ -9,7 +9,24 @@
   <style>
     :root{--bg:#0f172a;--text:#e5e7eb;--muted:#94a3b8;--accent:#22d3ee;--panel:#111827}
     *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.7;padding:32px;max-width:960px;margin:auto}
+    body{
+      margin:0;background:var(--bg);color:var(--text);
+      font:16px/1.7 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    }
+
+    /* Top nav (same as other pages) */
+    header{
+      position:fixed;top:0;left:0;right:0;height:56px;
+      background:#0b1220;border-bottom:1px solid #1e293b;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 16px;z-index:10;
+    }
+    header a{color:var(--text);text-decoration:none;font-weight:600}
+    header a:hover{color:var(--accent)}
+    .brand{font-weight:700;letter-spacing:.3px}
+    nav a{margin-left:16px}
+
+    main{padding:32px;max-width:960px;margin:80px auto 40px} /* margin-top for fixed header */
     h1{font-size:32px;color:var(--accent)}
     h2{margin-top:1.8em;color:var(--accent)}
     code{background:#1e293b;color:#f8fafc;padding:2px 6px;border-radius:5px;font-size:0.95em}
@@ -20,79 +37,92 @@
     th,td{border:1px solid #334155;padding:8px;text-align:left}
     th{background:#1e293b;color:#f8fafc}
     footer{margin-top:40px;color:var(--muted);font-size:0.9em;text-align:center}
+    .note{color:#9aa4b2;font-size:.95em}
   </style>
 </head>
 <body>
-  <h1>🧭 TimeProofs API Documentation</h1>
-  <p>The TimeProofs API lets you <strong>timestamp, verify, and prove the existence</strong> of any digital content instantly — without blockchain or tokens.</p>
-  
-  <h2>🌐 Base URL</h2>
-  <pre><code>https://api.timeproofs.io</code></pre>
+  <header>
+    <a class="brand" href="/index.html">TimeProofs</a>
+    <nav>
+      <a href="/verify.html">Verify</a>
+      <a href="/docs.html">Docs</a>
+      <a href="/legal.html">Legal</a>
+    </nav>
+  </header>
 
-  <h2>⚡ Endpoints</h2>
-  <table>
-    <tr><th>Endpoint</th><th>Method</th><th>Description</th></tr>
-    <tr><td><code>/proof</code></td><td>POST</td><td>Create a new proof of existence for a SHA256 hash.</td></tr>
-    <tr><td><code>/verify</code></td><td>GET</td><td>Verify if a proof exists and retrieve its timestamp and signature.</td></tr>
-  </table>
+  <main>
+    <h1>🧭 TimeProofs API Documentation</h1>
+    <p>The TimeProofs API lets you <strong>timestamp, verify, and prove the existence</strong> of any digital content instantly — without blockchain or tokens.</p>
 
-  <h2>🧾 Create Proof (POST /proof)</h2>
-  <pre><code>{
-  "hash": "sha256_of_your_data"
+    <h2>🌐 Base URL</h2>
+    <p><strong>Current (Worker):</strong></p>
+    <pre><code>https://timeproofs-api.jeason-bacoul.workers.dev/api</code></pre>
+    <p class="note">Planned production domain at launch: <code>https://api.timeproofs.io</code></p>
+
+    <h2>⚡ Endpoints</h2>
+    <table>
+      <tr><th>Endpoint</th><th>Method</th><th>Description</th></tr>
+      <tr><td><code>/timestamp</code></td><td>POST</td><td>Create a new proof of existence for a SHA-256 hash.</td></tr>
+      <tr><td><code>/verify</code></td><td>GET</td><td>Verify if a proof exists and retrieve its timestamp and signature.</td></tr>
+    </table>
+
+    <h2>🧾 Create Proof (POST /timestamp)</h2>
+    <p><strong>Request:</strong></p>
+    <pre><code>POST https://timeproofs-api.jeason-bacoul.workers.dev/api/timestamp
+Content-Type: application/json
+
+{ "hash": "64hexsha256", "type": "event", "meta": {} }</code></pre>
+    <p><strong>Returns:</strong></p>
+    <pre><code>{
+  "ok": true,
+  "id": "hashprefix:sigprefix",
+  "hash": "64hexsha256",
+  "timestamp": "2025-01-01T00:00:00.000Z",
+  "signature": "hex_hmac256",
+  "verify_url": "https://timeproofs-api.jeason-bacoul.workers.dev/api/verify?hash=..."
 }</code></pre>
-  <p><strong>Returns:</strong></p>
-  <pre><code>{
-  "proof_id": "uuid",
-  "timestamp": "2025-10-14T20:15:00Z",
-  "signature": "abcdef123456..."
+
+    <h2>🧩 Verify Proof (GET /verify)</h2>
+    <p><strong>Example:</strong></p>
+    <pre><code>GET https://timeproofs-api.jeason-bacoul.workers.dev/api/verify?hash=64hexsha256</code></pre>
+    <p><strong>Returns:</strong></p>
+    <pre><code>{
+  "ok": true,
+  "found": true,
+  "hash": "64hexsha256",
+  "timestamp": "2025-01-01T00:00:00.000Z",
+  "type": "event",
+  "meta": {},
+  "signature": "hex_hmac256"
 }</code></pre>
 
-  <h2>🧩 Verify Proof (GET /verify)</h2>
-  <p><strong>Example:</strong></p>
-  <pre><code>GET /verify?hash=your_hash_here</code></pre>
-  <p><strong>Returns:</strong></p>
-  <pre><code>{
-  "valid": true,
-  "timestamp": "2025-10-14T20:15:00Z",
-  "signature": "abcdef123456..."
-}</code></pre>
+    <h2>🔒 Security</h2>
+    <ul>
+      <li>Proofs are signed using <strong>HMAC-SHA256</strong> over <code>hash + timestamp</code> with a private secret.</li>
+      <li>Only hashes are sent/stored; your original content never leaves your device.</li>
+      <li>All requests over HTTPS. Reasonable rate limiting may apply during public beta.</li>
+    </ul>
 
-  <h2>💡 SDKs (coming soon)</h2>
-  <p>Use our lightweight SDKs for JavaScript, Python, and Go:</p>
-  <pre><code>npm install @timeproofs/sdk</code></pre>
-  <pre><code>import { timeproof } from "@timeproofs/sdk"
+    <h2>🧠 AI Use Cases</h2>
+    <ul>
+      <li>Verifying AI-generated outputs provenance and originality.</li>
+      <li>Timestamping training/fine-tune datasets and prompts.</li>
+      <li>Auditable event logs for agents and automation.</li>
+    </ul>
 
-const proof = await timeproof("sha256_hash")
-console.log(proof.timestamp)</code></pre>
+    <h2>🛠️ Error Codes</h2>
+    <table>
+      <tr><th>Code</th><th>Description</th></tr>
+      <tr><td><code>400</code></td><td>Missing or invalid hash.</td></tr>
+      <tr><td><code>404</code></td><td>Proof not found.</td></tr>
+      <tr><td><code>429</code></td><td>Rate limit exceeded (public beta safeguard).</td></tr>
+      <tr><td><code>500</code></td><td>Internal server error.</td></tr>
+    </table>
 
-  <h2>🔒 Security</h2>
-  <ul>
-    <li>Proofs are signed using <strong>HMAC-SHA256</strong> with a private salt.</li>
-    <li>Verification uses a public key exposed in the docs.</li>
-    <li>All data transmitted via HTTPS, no personal data stored.</li>
-  </ul>
-
-  <h2>🧠 AI Use Cases</h2>
-  <ul>
-    <li>Verifying AI-generated outputs for originality and authenticity.</li>
-    <li>Timestamping model training data or fine-tune datasets.</li>
-    <li>Tracking AI decisions or audits (ethical traceability).</li>
-  </ul>
-
-  <h2>🛠️ Error Codes</h2>
-  <table>
-    <tr><th>Code</th><th>Description</th></tr>
-    <tr><td><code>400</code></td><td>Missing or invalid hash.</td></tr>
-    <tr><td><code>404</code></td><td>Proof not found.</td></tr>
-    <tr><td><code>500</code></td><td>Internal server error.</td></tr>
-  </table>
-
-  <h2>📜 License</h2>
-  <p>MIT License — Free for personal and commercial use. Attribution required.</p>
-
-  <footer>
-    <a href="/">Home</a> • <a href="/verify.html">Verify</a> • <a href="/privacy.html">Privacy</a> • <a href="/legal.html">Legal</a>
-    <br>© 2025 TimeProofs.io — Proof of Existence. For Everything.
-  </footer>
+    <footer>
+      <a href="/index.html">Home</a> • <a href="/verify.html">Verify</a> • <a href="/privacy.html">Privacy</a> • <a href="/legal.html">Legal</a>
+      <br>© 2025 TimeProofs.io — Proof of Existence. For Everything.
+    </footer>
+  </main>
 </body>
 </html>
