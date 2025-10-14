@@ -1,68 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Core -->
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>About TimeProofs — The Universal Proof Layer</title>
-  <meta name="description" content="TimeProofs provides instant, privacy-first proof of existence for AI and developers. Timestamp any hash and verify it publicly — no blockchain, no gas, no friction."/>
+  <title>About — TimeProofs · The Universal Proof Layer</title>
+  <meta name="description" content="TimeProofs is the privacy-first, edge-native proof of existence layer for AI agents and developers. Hash locally, timestamp via API, verify publicly — no blockchain, no friction."/>
   <link rel="icon" href="/favicon.ico"/>
+
+  <!-- Social -->
+  <meta property="og:title" content="About — TimeProofs"/>
+  <meta property="og:description" content="Prove a thing existed at a moment in time. Instant. Publicly verifiable. Privacy-first. No blockchain."/>
+  <meta property="og:image" content="/og.png"/>
+  <meta property="og:type" content="website"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="About — TimeProofs"/>
+  <meta name="twitter:description" content="The universal proof layer for AI & developers."/>
+  <meta name="twitter:image" content="/og.png"/>
+
   <style>
-    :root{--bg:#0f172a;--text:#f8fafc;--muted:#94a3b8;--accent:#22d3ee}
-    *{box-sizing:border-box}
-    body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:0}
-    header{
-      position:fixed;top:0;left:0;right:0;height:56px;background:#0b1220;border-bottom:1px solid #1e293b;
-      display:flex;align-items:center;justify-content:space-between;padding:0 16px;z-index:10
+    :root{
+      --bg:#0b1020; --panel:#0f172a; --line:#1e293b; --muted:#94a3b8;
+      --text:#f8fafc; --accent:#22d3ee; --ok:#22c55e;
     }
-    header a{color:var(--text);text-decoration:none;font-weight:600}
-    header a:hover{color:var(--accent)}
-    .brand{font-weight:700;letter-spacing:.3px}
-    nav a{margin-left:16px}
-    main{max-width:980px;margin:80px auto 60px;padding:0 20px}
-    h1,h2{color:var(--accent)}
-    h1{font-size:2rem;margin:.2em 0 .8em}
-    section{margin-top:2.2rem}
-    p{line-height:1.7;color:var(--text)}
-    .muted{color:var(--muted)}
-    ul{margin:0;padding-left:1.2rem}
-    li{margin:.4rem 0}
-    .grid{display:grid;gap:16px}
-    @media(min-width:860px){ .grid.two{grid-template-columns:1fr 1fr} .grid.three{grid-template-columns:1fr 1fr 1fr} }
-    .card{border:1px solid #1e293b;border-radius:12px;padding:16px;background:#0c1424}
-    a.cta{display:inline-block;margin-top:12px;background:var(--accent);color:#0b1220;font-weight:700;padding:10px 14px;border-radius:8px;text-decoration:none}
-    a.cta:hover{filter:brightness(1.05)}
-    footer{margin-top:40px;color:var(--muted);font-size:.9em;text-align:center}
-    .kicker{font-size:.95rem;letter-spacing:.3px;color:#a8c5d6}
-    .pill{display:inline-block;border:1px solid #214a57;background:#0d2330;color:#aee9f7;border-radius:999px;padding:4px 10px;margin-right:8px;font-size:.8rem}
+    *{ box-sizing:border-box }
+    body{
+      margin:0; background:radial-gradient(1200px 500px at 65% -10%, rgba(34,211,238,.10), transparent 60%), var(--bg);
+      color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+    a{ color:var(--accent); text-decoration:none }
+    a:hover{ text-decoration:underline }
+
+    /* Header (unifié) */
+    .tp-header{
+      position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
+      background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+    }
+    .tp-brand{ color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none }
+    .tp-brand:hover{ color:var(--accent) }
+    .tp-burger{
+      display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
+      border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
+    }
+    .tp-nav a{
+      color:var(--text); text-decoration:none; font-weight:700; margin-left:18px; padding:8px 0; display:inline-block;
+    }
+    .tp-nav a:hover{ color:var(--accent) }
+    @media (min-width: 900px){
+      .tp-burger{ display:none }
+      .tp-nav{ display:flex; align-items:center }
+    }
+    @media (max-width: 899px){
+      .tp-nav{
+        position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
+        display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
+        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
+      }
+      .tp-nav a{ margin:4px 0 }
+      .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
+    }
+
+    /* Layout */
+    main{ padding:96px 20px 40px; max-width:1080px; margin:0 auto }
+    .kicker{ color:#a8c5d6; letter-spacing:.3px; font-size:.95rem }
+    h1{ font-size:2.15rem; margin:.2em 0 .6em; color:#eaf8ff }
+    p.lead{ color:var(--muted); max-width:860px; margin:0 0 1.2em }
+
+    .cta{ display:inline-block; background:var(--accent); color:#05222b; font-weight:900; padding:10px 16px; border-radius:10px; margin:10px 8px 0 0 }
+    .cta.ghost{ background:#0f1b30; color:#d7f7ff; border:1px solid var(--line) }
+
+    .grid{ display:grid; gap:16px }
+    @media(min-width:860px){
+      .grid.two{ grid-template-columns:1fr 1fr }
+      .grid.three{ grid-template-columns:1fr 1fr 1fr }
+      .grid.four{ grid-template-columns:1fr 1fr 1fr 1fr }
+    }
+
+    .card{ background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:18px }
+    .pill{ display:inline-block; border:1px solid #214a57; background:#0d2330; color:#aee9f7; border-radius:999px; padding:4px 10px; margin:6px 8px 0 0; font-size:.8rem }
+
+    .list{ margin:.4rem 0 0 1rem; padding:0 }
+    .list li{ margin:.35rem 0 }
+
+    .metric{ display:flex; flex-direction:column; align-items:flex-start; padding:16px; background:#0c1526; border:1px dashed #1e3550; border-radius:12px }
+    .metric b{ font-size:1.4rem }
+    .metric span{ color:var(--muted); font-size:.9rem }
+
+    .quote{ background:#0c1526; border-left:4px solid var(--accent); padding:14px 16px; border-radius:8px; color:#d8ecf4 }
+
+    footer{ margin-top:48px; color:#7b8aa7; font-size:.9rem; text-align:center; padding:20px }
+    footer a{ color:#a7b7cc; text-decoration:none; margin:0 8px }
+    footer a:hover{ color:var(--accent) }
   </style>
 </head>
 <body>
-  <header>
-    <a class="brand" href="/index.html">TimeProofs</a>
-    <nav>
+  <!-- Header -->
+  <header class="tp-header" role="navigation" aria-label="Main">
+    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">TimeProofs</a>
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
+      <span aria-hidden="true">☰</span>
+    </button>
+    <nav id="tp-nav" class="tp-nav" data-state="closed">
       <a href="/about.html">About</a>
       <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html">Verify</a>
       <a href="/docs.html">Docs</a>
       <a href="/pricing.html">Pricing</a>
+      <a href="/roadmap.html">Roadmap</a>
       <a href="/legal.html">Legal</a>
     </nav>
   </header>
 
   <main>
+    <!-- Hero -->
     <p class="kicker">ABOUT</p>
     <h1>The universal proof layer for AI & the web</h1>
-    <p class="muted">Prove a thing existed at a moment in time. Instant. Publicly verifiable. Privacy-first. No blockchain, no gas, no friction.</p>
+    <p class="lead">Prove a thing existed at a moment in time. Instant. Publicly verifiable. Privacy-first. No blockchain, no gas, no friction. TimeProofs gives AI agents and developers a neutral, open proof primitive that slots into any workflow.</p>
     <p>
       <a class="cta" href="/verify.html">Try it in 10 seconds</a>
-      <a class="cta" href="/docs.html" style="margin-left:8px">Read the docs</a>
+      <a class="cta ghost" href="/docs.html">Read the docs</a>
     </p>
 
-    <section>
+    <!-- Why now -->
+    <section style="margin-top:28px">
       <h2>Why now</h2>
-      <p>Information is fluid. AI systems rewrite content in milliseconds, creators iterate continuously, and critical decisions stream through software. Proving that “something existed at T” is now essential for trust, attribution, audit, and compliance. Traditional options are heavy (blockchains, gas, delays), closed (silos), or intrusive (uploading your files). Teams either don’t timestamp—or do it too late.</p>
+      <div class="grid two">
+        <div class="card">
+          <p>Information is fluid. AI systems rewrite content in milliseconds; creators publish continuously; critical decisions stream through software. Proving that “something existed at T” is essential for provenance, attribution, audit, and compliance.</p>
+          <p class="quote">“In an era of infinite remix, trust begins with an anchor in time.”</p>
+        </div>
+        <div class="card">
+          <ul class="list">
+            <li>Traditional options are heavy (blockchains, gas, delays)</li>
+            <li>Closed silos or intrusive uploads slow teams down</li>
+            <li>Result: most teams don’t timestamp—or do it too late</li>
+          </ul>
+          <p class="pill">Zero-upload</p><p class="pill">Zero-token</p><p class="pill">Edge-native</p>
+        </div>
+      </div>
     </section>
 
+    <!-- What it does -->
     <section>
       <h2>What TimeProofs does</h2>
       <div class="grid three">
@@ -70,27 +152,26 @@
         <div class="card"><strong>2) Timestamp via API</strong><br/><span class="muted">POST the hash to <code>/timestamp</code>. We return an ISO time and an HMAC signature.</span></div>
         <div class="card"><strong>3) Verify publicly</strong><br/><span class="muted">Anyone can call <code>/verify?hash=…</code> to confirm existence + timestamp + signature.</span></div>
       </div>
-      <p class="muted" style="margin-top:10px">
-        <span class="pill">No data leaves your device</span>
-        <span class="pill">Edge-native (Cloudflare)</span>
-        <span class="pill">Open & simple</span>
-      </p>
+      <p class="pill">No data leaves your device</p>
+      <p class="pill">Global edge (Cloudflare)</p>
+      <p class="pill">Open & simple</p>
     </section>
 
+    <!-- Why different -->
     <section>
       <h2>Why TimeProofs is different</h2>
       <div class="grid two">
         <div class="card">
           <strong>No blockchain</strong>
-          <ul>
-            <li>Instant: no blocks, no confirmations, no gas fees</li>
-            <li>Cost-efficient and predictable</li>
+          <ul class="list">
+            <li>Instant proofs (no blocks, no confirmations)</li>
+            <li>Predictable cost, no gas fees</li>
             <li>No token, no vendor lock-in</li>
           </ul>
         </div>
         <div class="card">
           <strong>Privacy-first</strong>
-          <ul>
+          <ul class="list">
             <li>Only the hash (64-hex) is sent and stored</li>
             <li>Your files/content never leave your device</li>
             <li>HTTPS everywhere, no tracking cookies</li>
@@ -98,16 +179,16 @@
         </div>
         <div class="card">
           <strong>Edge-native</strong>
-          <ul>
+          <ul class="list">
             <li>Cloudflare Workers global network</li>
             <li>Typical latency &lt;100 ms</li>
-            <li>Scales automatically with demand</li>
+            <li>Auto-scale by design</li>
           </ul>
         </div>
         <div class="card">
           <strong>Verifiable & open</strong>
-          <ul>
-            <li>HMAC-SHA256 signature over <code>hash + timestamp</code></li>
+          <ul class="list">
+            <li>HMAC-SHA256 over <code>hash + timestamp</code></li>
             <li>Public verification endpoint</li>
             <li>Minimal protocol, audit-friendly</li>
           </ul>
@@ -115,12 +196,13 @@
       </div>
     </section>
 
+    <!-- Who it's for -->
     <section>
       <h2>Who it’s for</h2>
       <div class="grid two">
         <div class="card">
           <strong>AI teams & agents</strong>
-          <ul>
+          <ul class="list">
             <li>Provenance for prompts & outputs</li>
             <li>Audit trails for autonomous runs</li>
             <li>Dataset & fine-tune integrity</li>
@@ -128,8 +210,8 @@
         </div>
         <div class="card">
           <strong>Creators, legal & research</strong>
-          <ul>
-            <li>Publication priority & content originality</li>
+          <ul class="list">
+            <li>Publication priority & originality proofs</li>
             <li>Contract/email/file timestamps</li>
             <li>Scientific or compliance evidence</li>
           </ul>
@@ -137,24 +219,39 @@
       </div>
     </section>
 
+    <!-- Trust & metrics -->
     <section>
-      <h2>Security & privacy</h2>
-      <ul>
-        <li><strong>Input:</strong> <code>hash</code> (64-hex), optional <code>type</code> and small <code>meta</code></li>
-        <li><strong>Output:</strong> ISO <code>timestamp</code>, HMAC-SHA256 <code>signature</code>, <code>verify_url</code></li>
-        <li><strong>Storage:</strong> Cloudflare KV → (<code>hash</code>, <code>timestamp</code>, <code>signature</code>, optional <code>type</code>/<code>meta</code>)</li>
-        <li><strong>Transport:</strong> HTTPS; no cookies; minimal edge logs</li>
-        <li><strong>Verification:</strong> read-only, idempotent, public</li>
-      </ul>
-      <p class="muted">TimeProofs never sees your data—only its cryptographic fingerprint.</p>
+      <h2>Built for reliability</h2>
+      <div class="grid four">
+        <div class="metric"><b>&lt;100 ms</b><span>Typical verification latency</span></div>
+        <div class="metric"><b>99.9%</b><span>Edge uptime target</span></div>
+        <div class="metric"><b>0</b><span>Files uploaded (hash-only)</span></div>
+        <div class="metric"><b>∞</b><span>Instant horizontal scale</span></div>
+      </div>
     </section>
 
+    <!-- Security & privacy -->
+    <section>
+      <h2>Security & privacy</h2>
+      <div class="card">
+        <ul class="list">
+          <li><strong>Input:</strong> <code>hash</code> (64-hex), optional <code>type</code> and small <code>meta</code></li>
+          <li><strong>Output:</strong> ISO <code>timestamp</code>, HMAC-SHA256 <code>signature</code>, <code>verify_url</code></li>
+          <li><strong>Storage:</strong> Cloudflare KV → (<code>hash</code>, <code>timestamp</code>, <code>signature</code>, optional <code>type</code>/<code>meta</code>)</li>
+          <li><strong>Transport:</strong> HTTPS; no cookies; minimal edge logs</li>
+          <li><strong>Verification:</strong> read-only, idempotent, public</li>
+        </ul>
+        <p class="muted">TimeProofs never sees your data—only its cryptographic fingerprint.</p>
+      </div>
+    </section>
+
+    <!-- Pricing preview -->
     <section>
       <h2>Pricing (overview)</h2>
       <div class="grid two">
         <div class="card">
           <strong>Beta — Free</strong>
-          <ul>
+          <ul class="list">
             <li>Up to 1,000 proofs / month / IP</li>
             <li>Unlimited public verification</li>
             <li>No API key required</li>
@@ -162,7 +259,7 @@
         </div>
         <div class="card">
           <strong>Pro — Coming soon</strong>
-          <ul>
+          <ul class="list">
             <li>10,000 proofs / month + API key</li>
             <li>PDF certificate, webhooks, dashboard</li>
             <li>From €9 / month (indicative)</li>
@@ -172,52 +269,52 @@
       <p><a class="cta" href="/pricing.html">See full pricing</a></p>
     </section>
 
+    <!-- Roadmap / Vision -->
     <section>
-      <h2>Roadmap</h2>
-      <ul>
-        <li>v0.2 — JS SDK, PDF certificate, “Copy as cURL/JSON” in Verify</li>
-        <li>v1.0 — API keys, quotas, dashboard usage & export</li>
-        <li>v2.0 — Light distributed validation (ProofChain), Python/Go SDKs</li>
+      <h2>Roadmap & vision</h2>
+      <ul class="list">
+        <li><strong>v0.2</strong> — JS SDK, PDF certificate, “Copy as cURL/JSON” in Verify</li>
+        <li><strong>v1.0</strong> — API keys, quotas, dashboard usage & export</li>
+        <li><strong>v2.0</strong> — Light distributed validation (ProofChain), Python/Go SDKs</li>
       </ul>
+      <p class="lead" style="margin-top:.6rem">By 2030, AI-generated data will exceed all human content. TimeProofs aims to be the neutral timestamp backbone for this new era — a fast, open, privacy-first standard to anchor digital truth in time.</p>
     </section>
 
-    <section>
-      <h2>FAQ (short)</h2>
-      <div class="grid two">
-        <div class="card">
-          <strong>Why not a blockchain?</strong>
-          <p class="muted">We optimize for instant proofs, low cost, and privacy by default—no gas fees, no confirmation delays, no token.</p>
-        </div>
-        <div class="card">
-          <strong>Do you store my files?</strong>
-          <p class="muted">No. We only handle the SHA-256 hash. Your content never leaves your device.</p>
-        </div>
-        <div class="card">
-          <strong>Is it legally useful?</strong>
-          <p class="muted">It’s strong technical evidence of existence/integrity at time T. Legal weight depends on jurisdiction/context.</p>
-        </div>
-        <div class="card">
-          <strong>Can anyone verify?</strong>
-          <p class="muted">Yes. The <code>/verify</code> endpoint is public, read-only, and idempotent.</p>
-        </div>
-      </div>
-      <p><a class="cta" href="/docs.html">Go to API docs</a></p>
-    </section>
-
-    <section>
-      <h2>Our vision</h2>
-      <p>By 2030, AI-generated data will exceed all human content. TimeProofs aims to be the neutral timestamp backbone for this new era—a fast, open, privacy-first standard to anchor digital truth in time.</p>
-    </section>
-
-    <p>
+    <!-- CTA -->
+    <p style="margin-top:10px">
       <a class="cta" href="/verify.html">Try TimeProofs now</a>
-      <a class="cta" href="/docs.html" style="margin-left:8px">Integrate in minutes</a>
+      <a class="cta ghost" href="/docs.html">Integrate in minutes</a>
     </p>
 
     <footer>
-      <a href="/index.html">Home</a> • <a href="/use-cases.html">Use Cases</a> • <a href="/verify.html">Verify</a> • <a href="/docs.html">Docs</a> • <a href="/pricing.html">Pricing</a> • <a href="/privacy.html">Privacy</a> • <a href="/legal.html">Legal</a>
-      <br/>© 2025 TimeProofs.io — Proof of Existence. For Everything.
+      © 2025 TimeProofs — Proof of Existence. For Everything.
+      <div style="margin-top:6px">
+        <a href="/index.html">Home</a> •
+        <a href="/about.html">About</a> •
+        <a href="/use-cases.html">Use Cases</a> •
+        <a href="/verify.html">Verify</a> •
+        <a href="/docs.html">Docs</a> •
+        <a href="/pricing.html">Pricing</a> •
+        <a href="/roadmap.html">Roadmap</a> •
+        <a href="/privacy.html">Privacy</a> •
+        <a href="/legal.html">Legal</a>
+      </div>
     </footer>
   </main>
+
+  <script>
+    // Header burger
+    (function(){
+      const burger = document.getElementById('tp-burger');
+      const nav = document.getElementById('tp-nav');
+      function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+      function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+      function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
+      burger.addEventListener('click', toggleMenu);
+      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); });
+      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); });
+      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); });
+    })();
+  </script>
 </body>
-  </html>
+</html>
