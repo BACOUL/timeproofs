@@ -1,6 +1,3 @@
-<p align="center">
-  <img src="https://timeproofs.vercel.app/logo.png" width="180" alt="TimeProofs logo" />
-</p>
 
 <h1 align="center">⏱️ TimeProofs</h1>
 <p align="center">Proof of Existence. For Everything.</p>
