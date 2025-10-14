@@ -2,34 +2,39 @@
 <html lang="en">
 <head>
   <!-- Core -->
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Pricing — TimeProofs</title>
-  <meta name="description" content="Simple, predictable pricing for TimeProofs. Free during beta. Pro plans with higher limits, API keys, and PDF certificates coming soon."/>
+  <meta name="description" content="Transparent pricing for TimeProofs — the universal proof layer. Start free in beta. Pro and Team tiers coming with API keys, quotas, dashboard, and webhooks."/>
   <link rel="icon" href="/favicon.ico"/>
 
   <!-- Social -->
   <meta property="og:title" content="Pricing — TimeProofs"/>
-  <meta property="og:description" content="Free during beta. Pro plans with higher limits, API keys, and PDF certificates coming soon."/>
+  <meta property="og:description" content="Start free. Predictable, no-gas pricing for timestamp & verify. Built for AI and developers."/>
   <meta property="og:type" content="website"/>
   <meta property="og:image" content="/og.png"/>
-  <meta property="og:url" content="https://timeproofs.io/pricing.html"/>
   <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Pricing — TimeProofs"/>
+  <meta name="twitter:description" content="Transparent pricing for the universal proof layer."/>
+  <meta name="twitter:image" content="/og.png"/>
 
   <style>
     :root{
       --bg:#0b1020; --panel:#0f172a; --line:#1e293b;
-      --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --ok:#22c55e;
+      --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
+      --ok:#22c55e; --warn:#f59e0b;
     }
     *{ box-sizing:border-box }
     body{
-      margin:0; background:var(--bg); color:var(--text);
+      margin:0; background:radial-gradient(1200px 500px at 70% -10%, rgba(34,211,238,.10), transparent 60%), var(--bg);
+      color:var(--text);
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
-    a{ color:var(--accent); text-decoration:none } a:hover{text-decoration:underline}
+    a{ color:var(--accent); text-decoration:none }
+    a:hover{ text-decoration:underline }
 
-    /* Header (shared) */
+    /* Header (unifié) */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
@@ -47,7 +52,8 @@
     }
     .tp-nav a:hover{ color:var(--accent) }
     @media (min-width: 900px){
-      .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center }
+      .tp-burger{ display:none }
+      .tp-nav{ display:flex; align-items:center }
     }
     @media (max-width: 899px){
       .tp-nav{
@@ -59,43 +65,61 @@
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
     }
 
-    /* Page */
-    .wrap{ max-width:1100px; margin:96px auto 40px; padding:0 20px; text-align:center }
-    h1{ font-size:clamp(1.8rem, 5vw, 2.6rem); margin:.2em 0 .3em }
-    .sub{ color:var(--muted); max-width:760px; margin:0 auto 24px; line-height:1.75 }
+    /* Layout */
+    main{ padding:96px 20px 40px; max-width:1100px; margin:0 auto; }
+    .hero{ text-align:center; max-width:860px; margin:0 auto 18px }
+    .hero h1{ font-size:clamp(1.9rem, 5.2vw, 2.4rem); margin:.2em 0 .2em }
+    .hero p{ color:var(--muted); margin:.2em auto 0; line-height:1.7 }
 
-    /* Plans */
-    .grid{ display:grid; gap:16px; grid-template-columns:1fr; margin-top:10px }
-    @media(min-width:900px){ .grid{ grid-template-columns:1fr 1fr 1fr } }
-    .plan{
-      background:#0c1424; border:1px solid var(--line); border-radius:16px; padding:20px; text-align:left;
-      display:flex; flex-direction:column; justify-content:space-between;
-      transition:transform .2s ease, box-shadow .2s ease;
+    /* Plans grid */
+    .plans{
+      display:grid; gap:16px; margin-top:20px; grid-template-columns:1fr;
     }
-    .plan:hover{ transform:translateY(-3px); box-shadow:0 14px 30px rgba(0,0,0,.25) }
-    .plan h3{ margin:.2em 0 .2em; font-size:1.25rem; color:#c7f3ff }
-    .price{ font-weight:900; font-size:1.8rem; margin:.2em 0 .2em }
-    .period{ color:var(--muted); font-size:.95rem }
-    .feat{ margin:.6em 0; padding-left:18px }
-    .feat li{ margin:.35em 0; color:#dbe7f3 }
+    @media(min-width:900px){ .plans{ grid-template-columns:1fr 1fr 1fr } }
+    .card{
+      background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px;
+      display:flex; flex-direction:column; justify-content:space-between; min-height:360px;
+      box-shadow:0 6px 26px rgba(0,0,0,.18);
+    }
+    .card h2{ margin:.1em 0 .2em; font-size:1.25rem; color:#b9e7f5 }
+    .price{ font-weight:900; font-size:1.8rem; margin:.1em 0 .4em }
+    .price small{ font-size:.9rem; color:#a6bdd1; font-weight:600 }
+    .feat{ margin:0.45em 0; color:#d9e9f7 }
+    .muted{ color:var(--muted) }
+    .ok{ color:#b7f7ce }
+    .soon{ color:#ffd89a }
+
     .cta{
-      margin-top:14px; align-self:flex-start;
-      background:var(--accent); color:#06202a; border:none; padding:.8em 1.2em; border-radius:12px;
-      font-weight:900; text-decoration:none; box-shadow:0 8px 30px rgba(34,211,238,.15);
+      display:inline-block; margin-top:12px; background:var(--accent); color:#06202a;
+      font-weight:900; padding:10px 14px; border-radius:10px; text-decoration:none; text-align:center;
+      transition:transform .15s ease, filter .15s ease;
     }
-    .cta.secondary{ background:#111d33; color:#e2f6ff; border:1px solid var(--line) }
-    .badge{ display:inline-block; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; padding:3px 10px; font-size:.8rem; margin-left:8px }
+    .cta:hover{ transform:translateY(-1px); filter:brightness(1.05) }
+    .ghost{ background:#111d33; color:#e2f6ff; border:1px solid var(--line) }
+
+    /* Comparison (mobile friendly) */
+    .compare{ margin-top:28px }
+    .compare h3{ text-align:center; margin:0 0 10px }
+    .cmp{
+      width:100%; border-collapse:collapse; border:1px solid var(--line);
+      background:#0b1220; border-radius:10px; overflow:hidden;
+    }
+    .cmp th, .cmp td{ border-bottom:1px solid var(--line); padding:10px; text-align:left; vertical-align:top }
+    .cmp th{ background:#0e172a; color:#dff5ff; font-weight:800 }
+    .cmp tr:last-child td{ border-bottom:none }
+    .tag{ display:inline-block; border:1px solid #214a57; background:#0d2330; color:#aee9f7; border-radius:999px; padding:2px 8px; font-size:.8rem; margin-left:6px }
 
     /* FAQ */
-    .faq{ margin:28px auto 0; text-align:left; max-width:900px }
-    .faq h2{ text-align:center; margin:10px 0 16px; color:#b9e7f5 }
-    .qa{ border:1px solid var(--line); background:#0c1424; border-radius:12px; padding:16px; margin:10px 0 }
-    .qa h4{ margin:0 0 6px; color:#e9f5ff }
-    .qa p{ margin:0; color:#cfe1ef; line-height:1.7 }
+    .faq{ margin-top:26px }
+    .faq h3{ text-align:center; margin:0 0 8px }
+    .qa{ background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:14px; margin:10px 0 }
+    .qa h4{ margin:.2em 0 .4em; color:#b9e7f5; font-size:1.05rem }
+    .qa p{ margin:.2em 0 0; color:#e4eef7 }
 
     /* Footer */
-    footer{ border-top:1px solid var(--line); margin-top:42px; padding:20px; color:#7c8aa5; text-align:center }
-    footer .links a{ color:#a7b7cc; margin:0 8px } footer .links a:hover{ color:var(--accent) }
+    footer{ border-top:1px solid var(--line); margin-top:34px; padding:18px; color:#7c8aa5; text-align:center }
+    footer .links a{ color:#a7b7cc; margin:0 8px; text-decoration:none }
+    footer .links a:hover{ color:var(--accent) }
   </style>
 </head>
 <body>
@@ -110,106 +134,179 @@
       <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html">Verify</a>
       <a href="/docs.html">Docs</a>
-      <a href="/pricing.html" aria-current="page">Pricing</a>
+      <a href="/pricing.html">Pricing</a>
       <a href="/roadmap.html">Roadmap</a>
       <a href="/legal.html">Legal</a>
     </nav>
   </header>
 
-  <main class="wrap">
-    <h1>Simple, predictable pricing</h1>
-    <p class="sub">Free during public beta. Pro plans unlock higher limits, API keys, dashboards, and PDF certificates. No blockchain, no gas, no surprises.</p>
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <h1>Pricing built for scale — and trust</h1>
+      <p>Start free in public beta. Predictable pricing later (no gas, no blockchain). Designed for AI teams, agents, and developers who need instant, verifiable proofs.</p>
+    </section>
 
-    <section class="grid" aria-label="Pricing plans">
-      <!-- Beta Free -->
-      <article class="plan">
+    <!-- Plans -->
+    <section class="plans" aria-label="Plans">
+      <!-- Free -->
+      <article class="card" aria-label="Free plan">
         <div>
-          <h3>Beta Free <span class="badge">current</span></h3>
-          <div class="price">€0<span class="period"> / mo</span></div>
-          <ul class="feat">
-            <li>Up to <strong>1,000 proofs / month</strong> (per IP)</li>
-            <li>Unlimited verification</li>
-            <li>No API key required</li>
-            <li>Hash-only, privacy-first</li>
-            <li>Edge global infrastructure</li>
-          </ul>
+          <h2>Beta — Free</h2>
+          <div class="price">$0 <small>/month</small></div>
+          <p class="muted">Best for evaluation, demos, and early projects.</p>
+          <p class="feat">• Up to <strong>1,000 proofs</strong> / month / IP</p>
+          <p class="feat">• Unlimited public verification</p>
+          <p class="feat">• <span class="ok">No API key required</span></p>
+          <p class="feat">• Hash-only, HMAC signature, edge latency</p>
         </div>
         <a class="cta" href="/verify.html">Start free</a>
       </article>
 
       <!-- Pro -->
-      <article class="plan" style="border-color:#2aa2b7">
+      <article class="card" aria-label="Pro plan">
         <div>
-          <h3>Pro <span class="badge">coming soon</span></h3>
-          <div class="price">€9<span class="period"> / mo</span></div>
-          <ul class="feat">
-            <li><strong>10,000 proofs / month</strong> (burst friendly)</li>
-            <li>API key & usage quotas</li>
-            <li>PDF proof certificate</li>
-            <li>Webhooks & dashboard</li>
-            <li>Email support</li>
-          </ul>
+          <h2>Pro — Coming soon</h2>
+          <div class="price">$9 <small>/month</small></div>
+          <p class="muted">For production apps and small teams.</p>
+          <p class="feat">• <strong>10,000 proofs</strong> / month <span class="tag">API key</span></p>
+          <p class="feat">• <strong>PDF certificate</strong> (downloadable proof)</p>
+          <p class="feat">• <strong>Webhooks</strong> (success/failure)</p>
+          <p class="feat">• Dashboard (usage & export)</p>
         </div>
-        <a class="cta secondary" href="mailto:hello@timeproofs.io?subject=Pro%20plan%20waitlist">Join waitlist</a>
+        <a class="cta ghost" href="mailto:hello@timeproofs.io?subject=Pro%20Early%20Access&body=Hi%2C%20we%27d%20like%20Pro%20early%20access.">Request early access</a>
       </article>
 
-      <!-- Enterprise -->
-      <article class="plan">
+      <!-- Team -->
+      <article class="card" aria-label="Team plan">
         <div>
-          <h3>Enterprise</h3>
-          <div class="price">Custom<span class="period"> / annual</span></div>
-          <ul class="feat">
-            <li>Higher volumes & SLAs</li>
-            <li>SOC2-ready processes</li>
-            <li>Custom retention & regions</li>
-            <li>Dedicated support & SSO</li>
-            <li>Private verifiers / mirror</li>
-          </ul>
+          <h2>Team — Coming later</h2>
+          <div class="price">$49 <small>/month</small></div>
+          <p class="muted">For teams with higher volume and governance needs.</p>
+          <p class="feat">• <strong>100,000 proofs</strong> / month</p>
+          <p class="feat">• All Pro features</p>
+          <p class="feat">• Org roles, key rotation, SIEM export</p>
+          <p class="feat">• Priority support</p>
         </div>
-        <a class="cta secondary" href="mailto:hello@timeproofs.io?subject=Enterprise%20inquiry">Contact sales</a>
+        <a class="cta ghost" href="mailto:hello@timeproofs.io?subject=Team%20Interest&body=Hi%2C%20we%27re%20interested%20in%20Team%20tier.">Contact sales</a>
       </article>
+    </section>
+
+    <!-- Comparison -->
+    <section class="compare" aria-labelledby="compare-title">
+      <h3 id="compare-title">Compare plans</h3>
+      <table class="cmp" role="table" aria-label="Plan comparison">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Beta — Free</th>
+            <th>Pro</th>
+            <th>Team</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Monthly proofs</td>
+            <td>1,000 / IP</td>
+            <td>10,000</td>
+            <td>100,000</td>
+          </tr>
+          <tr>
+            <td>Public verification</td>
+            <td>Unlimited</td>
+            <td>Unlimited</td>
+            <td>Unlimited</td>
+          </tr>
+          <tr>
+            <td>API key</td>
+            <td>Not required</td>
+            <td>Required</td>
+            <td>Required</td>
+          </tr>
+          <tr>
+            <td>PDF certificate</td>
+            <td>—</td>
+            <td>✔</td>
+            <td>✔</td>
+          </tr>
+          <tr>
+            <td>Webhooks</td>
+            <td>—</td>
+            <td>✔</td>
+            <td>✔</td>
+          </tr>
+          <tr>
+            <td>Dashboard</td>
+            <td>—</td>
+            <td>✔</td>
+            <td>✔</td>
+          </tr>
+          <tr>
+            <td>Org / Roles / SIEM</td>
+            <td>—</td>
+            <td>—</td>
+            <td>✔</td>
+          </tr>
+          <tr>
+            <td>Support</td>
+            <td>Community</td>
+            <td>Standard</td>
+            <td>Priority</td>
+          </tr>
+        </tbody>
+      </table>
     </section>
 
     <!-- FAQ -->
-    <section class="faq" aria-label="Pricing FAQ">
-      <h2>FAQ</h2>
+    <section class="faq" aria-labelledby="faq-title">
+      <h3 id="faq-title">FAQ</h3>
 
       <div class="qa">
-        <h4>What happens after beta?</h4>
-        <p>Free plan remains with reasonable limits. Pro unlocks higher quotas, PDF certificates, webhooks, and a dashboard. You can upgrade or cancel anytime.</p>
+        <h4>What happens if I exceed my Beta quota?</h4>
+        <p>During public beta, soft rate-limits may apply per IP. For sustained higher volume, request Pro early access so we can provision API keys and quotas.</p>
       </div>
 
       <div class="qa">
-        <h4>Do you store my files?</h4>
-        <p>No. We only store the SHA-256 hash plus the timestamp, signature, and optional minimal metadata. Your content never leaves your device.</p>
+        <h4>Do you store my data?</h4>
+        <p>No. We only store the <em>hash</em> you send (64-hex) alongside the timestamp and signature. Your original files never leave your device. See our <a href="/privacy.html">Privacy Policy</a>.</p>
       </div>
 
       <div class="qa">
-        <h4>Is there a per-request fee or gas?</h4>
-        <p>No blockchain, no gas. We aim for transparent, predictable pricing based on monthly volume.</p>
+        <h4>How are proofs verified?</h4>
+        <p>Public read-only endpoint <code>/verify?hash=…</code> returns existence, timestamp, and signature (HMAC-SHA256 over <code>hash + timestamp</code>). Anyone can verify without accessing your content.</p>
       </div>
 
       <div class="qa">
-        <h4>Do I need an API key?</h4>
-        <p>Not during beta for public endpoints. Pro introduces API keys and per-project quotas.</p>
+        <h4>Will pricing change?</h4>
+        <p>We target predictable, no-gas pricing suitable for automation and AI pipelines. Exact quotas and price points may adjust at GA based on usage and costs.</p>
+      </div>
+
+      <div class="qa">
+        <h4>Payments?</h4>
+        <p>Stripe for subscriptions & overages at GA. For pilots or enterprise, <a href="mailto:hello@timeproofs.io">contact us</a>.</p>
       </div>
     </section>
-  </main>
 
-  <footer>
-    © 2025 TimeProofs — Proof of Existence. For Everything.
-    <div class="links" style="margin-top:6px">
-      <a href="/index.html">Home</a> •
-      <a href="/about.html">About</a> •
-      <a href="/use-cases.html">Use Cases</a> •
-      <a href="/verify.html">Verify</a> •
-      <a href="/docs.html">Docs</a> •
-      <a href="/pricing.html">Pricing</a> •
-      <a href="/roadmap.html">Roadmap</a> •
-      <a href="/privacy.html">Privacy</a> •
-      <a href="/legal.html">Legal</a>
+    <div style="text-align:center; margin-top:16px">
+      <a class="cta" href="/verify.html">Try the API</a>
+      <a class="cta ghost" href="/docs.html" style="margin-left:8px">Read the Docs</a>
     </div>
-  </footer>
+
+    <footer>
+      © 2025 TimeProofs — Proof of Existence. For Everything.
+      <div class="links" style="margin-top:6px">
+        <a href="/index.html">Home</a> •
+        <a href="/about.html">About</a> •
+        <a href="/use-cases.html">Use Cases</a> •
+        <a href="/verify.html">Verify</a> •
+        <a href="/docs.html">Docs</a> •
+        <a href="/pricing.html">Pricing</a> •
+        <a href="/roadmap.html">Roadmap</a> •
+        <a href="/privacy.html">Privacy</a> •
+        <a href="/legal.html">Legal</a>
+      </div>
+    </footer>
+  </main>
 
   <script>
     (function(){
@@ -218,7 +315,7 @@
       function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
       function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
       function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
-      burger?.addEventListener('click', toggleMenu);
+      burger.addEventListener('click', toggleMenu);
       document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); });
       document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); });
       window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); });
