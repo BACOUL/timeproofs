@@ -140,7 +140,6 @@ Each proof is signed with **HMAC-SHA256** and can be verified using the public k
 
 **JavaScript SDK (coming soon)**  
 
-```text
 import { timeproof } from "@timeproofs/sdk"
 const proof = await timeproof(hash)
 
