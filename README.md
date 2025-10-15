@@ -135,6 +135,8 @@ Generate → Sign → Verify → Trust.
 
 Each proof is signed with **HMAC-SHA256** and can be verified using the public key available in `/docs.html`.
 
+---
+
 ## 🧮 Example Integration
 
 **JavaScript SDK (coming soon)**  
@@ -142,6 +144,8 @@ Each proof is signed with **HMAC-SHA256** and can be verified using the public k
 ```text
 import { timeproof } from "@timeproofs/sdk"
 const proof = await timeproof(hash)
+
+---
 
 The SDK automatically:
 
