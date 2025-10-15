@@ -81,7 +81,6 @@ Once verified, your proof is permanent, public, and independently checkable.
 3. **KV Store** — Persists `hash + timestamp + signature`.  
 4. **Frontend (Vercel)** — Provides public verification UI and documentation.
 
-```text
 [User / AI] → [SHA256 Hash] → [TimeProofs API] → [Signed Timestamp] → [Verify Publicly]
 
 ---
