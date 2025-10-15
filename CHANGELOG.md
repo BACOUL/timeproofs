@@ -1,9 +1,3 @@
-Parfait ✅ voici ton CHANGELOG.md en un seul bloc Markdown, 100 % prêt à copier-coller directement dans GitHub, sans aucune coupure, sans code, sans séparateurs.
-C’est la version finale propre et compatible avec l’affichage GitHub.
-
-
----
-
 🕓 TimeProofs — Changelog
 
 > The universal proof layer for AI, developers, and the internet.
@@ -210,8 +204,4 @@ v2.0	2026 – 2027	Validation Network
 
 Released under the MIT License © 2025 TimeProofs.
 
-
----
-
-Souhaites-tu que je fasse le PLAYBOOK.md exactement dans ce format aussi (un seul bloc Markdown clair, sans code) ?
 
