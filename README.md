@@ -84,6 +84,8 @@ Once verified, your proof is permanent, public, and independently checkable.
 ```text
 [User / AI] → [SHA256 Hash] → [TimeProofs API] → [Signed Timestamp] → [Verify Publicly]
 
+---
+
 ## 🧠 Why It Matters
 
 In the age of infinite remix and AI-generated content, **proof is the new trust.**  
