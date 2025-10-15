@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Core -->
+  <!-- ===== Core ===== -->
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Pricing — TimeProofs</title>
-  <meta name="description" content="Transparent pricing for TimeProofs — the universal proof layer. Start free in beta. Pro and Team tiers coming with API keys, quotas, dashboard, and webhooks."/>
+  <meta name="description" content="Transparent, no-gas pricing for the universal proof layer. Start free in beta. Pro & Team add API keys, quotas, dashboard, and webhooks."/>
+  <meta name="theme-color" content="#0b1020"/>
+  <link rel="canonical" href="https://timeproofs.io/pricing.html"/>
   <link rel="icon" href="/favicon.ico"/>
 
-  <!-- Social -->
+  <!-- ===== Social ===== -->
   <meta property="og:title" content="Pricing — TimeProofs"/>
-  <meta property="og:description" content="Start free. Predictable, no-gas pricing for timestamp & verify. Built for AI and developers."/>
+  <meta property="og:description" content="Start free. Predictable pricing for timestamp & verify — built for AI and developers."/>
   <meta property="og:type" content="website"/>
   <meta property="og:image" content="/og.png"/>
+  <meta property="og:url" content="https://timeproofs.io/pricing.html"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Pricing — TimeProofs"/>
   <meta name="twitter:description" content="Transparent pricing for the universal proof layer."/>
@@ -22,19 +25,21 @@
     :root{
       --bg:#0b1020; --panel:#0f172a; --line:#1e293b;
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
-      --ok:#22c55e; --warn:#f59e0b;
+      --ok:#22c55e; --warn:#f59e0b; --safe-btm: env(safe-area-inset-bottom, 0px);
     }
     *{ box-sizing:border-box }
+    html,body{ margin:0; height:100%; max-width:100%; overflow-x:hidden }
     body{
-      margin:0; background:radial-gradient(1200px 500px at 70% -10%, rgba(34,211,238,.10), transparent 60%), var(--bg);
+      background:radial-gradient(1100px 420px at 70% -10%, rgba(34,211,238,.10), transparent 60%), var(--bg);
       color:var(--text);
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      text-rendering:optimizeLegibility;
     }
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
 
-    /* Header (unifié) */
+    /* ===== Header (shared) ===== */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
@@ -47,14 +52,9 @@
       display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
       border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
     }
-    .tp-nav a{
-      color:var(--text); text-decoration:none; font-weight:700; margin-left:18px; padding:8px 0; display:inline-block;
-    }
+    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block }
     .tp-nav a:hover{ color:var(--accent) }
-    @media (min-width: 900px){
-      .tp-burger{ display:none }
-      .tp-nav{ display:flex; align-items:center }
-    }
+    @media (min-width: 900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width: 899px){
       .tp-nav{
         position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
@@ -65,29 +65,26 @@
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
     }
 
-    /* Layout */
-    main{ padding:96px 20px 40px; max-width:1100px; margin:0 auto; }
-    .hero{ text-align:center; max-width:860px; margin:0 auto 18px }
-    .hero h1{ font-size:clamp(1.9rem, 5.2vw, 2.4rem); margin:.2em 0 .2em }
+    /* ===== Layout ===== */
+    main{ padding:96px 20px 40px; max-width:1100px; margin:0 auto }
+    .hero{ text-align:center; max-width:880px; margin:0 auto 18px }
+    .hero h1{ font-size:clamp(1.9rem, 5vw, 2.4rem); margin:.2em 0 .2em; font-weight:900 }
     .hero p{ color:var(--muted); margin:.2em auto 0; line-height:1.7 }
 
-    /* Plans grid */
-    .plans{
-      display:grid; gap:16px; margin-top:20px; grid-template-columns:1fr;
-    }
+    .plans{ display:grid; gap:16px; margin-top:20px; grid-template-columns:1fr }
     @media(min-width:900px){ .plans{ grid-template-columns:1fr 1fr 1fr } }
+
     .card{
       background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px;
       display:flex; flex-direction:column; justify-content:space-between; min-height:360px;
-      box-shadow:0 6px 26px rgba(0,0,0,.18);
+      box-shadow:0 6px 26px rgba(0,0,0,.18)
     }
     .card h2{ margin:.1em 0 .2em; font-size:1.25rem; color:#b9e7f5 }
-    .price{ font-weight:900; font-size:1.8rem; margin:.1em 0 .4em }
+    .badge{ display:inline-block; margin-left:8px; border:1px solid #214a57; background:#0d2330; color:#aee9f7; border-radius:999px; padding:2px 8px; font-size:.78rem }
+    .price{ font-weight:900; font-size:1.8rem; margin:.1em 0 .5em }
     .price small{ font-size:.9rem; color:#a6bdd1; font-weight:600 }
-    .feat{ margin:0.45em 0; color:#d9e9f7 }
+    .feat{ margin:.45em 0; color:#d9e9f7 }
     .muted{ color:var(--muted) }
-    .ok{ color:#b7f7ce }
-    .soon{ color:#ffd89a }
 
     .cta{
       display:inline-block; margin-top:12px; background:var(--accent); color:#06202a;
@@ -107,7 +104,6 @@
     .cmp th, .cmp td{ border-bottom:1px solid var(--line); padding:10px; text-align:left; vertical-align:top }
     .cmp th{ background:#0e172a; color:#dff5ff; font-weight:800 }
     .cmp tr:last-child td{ border-bottom:none }
-    .tag{ display:inline-block; border:1px solid #214a57; background:#0d2330; color:#aee9f7; border-radius:999px; padding:2px 8px; font-size:.8rem; margin-left:6px }
 
     /* FAQ */
     .faq{ margin-top:26px }
@@ -117,13 +113,18 @@
     .qa p{ margin:.2em 0 0; color:#e4eef7 }
 
     /* Footer */
-    footer{ border-top:1px solid var(--line); margin-top:34px; padding:18px; color:#7c8aa5; text-align:center }
+    footer{
+      border-top:1px solid var(--line); margin-top:34px; padding:18px; padding-bottom:calc(18px + var(--safe-btm));
+      color:#7c8aa5; text-align:center
+    }
     footer .links a{ color:#a7b7cc; margin:0 8px; text-decoration:none }
     footer .links a:hover{ color:var(--accent) }
+
+    @media (prefers-reduced-motion: reduce){ *{ transition:none !important; animation:none !important } }
   </style>
 </head>
 <body>
-  <!-- Header -->
+  <!-- ===== Header ===== -->
   <header class="tp-header" role="navigation" aria-label="Main">
     <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">TimeProofs</a>
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
@@ -140,10 +141,11 @@
     </nav>
   </header>
 
+  <!-- ===== Content ===== -->
   <main>
     <!-- Hero -->
-    <section class="hero">
-      <h1>Pricing built for scale — and trust</h1>
+    <section class="hero" aria-labelledby="pricing-title">
+      <h1 id="pricing-title">Pricing built for scale — and trust</h1>
       <p>Start free in public beta. Predictable pricing later (no gas, no blockchain). Designed for AI teams, agents, and developers who need instant, verifiable proofs.</p>
     </section>
 
@@ -152,35 +154,36 @@
       <!-- Free -->
       <article class="card" aria-label="Free plan">
         <div>
-          <h2>Beta — Free</h2>
+          <h2>Beta — Free <span class="badge">Public</span></h2>
           <div class="price">$0 <small>/month</small></div>
           <p class="muted">Best for evaluation, demos, and early projects.</p>
           <p class="feat">• Up to <strong>1,000 proofs</strong> / month / IP</p>
           <p class="feat">• Unlimited public verification</p>
-          <p class="feat">• <span class="ok">No API key required</span></p>
-          <p class="feat">• Hash-only, HMAC signature, edge latency</p>
+          <p class="feat">• No API key required</p>
+          <p class="feat">• Hash-only proofs with HMAC signature</p>
+          <p class="feat">• Edge verification (global)</p>
         </div>
-        <a class="cta" href="/verify.html">Start free</a>
+        <a class="cta" href="/verify.html" aria-label="Start free with Beta plan">Start free</a>
       </article>
 
       <!-- Pro -->
       <article class="card" aria-label="Pro plan">
         <div>
-          <h2>Pro — Coming soon</h2>
+          <h2>Pro — Coming soon <span class="badge">Early Access</span></h2>
           <div class="price">$9 <small>/month</small></div>
           <p class="muted">For production apps and small teams.</p>
-          <p class="feat">• <strong>10,000 proofs</strong> / month <span class="tag">API key</span></p>
+          <p class="feat">• <strong>10,000 proofs</strong> / month <span class="badge">API key</span></p>
           <p class="feat">• <strong>PDF certificate</strong> (downloadable proof)</p>
           <p class="feat">• <strong>Webhooks</strong> (success/failure)</p>
-          <p class="feat">• Dashboard (usage & export)</p>
+          <p class="feat">• <strong>Dashboard</strong> (usage & export)</p>
         </div>
-        <a class="cta ghost" href="mailto:hello@timeproofs.io?subject=Pro%20Early%20Access&body=Hi%2C%20we%27d%20like%20Pro%20early%20access.">Request early access</a>
+        <a class="cta ghost" href="mailto:hello@timeproofs.io?subject=Pro%20Early%20Access&body=Hi%2C%20we%27d%20like%20Pro%20early%20access." aria-label="Request Pro early access">Request early access</a>
       </article>
 
       <!-- Team -->
       <article class="card" aria-label="Team plan">
         <div>
-          <h2>Team — Coming later</h2>
+          <h2>Team — Coming later <span class="badge">Planned</span></h2>
           <div class="price">$49 <small>/month</small></div>
           <p class="muted">For teams with higher volume and governance needs.</p>
           <p class="feat">• <strong>100,000 proofs</strong> / month</p>
@@ -188,7 +191,7 @@
           <p class="feat">• Org roles, key rotation, SIEM export</p>
           <p class="feat">• Priority support</p>
         </div>
-        <a class="cta ghost" href="mailto:hello@timeproofs.io?subject=Team%20Interest&body=Hi%2C%20we%27re%20interested%20in%20Team%20tier.">Contact sales</a>
+        <a class="cta ghost" href="mailto:hello@timeproofs.io?subject=Team%20Interest&body=Hi%2C%20we%27re%20interested%20in%20Team%20tier." aria-label="Contact sales for Team plan">Contact sales</a>
       </article>
     </section>
 
@@ -205,54 +208,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Monthly proofs</td>
-            <td>1,000 / IP</td>
-            <td>10,000</td>
-            <td>100,000</td>
-          </tr>
-          <tr>
-            <td>Public verification</td>
-            <td>Unlimited</td>
-            <td>Unlimited</td>
-            <td>Unlimited</td>
-          </tr>
-          <tr>
-            <td>API key</td>
-            <td>Not required</td>
-            <td>Required</td>
-            <td>Required</td>
-          </tr>
-          <tr>
-            <td>PDF certificate</td>
-            <td>—</td>
-            <td>✔</td>
-            <td>✔</td>
-          </tr>
-          <tr>
-            <td>Webhooks</td>
-            <td>—</td>
-            <td>✔</td>
-            <td>✔</td>
-          </tr>
-          <tr>
-            <td>Dashboard</td>
-            <td>—</td>
-            <td>✔</td>
-            <td>✔</td>
-          </tr>
-          <tr>
-            <td>Org / Roles / SIEM</td>
-            <td>—</td>
-            <td>—</td>
-            <td>✔</td>
-          </tr>
-          <tr>
-            <td>Support</td>
-            <td>Community</td>
-            <td>Standard</td>
-            <td>Priority</td>
-          </tr>
+          <tr><td>Monthly proofs</td><td>1,000 / IP</td><td>10,000</td><td>100,000</td></tr>
+          <tr><td>Public verification</td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td></tr>
+          <tr><td>API key</td><td>Not required</td><td>Required</td><td>Required</td></tr>
+          <tr><td>PDF certificate</td><td>—</td><td>✔</td><td>✔</td></tr>
+          <tr><td>Webhooks</td><td>—</td><td>✔</td><td>✔</td></tr>
+          <tr><td>Dashboard</td><td>—</td><td>✔</td><td>✔</td></tr>
+          <tr><td>Org / Roles / SIEM</td><td>—</td><td>—</td><td>✔</td></tr>
+          <tr><td>Support</td><td>Community</td><td>Standard</td><td>Priority</td></tr>
         </tbody>
       </table>
     </section>
@@ -292,7 +255,7 @@
       <a class="cta ghost" href="/docs.html" style="margin-left:8px">Read the Docs</a>
     </div>
 
-    <footer>
+    <footer role="contentinfo">
       © 2025 TimeProofs — Proof of Existence. For Everything.
       <div class="links" style="margin-top:6px">
         <a href="/index.html">Home</a> •
@@ -322,4 +285,4 @@
     })();
   </script>
 </body>
-</html>
+                                                                               </html>
