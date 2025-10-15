@@ -1,27 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- ===== Core ===== -->
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Use Cases — TimeProofs · Proof of Existence for AI & Developers</title>
   <meta name="description" content="Concrete TimeProofs use cases for AI teams, agents, and developers: provenance, datasets, audit trails, contracts, compliance, research."/>
+  <meta name="theme-color" content="#0b1020"/>
+  <link rel="canonical" href="https://timeproofs.io/use-cases.html"/>
   <link rel="icon" href="/favicon.ico"/>
+
+  <!-- ===== Social ===== -->
+  <meta property="og:title" content="Use Cases — TimeProofs · Proof of Existence for AI & Developers"/>
+  <meta property="og:description" content="Add a cryptographic moment-in-time to anything that matters — instant, private, verifiable."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:image" content="/og.png"/>
+  <meta property="og:url" content="https://timeproofs.io/use-cases.html"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Use Cases — TimeProofs"/>
+  <meta name="twitter:description" content="Provenance, datasets, audit trails, contracts, compliance, research — in minutes."/>
+  <meta name="twitter:image" content="/og.png"/>
+
   <style>
     :root{
       --bg:#0b1020; --panel:#0f172a; --line:#1e293b;
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
+      --safe-btm: env(safe-area-inset-bottom, 0px);
     }
     *{ box-sizing:border-box }
+    html,body{ margin:0; height:100%; max-width:100%; overflow-x:hidden }
     body{
-      margin:0; background:radial-gradient(1200px 500px at 65% -10%, rgba(34,211,238,.10), transparent 60%), var(--bg);
+      background:radial-gradient(1000px 400px at 65% -10%, rgba(34,211,238,.10), transparent 60%), var(--bg);
       color:var(--text);
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      text-rendering:optimizeLegibility;
     }
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
 
-    /* Header (shared) */
+    /* ===== Header (shared) ===== */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
@@ -35,13 +53,10 @@
       border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
     }
     .tp-nav a{
-      color:var(--text); text-decoration:none; font-weight:700; margin-left:18px; padding:8px 0; display:inline-block;
+      color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block; text-decoration:none;
     }
     .tp-nav a:hover{ color:var(--accent) }
-    @media (min-width: 900px){
-      .tp-burger{ display:none }
-      .tp-nav{ display:flex; align-items:center }
-    }
+    @media (min-width: 900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width: 899px){
       .tp-nav{
         position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
@@ -52,33 +67,48 @@
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
     }
 
-    /* Layout */
+    /* ===== Layout ===== */
     main{ padding:96px 20px 40px; max-width:1100px; margin:0 auto }
     .kicker{ color:#a8c5d6; letter-spacing:.3px; font-size:.95rem }
-    h1{ font-size:2rem; margin:.2em 0 .6em }
-    p.lead{ color:var(--muted); max-width:880px; margin:0 0 1.2em }
+    h1{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .6em; font-weight:900 }
+    p.lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 0 1.2em }
+
     .grid{ display:grid; gap:16px }
     @media(min-width:900px){ .grid.two{ grid-template-columns:1fr 1fr } .grid.three{ grid-template-columns:1fr 1fr 1fr } }
 
-    .card{ background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:18px }
+    .card{ background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px }
     .card h3{ margin:.2em 0 .4em; color:#b9e7f5; font-size:1.1rem }
-    .card p{ color:#dbe7f3; margin:.25em 0 .6em }
+    .card p{ color:#dbe7f3; margin:.25em 0 .6em; line-height:1.6 }
     .mini{ font-size:.92rem; color:#9fb3c6 }
-    pre{ background:#0b1220; border:1px solid #1f2937; color:#e5e7eb; border-radius:10px; padding:12px; overflow:auto; line-height:1.55; font-size:.92rem }
+
+    /* Code blocks — safe wrapping on mobile */
+    pre{
+      background:#0b1220; border:1px solid #1f2937; color:#e5e7eb; border-radius:12px;
+      padding:12px; overflow:auto; line-height:1.55; font-size:.92rem;
+      white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere;
+    }
+    code{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace; font-size:.92rem; white-space:inherit }
 
     .pill{ display:inline-block; border:1px solid #214a57; background:#0d2330; color:#aee9f7; border-radius:999px; padding:4px 10px; margin:6px 8px 0 0; font-size:.78rem }
     .cta-row{ margin-top:14px; display:flex; gap:10px; flex-wrap:wrap }
-    .cta{ display:inline-block; background:var(--accent); color:#06202a; font-weight:900; padding:10px 14px; border-radius:10px; text-decoration:none }
+    .cta{ display:inline-block; background:var(--accent); color:#06202a; font-weight:900; padding:10px 14px; border-radius:10px; text-decoration:none; transition:transform .15s ease,filter .15s ease }
+    .cta:hover{ transform:translateY(-1px); filter:brightness(1.05) }
     .ghost{ background:#0f1b30; color:#d7f7ff; border:1px solid var(--line) }
 
-    footer{ border-top:1px solid var(--line); margin-top:42px; padding:20px; color:#7c8aa5; text-align:center }
+    footer{
+      border-top:1px solid var(--line); margin-top:42px; padding:20px; padding-bottom:calc(20px + var(--safe-btm));
+      color:#7c8aa5; text-align:center
+    }
     footer a{ color:#a7b7cc; text-decoration:none; margin:0 8px }
     footer a:hover{ color:var(--accent) }
+
+    @media (prefers-reduced-motion: reduce){ *{ transition:none !important; animation:none !important } }
   </style>
 </head>
 <body>
+  <!-- ===== Header ===== -->
   <header class="tp-header" role="navigation" aria-label="Main">
-    <a class="tp-brand" href="/index.html">TimeProofs</a>
+    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">TimeProofs</a>
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
       <span aria-hidden="true">☰</span>
     </button>
@@ -93,83 +123,122 @@
     </nav>
   </header>
 
-  <main>
+  <!-- ===== Content ===== -->
+  <main role="main">
     <p class="kicker">USE CASES</p>
     <h1>Where TimeProofs becomes essential</h1>
-    <p class="lead">Add a cryptographic “moment in time” to anything that matters. Below are the fastest wins for AI teams, agents, and developers.</p>
+    <p class="lead">Add a cryptographic “moment in time” to anything that matters. Fastest wins for AI teams, agents, and developers.</p>
 
-    <section class="grid three">
-      <div class="card">
+    <!-- Use cases -->
+    <section class="grid three" aria-label="Primary use cases">
+      <article class="card">
         <h3>AI output provenance</h3>
         <p>Attach a proof to every LLM output or image. Share the public verify URL with users or auditors.</p>
-        <pre><code>// after generating output
+        <pre><code>// helper: sha256 of a string (browser)
+async function sha256Hex(str){
+  const buf = new TextEncoder().encode(str);
+  const digest = await crypto.subtle.digest('SHA-256', buf);
+  return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+const API = "https://timeproofs-api.jeason-bacoul.workers.dev/api";
 const hash = await sha256Hex(output);
-const proof = await fetch(API + "/timestamp", {
+const proof = await fetch(`${API}/timestamp`, {
   method:"POST", headers:{ "Content-Type":"application/json" },
   body: JSON.stringify({ hash, type:"gen", meta:{ model:"gpt", app:"agentX" } })
 }).then(r=>r.json());</code></pre>
         <div class="mini">Outcome: trust, anti-tampering, reproducibility.</div>
-      </div>
+      </article>
 
-      <div class="card">
+      <article class="card">
         <h3>Prompt & chain integrity</h3>
         <p>Timestamp key prompts and intermediate chain states for audit and regression safety.</p>
-        <pre><code>await post("/timestamp", { hash: sha256Hex(prompt), type:"prompt", meta:{ env:"prod" }});</code></pre>
+        <pre><code>const API = "https://timeproofs-api.jeason-bacoul.workers.dev/api";
+const promptHash = await sha256Hex(prompt);
+await fetch(`${API}/timestamp`, {
+  method:"POST", headers:{ "Content-Type":"application/json" },
+  body: JSON.stringify({ hash: promptHash, type:"prompt", meta:{ env:"prod" } })
+});</code></pre>
         <div class="mini">Outcome: explainability, liability buffer.</div>
-      </div>
+      </article>
 
-      <div class="card">
+      <article class="card">
         <h3>Dataset & fine-tune snapshots</h3>
-        <p>Prove the exact dataset used at T. Anchor training sets and versioned diffs.</p>
-        <pre><code>await post("/timestamp", { hash: sha256Hex(manifestJSON), type:"dataset", meta:{ version:"2025-01-10" }});</code></pre>
+        <p>Prove the exact dataset used at T. Anchor training sets and versioned manifests.</p>
+        <pre><code>const API = "https://timeproofs-api.jeason-bacoul.workers.dev/api";
+const manifestHash = await sha256Hex(JSON.stringify(manifest));
+await fetch(`${API}/timestamp`, {
+  method:"POST", headers:{ "Content-Type":"application/json" },
+  body: JSON.stringify({ hash: manifestHash, type:"dataset", meta:{ version:"2025-01-10" } })
+});</code></pre>
         <div class="mini">Outcome: auditability, reproducible research.</div>
-      </div>
+      </article>
 
-      <div class="card">
+      <article class="card">
         <h3>Contracts, emails, files</h3>
         <p>Keep content private. Prove existence/integrity with only the SHA-256 hash.</p>
-        <pre><code>await post("/timestamp", { hash: fileSHA256, type:"file", meta:{ mime:"application/pdf" }});</code></pre>
-        <div class="mini">Outcome: lightweight legal evidence.</div>
-      </div>
+        <pre><code>// hashing a File object (browser)
+async function sha256FileHex(file){
+  const buf = await file.arrayBuffer();
+  const digest = await crypto.subtle.digest('SHA-256', buf);
+  return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
+}
 
-      <div class="card">
+const fileHash = await sha256FileHex(file);
+await fetch(`${API}/timestamp`, {
+  method:"POST", headers:{ "Content-Type":"application/json" },
+  body: JSON.stringify({ hash: fileHash, type:"file", meta:{ mime:"application/pdf" } })
+});</code></pre>
+        <div class="mini">Outcome: lightweight legal evidence.</div>
+      </article>
+
+      <article class="card">
         <h3>Webhooks & event logs</h3>
         <p>Hash critical events and anchor them. Verify later without exposing payloads.</p>
-        <pre><code>await post("/timestamp", { hash: sha256Hex(eventJSON), type:"webhook", meta:{ src:"billing" }});</code></pre>
+        <pre><code>const eventHash = await sha256Hex(JSON.stringify(event));
+await fetch(`${API}/timestamp`, {
+  method:"POST", headers:{ "Content-Type":"application/json" },
+  body: JSON.stringify({ hash: eventHash, type:"webhook", meta:{ src:"billing" } })
+});</code></pre>
         <div class="mini">Outcome: integrity trails, compliance.</div>
-      </div>
+      </article>
 
-      <div class="card">
+      <article class="card">
         <h3>Release & binary integrity</h3>
         <p>Ship artifacts with a proof link. Users verify instantly before installing.</p>
-        <pre><code>await post("/timestamp", { hash: binarySHA256, type:"release", meta:{ tag:"v1.2.3" }});</code></pre>
+        <pre><code>await fetch(`${API}/timestamp`, {
+  method:"POST", headers:{ "Content-Type":"application/json" },
+  body: JSON.stringify({ hash: binarySHA256, type:"release", meta:{ tag:"v1.2.3" } })
+});</code></pre>
         <div class="mini">Outcome: supply-chain trust.</div>
-      </div>
+      </article>
     </section>
 
-    <div class="cta-row">
+    <div class="cta-row" role="group" aria-label="Get started">
       <a class="cta" href="/verify.html">Try in the browser</a>
       <a class="cta ghost" href="/docs.html">See full API docs</a>
     </div>
 
+    <!-- Adoption reasons -->
     <section style="margin-top:26px">
       <h2>Why teams adopt it quickly</h2>
       <div class="grid two">
-        <div class="card">
-          <p><strong>Zero content upload.</strong> Only hashes; privacy by design. Devs integrate in minutes.</p>
-          <p><strong>Edge-native.</strong> Global, low-latency, scales automatically.</p>
+        <article class="card">
+          <p><strong>Zero content upload.</strong> Only hashes; privacy by design. Integrate in minutes.</p>
+          <p><strong>Edge-native.</strong> Global, low-latency, auto-scaling.</p>
           <p><strong>No blockchain.</strong> Instant, predictable cost, no gas.</p>
-        </div>
-        <div class="card">
+        </article>
+        <article class="card">
           <p><strong>Public verification.</strong> Anyone can check a proof URL.</p>
-          <p><strong>Legal-friendly.</strong> Strong technical evidence for existence/integrity at time T.</p>
+          <p><strong>Legal-friendly.</strong> Strong tech evidence of existence at time T.</p>
           <p><strong>Future-proof.</strong> Roadmap: SDKs, PDF certificate, dashboard, API keys.</p>
-        </div>
+        </article>
       </div>
     </section>
   </main>
 
-  <footer>
+  <!-- ===== Footer ===== -->
+  <footer role="contentinfo">
     © 2025 TimeProofs — Proof of Existence. For Everything.
     <div style="margin-top:6px">
       <a href="/index.html">Home</a> •
