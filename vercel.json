@@ -1,51 +1,11 @@
 {
-  "version": 2,
   "cleanUrls": true,
   "trailingSlash": false,
-
-  "redirects": [
-    { "source": "/verify", "destination": "/verify.html", "permanent": true },
-    { "source": "/docs", "destination": "/docs.html", "permanent": true },
-    { "source": "/pricing", "destination": "/pricing.html", "permanent": true },
-    { "source": "/roadmap", "destination": "/roadmap.html", "permanent": true },
-    { "source": "/about", "destination": "/about.html", "permanent": true },
-    { "source": "/use-cases", "destination": "/use-cases.html", "permanent": true },
-    { "source": "/legal", "destination": "/legal.html", "permanent": true },
-    { "source": "/privacy", "destination": "/privacy.html", "permanent": true }
-  ],
-
   "headers": [
     {
-      "source": "/(.*)\\.(?:css|js|mjs|png|jpg|jpeg|gif|svg|webp|ico|ttf|woff|woff2)",
+      "source": "/(.*)\\.(?:css|js|mjs|png|jpg|jpeg|gif|svg|webp|ico|ttf|woff|woff2)$",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
-    },
-    {
-      "source": "/(.*)\\.html",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-store, max-age=0" }
-      ]
-    },
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
-        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
-        { "key": "Cross-Origin-Resource-Policy", "value": "same-origin" },
-        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" }
-      ]
-    },
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Content-Security-Policy",
-          "value": "default-src 'self'; connect-src 'self' https://timeproofs-api.jeason-bacoul.workers.dev; img-src 'self' data: https:; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
-        }
       ]
     }
   ]
