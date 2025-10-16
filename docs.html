@@ -5,10 +5,10 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>API Docs — TimeProofs</title>
-  <meta name="description" content="TimeProofs API — timestamp, verify, and prove digital existence with only a SHA-256 hash. Privacy-first, edge-native, built for AI agents & developers."/>
+  <meta name="description" content="TimeProofs API — timestamp, verify, and prove digital existence using SHA-256 hashes. Privacy-first, edge-native, and verifiable by anyone."/>
   <meta name="theme-color" content="#0b1020"/>
-  <link rel="canonical" href="https://timeproofs.io/docs.html"/>
   <link rel="icon" href="/favicon.ico"/>
+  <link rel="canonical" href="https://timeproofs.io/docs.html"/>
 
   <!-- Social -->
   <meta property="og:title" content="API Docs — TimeProofs"/>
@@ -25,21 +25,18 @@
     :root{
       --bg:#0b1020; --panel:#0f172a; --line:#1e293b;
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --ok:#22c55e; --bad:#ef4444;
-      --safe-btm: env(safe-area-inset-bottom, 0px);
     }
     *{ box-sizing:border-box }
-    html,body{ margin:0; height:100%; max-width:100%; overflow-x:hidden }
     body{
-      background:radial-gradient(1000px 400px at 70% -10%, rgba(34,211,238,.10), transparent 60%), var(--bg);
+      margin:0; background:radial-gradient(1000px 400px at 70% -10%, rgba(34,211,238,.10), transparent 60%), var(--bg);
       color:var(--text);
       font:16px/1.7 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-      text-rendering:optimizeLegibility;
     }
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
 
-    /* Header (shared) */
+    /* Header (unified) */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
@@ -50,9 +47,11 @@
     .tp-brand:hover{ color:var(--accent) }
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
-      border:1px solid var(--line); border-radius:10px; background:#0d1628; color:#f8fafc; cursor:pointer;
+      border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
     }
-    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block }
+    .tp-nav a{
+      color:var(--text); text-decoration:none; font-weight:700; margin-left:18px; padding:8px 0; display:inline-block;
+    }
     .tp-nav a:hover{ color:var(--accent) }
     @media (min-width: 900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width: 899px){
@@ -70,33 +69,33 @@
     h1{ font-size:2.1rem; margin:.2em 0 .6em; color:#eaf8ff }
     p.lead{ color:var(--muted); max-width:860px; margin:0 0 1.2em }
     h2{ color:#b9e7f5; margin:1.6em 0 .6em; font-size:1.35rem }
-    h3{ color:#aee9f7; margin:1em 0 .4em; font-size:1.05rem }
+    h3{ color:#aee9f7; margin:1.1em 0 .4em; font-size:1.05rem }
     .note{ color:#9db4c8; font-size:.95rem }
+    .muted{ color:var(--muted) }
 
     .card{ background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:18px; margin:16px 0 }
-    pre{
-      background:#0b1220; border:1px solid #1f2937; color:#e5e7eb;
-      border-radius:10px; padding:12px; overflow:auto; line-height:1.6;
-      white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere;
-    }
+    pre{ background:#0b1220; border:1px solid #1f2937; color:#e5e7eb; border-radius:10px; padding:12px; overflow:auto; line-height:1.6 }
     code{ background:#1e293b; color:#f8fafc; padding:2px 6px; border-radius:6px; font-size:.92rem }
     table{ width:100%; border-collapse:collapse; margin:8px 0 0 }
     th,td{ border:1px solid #334155; padding:8px; text-align:left; vertical-align:top }
     th{ background:#0b1220; color:#e5e7eb }
+
     .actions{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap }
     .btn{
       background:#111d33; color:#e2f6ff; border:1px solid var(--line);
-      padding:8px 12px; border-radius:8px; font-weight:700; cursor:pointer;
+      padding:8px 12px; border-radius:8px; font-weight:700; cursor:pointer
     }
     .btn:hover{ filter:brightness(1.05) }
 
-    footer{
-      margin-top:48px; color:#7b8aa7; font-size:.9rem; text-align:center; padding:20px;
-      padding-bottom:calc(20px + var(--safe-btm));
-      border-top:1px solid var(--line);
-    }
+    .pill{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; font-size:12px; margin-left:8px }
+    .ok{ background:#0f3b22; color:#b7f7ce; border:1px solid #1c6b3d }
+    .bad{ background:#3b0f12; color:#ffc1c6; border:1px solid #6b1c22 }
+
+    footer{ margin-top:48px; color:#7b8aa7; font-size:.9rem; text-align:center; padding:20px; border-top:1px solid var(--line) }
     footer a{ color:#a7b7cc; text-decoration:none; margin:0 8px }
     footer a:hover{ color:var(--accent) }
+
+    .mono-small{ font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; font-size:12px; color:#bcd9e8 }
   </style>
 </head>
 <body>
@@ -110,7 +109,7 @@
       <a href="/about.html">About</a>
       <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html">Verify</a>
-      <a href="/docs.html">Docs</a>
+      <a href="/docs.html" aria-current="page">Docs</a>
       <a href="/pricing.html">Pricing</a>
       <a href="/roadmap.html">Roadmap</a>
       <a href="/legal.html">Legal</a>
@@ -119,92 +118,88 @@
 
   <main>
     <h1>🧭 TimeProofs API</h1>
-    <p class="lead">Send only a <strong>SHA-256 hash</strong>. Get back an ISO <strong>timestamp</strong>, an HMAC <strong>signature</strong>, and a public <strong>verify URL</strong>. Privacy-first. Edge-native. Zero blockchain.</p>
+    <p class="lead">Timestamp and verify the existence of any digital content by sending only its <strong>SHA-256 hash</strong>. Privacy-first. Edge-native. Built for AI agents & developers.</p>
 
     <!-- Base URL -->
-    <section class="card" aria-labelledby="base-url">
-      <h2 id="base-url">🌐 Base URL</h2>
+    <div class="card">
+      <h2>🌐 Base URL</h2>
+      <p><strong>Current (Worker, beta):</strong></p>
       <pre><code>https://timeproofs-api.jeason-bacoul.workers.dev/api</code></pre>
-      <p class="note">Production domain (planned): <code>https://api.timeproofs.io</code></p>
-    </section>
+      <p class="note">Planned production domain: <code>https://api.timeproofs.io</code> (swap when DNS is ready).</p>
+    </div>
 
     <!-- Endpoints -->
-    <section class="card" aria-labelledby="endpoints">
-      <h2 id="endpoints">⚡ Endpoints</h2>
-      <table role="table" aria-label="Endpoints">
-        <thead>
-          <tr><th>Endpoint</th><th>Method</th><th>Description</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><code>/timestamp</code></td><td>POST</td><td>Create a proof for a SHA-256 hash.</td></tr>
-          <tr><td><code>/verify?hash=...</code></td><td>GET</td><td>Verify existence, timestamp, and server signature.</td></tr>
-        </tbody>
+    <div class="card">
+      <h2>⚡ Endpoints</h2>
+      <table role="table" aria-label="API Endpoints">
+        <tr><th>Endpoint</th><th>Method</th><th>Description</th></tr>
+        <tr><td><code>/timestamp</code></td><td>POST</td><td>Create a proof-of-existence for a SHA-256 hash.</td></tr>
+        <tr><td><code>/verify?hash=...</code></td><td>GET</td><td>Verify existence, timestamp, and server signature.</td></tr>
       </table>
-    </section>
+    </div>
 
     <!-- Quickstart -->
-    <section class="card" aria-labelledby="quickstart">
-      <h2 id="quickstart">⚙️ 30-second Quickstart</h2>
+    <div class="card">
+      <h2>⚙️ Quickstart (conceptual)</h2>
+      <ol>
+        <li>Compute a SHA-256 hash locally (text/file/output).</li>
+        <li><code>POST /timestamp</code> with the hash (+ optional <code>type</code> & <code>meta</code>).</li>
+        <li>Receive <code>{ ok, hash, timestamp, signature, verify_url }</code>.</li>
+        <li>Anyone can <code>GET /verify?hash=...</code> later.</li>
+      </ol>
 
-      <h3>Hash locally (browser)</h3>
-      <pre><code>async function sha256HexFromText(str){
-  const enc = new TextEncoder().encode(str || '');
-  const buf = await crypto.subtle.digest('SHA-256', enc);
-  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
-}</code></pre>
-
-      <h3>Request a timestamp</h3>
-      <pre id="curl-ts"><code>curl -X POST 'https://timeproofs-api.jeason-bacoul.workers.dev/api/timestamp' \
-  -H 'Content-Type: application/json' \
-  -d '{ "hash":"&lt;your_sha256&gt;", "type":"event", "meta": { "source":"docs" } }'</code></pre>
-      <div class="actions"><button class="btn" data-copy="#curl-ts">Copy cURL</button></div>
-
-      <h3>Verify anywhere</h3>
-      <pre id="curl-vf"><code>curl 'https://timeproofs-api.jeason-bacoul.workers.dev/api/verify?hash=&lt;your_sha256&gt;'</code></pre>
-      <div class="actions"><button class="btn" data-copy="#curl-vf">Copy cURL</button></div>
-    </section>
-
-    <!-- Create -->
-    <section class="card" aria-labelledby="create">
-      <h2 id="create">🧾 Create Proof — <code>POST /timestamp</code></h2>
-
-      <h3>Request body</h3>
-      <table role="table" aria-label="Create request">
-        <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td><code>hash</code></td><td>string (64-hex)</td><td>Yes</td><td>SHA-256 of the content (computed your side).</td></tr>
-          <tr><td><code>type</code></td><td>string</td><td>No</td><td>Optional label (e.g., <code>prompt</code>, <code>gen</code>, <code>file</code>, <code>event</code>).</td></tr>
-          <tr><td><code>meta</code></td><td>object</td><td>No</td><td>Small JSON (model, mime, tags…). Keep it tiny.</td></tr>
-        </tbody>
-      </table>
-
-      <h3>Example request</h3>
-      <pre><code>{
+      <h3>Request example</h3>
+      <pre id="qs-req"><code>{
   "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
   "type": "event",
   "meta": { "model": "gpt-4o", "mime": "text/plain" }
 }</code></pre>
 
-      <h3>Example response</h3>
-      <pre><code>{
+      <h3>Response example</h3>
+      <pre id="qs-res"><code>{
   "ok": true,
   "hash": "e3b0c4...",
   "timestamp": "2025-01-15T12:34:56.789Z",
-  "signature": "hmac_sha256_over(hash+timestamp)",
+  "signature": "hmac_sha256(hash|timestamp)",
   "verify_url": "https://timeproofs-api.jeason-bacoul.workers.dev/api/verify?hash=e3b0..."
 }</code></pre>
-      <p class="note">Signature = HMAC-SHA256(secret, <code>hash + timestamp</code>) — secret kept server-side.</p>
-    </section>
+
+      <div class="actions">
+        <button class="btn" data-copy="#qs-req">Copy Request JSON</button>
+        <button class="btn" data-copy="#qs-res">Copy Response JSON</button>
+        <a class="btn" href="/verify.html">Try in the browser</a>
+      </div>
+    </div>
+
+    <!-- Create -->
+    <div class="card">
+      <h2>🧾 Create Proof — <code>POST /timestamp</code></h2>
+      <p class="note">Send only the 64-hex SHA-256 hash. Optional <code>type</code> (string) and <code>meta</code> (small JSON).</p>
+      <h3>Request</h3>
+      <pre><code>{
+  "hash": "…64-hex…",
+  "type": "event | prompt | gen | file | mail | webhook | other",
+  "meta": { "model": "gpt-4o", "mime": "text/plain" }
+}</code></pre>
+      <h3>Response</h3>
+      <pre><code>{
+  "ok": true,
+  "hash": "…",
+  "timestamp": "2025-01-15T12:34:56.789Z",
+  "signature": "hmac_sha256_over(hash+timestamp)",
+  "verify_url": "https://…/verify?hash=…"
+}</code></pre>
+      <p class="note">Signature is HMAC-SHA256 over the concatenation of <code>hash + timestamp</code> with a server-side secret.</p>
+    </div>
 
     <!-- Verify -->
-    <section class="card" aria-labelledby="verify">
-      <h2 id="verify">🧩 Verify Proof — <code>GET /verify?hash={sha256}</code></h2>
-
-      <h3>Example response</h3>
+    <div class="card">
+      <h2>🧩 Verify Proof — <code>GET /verify?hash={sha256}</code></h2>
+      <h3>Response</h3>
       <pre><code>{
   "ok": true,
   "found": true,
-  "hash": "e3b0c4...",
+  "hash": "…",
   "timestamp": "2025-01-15T12:34:56.789Z",
   "signature": "server_signature",
   "first_seen": "2025-01-15T12:34:56.789Z",
@@ -214,69 +209,71 @@
 
       <h3>Outcomes</h3>
       <table role="table" aria-label="Verify outcomes">
-        <thead><tr><th>Case</th><th>Meaning</th></tr></thead>
-        <tbody>
-          <tr><td><code>ok=true & found=true</code></td><td>Valid proof with timestamp & signature.</td></tr>
-          <tr><td><code>found=false</code></td><td>No proof recorded for this hash.</td></tr>
-          <tr><td><code>ok=false</code></td><td>Malformed hash or internal error.</td></tr>
-        </tbody>
+        <tr><th>Case</th><th>Meaning</th></tr>
+        <tr><td><code>ok=true, found=true</code></td><td>Valid proof with matching timestamp & signature.</td></tr>
+        <tr><td><code>found=false</code></td><td>No proof recorded for this hash.</td></tr>
+        <tr><td><code>ok=false</code></td><td>Malformed hash or internal error; check request format.</td></tr>
       </table>
-    </section>
+    </div>
 
     <!-- Signature verification -->
-    <section class="card" aria-labelledby="sig">
-      <h2 id="sig">🔑 Signature verification (server/client)</h2>
-      <p>Recompute <code>HMAC-SHA256(secret, hash + timestamp)</code> and compare to <code>signature</code>. Matching values confirm authenticity and server timestamping.</p>
-      <h3>Pseudocode</h3>
+    <div class="card">
+      <h2>🔑 Signature Verification</h2>
+      <p>Recompute <code>HMAC-SHA256(secret, hash + timestamp)</code> and compare to <code>signature</code>. If they match, the proof is authentic and timestamped by TimeProofs.</p>
       <pre><code>// secret: server-side key (never exposed)
-// msg   : hex(hash) + ISO8601(timestamp)
-const expected = HMAC_SHA256(secret, msg);
-assert(expected === signature);</code></pre>
-      <p class="note">You can rely on <code>/verify</code> for zero-setup validation; offline verification coming later.</p>
-    </section>
+// msg   : concat hex(hash) + ISO8601(timestamp)
+// recalculated = HMAC_SHA256(secret, msg)
+// assert(recalculated === signature)</code></pre>
+      <p class="note">A public deterministic verifier exists via <code>/verify</code> for zero-setup validation.</p>
+    </div>
 
     <!-- Limits -->
-    <section class="card" aria-labelledby="limits">
-      <h2 id="limits">📈 Beta limits & rate-limiting</h2>
+    <div class="card">
+      <h2>📈 Limits & Rate Limiting (beta)</h2>
       <ul>
-        <li>Up to <strong>1,000 proofs / month / IP</strong> (beta)</li>
+        <li>Free public beta — up to <strong>1,000 proofs / month / IP</strong></li>
         <li>Unlimited public verification</li>
-        <li>No API key yet (Pro will add keys & quotas)</li>
+        <li>No API key for now (Pro plan will add keys & quotas)</li>
       </ul>
-      <p class="note">Abuse protection: minimal edge logs; we store only hashes + timestamp + signature (+ optional tiny meta).</p>
-    </section>
+      <p class="note">Abuse protection uses lightweight edge logs. Only hashes and minimal metadata you provide are stored.</p>
+    </div>
 
     <!-- Errors -->
-    <section class="card" aria-labelledby="errors">
-      <h2 id="errors">🛠️ Errors</h2>
-      <table role="table" aria-label="Error codes">
-        <thead><tr><th>HTTP</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td><code>400</code></td><td>Missing/invalid hash (must be 64-hex).</td></tr>
-          <tr><td><code>404</code></td><td>Proof not found.</td></tr>
-          <tr><td><code>429</code></td><td>Rate limit exceeded (beta safeguard).</td></tr>
-          <tr><td><code>500</code></td><td>Internal server error.</td></tr>
-        </tbody>
+    <div class="card">
+      <h2>🛠️ Error Codes</h2>
+      <table role="table" aria-label="HTTP errors">
+        <tr><th>HTTP</th><th>Description</th></tr>
+        <tr><td><code>400</code></td><td>Missing/invalid hash (must be 64-hex).</td></tr>
+        <tr><td><code>404</code></td><td>Proof not found.</td></tr>
+        <tr><td><code>429</code></td><td>Rate limit exceeded (public beta safeguard).</td></tr>
+        <tr><td><code>500</code></td><td>Internal server error.</td></tr>
       </table>
-    </section>
+    </div>
 
     <!-- SDKs -->
-    <section class="card" aria-labelledby="sdks">
-      <h2 id="sdks">📦 SDKs (coming soon)</h2>
-      <p>JavaScript (browser & Node), then Python & Go. En attendant, utilisez HTTP + JSON comme ci-dessus.</p>
-      <div class="actions">
+    <div class="card">
+      <h2>📦 SDKs (roadmap)</h2>
+      <table role="table" aria-label="SDK roadmap">
+        <tr><th>SDK</th><th>Status</th><th>Target</th></tr>
+        <tr><td>JavaScript / TypeScript</td><td>🚧 Alpha</td><td>v0.2</td></tr>
+        <tr><td>Python</td><td>🧪 Planned</td><td>v2.0</td></tr>
+        <tr><td>Go</td><td>🧪 Planned</td><td>v2.0</td></tr>
+      </table>
+      <div class="mono-small">The SDK will hash (if needed), call <code>/timestamp</code>, and return <code>{ hash, timestamp, signature, verify_url }</code>.</div>
+      <div class="actions" style="margin-top:10px">
         <a class="btn" href="/verify.html">Try in the browser</a>
         <a class="btn" href="/pricing.html">See pricing</a>
       </div>
-    </section>
+    </div>
 
     <!-- Support -->
-    <section class="card" aria-labelledby="support">
-      <h2 id="support">💬 Support & feedback</h2>
+    <div class="card">
+      <h2>💬 Support & Feedback</h2>
+      <p>Questions, feature requests, or partnerships?</p>
       <p><a href="mailto:hello@timeproofs.io">hello@timeproofs.io</a> • <a href="/roadmap.html">Roadmap</a> • <a href="/privacy.html">Privacy</a></p>
-    </section>
+    </div>
 
-    <footer role="contentinfo">
+    <footer>
       © 2025 TimeProofs — Proof of Existence. For Everything.
       <div style="margin-top:6px">
         <a href="/index.html">Home</a> •
