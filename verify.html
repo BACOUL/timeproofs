@@ -39,7 +39,7 @@
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
 
-    /* Header (unifié) */
+    /* Header (shared) */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
@@ -109,6 +109,9 @@
     .drop.drag{ border-color:#22d3ee; background:#0f1f33; }
 
     footer{ margin:26px 0 0; text-align:center; color:#7c8aa5; font-size:12px }
+
+    .monosmall{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:12px; color:#bcd9e8 }
+    .mutedline{ border-top:1px solid #1f2937; margin:12px 0 0; padding-top:10px }
   </style>
 </head>
 <body>
@@ -151,29 +154,32 @@
         <div id="input-text" style="margin-top:14px;">
           <label for="text">Text to hash (SHA-256 runs locally)</label>
           <textarea id="text" placeholder="Paste or type your text here..." spellcheck="false"></textarea>
+          <div id="hash-preview-text" class="monosmall mutedline" aria-live="polite"></div>
         </div>
 
         <div id="input-file" style="display:none; margin-top:14px;">
           <label for="file">File to hash (processed locally)</label>
           <input type="file" id="file" aria-describedby="file-hint"/>
-          <p id="file-hint" class="hint">We only compute a hash in your browser. The file is never uploaded.</p>
+          <p id="file-hint" class="hint">We only compute a hash in your browser. The file is never uploaded. Max 50 MB.</p>
           <div id="drop" class="drop" aria-hidden="false">…or drag & drop a file here</div>
           <div id="file-info" class="hint" aria-live="polite"></div>
+          <div id="hash-preview-file" class="monosmall mutedline" aria-live="polite"></div>
         </div>
 
         <div id="input-hash" style="display:none; margin-top:14px;">
           <label for="raw-hash">Existing SHA-256 hash (hex)</label>
           <input type="text" id="raw-hash" placeholder="e3b0c44298fc1c149a..." inputmode="latin" autocomplete="off" spellcheck="false"/>
+          <div id="hash-preview-raw" class="monosmall mutedline" aria-live="polite"></div>
         </div>
 
         <div class="row" style="margin-top:16px;">
           <div>
             <label for="type">Type (optional)</label>
-            <input type="text" id="type" placeholder="prompt | gen | file | webhook | other" autocomplete="off"/>
+            <input type="text" id="type" placeholder="prompt | gen | file | webhook | other" autocomplete="off" maxlength="32"/>
           </div>
           <div>
             <label for="meta">Meta (optional JSON, small)</label>
-            <input type="text" id="meta" placeholder='{"model":"gpt-4o","mime":"text/plain"}' autocomplete="off" spellcheck="false"/>
+            <input type="text" id="meta" placeholder='{"model":"gpt-4o","mime":"text/plain"}' autocomplete="off" spellcheck="false" maxlength="1024"/>
           </div>
         </div>
 
@@ -185,8 +191,9 @@
         <div id="create-status" style="margin-top:12px;" aria-live="polite"></div>
         <pre id="create-output" style="margin-top:12px;" aria-live="polite"></pre>
         <div class="actions" id="create-actions" style="display:none;">
-          <button class="btn ghost" id="copy-create-json" type="button">Copy JSON</button>
-          <button class="btn ghost" id="copy-create-curl" type="button">Copy cURL</button>
+          <a class="btn ghost" id="open-verify-link" href="#" target="_blank" rel="noopener" style="display:none">Open verify link</a>
+          <button class="btn ghost" id="copy-create-json" type="button" disabled>Copy JSON</button>
+          <button class="btn ghost" id="copy-create-curl" type="button" disabled>Copy cURL</button>
         </div>
       </section>
 
@@ -201,8 +208,8 @@
         <div id="verify-status" style="margin-top:12px;" aria-live="polite"></div>
         <pre id="verify-output" style="margin-top:12px;" aria-live="polite"></pre>
         <div class="actions" id="verify-actions" style="display:none;">
-          <button class="btn ghost" id="copy-verify-json" type="button">Copy JSON</button>
-          <button class="btn ghost" id="copy-verify-curl" type="button">Copy cURL</button>
+          <button class="btn ghost" id="copy-verify-json" type="button" disabled>Copy JSON</button>
+          <button class="btn ghost" id="copy-verify-curl" type="button" disabled>Copy cURL</button>
         </div>
       </section>
     </div>
@@ -226,6 +233,7 @@
 
     // ===== Config =====
     const API_BASE = "https://timeproofs-api.jeason-bacoul.workers.dev/api"; // swap to https://api.timeproofs.io at launch
+    const MAX_FILE_BYTES = 50 * 1024 * 1024; // 50 MB
 
     // ===== Tabs =====
     const tabCreate = document.getElementById('tab-create');
@@ -254,24 +262,6 @@
     chooseFile.onclick = () => { inputText.style.display='none'; inputFile.style.display='block'; inputHash.style.display='none'; };
     chooseHash.onclick = () => { inputText.style.display='none'; inputFile.style.display='none'; inputHash.style.display='block'; };
 
-    // ===== Dropzone helpers =====
-    const drop = document.getElementById('drop');
-    const fileInput = document.getElementById('file');
-    const fileInfo = document.getElementById('file-info');
-
-    if (drop) {
-      ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); drop.classList.add('drag'); }));
-      ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); drop.classList.remove('drag'); }));
-      drop.addEventListener('drop', e => {
-        const f = e.dataTransfer?.files?.[0];
-        if (f) { fileInput.files = e.dataTransfer.files; fileInfo.textContent = `${f.name} (${(f.size/1024/1024).toFixed(2)} MB)`; }
-      });
-      fileInput.addEventListener('change', e => {
-        const f = fileInput.files?.[0];
-        fileInfo.textContent = f ? `${f.name} (${(f.size/1024/1024).toFixed(2)} MB)` : '';
-      });
-    }
-
     // ===== Hash helpers =====
     async function sha256HexFromText(str){
       const enc = new TextEncoder().encode(str || '');
@@ -284,34 +274,115 @@
       return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
     }
 
+    // live hash previews
+    const textArea = document.getElementById('text');
+    const hashPrevText = document.getElementById('hash-preview-text');
+    const hashPrevFile = document.getElementById('hash-preview-file');
+    const hashPrevRaw  = document.getElementById('hash-preview-raw');
+
+    let textHashDebounce;
+    textArea?.addEventListener('input', ()=>{
+      clearTimeout(textHashDebounce);
+      textHashDebounce = setTimeout(async ()=>{
+        const v = textArea.value || '';
+        if (!v) { hashPrevText.textContent = ''; return; }
+        const h = await sha256HexFromText(v);
+        hashPrevText.textContent = `SHA-256: ${h}`;
+      }, 250);
+    });
+
+    // ===== Dropzone helpers =====
+    const drop = document.getElementById('drop');
+    const fileInput = document.getElementById('file');
+    const fileInfo = document.getElementById('file-info');
+
+    function setFileInfo(f){
+      if (!f) { fileInfo.textContent=''; hashPrevFile.textContent=''; return; }
+      const sizeMB = (f.size/1024/1024).toFixed(2);
+      fileInfo.textContent = `${f.name} (${sizeMB} MB)`;
+    }
+
+    if (drop) {
+      ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); drop.classList.add('drag'); }));
+      ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); drop.classList.remove('drag'); }));
+      drop.addEventListener('drop', async e => {
+        const f = e.dataTransfer?.files?.[0];
+        if (f) { 
+          if (f.size > MAX_FILE_BYTES) { alert('File too large (max 50 MB).'); return; }
+          fileInput.files = e.dataTransfer.files; 
+          setFileInfo(f);
+          const h = await sha256HexFromFile(f);
+          hashPrevFile.textContent = `SHA-256: ${h}`;
+        }
+      });
+      fileInput.addEventListener('change', async () => {
+        const f = fileInput.files?.[0];
+        if (!f) { setFileInfo(null); return; }
+        if (f.size > MAX_FILE_BYTES) { setFileInfo(null); fileInput.value=''; alert('File too large (max 50 MB).'); return; }
+        setFileInfo(f);
+        const h = await sha256HexFromFile(f);
+        hashPrevFile.textContent = `SHA-256: ${h}`;
+      });
+    }
+
+    // raw hash preview
+    const rawHashEl = document.getElementById('raw-hash');
+    rawHashEl?.addEventListener('input', ()=>{
+      const v = (rawHashEl.value || '').trim();
+      hashPrevRaw.textContent = v ? `Hash: ${v}` : '';
+    });
+
     // ===== Create proof =====
     const btnCreate = document.getElementById('btn-create');
     const outCreate = document.getElementById('create-output');
     const statusCreate = document.getElementById('create-status');
     const createActions = document.getElementById('create-actions');
+    const openVerifyLink = document.getElementById('open-verify-link');
+    const copyCreateJSON = document.getElementById('copy-create-json');
+    const copyCreateCURL = document.getElementById('copy-create-curl');
+
+    function enableCreateActions(data){
+      createActions.style.display='flex';
+      copyCreateJSON.disabled = false;
+      copyCreateCURL.disabled = false;
+      if (data?.verify_url){
+        openVerifyLink.style.display = 'inline-block';
+        openVerifyLink.href = data.verify_url;
+      } else {
+        openVerifyLink.style.display = 'none';
+      }
+    }
 
     btnCreate.onclick = async () => {
       if (btnCreate.disabled) return;
       btnCreate.disabled = true;
       outCreate.textContent = ''; statusCreate.innerHTML = ''; createActions.style.display='none';
+      openVerifyLink.style.display='none'; copyCreateJSON.disabled = true; copyCreateCURL.disabled = true;
+
       try {
         let hash = '';
         if (inputText.style.display !== 'none') {
-          const text = document.getElementById('text').value || '';
+          const text = textArea.value || '';
+          if (!text) { alert('Enter some text to hash.'); return; }
           hash = await sha256HexFromText(text);
         } else if (inputFile.style.display !== 'none') {
           const file = fileInput.files?.[0];
           if (!file) { alert('Select a file first.'); return; }
+          if (file.size > MAX_FILE_BYTES) { alert('File too large (max 50 MB).'); return; }
           hash = await sha256HexFromFile(file);
         } else {
-          hash = (document.getElementById('raw-hash').value || '').trim();
+          hash = (rawHashEl.value || '').trim();
           if (!/^[a-f0-9]{64}$/i.test(hash)) { alert('Enter a valid 64-hex SHA-256 hash.'); return; }
+          hash = hash.toLowerCase();
         }
 
         const type = (document.getElementById('type').value || 'event').trim();
+        if (type.length > 32) { alert('Type is too long (max 32 chars).'); return; }
+
         let meta = {};
         const metaRaw = (document.getElementById('meta').value || '').trim();
         if (metaRaw) {
+          if (metaRaw.length > 1024) { alert('Meta JSON too large (max 1 KB).'); return; }
           try { meta = JSON.parse(metaRaw); } catch { alert('Meta must be valid JSON.'); return; }
         }
 
@@ -321,15 +392,14 @@
           body: JSON.stringify({ hash, type, meta })
         });
         const j = await r.json();
-        if (!r.ok || j.error) throw new Error(j.error || 'Request failed');
+        if (!r.ok || j.error) throw new Error(j.error || `Request failed (${r.status})`);
 
         statusCreate.innerHTML = `<span class="pill ok" role="status">✅ Proof created</span>`;
         outCreate.textContent = JSON.stringify(j, null, 2);
-        createActions.style.display='flex';
+        enableCreateActions(j);
 
-        // Copy handlers
-        document.getElementById('copy-create-json').onclick = () => copyToClipboard(outCreate.textContent);
-        document.getElementById('copy-create-curl').onclick = () => {
+        copyCreateJSON.onclick = () => copyToClipboard(outCreate.textContent);
+        copyCreateCURL.onclick = () => {
           const curl = `curl -X POST '${API_BASE}/timestamp' -H 'Content-Type: application/json' -d '${JSON.stringify({hash, type, meta})}'`;
           copyToClipboard(curl);
         };
@@ -345,6 +415,8 @@
     const outVerify = document.getElementById('verify-output');
     const statusVerify = document.getElementById('verify-status');
     const verifyActions = document.getElementById('verify-actions');
+    const copyVerifyJSON = document.getElementById('copy-verify-json');
+    const copyVerifyCURL = document.getElementById('copy-verify-curl');
 
     // Prefill from ?hash=
     const params = new URLSearchParams(location.search);
@@ -359,7 +431,9 @@
       if (btnVerify.disabled) return;
       btnVerify.disabled = true;
       outVerify.textContent=''; statusVerify.innerHTML=''; verifyActions.style.display='none';
-      const hash = (document.getElementById('verify-hash').value || '').trim();
+      copyVerifyJSON.disabled = true; copyVerifyCURL.disabled = true;
+
+      const hash = (document.getElementById('verify-hash').value || '').trim().toLowerCase();
       if (!/^[a-f0-9]{64}$/i.test(hash)) { alert('Paste a valid 64-hex SHA-256 hash.'); btnVerify.disabled=false; return; }
       try {
         const r = await fetch(`${API_BASE}/verify?hash=${encodeURIComponent(hash)}`);
@@ -373,10 +447,10 @@
         }
         outVerify.textContent = JSON.stringify(j, null, 2);
         verifyActions.style.display='flex';
+        copyVerifyJSON.disabled = false; copyVerifyCURL.disabled = false;
 
-        // Copy handlers
-        document.getElementById('copy-verify-json').onclick = () => copyToClipboard(outVerify.textContent);
-        document.getElementById('copy-verify-curl').onclick = () => {
+        copyVerifyJSON.onclick = () => copyToClipboard(outVerify.textContent);
+        copyVerifyCURL.onclick = () => {
           const curl = `curl '${API_BASE}/verify?hash=${encodeURIComponent(hash)}'`;
           copyToClipboard(curl);
         };
@@ -400,4 +474,3 @@
   </script>
 </body>
 </html>
-```0
