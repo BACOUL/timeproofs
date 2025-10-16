@@ -26,6 +26,7 @@
       --bg:#0b1020; --panel:#0f172a; --line:#1e293b;
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
       --ok:#22c55e; --warn:#f59e0b; --safe-btm: env(safe-area-inset-bottom, 0px);
+      --focus: #38bdf8;
     }
     *{ box-sizing:border-box }
     html,body{ margin:0; height:100%; max-width:100%; overflow-x:hidden }
@@ -38,6 +39,7 @@
     }
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
+    a:focus-visible, button:focus-visible { outline:2px solid var(--focus); outline-offset:2px }
 
     /* ===== Header (shared) ===== */
     .tp-header{
@@ -53,6 +55,7 @@
       border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
     }
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block }
+    .tp-nav a[aria-current="page"]{ color:#b9e7f5; text-decoration:underline; text-underline-offset:4px }
     .tp-nav a:hover{ color:var(--accent) }
     @media (min-width: 900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width: 899px){
@@ -122,12 +125,48 @@
 
     @media (prefers-reduced-motion: reduce){ *{ transition:none !important; animation:none !important } }
   </style>
+
+  <!-- ===== JSON-LD: OfferCatalog for SaaS plans ===== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "OfferCatalog",
+    "name": "TimeProofs Pricing",
+    "url": "https://timeproofs.io/pricing.html",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "name": "Beta — Free",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "Up to 1,000 proofs/month/IP. Unlimited public verification. No API key.",
+        "url": "https://timeproofs.io/verify.html"
+      },
+      {
+        "@type": "Offer",
+        "name": "Pro — Coming soon",
+        "price": "9",
+        "priceCurrency": "USD",
+        "description": "10,000 proofs/month. PDF certificate. Webhooks. Dashboard. API key.",
+        "url": "mailto:hello@timeproofs.io?subject=Pro%20Early%20Access"
+      },
+      {
+        "@type": "Offer",
+        "name": "Team — Coming later",
+        "price": "49",
+        "priceCurrency": "USD",
+        "description": "100,000 proofs/month. All Pro features. Org roles. SIEM export. Priority support.",
+        "url": "mailto:hello@timeproofs.io?subject=Team%20Interest"
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <!-- ===== Header ===== -->
   <header class="tp-header" role="navigation" aria-label="Main">
     <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">TimeProofs</a>
-    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" type="button">
       <span aria-hidden="true">☰</span>
     </button>
     <nav id="tp-nav" class="tp-nav" data-state="closed">
@@ -135,7 +174,7 @@
       <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html">Verify</a>
       <a href="/docs.html">Docs</a>
-      <a href="/pricing.html">Pricing</a>
+      <a href="/pricing.html" aria-current="page">Pricing</a>
       <a href="/roadmap.html">Roadmap</a>
       <a href="/legal.html">Legal</a>
     </nav>
@@ -154,7 +193,7 @@
       <!-- Free -->
       <article class="card" aria-label="Free plan">
         <div>
-          <h2>Beta — Free <span class="badge">Public</span></h2>
+          <h2>Beta — Free <span class="badge" aria-label="Public">Public</span></h2>
           <div class="price">$0 <small>/month</small></div>
           <p class="muted">Best for evaluation, demos, and early projects.</p>
           <p class="feat">• Up to <strong>1,000 proofs</strong> / month / IP</p>
@@ -169,10 +208,10 @@
       <!-- Pro -->
       <article class="card" aria-label="Pro plan">
         <div>
-          <h2>Pro — Coming soon <span class="badge">Early Access</span></h2>
+          <h2>Pro — Coming soon <span class="badge" aria-label="Early Access">Early Access</span></h2>
           <div class="price">$9 <small>/month</small></div>
           <p class="muted">For production apps and small teams.</p>
-          <p class="feat">• <strong>10,000 proofs</strong> / month <span class="badge">API key</span></p>
+          <p class="feat">• <strong>10,000 proofs</strong> / month <span class="badge" aria-label="API key required">API key</span></p>
           <p class="feat">• <strong>PDF certificate</strong> (downloadable proof)</p>
           <p class="feat">• <strong>Webhooks</strong> (success/failure)</p>
           <p class="feat">• <strong>Dashboard</strong> (usage & export)</p>
@@ -183,7 +222,7 @@
       <!-- Team -->
       <article class="card" aria-label="Team plan">
         <div>
-          <h2>Team — Coming later <span class="badge">Planned</span></h2>
+          <h2>Team — Coming later <span class="badge" aria-label="Planned">Planned</span></h2>
           <div class="price">$49 <small>/month</small></div>
           <p class="muted">For teams with higher volume and governance needs.</p>
           <p class="feat">• <strong>100,000 proofs</strong> / month</p>
@@ -201,10 +240,10 @@
       <table class="cmp" role="table" aria-label="Plan comparison">
         <thead>
           <tr>
-            <th>Feature</th>
-            <th>Beta — Free</th>
-            <th>Pro</th>
-            <th>Team</th>
+            <th scope="col">Feature</th>
+            <th scope="col">Beta — Free</th>
+            <th scope="col">Pro</th>
+            <th scope="col">Team</th>
           </tr>
         </thead>
         <tbody>
@@ -251,8 +290,8 @@
     </section>
 
     <div style="text-align:center; margin-top:16px">
-      <a class="cta" href="/verify.html">Try the API</a>
-      <a class="cta ghost" href="/docs.html" style="margin-left:8px">Read the Docs</a>
+      <a class="cta" href="/verify.html" role="button" aria-label="Try the API now">Try the API</a>
+      <a class="cta ghost" href="/docs.html" role="button" aria-label="Read the API Docs" style="margin-left:8px">Read the Docs</a>
     </div>
 
     <footer role="contentinfo">
@@ -263,7 +302,7 @@
         <a href="/use-cases.html">Use Cases</a> •
         <a href="/verify.html">Verify</a> •
         <a href="/docs.html">Docs</a> •
-        <a href="/pricing.html">Pricing</a> •
+        <a href="/pricing.html" aria-current="page">Pricing</a> •
         <a href="/roadmap.html">Roadmap</a> •
         <a href="/privacy.html">Privacy</a> •
         <a href="/legal.html">Legal</a>
@@ -285,4 +324,4 @@
     })();
   </script>
 </body>
-                                                                               </html>
+</html>
