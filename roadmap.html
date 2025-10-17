@@ -24,6 +24,29 @@
   <meta name="twitter:description" content="Upcoming milestones for TimeProofs."/>
   <meta name="twitter:image" content="/og.png"/>
 
+  <!-- JSON-LD: WebPage + ItemList (versions) -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebPage",
+    "name":"TimeProofs Roadmap",
+    "url":"https://timeproofs.io/roadmap.html",
+    "description":"Public product roadmap for TimeProofs."
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"ItemList",
+    "name":"TimeProofs Versions",
+    "itemListElement":[
+      { "@type":"ListItem","position":1,"name":"v0.2 — Developer Experience","url":"https://timeproofs.io/roadmap.html#v02" },
+      { "@type":"ListItem","position":2,"name":"v1.0 — Productization","url":"https://timeproofs.io/roadmap.html#v10" },
+      { "@type":"ListItem","position":3,"name":"v2.0 — Validation Layer","url":"https://timeproofs.io/roadmap.html#v20" }
+    ]
+  }
+  </script>
+
   <style>
     :root{
       --bg:#0b1020; --panel:#0f172a; --line:#1e293b;
@@ -39,7 +62,7 @@
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
 
-    /* Header (unifié) */
+    /* Header */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
@@ -55,6 +78,7 @@
     .tp-nav a{
       color:var(--text); text-decoration:none; font-weight:700; margin-left:18px; padding:8px 0; display:inline-block;
     }
+    .tp-nav a[aria-current="page"]{ color:#aee9f7 }
     .tp-nav a:hover{ color:var(--accent) }
     @media (min-width: 900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width: 899px){
@@ -72,6 +96,10 @@
     .hero{ text-align:center; max-width:860px; margin:0 auto 18px }
     .hero h1{ font-size:clamp(1.9rem, 5vw, 2.4rem); margin:.2em 0 .2em; color:#eaf8ff }
     .hero p{ color:var(--muted); margin:0 auto 1.2em; line-height:1.75 }
+    .meta{ color:#7ea7ba; font-size:.9rem; margin-top:6px }
+
+    .toc{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:10px }
+    .toc a{ display:inline-block; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0c1424; color:#cfe7f5; font-size:.9rem }
 
     .badges{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:8px }
     .badge{
@@ -85,9 +113,7 @@
     .grid{ display:grid; gap:18px; margin-top:22px }
     @media(min-width:900px){ .grid.two{ grid-template-columns:1fr 1fr } .grid.three{ grid-template-columns:1fr 1fr 1fr } }
 
-    .card{
-      background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px;
-    }
+    .card{ background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px; }
     .card h2{ color:#b9e7f5; margin:.2em 0 .6em; font-size:1.22rem }
     .card h3{ margin:1em 0 .4em; color:#d7f7ff; font-size:1.05rem }
     .card p, .card li{ color:#e5eef7 }
@@ -110,7 +136,7 @@
 
     footer{ margin-top:48px; color:#7b8aa7; font-size:.9rem; text-align:center; padding:20px; border-top:1px solid var(--line) }
     footer a{ color:#a7b7cc; text-decoration:none; margin:0 8px }
-    footer a:hover{ color:var(--accent) }
+    footer a:hover{ color:#22d3ee }
   </style>
 </head>
 <body>
@@ -136,11 +162,20 @@
     <section class="hero" aria-labelledby="roadmap-title">
       <h1 id="roadmap-title">Roadmap</h1>
       <p>What’s next for the universal proof layer — built openly, privacy-first, and edge-native. Objective: make timestamp proofs the obvious default for every AI agent and developer workflow.</p>
+      <div class="meta" aria-label="Page metadata">Status: Public Beta v0.1 • Last updated: Jan 2025</div>
       <div class="badges" role="list">
         <span class="badge ok" role="listitem">Current: v0.1 (Public Beta)</span>
         <span class="badge" role="listitem">Infra: Cloudflare Workers + KV</span>
         <span class="badge warn" role="listitem">Focus: DX & reliability</span>
       </div>
+
+      <nav class="toc" aria-label="On this page">
+        <a href="#v02">v0.2</a>
+        <a href="#v10">v1.0</a>
+        <a href="#v20">v2.0</a>
+        <a href="#backlog">Backlog</a>
+        <a href="#changelog">Changelog</a>
+      </nav>
     </section>
 
     <section class="grid two" style="margin-top:22px">
@@ -204,7 +239,7 @@
 
       <article class="card" aria-labelledby="changelog-title">
         <h2 id="changelog-title">Changelog (highlights)</h2>
-        <div class="timeline" aria-label="Release timeline">
+        <div id="changelog" class="timeline" aria-label="Release timeline">
           <div class="titem">
             <div><strong>v0.1</strong> — Public beta</div>
             <div class="when">API timestamp & verify • Verify UI • Docs • Legal/Privacy</div>
