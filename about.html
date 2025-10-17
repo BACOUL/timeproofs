@@ -38,6 +38,43 @@
       text-rendering:optimizeLegibility;
     }
 
+    /* Skip link */
+    .skip-link{
+      position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
+    }
+    .skip-link:focus{
+      position:fixed; left:16px; top:16px; z-index:2000;
+      background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; padding:8px 12px;
+    }
+
+    /* Header (unifié, ARIA ok) */
+    .tp-header{
+      position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
+      background:rgba(11,16,32,.75); backdrop-filter:blur(8px);
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+    }
+    .tp-brand{ color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none }
+    .tp-brand:hover{ color:var(--accent) }
+    .tp-burger{
+      display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
+      border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
+    }
+    .tp-nav a{
+      color:var(--text); text-decoration:none; font-weight:700; margin-left:18px; padding:8px 0; display:inline-block;
+    }
+    .tp-nav a:hover{ color:var(--accent) }
+    @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
+    @media (max-width:899px){
+      .tp-nav{
+        position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
+        display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
+        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
+      }
+      .tp-nav a{ margin:4px 0 }
+      .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
+    }
+
     main{padding:96px 20px 60px;max-width:1080px;margin:0 auto}
 
     h1{font-size:clamp(2rem,4.5vw,2.4rem);margin:.2em 0 .5em;color:#eaf8ff;font-weight:900}
@@ -70,7 +107,26 @@
 </head>
 
 <body>
-  <main role="main">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Header (ARIA ok) -->
+  <header class="tp-header">
+    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">TimeProofs</a>
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
+      <span aria-hidden="true">☰</span>
+    </button>
+    <nav id="tp-nav" class="tp-nav" aria-label="Main" data-state="closed">
+      <a href="/about.html" aria-current="page">About</a>
+      <a href="/use-cases.html">Use Cases</a>
+      <a href="/verify.html">Verify</a>
+      <a href="/docs.html">Docs</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/roadmap.html">Roadmap</a>
+      <a href="/legal.html">Legal</a>
+    </nav>
+  </header>
+
+  <main id="main" role="main">
     <p class="pill" aria-label="Section tag">ABOUT</p>
     <h1>The universal proof layer for AI & the web</h1>
     <p class="lead">
@@ -150,7 +206,7 @@
       © 2025 TimeProofs — Proof of Existence. For Everything.  
       <div style="margin-top:6px">
         <a href="/index.html">Home</a> •
-        <a href="/about.html">About</a> •
+        <a href="/about.html" aria-current="page">About</a> •
         <a href="/use-cases.html">Use Cases</a> •
         <a href="/verify.html">Verify</a> •
         <a href="/docs.html">Docs</a> •
@@ -160,5 +216,20 @@
       </div>
     </footer>
   </main>
+
+  <!-- Burger script (léger) -->
+  <script>
+    (function(){
+      const burger = document.getElementById('tp-burger');
+      const nav = document.getElementById('tp-nav');
+      function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+      function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+      function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
+      burger.addEventListener('click', toggleMenu);
+      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); });
+      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); });
+      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); });
+    })();
+  </script>
 </body>
 </html>
