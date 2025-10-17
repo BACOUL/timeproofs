@@ -1,8 +1,5 @@
-
 <h1 align="center">⏱️ TimeProofs</h1>
-<p align="center">Proof of Existence. For Everything.</p>
-
-<h1 align="center">⏱️ TimeProofs</h1>
+<p align="center"><strong>Proof of Existence. For Everything.</strong></p>
 
 <p align="center">
   <strong>The universal proof layer for AI, developers, and the internet.</strong><br>
@@ -10,11 +7,11 @@
 </p>
 
 <p align="center">
-  <a href="https://timeproofs.vercel.app">Website</a> •
+  <a href="https://timeproofs-68lj-6txalli6h-jeason1.vercel.app">Website</a> •
   <a href="#-overview">Overview</a> •
   <a href="#-api-reference">API</a> •
   <a href="#-roadmap">Roadmap</a> •
-  <a href="#-contribute">Contribute</a> •
+  <a href="#-security--privacy">Security</a> •
   <a href="#-license">License</a>
 </p>
 
@@ -29,128 +26,176 @@
 
 ## 🌍 Overview
 
-**TimeProofs** is an edge-native API for **timestamping and verifying digital existence** — a minimal, scalable alternative to blockchain notarization.
+**TimeProofs** is an **edge-native proof API** that timestamps and verifies digital existence — a **minimal, scalable alternative** to blockchain notarization.
 
 Every hash you send is cryptographically signed with a verifiable timestamp.  
 No tokens. No blockchain. No friction. Just *truth, verified.*
 
 > “If data had a memory, TimeProofs would be it.”
 
-Built for AI agents, developers, and creators who need to prove that something *existed* — right here, right now.
+Built for **AI agents**, **developers**, and **creators** who need to prove that something *existed* — right here, right now.
 
 ---
 
 ## ⚡ Key Features
 
-✅ **Proof of Existence** — Create a verifiable timestamp for any SHA256 hash.  
-🔐 **Cryptographic Integrity** — Signed with HMAC256 using a private salt and public verifier.  
-🌐 **Edge-Native Architecture** — Runs globally on Cloudflare Workers with zero cold starts.  
-🧠 **AI-Ready** — Built for LLMs and agents to self-verify outputs autonomously.  
-💾 **Lightweight Storage** — Proofs stored in distributed KV, instantly queryable.  
-📜 **Human Verification Layer** — Downloadable proof certificate with timestamp & hash.  
-💶 **Future Micro-Payments** — Optional 0.001 € per proof via Stripe for sustainability.  
+✅ **Proof of Existence** — Create verifiable timestamps for any SHA-256 hash  
+🔐 **Cryptographic Integrity** — Signed with HMAC-SHA256 over `hash + timestamp`  
+🌐 **Edge-Native Architecture** — Runs globally on Cloudflare Workers + KV  
+🧠 **AI-Ready** — Built for autonomous models and verifiable AI output  
+💾 **Lightweight Storage** — Proofs stored in distributed KV, instantly queryable  
+📜 **Human Verification Layer** — Public Verify UI + Docs  
+💶 **Predictable Cost** — No gas, no blockchain, no tokens  
 
 ---
 
 ## 🧩 Architecture
 
-**Client / SDK** — Compute SHA256 hash → send to API  
+**Client / SDK** — Computes SHA-256 hash and sends it to API  
 **API Worker** — Cloudflare Worker timestamps, signs, and stores the hash  
-**KV Store** — Cloudflare KV maintains hash + timestamp + signature  
+**Storage** — Cloudflare KV `{ hash, timestamp, signature, type?, meta? }`  
 **Frontend** — Vercel static site for verification & documentation  
+**Security** — HMAC-SHA256 with a private secret key  
 
-The system scales infinitely and costs virtually nothing to run.
+The system is **serverless, global, privacy-first, and deterministic.**
 
 ---
 
 ## 🧠 Why It Matters
 
 In a world where information is infinite, **proof is rare.**  
-AI systems, creators, and organizations all need trust anchors — immutable evidence that something existed before it changed.
+AI systems, creators, and organizations all need **trust anchors** — immutable evidence that something existed before it changed.
 
-TimeProofs provides that missing layer: a *universal cryptographic clock* for the digital world.
+TimeProofs provides that missing layer:  
+a *universal cryptographic clock* for the digital world.
 
-Use cases include:  
-• AI output authenticity and provenance  
-• Creative or intellectual property timestamping  
-• Legal and contractual digital evidence  
+**Use cases include:**  
+• AI output authenticity & provenance  
+• Creative and IP timestamping  
+• Legal or contractual digital evidence  
 • Compliance and audit-proof event logs  
-• Any integrity-critical data verification pipeline  
-
----
+• Secure verifiable pipelines  
 
 ## 🧭 API Reference
 
-**Base URL:** `https://api.timeproofs.io`
+**Base URL (Public Beta)**  
+https://timeproofs-api.jeason-bacoul.workers.dev/api
 
-**Endpoints**
+### `POST /timestamp` — Create a Proof
+Create a verifiable timestamp for any SHA-256 hash. Only hashes are sent — your original data never leaves your device.
 
-• `/proof` — Create a proof of existence  
-  - Method: POST  
-  - Body: `{ "hash": "sha256_of_your_data" }`  
-  - Returns: `{ proof_id, timestamp, signature }`
+**Example Request**
+{
+  "hash": "64-hex",
+  "type": "event",
+  "meta": { "model": "gpt-4o", "mime": "text/plain" }
+}
 
-• `/verify` — Verify a proof’s authenticity  
-  - Method: GET  
-  - Query: `?hash=your_hash`  
-  - Returns: `{ valid: true, timestamp, signature }`
+**Example Response**
+{
+  "ok": true,
+  "hash": "…",
+  "timestamp": "2025-02-15T12:34:56.789Z",
+  "signature": "hmac_sha256(hash|timestamp)",
+  "verify_url": "https://timeproofs-api.jeason-bacoul.workers.dev/api/verify?hash=…"
+}
 
-Each proof is signed with HMAC256 and can be verified using the public verifier key available in the docs.
+### `GET /verify?hash=...` — Verify a Proof
+Checks whether a proof exists and confirms its authenticity.
 
----
+**Example Response**
+{
+  "ok": true,
+  "found": true,
+  "hash": "…",
+  "timestamp": "2025-02-15T12:34:56.789Z",
+  "signature": "server_signature",
+  "first_seen": "2025-02-15T12:34:56.789Z",
+  "type": "event",
+  "meta": { "model": "gpt-4o" }
+}
+
+**Outcomes**
+ok=true, found=true → Valid proof with timestamp & signature  
+found=false → No proof recorded for this hash  
+ok=false → Invalid hash or request format  
 
 ## 🧮 Example Integration
 
-**JavaScript SDK (coming soon)**  
-Import and use in one line:
+JavaScript SDK (coming in v0.2)
+import { timeproof } from "@timeproofs/sdk"
+const proof = await timeproof("your_hash")
+console.log(proof.timestamp, proof.signature)
 
-`import { timeproof } from "@timeproofs/sdk"`  
-`const proof = await timeproof(hash)`
+Output: verifiable signature + timestamp. Zero setup, zero infrastructure.
 
-Output: a verifiable signature + timestamp.  
-Zero setup, zero infrastructure.
+Planned SDK methods: createFromText(), createFromFile(), createFromHash(), verify()  
+Each returns { hash, timestamp, signature, verify_url }
 
----
+## 🔒 Security & Privacy
+
+- Only SHA-256 hashes are stored — never your original content  
+- All communication secured with TLS 1.3  
+- Signatures generated using HMAC-SHA256 (private server key)  
+- No cookies, no trackers, no analytics  
+- Public /verify endpoint enables independent verification  
+- Legal & privacy policies available at /privacy.html and /legal.html  
+
+Privacy-first by design. Nothing personal ever leaves your device.
 
 ## 🧭 Roadmap
 
-| Version | Description | ETA |
-|----------|-------------|------|
-| v0.1 | Public API + Verify UI (MVP) | Week 1 |
-| v0.2 | JS SDK + PDF proof export | Week 2–3 |
-| v1.0 | Stripe micro-payments + Dashboard | Week 4 |
-| v2.0 | ProofChain distributed validation | Later |
+v0.1 — Public Beta (API, Verify UI, Docs, Privacy/Legal) ✅ Live  
+v0.2 — JavaScript SDK, PDF proofs, Verify UX enhancements 🚧 In progress  
+v1.0 — Dashboard, API Keys, Stripe billing, quotas 🟡 Planned  
+v2.0 — ProofChain distributed validation, SDKs (Python/Go) 🧪 Research  
 
----
+Details: https://timeproofs-68lj-6txalli6h-jeason1.vercel.app/roadmap.html
+
+## 🕓 Changelog (Highlights)
+
+v0.1 — Public Beta (Feb 2025)  
+- Timestamp + Verify endpoints (Cloudflare Workers + KV)  
+- Public Verify UI  
+- Docs, Privacy & Legal pages  
+- Open GitHub repo + MIT license  
+
+v0.2 — Developer Experience (Q4 2025)  
+- JavaScript SDK (Node + Browser)  
+- PDF proof bundle generation  
+- Verify UI copy buttons (cURL / JSON)  
+- Updated Docs with FAQ + examples  
+
+v1.0 — Productization (2026)  
+- API keys & usage quotas (Free / Pro / Team)  
+- Dashboard (usage, CSV export, key rotation)  
+- Stripe billing + status endpoint  
+
+v2.0 — Validation Layer (2026 – 2027)  
+- ProofChain (distributed validation)  
+- SDKs for Python + Go  
+- Offline proof bundles  
+- Merkle root publication  
 
 ## 💡 Vision
 
-By 2030, AI-generated data will surpass all human-created content.  
-**TimeProofs** aims to become the *global timestamping backbone for the AI era* —  
-a universal proof protocol ensuring that every model, every agent, and every creator can anchor their outputs in time.
+By 2030, AI-generated data will surpass all human content.  
+TimeProofs aims to become the global timestamping backbone of the AI era — a universal proof protocol ensuring every model, agent and creator can anchor their outputs in time.
 
 Truth moves fast. TimeProofs makes it verifiable.
 
----
-
 ## 🤝 Contribute
 
-We welcome contributors, open-source developers, and researchers.  
-Fork the repo, build integrations, or extend SDKs for Python, Rust, Go, and more.
+We welcome developers, researchers, and open-source contributors.
 
-Join the mission to define the standard of *verifiable digital existence.*
+How to contribute:  
+1. Fork this repository  
+2. Create a feature branch  
+3. Submit a Pull Request  
 
----
+Security contact: security@timeproofs.io
 
 ## 🧾 License
 
-**MIT License** — Free for personal and commercial use.  
-Use, modify, and distribute with attribution.
-
----
-
-<p align="center">
-  <strong>TimeProofs</strong> — Proof of Existence. For Everything.
-</p>
-
----
+MIT License — free for personal and commercial use.  
+© 2025 TimeProofs — Proof of Existence. For Everything.
