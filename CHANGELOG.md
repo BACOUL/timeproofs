@@ -8,7 +8,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
-## 🟢 v0.1 — Public Beta _(February 2025)_
+## 🟢 v0.1 — Public Beta _(October 2025)_
 
 **Status:** ✅ Live  
 **Tag:** `v0.1.0`  
@@ -21,7 +21,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Frontend (Vercel) with **Verify UI**, **Docs**, **Privacy**, **Legal**
 - Sitemap + SEO structure  
 - MIT License + Public GitHub repository  
-- API base: `https://timeproofs-api.jeason-bacoul.workers.dev/api`
+- API base: [`https://timeproofs-api.jeason-bacoul.workers.dev/api`](https://timeproofs-api.jeason-bacoul.workers.dev/api)
 
 ### 🔐 Principles
 - Privacy-first — only hashes, never raw data  
@@ -40,9 +40,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - JavaScript / TypeScript SDK (browser + Node)  
   - `createFromText`, `createFromFile`, `createFromHash`, `verify`
 - PDF certificate — downloadable proof bundle  
-- Verify UI improvements  
-  - “Copy as cURL” & “Copy JSON” buttons  
-  - Proof detail modal  
+- Verify UI improvements (“Copy as cURL”, “Copy JSON”, Proof detail modal)
 - Docs refresh — limits, FAQ, live examples  
 - Minor UX polish + mobile layout updates
 
@@ -110,7 +108,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 | Frontend | Vercel (Static HTML / Next.js) |
 | Storage | KV `{ hash, timestamp, signature }` |
 | Security | HMAC-SHA256 over `hash + timestamp` |
-| Docs | `timeproofs.io/docs.html` |
+| Docs | [`timeproofs.io/docs.html`](https://timeproofs.io/docs.html) |
 
 ---
 
@@ -123,7 +121,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ---
 
 ## 🧠 Governance & Transparency
-- Open-source under MIT License  
+- Open-source under [MIT](./LICENSE) License  
 - Public roadmap and changelog on GitHub  
 - Transparent version tags (`v0.1`, `v0.2`, …)  
 - Coordinated releases via GitHub tags + site updates  
@@ -137,18 +135,16 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 | v0.1 | ✅ Live | Public Beta |
 | v0.2 | Q4 2025 | SDK + DX |
 | v1.0 | 2026 | API Keys + Stripe |
-| v2.0 | 2026 – 2027 | Validation Network |
+| v2.0 | 2026–2027 | Validation Network |
 
 ---
 
 ## 📬 Feedback & Contact
 💬 **hello@timeproofs.io**  
 🌐 [https://timeproofs.io](https://timeproofs.io)  
-🐦 [@TimeProofs](https://twitter.com/TimeProofs)  
-🤝 Community contributions welcome!
+🐦 _@TimeProofs (coming soon)_  
+👤 Maintainer — [BACOUL](https://github.com/BACOUL)  
 
 ---
 
-## 📄 License
-Released under the **MIT License © 2025 TimeProofs**  
-Maintained by **@BACOUL**
+**TimeProofs — Proof of Existence. For Everything.**
