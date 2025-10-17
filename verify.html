@@ -10,6 +10,11 @@
   <link rel="canonical" href="https://timeproofs.io/verify.html"/>
   <link rel="icon" href="/favicon.ico"/>
 
+  <!-- Performance hints -->
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev">
+  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin>
+
   <!-- Social -->
   <meta property="og:title" content="Verify & Create Proof — TimeProofs"/>
   <meta property="og:description" content="Hash locally. Timestamp via API. Verify publicly. No blockchain, no friction."/>
@@ -39,7 +44,7 @@
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
 
-    /* Header (unifié) */
+    /* Header */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
@@ -50,7 +55,7 @@
     .tp-brand:hover{ color:var(--accent) }
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
-      border:1px solid var(--line); border-radius:10px; background:#0d1628; color:#var(--text); cursor:pointer;
+      border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
     }
     .tp-nav a{
       color:var(--text); text-decoration:none; font-weight:700; margin-left:18px; padding:8px 0; display:inline-block;
@@ -112,13 +117,13 @@
   </style>
 </head>
 <body>
-  <!-- Header -->
-  <header class="tp-header" role="navigation" aria-label="Main">
+  <!-- Header (pas de rôle ARIA ici) -->
+  <header class="tp-header">
     <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">TimeProofs</a>
-    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
+    <button class="tp-burger" id="tp-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
       <span aria-hidden="true">☰</span>
     </button>
-    <nav id="tp-nav" class="tp-nav" data-state="closed">
+    <nav id="tp-nav" class="tp-nav" role="navigation" aria-label="Main" data-state="closed">
       <a href="/about.html">About</a>
       <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html" aria-current="page">Verify</a>
@@ -134,13 +139,13 @@
     <p class="lead">Hash locally → timestamp & sign via API → verify publicly. No content ever leaves your device.</p>
 
     <div class="tabs" role="tablist" aria-label="Create or Verify">
-      <button id="tab-create" class="tab active" role="tab" aria-selected="true" aria-controls="panel-create">Create Proof</button>
-      <button id="tab-verify" class="tab" role="tab" aria-selected="false" aria-controls="panel-verify">Verify Proof</button>
+      <button id="tab-create" class="tab active" type="button" role="tab" aria-selected="true" aria-controls="panel-create">Create Proof</button>
+      <button id="tab-verify" class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-verify">Verify Proof</button>
     </div>
 
     <div class="grid">
       <!-- CREATE PROOF -->
-      <section class="card" id="panel-create" role="tabpanel" aria-labelledby="tab-create">
+      <section class="card" id="panel-create" role="tabpanel" tabindex="-1" aria-labelledby="tab-create">
         <label>Choose input</label>
         <div class="row" role="group" aria-label="Input mode">
           <button class="btn ghost" id="choose-text" type="button">Text</button>
@@ -163,7 +168,14 @@
 
         <div id="input-hash" style="display:none; margin-top:14px;">
           <label for="raw-hash">Existing SHA-256 hash (hex)</label>
-          <input type="text" id="raw-hash" placeholder="e3b0c44298fc1c149a..." inputmode="latin" autocomplete="off" spellcheck="false"/>
+          <input
+            type="text" id="raw-hash"
+            placeholder="e3b0c44298fc1c149a..."
+            inputmode="text" autocomplete="off" spellcheck="false"
+            pattern="^[A-Fa-f0-9]{64}$"
+            aria-describedby="hash-help"
+          />
+          <div id="hash-help" class="hint">64 hexadecimal characters (0-9, a-f).</div>
         </div>
 
         <div class="row" style="margin-top:16px;">
@@ -192,9 +204,14 @@
       </section>
 
       <!-- VERIFY PROOF -->
-      <section class="card" id="panel-verify" role="tabpanel" aria-labelledby="tab-verify" style="display:none;">
+      <section class="card" id="panel-verify" role="tabpanel" tabindex="-1" aria-labelledby="tab-verify" style="display:none;">
         <label for="verify-hash">Hash to verify (SHA-256, hex)</label>
-        <input type="text" id="verify-hash" placeholder="Paste an existing hash" inputmode="latin" autocomplete="off" spellcheck="false"/>
+        <input
+          type="text" id="verify-hash"
+          placeholder="Paste an existing hash"
+          inputmode="text" autocomplete="off" spellcheck="false"
+          pattern="^[A-Fa-f0-9]{64}$"
+        />
         <div class="row" style="margin-top:12px;">
           <button class="btn" id="btn-verify" type="button">Verify</button>
           <span class="hint">Checks existence, timestamp, and server signature.</span>
@@ -292,7 +309,7 @@
     // ===== Create proof =====
     const btnCreate = document.getElementById('btn-create');
     const outCreate = document.getElementById('create-output');
-    const statusCreate = document.getElementById('create-status');
+       const statusCreate = document.getElementById('create-status');
     const createActions = document.getElementById('create-actions');
 
     btnCreate.onclick = async () => {
@@ -306,18 +323,18 @@
           hash = await sha256HexFromText(text);
         } else if (inputFile.style.display !== 'none') {
           const file = fileInput.files?.[0];
-          if (!file) { alert('Select a file first.'); return; }
+          if (!file) { alert('Select a file first.'); btnCreate.disabled=false; return; }
           hash = await sha256HexFromFile(file);
         } else {
           hash = (document.getElementById('raw-hash').value || '').trim();
-          if (!/^[a-f0-9]{64}$/i.test(hash)) { alert('Enter a valid 64-hex SHA-256 hash.'); return; }
+          if (!/^[a-f0-9]{64}$/i.test(hash)) { alert('Enter a valid 64-hex SHA-256 hash.'); btnCreate.disabled=false; return; }
         }
 
         const type = (document.getElementById('type').value || 'event').trim();
         let meta = {};
         const metaRaw = (document.getElementById('meta').value || '').trim();
         if (metaRaw) {
-          try { meta = JSON.parse(metaRaw); } catch { alert('Meta must be valid JSON.'); return; }
+          try { meta = JSON.parse(metaRaw); } catch { alert('Meta must be valid JSON.'); btnCreate.disabled=false; return; }
         }
 
         const r = await fetch(`${API_BASE}/timestamp`, {
