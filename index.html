@@ -11,6 +11,12 @@
   <meta name="theme-color" content="#0b1020"/>
   <link rel="canonical" href="https://timeproofs.io/"/>
 
+  <!-- ============ Performance Hints ============ -->
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev">
+  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin>
+  <link rel="preload" as="image" href="/og.png" imagesrcset="/og.png">
+
   <!-- ============ Social / Sharing ============ -->
   <meta property="og:title" content="TimeProofs — Proof of Existence. For Everything."/>
   <meta property="og:description" content="Hash locally. Timestamp via API. Verify publicly. No blockchain, no friction."/>
@@ -167,7 +173,7 @@
       color:#7c8aa5; text-align:center
     }
     footer .links a{ color:#a7b7cc; margin:0 8px; text-decoration:none }
-    footer .links a:hover{ color:var(--accent) }
+    footer .links a:hover{ color:#22d3ee }
 
     /* ===== Reduced motion ===== */
     @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important } }
@@ -232,7 +238,7 @@
       </div>
     </section>
 
-    <!-- Value props (condensé) -->
+    <!-- Value props -->
     <section class="section" aria-labelledby="why">
       <h2 id="why">Why developers choose TimeProofs</h2>
       <div class="grid three">
@@ -251,7 +257,7 @@
       </div>
     </section>
 
-    <!-- How it works (3 étapes) -->
+    <!-- How it works -->
     <section class="section" aria-labelledby="how">
       <h2 id="how">How it works</h2>
       <div class="grid two">
@@ -300,7 +306,7 @@ const check = await res.json();</code></pre>
   <footer role="contentinfo">
     © 2025 TimeProofs — Proof of Existence. For Everything.
     <div class="links" style="margin-top:6px">
-      <a href="/index.html">Home</a> •
+      <a href="/index.html" aria-current="page">Home</a> •
       <a href="/about.html">About</a> •
       <a href="/use-cases.html">Use Cases</a> •
       <a href="/verify.html">Verify</a> •
@@ -313,17 +319,17 @@ const check = await res.json();</code></pre>
   </footer>
 
   <!-- ============ Scripts ============ -->
-  <script>
+  <script defer>
     (function(){
       const burger = document.getElementById('tp-burger');
       const nav = document.getElementById('tp-nav');
       function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
       function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
       function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
-      burger.addEventListener('click', toggleMenu);
-      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); });
-      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); });
-      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); });
+      burger.addEventListener('click', toggleMenu, { passive:true });
+      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
     })();
   </script>
 </body>
