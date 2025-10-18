@@ -65,24 +65,22 @@
       border-bottom:1px solid var(--line);
       display:flex; align-items:center; justify-content:space-between; padding:0 16px;
     }
-    .tp-brand{
-      display:inline-flex; align-items:center; gap:10px;
-      color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem
-    }
+    .tp-brand{ color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem }
     .tp-brand:hover{ color:var(--accent) }
-    .tp-logo{
-      width:28px; height:28px; display:block; flex:0 0 28px;
-      border-radius:6px; object-fit:cover;
-      filter: drop-shadow(0 0 10px rgba(34,211,238,.18));
-    }
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
       border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
     }
     .tp-burger:focus{ outline:2px solid var(--accent); outline-offset:2px }
-    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block }
+    .tp-nav a{
+      color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block;
+    }
     .tp-nav a:hover{ color:var(--accent) }
-    @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
+
+    @media (min-width:900px){
+      .tp-burger{ display:none }
+      .tp-nav{ display:flex; align-items:center }
+    }
     @media (max-width:899px){
       .tp-nav{
         position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
@@ -91,9 +89,7 @@
         z-index:1001;
       }
       .tp-nav a{ margin:4px 0 }
-      .tp-nav[data-state="open"]{
-        transform:translateY(0); opacity:1; pointer-events:auto;
-      }
+      .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
     }
 
     /* ===== Containers ===== */
@@ -108,10 +104,6 @@
       min-height:calc(100svh - 64px - 90px);
       padding-top:92px; padding-bottom:28px;
       display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
-    }
-    .hero-logo{
-      width:120px; height:120px; margin:0 0 12px; border-radius:12px; object-fit:cover;
-      filter: drop-shadow(0 8px 26px rgba(34,211,238,.2));
     }
     .label{
       display:inline-flex; gap:8px; align-items:center; padding:6px 12px; border:1px solid #214a57; background:#0d2330;
@@ -143,22 +135,6 @@
       border:1px solid var(--line); border-radius:999px; background:#0e172a
     }
 
-    /* ===== Sections ===== */
-    .section{ padding:26px 0 }
-    .section h2{ color:#b9e7f5; font-size:clamp(1.2rem, 2.6vw, 1.5rem); margin:0 0 10px; text-align:center }
-
-    .grid{ display:grid; gap:14px }
-    .grid.three{ grid-template-columns:1fr }
-    .grid.two{ grid-template-columns:1fr }
-    @media(min-width:900px){
-      .grid.three{ grid-template-columns:1fr 1fr 1fr }
-      .grid.two{ grid-template-columns:1fr 1fr }
-    }
-
-    .card{ background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px; text-align:left }
-    .card h3{ color:var(--accent); margin:.2em 0 .3em; font-size:1.08rem }
-    .card p{ color:#dbe7f3; margin:.15em 0 .4em; line-height:1.55 }
-
     /* ===== Footer ===== */
     footer{
       border-top:1px solid var(--line); margin-top:38px; padding:18px; padding-bottom:calc(18px + var(--safe-btm));
@@ -180,10 +156,7 @@
 
   <!-- ===== Header ===== -->
   <header class="tp-header">
-    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">
-      <img class="tp-logo" src="/file_000000007b9c61f5a4750692b2debdff.png" alt="TimeProofs logo">
-      <span>TimeProofs</span>
-    </a>
+    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">TimeProofs</a>
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
       <span aria-hidden="true">☰</span>
     </button>
@@ -201,7 +174,6 @@
   <!-- ===== Main ===== -->
   <main id="main" class="wrap" role="main">
     <section class="hero" aria-labelledby="hero-title">
-      <img class="hero-logo" src="/file_000000007b9c61f5a4750692b2debdff.png" alt="TimeProofs brand">
       <div class="label">🔐 Privacy-first • ⚡ Edge-native • 🧠 AI-ready</div>
       <h1 id="hero-title" class="title">The universal proof layer for AI and developers.</h1>
       <p class="subtitle">
@@ -216,15 +188,6 @@
         <span class="item">✓ HMAC-SHA256 server signature</span>
         <span class="item">✓ Cloudflare Workers + KV</span>
         <span class="item">✓ Public verification endpoint</span>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="why">
-      <h2 id="why">Why developers choose TimeProofs</h2>
-      <div class="grid three">
-        <article class="card"><h3>Instant Proof of Existence</h3><p>Timestamp any SHA-256 hash in milliseconds. Zero setup, zero tokens, predictable cost.</p></article>
-        <article class="card"><h3>AI & Agents First</h3><p>Attach proofs to prompts, outputs, and workflows to build auditable pipelines in minutes.</p></article>
-        <article class="card"><h3>Private by Design</h3><p>Only hashes are sent and stored. Your original content never leaves your device.</p></article>
       </div>
     </section>
   </main>
