@@ -1,24 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- ============ Core Meta ============ -->
+  <!-- Core -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>TimeProofs — Proof of Existence. For Everything.</title>
   <meta name="description" content="TimeProofs is the universal proof layer for AI and developers. Hash locally, timestamp via API, verify publicly — instant, private, and edge-native."/>
-  <meta name="keywords" content="timeproofs, proof of existence, timestamp, cryptographic proof, HMAC, API, AI provenance, content authenticity, data integrity"/>
-  <meta name="author" content="TimeProofs.io"/>
   <meta name="theme-color" content="#0b1020"/>
   <link rel="canonical" href="https://timeproofs.io/"/>
 
-  <!-- ============ Icons & Manifest ============ -->
-  <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="icon" href="/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-
-  <!-- ============ Social / Sharing ============ -->
+  <!-- Social -->
   <meta property="og:title" content="TimeProofs — Proof of Existence. For Everything."/>
   <meta property="og:description" content="Hash locally. Timestamp via API. Verify publicly. No blockchain, no friction."/>
   <meta property="og:type" content="website"/>
@@ -29,36 +20,28 @@
   <meta name="twitter:description" content="Instant proof-of-existence for AI & developers."/>
   <meta name="twitter:image" content="/og.png"/>
 
-  <!-- ============ Styles ============ -->
+  <!-- Styles -->
   <style>
     :root{
       --bg:#0b1020; --panel:#0f172a; --line:#1e293b;
-      --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --ok:#22c55e;
-      --safe-btm: env(safe-area-inset-bottom, 0px);
+      --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
     }
     *{ box-sizing:border-box }
-    html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); }
+    html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg) }
     body{
       margin:0;
       background:
         radial-gradient(1200px 500px at 70% -10%, rgba(34,211,238,.12), transparent 60%),
         var(--bg);
       color:var(--text);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
-      text-rendering: optimizeLegibility;
+      font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      text-rendering:optimizeLegibility;
     }
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
 
-    /* ===== Skip link ===== */
-    .skip-link{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
-    .skip-link:focus{
-      position:fixed; left:16px; top:16px; width:auto; height:auto; padding:8px 12px;
-      background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000;
-    }
-
-    /* ===== Header ===== */
+    /* Header */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
@@ -71,7 +54,6 @@
       display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
       border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
     }
-    .tp-burger:focus{ outline:2px solid var(--accent); outline-offset:2px }
     .tp-nav a{
       color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block;
     }
@@ -86,20 +68,13 @@
         position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
         display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
         transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
-        z-index:1001;
       }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
     }
 
-    /* ===== Containers ===== */
-    .wrap{
-      max-width:1200px; margin:0 auto; width:100%;
-      padding-left:max(16px, env(safe-area-inset-left, 0px));
-      padding-right:max(16px, env(safe-area-inset-right, 0px));
-    }
-
-    /* ===== Hero ===== */
+    /* Layout */
+    .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
     .hero{
       min-height:calc(100svh - 64px - 90px);
       padding-top:92px; padding-bottom:28px;
@@ -126,41 +101,39 @@
     .cta.secondary{ background:#111d33; color:#e2f6ff; border:1px solid var(--line); box-shadow:none }
     .cta:hover{ transform:translateY(-1px); filter:brightness(1.05) }
 
-    .trust{
-      display:flex; gap:12px; justify-content:center; flex-wrap:wrap;
-      margin:18px auto 0; color:#a3b7c7; font-size:.92rem; padding:0 10px;
+    .section{ padding:26px 0 }
+    .section h2{ color:#b9e7f5; font-size:clamp(1.2rem, 2.6vw, 1.5rem); margin:0 0 10px; text-align:center }
+    .grid{ display:grid; gap:14px }
+    .grid.three{ grid-template-columns:1fr }
+    .grid.two{ grid-template-columns:1fr }
+    @media(min-width:900px){
+      .grid.three{ grid-template-columns:1fr 1fr 1fr }
+      .grid.two{ grid-template-columns:1fr 1fr }
     }
-    .trust .item{
-      display:inline-flex; gap:8px; align-items:center; padding:6px 10px;
-      border:1px solid var(--line); border-radius:999px; background:#0e172a
+    .card{ background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px }
+    .card h3{ color:var(--accent); margin:.2em 0 .3em; font-size:1.08rem }
+    .card p{ color:#dbe7f3; margin:.15em 0 .4em; line-height:1.55 }
+
+    pre{
+      background:#0b1220; border:1px solid #1f2937; color:#e5e7eb;
+      border-radius:12px; padding:12px; line-height:1.55;
+      white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere; margin:.5rem 0 0;
     }
 
-    /* ===== Footer ===== */
-    footer{
-      border-top:1px solid var(--line); margin-top:38px; padding:18px; padding-bottom:calc(18px + var(--safe-btm));
-      color:#7c8aa5; text-align:center
-    }
+    /* Footer */
+    footer{ border-top:1px solid var(--line); margin-top:38px; padding:18px; color:#7c8aa5; text-align:center }
     footer .links a{ color:#a7b7cc; margin:0 8px; text-decoration:none }
     footer .links a:hover{ color:#22d3ee }
-
-    @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important } }
   </style>
-
-  <!-- ============ JSON-LD (SEO) ============ -->
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/","description":"Universal, privacy-first proof of existence for AI and developers.","inLanguage":"en","potentialAction":{"@type":"SearchAction","target":"https://timeproofs.io/verify.html?hash={hash}","query-input":"required name=hash"}}
-  </script>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-
-  <!-- ===== Header ===== -->
+  <!-- Header -->
   <header class="tp-header">
     <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">TimeProofs</a>
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
       <span aria-hidden="true">☰</span>
     </button>
-    <nav id="tp-nav" class="tp-nav" aria-label="Main Navigation" data-state="closed">
+    <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation">
       <a href="/about.html">About</a>
       <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html">Verify</a>
@@ -168,82 +141,99 @@
       <a href="/pricing.html">Pricing</a>
       <a href="/roadmap.html">Roadmap</a>
       <a href="/legal.html">Legal</a>
+      <a href="/privacy.html">Privacy</a>
     </nav>
   </header>
 
-  <!-- ===== Main ===== -->
-  <main id="main" class="wrap" role="main">
+  <!-- Main -->
+  <main class="wrap" role="main">
     <section class="hero" aria-labelledby="hero-title">
       <div class="label">🔐 Privacy-first • ⚡ Edge-native • 🧠 AI-ready</div>
       <h1 id="hero-title" class="title">The universal proof layer for AI and developers.</h1>
       <p class="subtitle">
-        Hash locally. Timestamp via API. Verify publicly.<br>No blockchain, no gas — just cryptographic truth.
+        Hash locally. Timestamp via API. Verify publicly.<br>
+        No blockchain, no gas — just cryptographic truth.
       </p>
-      <div class="cta-wrap">
+      <div class="cta-wrap" role="group" aria-label="Primary actions">
         <a class="cta" href="/verify.html">Try the API</a>
         <a class="cta secondary" href="/docs.html">Read the Docs</a>
       </div>
-      <div class="trust">
-        <span class="item">✓ Hash-only (content stays local)</span>
-        <span class="item">✓ HMAC-SHA256 server signature</span>
-        <span class="item">✓ Cloudflare Workers + KV</span>
-        <span class="item">✓ Public verification endpoint</span>
+      <div class="cta-wrap" style="margin-top:14px; color:#a3b7c7;">
+        <span>✓ Hash-only (content stays local)</span>
+        <span>•</span>
+        <span>✓ HMAC-SHA256 signature</span>
+        <span>•</span>
+        <span>✓ Public verification endpoint</span>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="why">
+      <h2 id="why">Why developers choose TimeProofs</h2>
+      <div class="grid three">
+        <article class="card"><h3>Instant Proof of Existence</h3><p>Timestamp any SHA-256 hash in milliseconds. Zero setup, zero tokens, predictable cost.</p></article>
+        <article class="card"><h3>AI & Agents First</h3><p>Attach proofs to prompts, outputs, and workflows to build auditable pipelines in minutes.</p></article>
+        <article class="card"><h3>Private by Design</h3><p>Only hashes are sent and stored. Your original content never leaves your device.</p></article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="how">
+      <h2 id="how">How it works</h2>
+      <div class="grid two">
+        <article class="card">
+          <h3>1) Hash locally</h3>
+<pre><code>const buf = new TextEncoder().encode(text);
+const digest = await crypto.subtle.digest('SHA-256', buf);
+const hash = [...new Uint8Array(digest)]
+  .map(b => b.toString(16).padStart(2,'0')).join('');</code></pre>
+        </article>
+        <article class="card">
+          <h3>2) Timestamp</h3>
+<pre><code>const r = await fetch("https://timeproofs-api.jeason-bacoul.workers.dev/api/timestamp", {
+  method:"POST", headers:{ "Content-Type":"application/json" },
+  body: JSON.stringify({ hash, type:"event", meta:{ source:"web" } })
+});
+const proof = await r.json();</code></pre>
+        </article>
+        <article class="card">
+          <h3>3) Verify anywhere</h3>
+<pre><code>const res = await fetch(
+  "https://timeproofs-api.jeason-bacoul.workers.dev/api/verify?hash="+hash
+);
+const check = await res.json();</code></pre>
+        </article>
       </div>
     </section>
   </main>
 
-  <!-- ===== Footer ===== -->
-  <footer>
+  <!-- Footer -->
+  <footer role="contentinfo" aria-label="Site footer">
     © 2025 TimeProofs — Proof of Existence. For Everything.
-    <div class="links">
-      <a href="/index.html">Home</a> •
+    <div class="links" style="margin-top:6px">
+      <a href="/index.html" aria-current="page">Home</a> •
       <a href="/about.html">About</a> •
+      <a href="/use-cases.html">Use Cases</a> •
       <a href="/verify.html">Verify</a> •
       <a href="/docs.html">Docs</a> •
+      <a href="/pricing.html">Pricing</a> •
+      <a href="/roadmap.html">Roadmap</a> •
       <a href="/privacy.html">Privacy</a> •
       <a href="/legal.html">Legal</a>
     </div>
   </footer>
 
-  <!-- ===== Script ===== -->
+  <!-- Script: burger -->
   <script>
-document.addEventListener('DOMContentLoaded', function () {
-  const burger = document.getElementById('tp-burger');
-  const nav = document.getElementById('tp-nav');
-  if (!burger || !nav) return;
-
-  function openMenu() {
-    nav.setAttribute('data-state', 'open');
-    burger.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeMenu() {
-    nav.setAttribute('data-state', 'closed');
-    burger.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-  }
-  function toggleMenu() {
-    (nav.getAttribute('data-state') === 'open') ? closeMenu() : openMenu();
-  }
-
-  burger.addEventListener('click', toggleMenu);
-  document.addEventListener('click', function (e) {
-    if (window.matchMedia('(min-width:900px)').matches) return;
-    if (!e.target.closest('.tp-header') && nav.getAttribute('data-state') === 'open') closeMenu();
-  });
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && nav.getAttribute('data-state') === 'open') closeMenu();
-  });
-  window.addEventListener('resize', function () {
-    if (window.matchMedia('(min-width:900px)').matches) {
-      nav.removeAttribute('data-state');
-      burger.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-    } else {
-      closeMenu();
-    }
-  });
-});
+    (function(){
+      const burger = document.getElementById('tp-burger');
+      const nav = document.getElementById('tp-nav');
+      function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+      function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+      function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
+      burger.addEventListener('click', toggleMenu, { passive:true });
+      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
+    })();
   </script>
 </body>
 </html>
