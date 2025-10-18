@@ -1,28 +1,27 @@
 {
-  "version": 2,
-  "name": "timeproofs",
-  "public": true,
-  "trailingSlash": false,
   "cleanUrls": true,
+  "trailingSlash": false,
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/manifest.webmanifest",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+        { "key": "Content-Type", "value": "application/manifest+json; charset=utf-8" },
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/.well-known/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=300" }
       ]
     }
   ],
   "rewrites": [
-    { "source": "/", "destination": "/index.html" },
-    { "source": "/verify", "destination": "/verify.html" },
-    { "source": "/about", "destination": "/about.html" },
-    { "source": "/use-cases", "destination": "/use-cases.html" },
-    { "source": "/docs", "destination": "/docs.html" },
-    { "source": "/pricing", "destination": "/pricing.html" },
-    { "source": "/roadmap", "destination": "/roadmap.html" },
-    { "source": "/privacy", "destination": "/privacy.html" },
-    { "source": "/legal", "destination": "/legal.html" }
+    // Laisse passer tous les vrais fichiers (avec extension)
+    { "source": "/:all*(js|css|png|jpg|jpeg|gif|svg|ico|webp|json|xml|txt)", "destination": "/:all*" },
+    // Laisse passer .well-known
+    { "source": "/.well-known/:path*", "destination": "/.well-known/:path*" },
+    // Fallback SPA uniquement pour les routes "propres" sans extension
+    { "source": "/:path*", "destination": "/index.html" }
   ]
 }
