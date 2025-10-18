@@ -106,7 +106,7 @@
     <p class="kicker">PRIVACY</p>
     <h1>Privacy Policy</h1>
     <p class="lead">Privacy-first by design. We process <strong>hashes only</strong> — never your content. No cookies. Edge-native security with HTTPS and HMAC signatures.</p>
-    <p class="muted">Effective date: January 2025 • Last updated: January 2025</p>
+    <p class="muted">Effective date: <strong>October 18, 2025</strong> • Last updated: <strong>October 18, 2025</strong></p>
 
     <section class="card" aria-labelledby="summary">
       <h2 id="summary">At a glance</h2>
@@ -121,15 +121,15 @@
 
     <section aria-labelledby="controller" class="card">
       <h2 id="controller">Data controller & contact</h2>
-      <p><strong>Controller:</strong> TimeProofs (independent creator). Primary contact: <a href="mailto:privacy@timeproofs.io">privacy@timeproofs.io</a>. Security contact: <a href="mailto:security@timeproofs.io">security@timeproofs.io</a>.</p>
-      <p class="muted">This site and API are operated for research and open-source development purposes. See also the <a href="/legal.html">Legal Notice & Terms</a>.</p>
+      <p><strong>Controller:</strong> TimeProofs (independent creator). Primary contact: <a href="mailto:privacy@timeproofs.io">privacy@timeproofs.io</a>. Security contact: <a href="mailto:security@timeproofs.io">security@timeproofs.io</a>. General inquiries: <a href="mailto:contact@timeproofs.io">contact@timeproofs.io</a>.</p>
+      <p class="muted">Also see <a href="/legal.html">Legal Notice & Terms</a> and our <a href="/.well-known/security.txt">security.txt</a>.</p>
     </section>
 
     <section aria-labelledby="definitions" class="card">
       <h2 id="definitions">Key definitions</h2>
       <ul class="list">
         <li><strong>Hash:</strong> irreversible SHA-256 digest (64-hex) of your content, computed client-side or by you on server.</li>
-        <li><strong>Meta:</strong> optional, tiny JSON you send (e.g., <code>{"type":"file","mime":"application/pdf"}</code>) used only for categorization.</li>
+        <li><strong>Meta:</strong> optional, tiny JSON you send (e.g., <code>{"type":"file","mime":"application/pdf"}</code>) used only for categorization — <em>never include personal data</em>.</li>
         <li><strong>Proof:</strong> tuple stored in KV: <code>{ hash, timestamp, signature, type?, meta? }</code>.</li>
       </ul>
     </section>
@@ -171,12 +171,12 @@
         <li>Server signatures use HMAC-SHA256 over <code>hash + timestamp</code> with a private secret.</li>
         <li>Principle of minimal data: only what’s needed for verification.</li>
       </ul>
-      <p>If you believe you’ve found a vulnerability, please contact <a href="mailto:security@timeproofs.io">security@timeproofs.io</a> with details and steps to reproduce.</p>
+      <p>Found a vulnerability? Email <a href="mailto:security@timeproofs.io">security@timeproofs.io</a> or see <a href="/.well-known/security.txt">security.txt</a> for our disclosure policy.</p>
     </section>
 
     <section aria-labelledby="thirdparties" class="card">
       <h2 id="thirdparties">Sub-processors</h2>
-      <p>We use <strong>Cloudflare</strong> (Workers, KV, edge security, routing). Cloudflare may process limited operational metadata to deliver the service. We don’t sell data or share it for advertising.</p>
+      <p>We use <strong>Cloudflare</strong> (Workers, KV, edge security, routing). Cloudflare may process limited operational metadata to deliver the service. We don’t sell data or share it for advertising. Any change to sub-processors will be reflected on this page or in <a href="/legal.html">Legal</a>.</p>
     </section>
 
     <section aria-labelledby="cookies" class="card">
@@ -188,7 +188,7 @@
       <h2 id="rights">Your choices & rights</h2>
       <ul class="list">
         <li><strong>Content privacy:</strong> because only hashes are stored, your original files remain private by design.</li>
-        <li><strong>Proof removal:</strong> if you believe a proof contains personal data in its optional <code>meta</code>, contact us and we’ll assess and purge where appropriate.</li>
+        <li><strong>Proof removal:</strong> if optional <code>meta</code> included personal data by mistake, contact us and we’ll assess and purge where appropriate.</li>
         <li><strong>Consequences of deletion:</strong> deleting a proof removes public verifiability for that hash.</li>
         <li><strong>Contact:</strong> <a href="mailto:privacy@timeproofs.io">privacy@timeproofs.io</a></li>
       </ul>
@@ -196,7 +196,7 @@
 
     <section aria-labelledby="jurisdiction" class="card">
       <h2 id="jurisdiction">Jurisdiction & international transfers</h2>
-      <p>TimeProofs is operated globally using edge infrastructure. Where applicable, processing is governed by internationally recognized principles for digital services. Data may be routed through or stored in multiple regions to provide low-latency access. We apply a privacy-first approach (hash-only) to minimize exposure regardless of region.</p>
+      <p>TimeProofs operates globally on edge infrastructure. Data may transit or be stored in multiple regions to provide low-latency access. Our hash-only design minimizes exposure regardless of region. Where applicable, we align with internationally recognized principles for digital services.</p>
     </section>
 
     <section aria-labelledby="changes" class="card">
@@ -228,12 +228,11 @@
       function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
       function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
       function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
-      burger.addEventListener('click', toggleMenu);
-      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); });
-      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); });
-      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); });
+      burger.addEventListener('click', toggleMenu, { passive:true });
+      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
     })();
   </script>
 </body>
 </html>
-
