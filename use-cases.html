@@ -3,30 +3,56 @@
 <head>
   <!-- ===== Core ===== -->
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <title>Use Cases — TimeProofs · Proof of Existence for AI & Developers</title>
   <meta name="description" content="Concrete TimeProofs use cases for AI teams, agents, and developers: provenance, datasets, audit trails, contracts, compliance, research."/>
+  <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <link rel="canonical" href="https://timeproofs.io/use-cases.html"/>
 
-  <!-- Icons -->
+  <!-- Perf -->
+  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin>
+  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev"/>
+
+  <!-- Icons / Manifest -->
   <link rel="icon" href="/favicon.ico" sizes="any"/>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
   <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
   <link rel="manifest" href="/site.webmanifest"/>
 
-  <!-- ===== Social ===== -->
+  <!-- Social -->
   <meta property="og:title" content="Use Cases — TimeProofs · Proof of Existence for AI & Developers"/>
   <meta property="og:description" content="Add a cryptographic moment-in-time to anything that matters — instant, private, verifiable."/>
   <meta property="og:type" content="website"/>
-  <meta property="og:image" content="https://timeproofs.io/og.png"/>
   <meta property="og:url" content="https://timeproofs.io/use-cases.html"/>
+  <meta property="og:image" content="https://timeproofs.io/og.png"/>
   <meta property="og:site_name" content="TimeProofs"/>
   <meta property="og:locale" content="en_US"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Use Cases — TimeProofs"/>
   <meta name="twitter:description" content="Provenance, datasets, audit trails, contracts, compliance, research — in minutes."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"TimeProofs",
+    "url":"https://timeproofs.io/",
+    "logo":"https://timeproofs.io/logo%20(1).png",
+    "sameAs":[
+      "https://x.com/timeproofs",
+      "https://www.linkedin.com/company/timeproofs",
+      "https://github.com/timeproofs",
+      "https://youtube.com/@timeproofs",
+      "https://timeproofs.io/rss.xml"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  { "@context":"https://schema.org", "@type":"WebSite", "name":"TimeProofs", "url":"https://timeproofs.io/" }
+  </script>
 
   <style>
     :root{
@@ -54,7 +80,7 @@
       display:flex; align-items:center; justify-content:space-between; padding:0 16px;
     }
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none }
-    .tp-brand img{ height:34px; width:auto; object-fit:contain; vertical-align:middle }
+    .tp-brand img{ height:40px; width:auto; object-fit:contain; vertical-align:middle }
     .tp-brand:hover{ color:var(--accent) }
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
@@ -67,6 +93,7 @@
     .tp-nav a:hover{ color:var(--accent) }
     @media (min-width: 900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width: 899px){
+      .tp-brand img{ height:34px }
       .tp-nav{
         position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
         display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
@@ -122,13 +149,13 @@
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
       <span aria-hidden="true">☰</span>
     </button>
-    <nav id="tp-nav" class="tp-nav" data-state="closed">
+    <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html" aria-current="page">Use Cases</a>
       <a href="/verify.html">Verify</a>
       <a href="/docs.html">API Docs</a>
-      <a href="/legal.html">Legal</a>
       <a href="/privacy.html">Privacy</a>
+      <a href="/legal.html">Legal</a>
     </nav>
   </header>
 
@@ -247,7 +274,7 @@ await fetch(`${API}/timestamp`, {
   </main>
 
   <!-- ===== Footer ===== -->
-  <footer role="contentinfo">
+  <footer role="contentinfo" aria-label="Site footer">
     © 2025 TimeProofs — Proof of Existence. For Everything.
     <div style="margin-top:6px">
       <a href="/index.html">Home</a> •
