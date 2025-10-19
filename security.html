@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Core -->
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <title>Security — TimeProofs</title>
+  <meta name="description" content="Report security vulnerabilities to TimeProofs. Coordinated disclosure, scope, safe harbor, and PGP key."/>
+  <meta name="theme-color" content="#0b1020"/>
+  <meta name="robots" content="index,follow"/>
+  <link rel="canonical" href="https://timeproofs.io/security.html"/>
+
+  <!-- Icons / Manifest -->
+  <link rel="icon" href="/favicon.ico" sizes="any"/>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+  <link rel="manifest" href="/site.webmanifest"/>
+
+  <!-- Social -->
+  <meta property="og:title" content="Security — TimeProofs"/>
+  <meta property="og:description" content="How to report vulnerabilities to TimeProofs. PGP, scope, safe harbor, and acknowledgments."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://timeproofs.io/security.html"/>
+  <meta property="og:image" content="https://timeproofs.io/og.png"/>
+  <meta property="og:site_name" content="TimeProofs"/>
+  <meta property="og:locale" content="en_US"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Security — TimeProofs"/>
+  <meta name="twitter:description" content="Coordinated disclosure for TimeProofs."/>
+  <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
+
+  <style>
+    :root{ --bg:#0b1020; --panel:#0f172a; --line:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --ok:#22c55e }
+    *{ box-sizing:border-box }
+    html,body{ height:100%; max-width:100%; overflow-x:hidden }
+    body{
+      margin:0;
+      background:radial-gradient(1000px 420px at 70% -10%, rgba(34,211,238,.10), transparent 60%), var(--bg);
+      color:var(--text);
+      font:16px/1.7 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      text-rendering:optimizeLegibility;
+    }
+    a{ color:var(--accent); text-decoration:none } a:hover{ text-decoration:underline }
+    code,kbd{ background:#1e293b; color:#f8fafc; padding:2px 6px; border-radius:6px; font-size:.92rem }
+
+    /* Header */
+    .tp-header{
+      position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
+      background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+    }
+    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none }
+    .tp-brand img{ height:34px; width:auto; object-fit:contain; vertical-align:middle }
+    .tp-brand:hover{ color:var(--accent) }
+    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer }
+    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block; text-decoration:none }
+    .tp-nav a[aria-current="page"]{ color:#9beefb }
+    .tp-nav a:hover{ color:var(--accent) }
+    @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
+    @media (max-width:899px){
+      .tp-nav{
+        position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
+        display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
+        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
+      }
+      .tp-nav a{ margin:4px 0 }
+      .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
+    }
+
+    /* Layout */
+    main{ padding:96px 20px 40px; max-width:980px; margin:0 auto }
+    h1{ font-size:2rem; margin:.2em 0 .6em }
+    .meta{ color:var(--muted); margin:-6px 0 16px }
+    .card{ background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:18px; margin:14px 0 }
+    h2{ color:#b9e7f5; font-size:1.25rem; margin:1.2em 0 .5em }
+    h3{ color:#aee9f7; font-size:1.05rem; margin:1em 0 .3em }
+    ul{ margin:.4em 0 .8em; padding-left:20px }
+    li{ margin:.25em 0 }
+    .pill{ display:inline-block; padding:4px 10px; border-radius:999px; border:1px solid #214a57; background:#0d2330; color:#aee9f7; font-size:.78rem; margin:6px 6px 0 0 }
+    .ok{ border-color:#1c6b3d; background:#0f3b22; color:#b7f7ce }
+    .mono-small{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12px; color:#bcd9e8 }
+
+    footer{ border-top:1px solid var(--line); margin-top:40px; padding:20px; color:#7c8aa5; text-align:center }
+    footer a{ color:#a7b7cc; text-decoration:none; margin:0 8px } footer a:hover{ color:var(--accent) }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="tp-header" role="navigation" aria-label="Main">
+    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">
+      <img src="/logo%20(1).png" alt="TimeProofs logo"/><span>TimeProofs</span>
+    </a>
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
+    <nav id="tp-nav" class="tp-nav" data-state="closed">
+      <a href="/proofspec.html">Protocol (ProofSpec)</a>
+      <a href="/use-cases.html">Use Cases</a>
+      <a href="/verify.html">Verify</a>
+      <a href="/docs.html">API Docs</a>
+      <a href="/legal.html">Legal</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/security.html" aria-current="page">Security</a>
+    </nav>
+  </header>
+
+  <main role="main">
+    <h1>Security</h1>
+    <p class="meta">Coordinated disclosure. PGP available. See also <a href="/.well-known/security.txt">security.txt</a>.</p>
+
+    <section class="card" aria-labelledby="report">
+      <h2 id="report">How to report a vulnerability</h2>
+      <ul>
+        <li>Email: <a href="mailto:security@timeproofs.io">security@timeproofs.io</a></li>
+        <li>Encrypt reports: <a href="/pgp.txt">/pgp.txt</a> (PGP public key block)</li>
+        <li>Preferred languages: English, French</li>
+      </ul>
+      <p class="mono-small">Please include affected component, steps to reproduce, impact, and a proof-of-concept if possible.</p>
+      <p class="pill ok">No legal action for good-faith research (see Safe Harbor)</p>
+    </section>
+
+    <section class="card" aria-labelledby="scope">
+      <h2 id="scope">Scope</h2>
+      <h3>In scope</h3>
+      <ul>
+        <li><strong>API</strong>: <code>https://timeproofs-api.jeason-bacoul.workers.dev/api</code> and future <code>api.timeproofs.io</code></li>
+        <li><strong>Website</strong>: <code>timeproofs.io</code> and subpages</li>
+        <li><strong>Protocol artifacts</strong>: Proof generation and verification logic</li>
+      </ul>
+      <h3>Out of scope</h3>
+      <ul>
+        <li>Denial of Service, volumetric traffic, or rate-limit bypass without user impact</li>
+        <li>Spam, social engineering, or physical attacks</li>
+        <li>Reports that rely on stolen credentials or non-supported browsers</li>
+        <li>Best-practice suggestions without a concrete security impact</li>
+      </ul>
+    </section>
+
+    <section class="card" aria-labelledby="classes">
+      <h2 id="classes">Vulnerability classes of interest</h2>
+      <ul>
+        <li>Authentication / authorization flaws, key exposure, signature verification bypass</li>
+        <li>Crypto misuse around HMAC-SHA256, timestamp, or hash handling</li>
+        <li>Data validation resulting in meta injection or proof tampering</li>
+        <li>Server-side request forgery affecting verification endpoints</li>
+        <li>Cross-site scripting or CSRF on operator tools (if any)</li>
+      </ul>
+    </section>
+
+    <section class="card" aria-labelledby="process">
+      <h2 id="process">Coordinated disclosure process</h2>
+      <ul>
+        <li><strong>Acknowledge</strong> your report within 3 business days.</li>
+        <li><strong>Triage</strong> and assign severity within 7 business days.</li>
+        <li><strong>Remediate</strong> and deploy a fix as soon as feasible; we will share an ETA.</li>
+        <li><strong>Credit</strong> with your name/handle on this page unless you prefer anonymity.</li>
+      </ul>
+    </section>
+
+    <section class="card" aria-labelledby="harbor">
+      <h2 id="harbor">Safe harbor</h2>
+      <p>We will not initiate legal action for good-faith security research that:</p>
+      <ul>
+        <li>Accesses only what is necessary to demonstrate the vulnerability</li>
+        <li>Avoids privacy violations and data destruction</li>
+        <li>Respects rate limits and <a href="/legal.html">Terms</a></li>
+        <li>Gives us reasonable time to remediate before public disclosure</li>
+      </ul>
+    </section>
+
+    <section class="card" aria-labelledby="rewards">
+      <h2 id="rewards">Rewards</h2>
+      <p>No monetary bounties in v0.1. We offer public acknowledgments and early-access credits at our discretion.</p>
+    </section>
+
+    <section class="card" aria-labelledby="ack">
+      <h2 id="ack">Acknowledgments</h2>
+      <p>Thanks to the researchers who help keep TimeProofs safe.</p>
+      <ul id="hof">
+        <li><em>Hall of Fame will be listed here.</em></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    © 2025 TimeProofs — Proof of Existence. For Everything.
+    <div style="margin-top:6px">
+      <a href="/index.html">Home</a> •
+      <a href="/proofspec.html">Protocol</a> •
+      <a href="/use-cases.html">Use Cases</a> •
+      <a href="/verify.html">Verify</a> •
+      <a href="/docs.html">API Docs</a> •
+      <a href="/privacy.html">Privacy</a> •
+      <a href="/legal.html">Legal</a> •
+      <a href="/security.html" aria-current="page">Security</a>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const burger=document.getElementById('tp-burger');
+      const nav=document.getElementById('tp-nav');
+      function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+      function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+      function toggleMenu(){ (nav.getAttribute('data-state')==='open')?closeMenu():openMenu(); }
+      burger.addEventListener('click', toggleMenu, {passive:true});
+      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width:900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); }, {passive:true});
+      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); }, {passive:true});
+      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width:900px)').matches) closeMenu(); }, {passive:true});
+    })();
+  </script>
+</body>
+</html>
