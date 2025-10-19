@@ -2,24 +2,38 @@
 <html lang="en">
 <head>
   <!-- Core -->
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Verify & Create Proof — TimeProofs</title>
-  <meta name="description" content="Verify or create cryptographic proofs of existence. Hash locally, timestamp via API, verify publicly — private, instant, edge-native."/>
-  <meta name="theme-color" content="#0b1020"/>
-  <link rel="canonical" href="https://timeproofs.io/verify.html"/>
-  <link rel="icon" href="/favicon.ico"/>
+  <meta name="description" content="Verify or create cryptographic proofs of existence. Hash locally, timestamp via API, verify publicly — private, instant, edge-native." />
+  <meta name="robots" content="index,follow" />
+  <meta name="theme-color" content="#0b1020" />
+  <link rel="canonical" href="https://timeproofs.io/verify.html" />
 
-  <!-- Social -->
-  <meta property="og:title" content="Verify & Create Proof — TimeProofs"/>
-  <meta property="og:description" content="Hash locally. Timestamp via API. Verify publicly. No blockchain, no friction."/>
-  <meta property="og:type" content="website"/>
-  <meta property="og:image" content="/og.png"/>
-  <meta property="og:url" content="https://timeproofs.io/verify.html"/>
-  <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="Verify & Create Proof — TimeProofs"/>
-  <meta name="twitter:description" content="Instant proof-of-existence for AI & developers."/>
-  <meta name="twitter:image" content="/og.png"/>
+  <!-- Perf -->
+  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin />
+  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev" />
+
+  <!-- Icons / Manifest -->
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Verify & Create Proof — TimeProofs" />
+  <meta property="og:description" content="Hash locally. Timestamp via API. Verify publicly. No blockchain, no friction." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://timeproofs.io/verify.html" />
+  <meta property="og:image" content="https://timeproofs.io/og.png" />
+  <meta property="og:site_name" content="TimeProofs" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Verify & Create Proof — TimeProofs" />
+  <meta name="twitter:description" content="Instant proof-of-existence for AI, data and every digital creation." />
+  <meta name="twitter:image" content="https://timeproofs.io/og.png" />
 
   <style>
     :root{
@@ -28,36 +42,42 @@
       --ok:#22c55e; --bad:#ef4444;
     }
     *{ box-sizing:border-box }
-    html,body{ height:100%; max-width:100%; overflow-x:hidden }
+    html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg) }
     body{
       margin:0;
-      background:radial-gradient(1000px 420px at 70% -10%, rgba(34,211,238,.10), transparent 60%), var(--bg);
+      background:
+        radial-gradient(1000px 420px at 70% -10%, rgba(34,211,238,.10), transparent 60%),
+        var(--bg);
       color:var(--text);
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      text-rendering:optimizeLegibility;
     }
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
 
-    /* Header (shared) */
+    /* Header */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
       border-bottom:1px solid var(--line);
       display:flex; align-items:center; justify-content:space-between; padding:0 16px;
     }
-    .tp-brand{ color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none }
+    .tp-brand{
+      display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem;
+    }
+    .tp-brand img{ height:40px; width:auto; object-fit:contain; vertical-align:middle }
     .tp-brand:hover{ color:var(--accent) }
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
       border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
     }
     .tp-nav a{
-      color:var(--text); text-decoration:none; font-weight:700; margin-left:18px; padding:8px 0; display:inline-block;
+      color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block;
     }
     .tp-nav a:hover{ color:var(--accent) }
-    @media (min-width: 900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
-    @media (max-width: 899px){
+    @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
+    @media (max-width:899px){
       .tp-nav{
         position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
         display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
@@ -65,6 +85,7 @@
       }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
+      .tp-brand img{ height:34px }
     }
 
     /* Layout */
@@ -79,9 +100,7 @@
     .grid{ display:grid; grid-template-columns:1fr; gap:16px }
     @media(min-width:860px){ .grid{ grid-template-columns:1fr 1fr } }
 
-    .card{
-      background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px;
-    }
+    .card{ background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px }
     label{ display:block; font-size:13px; color:#a7b1c2; margin:8px 0 6px }
     input[type="text"], textarea{
       width:100%; background:#0b1220; color:var(--text); border:1px solid #1f2937; border-radius:10px; padding:10px 12px;
@@ -106,29 +125,31 @@
       margin-top:10px; padding:14px; border:1px dashed #2b3b55; border-radius:10px;
       background:#0b1220; color:#cfe3f5; text-align:center; font-size:.92rem;
     }
-    .drop.drag{ border-color:#22d3ee; background:#0f1f33; }
+    .drop.drag{ border-color:#22d3ee; background:#0f1f33 }
 
     footer{ margin:26px 0 0; text-align:center; color:#7c8aa5; font-size:12px }
 
-    .monosmall{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:12px; color:#bcd9e8 }
+    .monosmall{ font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-size:12px; color:#bcd9e8 }
     .mutedline{ border-top:1px solid #1f2937; margin:12px 0 0; padding-top:10px }
   </style>
 </head>
 <body>
   <!-- Header -->
   <header class="tp-header" role="navigation" aria-label="Main">
-    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">TimeProofs</a>
+    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">
+      <img src="/logo%20(1).png" alt="TimeProofs logo" />
+      <span>TimeProofs</span>
+    </a>
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
       <span aria-hidden="true">☰</span>
     </button>
     <nav id="tp-nav" class="tp-nav" data-state="closed">
-      <a href="/about.html">About</a>
+      <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html" aria-current="page">Verify</a>
-      <a href="/docs.html">Docs</a>
-      <a href="/pricing.html">Pricing</a>
-      <a href="/roadmap.html">Roadmap</a>
+      <a href="/docs.html">API Docs</a>
       <a href="/legal.html">Legal</a>
+      <a href="/privacy.html">Privacy</a>
     </nav>
   </header>
 
@@ -159,7 +180,7 @@
 
         <div id="input-file" style="display:none; margin-top:14px;">
           <label for="file">File to hash (processed locally)</label>
-          <input type="file" id="file" aria-describedby="file-hint"/>
+          <input type="file" id="file" aria-describedby="file-hint" />
           <p id="file-hint" class="hint">We only compute a hash in your browser. The file is never uploaded. Max 50 MB.</p>
           <div id="drop" class="drop" aria-hidden="false">…or drag & drop a file here</div>
           <div id="file-info" class="hint" aria-live="polite"></div>
@@ -168,18 +189,18 @@
 
         <div id="input-hash" style="display:none; margin-top:14px;">
           <label for="raw-hash">Existing SHA-256 hash (hex)</label>
-          <input type="text" id="raw-hash" placeholder="e3b0c44298fc1c149a..." inputmode="latin" autocomplete="off" spellcheck="false"/>
+          <input type="text" id="raw-hash" placeholder="e3b0c44298fc1c149a..." inputmode="latin" autocomplete="off" spellcheck="false" />
           <div id="hash-preview-raw" class="monosmall mutedline" aria-live="polite"></div>
         </div>
 
         <div class="row" style="margin-top:16px;">
           <div>
             <label for="type">Type (optional)</label>
-            <input type="text" id="type" placeholder="prompt | gen | file | webhook | other" autocomplete="off" maxlength="32"/>
+            <input type="text" id="type" placeholder="prompt | gen | file | webhook | other" autocomplete="off" maxlength="32" />
           </div>
           <div>
             <label for="meta">Meta (optional JSON, small)</label>
-            <input type="text" id="meta" placeholder='{"model":"gpt-4o","mime":"text/plain"}' autocomplete="off" spellcheck="false" maxlength="1024"/>
+            <input type="text" id="meta" placeholder='{"model":"gpt-4o","mime":"text/plain"}' autocomplete="off" spellcheck="false" maxlength="1024" />
           </div>
         </div>
 
@@ -200,7 +221,7 @@
       <!-- VERIFY PROOF -->
       <section class="card" id="panel-verify" role="tabpanel" aria-labelledby="tab-verify" style="display:none;">
         <label for="verify-hash">Hash to verify (SHA-256, hex)</label>
-        <input type="text" id="verify-hash" placeholder="Paste an existing hash" inputmode="latin" autocomplete="off" spellcheck="false"/>
+        <input type="text" id="verify-hash" placeholder="Paste an existing hash" inputmode="latin" autocomplete="off" spellcheck="false" />
         <div class="row" style="margin-top:12px;">
           <button class="btn" id="btn-verify" type="button">Verify</button>
           <span class="hint">Checks existence, timestamp, and server signature.</span>
@@ -225,10 +246,10 @@
       function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
       function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
       function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
-      burger.addEventListener('click', toggleMenu);
-      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); });
-      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); });
-      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); });
+      burger.addEventListener('click', toggleMenu, { passive:true });
+      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
     })();
 
     // ===== Config =====
@@ -307,9 +328,9 @@
       ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); drop.classList.remove('drag'); }));
       drop.addEventListener('drop', async e => {
         const f = e.dataTransfer?.files?.[0];
-        if (f) { 
+        if (f) {
           if (f.size > MAX_FILE_BYTES) { alert('File too large (max 50 MB).'); return; }
-          fileInput.files = e.dataTransfer.files; 
+          fileInput.files = e.dataTransfer.files;
           setFileInfo(f);
           const h = await sha256HexFromFile(f);
           hashPrevFile.textContent = `SHA-256: ${h}`;
