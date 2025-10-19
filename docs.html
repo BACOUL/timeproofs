@@ -3,29 +3,61 @@
 <head>
   <!-- Core -->
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <title>API Docs — TimeProofs</title>
   <meta name="description" content="TimeProofs API — timestamp, verify, and prove digital existence using SHA-256 hashes. Privacy-first, edge-native, and verifiable by anyone."/>
+  <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
-  <link rel="icon" href="/favicon.ico"/>
   <link rel="canonical" href="https://timeproofs.io/docs.html"/>
 
-  <!-- Social -->
+  <!-- Perf -->
+  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin/>
+  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev"/>
+
+  <!-- Icons / Manifest -->
+  <link rel="icon" href="/favicon.ico" sizes="any"/>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+  <link rel="manifest" href="/site.webmanifest"/>
+
+  <!-- Open Graph -->
   <meta property="og:title" content="API Docs — TimeProofs"/>
   <meta property="og:description" content="Hash locally. Timestamp via API. Verify publicly. No blockchain, no friction."/>
   <meta property="og:type" content="website"/>
-  <meta property="og:image" content="/og.png"/>
   <meta property="og:url" content="https://timeproofs.io/docs.html"/>
+  <meta property="og:image" content="https://timeproofs.io/og.png"/>
+  <meta property="og:site_name" content="TimeProofs"/>
+  <meta property="og:locale" content="en_US"/>
+
+  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="API Docs — TimeProofs"/>
   <meta name="twitter:description" content="The universal proof layer for AI & developers."/>
-  <meta name="twitter:image" content="/og.png"/>
+  <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"TimeProofs",
+    "url":"https://timeproofs.io/",
+    "logo":"https://timeproofs.io/logo%20(1).png",
+    "sameAs":[
+      "https://x.com/timeproofs",
+      "https://www.linkedin.com/company/timeproofs",
+      "https://github.com/timeproofs",
+      "https://youtube.com/@timeproofs",
+      "https://timeproofs.io/rss.xml"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  { "@context":"https://schema.org", "@type":"WebSite", "name":"TimeProofs", "url":"https://timeproofs.io/" }
+  </script>
 
   <style>
-    :root{
-      --bg:#0b1020; --panel:#0f172a; --line:#1e293b;
-      --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --ok:#22c55e; --bad:#ef4444;
-    }
+    :root{ --bg:#0b1020; --panel:#0f172a; --line:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --ok:#22c55e; --bad:#ef4444; }
     *{ box-sizing:border-box }
     body{
       margin:0; background:radial-gradient(1000px 400px at 70% -10%, rgba(34,211,238,.10), transparent 60%), var(--bg);
@@ -33,17 +65,17 @@
       font:16px/1.7 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
-    a{ color:var(--accent); text-decoration:none }
-    a:hover{ text-decoration:underline }
+    a{ color:var(--accent); text-decoration:none } a:hover{ text-decoration:underline }
 
-    /* Header (unified) */
+    /* Header */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
       border-bottom:1px solid var(--line);
       display:flex; align-items:center; justify-content:space-between; padding:0 16px;
     }
-    .tp-brand{ color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none }
+    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none }
+    .tp-brand img{ height:34px; width:auto; vertical-align:middle }
     .tp-brand:hover{ color:var(--accent) }
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
@@ -53,8 +85,8 @@
       color:var(--text); text-decoration:none; font-weight:700; margin-left:18px; padding:8px 0; display:inline-block;
     }
     .tp-nav a:hover{ color:var(--accent) }
-    @media (min-width: 900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
-    @media (max-width: 899px){
+    @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
+    @media (max-width:899px){
       .tp-nav{
         position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
         display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
@@ -81,15 +113,8 @@
     th{ background:#0b1220; color:#e5e7eb }
 
     .actions{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap }
-    .btn{
-      background:#111d33; color:#e2f6ff; border:1px solid var(--line);
-      padding:8px 12px; border-radius:8px; font-weight:700; cursor:pointer
-    }
+    .btn{ background:#111d33; color:#e2f6ff; border:1px solid var(--line); padding:8px 12px; border-radius:8px; font-weight:700; cursor:pointer }
     .btn:hover{ filter:brightness(1.05) }
-
-    .pill{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; font-size:12px; margin-left:8px }
-    .ok{ background:#0f3b22; color:#b7f7ce; border:1px solid #1c6b3d }
-    .bad{ background:#3b0f12; color:#ffc1c6; border:1px solid #6b1c22 }
 
     footer{ margin-top:48px; color:#7b8aa7; font-size:.9rem; text-align:center; padding:20px; border-top:1px solid var(--line) }
     footer a{ color:#a7b7cc; text-decoration:none; margin:0 8px }
@@ -100,19 +125,20 @@
 </head>
 <body>
   <!-- Header -->
-  <header class="tp-header">
-    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">TimeProofs</a>
+  <header class="tp-header" role="navigation" aria-label="Main">
+    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">
+      <img src="/logo%20(1).png" alt="TimeProofs logo"><span>TimeProofs</span>
+    </a>
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
       <span aria-hidden="true">☰</span>
     </button>
-    <nav id="tp-nav" class="tp-nav" aria-label="Main" data-state="closed">
-      <a href="/about.html">About</a>
+    <nav id="tp-nav" class="tp-nav" data-state="closed">
+      <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html">Verify</a>
-      <a href="/docs.html" aria-current="page">Docs</a>
-      <a href="/pricing.html">Pricing</a>
-      <a href="/roadmap.html">Roadmap</a>
+      <a href="/docs.html" aria-current="page">API Docs</a>
       <a href="/legal.html">Legal</a>
+      <a href="/privacy.html">Privacy</a>
     </nav>
   </header>
 
@@ -125,7 +151,7 @@
       <h2>🌐 Base URL</h2>
       <p><strong>Current (Worker, beta):</strong></p>
       <pre><code>https://timeproofs-api.jeason-bacoul.workers.dev/api</code></pre>
-      <p class="note">Planned production domain: <code>https://api.timeproofs.io</code> (swap when DNS is ready).</p>
+      <p class="note">Planned production: <code>https://api.timeproofs.io</code> (swap when DNS is ready).</p>
     </div>
 
     <!-- Endpoints -->
@@ -140,7 +166,7 @@
 
     <!-- Quickstart -->
     <div class="card">
-      <h2>⚙️ Quickstart (conceptual)</h2>
+      <h2>⚙️ Quickstart</h2>
       <ol>
         <li>Compute a SHA-256 hash locally (text/file/output).</li>
         <li><code>POST /timestamp</code> with the hash (+ optional <code>type</code> & <code>meta</code>).</li>
@@ -160,7 +186,7 @@
   "ok": true,
   "hash": "e3b0c4...",
   "timestamp": "2025-01-15T12:34:56.789Z",
-  "signature": "hmac_sha256(hash|timestamp)",
+  "signature": "hmac_sha256(hash|timestamp|meta)",
   "verify_url": "https://timeproofs-api.jeason-bacoul.workers.dev/api/verify?hash=e3b0..."
 }</code></pre>
 
@@ -171,17 +197,35 @@
       </div>
     </div>
 
-    <!-- (reste inchangé, tout ton contenu API / tables / footer) -->
+    <!-- cURL -->
+    <div class="card">
+      <h2>🖥️ cURL</h2>
+      <h3>Create</h3>
+      <pre><code>curl -X POST 'https://timeproofs-api.jeason-bacoul.workers.dev/api/timestamp' \
+  -H 'Content-Type: application/json' \
+  -d '{"hash":"&lt;64-hex-sha256&gt;","type":"event","meta":{"source":"docs"}}'</code></pre>
+      <h3>Verify</h3>
+      <pre><code>curl 'https://timeproofs-api.jeason-bacoul.workers.dev/api/verify?hash=&lt;64-hex-sha256&gt;'</code></pre>
+      <p class="note">Send only hashes. No original content is uploaded.</p>
+    </div>
+
+    <!-- Client-side hashing (JS) -->
+    <div class="card">
+      <h2>🔐 Local hashing (browser)</h2>
+      <pre><code>const buf = new TextEncoder().encode(text);
+const digest = await crypto.subtle.digest('SHA-256', buf);
+const hash = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,'0')).join('');</code></pre>
+      <p class="mono-small">Then POST the hex hash to <code>/timestamp</code>.</p>
+    </div>
+
     <footer>
       © 2025 TimeProofs — Proof of Existence. For Everything.
       <div style="margin-top:6px">
         <a href="/index.html">Home</a> •
-        <a href="/about.html">About</a> •
+        <a href="/proofspec.html">Protocol</a> •
         <a href="/use-cases.html">Use Cases</a> •
         <a href="/verify.html">Verify</a> •
-        <a href="/docs.html">Docs</a> •
-        <a href="/pricing.html">Pricing</a> •
-        <a href="/roadmap.html">Roadmap</a> •
+        <a href="/docs.html" aria-current="page">API Docs</a> •
         <a href="/privacy.html">Privacy</a> •
         <a href="/legal.html">Legal</a>
       </div>
@@ -189,6 +233,7 @@
   </main>
 
   <script>
+    // Header burger
     (function(){
       const burger = document.getElementById('tp-burger');
       const nav = document.getElementById('tp-nav');
