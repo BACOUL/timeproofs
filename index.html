@@ -72,6 +72,13 @@
     .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0 }
     .sr-only:focus{ position:static; width:auto; height:auto; margin:8px; clip:auto; white-space:normal }
 
+    /* Progress bar */
+    #tp-progress{
+      position:fixed; top:0; left:0; height:3px; width:0%;
+      background:linear-gradient(90deg, #22d3ee, #22c55e);
+      z-index:1500;
+    }
+
     /* Header */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
@@ -90,9 +97,14 @@
       border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
     }
     .tp-nav a{
-      color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block;
+      color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block; position:relative;
     }
-    .tp-nav a:hover{ color:var(--accent) }
+    .tp-nav a:hover::after{ transform:scaleX(1) }
+    .tp-nav a::after{
+      content:""; position:absolute; left:0; right:0; bottom:-2px; height:2px;
+      transform:scaleX(0); transform-origin:left; background:var(--accent); transition:transform .18s ease;
+    }
+    .tp-nav a.active{ color:var(--accent); text-decoration:underline }
 
     @media (min-width:900px){
       .tp-burger{ display:none }
@@ -114,7 +126,7 @@
     .hero{
       min-height:calc(100svh - 64px - 90px);
       padding-top:92px; padding-bottom:28px;
-      display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; position:relative;
     }
     .label{
       display:inline-flex; gap:8px; align-items:center; padding:6px 12px; border:1px solid #214a57; background:#0d2330;
@@ -127,6 +139,10 @@
     .subtitle{
       color:var(--muted); max-width:780px; margin:0 auto 16px; line-height:1.6;
       font-size:clamp(1rem, 2.8vw, 1.125rem); padding:0 6px;
+    }
+    .hero::after{
+      content:""; position:absolute; inset:auto 0 0 0; height:220px; pointer-events:none;
+      background:radial-gradient(60% 60% at 50% 100%, rgba(34,211,238,.08), transparent 60%);
     }
     .cta-wrap{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:12px }
     .cta{
@@ -141,7 +157,7 @@
     .badge{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0e172a; font-size:.92rem }
 
     .section{ padding:26px 0 }
-    .section h2{ color:#b9e7f5; font-size:clamp(1.2rem, 2.6vw, 1.5rem); margin:0 0 10px; text-align:center }
+    .section h2{ color:#b9e7f5; font-size:clamp(1.2rem, 2.6vw, 1.5rem); margin:0 0 10px; text-align:center; letter-spacing:.2px }
     .grid{ display:grid; gap:14px }
     .grid.three{ grid-template-columns:1fr }
     .grid.two{ grid-template-columns:1fr }
@@ -149,9 +165,10 @@
       .grid.three{ grid-template-columns:1fr 1fr 1fr }
       .grid.two{ grid-template-columns:1fr 1fr }
     }
-    .card{ background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px }
-    .card h3{ color:var(--accent); margin:.2em 0 .3em; font-size:1.08rem }
+    .card{ background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px; box-shadow:0 6px 28px rgba(0,0,0,.18) }
+    .card h3{ color:var(--accent); margin:.2em 0 .3em; font-size:1.08rem; letter-spacing:.2px }
     .card p{ color:#dbe7f3; margin:.15em 0 .4em; line-height:1.55 }
+    .card:hover{ transform:translateY(-1px); transition:transform .15s ease }
 
     /* Mini demo */
     .demo{ background:#0b1220; border:1px solid #1f2937; border-radius:14px; padding:16px }
@@ -178,6 +195,9 @@
     footer{ border-top:1px solid var(--line); margin-top:38px; padding:18px; color:#7c8aa5; text-align:center }
     footer .links a{ color:#a7b7cc; margin:0 8px; text-decoration:none }
     footer .links a:hover{ color:#22d3ee }
+
+    /* Motion respect */
+    @media (prefers-reduced-motion: reduce){ *{ animation:none!important; transition:none!important } }
   </style>
 
   <!-- JSON-LD: SoftwareApplication -->
@@ -210,6 +230,7 @@
 </head>
 
 <body>
+  <div id="tp-progress" aria-hidden="true"></div>
   <a class="sr-only" href="#main">Skip to content</a>
 
   <!-- Header -->
@@ -222,14 +243,15 @@
       <span aria-hidden="true">☰</span>
     </button>
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation">
-      <a href="/about.html">About</a>
-      <a href="/use-cases.html">Use Cases</a>
+      <a href="#why">Why</a>
+      <a href="#protocol">Protocol</a>
+      <a href="#compliance">Compliance</a>
+      <a href="#how">How</a>
+      <a href="#compare">Compare</a>
+      <a href="#security">Security</a>
+      <a href="#faq">FAQ</a>
       <a href="/verify.html">Verify</a>
       <a href="/docs.html">Docs</a>
-      <a href="/pricing.html">Pricing</a>
-      <a href="/roadmap.html">Roadmap</a>
-      <a href="/legal.html">Legal</a>
-      <a href="/privacy.html">Privacy</a>
     </nav>
   </header>
 
@@ -241,6 +263,9 @@
       <h1 id="hero-title" class="title">Proof of Existence. For Everything.</h1>
       <p class="subtitle">
         Hash locally. Timestamp via API. Verify publicly. No blockchain, no gas — just cryptographic truth.
+      </p>
+      <p class="subtitle" style="margin-top:6px">
+        Built for coming AI & content authenticity requirements. ProofSpec™ v1 makes every proof verifiable by anyone.
       </p>
       <div class="cta-wrap" role="group" aria-label="Primary actions">
         <a class="cta" href="/verify.html" role="button" aria-label="Create a proof now">Create a proof now</a>
@@ -314,6 +339,31 @@
       <p style="text-align:center;margin-top:16px;color:#a3b7c7">
         📜 <a href="/proofspec.html">Read the ProofSpec v1</a>
       </p>
+    </section>
+
+    <!-- Compliance -->
+    <section class="section" aria-labelledby="compliance">
+      <h2 id="compliance">Regulation & Compliance Ready</h2>
+      <div class="grid two">
+        <article class="card">
+          <h3>Why this will be required</h3>
+          <p>Upcoming global rules push for <strong>traceability and integrity</strong> of AI outputs and data.
+          Teams must prove <em>when</em> something existed and <em>that it has not changed</em>.</p>
+          <ul style="margin:.4rem 0 0; padding-left:1.1rem; color:#dbe7f3">
+            <li>Proof of existence for generated content</li>
+            <li>Open public verification by anyone</li>
+            <li>Privacy-by-design (hash-only) simplifies GDPR</li>
+            <li>Auditable pipelines for internal and external reviews</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Built to align by design</h3>
+          <p>TimeProofs provides <strong>hash-only timestamps</strong>, <strong>public verification</strong>,
+          and a <strong>formal ProofSpec™</strong>. This fits content authenticity and AI governance needs
+          without personal data or blockchain overhead.</p>
+          <p style="margin:.4rem 0 0">Result: lower risk, faster sign-off, easier audits.</p>
+        </article>
+      </div>
     </section>
 
     <!-- How it works -->
@@ -424,7 +474,9 @@ const check = await res.json();</code></pre>
       function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
       function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
       burger.addEventListener('click', toggleMenu, { passive:true });
-      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return;
+        if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu();
+      }, { passive:true });
       document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
       window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
     })();
@@ -455,6 +507,58 @@ const check = await res.json();</code></pre>
         }
       });
     })();
+
+    // Smooth scroll
+    (function(){
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      document.querySelectorAll('a[href^="#"]').forEach(a=>{
+        a.addEventListener('click', e=>{
+          const id = a.getAttribute('href');
+          if(!id || id === '#') return;
+          const el = document.querySelector(id);
+          if(!el) return;
+          e.preventDefault();
+          el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block:'start' });
+          history.replaceState(null, '', id);
+          if (window.matchMedia('(max-width: 899px)').matches) {
+            document.getElementById('tp-burger')?.click();
+          }
+        }, { passive:false });
+      });
+    })();
+
+    // Scroll progress
+    (function(){
+      const bar = document.getElementById('tp-progress');
+      const onScroll = () => {
+        const h = document.documentElement;
+        const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight);
+        bar.style.width = (scrolled * 100).toFixed(2) + '%';
+      };
+      document.addEventListener('scroll', onScroll, { passive:true });
+      onScroll();
+    })();
+
+    // Scroll-spy
+    (function(){
+      const links = Array.from(document.querySelectorAll('#tp-nav a[href^="#"]'));
+      const map = new Map(links.map(a => [a.getAttribute('href'), a]));
+      const opts = { rootMargin: '-40% 0px -55% 0px', threshold: 0 };
+      const io = new IntersectionObserver(entries=>{
+        entries.forEach(entry=>{
+          const id = '#'+entry.target.id;
+          const link = map.get(id);
+          if(!link) return;
+          if(entry.isIntersecting){
+            links.forEach(l=>{ l.classList.remove('active'); l.removeAttribute('aria-current'); });
+            link.classList.add('active');
+            link.setAttribute('aria-current','page');
+          }
+        });
+      }, opts);
+      ['why','protocol','compliance','how','compare','security','faq']
+        .forEach(id => { const el = document.getElementById(id); if(el) io.observe(el); });
+    })();
   </script>
 </body>
-</html>
+  </html>
