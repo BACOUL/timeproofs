@@ -42,23 +42,41 @@
     "@type":"TechArticle",
     "headline":"ProofSpec — TimeProofs Open Protocol for Digital Proof of Existence",
     "about":["digital signatures","timestamping","data integrity","hashing","interoperability"],
-    "author":{"@type":"Person","name":"Jeason Bacoul"},
+    "author":{"@type":"Organization","name":"TimeProofs Editorial"},
     "publisher":{"@type":"Organization","name":"TimeProofs","logo":{"@type":"ImageObject","url":"https://timeproofs.io/logo%20(1).png"}},
     "datePublished":"2025-10-19",
     "version":"1.0.0-draft"
   }
   </script>
 
-  <!-- Styles (reuse site palette) -->
+  <!-- Styles (site palette + layout) -->
   <style>
     :root{ --bg:#0b1020; --panel:#0f172a; --line:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; }
     *{ box-sizing:border-box }
-    html,body{ height:100%; background:var(--bg); color:var(--text) }
+    html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); color:var(--text) }
     body{ margin:0; font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif }
+
     a{ color:var(--accent); text-decoration:none } a:hover{text-decoration:underline}
+
+    /* Header (same as index) */
+    .tp-header{ position:fixed; inset:0 0 auto 0; height:64px; z-index:1000; background:rgba(11,16,32,.7); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 16px; }
+    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; }
+    .tp-brand img{ height:40px; width:auto; object-fit:contain; vertical-align:middle; }
+    .tp-brand:hover{ color:var(--accent) }
+    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer; }
+    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block; }
+    .tp-nav a:hover{ color:var(--accent) }
+    @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
+    @media (max-width:899px){
+      .tp-nav{ position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
+        display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
+        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease; }
+      .tp-nav a{ margin:4px 0 } .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
+      .tp-brand img{ height:34px; }
+    }
+
+    /* Page layout */
     .wrap{ max-width:980px; margin:0 auto; padding:88px 16px 28px }
-    header.top{ position:fixed; inset:0 0 auto 0; height:64px; display:flex; align-items:center; gap:12px; padding:0 16px; background:rgba(11,16,32,.7); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); z-index:10 }
-    header.top img{ height:34px }
     h1{ font-size:clamp(1.6rem,3.6vw,2.2rem); margin:.2em 0 }
     h2{ font-size:clamp(1.2rem,2.4vw,1.5rem); margin:1.6em 0 .4em; color:#b9e7f5 }
     h3{ font-size:1.08rem; margin:1.2em 0 .3em; color:#8feaff }
@@ -68,18 +86,36 @@
     pre{ background:#0b1220; border:1px solid #1f2937; color:#e5e7eb; border-radius:10px; padding:12px; overflow:auto; white-space:pre; }
     code{ font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-size:.95em }
     .toc a{ display:block; padding:6px 8px; color:#cfe7ff }
-    .badge{ display:inline-flex; gap:8px; align-items:center; padding:6px 10px; border:1px solid #214a57; background:#0d2330; border-radius:999px; color:#bff1ff; font-size:.85rem }
+
+    /* Footer */
     footer{ border-top:1px solid var(--line); margin-top:28px; padding:18px; color:#7c8aa5; text-align:center }
+    footer .links a{ color:#a7b7cc; margin:0 8px; text-decoration:none }
+    footer .links a:hover{ color:#22d3ee }
   </style>
 </head>
 <body>
-  <header class="top">
-    <a href="/index.html" aria-label="TimeProofs home"><img src="/logo%20(1).png" alt="TimeProofs logo"></a>
-    <strong>ProofSpec</strong><span class="muted"> · v1.0.0-draft</span>
+  <!-- Header -->
+  <header class="tp-header">
+    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">
+      <img src="/logo%20(1).png" alt="TimeProofs logo">
+      <span>TimeProofs</span>
+    </a>
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
+      <span aria-hidden="true">☰</span>
+    </button>
+    <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation">
+      <a href="/proofspec.html" aria-current="page">Protocol (ProofSpec)</a>
+      <a href="/use-cases.html">Use Cases</a>
+      <a href="/verify.html">Verify</a>
+      <a href="/docs.html">API Docs</a>
+      <!-- v0.1: Pricing/Roadmap gelés -->
+      <a href="/legal.html">Legal</a>
+      <a href="/privacy.html">Privacy</a>
+    </nav>
   </header>
 
   <main class="wrap" role="main">
-    <p class="badge">Status: Draft for public review · Protocol · Privacy-first · No blockchain</p>
+    <p class="muted">Status: <strong>Draft for public review</strong> · Protocol · Privacy-first · No blockchain</p>
     <h1>ProofSpec — TimeProofs Open Protocol for Digital Proof of Existence</h1>
     <p class="muted">Defines how to create, sign, timestamp, and verify proofs that a specific data artifact existed at a point in time and has not changed since, without exposing the original content.</p>
 
@@ -255,7 +291,7 @@ meta = {"type":"event","source":"tv1","nonce":"N7J7wq"}
 sig  = base64url( HMAC_SHA256(kid="tp-k1", key=K1, msg=hash+"\n"+ts+"\n"+b64url(JSON(meta))) )
 kid  = "tp-k1"</code></pre>
       </div>
-      <p class="muted">Replace with real vectors before <em>release</em>. Provide multiple locales and binary inputs.</p>
+      <p class="muted">Replace with real vectors before release. Provide multiple locales and binary inputs.</p>
     </section>
 
     <section id="faq">
@@ -268,7 +304,7 @@ kid  = "tp-k1"</code></pre>
 
     <section id="license">
       <h2>12. License & Copyright</h2>
-      <p>© 2025 Jeason Bacoul. ProofSpec text licensed under <strong>Apache-2.0</strong> (or MPL-2.0). “TimeProofs” is a trademark. The reference code is open-source under the same family of licenses.</p>
+      <p>© 2025 <strong>TimeProofs</strong>. ProofSpec text licensed under <strong>Apache-2.0</strong> (or MPL-2.0). “TimeProofs” is a trademark. The reference code is open-source under the same family of licenses.</p>
     </section>
 
     <section id="changelog">
@@ -279,8 +315,33 @@ kid  = "tp-k1"</code></pre>
     </section>
   </main>
 
-  <footer>
-    TimeProofs — Reference implementation of the ProofSpec protocol · <a href="/index.html">Home</a> · <a href="/docs.html">API Docs</a> · <a href="/verify.html">Verify</a>
+  <footer role="contentinfo" aria-label="Site footer">
+    TimeProofs — Reference implementation of the ProofSpec protocol.
+    <div class="links" style="margin-top:6px">
+      <a href="/index.html">Home</a> ·
+      <a href="/proofspec.html" aria-current="page">Protocol</a> ·
+      <a href="/use-cases.html">Use Cases</a> ·
+      <a href="/verify.html">Verify</a> ·
+      <a href="/docs.html">API Docs</a> ·
+      <!-- v0.1: Pricing/Roadmap gelés -->
+      <a href="/privacy.html">Privacy</a> ·
+      <a href="/legal.html">Legal</a>
+    </div>
   </footer>
+
+  <!-- Script: burger -->
+  <script defer>
+    (function(){
+      const burger = document.getElementById('tp-burger');
+      const nav = document.getElementById('tp-nav');
+      function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+      function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+      function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
+      if(burger){ burger.addEventListener('click', toggleMenu, { passive:true }); }
+      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
+    })();
+  </script>
 </body>
 </html>
