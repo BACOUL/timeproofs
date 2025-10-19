@@ -69,9 +69,6 @@
     .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0 }
     .sr-only:focus{ position:static; width:auto; height:auto; margin:8px; clip:auto; white-space:normal }
 
-    /* Progress bar */
-    #tp-progress{ position:fixed; top:0; left:0; height:3px; width:0%; background:linear-gradient(90deg,#22d3ee,#22c55e); z-index:1500 }
-
     /* Header */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
@@ -191,7 +188,6 @@
 </head>
 
 <body>
-  <div id="tp-progress" aria-hidden="true"></div>
   <a class="sr-only" href="#main">Skip to content</a>
 
   <!-- Header -->
@@ -239,7 +235,7 @@
       </div>
     </section>
 
-    <!-- Mini demo (read-only) -->
+    <!-- Mini demo -->
     <section class="section" aria-labelledby="demo">
       <h2 id="demo">Verify a hash in 30s</h2>
       <div class="demo" role="region" aria-label="Hash verification demo">
@@ -249,6 +245,9 @@
           <button type="submit" aria-label="Verify hash">Verify</button>
           <small id="hash-help">We never upload your content — only the hash you paste here.</small>
         </form>
+        <p style="text-align:center;margin:10px 0 0">
+          <a class="cta" href="/verify.html" role="button">Try in the browser</a>
+        </p>
         <pre id="verify-output" aria-live="polite" aria-atomic="true" style="min-height:48px"></pre>
       </div>
     </section>
@@ -278,13 +277,13 @@
       <div class="grid two">
         <article class="card">
           <h3>ProofSpec™ v1</h3>
-          <p>Universal JSON proof: <code>{ hash, ts, sig, meta }</code>. Signature: <code>sig = HMAC_SHA256(secret, hash + ts)</code>. ISO-8601 UTC timestamps. No blockchain. Anyone can verify independently.</p>
+          <p>Universal JSON proof: <code>{ hash, ts, sig, meta }</code>. Signature: <code>sig = HMAC_SHA256(secret, hash + ts)</code>. ISO-8601 UTC. No blockchain. Publicly verifiable.</p>
           <p style="margin:.4rem 0 0">📜 <a href="/proofspec.html">Read the ProofSpec v1</a></p>
         </article>
         <article class="card">
           <h3>Why it will be required</h3>
           <ul style="margin:.2rem 0 0; padding-left:1.1rem; color:#dbe7f3">
-            <li>Traceability and integrity of AI outputs</li>
+            <li>Traceability & integrity for AI outputs</li>
             <li>Open public verification for auditors</li>
             <li>Privacy-by-design (hash-only) eases GDPR</li>
             <li>Auditable pipelines for internal/external reviews</li>
@@ -463,56 +462,27 @@ const check = await res.json();</code></pre>
       });
     })();
 
-    // Smooth scroll
+    // Smooth scroll + scroll-spy
     (function(){
-      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       document.querySelectorAll('a[href^="#"]').forEach(a=>{
         a.addEventListener('click', e=>{
-          const id = a.getAttribute('href');
-          if(!id || id === '#') return;
-          const el = document.querySelector(id);
-          if(!el) return;
-          e.preventDefault();
-          el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block:'start' });
-          history.replaceState(null, '', id);
-          if (window.matchMedia('(max-width: 899px)').matches) {
-            document.getElementById('tp-burger')?.click();
-          }
-        }, { passive:false });
+          const id=a.getAttribute('href'); const el=document.querySelector(id);
+          if(!el) return; e.preventDefault();
+          el.scrollIntoView({behavior: reduce?'auto':'smooth', block:'start'});
+          history.replaceState(null,'',id);
+          if (matchMedia('(max-width: 899px)').matches) document.getElementById('tp-burger')?.click();
+        }, {passive:false});
       });
-    })();
-
-    // Scroll progress
-    (function(){
-      const bar = document.getElementById('tp-progress');
-      const onScroll = () => {
-        const h = document.documentElement;
-        const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight);
-        bar.style.width = (scrolled * 100).toFixed(2) + '%';
-      };
-      document.addEventListener('scroll', onScroll, { passive:true });
-      onScroll();
-    })();
-
-    // Scroll-spy
-    (function(){
-      const links = Array.from(document.querySelectorAll('#tp-nav a[href^="#"]'));
-      const map = new Map(links.map(a => [a.getAttribute('href'), a]));
-      const opts = { rootMargin: '-40% 0px -55% 0px', threshold: 0 };
-      const io = new IntersectionObserver(entries=>{
-        entries.forEach(entry=>{
-          const id = '#'+entry.target.id;
-          const link = map.get(id);
-          if(!link) return;
-          if(entry.isIntersecting){
-            links.forEach(l=>{ l.classList.remove('active'); l.removeAttribute('aria-current'); });
-            link.classList.add('active');
-            link.setAttribute('aria-current','page');
-          }
+      const links=[...document.querySelectorAll('#tp-nav a[href^="#"]')];
+      const map=new Map(links.map(a=>[a.getAttribute('href'),a]));
+      const io=new IntersectionObserver(es=>{
+        es.forEach(e=>{
+          const a=map.get('#'+e.target.id); if(!a) return;
+          if(e.isIntersecting){ links.forEach(x=>{x.classList.remove('active'); x.removeAttribute('aria-current');}); a.classList.add('active'); a.setAttribute('aria-current','page'); }
         });
-      }, opts);
-      ['why','standard','how','compare','security','faq']
-        .forEach(id => { const el = document.getElementById(id); if(el) io.observe(el); });
+      },{rootMargin:'-40% 0px -55% 0px', threshold:0});
+      ['why','standard','how','compare','security','faq'].forEach(id=>{const el=document.getElementById(id); if(el) io.observe(el);});
     })();
   </script>
 </body>
