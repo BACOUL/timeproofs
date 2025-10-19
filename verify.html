@@ -4,6 +4,7 @@
   <!-- Core -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
   <title>Verify & Create Proof — TimeProofs</title>
   <meta name="description" content="Verify or create cryptographic proofs of existence. Hash locally, timestamp via API, verify publicly — private, instant, edge-native." />
   <meta name="robots" content="index,follow" />
@@ -75,6 +76,7 @@
     .tp-nav a{
       color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block;
     }
+    .tp-nav a[aria-current="page"]{ color:#9beefb }
     .tp-nav a:hover{ color:var(--accent) }
     @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width:899px){
@@ -164,7 +166,7 @@
 
     <div class="grid">
       <!-- CREATE PROOF -->
-      <section class="card" id="panel-create" role="tabpanel" aria-labelledby="tab-create">
+      <section class="card" id="panel-create" role="tabpanel" aria-labelledby="tab-create" aria-busy="false">
         <label>Choose input</label>
         <div class="row" role="group" aria-label="Input mode">
           <button class="btn ghost" id="choose-text" type="button">Text</button>
@@ -174,7 +176,7 @@
 
         <div id="input-text" style="margin-top:14px;">
           <label for="text">Text to hash (SHA-256 runs locally)</label>
-          <textarea id="text" placeholder="Paste or type your text here..." spellcheck="false"></textarea>
+          <textarea id="text" placeholder="Paste or type your text here..." spellcheck="false" enterkeyhint="done"></textarea>
           <div id="hash-preview-text" class="monosmall mutedline" aria-live="polite"></div>
         </div>
 
@@ -189,7 +191,12 @@
 
         <div id="input-hash" style="display:none; margin-top:14px;">
           <label for="raw-hash">Existing SHA-256 hash (hex)</label>
-          <input type="text" id="raw-hash" placeholder="e3b0c44298fc1c149a..." inputmode="latin" autocomplete="off" spellcheck="false" />
+          <input
+            type="text" id="raw-hash"
+            placeholder="e3b0c44298fc1c149a..." inputmode="latin" autocapitalize="off" autocomplete="off" spellcheck="false"
+            pattern="[A-Fa-f0-9]{64}" aria-describedby="raw-hint" enterkeyhint="done"
+          />
+          <p id="raw-hint" class="hint">64 hex characters, case-insensitive.</p>
           <div id="hash-preview-raw" class="monosmall mutedline" aria-live="polite"></div>
         </div>
 
@@ -205,32 +212,37 @@
         </div>
 
         <div class="row" style="margin-top:16px;">
-          <button class="btn" id="btn-create" type="button">Create Proof</button>
+          <button class="btn" id="btn-create" type="button" aria-controls="create-output create-status">Create Proof</button>
           <span class="hint">Outputs: hash, timestamp, signature, verify URL</span>
         </div>
 
         <div id="create-status" style="margin-top:12px;" aria-live="polite"></div>
         <pre id="create-output" style="margin-top:12px;" aria-live="polite"></pre>
         <div class="actions" id="create-actions" style="display:none;">
-          <a class="btn ghost" id="open-verify-link" href="#" target="_blank" rel="noopener" style="display:none">Open verify link</a>
-          <button class="btn ghost" id="copy-create-json" type="button" disabled>Copy JSON</button>
-          <button class="btn ghost" id="copy-create-curl" type="button" disabled>Copy cURL</button>
+          <a class="btn ghost" id="open-verify-link" href="#" target="_blank" rel="noopener noreferrer" style="display:none">Open verify link</a>
+          <button class="btn ghost" id="copy-create-json" type="button" disabled aria-label="Copy create JSON">Copy JSON</button>
+          <button class="btn ghost" id="copy-create-curl" type="button" disabled aria-label="Copy create cURL">Copy cURL</button>
         </div>
       </section>
 
       <!-- VERIFY PROOF -->
-      <section class="card" id="panel-verify" role="tabpanel" aria-labelledby="tab-verify" style="display:none;">
+      <section class="card" id="panel-verify" role="tabpanel" aria-labelledby="tab-verify" aria-busy="false" style="display:none;">
         <label for="verify-hash">Hash to verify (SHA-256, hex)</label>
-        <input type="text" id="verify-hash" placeholder="Paste an existing hash" inputmode="latin" autocomplete="off" spellcheck="false" />
+        <input
+          type="text" id="verify-hash"
+          placeholder="Paste an existing hash"
+          inputmode="latin" autocapitalize="off" autocomplete="off" spellcheck="false"
+          pattern="[A-Fa-f0-9]{64}" enterkeyhint="go"
+        />
         <div class="row" style="margin-top:12px;">
-          <button class="btn" id="btn-verify" type="button">Verify</button>
+          <button class="btn" id="btn-verify" type="button" aria-controls="verify-output verify-status">Verify</button>
           <span class="hint">Checks existence, timestamp, and server signature.</span>
         </div>
         <div id="verify-status" style="margin-top:12px;" aria-live="polite"></div>
         <pre id="verify-output" style="margin-top:12px;" aria-live="polite"></pre>
         <div class="actions" id="verify-actions" style="display:none;">
-          <button class="btn ghost" id="copy-verify-json" type="button" disabled>Copy JSON</button>
-          <button class="btn ghost" id="copy-verify-curl" type="button" disabled>Copy cURL</button>
+          <button class="btn ghost" id="copy-verify-json" type="button" disabled aria-label="Copy verify JSON">Copy JSON</button>
+          <button class="btn ghost" id="copy-verify-curl" type="button" disabled aria-label="Copy verify cURL">Copy cURL</button>
         </div>
       </section>
     </div>
@@ -252,9 +264,29 @@
       window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
     })();
 
+    // Prevent accidental full-page file drop
+    (function(){
+      ['dragover','drop'].forEach(type=>{
+        document.addEventListener(type, e=>{
+          if (!e.target || !(e.target.closest && e.target.closest('#drop'))) {
+            e.preventDefault(); e.stopPropagation();
+          }
+        });
+      });
+    })();
+
     // ===== Config =====
     const API_BASE = "https://timeproofs-api.jeason-bacoul.workers.dev/api"; // swap to https://api.timeproofs.io at launch
     const MAX_FILE_BYTES = 50 * 1024 * 1024; // 50 MB
+    const REQ_TIMEOUT_MS = 15000;
+
+    // Abortable fetch with timeout
+    async function fetchWithTimeout(url, options={}){
+      const ctrl = new AbortController();
+      const t = setTimeout(()=>ctrl.abort(), REQ_TIMEOUT_MS);
+      try { return await fetch(url, { ...options, signal: ctrl.signal }); }
+      finally { clearTimeout(t); }
+    }
 
     // ===== Tabs =====
     const tabCreate = document.getElementById('tab-create');
@@ -353,6 +385,9 @@
       hashPrevRaw.textContent = v ? `Hash: ${v}` : '';
     });
 
+    // Small helper to unify failures and keep buttons state consistent
+    function fail(msg){ throw new Error(msg); }
+
     // ===== Create proof =====
     const btnCreate = document.getElementById('btn-create');
     const outCreate = document.getElementById('create-output');
@@ -361,6 +396,8 @@
     const openVerifyLink = document.getElementById('open-verify-link');
     const copyCreateJSON = document.getElementById('copy-create-json');
     const copyCreateCURL = document.getElementById('copy-create-curl');
+
+    function setBusy(el, busy){ el?.setAttribute('aria-busy', busy ? 'true' : 'false'); }
 
     function enableCreateActions(data){
       createActions.style.display='flex';
@@ -376,7 +413,7 @@
 
     btnCreate.onclick = async () => {
       if (btnCreate.disabled) return;
-      btnCreate.disabled = true;
+      btnCreate.disabled = true; setBusy(panelCreate, true);
       outCreate.textContent = ''; statusCreate.innerHTML = ''; createActions.style.display='none';
       openVerifyLink.style.display='none'; copyCreateJSON.disabled = true; copyCreateCURL.disabled = true;
 
@@ -384,36 +421,36 @@
         let hash = '';
         if (inputText.style.display !== 'none') {
           const text = textArea.value || '';
-          if (!text) { alert('Enter some text to hash.'); return; }
+          if (!text) fail('Enter some text to hash.');
           hash = await sha256HexFromText(text);
         } else if (inputFile.style.display !== 'none') {
           const file = fileInput.files?.[0];
-          if (!file) { alert('Select a file first.'); return; }
-          if (file.size > MAX_FILE_BYTES) { alert('File too large (max 50 MB).'); return; }
+          if (!file) fail('Select a file first.');
+          if (file.size > MAX_FILE_BYTES) fail('File too large (max 50 MB).');
           hash = await sha256HexFromFile(file);
         } else {
           hash = (rawHashEl.value || '').trim();
-          if (!/^[a-f0-9]{64}$/i.test(hash)) { alert('Enter a valid 64-hex SHA-256 hash.'); return; }
+          if (!/^[a-f0-9]{64}$/i.test(hash)) fail('Enter a valid 64-hex SHA-256 hash.');
           hash = hash.toLowerCase();
         }
 
         const type = (document.getElementById('type').value || 'event').trim();
-        if (type.length > 32) { alert('Type is too long (max 32 chars).'); return; }
+        if (type.length > 32) fail('Type is too long (max 32 chars).');
 
         let meta = {};
         const metaRaw = (document.getElementById('meta').value || '').trim();
         if (metaRaw) {
-          if (metaRaw.length > 1024) { alert('Meta JSON too large (max 1 KB).'); return; }
-          try { meta = JSON.parse(metaRaw); } catch { alert('Meta must be valid JSON.'); return; }
+          if (metaRaw.length > 1024) fail('Meta JSON too large (max 1 KB).');
+          try { meta = JSON.parse(metaRaw); } catch { fail('Meta must be valid JSON.'); }
         }
 
-        const r = await fetch(`${API_BASE}/timestamp`, {
+        const r = await fetchWithTimeout(`${API_BASE}/timestamp`, {
           method:'POST',
           headers:{ 'Content-Type':'application/json' },
           body: JSON.stringify({ hash, type, meta })
         });
-        const j = await r.json();
-        if (!r.ok || j.error) throw new Error(j.error || `Request failed (${r.status})`);
+        const j = await r.json().catch(()=> ({}));
+        if (!r.ok || j.error) fail(j.error || `Request failed (${r.status})`);
 
         statusCreate.innerHTML = `<span class="pill ok" role="status">✅ Proof created</span>`;
         outCreate.textContent = JSON.stringify(j, null, 2);
@@ -427,7 +464,7 @@
       } catch(e){
         statusCreate.innerHTML = `<span class="pill bad" role="alert">❌ ${String(e.message || e)}</span>`;
       } finally {
-        btnCreate.disabled = false;
+        btnCreate.disabled = false; setBusy(panelCreate, false);
       }
     };
 
@@ -450,15 +487,17 @@
 
     btnVerify.onclick = async () => {
       if (btnVerify.disabled) return;
-      btnVerify.disabled = true;
+      btnVerify.disabled = true; setBusy(panelVerify, true);
       outVerify.textContent=''; statusVerify.innerHTML=''; verifyActions.style.display='none';
       copyVerifyJSON.disabled = true; copyVerifyCURL.disabled = true;
 
-      const hash = (document.getElementById('verify-hash').value || '').trim().toLowerCase();
-      if (!/^[a-f0-9]{64}$/i.test(hash)) { alert('Paste a valid 64-hex SHA-256 hash.'); btnVerify.disabled=false; return; }
       try {
-        const r = await fetch(`${API_BASE}/verify?hash=${encodeURIComponent(hash)}`);
-        const j = await r.json();
+        const hash = (document.getElementById('verify-hash').value || '').trim().toLowerCase();
+        if (!/^[a-f0-9]{64}$/i.test(hash)) fail('Paste a valid 64-hex SHA-256 hash.');
+
+        const r = await fetchWithTimeout(`${API_BASE}/verify?hash=${encodeURIComponent(hash)}`);
+        const j = await r.json().catch(()=> ({}));
+
         if (j.found === false) {
           statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Not found</span>`;
         } else if (j.ok === true || j.found === true) {
@@ -478,7 +517,7 @@
       } catch(e){
         statusVerify.innerHTML = `<span class="pill bad" role="alert">❌ ${String(e.message || e)}</span>`;
       } finally {
-        btnVerify.disabled = false;
+        btnVerify.disabled = false; setBusy(panelVerify, false);
       }
     };
 
