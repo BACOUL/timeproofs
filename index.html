@@ -4,15 +4,19 @@
   <!-- Core -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="dark light" />
   <title>TimeProofs — The Open Standard for Digital Proof of Existence</title>
   <meta name="description" content="TimeProofs is the open, privacy-first protocol for digital proof of existence. Hash locally, timestamp instantly, verify publicly — for AI, data, and every digital creation." />
   <meta name="robots" content="index,follow" />
   <meta name="theme-color" content="#0b1020" />
   <link rel="canonical" href="https://timeproofs.io/" />
+  <link rel="alternate" type="application/rss+xml" title="TimeProofs RSS" href="/rss.xml" />
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
 
-  <!-- Perf: preconnect to API -->
+  <!-- Perf -->
   <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin />
   <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev" />
+  <link rel="preload" as="image" href="/logo%20(1).png" imagesrcset="/logo%20(1).png 1x" />
 
   <!-- Icons / Manifest -->
   <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -35,7 +39,7 @@
   <meta name="twitter:description" content="Hash locally. Timestamp instantly. Verify publicly. For AI, data, and every digital creation." />
   <meta name="twitter:image" content="https://timeproofs.io/og.png" />
 
-  <!-- JSON-LD (Organization + Website) -->
+  <!-- JSON-LD -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -70,13 +74,18 @@
     }
     a{ color:var(--accent); text-decoration:none } a:hover{ text-decoration:underline }
 
+    /* Skip link */
+    .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
+    .skip:focus{ position:fixed; left:12px; top:12px; width:auto; height:auto; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
+
     /* Header */
     .tp-header{ position:fixed; inset:0 0 auto 0; height:64px; z-index:1000; background:rgba(11,16,32,.7); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 16px; }
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; }
-    .tp-brand img{ height:40px; width:auto; object-fit:contain; vertical-align:middle; }
+    .tp-brand img{ height:40px; width:40px; object-fit:contain; vertical-align:middle }
     .tp-brand:hover{ color:var(--accent) }
     .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer; }
-    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block; }
+    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block; text-decoration:none }
+    .tp-nav a[aria-current="page"]{ color:#9beefb }
     .tp-nav a:hover{ color:var(--accent) }
     @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width:899px){
@@ -84,7 +93,7 @@
         display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
         transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease; }
       .tp-nav a{ margin:4px 0 } .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
-      .tp-brand img{ height:34px; }
+      .tp-brand img{ height:34px; width:34px }
     }
 
     /* Layout */
@@ -117,14 +126,18 @@
     footer{ border-top:1px solid var(--line); margin-top:38px; padding:18px; color:#7c8aa5; text-align:center }
     footer .links a{ color:#a7b7cc; margin:0 8px; text-decoration:none }
     footer .links a:hover{ color:#22d3ee }
+
+    @media (prefers-reduced-motion: reduce){ *{ transition:none !important; animation:none !important } }
   </style>
 </head>
 
 <body>
+  <a href="#main" class="skip">Skip to main content</a>
+
   <!-- Header -->
-  <header class="tp-header">
+  <header class="tp-header" role="banner">
     <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">
-      <img src="/logo%20(1).png" alt="TimeProofs logo">
+      <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high" />
       <span>TimeProofs</span>
     </a>
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
@@ -135,17 +148,16 @@
       <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html">Verify</a>
       <a href="/docs.html">API Docs</a>
-      <!-- v0.1: Pricing/Roadmap gelés -->
       <a href="/legal.html">Legal</a>
       <a href="/privacy.html">Privacy</a>
     </nav>
   </header>
 
   <!-- Main -->
-  <main class="wrap" role="main">
+  <main id="main" class="wrap" role="main">
     <!-- HERO -->
     <section class="hero" aria-labelledby="hero-title">
-      <div class="label">🔐 Privacy-first • ⚡ Edge-native • 🌍 Open Protocol</div>
+      <div class="label" role="note">🔐 Privacy-first • ⚡ Edge-native • 🌍 Open Protocol</div>
       <h1 id="hero-title" class="title">The Open Standard for Digital Proof of Existence</h1>
       <p class="subtitle">
         A public specification (<strong>ProofSpec</strong>) and a simple API to prove <strong>when</strong> something existed and that it <strong>hasn’t changed</strong>.
@@ -156,7 +168,7 @@
         <a class="cta secondary" href="/verify.html">Try the API</a>
       </div>
       <div class="cta-wrap" style="margin-top:14px; color:#a3b7c7;">
-        <span>✓ Hash-only</span><span>•</span><span>✓ Signed timestamp (HMAC-SHA256)</span><span>•</span><span>✓ Public verification</span>
+        <span>✓ Hash-only</span><span aria-hidden="true">•</span><span>✓ Signed timestamp (HMAC-SHA256)</span><span aria-hidden="true">•</span><span>✓ Public verification</span>
       </div>
     </section>
 
@@ -347,7 +359,6 @@ const check = await res.json();</code></pre>
       <a href="/use-cases.html">Use Cases</a> •
       <a href="/verify.html">Verify</a> •
       <a href="/docs.html">API Docs</a> •
-      <!-- v0.1: Pricing/Roadmap gelés -->
       <a href="/privacy.html">Privacy</a> •
       <a href="/legal.html">Legal</a>
     </div>
@@ -365,7 +376,14 @@ const check = await res.json();</code></pre>
       document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
       document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
       window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
+
+      // Noscript fallback hint
+      if (!('querySelector' in document)) {
+        var warn = document.createElement('p');
+        warn.textContent = 'JavaScript is required for the menu.';
+        document.body.prepend(warn);
+      }
     })();
   </script>
 </body>
-      </html>
+        </html>
