@@ -51,13 +51,13 @@
   <style>
     :root{ --bg:#0b1020; --panel:#0f172a; --line:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#22e6ff; --ok:#22c55e; --warn:#eab308 }
     *{ box-sizing:border-box }
-    html{ scroll-padding-top:76px } /* compense le header fixe */
+    html{ scroll-padding-top:76px }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg) }
     body{
       margin:0;
       background:
-        radial-gradient(1200px 500px at 70% -10%, rgba(34,211,238,.12), transparent 60%),
-        var(--bg);
+        radial-gradient(900px 380px at 50% 0%, rgba(34,230,255,.14), transparent 60%),
+        #0b1020;
       color:var(--text);
       font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
@@ -74,8 +74,10 @@
     @media (prefers-reduced-motion: reduce){
       *{ animation:none!important; transition:none!important }
     }
-    .reveal{ opacity:0; transform:translateY(16px); will-change:transform,opacity }
-    .reveal.in{ opacity:1; transform:none; transition:transform .5s ease, opacity .5s ease }
+    /* Fallback no-JS: visible. Avec .js, on active l’animation. */
+    .reveal{opacity:1;transform:none}
+    .js .reveal{opacity:0;transform:translateY(16px);will-change:transform,opacity}
+    .js .reveal.in{opacity:1;transform:none;transition:transform .5s ease,opacity .5s ease}
     .grid .card.reveal{ transition-duration:.55s }
     .grid .card.reveal:nth-child(2){ transition-delay:.07s }
     .grid .card.reveal:nth-child(3){ transition-delay:.14s }
@@ -84,7 +86,7 @@
     .cta:hover{ transform:translateY(-2px) scale(1.02); box-shadow:0 14px 36px rgba(34,211,238,.22) }
     .cta:active{ transform:translateY(0) scale(.995) }
     .section h2.reveal{ transform:translateY(10px); letter-spacing:.3px }
-    .section h2.reveal.in{ transform:none }
+    .js .section h2.reveal.in{ transform:none }
     .section:target{ outline:2px solid rgba(34,230,255,.25); outline-offset:6px; border-radius:14px }
 
     /* Header */
@@ -214,6 +216,9 @@
     ]
   }
   </script>
+
+  <!-- Active les animations (ajoute la classe .js) -->
+  <script>document.documentElement.classList.add('js');</script>
 </head>
 
 <body>
@@ -513,7 +518,7 @@ const check = await res.json();</code></pre>
       });
     })();
 
-    // Scroll-spy stable (debounce) + header shadow
+    // Scroll-spy stable + header shadow
     (function(){
       const links=[...document.querySelectorAll('#tp-nav a[href^="#"]')];
       const map=new Map(links.map(a=>[a.getAttribute('href'),a]));
@@ -542,19 +547,23 @@ const check = await res.json();</code></pre>
       document.addEventListener('scroll', onScroll, {passive:true}); onScroll();
     })();
 
-    // Reveal on scroll
+    // Reveal on scroll (robuste) + fallback total
     (function(){
-      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      const els=[...document.querySelectorAll('.reveal')];
-      if(!els.length) return;
-      const io=new IntersectionObserver((entries)=>{
-        entries.forEach(e=>{
-          if(e.isIntersecting){
-            e.target.classList.add('in'); io.unobserve(e.target);
-          }
-        });
-      },{ rootMargin:'-10% 0px -10% 0px', threshold:0.01 });
-      els.forEach(el=>io.observe(el));
+      try{
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const els=[...document.querySelectorAll('.reveal')];
+        if(!els.length) return;
+        // force le hero visible immédiatement
+        document.querySelectorAll('.hero .reveal').forEach(el=>el.classList.add('in'));
+        const io=new IntersectionObserver((entries)=>{
+          entries.forEach(e=>{
+            if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+          });
+        },{ rootMargin:'-10% 0px -10% 0px', threshold:0.01 });
+        els.forEach(el=>{ if(!el.classList.contains('in')) io.observe(el); });
+      }catch(e){
+        document.querySelectorAll('.reveal').forEach(el=>{ el.style.opacity=1; el.style.transform='none'; });
+      }
     })();
   </script>
 </body>
