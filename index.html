@@ -43,21 +43,13 @@
 
     /* Header */
     .tp-header{
-      position:fixed; inset:0 0 auto 0; height:70px; z-index:1000;
-      background:rgba(11,16,32,.75); backdrop-filter:blur(10px);
+      position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
+      background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
       border-bottom:1px solid var(--line);
-      display:flex; align-items:center; justify-content:space-between; padding:0 18px;
+      display:flex; align-items:center; justify-content:space-between; padding:0 16px;
     }
-    .tp-brand{
-      display:flex; align-items:center; gap:10px;
-      color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.2rem;
-    }
-    .tp-brand img{
-      height:42px; width:auto; object-fit:contain;
-      filter:drop-shadow(0 0 6px rgba(34,211,238,0.25));
-    }
+    .tp-brand{ color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem }
     .tp-brand:hover{ color:var(--accent) }
-
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
       border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
@@ -73,19 +65,18 @@
     }
     @media (max-width:899px){
       .tp-nav{
-        position:fixed; top:70px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
+        position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
         display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
         transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
       }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
-      .tp-brand img{ height:36px; }
     }
 
-    /* Layout (inchangé) */
+    /* Layout */
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
     .hero{
-      min-height:calc(100svh - 70px - 90px);
+      min-height:calc(100svh - 64px - 90px);
       padding-top:92px; padding-bottom:28px;
       display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
     }
@@ -139,10 +130,7 @@
 <body>
   <!-- Header -->
   <header class="tp-header">
-    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">
-      <img src="/logo.png" alt="TimeProofs Logo" />
-      <span>TimeProofs</span>
-    </a>
+    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">TimeProofs</a>
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
       <span aria-hidden="true">☰</span>
     </button>
@@ -158,7 +146,95 @@
     </nav>
   </header>
 
-  <!-- le reste du fichier reste inchangé -->
-  <!-- (hero, sections, footer, script burger) -->
+  <!-- Main -->
+  <main class="wrap" role="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="label">🔐 Privacy-first • ⚡ Edge-native • 🧠 AI-ready</div>
+      <h1 id="hero-title" class="title">The universal proof layer for AI and developers.</h1>
+      <p class="subtitle">
+        Hash locally. Timestamp via API. Verify publicly.<br>
+        No blockchain, no gas — just cryptographic truth.
+      </p>
+      <div class="cta-wrap" role="group" aria-label="Primary actions">
+        <a class="cta" href="/verify.html">Try the API</a>
+        <a class="cta secondary" href="/docs.html">Read the Docs</a>
+      </div>
+      <div class="cta-wrap" style="margin-top:14px; color:#a3b7c7;">
+        <span>✓ Hash-only (content stays local)</span>
+        <span>•</span>
+        <span>✓ HMAC-SHA256 signature</span>
+        <span>•</span>
+        <span>✓ Public verification endpoint</span>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="why">
+      <h2 id="why">Why developers choose TimeProofs</h2>
+      <div class="grid three">
+        <article class="card"><h3>Instant Proof of Existence</h3><p>Timestamp any SHA-256 hash in milliseconds. Zero setup, zero tokens, predictable cost.</p></article>
+        <article class="card"><h3>AI & Agents First</h3><p>Attach proofs to prompts, outputs, and workflows to build auditable pipelines in minutes.</p></article>
+        <article class="card"><h3>Private by Design</h3><p>Only hashes are sent and stored. Your original content never leaves your device.</p></article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="how">
+      <h2 id="how">How it works</h2>
+      <div class="grid two">
+        <article class="card">
+          <h3>1) Hash locally</h3>
+<pre><code>const buf = new TextEncoder().encode(text);
+const digest = await crypto.subtle.digest('SHA-256', buf);
+const hash = [...new Uint8Array(digest)]
+  .map(b => b.toString(16).padStart(2,'0')).join('');</code></pre>
+        </article>
+        <article class="card">
+          <h3>2) Timestamp</h3>
+<pre><code>const r = await fetch("https://timeproofs-api.jeason-bacoul.workers.dev/api/timestamp", {
+  method:"POST", headers:{ "Content-Type":"application/json" },
+  body: JSON.stringify({ hash, type:"event", meta:{ source:"web" } })
+});
+const proof = await r.json();</code></pre>
+        </article>
+        <article class="card">
+          <h3>3) Verify anywhere</h3>
+<pre><code>const res = await fetch(
+  "https://timeproofs-api.jeason-bacoul.workers.dev/api/verify?hash="+hash
+);
+const check = await res.json();</code></pre>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer role="contentinfo" aria-label="Site footer">
+    © 2025 TimeProofs — Proof of Existence. For Everything.
+    <div class="links" style="margin-top:6px">
+      <a href="/index.html" aria-current="page">Home</a> •
+      <a href="/about.html">About</a> •
+      <a href="/use-cases.html">Use Cases</a> •
+      <a href="/verify.html">Verify</a> •
+      <a href="/docs.html">Docs</a> •
+      <a href="/pricing.html">Pricing</a> •
+      <a href="/roadmap.html">Roadmap</a> •
+      <a href="/privacy.html">Privacy</a> •
+      <a href="/legal.html">Legal</a>
+    </div>
+  </footer>
+
+  <!-- Script: burger -->
+  <script>
+    (function(){
+      const burger = document.getElementById('tp-burger');
+      const nav = document.getElementById('tp-nav');
+      function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+      function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+      function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
+      burger.addEventListener('click', toggleMenu, { passive:true });
+      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
+    })();
+  </script>
 </body>
 </html>
