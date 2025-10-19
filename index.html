@@ -43,13 +43,21 @@
 
     /* Header */
     .tp-header{
-      position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
-      background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
+      position:fixed; inset:0 0 auto 0; height:70px; z-index:1000;
+      background:rgba(11,16,32,.75); backdrop-filter:blur(10px);
       border-bottom:1px solid var(--line);
-      display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+      display:flex; align-items:center; justify-content:space-between; padding:0 18px;
     }
-    .tp-brand{ color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem }
+    .tp-brand{
+      display:flex; align-items:center; gap:10px;
+      color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.2rem;
+    }
+    .tp-brand img{
+      height:42px; width:auto; object-fit:contain;
+      filter:drop-shadow(0 0 6px rgba(34,211,238,0.25));
+    }
     .tp-brand:hover{ color:var(--accent) }
+
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
       border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
@@ -65,18 +73,19 @@
     }
     @media (max-width:899px){
       .tp-nav{
-        position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
+        position:fixed; top:70px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
         display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
         transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
       }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
+      .tp-brand img{ height:36px; }
     }
 
-    /* Layout */
+    /* Layout (inchangé) */
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
     .hero{
-      min-height:calc(100svh - 64px - 90px);
+      min-height:calc(100svh - 70px - 90px);
       padding-top:92px; padding-bottom:28px;
       display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
     }
@@ -126,10 +135,14 @@
     footer .links a:hover{ color:#22d3ee }
   </style>
 </head>
+
 <body>
   <!-- Header -->
   <header class="tp-header">
-    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">TimeProofs</a>
+    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">
+      <img src="/logo.png" alt="TimeProofs Logo" />
+      <span>TimeProofs</span>
+    </a>
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
       <span aria-hidden="true">☰</span>
     </button>
@@ -144,3 +157,8 @@
       <a href="/privacy.html">Privacy</a>
     </nav>
   </header>
+
+  <!-- le reste du fichier reste inchangé -->
+  <!-- (hero, sections, footer, script burger) -->
+</body>
+</html>
