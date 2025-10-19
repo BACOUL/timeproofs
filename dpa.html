@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Core -->
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <title>Data Processing Addendum (DPA) — TimeProofs</title>
+  <meta name="description" content="Data Processing Addendum for TimeProofs. Roles, processing details, security, subprocessors, transfers, and deletion aligned with GDPR."/>
+  <meta name="robots" content="index,follow"/>
+  <meta name="theme-color" content="#0b1020"/>
+  <link rel="canonical" href="https://timeproofs.io/dpa.html"/>
+
+  <!-- Icons / Manifest -->
+  <link rel="icon" href="/favicon.ico" sizes="any"/>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+  <link rel="manifest" href="/site.webmanifest"/>
+
+  <!-- Social -->
+  <meta property="og:title" content="Data Processing Addendum (DPA) — TimeProofs"/>
+  <meta property="og:description" content="GDPR-aligned DPA for TimeProofs. Hash-only processing, security, subprocessors, SCCs, and data subject requests."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://timeproofs.io/dpa.html"/>
+  <meta property="og:image" content="https://timeproofs.io/og.png"/>
+  <meta property="og:site_name" content="TimeProofs"/>
+  <meta property="og:locale" content="en_US"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Data Processing Addendum (DPA) — TimeProofs"/>
+  <meta name="twitter:description" content="GDPR-aligned DPA for TimeProofs."/>
+  <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
+
+  <style>
+    :root{ --bg:#0b1020; --panel:#0f172a; --line:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee }
+    *{ box-sizing:border-box }
+    html,body{ margin:0; height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); color:var(--text) }
+    body{ font:16px/1.7 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif }
+    a{ color:var(--accent); text-decoration:none } a:hover{ text-decoration:underline }
+    code{ background:#1e293b; color:#f8fafc; padding:2px 6px; border-radius:6px; font-size:.92rem }
+
+    /* Header */
+    .tp-header{ position:fixed; inset:0 0 auto 0; height:64px; z-index:1000; background:rgba(11,16,32,.7); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 16px; }
+    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none }
+    .tp-brand img{ height:34px; width:auto; object-fit:contain; vertical-align:middle }
+    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer }
+    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block; text-decoration:none }
+    .tp-nav a[aria-current="page"]{ color:#9beefb }
+    @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
+    @media (max-width:899px){
+      .tp-nav{ position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45); transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease }
+      .tp-nav a{ margin:4px 0 } .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
+    }
+
+    /* Layout */
+    main{ padding:96px 20px 40px; max-width:980px; margin:0 auto }
+    h1{ font-size:2rem; margin:.2em 0 .4em }
+    h2{ color:#b9e7f5; font-size:1.25rem; margin:1.2em 0 .5em }
+    h3{ color:#aee9f7; font-size:1.05rem; margin:1em 0 .3em }
+    p.muted, .muted{ color:var(--muted) }
+    .card{ background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:18px; margin:14px 0 }
+    ul{ margin:.4em 0 .8em; padding-left:20px }
+    li{ margin:.25em 0 }
+
+    table{ width:100%; border-collapse:collapse; margin:.5rem 0 0 }
+    th,td{ border:1px solid #334155; padding:8px; text-align:left; vertical-align:top }
+    th{ background:#0b1220; color:#e5e7eb }
+
+    footer{ border-top:1px solid var(--line); margin-top:40px; padding:20px; color:#7c8aa5; text-align:center }
+    footer a{ color:#a7b7cc; text-decoration:none; margin:0 8px } footer a:hover{ color:var(--accent) }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="tp-header" role="navigation" aria-label="Main">
+    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">
+      <img src="/logo%20(1).png" alt="TimeProofs logo"/><span>TimeProofs</span>
+    </a>
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
+    <nav id="tp-nav" class="tp-nav" data-state="closed">
+      <a href="/proofspec.html">Protocol (ProofSpec)</a>
+      <a href="/use-cases.html">Use Cases</a>
+      <a href="/verify.html">Verify</a>
+      <a href="/docs.html">API Docs</a>
+      <a href="/legal.html">Legal</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/dpa.html" aria-current="page">DPA</a>
+    </nav>
+  </header>
+
+  <main role="main">
+    <h1>Data Processing Addendum (DPA)</h1>
+    <p class="muted">Version: <strong>v0.1-draft</strong> · Effective: <strong>2025-10-18</strong> · Last updated: <strong>2025-10-18</strong></p>
+    <p class="muted">This DPA forms part of the <a href="/legal.html">Terms</a> and applies to processing of personal data under GDPR/UK GDPR and comparable laws.</p>
+
+    <section class="card" aria-labelledby="roles">
+      <h2 id="roles">1) Roles and scope</h2>
+      <ul>
+        <li><strong>Customer</strong> is the <em>controller</em>.</li>
+        <li><strong>TimeProofs</strong> is the <em>processor</em> for in-scope personal data.</li>
+        <li><strong>Design note:</strong> The Service is <em>hash-only</em>. Do not send personal data in <code>meta</code>. If Customer includes personal data in <code>meta</code> despite guidance, this DPA governs such processing.</li>
+      </ul>
+    </section>
+
+    <section class="card" aria-labelledby="instructions">
+      <h2 id="instructions">2) Instructions</h2>
+      <p>TimeProofs processes personal data solely:</p>
+      <ul>
+        <li>to provide timestamp and verification services as documented;</li>
+        <li>per written lawful instructions from Customer; and</li>
+        <li>to comply with law, informing Customer unless prohibited.</li>
+      </ul>
+    </section>
+
+    <section class="card" aria-labelledby="details">
+      <h2 id="details">3) Processing details</h2>
+      <table role="table" aria-label="Processing details">
+        <tr><th>Subject matter</th><td>Provision of digital proof-of-existence services.</td></tr>
+        <tr><th>Duration</th><td>Term of the Agreement. Proofs retained per <a href="/privacy.html">Privacy Policy</a>.</td></tr>
+        <tr><th>Nature</th><td>Storing SHA-256 hash, timestamp, signature, optional small <code>meta</code>; public verification by hash.</td></tr>
+        <tr><th>Purpose</th><td>Integrity, existence attestation, abuse prevention, reliability.</td></tr>
+        <tr><th>Data categories</th><td>By design none. If Customer includes personal data in <code>meta</code>, categories are determined by Customer.</td></tr>
+        <tr><th>Data subjects</th><td>Determined by Customer.</td></tr>
+      </table>
+    </section>
+
+    <section class="card" aria-labelledby="security">
+      <h2 id="security">4) Security</h2>
+      <ul>
+        <li>TLS in transit; HMAC-SHA256 server signatures; key rotation.</li>
+        <li>Access controls, least privilege, logging, rate limiting, time sync.</li>
+        <li>Minimal data design; no original content upload.</li>
+      </ul>
+      <p class="muted">See also <a href="/privacy.html">Privacy</a> and <a href="/.well-known/security.txt">security.txt</a>.</p>
+    </section>
+
+    <section class="card" aria-labelledby="subproc">
+      <h2 id="subproc">5) Sub-processors</h2>
+      <ul>
+        <li><strong>Cloudflare, Inc.</strong> — Workers, KV, network security, routing.</li>
+      </ul>
+      <p>TimeProofs ensures written data protection terms with sub-processors and remains liable for their acts/omissions. Changes will be posted on this page or <a href="/legal.html">Legal</a>. Customer may object on reasonable grounds; if unresolved, Customer may terminate affected services.</p>
+    </section>
+
+    <section class="card" aria-labelledby="assist">
+      <h2 id="assist">6) Assistance</h2>
+      <ul>
+        <li>TimeProofs assists Customer in responding to data subject requests, security, DPIAs, and consultations, considering the hash-only model.</li>
+        <li>Customer is responsible for verifying the specific <code>hash</code> related to a request.</li>
+      </ul>
+    </section>
+
+    <section class="card" aria-labelledby="incidents">
+      <h2 id="incidents">7) Incidents</h2>
+      <p>TimeProofs notifies Customer without undue delay after becoming aware of a personal data breach affecting Customer data. Notice includes available details, remediation, and contact.</p>
+    </section>
+
+    <section class="card" aria-labelledby="deletion">
+      <h2 id="deletion">8) Return and deletion</h2>
+      <p>Upon termination or on written request, TimeProofs deletes personal data processed for Customer, unless retention is required by law or necessary for the integrity of the public verification service. Deleting a proof disables public verifiability for that hash.</p>
+    </section>
+
+    <section class="card" aria-labelledby="audits">
+      <h2 id="audits">9) Audits</h2>
+      <p>On request once per 12 months, TimeProofs makes available summaries of security measures and third-party reports (if any). Customer may conduct a targeted audit with reasonable notice, during business hours, without disrupting services. Mutual NDAs apply.</p>
+    </section>
+
+    <section class="card" aria-labelledby="transfers">
+      <h2 id="transfers">10) International transfers</h2>
+      <p>TimeProofs uses global edge infrastructure. Where transfer of personal data outside the EEA/UK occurs, the parties adopt the applicable EU Commission Standard Contractual Clauses (SCCs) and UK Addendum by reference. TimeProofs implements supplementary measures consistent with the hash-only architecture.</p>
+    </section>
+
+    <section class="card" aria-labelledby="records">
+      <h2 id="records">11) Records and cooperation</h2>
+      <p>TimeProofs maintains processing records and cooperates with competent supervisory authorities upon lawful request.</p>
+    </section>
+
+    <section class="card" aria-labelledby="liability">
+      <h2 id="liability">12) Liability</h2>
+      <p>Liability limits and exclusions in the <a href="/legal.html">Terms</a> apply to this DPA. Nothing excludes liability where prohibited by law.</p>
+    </section>
+
+    <section class="card" aria-labelledby="misc">
+      <h2 id="misc">13) Miscellaneous</h2>
+      <ul>
+        <li>Inconsistency: this DPA prevails over the Terms to the extent of conflict on data protection.</li>
+        <li>Changes: TimeProofs may update this DPA to reflect legal or service changes. Material updates will be notified.</li>
+        <li>Governing law: as in the Terms, without prejudice to mandatory data protection laws.</li>
+      </ul>
+    </section>
+
+    <section class="card" aria-labelledby="sign">
+      <h2 id="sign">Signatures</h2>
+      <p class="muted">This DPA is deemed executed when the Customer accepts the Terms or signs an Order Form referencing this DPA.</p>
+      <table role="table" aria-label="Signature blocks">
+        <tr>
+          <th>For Customer</th><th>For TimeProofs</th>
+        </tr>
+        <tr>
+          <td>
+            Name: _______________________<br/>
+            Title: ________________________<br/>
+            Date: ________________________<br/>
+            Signature: ____________________
+          </td>
+          <td>
+            Name: _______________________<br/>
+            Title: ________________________<br/>
+            Date: ________________________<br/>
+            Signature: ____________________
+          </td>
+        </tr>
+      </table>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    © 2025 TimeProofs — Proof of Existence. For Everything.
+    <div style="margin-top:6px">
+      <a href="/index.html">Home</a> •
+      <a href="/proofspec.html">Protocol</a> •
+      <a href="/use-cases.html">Use Cases</a> •
+      <a href="/verify.html">Verify</a> •
+      <a href="/docs.html">API Docs</a> •
+      <a href="/privacy.html">Privacy</a> •
+      <a href="/legal.html">Legal</a> •
+      <a href="/dpa.html" aria-current="page">DPA</a>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const burger=document.getElementById('tp-burger');
+      const nav=document.getElementById('tp-nav');
+      function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+      function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+      function toggleMenu(){ (nav.getAttribute('data-state')==='open')?closeMenu():openMenu(); }
+      if(burger) burger.addEventListener('click', toggleMenu, {passive:true});
+      document.addEventListener('click',(e)=>{ if (window.matchMedia('(min-width:900px)').matches) return; if(!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); },{passive:true});
+      document.addEventListener('keydown',(e)=>{ if(e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); },{passive:true});
+      window.addEventListener('resize',()=>{ if(window.matchMedia('(min-width:900px)').matches) closeMenu(); },{passive:true});
+    })();
+  </script>
+</body>
+</html>
