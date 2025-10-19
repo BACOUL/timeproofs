@@ -13,16 +13,39 @@
   <meta property="og:title" content="TimeProofs — Proof of Existence. For Everything."/>
   <meta property="og:description" content="Hash locally. Timestamp via API. Verify publicly. No blockchain, no friction."/>
   <meta property="og:type" content="website"/>
-  <meta property="og:image" content="/og.png"/>
+  <meta property="og:image" content="https://timeproofs.io/og.png"/>
+  <meta property="og:image:alt" content="TimeProofs — Proof of Existence"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
   <meta property="og:url" content="https://timeproofs.io/"/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:site_name" content="TimeProofs"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="TimeProofs — Proof of Existence. For Everything."/>
   <meta name="twitter:description" content="Instant proof-of-existence for AI & developers."/>
-  <meta name="twitter:image" content="/og.png"/>
+  <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
+  <meta name="twitter:site" content="@timeproofs"/>
+
+  <!-- Robots / Sitemaps -->
+  <meta name="robots" content="index,follow"/>
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml"/>
+
+  <!-- Security -->
+  <meta name="referrer" content="no-referrer"/>
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
+
+  <!-- Icons / PWA -->
+  <link rel="icon" href="/favicon.ico" sizes="any"/>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+  <link rel="manifest" href="/site.webmanifest"/>
+  <meta name="application-name" content="TimeProofs"/>
 
   <!-- Perf hints -->
-  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin>
-  <link rel="preload" as="image" href="/logo%20(1).png" imagesrcset="/logo%20(1).png"/>
+  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin/>
+  <link rel="dns-prefetch" href="https://timeproofs-api.jeason-bacoul.workers.dev"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="preload" as="image" href="/logo%20(1).png" imagesrcset="/logo%20(1).png" fetchpriority="high"/>
 
   <!-- Styles -->
   <style>
@@ -44,6 +67,10 @@
     }
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
+    img{ max-width:100%; height:auto }
+    :focus, :focus-visible { outline:2px solid var(--accent); outline-offset:2px }
+    .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0 }
+    .sr-only:focus{ position:static; width:auto; height:auto; margin:8px; clip:auto; white-space:normal }
 
     /* Header */
     .tp-header{
@@ -151,32 +178,44 @@
     footer{ border-top:1px solid var(--line); margin-top:38px; padding:18px; color:#7c8aa5; text-align:center }
     footer .links a{ color:#a7b7cc; margin:0 8px; text-decoration:none }
     footer .links a:hover{ color:#22d3ee }
-
-    /* A11y */
-    .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0 }
   </style>
 
-  <!-- FAQ JSON-LD -->
+  <!-- JSON-LD: SoftwareApplication -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"SoftwareApplication",
+    "name":"TimeProofs",
+    "url":"https://timeproofs.io",
+    "applicationCategory":"DeveloperApplication",
+    "operatingSystem":"Web",
+    "description":"Hash locally. Timestamp via API. Verify publicly. No blockchain, no gas — just cryptographic truth.",
+    "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}
+  }
+  </script>
+
+  <!-- JSON-LD: FAQ (EN) -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
     "@type":"FAQPage",
     "mainEntity":[
-      {"@type":"Question","name":"Que signifie hash-only ?","acceptedAnswer":{"@type":"Answer","text":"Nous ne stockons que le hash SHA-256 fourni par vous, plus l’horodatage et la signature. Jamais votre contenu."}},
-      {"@type":"Question","name":"Est-ce conforme RGPD ?","acceptedAnswer":{"@type":"Answer","text":"Le design minimise la donnée : pas de cookies, pas d’analytics, pas de contenu. Voir la Politique de confidentialité pour les détails."}},
-      {"@type":"Question","name":"Combien ça coûte ?","acceptedAnswer":{"@type":"Answer","text":"Pendant la bêta : gratuit en fair-use. Les paliers payants arriveront, documentés dans Pricing."}},
-      {"@type":"Question","name":"Puis-je vérifier publiquement ?","acceptedAnswer":{"@type":"Answer","text":"Oui, via l’endpoint public de vérification. Collez un hash pour obtenir l’état et l’horodatage."}},
-      {"@type":"Question","name":"Que se passe-t-il si je perds le hash ?","acceptedAnswer":{"@type":"Answer","text":"La preuve repose sur le hash ; nous ne pouvons pas reconstruire le contenu. Conservez vos hashes en lieu sûr."}}
+      {"@type":"Question","name":"What does “hash-only” mean?","acceptedAnswer":{"@type":"Answer","text":"We store only the SHA-256 hash you provide, plus the timestamp and a server signature. Never your files."}},
+      {"@type":"Question","name":"Is it GDPR-compliant?","acceptedAnswer":{"@type":"Answer","text":"Data-minimal by design: no cookies, no trackers, no content uploads. See the Privacy Policy."}},
+      {"@type":"Question","name":"How much does it cost?","acceptedAnswer":{"@type":"Answer","text":"Public beta is free under fair-use. Paid tiers will be published on the Pricing page."}},
+      {"@type":"Question","name":"Can I verify publicly?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use the public verification endpoint and paste a hash to get status and timestamp."}}
     ]
   }
   </script>
 </head>
 
 <body>
+  <a class="sr-only" href="#main">Skip to content</a>
+
   <!-- Header -->
-  <header class="tp-header">
+  <header class="tp-header" role="banner">
     <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">
-      <img src="/logo%20(1).png" alt="TimeProofs logo" fetchpriority="high">
+      <img src="/logo%20(1).png" alt="TimeProofs logo" fetchpriority="high" width="160" height="40">
       <span>TimeProofs</span>
     </a>
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
@@ -195,17 +234,17 @@
   </header>
 
   <!-- Main -->
-  <main class="wrap" role="main">
+  <main id="main" class="wrap" role="main">
     <!-- Hero -->
     <section class="hero" aria-labelledby="hero-title">
-      <div class="label">🔐 Privacy-first • ⚡ Edge-native • 🧠 AI-ready</div>
+      <div class="label" aria-label="Key attributes">🔐 Privacy-first • ⚡ Edge-native • 🧠 AI-ready</div>
       <h1 id="hero-title" class="title">Proof of Existence. For Everything.</h1>
       <p class="subtitle">
         Hash locally. Timestamp via API. Verify publicly. No blockchain, no gas — just cryptographic truth.
       </p>
       <div class="cta-wrap" role="group" aria-label="Primary actions">
-        <a class="cta" href="/verify.html">Try the API</a>
-        <a class="cta secondary" href="/docs.html">Read the Docs</a>
+        <a class="cta" href="/verify.html" role="button" aria-label="Create a proof now">Create a proof now</a>
+        <a class="cta secondary" href="/docs.html" role="button">Read the Docs</a>
       </div>
 
       <div class="badges" aria-label="Trust badges">
@@ -225,7 +264,7 @@
       <div class="demo" role="region" aria-label="Hash verification demo">
         <form id="verify-form" novalidate>
           <label for="hash" class="sr-only">SHA-256 hash</label>
-          <input id="hash" name="hash" inputmode="latin" pattern="[A-Fa-f0-9]{64}" placeholder="Paste a SHA-256 hash (64 hex chars)" aria-describedby="hash-help">
+          <input id="hash" name="hash" inputmode="text" pattern="[A-Fa-f0-9]{64}" placeholder="Paste a SHA-256 hash (64 hex chars)" aria-describedby="hash-help">
           <button type="submit" aria-label="Verify hash">Verify</button>
           <small id="hash-help">We never upload your content — only the hash you paste here.</small>
         </form>
@@ -287,11 +326,17 @@ const check = await res.json();</code></pre>
       <div style="overflow:auto">
         <table class="table" aria-label="Comparison table">
           <thead>
-            <tr><th>Criteria</th><th>TimeProofs</th><th>Blockchain</th><th>Notary</th><th>Cloud storage</th></tr>
+            <tr>
+              <th scope="col">Criteria</th>
+              <th scope="col">TimeProofs</th>
+              <th scope="col">Blockchain</th>
+              <th scope="col">Notary</th>
+              <th scope="col">Cloud storage</th>
+            </tr>
           </thead>
           <tbody>
             <tr><td>Latency</td><td>ms</td><td>seconds–minutes</td><td>hours–days</td><td>seconds</td></tr>
-            <tr><td>Cost</td><td>low & predictable</td><td>gas/volatile</td><td>$$ per act</td><td>storage-based</td></tr>
+            <tr><td>Cost</td><td>low &amp; predictable</td><td>gas/volatile</td><td>$$ per act</td><td>storage-based</td></tr>
             <tr><td>Privacy</td><td><strong>hash-only</strong></td><td>on-chain metadata</td><td>docs shared</td><td>files uploaded</td></tr>
             <tr><td>Open verification</td><td>Yes (public endpoint)</td><td>Explorer</td><td>No</td><td>Access controlled</td></tr>
             <tr><td>Complexity</td><td>Minimal</td><td>Protocol/tooling</td><td>Process heavy</td><td>Lifecycle mgmt</td></tr>
@@ -304,21 +349,21 @@ const check = await res.json();</code></pre>
     <section class="section" aria-labelledby="security">
       <h2 id="security">Security by design</h2>
       <div class="grid two">
-        <article class="card"><h3>TLS everywhere</h3><p>Transport fully chiffré. Aucune donnée sensible collectée.</p></article>
-        <article class="card"><h3>HMAC-SHA256</h3><p>Signatures serveur sur <code>hash+timestamp</code> avec secret privé.</p></article>
-        <article class="card"><h3>Minimal logs</h3><p>Métriques éphémères anti-abus (aucun tracking, pas de cookies).</p></article>
-        <article class="card"><h3>Edge-native</h3><p>Cloudflare Workers + KV pour performance et durabilité.</p></article>
+        <article class="card"><h3>TLS everywhere</h3><p>Encrypted transport. No sensitive content collected.</p></article>
+        <article class="card"><h3>HMAC-SHA256</h3><p>Server signatures over <code>hash+timestamp</code> with private secret.</p></article>
+        <article class="card"><h3>Minimal logs</h3><p>Ephimeral anti-abuse metrics (no cookies, no trackers).</p></article>
+        <article class="card"><h3>Edge-native</h3><p>Cloudflare Workers + KV for performance and durability.</p></article>
       </div>
     </section>
 
-    <!-- FAQ -->
+    <!-- FAQ (EN) -->
     <section class="section" aria-labelledby="faq">
       <h2 id="faq">FAQ</h2>
       <div class="grid two">
-        <article class="card"><h3>Hash-only ?</h3><p>Nous stockons uniquement le hash, l’horodatage et la signature. Jamais vos fichiers.</p></article>
-        <article class="card"><h3>RGPD ?</h3><p>Design minimal de données, pas de cookies/trackers. Voir <a href="/privacy.html">Privacy</a>.</p></article>
-        <article class="card"><h3>Tarifs ?</h3><p>Bêta gratuite (fair-use). Les paliers seront affichés sur <a href="/pricing.html">Pricing</a>.</p></article>
-        <article class="card"><h3>Disponibilité ?</h3><p>Edge global avec tolérance aux pannes. Voir <a href="/legal.html">Legal</a>.</p></article>
+        <article class="card"><h3>What does “hash-only” mean?</h3><p>We store only the hash, the timestamp, and a server signature. Never your files.</p></article>
+        <article class="card"><h3>Is it GDPR-compliant?</h3><p>Data-minimal by design. No cookies, no trackers, no content uploads. See <a href="/privacy.html">Privacy</a>.</p></article>
+        <article class="card"><h3>How much does it cost?</h3><p>Public beta is free under fair-use. Paid tiers will be published on <a href="/pricing.html">Pricing</a>.</p></article>
+        <article class="card"><h3>Can I verify publicly?</h3><p>Yes, via the public verification endpoint. Paste a hash to get status and timestamp.</p></article>
       </div>
     </section>
   </main>
@@ -335,7 +380,9 @@ const check = await res.json();</code></pre>
       <a href="/pricing.html">Pricing</a> •
       <a href="/roadmap.html">Roadmap</a> •
       <a href="/privacy.html">Privacy</a> •
-      <a href="/legal.html">Legal</a>
+      <a href="/legal.html">Legal</a> •
+      <a href="mailto:contact@timeproofs.io">Contact</a> •
+      <a href="/status.html">Status</a>
     </div>
     <p style="margin-top:10px; font-size:0.9rem; color:#8ca0b8;">
       <strong>TimeProofs™</strong> stores no personal data and keeps proofs private by design.
@@ -386,4 +433,3 @@ const check = await res.json();</code></pre>
   </script>
 </body>
 </html>
-
