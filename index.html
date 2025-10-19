@@ -4,25 +4,25 @@
   <!-- Core -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>TimeProofs — Proof of Existence. For Everything.</title>
-  <meta name="description" content="TimeProofs is the universal proof layer for AI and developers. Hash locally, timestamp via API, verify publicly — instant, private, and edge-native."/>
+  <title>The Open Standard for Digital Proof | TimeProofs</title>
+  <meta name="description" content="TimeProofs is the open, privacy-first standard to prove when something existed and that it hasn’t changed — hash locally, timestamp instantly, verify publicly. No blockchain."/>
   <meta name="theme-color" content="#0b1020"/>
   <link rel="canonical" href="https://timeproofs.io/"/>
 
   <!-- Social -->
-  <meta property="og:title" content="TimeProofs — Proof of Existence. For Everything."/>
-  <meta property="og:description" content="Hash locally. Timestamp via API. Verify publicly. No blockchain, no friction."/>
+  <meta property="og:title" content="The Open Standard for Digital Proof | TimeProofs"/>
+  <meta property="og:description" content="Prove existence and integrity — instantly, privately, and publicly verifiable. No blockchain."/>
   <meta property="og:type" content="website"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
-  <meta property="og:image:alt" content="TimeProofs — Proof of Existence"/>
+  <meta property="og:image:alt" content="TimeProofs — The Open Standard for Digital Proof"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
   <meta property="og:url" content="https://timeproofs.io/"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="TimeProofs"/>
   <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="TimeProofs — Proof of Existence. For Everything."/>
-  <meta name="twitter:description" content="Instant proof-of-existence for AI & developers."/>
+  <meta name="twitter:title" content="The Open Standard for Digital Proof | TimeProofs"/>
+  <meta name="twitter:description" content="Prove existence and integrity — instantly, privately, and publicly verifiable. No blockchain."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
   <meta name="twitter:site" content="@timeproofs"/>
 
@@ -49,10 +49,7 @@
 
   <!-- Styles -->
   <style>
-    :root{
-      --bg:#0b1020; --panel:#0f172a; --line:#1e293b;
-      --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --ok:#22c55e; --warn:#eab308;
-    }
+    :root{ --bg:#0b1020; --panel:#0f172a; --line:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --ok:#22c55e; --warn:#eab308 }
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg) }
     body{
@@ -73,11 +70,7 @@
     .sr-only:focus{ position:static; width:auto; height:auto; margin:8px; clip:auto; white-space:normal }
 
     /* Progress bar */
-    #tp-progress{
-      position:fixed; top:0; left:0; height:3px; width:0%;
-      background:linear-gradient(90deg, #22d3ee, #22c55e);
-      z-index:1500;
-    }
+    #tp-progress{ position:fixed; top:0; left:0; height:3px; width:0%; background:linear-gradient(90deg,#22d3ee,#22c55e); z-index:1500 }
 
     /* Header */
     .tp-header{
@@ -86,19 +79,14 @@
       border-bottom:1px solid var(--line);
       display:flex; align-items:center; justify-content:space-between; padding:0 16px;
     }
-    .tp-brand{
-      display:flex; align-items:center; gap:10px;
-      color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem;
-    }
+    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem }
     .tp-brand img{ height:40px; width:auto; object-fit:contain; vertical-align:middle }
     .tp-brand:hover{ color:var(--accent) }
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
       border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
     }
-    .tp-nav a{
-      color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block; position:relative;
-    }
+    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block; position:relative }
     .tp-nav a:hover::after{ transform:scaleX(1) }
     .tp-nav a::after{
       content:""; position:absolute; left:0; right:0; bottom:-2px; height:2px;
@@ -106,10 +94,7 @@
     }
     .tp-nav a.active{ color:var(--accent); text-decoration:underline }
 
-    @media (min-width:900px){
-      .tp-burger{ display:none }
-      .tp-nav{ display:flex; align-items:center }
-    }
+    @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width:899px){
       .tp-nav{
         position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
@@ -128,28 +113,12 @@
       padding-top:92px; padding-bottom:28px;
       display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; position:relative;
     }
-    .label{
-      display:inline-flex; gap:8px; align-items:center; padding:6px 12px; border:1px solid #214a57; background:#0d2330;
-      color:#bff1ff; border-radius:999px; font-size:.85rem; margin-bottom:10px;
-    }
-    .title{
-      font-size:clamp(2rem, 6vw, 3.1rem); line-height:1.08; margin:.2em auto .35em; font-weight:900; max-width:920px;
-      text-shadow:0 2px 40px rgba(34,211,238,.12);
-    }
-    .subtitle{
-      color:var(--muted); max-width:780px; margin:0 auto 16px; line-height:1.6;
-      font-size:clamp(1rem, 2.8vw, 1.125rem); padding:0 6px;
-    }
-    .hero::after{
-      content:""; position:absolute; inset:auto 0 0 0; height:220px; pointer-events:none;
-      background:radial-gradient(60% 60% at 50% 100%, rgba(34,211,238,.08), transparent 60%);
-    }
+    .label{ display:inline-flex; gap:8px; align-items:center; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem; margin-bottom:10px }
+    .title{ font-size:clamp(2rem, 6vw, 3.1rem); line-height:1.08; margin:.2em auto .35em; font-weight:900; max-width:920px; text-shadow:0 2px 40px rgba(34,211,238,.12) }
+    .subtitle{ color:var(--muted); max-width:780px; margin:0 auto 16px; line-height:1.6; font-size:clamp(1rem, 2.8vw, 1.125rem); padding:0 6px }
+    .hero::after{ content:""; position:absolute; inset:auto 0 0 0; height:220px; pointer-events:none; background:radial-gradient(60% 60% at 50% 100%, rgba(34,211,238,.08), transparent 60%) }
     .cta-wrap{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:12px }
-    .cta{
-      background:var(--accent); color:#06202a; border:none; padding:.9em 1.4em; border-radius:12px;
-      font-weight:900; box-shadow:0 8px 30px rgba(34,211,238,.15);
-      transition:transform .15s ease, filter .15s ease;
-    }
+    .cta{ background:var(--accent); color:#06202a; border:none; padding:.9em 1.4em; border-radius:12px; font-weight:900; box-shadow:0 8px 30px rgba(34,211,238,.15); transition:transform .15s ease, filter .15s ease }
     .cta.secondary{ background:#111d33; color:#e2f6ff; border:1px solid var(--line); box-shadow:none }
     .cta:hover{ transform:translateY(-1px); filter:brightness(1.05) }
 
@@ -161,16 +130,13 @@
     .grid{ display:grid; gap:14px }
     .grid.three{ grid-template-columns:1fr }
     .grid.two{ grid-template-columns:1fr }
-    @media(min-width:900px){
-      .grid.three{ grid-template-columns:1fr 1fr 1fr }
-      .grid.two{ grid-template-columns:1fr 1fr }
-    }
+    @media(min-width:900px){ .grid.three{ grid-template-columns:1fr 1fr 1fr } .grid.two{ grid-template-columns:1fr 1fr } }
     .card{ background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px; box-shadow:0 6px 28px rgba(0,0,0,.18) }
     .card h3{ color:var(--accent); margin:.2em 0 .3em; font-size:1.08rem; letter-spacing:.2px }
     .card p{ color:#dbe7f3; margin:.15em 0 .4em; line-height:1.55 }
     .card:hover{ transform:translateY(-1px); transition:transform .15s ease }
 
-    /* Mini demo */
+    /* Demo */
     .demo{ background:#0b1220; border:1px solid #1f2937; border-radius:14px; padding:16px }
     .demo form{ display:flex; gap:10px; flex-wrap:wrap }
     .demo input{
@@ -180,11 +146,7 @@
     .demo button{ padding:10px 14px; border-radius:10px; border:1px solid var(--line); background:#132036; color:#eaf6ff; font-weight:800; cursor:pointer }
     .demo button:hover{ filter:brightness(1.05) }
     .demo small{ color:#93a8c2 }
-    pre{
-      background:#0b1220; border:1px solid #1f2937; color:#e5e7eb;
-      border-radius:12px; padding:12px; line-height:1.55;
-      white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere; margin:.6rem 0 0;
-    }
+    pre{ background:#0b1220; border:1px solid #1f2937; color:#e5e7eb; border-radius:12px; padding:12px; line-height:1.55; white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere; margin:.6rem 0 0 }
 
     /* Table compare */
     .table{ width:100%; border-collapse:collapse; overflow:hidden; border-radius:12px; border:1px solid var(--line) }
@@ -196,7 +158,6 @@
     footer .links a{ color:#a7b7cc; margin:0 8px; text-decoration:none }
     footer .links a:hover{ color:#22d3ee }
 
-    /* Motion respect */
     @media (prefers-reduced-motion: reduce){ *{ animation:none!important; transition:none!important } }
   </style>
 
@@ -214,7 +175,7 @@
   }
   </script>
 
-  <!-- JSON-LD: FAQ (EN) -->
+  <!-- JSON-LD: FAQ -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -244,8 +205,7 @@
     </button>
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation">
       <a href="#why">Why</a>
-      <a href="#protocol">Protocol</a>
-      <a href="#compliance">Compliance</a>
+      <a href="#standard">Standard</a>
       <a href="#how">How</a>
       <a href="#compare">Compare</a>
       <a href="#security">Security</a>
@@ -260,13 +220,9 @@
     <!-- Hero -->
     <section class="hero" aria-labelledby="hero-title">
       <div class="label" aria-label="Key attributes">🔐 Privacy-first • ⚡ Edge-native • 🧠 AI-ready</div>
-      <h1 id="hero-title" class="title">Proof of Existence. For Everything.</h1>
-      <p class="subtitle">
-        Hash locally. Timestamp via API. Verify publicly. No blockchain, no gas — just cryptographic truth.
-      </p>
-      <p class="subtitle" style="margin-top:6px">
-        Built for coming AI & content authenticity requirements. ProofSpec™ v1 makes every proof verifiable by anyone.
-      </p>
+      <h1 id="hero-title" class="title">The Open Standard for Digital Proof.</h1>
+      <p class="subtitle">Prove when something existed and that it hasn’t changed — instantly, privately, and publicly verifiable. No blockchain.</p>
+      <p class="subtitle" style="margin-top:6px">Built for upcoming AI & content authenticity requirements. ProofSpec™ v1 lets anyone verify every proof.</p>
       <div class="cta-wrap" role="group" aria-label="Primary actions">
         <a class="cta" href="/verify.html" role="button" aria-label="Create a proof now">Create a proof now</a>
         <a class="cta secondary" href="/docs.html" role="button">Read the Docs</a>
@@ -285,7 +241,7 @@
 
     <!-- Mini demo (read-only) -->
     <section class="section" aria-labelledby="demo">
-      <h2 id="demo">Try verification in 30s</h2>
+      <h2 id="demo">Verify a hash in 30s</h2>
       <div class="demo" role="region" aria-label="Hash verification demo">
         <form id="verify-form" novalidate>
           <label for="hash" class="sr-only">SHA-256 hash</label>
@@ -313,56 +269,55 @@
           <h3>Private by Design</h3>
           <p>Only hashes are sent and stored. Your original content never leaves your device.</p>
         </article>
-        <article class="card">
-          <h3>Open Protocol</h3>
-          <p>Backed by ProofSpec™ v1. Openly verifiable format designed for global interoperability.</p>
-        </article>
       </div>
     </section>
 
-    <!-- Protocol -->
-    <section class="section" aria-labelledby="protocol">
-      <h2 id="protocol">The TimeProofs Protocol (ProofSpec™)</h2>
+    <!-- Open Standard & Compliance -->
+    <section class="section" aria-labelledby="standard">
+      <h2 id="standard">Open Standard & Compliance Ready</h2>
       <div class="grid two">
         <article class="card">
-          <h3>Open & Verifiable Standard</h3>
-          <p><strong>ProofSpec™</strong> defines a universal JSON proof:
-          <code>{ hash, ts, sig, meta }</code>. HMAC-SHA256 over <code>hash+ts</code>,
-          ISO-8601 UTC timestamps. No blockchain. Anyone can verify independently.</p>
+          <h3>ProofSpec™ v1</h3>
+          <p>Universal JSON proof: <code>{ hash, ts, sig, meta }</code>. Signature: <code>sig = HMAC_SHA256(secret, hash + ts)</code>. ISO-8601 UTC timestamps. No blockchain. Anyone can verify independently.</p>
+          <p style="margin:.4rem 0 0">📜 <a href="/proofspec.html">Read the ProofSpec v1</a></p>
         </article>
         <article class="card">
-          <h3>Legally Anchored & Privacy-First</h3>
-          <p>Privacy-by-design. The specification is published publicly and registered as prior art
-          to enable open use and legal recognition.</p>
-        </article>
-      </div>
-      <p style="text-align:center;margin-top:16px;color:#a3b7c7">
-        📜 <a href="/proofspec.html">Read the ProofSpec v1</a>
-      </p>
-    </section>
-
-    <!-- Compliance -->
-    <section class="section" aria-labelledby="compliance">
-      <h2 id="compliance">Regulation & Compliance Ready</h2>
-      <div class="grid two">
-        <article class="card">
-          <h3>Why this will be required</h3>
-          <p>Upcoming global rules push for <strong>traceability and integrity</strong> of AI outputs and data.
-          Teams must prove <em>when</em> something existed and <em>that it has not changed</em>.</p>
-          <ul style="margin:.4rem 0 0; padding-left:1.1rem; color:#dbe7f3">
-            <li>Proof of existence for generated content</li>
-            <li>Open public verification by anyone</li>
-            <li>Privacy-by-design (hash-only) simplifies GDPR</li>
-            <li>Auditable pipelines for internal and external reviews</li>
+          <h3>Why it will be required</h3>
+          <ul style="margin:.2rem 0 0; padding-left:1.1rem; color:#dbe7f3">
+            <li>Traceability and integrity of AI outputs</li>
+            <li>Open public verification for auditors</li>
+            <li>Privacy-by-design (hash-only) eases GDPR</li>
+            <li>Auditable pipelines for internal/external reviews</li>
           </ul>
+          <p style="margin:.6rem 0 0">Result: lower risk, faster sign-off, easier audits.</p>
         </article>
-        <article class="card">
-          <h3>Built to align by design</h3>
-          <p>TimeProofs provides <strong>hash-only timestamps</strong>, <strong>public verification</strong>,
-          and a <strong>formal ProofSpec™</strong>. This fits content authenticity and AI governance needs
-          without personal data or blockchain overhead.</p>
-          <p style="margin:.4rem 0 0">Result: lower risk, faster sign-off, easier audits.</p>
-        </article>
+      </div>
+
+      <!-- Mini diagram -->
+      <div style="margin-top:14px" aria-hidden="true">
+        <svg viewBox="0 0 900 120" width="100%" height="120" role="img">
+          <defs>
+            <style><![CDATA[
+              .b{fill:none;stroke:#22d3ee;stroke-width:2}
+              .t{fill:#dbe7f3;font:600 14px/1.4 system-ui,Segoe UI,Roboto,Arial}
+              .n{fill:#0c1424;stroke:#1e293b}
+            ]]></style>
+          </defs>
+          <rect x="60" y="24" rx="10" ry="10" width="200" height="72" class="n"/>
+          <text x="160" y="55" text-anchor="middle" class="t">1) Hash locally</text>
+          <text x="160" y="78" text-anchor="middle" class="t">SHA-256(content) → <tspan fill="#22d3ee">hash</tspan></text>
+
+          <rect x="350" y="24" rx="10" ry="10" width="200" height="72" class="n"/>
+          <text x="450" y="55" text-anchor="middle" class="t">2) Timestamp</text>
+          <text x="450" y="78" text-anchor="middle" class="t">{ hash, ts, <tspan fill="#22d3ee">sig</tspan> }</text>
+
+          <rect x="640" y="24" rx="10" ry="10" width="200" height="72" class="n"/>
+          <text x="740" y="55" text-anchor="middle" class="t">3) Verify publicly</text>
+          <text x="740" y="78" text-anchor="middle" class="t">GET /verify?hash=…</text>
+
+          <line x1="260" y1="60" x2="350" y2="60" class="b"/><polygon points="350,60 340,55 340,65" fill="#22d3ee"/>
+          <line x1="550" y1="60" x2="640" y2="60" class="b"/><polygon points="640,60 630,55 630,65" fill="#22d3ee"/>
+        </svg>
       </div>
     </section>
 
@@ -397,7 +352,7 @@ const check = await res.json();</code></pre>
 
     <!-- Compare -->
     <section class="section" aria-labelledby="compare">
-      <h2 id="compare">How it compares</h2>
+      <h2 id="compare">Compare</h2>
       <div style="overflow:auto">
         <table class="table" aria-label="Comparison table">
           <thead>
@@ -431,7 +386,7 @@ const check = await res.json();</code></pre>
       </div>
     </section>
 
-    <!-- FAQ (EN) -->
+    <!-- FAQ -->
     <section class="section" aria-labelledby="faq">
       <h2 id="faq">FAQ</h2>
       <div class="grid two">
@@ -445,7 +400,7 @@ const check = await res.json();</code></pre>
 
   <!-- Footer -->
   <footer role="contentinfo" aria-label="Site footer">
-    © 2025 TimeProofs — Proof of Existence. For Everything.
+    © 2025 TimeProofs — The Open Standard for Digital Proof.
     <div class="links" style="margin-top:6px">
       <a href="/index.html" aria-current="page">Home</a> •
       <a href="/about.html">About</a> •
@@ -556,9 +511,9 @@ const check = await res.json();</code></pre>
           }
         });
       }, opts);
-      ['why','protocol','compliance','how','compare','security','faq']
+      ['why','standard','how','compare','security','faq']
         .forEach(id => { const el = document.getElementById(id); if(el) io.observe(el); });
     })();
   </script>
 </body>
-  </html>
+</html>
