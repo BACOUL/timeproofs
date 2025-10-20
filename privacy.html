@@ -11,8 +11,8 @@
   <link rel="canonical" href="https://timeproofs.io/privacy.html"/>
 
   <!-- Perf -->
-  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin/>
-  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev"/>
+  <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
+  <link rel="dns-prefetch" href="//api.timeproofs.io"/>
 
   <!-- Icons / Manifest -->
   <link rel="icon" href="/favicon.ico" sizes="any"/>
@@ -83,7 +83,7 @@
     .lead{ color:#bcd9e8; margin:0 0 1em }
     .kicker{ color:#a8c5d6; font-size:.95rem; letter-spacing:.3px }
     .card{ background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:16px; margin:12px 0 }
-    .muted{ color:var(--muted) }
+    .muted{ color:#94a3b8 }
     .list{ margin:.25em 0 0 1.1rem; padding:0 }
     .list li{ margin:.35em 0 }
     .pill{ display:inline-block; border:1px solid #214a57; background:#0d2330; color:#aee9f7; border-radius:999px; padding:4px 10px; font-size:.78rem; margin:6px 8px 0 0 }
@@ -110,6 +110,7 @@
       <a href="/docs.html">API Docs</a>
       <a href="/legal.html">Legal</a>
       <a href="/privacy.html" aria-current="page">Privacy</a>
+      <a href="/security.html">Security</a>
     </nav>
   </header>
 
@@ -132,8 +133,8 @@
 
     <section aria-labelledby="controller" class="card">
       <h2 id="controller">Data controller & contact</h2>
-      <p><strong>Controller:</strong> TimeProofs. Contact privacy: <a href="mailto:privacy@timeproofs.io">privacy@timeproofs.io</a> • security: <a href="mailto:security@timeproofs.io">security@timeproofs.io</a> • general: <a href="mailto:contact@timeproofs.io">contact@timeproofs.io</a>.</p>
-      <p class="muted">See also <a href="/legal.html">Legal Notice & Terms</a> and <a href="/.well-known/security.txt">security.txt</a>. For processing contracts, see our <a href="/dpa.html">Data Processing Addendum (DPA)</a>.</p>
+      <p><strong>Controller:</strong> TimeProofs. Contact privacy: <a href="mailto:privacy@timeproofs.io">privacy@timeproofs.io</a> • security: <a href="mailto:security@timeproofs.io">security@timeproofs.io</a> • general: <a href="mailto:hello@timeproofs.io">hello@timeproofs.io</a>.</p>
+      <p class="muted">See also <a href="/legal.html">Legal Notice & Terms</a> and <a href="/.well-known/security.txt">security.txt</a>.</p>
     </section>
 
     <section aria-labelledby="definitions" class="card">
@@ -143,7 +144,7 @@
         <li><strong>Meta:</strong> optional, tiny JSON you send (e.g., <code>{"type":"file","mime":"application/pdf"}</code>) for categorization only — do not include personal data.</li>
         <li><strong>Proof:</strong> KV tuple: <code>{ hash, timestamp, signature, type?, meta? }</code>.</li>
       </ul>
-      <p class="muted">Note: in context, a hash can constitute personal data if it is reasonably linkable to a person. Treat <code>meta</code> accordingly.</p>
+      <p class="muted">Note: in context, a hash can constitute personal data if reasonably linkable to a person. Keep <code>meta</code> non-identifying.</p>
     </section>
 
     <section aria-labelledby="collection" class="card">
@@ -226,7 +227,7 @@
 
     <section aria-labelledby="representatives" class="card">
       <h2 id="representatives">EU/UK Representatives (if applicable)</h2>
-      <p>EU: [Name, address, email] • UK: [Name, address, email]. These contacts apply if we appoint representatives for GDPR/UK GDPR Article 27 compliance.</p>
+      <p>Not currently appointed. If required under Article 27 GDPR/UK GDPR, details will be added here.</p>
     </section>
 
     <section aria-labelledby="ccpa" class="card">
@@ -240,4 +241,68 @@
 
     <section aria-labelledby="optout" class="card">
       <h2 id="optout">Opt-out & deletion requests</h2>
-      <p>Email <a href="mailto:privacy@timeproofs.io">privacy@
+      <p>Email <a href="mailto:privacy@timeproofs.io">privacy@timeproofs.io</a> with the <code>hash</code>, context, and justification. We will evaluate and, where appropriate, purge the entry from public verification. Deleting a proof removes public verifiability for that hash.</p>
+    </section>
+
+    <section aria-labelledby="children" class="card">
+      <h2 id="children">Children’s privacy</h2>
+      <p>TimeProofs is a developer tool and is not directed to children. We do not knowingly process personal data of children.</p>
+    </section>
+
+    <section aria-labelledby="pbd" class="card">
+      <h2 id="pbd">Privacy-by-design</h2>
+      <ul class="list">
+        <li>Zero-upload original content.</li>
+        <li>Hash-only, irreversible digests.</li>
+        <li>No cookies or trackers.</li>
+        <li>Edge-native, minimal state.</li>
+        <li>Open protocol and implementation.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="table" class="card">
+      <h2 id="table">Data protection summary</h2>
+      <ul class="list">
+        <li><strong>Processed:</strong> hash, timestamp, signature, optional meta</li>
+        <li><strong>Not processed:</strong> original files, names, emails, behavioral data</li>
+        <li><strong>Storage:</strong> Cloudflare KV</li>
+        <li><strong>Security:</strong> TLS, HMAC-SHA256, key rotation, minimal logs</li>
+        <li><strong>Retention:</strong> proofs = indefinite; operational logs = ≤ 30 days</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="changes" class="card">
+      <h2 id="changes">Policy changes</h2>
+      <p>We may update this policy to reflect product or legal changes. We update the “Last updated” date and highlight material changes.</p>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    © 2025 TimeProofs — Proof of Existence. For Everything.
+    <div class="links" style="margin-top:6px">
+      <a href="/index.html">Home</a> •
+      <a href="/proofspec.html">Protocol</a> •
+      <a href="/use-cases.html">Use Cases</a> •
+      <a href="/verify.html">Verify</a> •
+      <a href="/docs.html">API Docs</a> •
+      <a href="/privacy.html" aria-current="page">Privacy</a> •
+      <a href="/legal.html">Legal</a> •
+      <a href="/security.html">Security</a>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const burger=document.getElementById('tp-burger');
+      const nav=document.getElementById('tp-nav');
+      function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+      function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+      function toggleMenu(){ (nav.getAttribute('data-state')==='open')?closeMenu():openMenu(); }
+      burger.addEventListener('click', toggleMenu, { passive:true });
+      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width:900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width:900px)').matches) closeMenu(); }, { passive:true });
+    })();
+  </script>
+</body>
+</html>
