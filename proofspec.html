@@ -10,7 +10,7 @@
   <meta name="theme-color" content="#0b1020" />
   <link rel="canonical" href="https://timeproofs.io/proofspec.html" />
 
-  <!-- Security (keeps inline for v0.1) -->
+  <!-- Security (kept inline for v0.1) -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
     img-src 'self' data:;
@@ -56,7 +56,7 @@
     "about":["digital signatures","timestamping","data integrity","hashing","interoperability"],
     "author":{"@type":"Organization","name":"TimeProofs Editorial"},
     "publisher":{"@type":"Organization","name":"TimeProofs","logo":{"@type":"ImageObject","url":"https://timeproofs.io/logo%20(1).png"}},
-    "datePublished":"2025-10-19",
+    "datePublished":"2025-10-20",
     "version":"1.0.0-draft"
   }
   </script>
@@ -149,7 +149,7 @@
 
     <section id="abstract">
       <h2>1. Abstract</h2>
-      <p>ProofSpec binds a content-derived hash to a signed timestamp and a verification method. Transport-agnostic. Verifiable by anyone. Original content never leaves the device.</p>
+      <p>ProofSpec binds a content-derived SHA-256 hash to a signed timestamp and a verification method. Transport-agnostic. Verifiable by anyone. Original content stays local.</p>
     </section>
 
     <section id="model">
@@ -166,7 +166,7 @@
         <div class="panel">
           <h3>Core flow</h3>
           <ol>
-            <li>Hash input <em>M</em> with SHA-256 → <code>hash</code> as <code>sha256:&lt;hex64&gt;</code>.</li>
+            <li>Hash input <em>M</em> with SHA-256 → <code>hash</code> as 64-hex.</li>
             <li>Submit <code>hash</code> + optional <code>meta</code> → receive signed <em>Proof</em>.</li>
             <li>Verify signature, time bounds, and hash equality.</li>
           </ol>
@@ -179,16 +179,16 @@
       <div class="panel">
 <pre><code>{
   "spec": "proofspec/1.0",
-  "hash": "sha256:&lt;64-hex&gt;",
+  "hash": "&lt;64-hex&gt;",
   "alg":  "hmac-sha256",
-  "ts":   "2025-10-19T14:00:00Z",
+  "ts":   "2025-10-20T14:00:00Z",
   "meta": { "type":"event", "source":"api", "nonce":"base64url" },
-  "sig":  "base64url(hmac(secret, message))",
+  "sig":  "base64url(hmac(secret, hash + '\n' + ts + '\n' + base64url(JSON(meta||{}))))",
   "kid":  "key-id-or-issuer",
-  "ver":  { "endpoint":"https://.../api/verify", "method":"GET" }
+  "ver":  { "endpoint":"https://timeproofs-api.jeason-bacoul.workers.dev/api/verify", "method":"GET" }
 }</code></pre>
       </div>
-      <p class="muted">Message format below. <code>meta</code> optional. Exclude personal data.</p>
+      <p class="muted"><code>meta</code> is optional. Exclude personal data.</p>
     </section>
 
     <section id="schema">
@@ -202,7 +202,7 @@
   "required":["spec","hash","alg","ts","sig","kid","ver"],
   "properties":{
     "spec":{"type":"string","const":"proofspec/1.0"},
-    "hash":{"type":"string","pattern":"^sha256:[0-9a-f]{64}$"},
+    "hash":{"type":"string","pattern":"^[0-9a-f]{64}$"},
     "alg":{"type":"string","enum":["hmac-sha256"]},
     "ts":{"type":"string","format":"date-time"},
     "meta":{"type":"object","additionalProperties":true},
@@ -225,7 +225,7 @@
     <section id="algorithms">
       <h2>5. Algorithms</h2>
       <h3>5.1 Hashing</h3>
-      <p>Use SHA-256. Text is UTF-8. Emit <code>sha256:&lt;hex64&gt;</code>.</p>
+      <p>Use SHA-256. Text is UTF-8. Emit lowercase 64-hex.</p>
       <h3>5.2 Signing</h3>
       <p>HMAC-SHA256 with service key <code>kid</code>. Build UTF-8 message:</p>
       <div class="panel"><code>message = hash + "\n" + ts + "\n" + base64url(JSON.stringify(meta || {}))</code></div>
@@ -243,7 +243,7 @@
       <h2>6. Security & Privacy</h2>
       <ul>
         <li><strong>Hash-only</strong>: content not transmitted.</li>
-        <li><strong>No personal data in <code>meta</code></strong>.</li>
+        <li><strong>No personal data</strong> in <code>meta</code>.</li>
         <li><strong>Keys</strong>: rotate; bind <code>kid</code> to rotation policy.</li>
         <li><strong>Replay</strong>: include <code>nonce</code> in <code>meta</code> if needed.</li>
         <li><strong>Time</strong>: NTP-synchronized service clocks.</li>
@@ -262,7 +262,7 @@
           <p>No personal data required. Keep <code>meta</code> non-identifying.</p>
         </div>
       </div>
-      <p class="muted">Complements C2PA: ProofSpec focuses on existence + integrity, not full provenance chains.</p>
+      <p class="muted">Complements C2PA: existence + integrity, not full provenance chains.</p>
     </section>
 
     <section id="versioning">
@@ -281,11 +281,11 @@
         <div class="panel">
           <h3>Create</h3>
 <pre><code>POST https://timeproofs-api.jeason-bacoul.workers.dev/api/timestamp
-{"hash":"sha256:&lt;64-hex&gt;","type":"event","meta":{"source":"spec"}}</code></pre>
+{"hash":"&lt;64-hex&gt;","type":"event","meta":{"source":"spec"}}</code></pre>
         </div>
         <div class="panel">
           <h3>Verify</h3>
-<pre><code>GET  https://timeproofs-api.jeason-bacoul.workers.dev/api/verify?hash=sha256:&lt;64-hex&gt;</code></pre>
+<pre><code>GET  https://timeproofs-api.jeason-bacoul.workers.dev/api/verify?hash=&lt;64-hex&gt;</code></pre>
         </div>
       </div>
       <p>OpenAPI and examples: <a href="/docs.html">API Docs</a>.</p>
@@ -295,14 +295,14 @@
       <h2>10. Test Vectors</h2>
       <div class="panel">
 <pre><code># Input (UTF-8): "TimeProofs"
-hash = "sha256:3940cae79aa443bfcdfc09b4f9fbb49bf16f0be354dee96e014a236d1c7ac9c3"
-ts   = "2025-10-19T14:00:00Z"
+hash = "3940cae79aa443bfcdfc09b4f9fbb49bf16f0be354dee96e014a236d1c7ac9c3"  # example
+ts   = "2025-10-20T14:00:00Z"
 meta = {"type":"event","source":"tv1","nonce":"N7J7wq"}
-msg  = "sha256:3940...c9c3\n2025-10-19T14:00:00Z\n" + base64url(JSON.stringify(meta))
+msg  = hash + "\n" + ts + "\n" + base64url(JSON.stringify(meta))
 sig  = base64url( HMAC_SHA256(key=K1, msg=msg) )
 kid  = "tp-k1"</code></pre>
       </div>
-      <p class="muted">Provide official vectors with real keys before release. Include binary inputs and multi-locale text.</p>
+      <p class="muted">Example only. Publish official vectors before final release.</p>
     </section>
 
     <section id="faq">
@@ -310,7 +310,7 @@ kid  = "tp-k1"</code></pre>
       <h3>Is blockchain required?</h3>
       <p>No. Standard hashing and signatures. Lower cost. Higher privacy.</p>
       <h3>Can I verify offline?</h3>
-      <p>Yes, if you have the proof object and the key policy for <code>kid</code>.</p>
+      <p>Yes, with the proof object and the key policy for <code>kid</code>.</p>
     </section>
 
     <section id="license">
@@ -321,7 +321,7 @@ kid  = "tp-k1"</code></pre>
     <section id="changelog">
       <h2>13. Changelog</h2>
       <ul>
-        <li><strong>1.0.0-draft</strong> — Initial public draft: data model, schema, HMAC-SHA256 profile, test vectors.</li>
+        <li><strong>1.0.0-draft</strong> — Initial public draft: data model, schema, HMAC-SHA256 profile, example vectors.</li>
       </ul>
     </section>
   </main>
@@ -354,4 +354,4 @@ kid  = "tp-k1"</code></pre>
     })();
   </script>
 </body>
-      </html>
+</html>
