@@ -1,9 +1,9 @@
 # 🕓 TimeProofs — Changelog
 
-> The universal proof layer for AI, developers, and the internet.  
-> Built openly, privacy-first, and edge-native.
+> The open, privacy-first, edge-native proof-of-existence protocol.  
+> Built to become the universal layer for AI, developers, and digital authenticity.
 
-All notable changes to **TimeProofs** will be documented in this file.  
+All notable changes to **TimeProofs** are documented in this file.  
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
@@ -16,18 +16,18 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### ✨ Features
 - `/timestamp` → create proof of existence for any SHA-256 hash  
-- `/verify` → public proof validation  
-- Edge-native infra: **Cloudflare Workers + KV**
-- Frontend (Vercel) with **Verify UI**, **Docs**, **Privacy**, **Legal**
-- Sitemap + SEO structure  
-- MIT License + Public GitHub repository  
-- API base: [`https://timeproofs-api.jeason-bacoul.workers.dev/api`](https://timeproofs-api.jeason-bacoul.workers.dev/api)
+- `/verify` → public proof validation endpoint  
+- Edge-native infra : **Cloudflare Workers + KV**  
+- Frontend (Vercel) : **Verify UI**, **Docs**, **Privacy**, **Legal**  
+- SEO / sitemap / robots setup  
+- MIT License + public GitHub repository  
+- API base : [`https://timeproofs-api.jeason-bacoul.workers.dev/api`](https://timeproofs-api.jeason-bacoul.workers.dev/api)
 
 ### 🔐 Principles
 - Privacy-first — only hashes, never raw data  
 - Open & transparent — public verifiable proofs  
 - Minimal & deterministic — no blockchain, no tokens  
-- Predictable cost — no gas, no friction
+- Predictable cost — no gas, no friction  
 
 ---
 
@@ -38,17 +38,17 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### 🚀 Planned Features
 - JavaScript / TypeScript SDK (browser + Node)  
-  - `createFromText`, `createFromFile`, `createFromHash`, `verify`
-- PDF certificate — downloadable proof bundle  
-- Verify UI improvements (“Copy as cURL”, “Copy JSON”, Proof detail modal)
+  - `createFromText`, `createFromFile`, `createFromHash`, `verify`  
+- PDF certificate (downloadable proof bundle)  
+- Verify UI improvements (“Copy as cURL”, “Copy JSON”, Proof modal)  
 - Docs refresh — limits, FAQ, live examples  
-- Minor UX polish + mobile layout updates
+- Minor UX polish + mobile layout updates  
 
-**Objective:** Integration in minutes, proofs readable by humans and machines.
+**Objective:** Integration in minutes, proofs readable by humans and machines.  
 
 ---
 
-## 🟡 v1.0 — Productization _(Target: 2026)_
+## 🟡 v1.0 — Productization _(Target 2026)_
 
 **Status:** 🔜 Planned  
 **Goal:** Reliability, access control, and monetization.
@@ -57,35 +57,35 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - API keys & usage quotas (Free / Pro / Team)  
 - Dashboard (usage stats, CSV export, key rotation)  
 - Webhooks (success / failure callbacks)  
-- Billing via **Stripe** — predictable micro-payments  
+- Billing via **Stripe** (micro-payments)  
 - `/api/status` endpoint  
 
-**Objective:** Scalable, predictable operations for individuals & teams.
+**Objective:** Scalable, predictable operations for individuals and teams.  
 
 ---
 
-## 🔵 v2.0 — Validation Layer _(Research Phase: 2026–2027)_
+## 🔵 v2.0 — Validation Layer _(Research 2026 – 2027)_
 
 **Status:** 🧪 Research  
 **Goal:** Distributed proof validation and offline verification.
 
 ### 🔬 Planned Features
 - **ProofChain** — periodic aggregation + Merkle root publication  
-- SDKs: **Python** & **Go**  
+- SDKs for **Python** & **Go**  
 - Advanced verify — offline proof bundles  
 - CLI tool for CI/CD timestamping  
-- Anchoring + attestations (RFC 3161 / TSA compatibility)
+- Anchoring + attestations (RFC 3161 / TSA compatibility)  
 
-**Objective:** Extra assurance without sacrificing speed or privacy.
+**Objective:** Extra assurance without sacrificing speed or privacy.  
 
 ---
 
 ## 💡 Backlog / Ideas
-- Per-agent API keys & attestations  
+- Per-agent API keys and attestations  
 - Cloud storage hooks (S3 / GCS hash-on-upload)  
 - Organization features (roles, audit export, SIEM)  
 - Proof feed / analytics export  
-- RFC 3161 compatibility (research)
+- RFC 3161 compatibility (research)  
 
 ---
 
@@ -116,7 +116,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Only hashes stored — never user files or personal data  
 - HTTPS / TLS 1.3 enforced  
 - No cookies, no tracking  
-- Proofs are verifiable independently without central trust  
+- Proofs verifiable independently, no central trust  
 
 ---
 
@@ -128,22 +128,22 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
-## 🗓️ Release Timeline (est.)
+## 🗓️ Release Timeline (estimated)
 
 | Version | ETA | Theme |
 |----------|-----|-------|
 | v0.1 | ✅ Live | Public Beta |
 | v0.2 | Q4 2025 | SDK + DX |
 | v1.0 | 2026 | API Keys + Stripe |
-| v2.0 | 2026–2027 | Validation Network |
+| v2.0 | 2026 – 2027 | Validation Network |
 
 ---
 
 ## 📬 Feedback & Contact
 💬 **hello@timeproofs.io**  
 🌐 [https://timeproofs.io](https://timeproofs.io)  
-🐦 _@TimeProofs (coming soon)_  
-👤 Maintainer — [BACOUL](https://github.com/BACOUL)  
+🐦 @TimeProofs (coming soon)  
+👤 Maintainer — [BACOUL](https://github.com/BACOUL)
 
 ---
 
