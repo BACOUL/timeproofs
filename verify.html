@@ -12,6 +12,9 @@
   <link rel="canonical" href="https://timeproofs.io/verify.html" />
 
   <!-- Perf -->
+  <link rel="preconnect" href="https://api.timeproofs.io" crossorigin />
+  <link rel="dns-prefetch" href="//api.timeproofs.io" />
+  <!-- Fallback until full cutover -->
   <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin />
   <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev" />
 
@@ -138,7 +141,7 @@
 <body>
   <!-- Header -->
   <header class="tp-header" role="navigation" aria-label="Main">
-    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">
+    <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/logo%20(1).png" alt="TimeProofs logo" />
       <span>TimeProofs</span>
     </a>
@@ -275,17 +278,34 @@
       });
     })();
 
-    // ===== Config =====
-    const API_BASE = "https://timeproofs-api.jeason-bacoul.workers.dev/api"; // swap to https://api.timeproofs.io at launch
+    // ===== Config with primary + fallback =====
+    const API_BASES = [
+      "https://api.timeproofs.io",
+      "https://timeproofs-api.jeason-bacoul.workers.dev/api"
+    ];
     const MAX_FILE_BYTES = 50 * 1024 * 1024; // 50 MB
     const REQ_TIMEOUT_MS = 15000;
 
-    // Abortable fetch with timeout
-    async function fetchWithTimeout(url, options={}){
+    function withTimeout(options={}){
       const ctrl = new AbortController();
       const t = setTimeout(()=>ctrl.abort(), REQ_TIMEOUT_MS);
-      try { return await fetch(url, { ...options, signal: ctrl.signal }); }
-      finally { clearTimeout(t); }
+      return { ...options, signal: ctrl.signal, _timeoutId: t, _controller: ctrl };
+    }
+    async function fetchAPI(path, options={}){
+      let lastErr;
+      for (const base of API_BASES){
+        const opt = withTimeout(options);
+        try{
+          const res = await fetch(`${base}${path}`, opt);
+          clearTimeout(opt._timeoutId);
+          return res;
+        }catch(e){
+          clearTimeout(opt._timeoutId);
+          lastErr = e;
+          // try next base
+        }
+      }
+      throw lastErr || new Error("Network error");
     }
 
     // ===== Tabs =====
@@ -387,17 +407,17 @@
 
     // Small helper to unify failures and keep buttons state consistent
     function fail(msg){ throw new Error(msg); }
+    function setBusy(el, busy){ el?.setAttribute('aria-busy', busy ? 'true' : 'false'); }
 
     // ===== Create proof =====
     const btnCreate = document.getElementById('btn-create');
     const outCreate = document.getElementById('create-output');
+    let createdPayload = null;
     const statusCreate = document.getElementById('create-status');
     const createActions = document.getElementById('create-actions');
     const openVerifyLink = document.getElementById('open-verify-link');
     const copyCreateJSON = document.getElementById('copy-create-json');
     const copyCreateCURL = document.getElementById('copy-create-curl');
-
-    function setBusy(el, busy){ el?.setAttribute('aria-busy', busy ? 'true' : 'false'); }
 
     function enableCreateActions(data){
       createActions.style.display='flex';
@@ -406,6 +426,10 @@
       if (data?.verify_url){
         openVerifyLink.style.display = 'inline-block';
         openVerifyLink.href = data.verify_url;
+      } else if (data?.hash){
+        // Construct a canonical verify URL on our site
+        openVerifyLink.style.display = 'inline-block';
+        openVerifyLink.href = `/verify.html?hash=${encodeURIComponent(data.hash)}`;
       } else {
         openVerifyLink.style.display = 'none';
       }
@@ -414,7 +438,8 @@
     btnCreate.onclick = async () => {
       if (btnCreate.disabled) return;
       btnCreate.disabled = true; setBusy(panelCreate, true);
-      outCreate.textContent = ''; statusCreate.innerHTML = ''; createActions.style.display='none';
+      outCreate.textContent = ''; createdPayload = null;
+      statusCreate.innerHTML = ''; createActions.style.display='none';
       openVerifyLink.style.display='none'; copyCreateJSON.disabled = true; copyCreateCURL.disabled = true;
 
       try {
@@ -444,7 +469,7 @@
           try { meta = JSON.parse(metaRaw); } catch { fail('Meta must be valid JSON.'); }
         }
 
-        const r = await fetchWithTimeout(`${API_BASE}/timestamp`, {
+        const r = await fetchAPI(`/timestamp`, {
           method:'POST',
           headers:{ 'Content-Type':'application/json' },
           body: JSON.stringify({ hash, type, meta })
@@ -454,11 +479,13 @@
 
         statusCreate.innerHTML = `<span class="pill ok" role="status">✅ Proof created</span>`;
         outCreate.textContent = JSON.stringify(j, null, 2);
+        createdPayload = j;
         enableCreateActions(j);
 
         copyCreateJSON.onclick = () => copyToClipboard(outCreate.textContent);
         copyCreateCURL.onclick = () => {
-          const curl = `curl -X POST '${API_BASE}/timestamp' -H 'Content-Type: application/json' -d '${JSON.stringify({hash, type, meta})}'`;
+          const body = JSON.stringify({hash, type, meta});
+          const curl = `curl -X POST 'https://api.timeproofs.io/timestamp' -H 'Content-Type: application/json' -d '${body.replace(/'/g,"'\\''")}'`;
           copyToClipboard(curl);
         };
       } catch(e){
@@ -495,7 +522,7 @@
         const hash = (document.getElementById('verify-hash').value || '').trim().toLowerCase();
         if (!/^[a-f0-9]{64}$/i.test(hash)) fail('Paste a valid 64-hex SHA-256 hash.');
 
-        const r = await fetchWithTimeout(`${API_BASE}/verify?hash=${encodeURIComponent(hash)}`);
+        const r = await fetchAPI(`/verify?hash=${encodeURIComponent(hash)}`);
         const j = await r.json().catch(()=> ({}));
 
         if (j.found === false) {
@@ -511,7 +538,7 @@
 
         copyVerifyJSON.onclick = () => copyToClipboard(outVerify.textContent);
         copyVerifyCURL.onclick = () => {
-          const curl = `curl '${API_BASE}/verify?hash=${encodeURIComponent(hash)}'`;
+          const curl = `curl 'https://api.timeproofs.io/verify?hash=${encodeURIComponent(hash)}'`;
           copyToClipboard(curl);
         };
       } catch(e){
