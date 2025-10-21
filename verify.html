@@ -14,7 +14,6 @@
   <!-- Perf -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin />
   <link rel="dns-prefetch" href="//api.timeproofs.io" />
-  <!-- Fallback until full cutover -->
   <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin />
   <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev" />
 
@@ -60,25 +59,20 @@
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
 
-    /* Header */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
       border-bottom:1px solid var(--line);
       display:flex; align-items:center; justify-content:space-between; padding:0 16px;
     }
-    .tp-brand{
-      display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem;
-    }
+    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem }
     .tp-brand img{ height:40px; width:auto; object-fit:contain; vertical-align:middle }
     .tp-brand:hover{ color:var(--accent) }
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
       border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
     }
-    .tp-nav a{
-      color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block;
-    }
+    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block }
     .tp-nav a[aria-current="page"]{ color:#9beefb }
     .tp-nav a:hover{ color:var(--accent) }
     @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
@@ -93,7 +87,6 @@
       .tp-brand img{ height:34px }
     }
 
-    /* Layout */
     .wrap{ max-width:980px; margin:100px auto 40px; padding:0 20px }
     h1{ margin:0 0 8px; font-size:clamp(1.6rem, 4.5vw, 1.9rem) }
     p.lead{ margin:0 0 22px; color:var(--muted) }
@@ -125,7 +118,6 @@
     pre{ width:100%; overflow:auto; background:#0b1220; color:#a7f3d0; border:1px solid #1f2937; border-radius:10px; padding:12px }
     .actions{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap }
 
-    /* Dropzone */
     .drop{
       margin-top:10px; padding:14px; border:1px dashed #2b3b55; border-radius:10px;
       background:#0b1220; color:#cfe3f5; text-align:center; font-size:.92rem;
@@ -139,7 +131,6 @@
   </style>
 </head>
 <body>
-  <!-- Header -->
   <header class="tp-header" role="navigation" aria-label="Main">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/logo%20(1).png" alt="TimeProofs logo" />
@@ -278,10 +269,10 @@
       });
     })();
 
-    // ===== Config with primary + fallback =====
+    // ===== Config with primary + fallback (no trailing /api) =====
     const API_BASES = [
       "https://api.timeproofs.io",
-      "https://timeproofs-api.jeason-bacoul.workers.dev/api"
+      "https://timeproofs-api.jeason-bacoul.workers.dev"
     ];
     const MAX_FILE_BYTES = 50 * 1024 * 1024; // 50 MB
     const REQ_TIMEOUT_MS = 15000;
@@ -302,7 +293,6 @@
         }catch(e){
           clearTimeout(opt._timeoutId);
           lastErr = e;
-          // try next base
         }
       }
       throw lastErr || new Error("Network error");
@@ -405,7 +395,6 @@
       hashPrevRaw.textContent = v ? `Hash: ${v}` : '';
     });
 
-    // Small helper to unify failures and keep buttons state consistent
     function fail(msg){ throw new Error(msg); }
     function setBusy(el, busy){ el?.setAttribute('aria-busy', busy ? 'true' : 'false'); }
 
@@ -427,7 +416,6 @@
         openVerifyLink.style.display = 'inline-block';
         openVerifyLink.href = data.verify_url;
       } else if (data?.hash){
-        // Construct a canonical verify URL on our site
         openVerifyLink.style.display = 'inline-block';
         openVerifyLink.href = `/verify.html?hash=${encodeURIComponent(data.hash)}`;
       } else {
@@ -469,7 +457,7 @@
           try { meta = JSON.parse(metaRaw); } catch { fail('Meta must be valid JSON.'); }
         }
 
-        const r = await fetchAPI(`/timestamp`, {
+        const r = await fetchAPI(`/create`, {
           method:'POST',
           headers:{ 'Content-Type':'application/json' },
           body: JSON.stringify({ hash, type, meta })
@@ -485,7 +473,7 @@
         copyCreateJSON.onclick = () => copyToClipboard(outCreate.textContent);
         copyCreateCURL.onclick = () => {
           const body = JSON.stringify({hash, type, meta});
-          const curl = `curl -X POST 'https://api.timeproofs.io/timestamp' -H 'Content-Type: application/json' -d '${body.replace(/'/g,"'\\''")}'`;
+          const curl = `curl -X POST 'https://api.timeproofs.io/create' -H 'Content-Type: application/json' -d '${body.replace(/'/g,"'\\''")}'`;
           copyToClipboard(curl);
         };
       } catch(e){
@@ -525,13 +513,14 @@
         const r = await fetchAPI(`/verify?hash=${encodeURIComponent(hash)}`);
         const j = await r.json().catch(()=> ({}));
 
-        if (j.found === false) {
-          statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Not found</span>`;
-        } else if (j.ok === true || j.found === true) {
+        if (j.ok && j.verified === true) {
           statusVerify.innerHTML = `<span class="pill ok" role="status">✅ Valid</span>`;
+        } else if (j.ok === false && (j.error === "not_found" || r.status === 404)) {
+          statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Not found</span>`;
         } else {
           statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Invalid</span>`;
         }
+
         outVerify.textContent = JSON.stringify(j, null, 2);
         verifyActions.style.display='flex';
         copyVerifyJSON.disabled = false; copyVerifyCURL.disabled = false;
