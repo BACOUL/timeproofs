@@ -59,6 +59,7 @@
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
 
+    /* Header */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
@@ -87,6 +88,7 @@
       .tp-brand img{ height:34px }
     }
 
+    /* Layout */
     .wrap{ max-width:980px; margin:100px auto 40px; padding:0 20px }
     h1{ margin:0 0 8px; font-size:clamp(1.6rem, 4.5vw, 1.9rem) }
     p.lead{ margin:0 0 22px; color:var(--muted) }
@@ -115,9 +117,22 @@
     .ok{ background:#0f3b22; color:#b7f7ce; border:1px solid #1c6b3d }
     .bad{ background:#3b0f12; color:#ffc1c6; border:1px solid #6b1c22 }
 
-    pre{ width:100%; overflow:auto; background:#0b1220; color:#a7f3d0; border:1px solid #1f2937; border-radius:10px; padding:12px }
+    /* JSON block: wrap long hashes/signatures on mobile */
+    pre{
+      width:100%;
+      background:#0b1220;
+      color:#a7f3d0;
+      border:1px solid #1f2937;
+      border-radius:10px;
+      padding:12px;
+      white-space:pre-wrap;
+      word-break:break-all;
+      overflow-wrap:anywhere;
+      font-size:13px;
+    }
     .actions{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap }
 
+    /* Dropzone */
     .drop{
       margin-top:10px; padding:14px; border:1px dashed #2b3b55; border-radius:10px;
       background:#0b1220; color:#cfe3f5; text-align:center; font-size:.92rem;
@@ -128,6 +143,17 @@
 
     .monosmall{ font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-size:12px; color:#bcd9e8 }
     .mutedline{ border-top:1px solid #1f2937; margin:12px 0 0; padding-top:10px }
+
+    /* --- Mobile fixes --- */
+    @media (max-width:480px){
+      .wrap{ margin:84px auto 24px; padding:0 14px }
+      .card{ padding:14px }
+      .row{ gap:8px }
+      .btn, .row .btn{ width:100%; min-height:44px }
+      .tab{ padding:8px 10px; font-size:.95rem }
+      .tp-header{ height:56px }
+      input[type="text"], textarea{ padding:9px 10px; font-size:14px }
+    }
   </style>
 </head>
 <body>
@@ -485,7 +511,8 @@
 
     // ===== Verify proof =====
     const btnVerify = document.getElementById('btn-verify');
-    const outVerify = document.getElementById('verify-output');
+    theVerifyOutput = document.getElementById('verify-output');
+    const outVerify = theVerifyOutput;
     const statusVerify = document.getElementById('verify-status');
     const verifyActions = document.getElementById('verify-actions');
     const copyVerifyJSON = document.getElementById('copy-verify-json');
