@@ -3,7 +3,7 @@
 <head>
   <!-- Core -->
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta name="color-scheme" content="dark"/>
   <title>Verify & Create Proof — TimeProofs</title>
   <meta name="description" content="Verify or create cryptographic proofs of existence. Hash locally, timestamp via API, verify publicly — private, instant, edge-native."/>
@@ -12,10 +12,10 @@
   <link rel="canonical" href="https://timeproofs.io/verify.html"/>
 
   <!-- Perf -->
-  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin>
-  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev">
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin>
   <link rel="dns-prefetch" href="//api.timeproofs.io">
+  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin>
+  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev">
 
   <!-- Icons / Manifest -->
   <link rel="icon" href="/favicon.ico" sizes="any"/>
@@ -41,8 +41,12 @@
       --bg:#0b1020; --panel:#0f172a; --line:#1e293b;
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
       --ok:#22c55e; --bad:#ef4444;
+      --safe-top: env(safe-area-inset-top, 0px);
       --safe-btm: env(safe-area-inset-bottom, 0px);
+      --header-h: 64px;
     }
+    @media (max-width:900px){ :root{ --header-h: 56px } }
+
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg) }
     body{
@@ -52,13 +56,22 @@
       font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
       text-rendering:optimizeLegibility;
+      /* push content below fixed header on all devices */
+      padding-top: calc(var(--header-h) + var(--safe-top));
     }
     a{ color:var(--accent); text-decoration:none } a:hover{ text-decoration:underline }
 
     /* Header */
-    .tp-header{ position:fixed; inset:0 0 auto 0; height:64px; z-index:1000; background:rgba(11,16,32,.7); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 16px }
+    .tp-header{
+      position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:1000;
+      padding-top: var(--safe-top);
+      background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between; padding-left:16px; padding-right:16px;
+    }
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem }
     .tp-brand img{ height:40px; width:auto; object-fit:contain; vertical-align:middle }
+    @media (max-width:899px){ .tp-brand img{ height:34px } }
     .tp-brand:hover{ color:var(--accent) }
     .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer }
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block }
@@ -66,15 +79,18 @@
     .tp-nav a:hover{ color:var(--accent) }
     @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width:899px){
-      .tp-nav{ position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45); transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease }
+      .tp-nav{
+        position:fixed; top:calc(var(--header-h) + var(--safe-top)); left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
+        display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
+        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
+      }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
-      .tp-brand img{ height:34px }
     }
 
     /* Layout */
-    .wrap{ max-width:980px; margin:100px auto 40px; padding:0 20px }
-    h1{ margin:0 0 8px; font-size:clamp(1.6rem, 4.5vw, 1.9rem) }
+    .wrap{ max-width:980px; margin:0 auto 40px; padding:0 20px }
+    h1{ margin:14px 0 8px; font-size:clamp(1.6rem, 4.5vw, 1.9rem) }
     p.lead{ margin:0 0 22px; color:var(--muted) }
 
     .tabs{ display:flex; gap:8px; margin:10px 0 18px; flex-wrap:wrap }
@@ -105,16 +121,14 @@
     .drop{ margin-top:10px; padding:14px; border:1px dashed #2b3b55; border-radius:10px; background:#0b1220; color:#cfe3f5; text-align:center; font-size:.92rem }
     .drop.drag{ border-color:#22d3ee; background:#0f1f33 }
 
-    footer{ margin:26px 0 0; text-align:center; color:#7c8aa5; font-size:12px; padding-bottom:calc(8px + var(--safe-btm)) }
+    footer{ margin:26px 0 0; text-align:center; color:#7c8aa5; font-size:12px; padding:8px 12px; padding-bottom:calc(12px + var(--safe-btm)) }
 
-    /* Mobile */
+    /* Mobile touch targets */
     @media (max-width:480px){
-      .wrap{ margin:84px auto 24px; padding:0 14px }
       .card{ padding:14px }
       .row{ gap:8px }
       .btn, .row .btn{ width:100%; min-height:44px }
       .tab{ padding:8px 10px; font-size:.95rem }
-      .tp-header{ height:56px }
       input[type="text"], textarea{ padding:9px 10px; font-size:14px }
     }
   </style>
@@ -245,10 +259,10 @@
       });
     })();
 
-    /* API bases (include /api) */
+    /* API bases (prod first, include /api) */
     const API_BASES = [
-      "https://timeproofs-api.jeason-bacoul.workers.dev/api",
-      "https://api.timeproofs.io/api"
+      "https://api.timeproofs.io/api",
+      "https://timeproofs-api.jeason-bacoul.workers.dev/api"
     ];
     const MAX_FILE_BYTES = 50 * 1024 * 1024;
     const REQ_TIMEOUT_MS = 15000;
@@ -265,7 +279,7 @@
           const opt = withTimeout(options);
           res = await fetch(`${base}${path}`, opt);
           clearTimeout(opt._timeoutId);
-          if (res.ok || res.status < 500) return res; // return first non-5xx
+          if (res.ok || res.status < 500) return res;
         }catch(e){ lastErr = e; }
       }
       if (res) return res;
@@ -382,8 +396,7 @@
       copyCreateJSON.onclick = () => copyToClipboard(outCreate.textContent);
       copyCreateCURL.onclick = () => {
         const curlBody = JSON.stringify(req).replace(/'/g, "'\\''");
-        const curl = `curl -X POST 'https://timeproofs-api.jeason-bacoul.workers.dev/api/timestamp' -H 'Content-Type: application/json' -d '${curlBody}'`;
-        copyToClipboard(curl);
+        copyToClipboard(`curl -X POST 'https://api.timeproofs.io/api/timestamp' -H 'Content-Type: application/json' -d '${curlBody}'`);
       };
     }
 
@@ -424,7 +437,6 @@
         const j = await r.json().catch(()=> ({}));
         if (!r.ok || j.error) fail(j.error || `Request failed (${r.status})`);
 
-        // Normalize fields for display
         const normalized = {
           ok: j.ok === true,
           hash: j.hash,
@@ -452,7 +464,6 @@
     const copyVerifyJSON = document.getElementById('copy-verify-json');
     const copyVerifyCURL = document.getElementById('copy-verify-curl');
 
-    // Prefill from ?hash=
     const params = new URLSearchParams(location.search);
     const preHash = params.get('hash');
     if (preHash && /^[a-f0-9]{64}$/i.test(preHash)) {
@@ -491,7 +502,7 @@
         verifyActions.style.display='flex';
         copyVerifyJSON.disabled=false; copyVerifyCURL.disabled=false;
         copyVerifyJSON.onclick = () => copyToClipboard(outVerify.textContent);
-        copyVerifyCURL.onclick = () => copyToClipboard(`curl 'https://timeproofs-api.jeason-bacoul.workers.dev/api/verify?hash=${encodeURIComponent(hash)}'`);
+        copyVerifyCURL.onclick = () => copyToClipboard(`curl 'https://api.timeproofs.io/api/verify?hash=${encodeURIComponent(hash)}'`);
       }catch(e){
         statusVerify.innerHTML = `<span class="pill bad" role="alert">❌ ${String(e.message || e)}</span>`;
       }finally{
