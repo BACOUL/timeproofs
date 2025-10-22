@@ -10,21 +10,21 @@
   <meta name="theme-color" content="#0b1020" />
   <link rel="canonical" href="https://timeproofs.io/proofspec.html" />
 
-  <!-- Security (kept inline for v0.1) -->
+  <!-- Security -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
-    img-src 'self' data:;
+    img-src 'self' https: data:;
     style-src 'self' 'unsafe-inline';
     script-src 'self' 'unsafe-inline';
-    connect-src https://timeproofs-api.jeason-bacoul.workers.dev;
+    connect-src https://api.timeproofs.io;
     font-src 'self';
     object-src 'none';
     base-uri 'self';
     frame-ancestors 'none'">
 
   <!-- Perf -->
-  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin />
-  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev" />
+  <link rel="preconnect" href="https://api.timeproofs.io" crossorigin />
+  <link rel="dns-prefetch" href="//api.timeproofs.io" />
 
   <!-- Icons / Manifest -->
   <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -56,7 +56,7 @@
     "about":["digital signatures","timestamping","data integrity","hashing","interoperability"],
     "author":{"@type":"Organization","name":"TimeProofs Editorial"},
     "publisher":{"@type":"Organization","name":"TimeProofs","logo":{"@type":"ImageObject","url":"https://timeproofs.io/logo%20(1).png"}},
-    "datePublished":"2025-10-20",
+    "datePublished":"2025-10-22",
     "version":"1.0.0-draft"
   }
   </script>
@@ -71,11 +71,12 @@
 
     /* Header */
     .tp-header{ position:fixed; inset:0 0 auto 0; height:64px; z-index:1000; background:rgba(11,16,32,.7); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 16px; }
-    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; }
+    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none }
     .tp-brand img{ height:40px; width:auto; object-fit:contain; vertical-align:middle; }
     .tp-brand:hover{ color:var(--accent) }
     .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer; }
-    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block; }
+    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block; text-decoration:none }
+    .tp-nav a[aria-current="page"]{ color:#9beefb }
     .tp-nav a:hover{ color:var(--accent) }
     @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width:899px){
@@ -83,7 +84,7 @@
         display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
         transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease; }
       .tp-nav a{ margin:4px 0 } .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
-      .tp-brand img{ height:34px; }
+      .tp-brand img{ height:34px }
     }
 
     /* Page */
@@ -106,7 +107,7 @@
 </head>
 <body>
   <!-- Header -->
-  <header class="tp-header">
+  <header class="tp-header" role="banner">
     <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">
       <img src="/logo%20(1).png" alt="TimeProofs logo">
       <span>TimeProofs</span>
@@ -159,7 +160,7 @@
           <h3>Actors</h3>
           <ul>
             <li><strong>Author</strong>: computes the hash locally.</li>
-            <li><strong>Timestamping Service</strong>: signs a tuple <em>(hash, ts, meta)</em>.</li>
+            <li><strong>Timestamping Service</strong>: signs a tuple <em>(hash, ts)</em> and returns a proof.</li>
             <li><strong>Verifier</strong>: checks integrity and signature.</li>
           </ul>
         </div>
@@ -167,8 +168,8 @@
           <h3>Core flow</h3>
           <ol>
             <li>Hash input <em>M</em> with SHA-256 → <code>hash</code> as 64-hex.</li>
-            <li>Submit <code>hash</code> + optional <code>meta</code> → receive signed <em>Proof</em>.</li>
-            <li>Verify signature, time bounds, and hash equality.</li>
+            <li>Submit <code>hash</code> (+ optional <code>meta</code>) → receive signed <em>Proof</em>.</li>
+            <li>Verify signature and hash equality. Optionally, policy checks on <code>ts</code>.</li>
           </ol>
         </div>
       </div>
@@ -180,12 +181,12 @@
 <pre><code>{
   "spec": "proofspec/1.0",
   "hash": "&lt;64-hex&gt;",
-  "alg":  "hmac-sha256",
-  "ts":   "2025-10-20T14:00:00Z",
-  "meta": { "type":"event", "source":"api", "nonce":"base64url" },
-  "sig":  "base64url(hmac(secret, hash + '\n' + ts + '\n' + base64url(JSON(meta||{}))))",
-  "kid":  "key-id-or-issuer",
-  "ver":  { "endpoint":"https://timeproofs-api.jeason-bacoul.workers.dev/api/verify", "method":"GET" }
+  "alg":  "HMAC-SHA256",
+  "ts":   "2025-10-22T14:00:00.000Z",
+  "sig":  "&lt;hex(hmac_sha256(secret, `${hash}|${ts}`))&gt;",
+  "kid":  "tp-admin-v0",
+  "meta": { "type":"event", "source":"api" },
+  "ver":  { "endpoint":"https://timeproofs.io/verify.html?hash=&lt;hash&gt;", "method":"GET" }
 }</code></pre>
       </div>
       <p class="muted"><code>meta</code> is optional. Exclude personal data.</p>
@@ -203,18 +204,19 @@
   "properties":{
     "spec":{"type":"string","const":"proofspec/1.0"},
     "hash":{"type":"string","pattern":"^[0-9a-f]{64}$"},
-    "alg":{"type":"string","enum":["hmac-sha256"]},
+    "alg":{"type":"string","enum":["HMAC-SHA256"]},
     "ts":{"type":"string","format":"date-time"},
-    "meta":{"type":"object","additionalProperties":true},
-    "sig":{"type":"string","pattern":"^[A-Za-z0-9_-]+={0,2}$"},
+    "sig":{"type":"string","pattern":"^[0-9a-f]{64}$|^[0-9a-f]{128}$"},
     "kid":{"type":"string","minLength":1},
+    "meta":{"type":"object","additionalProperties":true},
     "ver":{
       "type":"object",
       "required":["endpoint","method"],
       "properties":{
         "endpoint":{"type":"string","format":"uri"},
         "method":{"type":"string","enum":["GET","POST"]}
-      }
+      },
+      "additionalProperties":false
     }
   },
   "additionalProperties":false
@@ -227,16 +229,17 @@
       <h3>5.1 Hashing</h3>
       <p>Use SHA-256. Text is UTF-8. Emit lowercase 64-hex.</p>
       <h3>5.2 Signing</h3>
-      <p>HMAC-SHA256 with service key <code>kid</code>. Build UTF-8 message:</p>
-      <div class="panel"><code>message = hash + "\n" + ts + "\n" + base64url(JSON.stringify(meta || {}))</code></div>
+      <p>HMAC-SHA256 with service key <code>kid</code>. Message is UTF-8:</p>
+      <div class="panel"><code>message = `${hash}|${ts}`</code></div>
+      <p>Emit signature as lowercase hex.</p>
       <h3>5.3 Verification</h3>
       <ol>
-        <li>Recompute <code>hash</code> from input; compare.</li>
-        <li>Rebuild <code>message</code>; verify <code>sig</code> using key for <code>kid</code>.</li>
-        <li>Check <code>spec</code>, <code>alg</code>, and policy on <code>ts</code>.</li>
+        <li>Recompute <code>hash</code> from input; compare to proof.</li>
+        <li>Rebuild <code>message</code>; verify <code>sig</code> using the key bound to <code>kid</code>.</li>
+        <li>Validate <code>spec</code>/<code>alg</code> and time policy on <code>ts</code> if applicable.</li>
       </ol>
       <h3>5.4 Transport</h3>
-      <p>Out of scope. Reference HTTP endpoint in <code>ver.endpoint</code>.</p>
+      <p>Out of scope. HTTP reference in <code>ver.endpoint</code>. HTTPS required.</p>
     </section>
 
     <section id="security">
@@ -245,7 +248,7 @@
         <li><strong>Hash-only</strong>: content not transmitted.</li>
         <li><strong>No personal data</strong> in <code>meta</code>.</li>
         <li><strong>Keys</strong>: rotate; bind <code>kid</code> to rotation policy.</li>
-        <li><strong>Replay</strong>: include <code>nonce</code> in <code>meta</code> if needed.</li>
+        <li><strong>Replay</strong>: if needed, add a nonce in <code>meta</code> and include it in server logs only.</li>
         <li><strong>Time</strong>: NTP-synchronized service clocks.</li>
       </ul>
     </section>
@@ -280,12 +283,15 @@
       <div class="two">
         <div class="panel">
           <h3>Create</h3>
-<pre><code>POST https://timeproofs-api.jeason-bacoul.workers.dev/api/timestamp
-{"hash":"&lt;64-hex&gt;","type":"event","meta":{"source":"spec"}}</code></pre>
+<pre><code>POST https://api.timeproofs.io/api/admin/timestamp
+Authorization: Bearer &lt;ADMIN_TOKEN&gt;
+Content-Type: application/json
+
+{"hash":"&lt;64-hex&gt;","meta":{"source":"spec"}}</code></pre>
         </div>
         <div class="panel">
           <h3>Verify</h3>
-<pre><code>GET  https://timeproofs-api.jeason-bacoul.workers.dev/api/verify?hash=&lt;64-hex&gt;</code></pre>
+<pre><code>GET https://timeproofs.io/verify.html?hash=&lt;64-hex&gt;</code></pre>
         </div>
       </div>
       <p>OpenAPI and examples: <a href="/docs.html">API Docs</a>.</p>
@@ -296,11 +302,10 @@
       <div class="panel">
 <pre><code># Input (UTF-8): "TimeProofs"
 hash = "3940cae79aa443bfcdfc09b4f9fbb49bf16f0be354dee96e014a236d1c7ac9c3"  # example
-ts   = "2025-10-20T14:00:00Z"
-meta = {"type":"event","source":"tv1","nonce":"N7J7wq"}
-msg  = hash + "\n" + ts + "\n" + base64url(JSON.stringify(meta))
-sig  = base64url( HMAC_SHA256(key=K1, msg=msg) )
-kid  = "tp-k1"</code></pre>
+ts   = "2025-10-22T14:00:00.000Z"
+msg  = `${hash}|${ts}`
+sig  = hex( HMAC_SHA256(key=K1, msg=msg) ).lower()
+kid  = "tp-admin-v0"</code></pre>
       </div>
       <p class="muted">Example only. Publish official vectors before final release.</p>
     </section>
@@ -310,7 +315,7 @@ kid  = "tp-k1"</code></pre>
       <h3>Is blockchain required?</h3>
       <p>No. Standard hashing and signatures. Lower cost. Higher privacy.</p>
       <h3>Can I verify offline?</h3>
-      <p>Yes, with the proof object and the key policy for <code>kid</code>.</p>
+      <p>Yes, with the proof object and the verification key policy for <code>kid</code>.</p>
     </section>
 
     <section id="license">
