@@ -2,87 +2,71 @@
 <html lang="en">
 <head>
   <!-- Core -->
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="color-scheme" content="dark" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="color-scheme" content="dark"/>
   <title>Verify & Create Proof — TimeProofs</title>
-  <meta name="description" content="Verify or create cryptographic proofs of existence. Hash locally, timestamp via API, verify publicly — private, instant, edge-native." />
-  <meta name="robots" content="index,follow" />
-  <meta name="theme-color" content="#0b1020" />
-  <link rel="canonical" href="https://timeproofs.io/verify.html" />
+  <meta name="description" content="Verify or create cryptographic proofs of existence. Hash locally, timestamp via API, verify publicly — private, instant, edge-native."/>
+  <meta name="robots" content="index,follow"/>
+  <meta name="theme-color" content="#0b1020"/>
+  <link rel="canonical" href="https://timeproofs.io/verify.html"/>
 
   <!-- Perf -->
-  <link rel="preconnect" href="https://api.timeproofs.io" crossorigin />
-  <link rel="dns-prefetch" href="//api.timeproofs.io" />
-  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin />
-  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev" />
+  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin>
+  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev">
+  <link rel="preconnect" href="https://api.timeproofs.io" crossorigin>
+  <link rel="dns-prefetch" href="//api.timeproofs.io">
 
   <!-- Icons / Manifest -->
-  <link rel="icon" href="/favicon.ico" sizes="any" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="icon" href="/favicon.ico" sizes="any"/>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+  <link rel="manifest" href="/site.webmanifest"/>
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="Verify & Create Proof — TimeProofs" />
-  <meta property="og:description" content="Hash locally. Timestamp via API. Verify publicly. No blockchain, no friction." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://timeproofs.io/verify.html" />
-  <meta property="og:image" content="https://timeproofs.io/og.png" />
-  <meta property="og:site_name" content="TimeProofs" />
-  <meta property="og:locale" content="en_US" />
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Verify & Create Proof — TimeProofs" />
-  <meta name="twitter:description" content="Instant proof-of-existence for AI, data and every digital creation." />
-  <meta name="twitter:image" content="https://timeproofs.io/og.png" />
+  <!-- Social -->
+  <meta property="og:title" content="Verify & Create Proof — TimeProofs"/>
+  <meta property="og:description" content="Hash locally. Timestamp via API. Verify publicly. No blockchain, no friction."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://timeproofs.io/verify.html"/>
+  <meta property="og:image" content="https://timeproofs.io/og.png"/>
+  <meta property="og:site_name" content="TimeProofs"/>
+  <meta property="og:locale" content="en_US"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Verify & Create Proof — TimeProofs"/>
+  <meta name="twitter:description" content="Instant proof-of-existence for AI, data and every digital creation."/>
+  <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <style>
     :root{
       --bg:#0b1020; --panel:#0f172a; --line:#1e293b;
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
       --ok:#22c55e; --bad:#ef4444;
+      --safe-btm: env(safe-area-inset-bottom, 0px);
     }
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg) }
     body{
       margin:0;
-      background:
-        radial-gradient(1000px 420px at 70% -10%, rgba(34,211,238,.10), transparent 60%),
-        var(--bg);
+      background: radial-gradient(1000px 420px at 70% -10%, rgba(34,211,238,.10), transparent 60%), var(--bg);
       color:var(--text);
       font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
       text-rendering:optimizeLegibility;
     }
-    a{ color:var(--accent); text-decoration:none }
-    a:hover{ text-decoration:underline }
+    a{ color:var(--accent); text-decoration:none } a:hover{ text-decoration:underline }
 
     /* Header */
-    .tp-header{
-      position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
-      background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
-      border-bottom:1px solid var(--line);
-      display:flex; align-items:center; justify-content:space-between; padding:0 16px;
-    }
+    .tp-header{ position:fixed; inset:0 0 auto 0; height:64px; z-index:1000; background:rgba(11,16,32,.7); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 16px }
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem }
     .tp-brand img{ height:40px; width:auto; object-fit:contain; vertical-align:middle }
     .tp-brand:hover{ color:var(--accent) }
-    .tp-burger{
-      display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
-      border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
-    }
+    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer }
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block }
     .tp-nav a[aria-current="page"]{ color:#9beefb }
     .tp-nav a:hover{ color:var(--accent) }
     @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width:899px){
-      .tp-nav{
-        position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
-        display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
-        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
-      }
+      .tp-nav{ position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45); transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
       .tp-brand img{ height:34px }
@@ -102,9 +86,7 @@
 
     .card{ background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px }
     label{ display:block; font-size:13px; color:#a7b1c2; margin:8px 0 6px }
-    input[type="text"], textarea{
-      width:100%; background:#0b1220; color:var(--text); border:1px solid #1f2937; border-radius:10px; padding:10px 12px;
-    }
+    input[type="text"], textarea{ width:100%; background:#0b1220; color:var(--text); border:1px solid #1f2937; border-radius:10px; padding:10px 12px }
     textarea{ min-height:110px; resize:vertical }
     .row{ display:flex; gap:12px; flex-wrap:wrap; align-items:center }
     .row > *{ flex:1 1 240px }
@@ -117,34 +99,15 @@
     .ok{ background:#0f3b22; color:#b7f7ce; border:1px solid #1c6b3d }
     .bad{ background:#3b0f12; color:#ffc1c6; border:1px solid #6b1c22 }
 
-    /* JSON block: wrap long hashes/signatures on mobile */
-    pre{
-      width:100%;
-      background:#0b1220;
-      color:#a7f3d0;
-      border:1px solid #1f2937;
-      border-radius:10px;
-      padding:12px;
-      white-space:pre-wrap;
-      word-break:break-all;
-      overflow-wrap:anywhere;
-      font-size:13px;
-    }
+    pre{ width:100%; background:#0b1220; color:#a7f3d0; border:1px solid #1f2937; border-radius:10px; padding:12px; white-space:pre-wrap; word-break:break-all; overflow-wrap:anywhere; font-size:13px }
     .actions{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap }
 
-    /* Dropzone */
-    .drop{
-      margin-top:10px; padding:14px; border:1px dashed #2b3b55; border-radius:10px;
-      background:#0b1220; color:#cfe3f5; text-align:center; font-size:.92rem;
-    }
+    .drop{ margin-top:10px; padding:14px; border:1px dashed #2b3b55; border-radius:10px; background:#0b1220; color:#cfe3f5; text-align:center; font-size:.92rem }
     .drop.drag{ border-color:#22d3ee; background:#0f1f33 }
 
-    footer{ margin:26px 0 0; text-align:center; color:#7c8aa5; font-size:12px }
+    footer{ margin:26px 0 0; text-align:center; color:#7c8aa5; font-size:12px; padding-bottom:calc(8px + var(--safe-btm)) }
 
-    .monosmall{ font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-size:12px; color:#bcd9e8 }
-    .mutedline{ border-top:1px solid #1f2937; margin:12px 0 0; padding-top:10px }
-
-    /* --- Mobile fixes --- */
+    /* Mobile */
     @media (max-width:480px){
       .wrap{ margin:84px auto 24px; padding:0 14px }
       .card{ padding:14px }
@@ -158,13 +121,11 @@
 </head>
 <body>
   <header class="tp-header" role="navigation" aria-label="Main">
-    <a class="tp-brand" href="/" aria-label="TimeProofs Home">
-      <img src="/logo%20(1).png" alt="TimeProofs logo" />
+    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">
+      <img src="/logo%20(1).png" alt="TimeProofs logo"/>
       <span>TimeProofs</span>
     </a>
-    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
-      <span aria-hidden="true">☰</span>
-    </button>
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
     <nav id="tp-nav" class="tp-nav" data-state="closed">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
@@ -185,7 +146,7 @@
     </div>
 
     <div class="grid">
-      <!-- CREATE PROOF -->
+      <!-- CREATE -->
       <section class="card" id="panel-create" role="tabpanel" aria-labelledby="tab-create" aria-busy="false">
         <label>Choose input</label>
         <div class="row" role="group" aria-label="Input mode">
@@ -197,37 +158,33 @@
         <div id="input-text" style="margin-top:14px;">
           <label for="text">Text to hash (SHA-256 runs locally)</label>
           <textarea id="text" placeholder="Paste or type your text here..." spellcheck="false" enterkeyhint="done"></textarea>
-          <div id="hash-preview-text" class="monosmall mutedline" aria-live="polite"></div>
+          <div id="hash-preview-text" class="hint" aria-live="polite"></div>
         </div>
 
         <div id="input-file" style="display:none; margin-top:14px;">
           <label for="file">File to hash (processed locally)</label>
-          <input type="file" id="file" aria-describedby="file-hint" />
+          <input type="file" id="file" aria-describedby="file-hint"/>
           <p id="file-hint" class="hint">We only compute a hash in your browser. The file is never uploaded. Max 50 MB.</p>
-          <div id="drop" class="drop" aria-hidden="false">…or drag & drop a file here</div>
+          <div id="drop" class="drop">…or drag & drop a file here</div>
           <div id="file-info" class="hint" aria-live="polite"></div>
-          <div id="hash-preview-file" class="monosmall mutedline" aria-live="polite"></div>
+          <div id="hash-preview-file" class="hint" aria-live="polite"></div>
         </div>
 
         <div id="input-hash" style="display:none; margin-top:14px;">
           <label for="raw-hash">Existing SHA-256 hash (hex)</label>
-          <input
-            type="text" id="raw-hash"
-            placeholder="e3b0c44298fc1c149a..." inputmode="latin" autocapitalize="off" autocomplete="off" spellcheck="false"
-            pattern="[A-Fa-f0-9]{64}" aria-describedby="raw-hint" enterkeyhint="done"
-          />
-          <p id="raw-hint" class="hint">64 hex characters, case-insensitive.</p>
-          <div id="hash-preview-raw" class="monosmall mutedline" aria-live="polite"></div>
+          <input type="text" id="raw-hash" placeholder="e3b0c44298fc1c149a..." inputmode="latin" autocapitalize="off" autocomplete="off" spellcheck="false" pattern="[A-Fa-f0-9]{64}" enterkeyhint="done"/>
+          <p class="hint">64 hex characters, case-insensitive.</p>
+          <div id="hash-preview-raw" class="hint" aria-live="polite"></div>
         </div>
 
         <div class="row" style="margin-top:16px;">
           <div>
             <label for="type">Type (optional)</label>
-            <input type="text" id="type" placeholder="prompt | gen | file | webhook | other" autocomplete="off" maxlength="32" />
+            <input type="text" id="type" placeholder="prompt | gen | file | webhook | other" autocomplete="off" maxlength="32"/>
           </div>
           <div>
             <label for="meta">Meta (optional JSON, small)</label>
-            <input type="text" id="meta" placeholder='{"model":"gpt-4o","mime":"text/plain"}' autocomplete="off" spellcheck="false" maxlength="1024" />
+            <input type="text" id="meta" placeholder='{"model":"gpt-4o","mime":"text/plain"}' autocomplete="off" spellcheck="false" maxlength="1024"/>
           </div>
         </div>
 
@@ -240,20 +197,15 @@
         <pre id="create-output" style="margin-top:12px;" aria-live="polite"></pre>
         <div class="actions" id="create-actions" style="display:none;">
           <a class="btn ghost" id="open-verify-link" href="#" target="_blank" rel="noopener noreferrer" style="display:none">Open verify link</a>
-          <button class="btn ghost" id="copy-create-json" type="button" disabled aria-label="Copy create JSON">Copy JSON</button>
-          <button class="btn ghost" id="copy-create-curl" type="button" disabled aria-label="Copy create cURL">Copy cURL</button>
+          <button class="btn ghost" id="copy-create-json" type="button" disabled>Copy JSON</button>
+          <button class="btn ghost" id="copy-create-curl" type="button" disabled>Copy cURL</button>
         </div>
       </section>
 
-      <!-- VERIFY PROOF -->
+      <!-- VERIFY -->
       <section class="card" id="panel-verify" role="tabpanel" aria-labelledby="tab-verify" aria-busy="false" style="display:none;">
         <label for="verify-hash">Hash to verify (SHA-256, hex)</label>
-        <input
-          type="text" id="verify-hash"
-          placeholder="Paste an existing hash"
-          inputmode="latin" autocapitalize="off" autocomplete="off" spellcheck="false"
-          pattern="[A-Fa-f0-9]{64}" enterkeyhint="go"
-        />
+        <input type="text" id="verify-hash" placeholder="Paste an existing hash" inputmode="latin" autocapitalize="off" autocomplete="off" spellcheck="false" pattern="[A-Fa-f0-9]{64}" enterkeyhint="go"/>
         <div class="row" style="margin-top:12px;">
           <button class="btn" id="btn-verify" type="button" aria-controls="verify-output verify-status">Verify</button>
           <span class="hint">Checks existence, timestamp, and server signature.</span>
@@ -261,8 +213,8 @@
         <div id="verify-status" style="margin-top:12px;" aria-live="polite"></div>
         <pre id="verify-output" style="margin-top:12px;" aria-live="polite"></pre>
         <div class="actions" id="verify-actions" style="display:none;">
-          <button class="btn ghost" id="copy-verify-json" type="button" disabled aria-label="Copy verify JSON">Copy JSON</button>
-          <button class="btn ghost" id="copy-verify-curl" type="button" disabled aria-label="Copy verify cURL">Copy cURL</button>
+          <button class="btn ghost" id="copy-verify-json" type="button" disabled>Copy JSON</button>
+          <button class="btn ghost" id="copy-verify-curl" type="button" disabled>Copy cURL</button>
         </div>
       </section>
     </div>
@@ -271,7 +223,7 @@
   </div>
 
   <script>
-    // ===== Header burger =====
+    /* Header burger */
     (function(){
       const burger = document.getElementById('tp-burger');
       const nav = document.getElementById('tp-nav');
@@ -284,74 +236,62 @@
       window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
     })();
 
-    // Prevent accidental full-page file drop
+    /* Prevent full-page drop */
     (function(){
       ['dragover','drop'].forEach(type=>{
         document.addEventListener(type, e=>{
-          if (!e.target || !(e.target.closest && e.target.closest('#drop'))) {
-            e.preventDefault(); e.stopPropagation();
-          }
+          if (!e.target || !(e.target.closest && e.target.closest('#drop'))) { e.preventDefault(); e.stopPropagation(); }
         });
       });
     })();
 
-    // ===== Config with primary + fallback (no trailing /api) =====
+    /* API bases (include /api) */
     const API_BASES = [
-      "https://api.timeproofs.io",
-      "https://timeproofs-api.jeason-bacoul.workers.dev"
+      "https://timeproofs-api.jeason-bacoul.workers.dev/api",
+      "https://api.timeproofs.io/api"
     ];
-    const MAX_FILE_BYTES = 50 * 1024 * 1024; // 50 MB
+    const MAX_FILE_BYTES = 50 * 1024 * 1024;
     const REQ_TIMEOUT_MS = 15000;
 
     function withTimeout(options={}){
       const ctrl = new AbortController();
       const t = setTimeout(()=>ctrl.abort(), REQ_TIMEOUT_MS);
-      return { ...options, signal: ctrl.signal, _timeoutId: t, _controller: ctrl };
+      return { ...options, signal: ctrl.signal, _timeoutId: t };
     }
     async function fetchAPI(path, options={}){
-      let lastErr;
+      let lastErr, res;
       for (const base of API_BASES){
-        const opt = withTimeout(options);
         try{
-          const res = await fetch(`${base}${path}`, opt);
+          const opt = withTimeout(options);
+          res = await fetch(`${base}${path}`, opt);
           clearTimeout(opt._timeoutId);
-          return res;
-        }catch(e){
-          clearTimeout(opt._timeoutId);
-          lastErr = e;
-        }
+          if (res.ok || res.status < 500) return res; // return first non-5xx
+        }catch(e){ lastErr = e; }
       }
+      if (res) return res;
       throw lastErr || new Error("Network error");
     }
 
-    // ===== Tabs =====
+    /* Tabs */
     const tabCreate = document.getElementById('tab-create');
     const tabVerify = document.getElementById('tab-verify');
     const panelCreate = document.getElementById('panel-create');
     const panelVerify = document.getElementById('panel-verify');
-    tabCreate.onclick = () => {
-      tabCreate.classList.add('active'); tabVerify.classList.remove('active');
-      tabCreate.setAttribute('aria-selected','true'); tabVerify.setAttribute('aria-selected','false');
-      panelCreate.style.display='block'; panelVerify.style.display='none';
-    };
-    tabVerify.onclick = () => {
-      tabVerify.classList.add('active'); tabCreate.classList.remove('active');
-      tabVerify.setAttribute('aria-selected','true'); tabCreate.setAttribute('aria-selected','false');
-      panelVerify.style.display='block'; panelCreate.style.display='none';
-    };
+    tabCreate.onclick = ()=>{ tabCreate.classList.add('active'); tabVerify.classList.remove('active'); tabCreate.setAttribute('aria-selected','true'); tabVerify.setAttribute('aria-selected','false'); panelCreate.style.display='block'; panelVerify.style.display='none'; }
+    tabVerify.onclick = ()=>{ tabVerify.classList.add('active'); tabCreate.classList.remove('active'); tabVerify.setAttribute('aria-selected','true'); tabCreate.setAttribute('aria-selected','false'); panelVerify.style.display='block'; panelCreate.style.display='none'; }
 
-    // ===== Input mode =====
+    /* Input modes */
     const chooseText = document.getElementById('choose-text');
     const chooseFile = document.getElementById('choose-file');
     const chooseHash = document.getElementById('choose-hash');
     const inputText = document.getElementById('input-text');
     const inputFile = document.getElementById('input-file');
     const inputHash = document.getElementById('input-hash');
-    chooseText.onclick = () => { inputText.style.display='block'; inputFile.style.display='none'; inputHash.style.display='none'; };
-    chooseFile.onclick = () => { inputText.style.display='none'; inputFile.style.display='block'; inputHash.style.display='none'; };
-    chooseHash.onclick = () => { inputText.style.display='none'; inputFile.style.display='none'; inputHash.style.display='block'; };
+    chooseText.onclick = ()=>{ inputText.style.display='block'; inputFile.style.display='none'; inputHash.style.display='none'; }
+    chooseFile.onclick = ()=>{ inputText.style.display='none'; inputFile.style.display='block'; inputHash.style.display='none'; }
+    chooseHash.onclick = ()=>{ inputText.style.display='none'; inputFile.style.display='none'; inputHash.style.display='block'; }
 
-    // ===== Hash helpers =====
+    /* Hash helpers */
     async function sha256HexFromText(str){
       const enc = new TextEncoder().encode(str || '');
       const buf = await crypto.subtle.digest('SHA-256', enc);
@@ -363,7 +303,7 @@
       return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
     }
 
-    // live hash previews
+    /* Live previews */
     const textArea = document.getElementById('text');
     const hashPrevText = document.getElementById('hash-preview-text');
     const hashPrevFile = document.getElementById('hash-preview-file');
@@ -377,10 +317,10 @@
         if (!v) { hashPrevText.textContent = ''; return; }
         const h = await sha256HexFromText(v);
         hashPrevText.textContent = `SHA-256: ${h}`;
-      }, 250);
+      }, 200);
     });
 
-    // ===== Dropzone helpers =====
+    /* Dropzone */
     const drop = document.getElementById('drop');
     const fileInput = document.getElementById('file');
     const fileInfo = document.getElementById('file-info');
@@ -390,21 +330,19 @@
       const sizeMB = (f.size/1024/1024).toFixed(2);
       fileInfo.textContent = `${f.name} (${sizeMB} MB)`;
     }
-
-    if (drop) {
+    if (drop){
       ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); drop.classList.add('drag'); }));
       ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); drop.classList.remove('drag'); }));
       drop.addEventListener('drop', async e => {
         const f = e.dataTransfer?.files?.[0];
-        if (f) {
-          if (f.size > MAX_FILE_BYTES) { alert('File too large (max 50 MB).'); return; }
-          fileInput.files = e.dataTransfer.files;
-          setFileInfo(f);
-          const h = await sha256HexFromFile(f);
-          hashPrevFile.textContent = `SHA-256: ${h}`;
-        }
+        if (!f) return;
+        if (f.size > MAX_FILE_BYTES) { alert('File too large (max 50 MB).'); return; }
+        fileInput.files = e.dataTransfer.files;
+        setFileInfo(f);
+        const h = await sha256HexFromFile(f);
+        hashPrevFile.textContent = `SHA-256: ${h}`;
       });
-      fileInput.addEventListener('change', async () => {
+      fileInput.addEventListener('change', async ()=>{
         const f = fileInput.files?.[0];
         if (!f) { setFileInfo(null); return; }
         if (f.size > MAX_FILE_BYTES) { setFileInfo(null); fileInput.value=''; alert('File too large (max 50 MB).'); return; }
@@ -414,7 +352,7 @@
       });
     }
 
-    // raw hash preview
+    /* Raw hash preview */
     const rawHashEl = document.getElementById('raw-hash');
     rawHashEl?.addEventListener('input', ()=>{
       const v = (rawHashEl.value || '').trim();
@@ -424,95 +362,91 @@
     function fail(msg){ throw new Error(msg); }
     function setBusy(el, busy){ el?.setAttribute('aria-busy', busy ? 'true' : 'false'); }
 
-    // ===== Create proof =====
+    /* Create */
     const btnCreate = document.getElementById('btn-create');
     const outCreate = document.getElementById('create-output');
-    let createdPayload = null;
     const statusCreate = document.getElementById('create-status');
     const createActions = document.getElementById('create-actions');
     const openVerifyLink = document.getElementById('open-verify-link');
     const copyCreateJSON = document.getElementById('copy-create-json');
     const copyCreateCURL = document.getElementById('copy-create-curl');
 
-    function enableCreateActions(data){
+    function enableCreateActions(data, req){
       createActions.style.display='flex';
-      copyCreateJSON.disabled = false;
-      copyCreateCURL.disabled = false;
-      if (data?.verify_url){
-        openVerifyLink.style.display = 'inline-block';
-        openVerifyLink.href = data.verify_url;
-      } else if (data?.hash){
-        openVerifyLink.style.display = 'inline-block';
-        openVerifyLink.href = `/verify.html?hash=${encodeURIComponent(data.hash)}`;
-      } else {
-        openVerifyLink.style.display = 'none';
-      }
+      copyCreateJSON.disabled=false; copyCreateCURL.disabled=false;
+      const vurl = data?.verify_url;
+      if (vurl){ openVerifyLink.style.display='inline-block'; openVerifyLink.href=vurl; }
+      else if (data?.hash){ openVerifyLink.style.display='inline-block'; openVerifyLink.href=`/verify.html?hash=${encodeURIComponent(data.hash)}`; }
+      else openVerifyLink.style.display='none';
+
+      copyCreateJSON.onclick = () => copyToClipboard(outCreate.textContent);
+      copyCreateCURL.onclick = () => {
+        const curlBody = JSON.stringify(req).replace(/'/g, "'\\''");
+        const curl = `curl -X POST 'https://timeproofs-api.jeason-bacoul.workers.dev/api/timestamp' -H 'Content-Type: application/json' -d '${curlBody}'`;
+        copyToClipboard(curl);
+      };
     }
 
-    btnCreate.onclick = async () => {
+    btnCreate.onclick = async ()=>{
       if (btnCreate.disabled) return;
-      btnCreate.disabled = true; setBusy(panelCreate, true);
-      outCreate.textContent = ''; createdPayload = null;
-      statusCreate.innerHTML = ''; createActions.style.display='none';
-      openVerifyLink.style.display='none'; copyCreateJSON.disabled = true; copyCreateCURL.disabled = true;
+      btnCreate.disabled=true; setBusy(panelCreate,true);
+      outCreate.textContent=''; statusCreate.innerHTML=''; createActions.style.display='none'; openVerifyLink.style.display='none'; copyCreateJSON.disabled=true; copyCreateCURL.disabled=true;
 
-      try {
-        let hash = '';
-        if (inputText.style.display !== 'none') {
+      try{
+        let hash='';
+        if (inputText.style.display!=='none'){
           const text = textArea.value || '';
           if (!text) fail('Enter some text to hash.');
           hash = await sha256HexFromText(text);
-        } else if (inputFile.style.display !== 'none') {
+        } else if (inputFile.style.display!=='none'){
           const file = fileInput.files?.[0];
           if (!file) fail('Select a file first.');
           if (file.size > MAX_FILE_BYTES) fail('File too large (max 50 MB).');
           hash = await sha256HexFromFile(file);
         } else {
-          hash = (rawHashEl.value || '').trim();
+          hash = (rawHashEl.value||'').trim();
           if (!/^[a-f0-9]{64}$/i.test(hash)) fail('Enter a valid 64-hex SHA-256 hash.');
           hash = hash.toLowerCase();
         }
 
         const type = (document.getElementById('type').value || 'event').trim();
-        if (type.length > 32) fail('Type is too long (max 32 chars).');
+        if (type.length > 32) fail('Type too long (max 32 chars).');
 
         let meta = {};
         const metaRaw = (document.getElementById('meta').value || '').trim();
-        if (metaRaw) {
+        if (metaRaw){
           if (metaRaw.length > 1024) fail('Meta JSON too large (max 1 KB).');
-          try { meta = JSON.parse(metaRaw); } catch { fail('Meta must be valid JSON.'); }
+          try{ meta = JSON.parse(metaRaw); }catch{ fail('Meta must be valid JSON.'); }
         }
 
-        const r = await fetchAPI(`/create`, {
-          method:'POST',
-          headers:{ 'Content-Type':'application/json' },
-          body: JSON.stringify({ hash, type, meta })
-        });
+        const req = { hash, type, meta };
+        const r = await fetchAPI(`/timestamp`, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(req) });
         const j = await r.json().catch(()=> ({}));
         if (!r.ok || j.error) fail(j.error || `Request failed (${r.status})`);
 
-        statusCreate.innerHTML = `<span class="pill ok" role="status">✅ Proof created</span>`;
-        outCreate.textContent = JSON.stringify(j, null, 2);
-        createdPayload = j;
-        enableCreateActions(j);
-
-        copyCreateJSON.onclick = () => copyToClipboard(outCreate.textContent);
-        copyCreateCURL.onclick = () => {
-          const body = JSON.stringify({hash, type, meta});
-          const curl = `curl -X POST 'https://api.timeproofs.io/create' -H 'Content-Type: application/json' -d '${body.replace(/'/g,"'\\''")}'`;
-          copyToClipboard(curl);
+        // Normalize fields for display
+        const normalized = {
+          ok: j.ok === true,
+          hash: j.hash,
+          timestamp: j.timestamp || j.ts,
+          signature: j.signature || j.sig,
+          verify_url: j.verify_url || (j.hash ? `/verify.html?hash=${encodeURIComponent(j.hash)}` : undefined),
+          type: j.type, meta: j.meta
         };
-      } catch(e){
+
+        statusCreate.innerHTML = `<span class="pill ok" role="status">✅ Proof created</span>`;
+        outCreate.textContent = JSON.stringify(normalized, null, 2);
+        enableCreateActions(normalized, req);
+      }catch(e){
         statusCreate.innerHTML = `<span class="pill bad" role="alert">❌ ${String(e.message || e)}</span>`;
-      } finally {
-        btnCreate.disabled = false; setBusy(panelCreate, false);
+      }finally{
+        btnCreate.disabled=false; setBusy(panelCreate,false);
       }
     };
 
-    // ===== Verify proof =====
+    /* Verify */
     const btnVerify = document.getElementById('btn-verify');
-    theVerifyOutput = document.getElementById('verify-output');
-    const outVerify = theVerifyOutput;
+    const outVerify = document.getElementById('verify-output');
     const statusVerify = document.getElementById('verify-status');
     const verifyActions = document.getElementById('verify-actions');
     const copyVerifyJSON = document.getElementById('copy-verify-json');
@@ -524,55 +458,51 @@
     if (preHash && /^[a-f0-9]{64}$/i.test(preHash)) {
       document.getElementById('verify-hash').value = preHash;
       tabVerify.click();
-      setTimeout(() => btnVerify.click(), 50);
+      setTimeout(()=>btnVerify.click(), 60);
     }
 
-    btnVerify.onclick = async () => {
+    btnVerify.onclick = async ()=>{
       if (btnVerify.disabled) return;
-      btnVerify.disabled = true; setBusy(panelVerify, true);
-      outVerify.textContent=''; statusVerify.innerHTML=''; verifyActions.style.display='none';
-      copyVerifyJSON.disabled = true; copyVerifyCURL.disabled = true;
+      btnVerify.disabled=true; setBusy(panelVerify,true);
+      outVerify.textContent=''; statusVerify.innerHTML=''; verifyActions.style.display='none'; copyVerifyJSON.disabled=true; copyVerifyCURL.disabled=true;
 
-      try {
+      try{
         const hash = (document.getElementById('verify-hash').value || '').trim().toLowerCase();
         if (!/^[a-f0-9]{64}$/i.test(hash)) fail('Paste a valid 64-hex SHA-256 hash.');
 
         const r = await fetchAPI(`/verify?hash=${encodeURIComponent(hash)}`);
         const j = await r.json().catch(()=> ({}));
 
-        if (j.ok && j.verified === true) {
-          statusVerify.innerHTML = `<span class="pill ok" role="status">✅ Valid</span>`;
-        } else if (j.ok === false && (j.error === "not_found" || r.status === 404)) {
-          statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Not found</span>`;
-        } else {
-          statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Invalid</span>`;
-        }
+        const ok = j.ok === true;
+        const found = j.found === true || j.verified === true || (ok && !!(j.timestamp || j.ts || j.signature || j.sig));
+        if (ok && found) statusVerify.innerHTML = `<span class="pill ok" role="status">✅ Valid</span>`;
+        else if (j.error === 'not_found' || r.status === 404) statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Not found</span>`;
+        else statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Invalid</span>`;
 
-        outVerify.textContent = JSON.stringify(j, null, 2);
-        verifyActions.style.display='flex';
-        copyVerifyJSON.disabled = false; copyVerifyCURL.disabled = false;
-
-        copyVerifyJSON.onclick = () => copyToClipboard(outVerify.textContent);
-        copyVerifyCURL.onclick = () => {
-          const curl = `curl 'https://api.timeproofs.io/verify?hash=${encodeURIComponent(hash)}'`;
-          copyToClipboard(curl);
+        const normalized = {
+          ok: ok, found: !!found,
+          hash: j.hash || hash,
+          timestamp: j.timestamp || j.ts || null,
+          signature: j.signature || j.sig || null,
+          type: j.type || null, meta: j.meta || null
         };
-      } catch(e){
+        outVerify.textContent = JSON.stringify(normalized, null, 2);
+
+        verifyActions.style.display='flex';
+        copyVerifyJSON.disabled=false; copyVerifyCURL.disabled=false;
+        copyVerifyJSON.onclick = () => copyToClipboard(outVerify.textContent);
+        copyVerifyCURL.onclick = () => copyToClipboard(`curl 'https://timeproofs-api.jeason-bacoul.workers.dev/api/verify?hash=${encodeURIComponent(hash)}'`);
+      }catch(e){
         statusVerify.innerHTML = `<span class="pill bad" role="alert">❌ ${String(e.message || e)}</span>`;
-      } finally {
-        btnVerify.disabled = false; setBusy(panelVerify, false);
+      }finally{
+        btnVerify.disabled=false; setBusy(panelVerify,false);
       }
     };
 
-    // ===== Utils =====
+    /* Clipboard */
     async function copyToClipboard(text){
-      try{
-        await navigator.clipboard.writeText(text);
-        alert('Copied to clipboard');
-      }catch(e){
-        console.warn('Clipboard error:', e);
-        prompt('Copy manually:', text);
-      }
+      try{ await navigator.clipboard.writeText(text); alert('Copied to clipboard'); }
+      catch(e){ console.warn('Clipboard error:', e); prompt('Copy manually:', text); }
     }
   </script>
 </body>
