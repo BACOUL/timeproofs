@@ -10,6 +10,13 @@
   <meta name="robots" content="index,follow"/>
   <link rel="canonical" href="https://timeproofs.io/security.html"/>
 
+  <!-- CSP (v0.1) -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src https://timeproofs-api.jeason-bacoul.workers.dev; font-src 'self'; base-uri 'self'; frame-ancestors 'none'">
+
+  <!-- Perf -->
+  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin>
+  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev"/>
+
   <!-- Icons / Manifest -->
   <link rel="icon" href="/favicon.ico" sizes="any"/>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
@@ -28,6 +35,27 @@
   <meta name="twitter:title" content="Security — TimeProofs"/>
   <meta name="twitter:description" content="Coordinated disclosure, cryptographic keys, scope, and how to report vulnerabilities."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"TimeProofs",
+    "url":"https://timeproofs.io/",
+    "logo":"https://timeproofs.io/logo%20(1).png",
+    "sameAs":[
+      "https://x.com/timeproofs",
+      "https://www.linkedin.com/company/timeproofs",
+      "https://github.com/timeproofs",
+      "https://youtube.com/@timeproofs",
+      "https://timeproofs.io/rss.xml"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  { "@context":"https://schema.org", "@type":"WebSite", "name":"TimeProofs", "url":"https://timeproofs.io/" }
+  </script>
 
   <style>
     :root{ --bg:#0b1020; --panel:#0f172a; --line:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee }
@@ -84,7 +112,7 @@
     .muted{ color:var(--muted) }
 
     footer{ border-top:1px solid var(--line); margin-top:40px; padding:20px; color:#7c8aa5; text-align:center }
-    footer a{ color:#a7b7cc; text-decoration:none; margin:0 8px } footer a:hover{ color:var(--accent) }
+    footer a{ color:#a7b7cc; text-decoration:none; margin:0 8px } footer a:hover{ color:#22d3ee }
   </style>
 </head>
 <body>
@@ -113,26 +141,26 @@
 
     <section class="card" aria-labelledby="disclosure">
       <h2 id="disclosure">Coordinated Disclosure</h2>
-      <p>Report vulnerabilities privately to <a href="mailto:security@timeproofs.io">security@timeproofs.io</a>. Optionally encrypt using our PGP key published at <a href="/pgp.txt">/pgp.txt</a>. Our policy and contacts are mirrored in <a href="/.well-known/security.txt">/.well-known/security.txt</a>.</p>
+      <p>Report vulnerabilities privately to <a href="mailto:security@timeproofs.io">security@timeproofs.io</a>. Optionally encrypt using our PGP key at <a href="/pgp.txt">/pgp.txt</a>. Our policy and contacts appear in <a href="/.well-known/security.txt">/.well-known/security.txt</a>.</p>
       <ul>
-        <li><strong>We will</strong> acknowledge receipt, assess impact, and coordinate timelines.</li>
-        <li><strong>Please do not</strong> exploit, modify, or access data beyond what’s required to demonstrate the issue.</li>
-        <li>No bug bounty in v0.1. We publish acknowledgments for qualifying reports.</li>
+        <li><strong>We will</strong> acknowledge, triage, and coordinate timelines.</li>
+        <li><strong>Please</strong> avoid data access beyond proof-of-concept. No public disclosure before a fix.</li>
+        <li>No bug bounty in v0.1. We credit qualifying reports by consent.</li>
       </ul>
     </section>
 
     <section class="card" aria-labelledby="scope">
       <h2 id="scope">Scope</h2>
       <ul>
-        <li>Public API endpoints: <code class="mono">/api/timestamp</code>, <code class="mono">/api/verify</code></li>
-        <li>Website static pages and verification UI</li>
+        <li>Public API: <code class="mono">/api/timestamp</code>, <code class="mono">/api/verify</code></li>
+        <li>Static site and verification UI</li>
         <li>Edge runtime on Cloudflare Workers + KV</li>
       </ul>
       <h3>Out of scope</h3>
       <ul>
-        <li>Denial-of-service without a novel bypass</li>
-        <li>Self-XSS requiring user pasting code</li>
-        <li>3rd-party platform issues outside our control</li>
+        <li>DoS without a novel bypass</li>
+        <li>Self-XSS requiring the victim to paste code</li>
+        <li>3rd-party platform issues</li>
       </ul>
     </section>
 
@@ -142,28 +170,25 @@
         <li>Hashing: <strong>SHA-256</strong> client-side or by user systems</li>
         <li>Signing: <strong>HMAC-SHA256</strong> over <code class="mono">hash + "\n" + timestamp + "\n" + base64url(meta)</code></li>
         <li>Transport: <strong>TLS</strong> only</li>
-        <li>Key management: rotation by <code class="mono">kid</code> policy</li>
+        <li>Key management: rotation via <code class="mono">kid</code> policy</li>
       </ul>
-      <p class="muted">See <a href="/proofspec.html">ProofSpec</a> for protocol details.</p>
+      <p class="muted">Protocol details: <a href="/proofspec.html">ProofSpec</a>.</p>
     </section>
 
     <section class="card" aria-labelledby="hardening">
       <h2 id="hardening">Operational Hardening</h2>
       <ul>
-        <li>Minimal data design: hashes + small optional metadata only</li>
-        <li>Strict input validation and size limits</li>
-        <li>Rate limiting and abuse detection at the edge</li>
+        <li>Minimal data: hashes + small optional metadata only</li>
+        <li>Strict validation and size limits</li>
+        <li>Edge rate limiting and abuse detection</li>
         <li>Clock sync and signed timestamps</li>
       </ul>
     </section>
 
     <section class="card" aria-labelledby="ack">
       <h2 id="ack">Acknowledgments</h2>
-      <p>We thank security researchers who practice responsible disclosure. Qualifying contributors may be listed here.</p>
-      <ul>
-        <li>—</li>
-      </ul>
-      <p class="muted">To be added upon first disclosure.</p>
+      <p>We thank researchers practicing responsible disclosure. Names added here with consent.</p>
+      <ul><li>—</li></ul>
     </section>
 
     <section class="card" aria-labelledby="keys">
@@ -171,7 +196,7 @@
       <ul>
         <li>Email: <a href="mailto:security@timeproofs.io">security@timeproofs.io</a></li>
         <li>PGP: <a href="/pgp.txt">/pgp.txt</a></li>
-        <li>Security policy file: <a href="/.well-known/security.txt">/.well-known/security.txt</a></li>
+        <li>Security policy: <a href="/.well-known/security.txt">/.well-known/security.txt</a></li>
       </ul>
     </section>
   </main>
