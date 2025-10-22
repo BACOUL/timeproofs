@@ -11,8 +11,8 @@
   <link rel="canonical" href="https://timeproofs.io/docs.html"/>
 
   <!-- Perf -->
-  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin/>
-  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev"/>
+  <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
+  <link rel="dns-prefetch" href="//api.timeproofs.io"/>
 
   <!-- Icons / Manifest -->
   <link rel="icon" href="/favicon.ico" sizes="any"/>
@@ -59,7 +59,7 @@
   <style>
     :root{
       --bg:#0b1020; --panel:#0f172a; --line:#1e293b;
-      --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --ok:#22c55e; --bad:#ef4444;
+      --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
     }
     *{ box-sizing:border-box }
     body{
@@ -109,9 +109,6 @@
     .note{ color:#9db4c8; font-size:.95rem }
     .muted{ color:var(--muted) }
 
-    .grid{ display:grid; gap:16px }
-    @media(min-width:900px){ .grid.two{ grid-template-columns:1fr 1fr } }
-
     .card{ background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:18px; margin:16px 0 }
     pre{ background:#0b1220; border:1px solid #1f2937; color:#e5e7eb; border-radius:10px; padding:12px; overflow:auto; line-height:1.6; white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
     code{ background:#1e293b; color:#f8fafc; padding:2px 6px; border-radius:6px; font-size:.92rem }
@@ -126,11 +123,6 @@
     footer{ margin-top:48px; color:#7b8aa7; font-size:.9rem; text-align:center; padding:20px; border-top:1px solid var(--line) }
     footer a{ color:#a7b7cc; text-decoration:none; margin:0 8px }
     footer a:hover{ color:var(--accent) }
-
-    .mono-small{ font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; font-size:12px; color:#bcd9e8 }
-    .pill{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; font-size:12px; margin-left:8px }
-    .ok{ background:#0f3b22; color:#b7f7ce; border:1px solid #1c6b3d }
-    .bad{ background:#3b0f12; color:#ffc1c6; border:1px solid #6b1c22 }
   </style>
 </head>
 <body>
@@ -154,27 +146,25 @@
   </header>
 
   <main role="main">
-    <h1>🧭 TimeProofs API</h1>
-    <p class="lead">Send only a <strong>SHA-256 hash</strong>. Get a signed timestamp and a public verify URL. No uploads, no blockchain.</p>
+    <h1>🧭 TimeProofs API (v0.1)</h1>
+    <p class="lead">Envoyez un <strong>hash SHA-256</strong>. Recevez un timestamp signé et une URL de vérification publique. Pas d’upload. Pas de blockchain.</p>
 
     <!-- Base URL -->
     <div class="card">
       <h2>🌐 Base URL</h2>
-      <p><strong>Current (beta):</strong></p>
-      <pre><code>https://timeproofs-api.jeason-bacoul.workers.dev/api</code></pre>
-      <p class="note">Planned production: <code>https://api.timeproofs.io</code> (switch when DNS is live).</p>
+      <pre><code>https://api.timeproofs.io/api</code></pre>
+      <p class="note">Production. CORS ouvert pour <code>https://timeproofs.io</code>.</p>
     </div>
 
     <!-- Endpoints -->
     <div class="card">
       <h2>⚡ Endpoints</h2>
       <table role="table" aria-label="API Endpoints">
-        <tr><th>Endpoint</th><th>Method</th><th>Description</th></tr>
-        <tr><td><code>/timestamp</code></td><td>POST</td><td>Create a proof-of-existence for a SHA-256 hash.</td></tr>
-        <tr><td><code>/verify?hash=...</code></td><td>GET</td><td>Verify existence, timestamp, and server signature.</td></tr>
+        <tr><th>Endpoint</th><th>Method</th><th>Description</th><th>Auth</th></tr>
+        <tr><td><code>/ping</code></td><td>GET</td><td>Healthcheck.</td><td>—</td></tr>
+        <tr><td><code>/admin/timestamp</code></td><td>POST</td><td>Crée une preuve pour un hash SHA-256.</td><td>Bearer</td></tr>
       </table>
       <div class="actions">
-        <a class="btn" href="/openapi.yaml" download>Download OpenAPI (yaml)</a>
         <a class="btn" href="/verify.html">Try in browser</a>
       </div>
     </div>
@@ -182,129 +172,94 @@
     <!-- Quickstart -->
     <div class="card">
       <h2>⚙️ Quickstart</h2>
-      <ol>
-        <li>Compute a SHA-256 hash locally (text/file/output).</li>
-        <li><code>POST /timestamp</code> with the hash (+ optional <code>type</code> & <code>meta</code>).</li>
-        <li>Receive <code>{ ok, hash, timestamp, signature, verify_url, type?, meta? }</code>.</li>
-        <li>Anyone can <code>GET /verify?hash=...</code> later.</li>
-      </ol>
 
-      <h3>Request</h3>
-      <pre id="qs-req"><code>{
-  "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "type": "event",
-  "meta": { "model": "gpt-4o", "mime": "text/plain" }
-}</code></pre>
+      <h3>1) cURL — ping</h3>
+      <pre id="curl-ping"><code>curl -s https://api.timeproofs.io/api/ping</code></pre>
 
-      <h3>Response</h3>
+      <h3>2) cURL — créer une preuve</h3>
+      <pre id="curl-create"><code>curl -s -X POST https://api.timeproofs.io/api/admin/timestamp \
+  -H "Authorization: Bearer &lt;ADMIN_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"hash":"&lt;64-hex-sha256&gt;","meta":{"source":"docs"},"env":"prod"}'</code></pre>
+
+      <h3>Exemple de réponse</h3>
       <pre id="qs-res"><code>{
   "ok": true,
-  "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "timestamp": "2025-01-15T12:34:56.789Z",
-  "signature": "hmac_sha256(secret, `${hash}|${timestamp}`)",
-  "verify_url": "https://timeproofs-api.jeason-bacoul.workers.dev/api/verify?hash=e3b0... ",
-  "type": "event",
-  "meta": { "model": "gpt-4o", "mime": "text/plain" }
+  "hash": "7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2",
+  "ts": "2025-10-22T12:34:56.789Z",
+  "sig": "hmac_sha256(secret, `${hash}|${ts}`)",
+  "verify_url": "https://timeproofs.io/verify.html?hash=7c04...&ts=...&sig=...",
+  "meta": { "source": "docs" }
 }</code></pre>
 
       <div class="actions">
-        <button class="btn" data-copy="#qs-req">Copy request JSON</button>
-        <button class="btn" data-copy="#qs-res">Copy response JSON</button>
-      </div>
-    </div>
-
-    <!-- cURL -->
-    <div class="card">
-      <h2>🖥️ cURL</h2>
-      <h3>Create</h3>
-      <pre id="curl-create"><code>curl -X POST 'https://timeproofs-api.jeason-bacoul.workers.dev/api/timestamp' \
-  -H 'Content-Type: application/json' \
-  -d '{"hash":"&lt;64-hex-sha256&gt;","type":"event","meta":{"source":"docs"}}'</code></pre>
-      <h3>Verify</h3>
-      <pre id="curl-verify"><code>curl 'https://timeproofs-api.jeason-bacoul.workers.dev/api/verify?hash=&lt;64-hex-sha256&gt;'</code></pre>
-      <p class="note">Send only hashes. No original content is uploaded.</p>
-      <div class="actions">
-        <button class="btn" data-copy="#curl-create">Copy cURL (create)</button>
-        <button class="btn" data-copy="#curl-verify">Copy cURL (verify)</button>
+        <button class="btn" data-copy="#curl-ping">Copy ping</button>
+        <button class="btn" data-copy="#curl-create">Copy create</button>
+        <button class="btn" data-copy="#qs-res">Copy response</button>
       </div>
     </div>
 
     <!-- Client-side hashing -->
     <div class="card">
-      <h2>🔐 Local hashing (browser)</h2>
+      <h2>🔐 Hash local (browser)</h2>
       <pre><code>const buf = new TextEncoder().encode(text);
 const digest = await crypto.subtle.digest('SHA-256', buf);
 const hash = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,'0')).join('');</code></pre>
-      <p class="mono-small">Then POST the hex hash to <code>/timestamp</code>.</p>
+      <p class="note">Envoyez uniquement le hash hexadécimal (64 chars).</p>
     </div>
 
-    <!-- Signature verification -->
+    <!-- Verify -->
     <div class="card">
-      <h2>🧾 Verify server signature locally</h2>
-      <p class="muted">We sign <code>message = `${hash}|${timestamp}`</code> with HMAC-SHA256 using a private secret. Verify on your side:</p>
-      <div class="grid two">
+      <h2>🧾 Vérifier une preuve</h2>
+      <p>Utilisez la page <a href="/verify.html">Verify</a> pour valider publiquement une preuve (hash, timestamp, signature).</p>
+      <p class="muted">La signature serveur est un HMAC-SHA256 de <code>${hash}|${ts}</code>.</p>
+      <div class="grid" style="display:grid;gap:16px">
         <div>
           <h3>Node.js</h3>
-          <pre><code>import crypto from "node:crypto";
-function verify({ hash, timestamp, signature }, secret){
-  const msg = `${hash}|${timestamp}`;
-  const sig = crypto.createHmac("sha256", secret).update(msg).digest("hex");
-  return crypto.timingSafeEqual(Buffer.from(sig,'hex'), Buffer.from(signature,'hex'));
+<pre><code>import crypto from "node:crypto";
+function verify({ hash, ts, sig }, secret){
+  const msg = `${hash}|${ts}`;
+  const expect = crypto.createHmac("sha256", secret).update(msg).digest("hex");
+  return crypto.timingSafeEqual(Buffer.from(expect,'hex'), Buffer.from(sig,'hex'));
 }</code></pre>
         </div>
         <div>
           <h3>Python</h3>
-          <pre><code>import hmac, hashlib
+<pre><code>import hmac, hashlib
 def verify(payload, secret: bytes) -> bool:
-    msg = f"{payload['hash']}|{payload['timestamp']}".encode()
+    msg = f"{payload['hash']}|{payload['ts']}".encode()
     sig = hmac.new(secret, msg, hashlib.sha256).hexdigest()
-    return hmac.compare_digest(sig, payload["signature"])</code></pre>
+    return hmac.compare_digest(sig, payload["sig"])</code></pre>
         </div>
       </div>
-      <p class="note">The server secret is never exposed. You only verify consistency with what the server claims.</p>
     </div>
 
     <!-- JSON schema -->
     <div class="card">
-      <h2>📦 JSON schemas</h2>
-      <h3>POST /timestamp — request</h3>
-      <pre><code>{
+      <h2>📦 Schémas JSON</h2>
+
+      <h3>POST /admin/timestamp — request</h3>
+<pre><code>{
   "type":"object",
   "required":["hash"],
   "properties":{
     "hash":{"type":"string","pattern":"^[a-f0-9]{64}$"},
-    "type":{"type":"string","maxLength":32},
-    "meta":{"type":"object","maxProperties":32, "additionalProperties": true}
+    "meta":{"type":"object","maxProperties":32,"additionalProperties":true},
+    "env":{"type":"string","maxLength":16}
   },
   "additionalProperties": false
 }</code></pre>
 
-      <h3>POST /timestamp — response</h3>
-      <pre><code>{
+      <h3>POST /admin/timestamp — response</h3>
+<pre><code>{
   "type":"object",
-  "required":["ok","hash","timestamp","signature","verify_url"],
+  "required":["ok","hash","ts","sig","verify_url"],
   "properties":{
     "ok":{"type":"boolean"},
     "hash":{"type":"string"},
-    "timestamp":{"type":"string","format":"date-time"},
-    "signature":{"type":"string"},
+    "ts":{"type":"string","format":"date-time"},
+    "sig":{"type":"string"},
     "verify_url":{"type":"string","format":"uri"},
-    "type":{"type":"string"},
-    "meta":{"type":"object"}
-  }
-}</code></pre>
-
-      <h3>GET /verify — response</h3>
-      <pre><code>{
-  "type":"object",
-  "required":["ok","found"],
-  "properties":{
-    "ok":{"type":"boolean"},
-    "found":{"type":"boolean"},
-    "hash":{"type":"string"},
-    "timestamp":{"type":"string","format":"date-time"},
-    "signature":{"type":"string"},
-    "type":{"type":"string"},
     "meta":{"type":"object"}
   }
 }</code></pre>
@@ -312,38 +267,28 @@ def verify(payload, secret: bytes) -> bool:
 
     <!-- Status & errors -->
     <div class="card">
-      <h2>🚦 Status codes & errors</h2>
+      <h2>🚦 Status & erreurs</h2>
       <table role="table" aria-label="HTTP status codes">
-        <tr><th>Status</th><th>When</th><th>Body</th></tr>
-        <tr><td><code>200</code></td><td>Success</td><td>JSON object</td></tr>
-        <tr><td><code>400</code></td><td>Bad request</td><td><code>{ "error":"message" }</code></td></tr>
-        <tr><td><code>422</code></td><td>Validation failed</td><td><code>{ "error":"message" }</code></td></tr>
-        <tr><td><code>429</code></td><td>Rate limited</td><td><code>{ "error":"rate_limited" }</code></td></tr>
-        <tr><td><code>500</code></td><td>Server error</td><td><code>{ "error":"internal" }</code></td></tr>
+        <tr><th>Status</th><th>Quand</th><th>Body</th></tr>
+        <tr><td><code>200</code></td><td>Succès</td><td>Objet JSON</td></tr>
+        <tr><td><code>400</code></td><td>JSON invalide / hash invalide</td><td><code>{ "ok":false, "error":"..." }</code></td></tr>
+        <tr><td><code>401</code></td><td>Bearer manquant/erroné</td><td><code>{ "ok":false, "error":"unauthorized" }</code></td></tr>
+        <tr><td><code>404</code></td><td>Route inconnue</td><td><code>{ "ok":false, "error":"not_found" }</code></td></tr>
+        <tr><td><code>429</code></td><td>Rate limit (si activée)</td><td><code>{ "ok":false, "error":"rate_limited" }</code></td></tr>
+        <tr><td><code>500</code></td><td>Erreur serveur</td><td><code>{ "ok":false, "error":"internal" }</code></td></tr>
       </table>
-      <p class="mono-small">Headers: <code>Retry-After</code> with 429.</p>
-    </div>
-
-    <!-- Limits -->
-    <div class="card">
-      <h2>📏 Limits & best practices</h2>
-      <ul>
-        <li>Hash format: 64-hex lowercase SHA-256.</li>
-        <li><code>type</code> ≤ 32 chars. <code>meta</code> JSON ≤ 1 KB. No personal data.</li>
-        <li>Idempotent: same hash returns the same proof payload.</li>
-        <li>CORS: <code>GET /verify</code> and <code>POST /timestamp</code> allowed from browsers.</li>
-      </ul>
     </div>
 
     <!-- Security notes -->
     <div class="card">
-      <h2>🔒 Security notes</h2>
+      <h2>🔒 Sécurité</h2>
       <ul>
-        <li>No content uploads. Only hashes are processed.</li>
-        <li>Transport: HTTPS only.</li>
-        <li>Signature: HMAC-SHA256 over <code>${hash}|${timestamp}</code>.</li>
+        <li>Pas d’upload de contenu. Hash uniquement.</li>
+        <li>HTTPS obligatoire.</li>
+        <li>Signature: HMAC-SHA256 de <code>${hash}|${ts}</code>.</li>
+        <li>Pas de données personnelles dans <code>meta</code>.</li>
       </ul>
-      <p class="mono-small">See <a href="/privacy.html">Privacy</a> and <a href="/legal.html">Legal</a>.</p>
+      <p class="note">Voir <a href="/privacy.html">Privacy</a> et <a href="/legal.html">Legal</a>.</p>
     </div>
 
     <footer>
