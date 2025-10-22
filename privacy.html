@@ -33,6 +33,9 @@
   <meta name="twitter:description" content="Hash-only processing. No cookies. Edge-native security. Your rights under GDPR/CPRA."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
+  <!-- Minimal CSP for v0.1 -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src https://api.timeproofs.io; base-uri 'self'; form-action 'self'">
+
   <style>
     :root{ --bg:#0b1020; --panel:#0f172a; --line:#1e293b; --text:#e5e7eb; --muted:#94a3b8; --accent:#22d3ee }
     *{ box-sizing:border-box }
@@ -118,7 +121,7 @@
     <p class="kicker">PRIVACY</p>
     <h1>Privacy Policy</h1>
     <p class="lead">Privacy-first by design. We process <strong>hashes only</strong> — never your content. No cookies. Edge-native security with HTTPS and HMAC signatures.</p>
-    <p class="muted">Effective date: <strong>2025-10-18</strong> • Last updated: <strong>2025-10-18</strong> • Version: <strong>v0.1</strong></p>
+    <p class="muted">Effective date: <strong>2025-10-22</strong> • Last updated: <strong>2025-10-22</strong> • Version: <strong>v0.1</strong></p>
 
     <section class="card" aria-labelledby="summary">
       <h2 id="summary">At a glance</h2>
@@ -142,7 +145,7 @@
       <ul class="list">
         <li><strong>Hash:</strong> irreversible SHA-256 digest (64-hex) of your content, computed client-side or by you on server.</li>
         <li><strong>Meta:</strong> optional, tiny JSON you send (e.g., <code>{"type":"file","mime":"application/pdf"}</code>) for categorization only — do not include personal data.</li>
-        <li><strong>Proof:</strong> KV tuple: <code>{ hash, timestamp, signature, type?, meta? }</code>.</li>
+        <li><strong>Proof:</strong> KV tuple: <code>{ hash, ts, sig, type?, meta? }</code>.</li>
       </ul>
       <p class="muted">Note: in context, a hash can constitute personal data if reasonably linkable to a person. Keep <code>meta</code> non-identifying.</p>
     </section>
@@ -151,7 +154,7 @@
       <h2 id="collection">Data we process</h2>
       <ul class="list">
         <li><strong>Hashes:</strong> provided by you; not reversible to original content.</li>
-        <li><strong>Optional metadata:</strong> small fields you provide (<code>type</code>, <code>meta</code>).</li>
+        <li><strong>Optional metadata:</strong> small fields you provide (<code>meta</code>).</li>
         <li><strong>Edge logs:</strong> minimal request metrics (route, timestamp, coarse IP region) kept ≤ 30 days on a rolling basis for security and reliability.</li>
       </ul>
       <p class="muted">We do not collect names, emails, or user content via the public API.</p>
@@ -198,7 +201,7 @@
       <h2 id="security">Security</h2>
       <ul class="list">
         <li>TLS for all transport.</li>
-        <li>HMAC-SHA256 signatures over <code>hash + timestamp</code> with private secrets; keys rotated per policy.</li>
+        <li>HMAC-SHA256 signatures over <code>hash|ts</code> with private secrets; keys rotated per policy.</li>
         <li>Clock sync, minimal data design, rate limiting, and monitoring.</li>
       </ul>
       <p>Report vulnerabilities to <a href="mailto:security@timeproofs.io">security@timeproofs.io</a> or see <a href="/.well-known/security.txt">security.txt</a>.</p>
@@ -263,7 +266,7 @@
     <section aria-labelledby="table" class="card">
       <h2 id="table">Data protection summary</h2>
       <ul class="list">
-        <li><strong>Processed:</strong> hash, timestamp, signature, optional meta</li>
+        <li><strong>Processed:</strong> hash, ts, sig, optional meta</li>
         <li><strong>Not processed:</strong> original files, names, emails, behavioral data</li>
         <li><strong>Storage:</strong> Cloudflare KV</li>
         <li><strong>Security:</strong> TLS, HMAC-SHA256, key rotation, minimal logs</li>
