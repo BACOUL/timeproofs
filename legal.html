@@ -4,6 +4,7 @@
   <!-- Core -->
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="color-scheme" content="dark"/>
   <title>Legal — TimeProofs</title>
   <meta name="description" content="TimeProofs Legal: Terms of Service, acceptable use, rate limits, IP, liability, compliance, dispute resolution, and contact."/>
   <meta name="theme-color" content="#0b1020"/>
@@ -29,11 +30,18 @@
   <meta name="twitter:description" content="Terms of Service, acceptable use, rate limits, IP, liability, compliance, dispute resolution, and contact."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
-  <!-- Optional CSP (non bloquant pour v0.1, garde simple) -->
+  <!-- CSP (safe for v0.1) -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src https://api.timeproofs.io; base-uri 'self'; form-action 'self'">
 
   <style>
-    :root{ --bg:#0b1020; --panel:#0f172a; --line:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee }
+    :root{
+      --bg:#0b1020; --panel:#0f172a; --line:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
+      --safe-top: env(safe-area-inset-top,0px);
+      --safe-btm: env(safe-area-inset-bottom,0px);
+      --header-h:64px;
+    }
+    @media (max-width:900px){ :root{ --header-h:56px } }
+
     *{ box-sizing:border-box }
     html,body{ margin:0; height:100%; max-width:100%; overflow-x:hidden }
     body{
@@ -42,31 +50,32 @@
       font:16px/1.7 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
       text-rendering:optimizeLegibility;
+      /* prevent content cut under fixed header */
+      padding-top: calc(var(--header-h) + var(--safe-top));
     }
     a{ color:var(--accent); text-decoration:none } a:hover{ text-decoration:underline }
     code{ background:#1e293b; color:#f8fafc; padding:2px 6px; border-radius:6px; font-size:.92rem }
 
     /* Header */
     .tp-header{
-      position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
+      position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:1000;
+      padding-top: var(--safe-top);
       background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
       border-bottom:1px solid var(--line);
-      display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+      display:flex; align-items:center; justify-content:space-between; padding-left:16px; padding-right:16px;
     }
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none }
-    .tp-brand img{ height:34px; width:auto; object-fit:contain; vertical-align:middle }
+    .tp-brand img{ height:40px; width:auto; object-fit:contain; vertical-align:middle }
+    @media (max-width:899px){ .tp-brand img{ height:34px } }
     .tp-brand:hover{ color:var(--accent) }
-    .tp-burger{
-      display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
-      border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
-    }
+    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer }
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block; text-decoration:none }
     .tp-nav a[aria-current="page"]{ color:#9beefb }
     .tp-nav a:hover{ color:var(--accent) }
     @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width:899px){
       .tp-nav{
-        position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
+        position:fixed; top:calc(var(--header-h) + var(--safe-top)); left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
         display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
         transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
       }
@@ -75,7 +84,7 @@
     }
 
     /* Layout */
-    main{ padding:96px 20px 40px; max-width:980px; margin:0 auto }
+    main{ padding:24px 20px calc(24px + var(--safe-btm)); max-width:980px; margin:0 auto }
     h1{ font-size:2rem; margin:.2em 0 .4em }
     .meta{ color:var(--muted); margin:0 0 1em }
     .card{ background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:18px; margin:14px 0 }
@@ -84,8 +93,15 @@
     ul{ margin:.4em 0 .8em; padding-left:20px }
     li{ margin:.25em 0 }
     .muted{ color:var(--muted) }
-    footer{ border-top:1px solid var(--line); margin-top:40px; padding:20px; color:#7c8aa5; text-align:center }
-    footer a{ color:#a7b7cc; text-decoration:none; margin:0 8px } footer a:hover{ color:#22d3ee }
+
+    footer{ border-top:1px solid var(--line); margin-top:40px; padding:20px 12px; color:#7c8aa5; text-align:center; padding-bottom:calc(20px + var(--safe-btm)) }
+    footer a{ color:#a7b7cc; text-decoration:none; margin:0 8px } footer a:hover{ color:var(--accent) }
+
+    /* Mobile */
+    @media (max-width:480px){
+      .card{ padding:14px }
+      .tp-nav a{ margin:6px 0 }
+    }
   </style>
 </head>
 <body>
@@ -100,9 +116,9 @@
       <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html">Verify</a>
       <a href="/docs.html">API Docs</a>
-      <a href="/legal.html" aria-current="page">Legal</a>
-      <a href="/privacy.html">Privacy</a>
       <a href="/security.html">Security</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/legal.html" aria-current="page">Legal</a>
     </nav>
   </header>
 
@@ -295,9 +311,9 @@
       <a href="/use-cases.html">Use Cases</a> •
       <a href="/verify.html">Verify</a> •
       <a href="/docs.html">API Docs</a> •
+      <a href="/security.html">Security</a> •
       <a href="/privacy.html">Privacy</a> •
-      <a href="/legal.html" aria-current="page">Legal</a> •
-      <a href="/security.html">Security</a>
+      <a href="/legal.html" aria-current="page">Legal</a>
     </div>
   </footer>
 
