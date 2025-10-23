@@ -4,6 +4,7 @@
   <!-- Core -->
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="color-scheme" content="dark"/>
   <title>TimeProofs — Privacy Policy</title>
   <meta name="description" content="Privacy-first by design. Hash-only processing, no content uploads, no cookies. Learn how TimeProofs protects your data and your rights."/>
   <meta name="theme-color" content="#0b1020"/>
@@ -26,6 +27,7 @@
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/privacy.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
+  <meta property="og:image:alt" content="TimeProofs — Privacy-first by design"/>
   <meta property="og:site_name" content="TimeProofs"/>
   <meta property="og:locale" content="en_US"/>
   <meta name="twitter:card" content="summary_large_image"/>
@@ -33,11 +35,18 @@
   <meta name="twitter:description" content="Hash-only processing. No cookies. Edge-native security. Your rights under GDPR/CPRA."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
-  <!-- Minimal CSP for v0.1 -->
+  <!-- Minimal CSP v0.1 -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src https://api.timeproofs.io; base-uri 'self'; form-action 'self'">
 
   <style>
-    :root{ --bg:#0b1020; --panel:#0f172a; --line:#1e293b; --text:#e5e7eb; --muted:#94a3b8; --accent:#22d3ee }
+    :root{
+      --bg:#0b1020; --panel:#0f172a; --line:#1e293b; --text:#e5e7eb; --muted:#94a3b8; --accent:#22d3ee;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-btm: env(safe-area-inset-bottom, 0px);
+      --safe-l: env(safe-area-inset-left, 0px);
+      --safe-r: env(safe-area-inset-right, 0px);
+      --header-h:64px;
+    }
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden }
     body{
@@ -45,33 +54,34 @@
       background:radial-gradient(1000px 420px at 70% -10%, rgba(34,211,238,.10), transparent 60%), var(--bg);
       color:var(--text);
       font:16px/1.7 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-      text-rendering:optimizeLegibility;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; text-rendering:optimizeLegibility;
+      padding-left: max(0px, var(--safe-l)); padding-right: max(0px, var(--safe-r));
     }
     a{ color:var(--accent); text-decoration:none } a:hover{ text-decoration:underline }
 
     /* Header */
     .tp-header{
-      position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
+      position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:1000;
       background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
       border-bottom:1px solid var(--line);
-      display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+      display:flex; align-items:center; justify-content:space-between;
+      padding: calc(0px + var(--safe-top)) max(16px, var(--safe-r)) 0 max(16px, var(--safe-l));
     }
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none }
     .tp-brand img{ height:34px; width:auto; object-fit:contain; vertical-align:middle }
     .tp-brand:hover{ color:var(--accent) }
-    .tp-burger{
-      display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
-      border:1px solid var(--line); border-radius:10px; background:#0d1628; color:#fff; cursor:pointer;
-    }
+    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border:1px solid var(--line); border-radius:10px; background:#0d1628; color:#fff; cursor:pointer; }
     .tp-nav a{ color:var(--text); text-decoration:none; font-weight:700; margin-left:18px; padding:8px 0; display:inline-block }
     .tp-nav a[aria-current="page"]{ color:#9beefb }
     .tp-nav a:hover{ color:var(--accent) }
     @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width:899px){
       .tp-nav{
-        position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
-        display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
+        position:fixed; top:calc(var(--header-h) + var(--safe-top)); left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
+        display:flex; flex-direction:column; gap:10px; padding:14px max(16px, var(--safe-r)) 14px max(16px, var(--safe-l));
+        box-shadow:0 16px 40px rgba(0,0,0,.45);
+        max-height: calc(100dvh - var(--header-h) - var(--safe-btm) - var(--safe-top));
+        overflow:auto;
         transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
       }
       .tp-nav a{ margin:4px 0 }
@@ -79,7 +89,7 @@
     }
 
     /* Layout */
-    main{ padding:96px 20px 40px; max-width:900px; margin:0 auto }
+    main{ padding: calc(96px + var(--safe-top)) 20px calc(40px + var(--safe-btm)); max-width:900px; margin:0 auto }
     h1{ font-size:2rem; margin:.2em 0 .5em; color:#eaf8ff }
     h2{ font-size:1.25rem; margin:1.6em 0 .5em; color:#cfe9ff }
     p,li{ color:var(--text) }
@@ -92,7 +102,7 @@
     .pill{ display:inline-block; border:1px solid #214a57; background:#0d2330; color:#aee9f7; border-radius:999px; padding:4px 10px; font-size:.78rem; margin:6px 8px 0 0 }
 
     /* Footer */
-    footer{ border-top:1px solid var(--line); margin-top:34px; padding:18px; color:#7c8aa5; text-align:center }
+    footer{ border-top:1px solid var(--line); padding:18px max(16px, var(--safe-r)) calc(18px + var(--safe-btm)) max(16px, var(--safe-l)); color:#7c8aa5; text-align:center }
     footer .links a{ color:#a7b7cc; margin:0 8px; text-decoration:none }
     footer .links a:hover{ color:#22d3ee }
   </style>
@@ -223,8 +233,8 @@
       <h2 id="gdpr-eea">EEA/UK addendum (GDPR/UK GDPR)</h2>
       <ul class="list">
         <li><strong>Controller location:</strong> TimeProofs operates globally via edge infrastructure.</li>
-        <li><strong>International transfers:</strong> data may transit or be stored outside your country to provide low latency. Where required, appropriate safeguards apply (e.g., Cloudflare’s transfer mechanisms and standard contractual commitments).</li>
-        <li><strong>Supervisory authority:</strong> you may lodge a complaint with your local authority if you believe your rights are infringed.</li>
+        <li><strong>International transfers:</strong> data may transit or be stored outside your country to provide low latency. Where required, appropriate safeguards apply.</li>
+        <li><strong>Supervisory authority:</strong> you may lodge a complaint with your local authority.</li>
       </ul>
     </section>
 
