@@ -199,3 +199,20 @@ Security contact: security@timeproofs.io
 
 MIT License — free for personal and commercial use.  
 © 2025 TimeProofs — Proof of Existence. For Everything.
+
+---
+
+## 🕒 Proof of Release — v0.1 (Public Beta)
+
+- **Version:** v0.1  
+- **Date:** 2025-10-23  
+- **Commit/Tag:** patch-v0.1  
+- **Hash (SHA-256):** `ceb9c21de354037aadb522a68f680521646bdb46f1bbf9ca9ba9f2443ec606d`  
+- **Timestamp:** Verified by [TimeProofs.io](https://timeproofs.io)  
+- **Integrity:** Proof cryptographically sealed via `/api/verify`  
+- **Scope:** Full site + API deployed on Cloudflare + Vercel  
+
+> This release is officially timestamped and verifiable —  
+> the first version of TimeProofs sealed by its own protocol.
+
+---
