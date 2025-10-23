@@ -11,9 +11,11 @@
   <link rel="canonical" href="https://timeproofs.io/use-cases.html"/>
 
   <!-- Security (v0.1) -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src https://timeproofs-api.jeason-bacoul.workers.dev; font-src 'self'; base-uri 'self'; frame-ancestors 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev; font-src 'self'; base-uri 'self'; frame-ancestors 'none'">
 
   <!-- Perf -->
+  <link rel="preconnect" href="https://api.timeproofs.io" crossorigin>
+  <link rel="dns-prefetch" href="//api.timeproofs.io"/>
   <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin>
   <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev"/>
 
@@ -180,7 +182,8 @@ async function sha256Hex(str){
   return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
 }
 
-const API = "https://timeproofs-api.jeason-bacoul.workers.dev/api";
+// primary API, fallback handled at your app layer if needed
+const API = "https://api.timeproofs.io/api";
 const hash = await sha256Hex(output);
 const proof = await fetch(`${API}/timestamp`, {
   method:"POST", headers:{ "Content-Type":"application/json" },
@@ -192,7 +195,7 @@ const proof = await fetch(`${API}/timestamp`, {
       <article class="card">
         <h3>Prompt & chain integrity</h3>
         <p>Timestamp key prompts and intermediate chain states for audit and regression safety.</p>
-        <pre><code>const API = "https://timeproofs-api.jeason-bacoul.workers.dev/api";
+        <pre><code>const API = "https://api.timeproofs.io/api";
 const promptHash = await sha256Hex(prompt);
 await fetch(`${API}/timestamp`, {
   method:"POST", headers:{ "Content-Type":"application/json" },
@@ -204,7 +207,7 @@ await fetch(`${API}/timestamp`, {
       <article class="card">
         <h3>Dataset & fine-tune snapshots</h3>
         <p>Prove the exact dataset used at T. Anchor training sets and versioned manifests.</p>
-        <pre><code>const API = "https://timeproofs-api.jeason-bacoul.workers.dev/api";
+        <pre><code>const API = "https://api.timeproofs.io/api";
 const manifestHash = await sha256Hex(JSON.stringify(manifest));
 await fetch(`${API}/timestamp`, {
   method:"POST", headers:{ "Content-Type":"application/json" },
@@ -223,7 +226,7 @@ async function sha256FileHex(file){
   return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
 }
 
-const API = "https://timeproofs-api.jeason-bacoul.workers.dev/api";
+const API = "https://api.timeproofs.io/api";
 const fileHash = await sha256FileHex(file);
 await fetch(`${API}/timestamp`, {
   method:"POST", headers:{ "Content-Type":"application/json" },
@@ -235,7 +238,7 @@ await fetch(`${API}/timestamp`, {
       <article class="card">
         <h3>Webhooks & event logs</h3>
         <p>Hash critical events and anchor them. Verify later without exposing payloads.</p>
-        <pre><code>const API = "https://timeproofs-api.jeason-bacoul.workers.dev/api";
+        <pre><code>const API = "https://api.timeproofs.io/api";
 const eventHash = await sha256Hex(JSON.stringify(event));
 await fetch(`${API}/timestamp`, {
   method:"POST", headers:{ "Content-Type":"application/json" },
@@ -247,7 +250,7 @@ await fetch(`${API}/timestamp`, {
       <article class="card">
         <h3>Release & binary integrity</h3>
         <p>Ship artifacts with a proof link. Users verify instantly before installing.</p>
-        <pre><code>const API = "https://timeproofs-api.jeason-bacoul.workers.dev/api";
+        <pre><code>const API = "https://api.timeproofs.io/api";
 await fetch(`${API}/timestamp`, {
   method:"POST", headers:{ "Content-Type":"application/json" },
   body: JSON.stringify({ hash: binarySHA256, type:"release", meta:{ tag:"v1.2.3" } })
