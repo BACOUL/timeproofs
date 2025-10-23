@@ -209,7 +209,7 @@ MIT License — free for personal and commercial use.
 - **Version:** v0.1  
 - **Date:** 2025-10-23  
 - **Commit/Tag:** patch-v0.1  
-- **Hash (SHA-256):** `ceb9c21de354037aadb522a68f680521646bdb46f1bbf9ca9ba9f2443ec606d`  
+- **Hash (SHA-256):** `2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824`  
 - **Timestamp:** Verified by [TimeProofs.io](https://timeproofs.io)  
 - **Integrity:** Proof cryptographically sealed via `/api/verify`  
 - **Scope:** Full site + API deployed on Cloudflare + Vercel  
