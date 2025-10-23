@@ -10,10 +10,12 @@
   <meta name="robots" content="index,follow"/>
   <link rel="canonical" href="https://timeproofs.io/security.html"/>
 
-  <!-- CSP (v0.1) -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src https://timeproofs-api.jeason-bacoul.workers.dev; font-src 'self'; base-uri 'self'; frame-ancestors 'none'">
+  <!-- CSP v0.1 -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev; font-src 'self'; base-uri 'self'; frame-ancestors 'none'">
 
   <!-- Perf -->
+  <link rel="preconnect" href="https://api.timeproofs.io" crossorigin>
+  <link rel="dns-prefetch" href="//api.timeproofs.io"/>
   <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin>
   <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev"/>
 
@@ -168,9 +170,9 @@
       <h2 id="crypto">Cryptography</h2>
       <ul>
         <li>Hashing: <strong>SHA-256</strong> client-side or by user systems</li>
-        <li>Signing: <strong>HMAC-SHA256</strong> over <code class="mono">hash + "\n" + timestamp + "\n" + base64url(meta)</code></li>
+        <li>Signing: <strong>HMAC-SHA256</strong> over <code class="mono">message = `${hash}|${ts}`</code></li>
         <li>Transport: <strong>TLS</strong> only</li>
-        <li>Key management: rotation via <code class="mono">kid</code> policy</li>
+        <li>Key management: rotation and policy via <code class="mono">kid</code></li>
       </ul>
       <p class="muted">Protocol details: <a href="/proofspec.html">ProofSpec</a>.</p>
     </section>
