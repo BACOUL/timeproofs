@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  api:
+    build: .
+    ports: ["8787:8787"]
+    environment:
+      - TP_SECRET=${TP_SECRET}
+      - TP_REDIS_URL=redis://redis:6379
+      - PORT=8787
+    depends_on: [redis]
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
