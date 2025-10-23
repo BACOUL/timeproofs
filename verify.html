@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Core -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta name="color-scheme" content="dark"/>
@@ -10,16 +11,19 @@
   <meta name="theme-color" content="#0b1020"/>
   <link rel="canonical" href="https://timeproofs.io/verify.html"/>
 
+  <!-- Perf -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin>
   <link rel="dns-prefetch" href="//api.timeproofs.io">
   <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin>
   <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev">
 
+  <!-- Icons / Manifest -->
   <link rel="icon" href="/favicon.ico" sizes="any"/>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
   <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
   <link rel="manifest" href="/site.webmanifest"/>
 
+  <!-- Social -->
   <meta property="og:title" content="Verify & Create Proof — TimeProofs"/>
   <meta property="og:description" content="Hash locally. Timestamp via API. Verify publicly. No blockchain, no friction."/>
   <meta property="og:type" content="website"/>
@@ -42,11 +46,12 @@
       --safe-l: env(safe-area-inset-left, 0px);
       --safe-r: env(safe-area-inset-right, 0px);
       --header-h: 64px;
+      --side-pad: max(16px, calc(16px + max(var(--safe-l), var(--safe-r))/2));
     }
     @media (max-width:900px){ :root{ --header-h: 56px } }
 
     *{ box-sizing:border-box }
-    html,body{ height:100%; max-width:100%; background:var(--bg) }
+    html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg) }
     body{
       margin:0;
       background: radial-gradient(1000px 420px at 70% -10%, rgba(34,211,238,.10), transparent 60%), var(--bg);
@@ -54,11 +59,9 @@
       font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
       text-rendering:optimizeLegibility;
-      /* évite tout recouvrement par l’en-tête et tient compte des encoches */
       padding-top: calc(var(--header-h) + var(--safe-top));
-      padding-left: max(20px, var(--safe-l));
-      padding-right: max(20px, var(--safe-r));
-      overflow-x:hidden;
+      padding-left: var(--side-pad);
+      padding-right: var(--side-pad);
     }
     a{ color:var(--accent); text-decoration:none } a:hover{ text-decoration:underline }
 
@@ -87,9 +90,9 @@
         top:calc(var(--header-h) + var(--safe-top));
         left:0; right:0;
         background:#0c1424; border-top:1px solid var(--line);
-        display:flex; flex-direction:column; gap:10px; padding:14px max(16px, var(--safe-r)) 14px max(16px, var(--safe-l));
+        display:flex; flex-direction:column; gap:10px;
+        padding:14px max(16px, var(--safe-r)) 14px max(16px, var(--safe-l));
         box-shadow:0 16px 40px rgba(0,0,0,.45);
-        /* plein écran sans couper, scrollable */
         max-height: calc(100dvh - var(--header-h) - var(--safe-btm) - var(--safe-top));
         overflow:auto;
         transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
@@ -99,11 +102,11 @@
     }
 
     /* Layout */
-    .wrap{ max-width:980px; margin:0 auto 40px; padding:0 }
-    h1{ margin:14px 0 8px; font-size:clamp(1.6rem, 4.5vw, 1.9rem) }
-    p.lead{ margin:0 0 22px; color:var(--muted) }
+    .wrap{ max-width:980px; width:100%; margin-left:auto; margin-right:auto; margin-bottom:40px; padding-left:0; padding-right:0 }
+    h1{ margin:14px 0 8px; font-size:clamp(1.6rem, 4.5vw, 1.9rem); text-align:center }
+    p.lead{ margin:0 0 22px; color:var(--muted); text-align:center; padding:0 4px }
 
-    .tabs{ display:flex; gap:8px; margin:10px 0 18px; flex-wrap:wrap }
+    .tabs{ display:flex; gap:8px; margin:10px 0 18px; flex-wrap:wrap; justify-content:center }
     .tab{ padding:10px 14px; background:#0b1220; border:1px solid #1f2937; border-radius:10px; cursor:pointer; color:#cbd5e1 }
     .tab.active{ background:var(--panel); color:var(--text); border-color:#263244 }
 
@@ -112,7 +115,7 @@
 
     .card{ background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px }
     label{ display:block; font-size:13px; color:#a7b1c2; margin:8px 0 6px }
-    input[type="text"], textarea{ width:100%; background:#0b1220; color:var(--text); border:1px solid #1f2937; border-radius:10px; padding:10px 12px }
+    input[type="text"], textarea{ width:100%; background:#0b1220; color:#f8fafc; border:1px solid #1f2937; border-radius:10px; padding:10px 12px }
     textarea{ min-height:110px; resize:vertical }
     .row{ display:flex; gap:12px; flex-wrap:wrap; align-items:center }
     .row > *{ flex:1 1 240px }
@@ -128,17 +131,17 @@
     pre{
       width:100%;
       background:#0b1220; color:#a7f3d0; border:1px solid #1f2937; border-radius:10px; padding:12px;
-      white-space:pre-wrap; word-break:break-all; overflow-wrap:anywhere; font-size:13px;
-      max-height:40vh; overflow:auto; /* évite le contenu coupé sur mobile */
+      white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere; font-size:13px;
+      max-height:40vh; overflow:auto;
     }
     .actions{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap }
 
     .drop{ margin-top:10px; padding:14px; border:1px dashed #2b3b55; border-radius:10px; background:#0b1220; color:#cfe3f5; text-align:center; font-size:.92rem }
     .drop.drag{ border-color:#22d3ee; background:#0f1f33 }
 
-    footer{ margin:26px 0 0; text-align:center; color:#7c8aa5; font-size:12px; padding:8px 12px; padding-bottom:calc(12px + var(--safe-btm)) }
+    footer{ margin:26px 0 0; text-align:center; color:#7c8aa5; font-size:12px; padding:8px 0; padding-bottom:calc(12px + var(--safe-btm)) }
 
-    /* Mobile touch targets */
+    /* Mobile */
     @media (max-width:480px){
       .card{ padding:14px }
       .row{ gap:8px }
@@ -162,6 +165,7 @@
       <a href="/docs.html">API Docs</a>
       <a href="/legal.html">Legal</a>
       <a href="/privacy.html">Privacy</a>
+      <a href="/security.html">Security</a>
     </nav>
   </header>
 
@@ -294,7 +298,7 @@
           const opt = withTimeout(options);
           res = await fetch(`${base}${path}`, opt);
           clearTimeout(opt._timeoutId);
-          if (res.ok || res.status < 500) return res;
+          if (res.ok || res.status < 500) return res; // prefer first non-5xx
         }catch(e){ lastErr = e; }
       }
       if (res) return res;
@@ -391,6 +395,12 @@
     function fail(msg){ throw new Error(msg); }
     function setBusy(el, busy){ el?.setAttribute('aria-busy', busy ? 'true' : 'false'); }
 
+    /* Clipboard util */
+    function copyToClipboard(text){
+      navigator.clipboard?.writeText(text).then(()=>alert('Copied to clipboard'))
+      .catch(()=>prompt('Copy manually:', text));
+    }
+
     /* Create */
     const btnCreate = document.getElementById('btn-create');
     const outCreate = document.getElementById('create-output');
@@ -399,11 +409,6 @@
     const openVerifyLink = document.getElementById('open-verify-link');
     const copyCreateJSON = document.getElementById('copy-create-json');
     const copyCreateCURL = document.getElementById('copy-create-curl');
-
-    function copyToClipboard(text){
-      navigator.clipboard?.writeText(text).then(()=>alert('Copied to clipboard'))
-      .catch(()=>prompt('Copy manually:', text));
-    }
 
     function enableCreateActions(data, req){
       createActions.style.display='flex';
@@ -463,7 +468,7 @@
           timestamp: j.timestamp || j.ts,
           signature: j.signature || j.sig,
           verify_url: j.verify_url || (j.hash ? `/verify.html?hash=${encodeURIComponent(j.hash)}` : undefined),
-          type: j.type, meta: j.meta
+          type: j.type ?? undefined, meta: j.meta ?? undefined
         };
 
         statusCreate.innerHTML = `<span class="pill ok" role="status">✅ Proof created</span>`;
@@ -484,6 +489,7 @@
     const copyVerifyJSON = document.getElementById('copy-verify-json');
     const copyVerifyCURL = document.getElementById('copy-verify-curl');
 
+    // Prefill from ?hash=
     const params = new URLSearchParams(location.search);
     const preHash = params.get('hash');
     if (preHash && /^[a-f0-9]{64}$/i.test(preHash)) {
@@ -511,7 +517,7 @@
         else statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Invalid</span>`;
 
         const normalized = {
-          ok: ok, found: !!found,
+          ok, found: !!found,
           hash: j.hash || hash,
           timestamp: j.timestamp || j.ts || null,
           signature: j.signature || j.sig || null,
@@ -531,4 +537,4 @@
     };
   </script>
 </body>
-  </html>
+</html>
