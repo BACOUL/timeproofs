@@ -44,6 +44,9 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"TimeProofs","url":"https://timeproofs.io/","logo":"https://timeproofs.io/logo%20(1).png","sameAs":["https://x.com/timeproofs","https://www.linkedin.com/company/timeproofs","https://github.com/timeproofs","https://youtube.com/@timeproofs","https://timeproofs.io/rss.xml"]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"}</script>
 
+  <!-- CSP -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.timeproofs.io; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' https://api.timeproofs.io; font-src 'self' https: data:">
+
   <!-- Styles -->
   <style>
     :root{
@@ -134,13 +137,14 @@
     .section.bg-solid{ background:#0d1628; border-top:1px solid #1a2640; border-bottom:1px solid #1a2640 }
 
     /* Cards */
-    .card{ position:relative; border-radius:16px; padding:18px; background:#0c1424; color:#dbe7f3; border:1px solid transparent }
+    .card{ position:relative; border-radius:16px; padding:18px; background:#0c1424; color:#dbe7f3; border:1px solid transparent; transition:transform .18s var(--e) }
     .card::before{
       content:""; position:absolute; inset:0; border-radius:inherit; padding:1px;
       background:linear-gradient(135deg, rgba(34,211,238,.35), rgba(34,211,238,.05));
       -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none;
     }
+    .card:hover{ transform:translateY(-2px) }
     .card h3{ color:#22d3ee; margin:.2em 0 .3em; font-size:1.08rem }
     .card p{ margin:.15em 0 .4em; line-height:1.6 }
 
@@ -222,11 +226,17 @@
       <div class="label">🔐 Privacy-first • ⚡ Edge-native • 🌍 Open Protocol</div>
       <h1 id="hero-title" class="title">The Open Standard for Digital Proof of Existence</h1>
       <p class="subtitle">
-        Prove when something existed, privately, for any data. One open format. No blockchain. No personal data. Fully verifiable.
+        Prove when something existed. Private by design. One open format. Fully verifiable.
       </p>
       <div class="cta-wrap" role="group" aria-label="Primary actions">
         <a class="cta" href="/proofspec.html">Read the ProofSpec</a>
         <a class="cta secondary" href="/verify.html">Try the API</a>
+      </div>
+      <!-- Persona CTAs -->
+      <div class="cta-wrap" style="margin-top:8px">
+        <a class="cta secondary" href="/docs.html#quickstart-dev">For Developers</a>
+        <a class="cta secondary" href="/use-cases.html#legal">For Legal/Compliance</a>
+        <a class="cta secondary" href="/use-cases.html#ai">For AI Teams</a>
       </div>
 
       <!-- Live demo -->
@@ -345,8 +355,19 @@ const check = await res.json();</code></pre>
       </div>
     </section>
 
+    <!-- REQUIREMENT → ENDPOINT -->
+    <section class="section bg-alt reveal" aria-labelledby="proofmap">
+      <h2 id="proofmap">From requirement to endpoint</h2>
+      <div class="grid three">
+        <article class="card"><h3>Traceability</h3><p>EU AI Act Art. 12</p><pre><code>POST /api/timestamp
+{ "hash":"...", "type":"event", "meta":{"source":"svc-A"} }</code></pre></article>
+        <article class="card"><h3>Integrity</h3><p>GDPR Art. 5(1)(f)</p><pre><code>GET /api/verify?hash=...</code></pre></article>
+        <article class="card"><h3>Auditability</h3><p>DSA Art. 15</p><pre><code>GET /api/logs?id=...</code></pre></article>
+      </div>
+    </section>
+
     <!-- WHY CHOOSE -->
-    <section class="section bg-alt reveal" aria-labelledby="why">
+    <section class="section bg-solid reveal" aria-labelledby="why">
       <h2 id="why">Why organizations choose TimeProofs</h2>
       <div class="grid three">
         <article class="card"><h3>Instant Proof</h3><p>Millisecond timestamps. Zero tokens. Predictable pricing.</p></article>
@@ -358,6 +379,17 @@ const check = await res.json();</code></pre>
         <article class="card"><h3>No lock-in</h3><p>Public verification by anyone, including outside our API.</p></article>
         <article class="card"><h3>Edge-native</h3><p>Fast, efficient, built for modern architectures.</p></article>
       </div>
+    </section>
+
+    <!-- TRUSTED BY -->
+    <section class="section bg-alt reveal" aria-labelledby="trusted">
+      <h2 id="trusted">Trusted by</h2>
+      <div class="grid three" style="align-items:center;text-align:center">
+        <div class="card" aria-label="Placeholder logo">Your Logo</div>
+        <div class="card" aria-label="Placeholder logo">Your Logo</div>
+        <div class="card" aria-label="Placeholder logo">Your Logo</div>
+      </div>
+      <p style="text-align:center;color:#9fb3c9;margin-top:10px">Replace with approved brand marks.</p>
     </section>
 
     <!-- PERSONAS -->
@@ -476,7 +508,9 @@ const check = await res.json();</code></pre>
       <a href="/use-cases.html">Use Cases</a> •
       <a href="/verify.html">Verify</a> •
       <a href="/docs.html">API Docs</a> •
-      <a href="/security.html">Security</a> •
+      <a href="/changelog.html">Changelog</a> •
+      <a href="/status.html">Status</a> •
+      <a href="/security.txt">Security.txt</a> •
       <a href="/privacy.html">Privacy</a> •
       <a href="/legal.html">Legal</a>
     </div>
