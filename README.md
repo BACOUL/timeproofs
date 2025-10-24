@@ -22,7 +22,7 @@
   <img src="https://img.shields.io/badge/verified-cryptographic%20HMAC256-8A2BE2?style=flat-square" />
 </p>
 
-> 🔖 [View cryptographic release proof — patch-v0.1](https://github.com/BACOUL/timeproofs/releases/tag/patch-v0.1)
+> 🔖 [View cryptographic release proof — patch-v0.1](https://github.com/BACOUL/timeproofs/releases/tag/v0.1-final)
 
 ---
 
