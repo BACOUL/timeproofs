@@ -204,17 +204,6 @@ MIT License — free for personal and commercial use.
 
 ---
 
-## 🕒 Proof of Release — v0.1 (Public Beta)
-
-- **Version:** v0.1  
-- **Date:** 2025-10-23  
-- **Commit/Tag:** patch-v0.1  
-- **Hash (SHA-256):** `2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824`  
-- **Timestamp:** Verified by [TimeProofs.io](https://timeproofs.io)  
-- **Integrity:** Proof cryptographically sealed via `/api/verify`  
-- **Scope:** Full site + API deployed on Cloudflare + Vercel  
-
-> This release is officially timestamped and verifiable —  
-> the first version of TimeProofs sealed by its own protocol.
+🧾 Proof of Worker — v0.1-final (Public Beta) — File: worker.js | Version: v0.1-final | Date: 2025-10-24 | SHA-256: 5b09abaf6ceec6830fffbdec5443fa2d0883a36574dac4b5dec555acdf0c0903 | Timestamp: 2025-10-24T06:26:52.206Z | Signature (HMAC): 8dd65eb7b9e225a8df5469d89558f2c46216d4db69a892d3ae9d15392ec8af9 | Verify URL: https://timeproofs.io/verify.html?hash=5b09abaf6ceec6830fffbdec5443fa2d0883a36574dac4b5dec555acdf0c0903 | Integrity: ✅ cryptographically sealed by TimeProofs.io | Meta: {"src":"release","env":"prod"}
 
 ---
