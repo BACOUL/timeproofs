@@ -48,8 +48,8 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"TimeProofs","url":"https://timeproofs.io/","logo":"https://timeproofs.io/logo%20(1).png","sameAs":["https://x.com/timeproofs","https://www.linkedin.com/company/timeproofs","https://github.com/timeproofs","https://youtube.com/@timeproofs","https://timeproofs.io/rss.xml"]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"}</script>
 
-  <!-- CSP -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.timeproofs.io; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' 'nonce-TP-2025'; connect-src 'self' https://api.timeproofs.io; font-src 'self' https: data:; base-uri 'self'; frame-ancestors 'self'; upgrade-insecure-requests">
+  <!-- CSP (fix SW) -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.timeproofs.io; worker-src 'self' blob:; child-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' 'nonce-TP-2025'; connect-src 'self' https://api.timeproofs.io; font-src 'self' https: data:; base-uri 'self'; frame-ancestors 'self'; upgrade-insecure-requests">
 
   <!-- Styles -->
   <style>
@@ -408,6 +408,7 @@ const check = await res.json();</code></pre>
       <details><summary>Is there a blockchain involved?</summary><p>No. Cryptographic timestamps and public verification without blockchain overhead.</p></details>
       <details><summary>How do I verify a proof?</summary><p>Use our verify endpoint or any ProofSpec-compliant client. The proof is self-describing.</p></details>
       <details><summary>How does this help with the EU AI Act?</summary><p>It provides timestamped, verifiable trails for AI outputs and model interactions to meet traceability needs.</p></details>
+
     </section>
 
     <!-- Release proof v0.1 -->
@@ -451,6 +452,15 @@ const check = await res.json();</code></pre>
     <style>.reveal{opacity:1;transform:none}</style>
     <div role="note" style="text-align:center;color:#9fb3c9">JavaScript is disabled. The demo and animations are inactive.</div>
   </noscript>
+
+  <!-- Service Worker -->
+  <script defer nonce="TP-2025">
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js', { type: 'module' })
+        .then(reg => console.log('SW registered:', reg.scope))
+        .catch(err => console.warn('SW registration failed:', err));
+    }
+  </script>
 
   <!-- Scripts -->
   <script defer nonce="TP-2025">
@@ -508,13 +518,13 @@ const check = await res.json();</code></pre>
       }catch(e){ print('Verify failed. Check network or CORS.','Error'); }
     });
 
-    // Release proof link auto-fill if hash provided
+    // Release proof link auto-fill
     (function(){
-      const hp=document.getElementById('rel-proof-hash').textContent.trim();
-      const a=document.getElementById('rel-proof-link');
-      if(hp && !hp.startsWith('PUT_')) a.href='https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(hp);
+      const hp=document.getElementById('rel-proof-hash'); if(!hp) return;
+      const val=hp.textContent.trim(); const a=document.getElementById('rel-proof-link');
+      if(val && !val.startsWith('PUT_')) a.href='https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(val);
     })();
   })();
   </script>
 </body>
-</html>
+                 </html>
