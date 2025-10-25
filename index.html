@@ -48,8 +48,19 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"TimeProofs","url":"https://timeproofs.io/","logo":"https://timeproofs.io/logo%20(1).png","sameAs":["https://x.com/timeproofs","https://www.linkedin.com/company/timeproofs","https://github.com/timeproofs","https://youtube.com/@timeproofs","https://timeproofs.io/rss.xml"]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"}</script>
 
-  <!-- CSP (fix SW) -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.timeproofs.io; worker-src 'self' blob:; child-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' 'nonce-TP-2025'; connect-src 'self' https://api.timeproofs.io; font-src 'self' https: data:; base-uri 'self'; frame-ancestors 'self'; upgrade-insecure-requests">
+  <!-- CSP (SW-safe) -->
+  <meta http-equiv="Content-Security-Policy" content="
+default-src 'self' https://api.timeproofs.io;
+worker-src 'self' blob:;
+child-src 'self';
+img-src 'self' data: https:;
+style-src 'self' 'unsafe-inline';
+script-src 'self' 'nonce-TP-2025';
+connect-src 'self' https://api.timeproofs.io;
+font-src 'self' https: data:;
+base-uri 'self';
+frame-ancestors 'self';
+upgrade-insecure-requests">
 
   <!-- Styles -->
   <style>
@@ -160,16 +171,16 @@
     /* Progress */
     .progress{ position:fixed; left:0; top:64px; width:100%; height:2px; background:linear-gradient(90deg, rgba(34,211,238,.0), rgba(34,211,238,.35)); transform-origin:left; scale:0 1; z-index:900 }
 
-    /* Centrage systémique */
+    /* Centering */
     .section > .grid{ justify-items:center }
     .section > p{ text-align:center; margin-inline:auto; max-width:900px }
 
-    /* A11y focus visible */
+    /* A11y focus */
     a:focus-visible, .cta:focus-visible, .btn:focus-visible, .social a:focus-visible, .tp-burger:focus-visible{
       outline:2px solid #22d3ee; outline-offset:3px; border-radius:12px;
     }
 
-    /* Contraste bouton secondaire au hover */
+    /* Secondary CTA hover */
     .cta.secondary:hover{
       background:#16284a; border-color:#2b4d7a;
       box-shadow:0 0 0 2px rgba(34,211,238,.15), 0 12px 38px rgba(34,211,238,.25);
@@ -408,7 +419,6 @@ const check = await res.json();</code></pre>
       <details><summary>Is there a blockchain involved?</summary><p>No. Cryptographic timestamps and public verification without blockchain overhead.</p></details>
       <details><summary>How do I verify a proof?</summary><p>Use our verify endpoint or any ProofSpec-compliant client. The proof is self-describing.</p></details>
       <details><summary>How does this help with the EU AI Act?</summary><p>It provides timestamped, verifiable trails for AI outputs and model interactions to meet traceability needs.</p></details>
-
     </section>
 
     <!-- Release proof v0.1 -->
@@ -453,7 +463,7 @@ const check = await res.json();</code></pre>
     <div role="note" style="text-align:center;color:#9fb3c9">JavaScript is disabled. The demo and animations are inactive.</div>
   </noscript>
 
-  <!-- Service Worker -->
+  <!-- Service Worker (module) -->
   <script defer nonce="TP-2025">
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js', { type: 'module' })
@@ -462,7 +472,7 @@ const check = await res.json();</code></pre>
     }
   </script>
 
-  <!-- Scripts -->
+  <!-- App Scripts -->
   <script defer nonce="TP-2025">
   (function(){
     // Header + progress
@@ -527,4 +537,4 @@ const check = await res.json();</code></pre>
   })();
   </script>
 </body>
-                 </html>
+            </html>
