@@ -66,11 +66,16 @@
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem }
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
-    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border:1px solid var(--line); border-radius:10px; background:#0d1628; color:#text; color:var(--text); cursor:pointer }
+    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer }
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block }
     .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
     @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
-    @media (max-width:899px){ .tp-nav{ position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45); transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease } .tp-nav a{ margin:4px 0 } .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto } .tp-brand img{ height:34px; width:34px } }
+    @media (max-width:899px){
+      .tp-nav{ position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45); transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease }
+      .tp-nav a{ margin:4px 0 }
+      .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
+      .tp-brand img{ height:34px; width:34px }
+    }
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
@@ -101,8 +106,7 @@
     .grid{ display:grid; gap:16px }
     .grid.three{ grid-template-columns:1fr }
     .grid.two{ grid-template-columns:1fr }
-    @media(min-width:900px){ .grid.three{ grid-template-columns:repeat(3,1fr) } .grid.two{ grid-template-columns:1fr 1fR } }
-    @media(min-width:900px){ .grid.two{ grid-template-columns:1fr 1fr } } /* fix typo */
+    @media(min-width:900px){ .grid.three{ grid-template-columns:repeat(3,1fr) } .grid.two{ grid-template-columns:1fr 1fr } }
 
     /* Themes */
     .section.bg-alt{ background:linear-gradient(180deg,#0b1020,#0c1424); border-top:1px solid #121a2e; border-bottom:1px solid #121a2e }
@@ -156,16 +160,16 @@
     /* Progress */
     .progress{ position:fixed; left:0; top:64px; width:100%; height:2px; background:linear-gradient(90deg, rgba(34,211,238,.0), rgba(34,211,238,.35)); transform-origin:left; scale:0 1; z-index:900 }
 
-    /* Centrage systémique des grilles et textes */
+    /* Centrage systémique */
     .section > .grid{ justify-items:center }
     .section > p{ text-align:center; margin-inline:auto; max-width:900px }
 
-    /* A11y focus visible uniforme */
+    /* A11y focus visible */
     a:focus-visible, .cta:focus-visible, .btn:focus-visible, .social a:focus-visible, .tp-burger:focus-visible{
       outline:2px solid #22d3ee; outline-offset:3px; border-radius:12px;
     }
 
-    /* Contraste renforcé bouton secondaire au hover */
+    /* Contraste bouton secondaire au hover */
     .cta.secondary:hover{
       background:#16284a; border-color:#2b4d7a;
       box-shadow:0 0 0 2px rgba(34,211,238,.15), 0 12px 38px rgba(34,211,238,.25);
@@ -181,7 +185,7 @@
       .btn, .in{ width:100% }
       pre{ font-size:.9rem }
       .subtitle{ padding:0 8px; max-width:680px }
-      .table{ max-width:100%; min-width:720px } /* forcer scroll horizontal propre */
+      .table{ max-width:100%; min-width:720px }
       .table th, .table td{ padding:10px; font-size:.9rem }
       .progress{ top:64px }
     }
@@ -406,16 +410,14 @@ const check = await res.json();</code></pre>
       <details><summary>How does this help with the EU AI Act?</summary><p>It provides timestamped, verifiable trails for AI outputs and model interactions to meet traceability needs.</p></details>
     </section>
 
-    <!-- Social -->
-    <section class="section bg-alt reveal" aria-label="Social links">
-      <div class="social">
-        <a href="https://x.com/timeproofs" aria-label="TimeProofs on X" rel="me noopener" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18.244 2H21l-6.5 7.43L22 22h-6.5l-4.11-5.36L6.5 22H3.74l6.94-7.93L2 2h6.6l3.73 5.02L18.244 2Zm-2.27 18h1.76L8.11 4h-1.8l9.664 16Z" fill="currentColor"/></svg></a>
-        <a href="https://www.linkedin.com/company/timeproofs" aria-label="TimeProofs on LinkedIn" rel="me noopener" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.94 8.67H4V20h2.94V8.67ZM5.47 7.33A1.73 1.73 0 1 0 5.46 4a1.73 1.73 0 0 0 .01 3.33ZM20 20h-2.94v-5.77c0-1.38-.03-3.16-1.92-3.16-1.92 0-2.22 1.5-2.22 3.05V20H9.98V8.67h2.82v1.54h.04c.39-.74 1.35-1.52 2.78-1.52 2.97 0 3.52 1.96 3.52 4.5V20Z" fill="currentColor"/></svg></a>
-        <a href="https://github.com/timeproofs" aria-label="TimeProofs on GitHub" rel="me noopener" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12.2c0 5.19 3.37 9.6 8.06 11.16.59.11.8-.26.8-.58v-2.17c-3.28.73-3.97-1.42-3.97-1.42-.54-1.4-1.33-1.78-1.33-1.78-1.09-.76.08-.74.08-.74 1.21.09 1.84 1.27 1.84 1.27 1.07 1.88 2.8 1.34 3.49 1.03.11-.8.42-1.34.76-1.65-2.62-.3-5.38-1.35-5.38-6 0-1.33.46-2.41 1.22-3.26-.12-.3-.53-1.52.12-3.17 0 0 1-.33 3.3 1.24a11.3 11.3 0 0 1 6 0c2.3-1.57 3.3-1.24 3.3-1.24.65 1.65.24 2.87.12 3.17.76.85 1.22 1.93 1.22 3.26 0 4.67-2.77 5.69-5.41 5.99.43.38.82 1.13.82 2.29v3.39c0 .33.21.7.81.58A11.7 11.7 0 0 0 23.5 12.2 11.5 11.5 0 0 0 12 .5Z" fill="currentColor"/></svg></a>
-        <a href="https://youtube.com/@timeproofs" aria-label="TimeProofs on YouTube" rel="me noopener" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M23 12s0-3.22-.41-4.63a3.13 3.13 0 0 0-2.21-2.21C18.97 4.75 12 4.75 12 4.75s-6.97 0-8.38.41A3.13 3.13 0 0 0 1.41 7.37C1 8.78 1 12 1 12s0 3.22.41 4.63a3.13 3.13 0 0 0 2.21 2.21c1.41.41 8.38.41 8.38.41s6.97 0  8.38-.41a3.13 3.13 0 0 0 2.21-2.21C23 15.22 23 12 23 12Zm-13 3.18v-6.36L16.18 12 10 15.18Z" fill="currentColor"/></svg></a>
-        <a href="mailto:hello@timeproofs.io" aria-label="Email TimeProofs"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.5 4h-17A1.5 1.5 0 0 0 2 5.5v13A1.5 1.5 0 0 0 3.5 20h17a1.5 1.5 0 0 0 1.5-1.5v-13A1.5 1.5 0 0 0 20.5 4Zm-.3 2-7.7 5.39 L4.8 6h15.4Zm.3 12.5h-17V7.66l8.2 5.73a1 1 0 0 0 1.16 0l8.64-6.04V18.5Z" fill="currentColor"/></svg></a>
-        <a href="/rss.xml" aria-label="TimeProofs RSS"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 17a2 2 0 1 0 .001 4.001A2 2 0 0 0 6 17Zm-3-7v3a8 8 0 0 1 8 8h3c0-6.075-4.925-11-11-11Zm0-5v3c9.389 0 17 7.611 17 17h3C23 13.297 10.703 5 3 5Z" fill="currentColor"/></svg></a>
-      </div>
+    <!-- Release proof v0.1 -->
+    <section class="section bg-solid" aria-label="Release proof">
+      <p style="text-align:center;color:#9beefb">
+        ✅ TimeProofs v0.1 — Public Beta (<time datetime="2025-10-25">2025-10-25</time>)<br />
+        Proof ID: <code id="rel-proof-id">TP-v0.1</code> ·
+        Hash: <code id="rel-proof-hash">PUT_YOUR_RELEASE_HASH_HERE</code> ·
+        <a id="rel-proof-link" href="/verify.html">Verify</a>
+      </p>
     </section>
   </main>
 
@@ -428,8 +430,6 @@ const check = await res.json();</code></pre>
       <a href="/use-cases.html">Use Cases</a> •
       <a href="/verify.html">Verify</a> •
       <a href="/docs.html">API Docs</a> •
-      <a href="/changelog.html">Changelog</a> •
-      <a href="/status.html">Status</a> •
       <a href="/security.txt">Security.txt</a> •
       <a href="/privacy.html">Privacy</a> •
       <a href="/legal.html">Legal</a>
@@ -457,8 +457,11 @@ const check = await res.json();</code></pre>
   (function(){
     // Header + progress
     const hdr=document.getElementById('hdr'); const bar=document.getElementById('progress');
-    function onScroll(){ if(window.scrollY>6) hdr.classList.add('scrolled'); else hdr.classList.remove('scrolled');
-      const h=document.documentElement; const p=(h.scrollTop)/((h.scrollHeight-h.clientHeight)||1); bar.style.transform=`scaleX(${Math.max(0,Math.min(1,p))})`; }
+    function onScroll(){
+      if(window.scrollY>6) hdr.classList.add('scrolled'); else hdr.classList.remove('scrolled');
+      const h=document.documentElement; const p=(h.scrollTop)/((h.scrollHeight-h.clientHeight)||1);
+      bar.style.transform=`scaleX(${Math.max(0,Math.min(1,p))})`;
+    }
     onScroll(); window.addEventListener('scroll', onScroll, { passive:true });
 
     // Burger
@@ -475,7 +478,9 @@ const check = await res.json();</code></pre>
     const prefersReduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(!prefersReduced){
       const targets=document.querySelectorAll('.section, .card, details');
-      const io=new IntersectionObserver((ents)=>{ ents.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target); } }); }, { rootMargin:'-10% 0px -10% 0px', threshold:0.08 });
+      const io=new IntersectionObserver((ents)=>{
+        ents.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target); } });
+      }, { rootMargin:'-10% 0px -10% 0px', threshold:0.08 });
       targets.forEach(el=>{ el.classList.add('reveal'); io.observe(el); });
     }
 
@@ -484,15 +489,31 @@ const check = await res.json();</code></pre>
     const inTxt=$('demo-input'), out=$('demo-out'), inHash=$('demo-hash'), inVerify=$('demo-hash-verify');
     async function sha256Hex(str){ const buf=new TextEncoder().encode(str); const digest=await crypto.subtle.digest('SHA-256', buf); return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join(''); }
     function print(obj,label){ const t=typeof obj==='string'?obj:JSON.stringify(obj,null,2); const l=label?`// ${label}\n`:''; out.textContent=l+t; }
-    $('btn-hash').addEventListener('click', async ()=>{ const v=inTxt.value||''; if(!v.trim()){ print('Provide content to hash.','Info'); return; } const h=await sha256Hex(v); inHash.value=h; inVerify.value=h; print({hash:h},'Local SHA-256'); });
-    $('btn-stamp').addEventListener('click', async ()=>{ const h=inHash.value.trim(); if(!h){ print('No hash to timestamp.','Warn'); return; }
-      try{ const r=await fetch('https://api.timeproofs.io/api/timestamp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({hash:h,type:'event',meta:{source:'web'}})}); const j=await r.json(); print(j,'Timestamp response'); }
-      catch(e){ print('Timestamp failed. Check network or CORS.','Error'); }
+    $('btn-hash').addEventListener('click', async ()=>{
+      const v=inTxt.value||''; if(!v.trim()){ print('Provide content to hash.','Info'); return; }
+      const h=await sha256Hex(v); inHash.value=h; inVerify.value=h; print({hash:h},'Local SHA-256');
     });
-    $('btn-verify').addEventListener('click', async ()=>{ const h=inVerify.value.trim(); if(!h){ print('Provide a hash to verify.','Warn'); return; }
-      try{ const r=await fetch('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(h)); const j=await r.json(); print(j,'Verify response'); }
-      catch(e){ print('Verify failed. Check network or CORS.','Error'); }
+    $('btn-stamp').addEventListener('click', async ()=>{
+      const h=inHash.value.trim(); if(!h){ print('No hash to timestamp.','Warn'); return; }
+      try{
+        const r=await fetch('https://api.timeproofs.io/api/timestamp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({hash:h,type:'event',meta:{source:'web'}})});
+        const j=await r.json(); print(j,'Timestamp response');
+      }catch(e){ print('Timestamp failed. Check network or CORS.','Error'); }
     });
+    $('btn-verify').addEventListener('click', async ()=>{
+      const h=inVerify.value.trim(); if(!h){ print('Provide a hash to verify.','Warn'); return; }
+      try{
+        const r=await fetch('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(h));
+        const j=await r.json(); print(j,'Verify response');
+      }catch(e){ print('Verify failed. Check network or CORS.','Error'); }
+    });
+
+    // Release proof link auto-fill if hash provided
+    (function(){
+      const hp=document.getElementById('rel-proof-hash').textContent.trim();
+      const a=document.getElementById('rel-proof-link');
+      if(hp && !hp.startsWith('PUT_')) a.href='https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(hp);
+    })();
   })();
   </script>
 </body>
