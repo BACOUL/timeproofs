@@ -74,9 +74,8 @@
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* Hero */
-    .hero{ min-height:calc(100svh - 64px); padding-top:92px; padding-bottom:34px; display:grid; place-items:center; text-align:center; position:relative; isolation:isolate }
-    .hero canvas{ position:absolute; inset:0; z-index:-1; opacity:.65 }
+    /* Hero (centered, no snow) */
+    .hero{ min-height:calc(100svh - 64px); padding-top:92px; padding-bottom:34px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; position:relative; isolation:isolate }
     .label{ display:inline-flex; gap:8px; align-items:center; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem; margin-bottom:12px; box-shadow:var(--ring) }
     .title{ font-size:clamp(2.2rem, 6.2vw, 3.4rem); line-height:1.06; margin:.2em auto .3em; font-weight:900; max-width:1000px; background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent; background-size:220% 100%; animation:shine 6s var(--e) 1 both; text-shadow:0 2px 40px rgba(34,211,238,.10) }
     @keyframes shine{from{background-position:200% 50%;opacity:0;transform:translateY(8px)}to{background-position:0% 50%;opacity:1;transform:translateY(0)}}
@@ -182,7 +181,6 @@
   <main id="main" class="wrap" role="main">
     <!-- HERO -->
     <section class="hero" aria-labelledby="hero-title">
-      <canvas id="tp-canvas" aria-hidden="true"></canvas>
       <div class="label">🔐 Privacy-first • ⚡ Edge-native • 🌍 Open Protocol</div>
       <h1 id="hero-title" class="title">The Open Standard for Digital Proof of Existence</h1>
       <p class="subtitle">Prove when something existed. Private by design. One open format. Fully verifiable.</p>
@@ -324,19 +322,8 @@ const check = await res.json();</code></pre>
       </div>
     </section>
 
-    <!-- TRUSTED BY -->
-    <section class="section bg-alt reveal" aria-labelledby="trusted">
-      <h2 id="trusted">Trusted by</h2>
-      <div class="grid three" style="align-items:center;text-align:center">
-        <div class="card" aria-label="Placeholder logo">Your Logo</div>
-        <div class="card" aria-label="Placeholder logo">Your Logo</div>
-        <div class="card" aria-label="Placeholder logo">Your Logo</div>
-      </div>
-      <p style="text-align:center;color:#9fb3c9;margin-top:10px">Replace with approved brand marks.</p>
-    </section>
-
     <!-- PERSONAS -->
-    <section class="section bg-solid reveal" aria-labelledby="personas">
+    <section class="section bg-alt reveal" aria-labelledby="personas">
       <h2 id="personas">Pick your path</h2>
       <div class="grid three">
         <article class="card persona"><div class="ico" aria-hidden="true">👩‍💻</div><div><h3>Developers</h3><p>Drop-in hashing, timestamp endpoint, verify anywhere. Start in minutes.</p><p><a href="/docs.html">Go to API Docs →</a></p></div></article>
@@ -346,7 +333,7 @@ const check = await res.json();</code></pre>
     </section>
 
     <!-- SOCIAL PROOF -->
-    <section class="section bg-alt reveal" aria-labelledby="proof">
+    <section class="section bg-solid reveal" aria-labelledby="proof">
       <h2 id="proof">Trusted signals</h2>
       <div class="grid two">
         <article class="card quote">“Hash-only timestamping with public verification is the missing <strong>proof layer</strong> for modern data workflows.” — CTO, AI startup</article>
@@ -355,7 +342,7 @@ const check = await res.json();</code></pre>
     </section>
 
     <!-- IP -->
-    <section class="section bg-solid reveal" aria-labelledby="created">
+    <section class="section bg-alt reveal" aria-labelledby="created">
       <h2 id="created">What we’ve created</h2>
       <div class="grid two">
         <article class="card">
@@ -371,7 +358,7 @@ const check = await res.json();</code></pre>
     </section>
 
     <!-- FAQ -->
-    <section class="section bg-alt reveal" aria-labelledby="faq">
+    <section class="section bg-solid reveal" aria-labelledby="faq">
       <h2 id="faq">FAQ</h2>
       <details><summary>Do you store my content?</summary><p>No. We only handle hashes. Original content never leaves your device.</p></details>
       <details><summary>Is there a blockchain involved?</summary><p>No. Cryptographic timestamps and public verification without blockchain overhead.</p></details>
@@ -380,7 +367,7 @@ const check = await res.json();</code></pre>
     </section>
 
     <!-- Social -->
-    <section class="section bg-solid reveal" aria-label="Social links">
+    <section class="section bg-alt reveal" aria-label="Social links">
       <div class="social">
         <a href="https://x.com/timeproofs" aria-label="TimeProofs on X" rel="me noopener" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18.244 2H21l-6.5 7.43L22 22h-6.5l-4.11-5.36L6.5 22H3.74l6.94-7.93L2 2h6.6l3.73 5.02L18.244 2Zm-2.27 18h1.76L8.11 4h-1.8l9.664 16Z" fill="currentColor"/></svg></a>
         <a href="https://www.linkedin.com/company/timeproofs" aria-label="TimeProofs on LinkedIn" rel="me noopener" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.94 8.67H4V20h2.94V8.67ZM5.47 7.33A1.73 1.73 0 1 0 5.46 4a1.73 1.73 0 0 0 .01 3.33ZM20 20h-2.94v-5.77c0-1.38-.03-3.16-1.92-3.16-1.92 0-2.22 1.5-2.22 3.05V20H9.98V8.67h2.82v1.54h.04c.39-.74 1.35-1.52 2.78-1.52 2.97 0 3.52 1.96 3.52 4.5V20Z" fill="currentColor"/></svg></a>
@@ -450,24 +437,6 @@ const check = await res.json();</code></pre>
       const targets=document.querySelectorAll('.section, .card, details');
       const io=new IntersectionObserver((ents)=>{ ents.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target); } }); }, { rootMargin:'-10% 0px -10% 0px', threshold:0.08 });
       targets.forEach(el=>{ el.classList.add('reveal'); io.observe(el); });
-    }
-
-    // Hero canvas
-    const c=document.getElementById('tp-canvas'); if(c){
-      const ctx=c.getContext('2d',{alpha:true}); let w=0,h=0,dpr=Math.min(window.devicePixelRatio||1,2),rid=0; const P=[]; const N=90;
-      function resize(){ w=c.clientWidth; h=c.clientHeight; c.width=w*dpr; c.height=h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
-      function rnd(a,b){ return a+Math.random()*(b-a); }
-      function reset(p){ p.x=rnd(0,w); p.y=rnd(-10,h*0.4); p.vx=rnd(-.15,.15); p.vy=rnd(.18,.42); p.r=rnd(.6,1.8); p.o=rnd(.14,.42); }
-      function init(){ resize(); P.length=0; for(let i=0;i<N;i++){ const p={}; reset(p); p.y=rnd(0,h); P.push(p);} }
-      function step(){ ctx.clearRect(0,0,w,h);
-        const g=ctx.createRadialGradient(w*0.75,h*0.05,20, w*0.75,h*0.05, Math.max(w,h)*0.9);
-        g.addColorStop(0,'rgba(34,211,238,0.12)'); g.addColorStop(1,'rgba(0,0,0,0)'); ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
-        for(const p of P){ p.x+=p.vx; p.y+=p.vy; if(p.y>h+10||p.x<-10||p.x>w+10) reset(p); ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle=`rgba(155,238,251,${p.o})`; ctx.fill(); }
-        rid=requestAnimationFrame(step);
-      }
-      init(); step();
-      window.addEventListener('resize', ()=>{ cancelAnimationFrame(rid); init(); step(); }, { passive:true });
-      document.addEventListener('visibilitychange', ()=>{ if(document.hidden){ cancelAnimationFrame(rid); } else { step(); }});
     }
 
     // Demo logic
