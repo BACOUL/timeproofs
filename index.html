@@ -74,7 +74,7 @@
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* Hero (centered, no snow) */
+    /* Hero */
     .hero{ min-height:calc(100svh - 64px); padding-top:92px; padding-bottom:34px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; position:relative; isolation:isolate }
     .label{ display:inline-flex; gap:8px; align-items:center; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem; margin-bottom:12px; box-shadow:var(--ring) }
     .title{ font-size:clamp(2.2rem, 6.2vw, 3.4rem); line-height:1.06; margin:.2em auto .3em; font-weight:900; max-width:1000px; background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent; background-size:220% 100%; animation:shine 6s var(--e) 1 both; text-shadow:0 2px 40px rgba(34,211,238,.10) }
@@ -82,7 +82,7 @@
     .subtitle{ color:var(--muted); max-width:820px; margin:0 auto 18px; line-height:1.7; font-size:clamp(1rem, 2.8vw, 1.15rem); padding:0 6px }
     .cta-wrap{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:12px }
     .cta{ background:var(--accent); color:#06202a; border:none; padding:.92em 1.4em; border-radius:12px; font-weight:900; box-shadow:0 8px 30px rgba(34,211,238,.18); transition:transform .18s var(--e), box-shadow .18s }
-    .cta.secondary{ background:#111d33; color:#e2f6ff; border:1px solid var(--line) }
+    .cta.secondary{ background:#111d33; color:#e2f6ff; border:1px solid #1e2a3e }
     .cta:hover{ transform:translateY(-2px); box-shadow:0 12px 38px rgba(34,211,238,.25) }
 
     /* Demo */
@@ -108,15 +108,19 @@
     .section.bg-solid{ background:#0d1628; border-top:1px solid #1a2640; border-bottom:1px solid #1a2640 }
 
     /* Cards */
-    .card{ position:relative; border-radius:16px; padding:18px; background:#0c1424; color:#dbe7f3; border:1px solid transparent; transition:transform .18s var(--e) }
+    .card{ position:relative; border-radius:16px; padding:18px; background:#0c1424; color:#dbe7f3; border:1px solid transparent; transition:transform .18s var(--e); max-width:760px; margin-inline:auto }
     .card::before{ content:""; position:absolute; inset:0; border-radius:inherit; padding:1px; background:linear-gradient(135deg, rgba(34,211,238,.35), rgba(34,211,238,.05)); -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none }
     .card:hover{ transform:translateY(-2px) perspective(600px) rotateX(1.2deg) rotateY(.8deg) }
     .card h3{ color:#22d3ee; margin:.2em 0 .3em; font-size:1.08rem }
     .card p{ margin:.15em 0 .4em; line-height:1.6 }
 
-    /* Table */
-    .table{ width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; border:1px solid #1f2a44; border-radius:14px; background:#0b1426 }
-    .table th,.table td{ padding:12px; text-align:left; border-bottom:1px solid #1a2846; font-size:.98rem }
+    /* Code blocks responsive */
+    pre, code { white-space: pre-wrap; word-break: break-word; }
+    pre{ max-width:100%; overflow:auto; padding:12px; border-radius:12px; background:#0b1426; border:1px solid #1f2a44; font-size:.95rem }
+
+    /* Tables responsive */
+    .table{ width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; border:1px solid #1f2a44; border-radius:14px; background:#0b1426; display:block; overflow:auto }
+    .table th,.table td{ padding:12px; text-align:left; border-bottom:1px solid #1a2846; font-size:.98rem; white-space:nowrap }
     .table th{ color:#9beefb } .table tr:last-child td{ border-bottom:none }
     .tag{ display:inline-block; padding:3px 8px; border-radius:999px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; font-size:.78rem }
 
@@ -149,7 +153,24 @@
     /* Progress */
     .progress{ position:fixed; left:0; top:64px; width:100%; height:2px; background:linear-gradient(90deg, rgba(34,211,238,.0), rgba(34,211,238,.35)); transform-origin:left; scale:0 1; z-index:900 }
 
-    @media (prefers-reduced-motion: reduce){ .title{ animation:none !important } .reveal{ opacity:1 !important; transform:none !important } }
+    /* Mobile refinements */
+    .section > .grid { justify-items:center }
+    .section > p { text-align:center; margin-left:auto; margin-right:auto; max-width:900px }
+    @media (max-width: 899px){
+      .hero{ padding-top:92px; padding-bottom:24px; min-height:calc(100svh - 64px) }
+      .section{ padding:28px 0 }
+      .grid.two, .grid.three{ grid-template-columns:1fr }
+      .row{ grid-template-columns:1fr }
+      .btn, .in{ width:100% }
+      pre{ font-size:.9rem }
+      .subtitle{ padding:0 8px; max-width:680px }
+      .table th, .table td{ white-space:nowrap }
+      .progress{ top:64px }
+    }
+    @media (prefers-reduced-motion: reduce){
+      .title{ animation:none !important }
+      .reveal{ opacity:1 !important; transform:none !important }
+    }
   </style>
 </head>
 
@@ -281,7 +302,7 @@ const check = await res.json();</code></pre>
     <!-- REGULATORY MAPPING -->
     <section class="section bg-solid reveal" id="regulatory" aria-labelledby="regulatory-title">
       <h2 id="regulatory-title">Built for the Regulatory Era</h2>
-      <p style="text-align:center;max-width:900px;margin:0 auto;color:#d1def0">Map core requirements to concrete proofs delivered by TimeProofs.</p>
+      <p>Map core requirements to concrete proofs delivered by TimeProofs.</p>
       <div style="overflow:auto; margin-top:12px">
         <table class="table" aria-label="Regulatory mapping">
           <thead><tr><th>Framework</th><th>Requirement</th><th>TimeProofs capability</th></tr></thead>
