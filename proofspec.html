@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="top">
 <head>
   <!-- Core -->
   <meta charset="UTF-8" />
@@ -7,9 +7,11 @@
   <meta name="color-scheme" content="dark" />
   <title>ProofSpec — TimeProofs Open Protocol for Digital Proof of Existence</title>
   <meta name="description" content="ProofSpec is the public specification of the TimeProofs protocol: how to create, sign, timestamp, and verify digital proofs of existence. Privacy-first, edge-native, interoperable." />
+  <meta name="keywords" content="proofspec,digital proof,timestamp,hash,verification,schema,open protocol" />
   <meta name="robots" content="index,follow" />
   <meta name="theme-color" content="#0b1020" />
   <link rel="canonical" href="https://timeproofs.io/proofspec.html" />
+  <link rel="alternate" type="application/pdf" href="/proofspec-v1.pdf" />
 
   <!-- Security (v0.1 minimal) -->
   <meta http-equiv="Content-Security-Policy" content="
@@ -49,7 +51,7 @@
   <meta name="twitter:description" content="Open protocol for digital proof of existence. Interoperable and privacy-first." />
   <meta name="twitter:image" content="https://timeproofs.io/og.png" />
 
-  <!-- JSON-LD -->
+  <!-- JSON-LD: TechArticle -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -61,6 +63,18 @@
     "datePublished":"2025-10-22",
     "version":"1.0.0-draft",
     "url":"https://timeproofs.io/proofspec.html"
+  }
+  </script>
+
+  <!-- JSON-LD: Breadcrumb -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"BreadcrumbList",
+    "itemListElement":[
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://timeproofs.io/"},
+      {"@type":"ListItem","position":2,"name":"Protocol (ProofSpec)","item":"https://timeproofs.io/proofspec.html"}
+    ]
   }
   </script>
 
@@ -77,6 +91,7 @@
     }
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); color:var(--text) }
+    html{ scroll-behavior:smooth }
     body{
       margin:0; font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       background: radial-gradient(1100px 460px at 70% -10%, rgba(34,211,238,.10), transparent 60%), var(--bg);
@@ -122,7 +137,15 @@
     .two{ display:grid; gap:14px; grid-template-columns:1fr } @media(min-width:900px){ .two{ grid-template-columns:1fr 1fr } }
     pre{ background:#0b1220; border:1px solid #1f2937; color:#e5e7eb; border-radius:10px; padding:12px; overflow:auto; white-space:pre; }
     code{ font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-size:.95em }
+    .toc{ position:relative }
+    @media(min-width:900px){ .toc{ position:sticky; top:96px } }
     .toc a{ display:block; padding:6px 8px; color:#cfe7ff }
+    .toc a:hover{ color:#9beefb }
+    .crumb{ margin-top:80px;margin-bottom:12px;font-size:.9rem }
+
+    /* Reveal */
+    .reveal{ opacity:0; transform:translateY(10px); transition:opacity .45s ease, transform .45s ease }
+    .reveal.is-in{ opacity:1; transform:none }
 
     /* Footer */
     footer{ border-top:1px solid var(--line); margin-top:28px; padding:18px max(16px,var(--safe-r)) calc(18px + var(--safe-btm)) max(16px,var(--safe-l)); color:#7c8aa5; text-align:center }
@@ -151,13 +174,24 @@
     </nav>
   </header>
 
+  <!-- Breadcrumb -->
+  <nav aria-label="Breadcrumb" class="muted crumb">
+    <a href="/index.html">Home</a> › <span aria-current="page">Protocol (ProofSpec)</span>
+  </nav>
+
   <main class="wrap" role="main">
     <p class="muted">Status: <strong>Draft for public review</strong> · Protocol · Privacy-first · No blockchain</p>
     <h1>ProofSpec — TimeProofs Open Protocol for Digital Proof of Existence</h1>
     <p class="muted">Defines how to create, sign, timestamp, and verify proofs that a specific data artifact existed at a point in time and has not changed since, without exposing the original content.</p>
 
+    <!-- TL;DR -->
+    <p class="panel"><strong>TL;DR — ProofSpec</strong><br>
+      Defines how to prove that data existed at a given time — hash, sign, verify — without ever sharing the original content.
+      Open, privacy-first, edge-ready.
+    </p>
+
     <!-- TOC -->
-    <nav class="panel toc" aria-label="Table of contents">
+    <nav class="panel toc" role="doc-toc" aria-label="Table of contents">
       <strong>Contents</strong>
       <a href="#abstract">1. Abstract</a>
       <a href="#model">2. Model & Terms</a>
@@ -166,20 +200,22 @@
       <a href="#algorithms">5. Algorithms</a>
       <a href="#security">6. Security & Privacy</a>
       <a href="#compliance">7. Regulatory Mapping</a>
-      <a href="#versioning">8. Versioning</a>
-      <a href="#impl">9. Reference Implementation</a>
-      <a href="#tests">10. Test Vectors</a>
-      <a href="#faq">11. FAQ</a>
-      <a href="#license">12. License & Copyright</a>
-      <a href="#changelog">13. Changelog</a>
+      <a href="#proof">8. Document Proof</a>
+      <a href="#versioning">9. Versioning</a>
+      <a href="#impl">10. Reference Implementation</a>
+      <a href="#tests">11. Test Vectors</a>
+      <a href="#faq">12. FAQ</a>
+      <a href="#license">13. License & Copyright</a>
+      <a href="#changelog">14. Changelog</a>
+      <a href="#top" class="muted">↑ Back to top</a>
     </nav>
 
-    <section id="abstract">
+    <section id="abstract" class="section reveal">
       <h2>1. Abstract</h2>
       <p>ProofSpec binds a content-derived SHA-256 hash to a signed timestamp and a verification method. Transport-agnostic. Verifiable by anyone. Original content stays local.</p>
     </section>
 
-    <section id="model">
+    <section id="model" class="section reveal">
       <h2>2. Model & Terms</h2>
       <div class="two">
         <div class="panel">
@@ -201,7 +237,7 @@
       </div>
     </section>
 
-    <section id="datamodel">
+    <section id="datamodel" class="section reveal">
       <h2>3. Data Model</h2>
       <div class="panel">
 <pre><code>{
@@ -215,10 +251,11 @@
   "ver":  { "endpoint":"https://timeproofs.io/verify.html?hash=&lt;hash&gt;", "method":"GET" }
 }</code></pre>
       </div>
+      <p class="muted">Official media type : <code>application/tproof+json</code> · File extension : <code>.tproof.json</code></p>
       <p class="muted"><code>meta</code> is optional. Exclude personal data.</p>
     </section>
 
-    <section id="schema">
+    <section id="schema" class="section reveal">
       <h2>4. JSON Schema</h2>
       <div class="panel">
 <pre><code>{
@@ -250,7 +287,7 @@
       </div>
     </section>
 
-    <section id="algorithms">
+    <section id="algorithms" class="section reveal">
       <h2>5. Algorithms</h2>
       <h3>5.1 Hashing</h3>
       <p>Use SHA-256. Text is UTF-8. Emit lowercase 64-hex.</p>
@@ -264,11 +301,12 @@
         <li>Rebuild <code>message</code>; verify <code>sig</code> using the key bound to <code>kid</code>.</li>
         <li>Validate <code>spec</code>/<code>alg</code> and time policy on <code>ts</code> if applicable.</li>
       </ol>
+      <p class="muted">Note: future <code>Ed25519</code> signature profile planned for ProofSpec v1.1.</p>
       <h3>5.4 Transport</h3>
       <p>Out of scope. HTTP reference in <code>ver.endpoint</code>. HTTPS required.</p>
     </section>
 
-    <section id="security">
+    <section id="security" class="section reveal">
       <h2>6. Security & Privacy</h2>
       <ul>
         <li><strong>Hash-only</strong>: content not transmitted.</li>
@@ -277,9 +315,10 @@
         <li><strong>Replay</strong>: if needed, add a nonce in <code>meta</code> and include it in server logs only.</li>
         <li><strong>Time</strong>: NTP-synchronized service clocks.</li>
       </ul>
+      <p class="muted">Clock tolerance ≤ 5 s — service synchronized via multi-source NTP.</p>
     </section>
 
-    <section id="compliance">
+    <section id="compliance" class="section reveal">
       <h2>7. Regulatory Mapping</h2>
       <div class="two">
         <div class="panel">
@@ -291,11 +330,20 @@
           <p>No personal data required. Keep <code>meta</code> non-identifying.</p>
         </div>
       </div>
-      <p class="muted">Complements C2PA: existence + integrity, not full provenance chains.</p>
+      <p class="muted">ProofSpec complements C2PA — existence + integrity layer for all digital assets.</p>
     </section>
 
-    <section id="versioning">
-      <h2>8. Versioning</h2>
+    <section id="proof" class="section reveal">
+      <h2>8. Document Proof</h2>
+      <p>This document is cryptographically timestamped by TimeProofs.</p>
+      <p>Proof: <code>TP-ProofSpec-v1</code> · Hash:
+        <code>PUT_HASH_HERE</code> ·
+        <a href="https://api.timeproofs.io/api/verify?hash=PUT_HASH_HERE">Verify</a>
+      </p>
+    </section>
+
+    <section id="versioning" class="section reveal">
+      <h2>9. Versioning</h2>
       <ul>
         <li><code>spec</code> = <code>proofspec/MAJOR.MINOR</code>.</li>
         <li>MINOR is backward compatible. MAJOR breaks.</li>
@@ -303,8 +351,8 @@
       </ul>
     </section>
 
-    <section id="impl">
-      <h2>9. Reference Implementation</h2>
+    <section id="impl" class="section reveal">
+      <h2>10. Reference Implementation</h2>
       <p>Open reference implementation with public verification.</p>
       <div class="two">
         <div class="panel">
@@ -323,8 +371,8 @@ Content-Type: application/json
       <p>OpenAPI and examples: <a href="/docs.html">API Docs</a>.</p>
     </section>
 
-    <section id="tests">
-      <h2>10. Test Vectors</h2>
+    <section id="tests" class="section reveal">
+      <h2>11. Test Vectors</h2>
       <div class="panel">
 <pre><code># Input (UTF-8): "TimeProofs"
 hash = "3940cae79aa443bfcdfc09b4f9fbb49bf16f0be354dee96e014a236d1c7ac9c3"  # example
@@ -336,21 +384,21 @@ kid  = "tp-admin-v0"</code></pre>
       <p class="muted">Example only. Publish official vectors before final release.</p>
     </section>
 
-    <section id="faq">
-      <h2>11. FAQ</h2>
+    <section id="faq" class="section reveal">
+      <h2>12. FAQ</h2>
       <h3>Is blockchain required?</h3>
       <p>No. Standard hashing and signatures. Lower cost. Higher privacy.</p>
       <h3>Can I verify offline?</h3>
       <p>Yes, with the proof object and the verification key policy for <code>kid</code>.</p>
     </section>
 
-    <section id="license">
-      <h2>12. License & Copyright</h2>
+    <section id="license" class="section reveal">
+      <h2>13. License & Copyright</h2>
       <p>© 2025 <strong>TimeProofs</strong>. ProofSpec text under <strong>Apache-2.0</strong> (or MPL-2.0). “TimeProofs” is a trademark. Reference code is open-source under a compatible license.</p>
     </section>
 
-    <section id="changelog">
-      <h2>13. Changelog</h2>
+    <section id="changelog" class="section reveal">
+      <h2>14. Changelog</h2>
       <ul>
         <li><strong>1.0.0-draft</strong> — Initial public draft: data model, schema, HMAC-SHA256 profile, example vectors.</li>
       </ul>
@@ -371,8 +419,9 @@ kid  = "tp-admin-v0"</code></pre>
     </div>
   </footer>
 
-  <!-- Script: burger -->
+  <!-- Scripts -->
   <script>
+    // Burger menu
     (function(){
       const burger = document.getElementById('tp-burger');
       const nav = document.getElementById('tp-nav');
@@ -383,6 +432,26 @@ kid  = "tp-admin-v0"</code></pre>
       document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
       document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
       window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
+    })();
+
+    // Reveal on scroll
+    (function(){
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(prefersReduced) return;
+      const items = document.querySelectorAll('.reveal');
+      const io = new IntersectionObserver((ents)=>{
+        ents.forEach(e=>{
+          if(e.isIntersecting){
+            const el=e.target;
+            // stagger by sibling index if any
+            const idx=[...el.parentElement?.children||[]].indexOf?.(el) ?? 0;
+            el.style.transitionDelay = (idx*60)+'ms';
+            el.classList.add('is-in');
+            io.unobserve(el);
+          }
+        });
+      }, { rootMargin:'-10% 0px -10% 0px', threshold:0.08 });
+      items.forEach(el=>io.observe(el));
     })();
   </script>
 </body>
