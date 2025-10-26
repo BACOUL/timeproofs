@@ -79,7 +79,7 @@
     .tp-brand img{ height:40px; width:auto; object-fit:contain; vertical-align:middle }
     @media (max-width:899px){ .tp-brand img{ height:34px } }
     .tp-brand:hover{ color:var(--accent) }
-    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer }
+    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border:1px solid var(--line); border-radius:10px; background:#0d1628; color:#fff; cursor:pointer }
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block }
     .tp-nav a[aria-current="page"]{ color:#9beefb }
     .tp-nav a:hover{ color:var(--accent) }
@@ -102,7 +102,7 @@
     }
 
     /* Layout */
-    .wrap{ max-width:980px; width:100%; margin-left:auto; margin-right:auto; margin-bottom:40px; padding-left:0; padding-right:0 }
+    .wrap{ max-width:980px; width:100%; margin-left:auto; margin-right:auto; margin-bottom:40px; padding:0 }
     h1{ margin:14px 0 8px; font-size:clamp(1.6rem, 4.5vw, 1.9rem); text-align:center }
     p.lead{ margin:0 0 22px; color:var(--muted); text-align:center; padding:0 4px }
 
@@ -116,10 +116,11 @@
     .card{ background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px }
     label{ display:block; font-size:13px; color:#a7b1c2; margin:8px 0 6px }
     input[type="text"], textarea{ width:100%; background:#0b1220; color:#f8fafc; border:1px solid #1f2937; border-radius:10px; padding:10px 12px }
-    textarea{ min-height:110px; resize:vertical }
+    textarea{ min-height:110px; max-height:180px; overflow:auto; line-height:1.4; resize:vertical }
     .row{ display:flex; gap:12px; flex-wrap:wrap; align-items:center }
     .row > *{ flex:1 1 240px }
     .btn{ background:var(--accent); color:#06202a; border:none; padding:11px 16px; border-radius:10px; font-weight:800; cursor:pointer }
+    .btn[disabled]{ opacity:.6; cursor:not-allowed }
     .btn:hover{ filter:brightness(1.05) }
     .ghost{ background:#111d33; color:#e2f6ff; border:1px solid var(--line) }
 
@@ -132,12 +133,19 @@
       width:100%;
       background:#0b1220; color:#a7f3d0; border:1px solid #1f2937; border-radius:10px; padding:12px;
       white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere; font-size:13px;
-      max-height:40vh; overflow:auto;
+      max-height:40vh; overflow:auto; font-family: ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
     }
     .actions{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap }
 
     .drop{ margin-top:10px; padding:14px; border:1px dashed #2b3b55; border-radius:10px; background:#0b1220; color:#cfe3f5; text-align:center; font-size:.92rem }
     .drop.drag{ border-color:#22d3ee; background:#0f1f33 }
+
+    /* Résumé lisible */
+    .summary{ display:grid; grid-template-columns:1fr; gap:8px; margin-top:10px }
+    .summary .row{ display:flex; gap:8px; align-items:center; flex-wrap:wrap }
+    .k{ color:#9fb3c9; min-width:120px }
+    .v{ color:#e6f6ff; font-weight:600; word-break:break-all }
+    .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; border:1px solid #214a57; background:#0d2330; font-size:12px; color:#bff1ff }
 
     footer{ margin:26px 0 0; text-align:center; color:#7c8aa5; font-size:12px; padding:8px 0; padding-bottom:calc(12px + var(--safe-btm)) }
 
@@ -226,6 +234,7 @@
         </div>
 
         <div id="create-status" style="margin-top:12px;" aria-live="polite"></div>
+        <div id="create-summary" class="summary" aria-live="polite"></div>
         <pre id="create-output" style="margin-top:12px;" aria-live="polite"></pre>
         <div class="actions" id="create-actions" style="display:none;">
           <a class="btn ghost" id="open-verify-link" href="#" target="_blank" rel="noopener noreferrer" style="display:none">Open verify link</a>
@@ -243,6 +252,7 @@
           <span class="hint">Checks existence, timestamp, and server signature.</span>
         </div>
         <div id="verify-status" style="margin-top:12px;" aria-live="polite"></div>
+        <div id="verify-summary" class="summary" aria-live="polite"></div>
         <pre id="verify-output" style="margin-top:12px;" aria-live="polite"></pre>
         <div class="actions" id="verify-actions" style="display:none;">
           <button class="btn ghost" id="copy-verify-json" type="button" disabled>Copy JSON</button>
@@ -297,12 +307,21 @@
           const opt = withTimeout(options);
           res = await fetch(`${base}${path}`, opt);
           clearTimeout(opt._timeoutId);
-          if (res.ok || res.status < 500) return res; // keep first non-5xx
+          if (res.ok || res.status < 500) return res;
         }catch(e){ lastErr = e; }
       }
       if (res) return res;
       throw lastErr || new Error("Network error");
     }
+
+    /* Helpers */
+    function shortHash(h){ return (h && h.length>=16) ? `${h.slice(0,10)}…${h.slice(-6)}` : (h||''); }
+    function fmtTs(ts){
+      if(!ts) return '';
+      const d = new Date(typeof ts==='number'? ts : String(ts));
+      return isFinite(d) ? d.toLocaleString() : String(ts);
+    }
+    function setHTML(id, html){ const el=document.getElementById(id); if(el) el.innerHTML=html; }
 
     /* Tabs */
     const tabCreate = document.getElementById('tab-create');
@@ -404,6 +423,7 @@
     const btnCreate = document.getElementById('btn-create');
     const outCreate = document.getElementById('create-output');
     const statusCreate = document.getElementById('create-status');
+    const createSummary = document.getElementById('create-summary');
     const createActions = document.getElementById('create-actions');
     const openVerifyLink = document.getElementById('open-verify-link');
     const copyCreateJSON = document.getElementById('copy-create-json');
@@ -427,7 +447,7 @@
     btnCreate.onclick = async ()=>{
       if (btnCreate.disabled) return;
       btnCreate.disabled=true; setBusy(panelCreate,true);
-      outCreate.textContent=''; statusCreate.innerHTML=''; createActions.style.display='none'; openVerifyLink.style.display='none'; copyCreateJSON.disabled=true; copyCreateCURL.disabled=true;
+      outCreate.textContent=''; statusCreate.innerHTML=''; createSummary.innerHTML=''; createActions.style.display='none'; openVerifyLink.style.display='none'; copyCreateJSON.disabled=true; copyCreateCURL.disabled=true;
 
       try{
         let hash='';
@@ -471,10 +491,18 @@
         };
 
         statusCreate.innerHTML = `<span class="pill ok" role="status">✅ Proof created</span>`;
+        setHTML('create-summary', `
+          <div class="row"><span class="k">Hash</span><span class="v">${shortHash(normalized.hash)}</span></div>
+          <div class="row"><span class="k">Timestamp</span><span class="v">${fmtTs(normalized.timestamp)}</span></div>
+          <div class="row"><span class="k">Signature</span><span class="v">${normalized.signature? shortHash(normalized.signature) : '—'}</span></div>
+          <div class="row"><span class="k">Verify URL</span><span class="v">${normalized.verify_url? `<a href="${normalized.verify_url}" target="_blank" rel="noopener noreferrer">Open</a>` : '—'}</span></div>
+          <div class="row"><span class="badge">Hash-only • Private</span><span class="badge">Edge-signed</span></div>
+        `);
         outCreate.textContent = JSON.stringify(normalized, null, 2);
         enableCreateActions(normalized, req);
       }catch(e){
         statusCreate.innerHTML = `<span class="pill bad" role="alert">❌ ${String(e.message || e)}</span>`;
+        setHTML('create-summary','');
       }finally{
         btnCreate.disabled=false; setBusy(panelCreate,false);
       }
@@ -484,6 +512,7 @@
     const btnVerify = document.getElementById('btn-verify');
     const outVerify = document.getElementById('verify-output');
     const statusVerify = document.getElementById('verify-status');
+    const verifySummary = document.getElementById('verify-summary');
     const verifyActions = document.getElementById('verify-actions');
     const copyVerifyJSON = document.getElementById('copy-verify-json');
     const copyVerifyCURL = document.getElementById('copy-verify-curl');
@@ -500,7 +529,7 @@
     btnVerify.onclick = async ()=>{
       if (btnVerify.disabled) return;
       btnVerify.disabled=true; setBusy(panelVerify,true);
-      outVerify.textContent=''; statusVerify.innerHTML=''; verifyActions.style.display='none'; copyVerifyJSON.disabled=true; copyVerifyCURL.disabled=true;
+      outVerify.textContent=''; statusVerify.innerHTML=''; verifySummary.innerHTML=''; verifyActions.style.display='none'; copyVerifyJSON.disabled=true; copyVerifyCURL.disabled=true;
 
       try{
         const hash = (document.getElementById('verify-hash').value || '').trim().toLowerCase();
@@ -522,14 +551,22 @@
           signature: j.signature || j.sig || null,
           type: j.type || null, meta: j.meta || null
         };
+        setHTML('verify-summary', `
+          <div class="row"><span class="k">Hash</span><span class="v">${shortHash(normalized.hash)}</span></div>
+          <div class="row"><span class="k">Found</span><span class="v">${normalized.found? 'Yes' : 'No'}</span></div>
+          <div class="row"><span class="k">Timestamp</span><span class="v">${fmtTs(normalized.timestamp)||'—'}</span></div>
+          <div class="row"><span class="k">Signature</span><span class="v">${normalized.signature? shortHash(normalized.signature) : '—'}</span></div>
+        `);
+
         outVerify.textContent = JSON.stringify(normalized, null, 2);
 
         verifyActions.style.display='flex';
         copyVerifyJSON.disabled=false; copyVerifyCURL.disabled=false;
         copyVerifyJSON.onclick = () => copyToClipboard(outVerify.textContent);
-        copyVerifyCURL.onclick = () => copyToClipboard(`curl 'https://api.timeproofs.io/api/verify?hash=${encodeURIComponent(hash)}'`);
+        copyVerifyCURL.onclick = () => copyToClipboard(`curl 'https://api.timeproofs.io/api/verify?hash=${encodeURIComponent(normalized.hash)}'`);
       }catch(e){
         statusVerify.innerHTML = `<span class="pill bad" role="alert">❌ ${String(e.message || e)}</span>`;
+        setHTML('verify-summary','');
       }finally{
         btnVerify.disabled=false; setBusy(panelVerify,false);
       }
