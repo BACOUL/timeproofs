@@ -11,14 +11,14 @@
   <meta name="theme-color" content="#0b1020"/>
   <link rel="canonical" href="https://timeproofs.io/verify.html"/>
 
-  <!-- CSP -->
+  <!-- CSP (allows inline script; connects to prod + fallback worker) -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
     worker-src 'self' blob:;
     img-src 'self' data: https:;
     style-src 'self' 'unsafe-inline';
-    script-src 'self';
-    connect-src https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
+    script-src 'self' 'unsafe-inline';
+    connect-src https://api.timeproofs.io https://timeproofs-api-v1.jeason-bacoul.workers.dev;
     font-src 'self' https: data:;
     base-uri 'self';
     frame-ancestors 'self';
@@ -27,8 +27,8 @@
   <!-- Perf -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin>
   <link rel="dns-prefetch" href="//api.timeproofs.io">
-  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin>
-  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev">
+  <link rel="preconnect" href="https://timeproofs-api-v1.jeason-bacoul.workers.dev" crossorigin>
+  <link rel="dns-prefetch" href="//timeproofs-api-v1.jeason-bacoul.workers.dev">
 
   <!-- Icons / Manifest -->
   <link rel="icon" href="/favicon.ico" sizes="any"/>
@@ -292,10 +292,10 @@
     /* API bases (prod first, fallback worker) */
     const API_BASES = [
       "https://api.timeproofs.io/api",
-      "https://timeproofs-api.jeason-bacoul.workers.dev/api"
+      "https://timeproofs-api-v1.jeason-bacoul.workers.dev/api"
     ];
     const MAX_FILE_BYTES = 50 * 1024 * 1024;
-    const REQ_TIMEOUT_MS = 15000;
+    the REQ_TIMEOUT_MS = 15000;
 
     function withTimeout(options={}){
       const ctrl = new AbortController();
@@ -309,7 +309,7 @@
           const opt = withTimeout(options);
           res = await fetch(`${base}${path}`, opt);
           clearTimeout(opt._timeoutId);
-          if (res.ok || res.status < 500) return res; // prefer first non-5xx
+          if (res.ok || res.status < 500) return res;
         }catch(e){ lastErr = e; }
       }
       if (res) return res;
@@ -525,7 +525,7 @@
         const found = j.found === true || j.verified === true || (ok && !!(j.timestamp || j.ts || j.signature || j.sig));
         if (ok && found) statusVerify.innerHTML = `<span class="pill ok" role="status">✅ Valid</span>`;
         else if (j.error === 'not_found' || r.status === 404) statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Not found</span>`;
-        else statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Invalid</span>';
+        else statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Invalid</span>`;
 
         const normalized = {
           ok, found: !!found,
