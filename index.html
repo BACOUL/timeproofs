@@ -8,6 +8,7 @@
   <title>TimeProofs — The Open Standard for Digital Proof of Existence</title>
   <meta name="description" content="TimeProofs is the open, privacy-first protocol for digital proof of existence. Hash locally, timestamp instantly, verify publicly — for AI, data, and every digital creation." />
   <meta name="keywords" content="digital proof,timestamp API,content authenticity,AI provenance,TimeProofs,proof of existence,hashing,SHA-256" />
+  <meta property="og:locale" content="en_US" />
   <meta property="og:locale:alternate" content="fr_FR" />
   <meta name="robots" content="index,follow" />
   <meta name="theme-color" content="#0b1020" />
@@ -28,8 +29,9 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
-  <link rel="alternate" type="application/json" href="/openapi.yaml" />
+  <link rel="alternate" type="application/yaml" href="/openapi.yaml" />
   <link rel="status" href="https://status.timeproofs.io" />
+  <link rel="author" href="/humans.txt" />
 
   <!-- Open Graph / Twitter -->
   <meta property="og:title" content="TimeProofs — The Open Standard for Digital Proof of Existence" />
@@ -41,7 +43,6 @@
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:site_name" content="TimeProofs" />
-  <meta property="og:locale" content="en_US" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="TimeProofs — The Open Standard for Digital Proof of Existence" />
   <meta name="twitter:description" content="Hash locally. Timestamp instantly. Verify publicly. For AI, data, and every digital creation." />
@@ -76,12 +77,12 @@ upgrade-insecure-requests">
     .skip:focus{ position:fixed; left:12px; top:12px; width:auto; height:auto; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
 
     /* Header */
-    .tp-header{ position:fixed; inset:0 0 auto 0; height:64px; z-index:1000; background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 16px }
+    .tp-header{ position:fixed; inset:0 0 auto 0; height:64px; z-index:1000; background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 16px; transition:background .25s var(--e) }
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
-    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem }
+    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none }
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
-    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid var(--line); border-radius:12px; background:#0d1628; color:var(--text); cursor:pointer } /* ≥48px tap target */
-    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block }
+    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid var(--line); border-radius:12px; background:#0d1628; color:var(--text); cursor:pointer } /* tap target ≥48px */
+    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none }
     .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
     @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width:899px){
@@ -99,6 +100,7 @@ upgrade-insecure-requests">
     .title{ font-size:clamp(2.2rem, 6.2vw, 3.4rem); line-height:1.06; margin:.2em auto .3em; font-weight:900; max-width:1000px; background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent; background-size:220% 100%; text-shadow:0 2px 40px rgba(34,211,238,.10) }
     .subtitle{ color:var(--muted); max-width:820px; margin:0 auto 18px; line-height:1.7; font-size:clamp(1rem, 2.8vw, 1.15rem); padding:0 6px }
     .subnote{ color:#9fb3c9; margin-top:-6px; margin-bottom:14px }
+
     .cta-wrap{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:12px }
     .cta{ background:var(--accent); color:#06202a; border:none; padding:14px 18px; border-radius:12px; font-weight:700; box-shadow:0 8px 30px rgba(34,211,238,.18); transition:transform .18s var(--e), box-shadow .18s }
     .cta.secondary{ background:#111d33; color:#e2f6ff; border:1px solid #1e2a3e; font-weight:600 }
@@ -119,8 +121,6 @@ upgrade-insecure-requests">
     /* Sections */
     .section{ padding:44px 0; position:relative }
     .section h2{ color:#b9e7f5; font-size:clamp(1.3rem, 2.6vw, 1.6rem); margin:0 0 14px; text-align:center }
-
-    /* Cards, code, tables identical to avant */
     .grid{ display:grid; gap:16px }
     .grid.three{ grid-template-columns:1fr }
     .grid.two{ grid-template-columns:1fr }
@@ -136,6 +136,7 @@ upgrade-insecure-requests">
     .card p{ margin:.15em 0 .4em; line-height:1.6 }
     pre, code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
     pre{ max-width:100%; overflow:auto; padding:12px; border-radius:12px; background:#0b1426; border:1px solid #1f2a44; font-size:.95rem }
+
     .table{ width:100%; border-collapse:separate; border-spacing:0; border:1px solid #1f2a44; border-radius:14px; background:#0b1426; display:block; overflow:auto; -webkit-overflow-scrolling:touch }
     .table th,.table td{ padding:12px; text-align:left; border-bottom:1px solid #1a2846; font-size:.98rem; white-space:nowrap }
     .table th{ color:#9beefb }
@@ -146,6 +147,9 @@ upgrade-insecure-requests">
     footer{ border-top:1px solid var(--line); margin-top:44px; padding:18px; color:#7c8aa5; text-align:center }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
+    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
+    .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; transition:transform .18s var(--e); color:#cfefff }
+    .social a:hover{ transform:translateY(-2px) }
 
     /* Reveal */
     .reveal{ opacity:0; transform:translateY(16px); transition:opacity .5s ease, transform .5s ease }
@@ -222,7 +226,10 @@ upgrade-insecure-requests">
           </div>
           <div class="row">
             <input id="demo-hash" class="in" placeholder="SHA-256 will appear here" aria-label="SHA-256 hash" readonly />
-            <button type="button" id="btn-stamp" class="btn"><span id="sp-stamp" aria-hidden="true">Create Proof</span><svg id="spin" width="16" height="16" viewBox="0 0 50 50" style="display:none"><circle cx="25" cy="25" r="20" stroke="currentColor" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="31.4 31.4"><animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.9s" repeatCount="indefinite"/></circle></svg></button>
+            <button type="button" id="btn-stamp" class="btn" aria-busy="false">
+              <span id="sp-stamp" aria-hidden="true">Create Proof</span>
+              <svg id="spin" width="16" height="16" viewBox="0 0 50 50" style="display:none"><circle cx="25" cy="25" r="20" stroke="currentColor" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="31.4 31.4"><animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.9s" repeatCount="indefinite"/></circle></svg>
+            </button>
           </div>
           <div class="row">
             <input id="demo-hash-verify" class="in" placeholder="Hash to verify" aria-label="Hash to verify" />
@@ -384,9 +391,28 @@ const check = await res.json();</code></pre>
       <a href="/security.txt">Security.txt</a> •
       <a href="/privacy.html">Privacy</a> •
       <a href="/legal.html">Legal</a> •
-      <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">X/Twitter</a> •
-      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">GitHub</a> •
       <a href="/humans.txt">humans.txt</a>
+    </div>
+
+    <!-- Social icons -->
+    <div class="social" aria-label="Social links">
+      <a href="https://x.com/timeproofs" target="_blank" rel="noopener me" aria-label="Follow @timeproofs on X">
+        <!-- X logo -->
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
+      </a>
+      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv2" target="_blank" rel="noopener me" aria-label="TimeProofs on GitHub">
+        <!-- GitHub mark -->
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg>
+      </a>
+      <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on YouTube">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.5s-.2-1.6-.8-2.3c-.8-.8-1.7-.8-2.1-.9C16.8 4 12 4 12 4h0s-4.8 0-8.1.3c-.4 0-1.3 0-2.1.9C1.2 5.9 1 7.5 1 7.5S.8 9.3.8 11v2c0 1.7.2 3.5.2 3.5s.2 1.6.8 2.3c.8.8 1.9.8 2.4.9C6.2 19.9 12 20 12 20s4.8 0 8.1-.3c.4 0 1.3 0 2.1-.9.6-.7.8-2.3.8-2.3s.2-1.8.2-3.5v-2c0-1.7-.2-3.5-.2-3.5ZM9.8 15.5v-7l6.2 3.5-6.2 3.5Z"/></svg>
+      </a>
+      <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/></svg>
+      </a>
     </div>
   </footer>
 
@@ -399,12 +425,6 @@ const check = await res.json();</code></pre>
     {"@type":"Question","name":"How does this help with the EU AI Act?","acceptedAnswer":{"@type":"Answer","text":"It provides timestamped, verifiable trails for AI outputs and model interactions to meet traceability needs."}}
   ]}
   </script>
-
-  <!-- No-JS fallback -->
-  <noscript>
-    <style>.reveal{opacity:1;transform:none}</style>
-    <div role="note" style="text-align:center;color:#9fb3c9">JavaScript is disabled. The demo and animations are inactive.</div>
-  </noscript>
 
   <!-- App Scripts -->
   <script defer nonce="TP-2025">
@@ -445,23 +465,30 @@ const check = await res.json();</code></pre>
     const $=(id)=>document.getElementById(id);
     const inTxt=$('demo-input'), out=$('demo-out'), inHash=$('demo-hash'), inVerify=$('demo-hash-verify');
     const btnStamp=$('btn-stamp'), spinner=$('spin'), spLbl=$('sp-stamp'), btnDl=$('btn-download');
-    async function sha256Hex(str){ const buf=new TextEncoder().encode(str); const digest=await crypto.subtle.digest('SHA-256', buf); return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join(''); }
+
+    async function sha256Hex(str){
+      const buf=new TextEncoder().encode(str);
+      const digest=await crypto.subtle.digest('SHA-256', buf);
+      return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
     function print(obj,label){ const t=typeof obj==='string'?obj:JSON.stringify(obj,null,2); const l=label?`// ${label}\n`:''; out.textContent=l+t; }
+
     $('btn-hash').addEventListener('click', async ()=>{
       const v=inTxt.value||''; if(!v.trim()){ print('Provide content to hash.','Info'); return; }
       const h=await sha256Hex(v); inHash.value=h; inVerify.value=h; print({hash:h},'Local SHA-256'); toast('SHA-256 computed');
     });
+
     btnStamp.addEventListener('click', async ()=>{
       const h=inHash.value.trim(); if(!h){ print('No hash to timestamp.','Warn'); return; }
       try{
-        spinner.style.display='inline'; spLbl.textContent='Creating...'; btnStamp.disabled=true;
+        btnStamp.setAttribute('aria-busy','true'); spinner.style.display='inline'; spLbl.textContent='Creating...'; btnStamp.disabled=true;
         const r=await fetch('https://api.timeproofs.io/api/timestamp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({hash:h,type:'event',meta:{source:'web'}})});
-        const j=await r.json(); print(j,'Timestamp response'); toast('Proof created'); 
-        // enable download
+        const j=await r.json(); print(j,'Timestamp response'); toast('Proof created');
         btnDl.disabled=false; btnDl.onclick=()=>{ const blob=new Blob([JSON.stringify(j,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='proof.tproof.json'; a.click(); URL.revokeObjectURL(a.href); };
       }catch(e){ print('Timestamp failed. Check network or CORS.','Error'); }
-      finally{ spinner.style.display='none'; spLbl.textContent='Create Proof'; btnStamp.disabled=false; }
+      finally{ spinner.style.display='none'; spLbl.textContent='Create Proof'; btnStamp.disabled=false; btnStamp.setAttribute('aria-busy','false'); }
     });
+
     $('btn-verify').addEventListener('click', async ()=>{
       const h=inVerify.value.trim(); if(!h){ print('Provide a hash to verify.','Warn'); return; }
       try{
@@ -474,7 +501,7 @@ const check = await res.json();</code></pre>
     (function(){
       const hp=document.getElementById('rel-proof-hash'); if(!hp) return;
       const val=hp.textContent.trim(); const a=document.getElementById('rel-proof-link');
-      if(val && !val.startsWith('PUT_')) a.href='https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(val);
+      if(a && val && !val.startsWith('PUT_')) a.href='https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(val);
     })();
   })();
   </script>
@@ -482,4 +509,4 @@ const check = await res.json();</code></pre>
   <!-- Toast container -->
   <div class="toast" role="status" aria-live="polite"></div>
 </body>
-</html>
+  </html>
