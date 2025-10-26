@@ -287,7 +287,7 @@
       });
     })();
 
-    /* API bases (prod first) */
+    /* API bases (prod then worker) */
     const API_BASES = [
       "https://api.timeproofs.io/api",
       "https://timeproofs-api-v1.jeason-bacoul.workers.dev/api"
@@ -300,17 +300,20 @@
       const t = setTimeout(()=>ctrl.abort(), REQ_TIMEOUT_MS);
       return { ...options, signal: ctrl.signal, _timeoutId: t };
     }
+
+    // Fallback uniquement si la réponse n'est pas OK
     async function fetchAPI(path, options={}){
-      let lastErr, res;
+      let lastRes, lastErr;
       for (const base of API_BASES){
         try{
           const opt = withTimeout(options);
-          res = await fetch(`${base}${path}`, opt);
+          const res = await fetch(`${base}${path}`, opt);
           clearTimeout(opt._timeoutId);
-          if (res.ok || res.status < 500) return res;
+          if (res.ok) return res;      // on garde seulement OK
+          lastRes = res;               // sinon on essaie l'autre base
         }catch(e){ lastErr = e; }
       }
-      if (res) return res;
+      if (lastRes) return lastRes;
       throw lastErr || new Error("Network error");
     }
 
@@ -322,6 +325,21 @@
       return isFinite(d) ? d.toLocaleString() : String(ts);
     }
     function setHTML(id, html){ const el=document.getElementById(id); if(el) el.innerHTML=html; }
+
+    // Unification {ok,true,data:{...}} ou flat
+    function unwrap(j){
+      const d = (j && typeof j.data === 'object') ? j.data : j || {};
+      return {
+        ok: j?.ok === true,
+        found: d?.found ?? j?.found ?? undefined,
+        hash: d?.hash ?? j?.hash,
+        timestamp: d?.timestamp ?? d?.ts ?? j?.timestamp ?? j?.ts ?? null,
+        signature: d?.signature ?? d?.sig ?? j?.signature ?? j?.sig ?? null,
+        verify_url: d?.verify_url ?? j?.verify_url ?? undefined,
+        type: d?.type ?? j?.type ?? undefined,
+        meta: d?.meta ?? j?.meta ?? undefined
+      };
+    }
 
     /* Tabs */
     const tabCreate = document.getElementById('tab-create');
@@ -481,25 +499,18 @@
         const j = await r.json().catch(()=> ({}));
         if (!r.ok || j.error) fail(j.error || `Request failed (${r.status})`);
 
-        const normalized = {
-          ok: j.ok === true,
-          hash: j.hash,
-          timestamp: j.timestamp || j.ts,
-          signature: j.signature || j.sig,
-          verify_url: j.verify_url || (j.hash ? `/verify.html?hash=${encodeURIComponent(j.hash)}` : undefined),
-          type: j.type ?? undefined, meta: j.meta ?? undefined
-        };
+        const n = unwrap(j);
 
         statusCreate.innerHTML = `<span class="pill ok" role="status">✅ Proof created</span>`;
         setHTML('create-summary', `
-          <div class="row"><span class="k">Hash</span><span class="v">${shortHash(normalized.hash)}</span></div>
-          <div class="row"><span class="k">Timestamp</span><span class="v">${fmtTs(normalized.timestamp)}</span></div>
-          <div class="row"><span class="k">Signature</span><span class="v">${normalized.signature? shortHash(normalized.signature) : '—'}</span></div>
-          <div class="row"><span class="k">Verify URL</span><span class="v">${normalized.verify_url? `<a href="${normalized.verify_url}" target="_blank" rel="noopener noreferrer">Open</a>` : '—'}</span></div>
+          <div class="row"><span class="k">Hash</span><span class="v">${shortHash(n.hash)}</span></div>
+          <div class="row"><span class="k">Timestamp</span><span class="v">${fmtTs(n.timestamp)}</span></div>
+          <div class="row"><span class="k">Signature</span><span class="v">${n.signature? shortHash(n.signature) : '—'}</span></div>
+          <div class="row"><span class="k">Verify URL</span><span class="v">${n.verify_url? `<a href="${n.verify_url}" target="_blank" rel="noopener noreferrer">Open</a>` : '—'}</span></div>
           <div class="row"><span class="badge">Hash-only • Private</span><span class="badge">Edge-signed</span></div>
         `);
-        outCreate.textContent = JSON.stringify(normalized, null, 2);
-        enableCreateActions(normalized, req);
+        outCreate.textContent = JSON.stringify(n, null, 2);
+        enableCreateActions(n, req);
       }catch(e){
         statusCreate.innerHTML = `<span class="pill bad" role="alert">❌ ${String(e.message || e)}</span>`;
         setHTML('create-summary','');
@@ -537,20 +548,15 @@
 
         const r = await fetchAPI(`/verify?hash=${encodeURIComponent(hash)}`);
         const j = await r.json().catch(()=> ({}));
+        const n = unwrap(j);
 
-        const ok = j.ok === true;
-        const found = j.found === true || j.verified === true || (ok && !!(j.timestamp || j.ts || j.signature || j.sig));
-        if (ok && found) statusVerify.innerHTML = `<span class="pill ok" role="status">✅ Valid</span>`;
-        else if (j.error === 'not_found' || r.status === 404) statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Not found</span>`;
+        const found = n.found === true || !!(n.timestamp || n.signature);
+        if (n.ok && found) statusVerify.innerHTML = `<span class="pill ok" role="status">✅ Valid</span>`;
+        else if (r.status === 404 || j.error === 'not_found') statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Not found</span>`;
         else statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Invalid</span>`;
 
-        const normalized = {
-          ok, found: !!found,
-          hash: j.hash || hash,
-          timestamp: j.timestamp || j.ts || null,
-          signature: j.signature || j.sig || null,
-          type: j.type || null, meta: j.meta || null
-        };
+        const normalized = { ok: n.ok, found, hash: n.hash || hash, timestamp: n.timestamp || null, signature: n.signature || null, type: n.type || null, meta: n.meta || null };
+
         setHTML('verify-summary', `
           <div class="row"><span class="k">Hash</span><span class="v">${shortHash(normalized.hash)}</span></div>
           <div class="row"><span class="k">Found</span><span class="v">${normalized.found? 'Yes' : 'No'}</span></div>
