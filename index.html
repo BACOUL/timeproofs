@@ -70,7 +70,7 @@ upgrade-insecure-requests">
   <style>
     :root{ --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --ok:#34d399; --warn:#f59e0b; --err:#ef4444; --ring:0 0 0 1px #1e293b, 0 10px 40px rgba(34,211,238,.14); --e:cubic-bezier(.22,.61,.36,1) }
     *{ box-sizing:border-box }
-    html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg) }
+    html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); scroll-behavior:smooth }
     body{ margin:0; color:var(--text); font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; background: radial-gradient(1200px 600px at 80% -10%, rgba(34,211,238,.06), transparent 60%), conic-gradient(from 220deg at 10% -20%, rgba(34,211,238,.04), transparent 30%), var(--bg) }
     a{ color:var(--accent); text-decoration:none } a:hover{ text-decoration:underline }
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
@@ -81,7 +81,7 @@ upgrade-insecure-requests">
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none }
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
-    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid var(--line); border-radius:12px; background:#0d1628; color:var(--text); cursor:pointer } /* tap target ≥48px */
+    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid var(--line); border-radius:12px; background:#0d1628; color:#var(--text); cursor:pointer }
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none }
     .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
     @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
@@ -115,7 +115,7 @@ upgrade-insecure-requests">
     .btn:hover{ filter:brightness(1.08) }
     .kv{ display:grid; gap:8px; background:#0b1220; border:1px solid #1f2937; border-radius:12px; padding:10px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.92rem; color:#dbe7f3; text-align:left; max-height:220px; overflow:auto }
     .mini{ color:#9fb3c9; font-size:.9rem; text-align:left }
-    .toast{ position:fixed; right:14px; bottom:14px; background:#0f1b30; color:#cfefff; border:1px solid #1f2a44; border-radius:10px; padding:8px 12px; box-shadow:var(--ring); opacity:0; transform:translateY(8px); transition:all .2s ease; z-index:1200 }
+    .toast{ position:fixed; right:14px; bottom:14px; background:#0f1b30; color:#cfefff; border:1px solid #1f2a4a; border-radius:10px; padding:8px 12px; box-shadow:var(--ring); opacity:0; transform:translateY(8px); transition:all .2s ease; z-index:1200 }
     .toast.show{ opacity:1; transform:none }
 
     /* Sections */
@@ -152,7 +152,7 @@ upgrade-insecure-requests">
     .social a:hover{ transform:translateY(-2px) }
 
     /* Reveal */
-    .reveal{ opacity:0; transform:translateY(16px); transition:opacity .5s ease, transform .5s ease }
+    .reveal{ opacity:0; transform:translateY(16px); transition:opacity .5s ease, transform .5s ease; will-change:transform,opacity }
     .reveal.is-in{ opacity:1; transform:none }
 
     /* Progress */
@@ -307,6 +307,48 @@ const check = await res.json();</code></pre>
       </div>
     </section>
 
+    <!-- REGULATORY ERA -->
+    <section class="section bg-solid reveal" id="regulatory" aria-labelledby="reg-title">
+      <h2 id="reg-title">Built for the Regulatory Era</h2>
+      <div class="grid two">
+        <article class="card">
+          <h3>EU AI Act</h3>
+          <p>Traceability of AI outputs and key prompts.</p>
+          <p><span class="tag">Signed timestamp</span> · <span class="tag">Public verification</span></p>
+        </article>
+        <article class="card">
+          <h3>GDPR</h3>
+          <p>Privacy by design. No personal data stored.</p>
+          <p><span class="tag">Hash-only</span> · <span class="tag">No uploads</span></p>
+        </article>
+        <article class="card">
+          <h3>DSA / Data Act</h3>
+          <p>Content integrity and data provenance.</p>
+          <p><span class="tag">Event proofs</span> · <span class="tag">Chain of custody</span></p>
+        </article>
+        <article class="card">
+          <h3>NIS2 / Supply chain</h3>
+          <p>Release & binary integrity for software.</p>
+          <p><span class="tag">Proof links</span> · <span class="tag">CI/CD verify</span></p>
+        </article>
+      </div>
+    </section>
+
+    <!-- DATA & PRIVACY -->
+    <section class="section bg-alt reveal" id="privacy" aria-labelledby="privacy-title">
+      <h2 id="privacy-title">Data & Privacy, by design</h2>
+      <div class="grid two">
+        <article class="card">
+          <h3>Keep content private</h3>
+          <p>Only SHA-256 hashes are sent. The original never leaves your device.</p>
+        </article>
+        <article class="card">
+          <h3>You stay in control</h3>
+          <p>No personal data in proofs. Use metadata sparingly and without PII.</p>
+        </article>
+      </div>
+    </section>
+
     <!-- TRUST: site verified -->
     <section class="section bg-solid reveal" aria-labelledby="site-proof">
       <h2 id="site-proof">This site is verified by TimeProofs</h2>
@@ -372,6 +414,15 @@ const check = await res.json();</code></pre>
       <details><summary>How do I verify a proof?</summary><p>Use our verify endpoint or any ProofSpec-compliant client. The proof is self-describing.</p></details>
       <details><summary>How does this help with the EU AI Act?</summary><p>It provides timestamped, verifiable trails for AI outputs and model interactions to meet traceability needs.</p></details>
     </section>
+
+    <!-- FINAL CTA -->
+    <section class="section bg-alt reveal" aria-labelledby="final-cta">
+      <h2 id="final-cta">Ready to prove it?</h2>
+      <div class="cta-wrap" role="group" aria-label="Final actions">
+        <a class="cta" href="/verify.html">Create / Verify a Proof</a>
+        <a class="cta secondary" href="/proofspec.html">Learn the Spec</a>
+      </div>
+    </section>
   </main>
 
   <!-- Footer -->
@@ -397,11 +448,9 @@ const check = await res.json();</code></pre>
     <!-- Social icons -->
     <div class="social" aria-label="Social links">
       <a href="https://x.com/timeproofs" target="_blank" rel="noopener me" aria-label="Follow @timeproofs on X">
-        <!-- X logo -->
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
       </a>
       <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv2" target="_blank" rel="noopener me" aria-label="TimeProofs on GitHub">
-        <!-- GitHub mark -->
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
       </a>
       <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn">
@@ -423,6 +472,14 @@ const check = await res.json();</code></pre>
     {"@type":"Question","name":"Is there a blockchain involved?","acceptedAnswer":{"@type":"Answer","text":"No. Cryptographic timestamps and public verification without blockchain overhead."}},
     {"@type":"Question","name":"How do I verify a proof?","acceptedAnswer":{"@type":"Answer","text":"Use our verify endpoint or any ProofSpec-compliant client. The proof is self-describing."}},
     {"@type":"Question","name":"How does this help with the EU AI Act?","acceptedAnswer":{"@type":"Answer","text":"It provides timestamped, verifiable trails for AI outputs and model interactions to meet traceability needs."}}
+  ]}
+  </script>
+
+  <!-- JSON-LD Breadcrumb -->
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://timeproofs.io/"},
+    {"@type":"ListItem","position":2,"name":"Create/Verify","item":"https://timeproofs.io/verify.html"}
   ]}
   </script>
 
@@ -448,12 +505,20 @@ const check = await res.json();</code></pre>
     document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
     window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
 
-    // Reveal
+    // Reveal + stagger
     const prefersReduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(!prefersReduced){
-      const targets=document.querySelectorAll('.section, .card, details');
+      const targets=[...document.querySelectorAll('.section'), ...document.querySelectorAll('.card'), ...document.querySelectorAll('details')];
       const io=new IntersectionObserver((ents)=>{
-        ents.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target); } });
+        ents.forEach(e=>{
+          if(e.isIntersecting){
+            const el=e.target;
+            const idx=[...el.parentElement?.children||[]].indexOf?.(el) ?? 0;
+            el.style.transitionDelay = (idx*60)+'ms';
+            el.classList.add('reveal','is-in');
+            io.unobserve(el);
+          }
+        });
       }, { rootMargin:'-10% 0px -10% 0px', threshold:0.08 });
       targets.forEach(el=>{ el.classList.add('reveal'); io.observe(el); });
     }
@@ -509,4 +574,4 @@ const check = await res.json();</code></pre>
   <!-- Toast container -->
   <div class="toast" role="status" aria-live="polite"></div>
 </body>
-  </html>
+</html>
