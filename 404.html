@@ -1,63 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Core -->
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="color-scheme" content="dark"/>
   <title>404 — Page Not Found | TimeProofs</title>
   <meta name="description" content="The page you’re looking for does not exist. Return to TimeProofs home or open the API docs."/>
-  <meta name="robots" content="noindex, follow"/>
+  <meta name="robots" content="noindex,follow"/>
+  <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <meta name="theme-color" content="#0b1020"/>
-  <link rel="canonical" href="https://timeproofs.io/404.html"/>
-  <link rel="icon" href="/favicon.ico"/>
+
+  <!-- CSP (aligned site-wide v0.1) -->
+  <meta http-equiv="Content-Security-Policy" content="
+default-src 'self' https://api.timeproofs.io;
+worker-src 'self' blob:;
+img-src 'self' data: https:;
+style-src 'self' 'unsafe-inline';
+script-src 'self' 'nonce-TP-2025';
+connect-src 'self' https://api.timeproofs.io;
+font-src 'self' https: data:;
+base-uri 'self';
+frame-ancestors 'self';
+upgrade-insecure-requests">
+
+  <!-- Perf -->
+  <link rel="preconnect" href="https://api.timeproofs.io" crossorigin>
+  <link rel="dns-prefetch" href="//api.timeproofs.io"/>
+
+  <!-- Icons / Manifest -->
+  <link rel="icon" href="/favicon.ico" sizes="any"/>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+  <link rel="manifest" href="/site.webmanifest"/>
+
+  <!-- Social -->
+  <meta property="og:title" content="404 — Page Not Found | TimeProofs"/>
+  <meta property="og:description" content="The page you’re looking for does not exist. Return to TimeProofs or read the API docs."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://timeproofs.io/404.html"/>
+  <meta property="og:image" content="https://timeproofs.io/og.png"/>
+  <meta property="og:site_name" content="TimeProofs"/>
+  <meta property="og:locale" content="en_US"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="404 — Page Not Found | TimeProofs"/>
+  <meta name="twitter:description" content="Return to TimeProofs home or open the API docs."/>
+  <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
+
   <style>
     :root{
-      --bg:#0f172a;--text:#e5e7eb;--muted:#94a3b8;
-      --accent:#22d3ee;--panel:#111827;--line:#1e293b
+      --bg:#0b1020; --panel:#0f172a; --line:#1e293b;
+      --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
+      --header-h:64px;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;padding:0}
+    *{ box-sizing:border-box }
+    html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg) }
+    html{ scroll-behavior:smooth }
     body{
-      background:var(--bg);color:var(--text);
-      font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-      display:flex;align-items:center;justify-content:center;
-      text-align:center;padding:24px;
+      margin:0; color:var(--text);
+      background: radial-gradient(1000px 420px at 70% -10%, rgba(34,211,238,.10), transparent 60%), var(--bg);
+      font:16px/1.7 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      padding-top: var(--header-h);
+      display:flex; flex-direction:column;
     }
+    a{ color:var(--accent); text-decoration:none } a:hover{ text-decoration:underline }
+    /* Header (shared) */
+    .tp-header{ position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:1000;
+      background:rgba(11,16,32,.7); backdrop-filter:blur(8px); border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+    }
+    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem }
+    .tp-brand img{ height:40px; width:auto; object-fit:contain }
+    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
+      border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
+    }
+    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block }
+    .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
+    @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
+    @media (max-width:899px){
+      .tp-brand img{ height:34px }
+      .tp-nav{ position:fixed; top:var(--header-h); left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
+        display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
+        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease }
+      .tp-nav a{ margin:4px 0 } .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
+    }
+    /* 404 Card */
+    main{ flex:1; display:flex; align-items:center; justify-content:center; padding:24px }
     .card{
-      background:var(--panel);
-      border:1px solid var(--line);
-      border-radius:14px;
-      max-width:720px;width:100%;
-      padding:32px 28px;
-      box-shadow:0 10px 30px rgba(0,0,0,.2)
+      background:#0c1424; border:1px solid var(--line); border-radius:14px;
+      width:min(780px,100%); padding:32px 28px; text-align:center;
+      box-shadow:0 10px 30px rgba(0,0,0,.25)
     }
-    h1{font-size:clamp(1.8rem,4vw,2.2rem);margin:6px 0 10px}
-    p{color:var(--muted);margin:0 0 18px}
-    .actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:12px}
-    a.btn{
-      display:inline-block;padding:10px 14px;border-radius:10px;
-      background:var(--accent);color:#041923;font-weight:800;text-decoration:none;
-      transition:filter .15s ease,transform .15s ease;
-    }
-    a.btn:hover{filter:brightness(1.05);transform:translateY(-1px)}
-    a.link{color:var(--accent);text-decoration:none}
-    a.link:hover{text-decoration:underline}
-    footer{margin-top:22px;color:#8b95a7;font-size:12px}
+    h1{ font-size:clamp(1.9rem,4.5vw,2.3rem); margin:.2em 0 .3em }
+    p.lead{ color:var(--muted); margin:0 0 14px }
+    .actions{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:12px }
+    .btn{ display:inline-block; padding:10px 14px; border-radius:10px; font-weight:900; text-decoration:none }
+    .btn.primary{ background:var(--accent); color:#06202a }
+    .btn.ghost{ background:#0f1b30; color:#d7f7ff; border:1px solid var(--line) }
+    .btn:hover{ filter:brightness(1.05); transform:translateY(-1px); transition:transform .15s ease, filter .15s ease }
+    /* Footer */
+    footer{ border-top:1px solid var(--line); color:#7c8aa5; text-align:center; padding:18px; }
+    footer a{ color:#a7b7cc; margin:0 8px } footer a:hover{ color:var(--accent) }
+    /* a11y focus */
+    a:focus-visible, .btn:focus-visible, .tp-burger:focus-visible{ outline:2px solid #22d3ee; outline-offset:3px; border-radius:10px }
   </style>
 </head>
 <body>
-  <main class="card" role="main" aria-labelledby="title">
-    <h1 id="title">404 — Page Not Found</h1>
-    <p>The page you requested doesn’t exist or has moved.</p>
-    <div class="actions" role="group" aria-label="Navigation links">
-      <a class="btn" href="/index.html">Go Home</a>
-      <a class="btn" href="/verify.html">Open Verify UI</a>
-      <a class="btn" href="/docs.html">Read API Docs</a>
-    </div>
-    <p style="margin-top:16px">
-      If you think this is an error, contact us:
-      <a class="link" href="mailto:hello@timeproofs.io">hello@timeproofs.io</a>
-    </p>
-    <footer>© 2025 TimeProofs — Proof of Existence. For Everything.</footer>
+  <!-- Header -->
+  <header class="tp-header" role="navigation" aria-label="Main">
+    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">
+      <img src="/logo%20(1).png" alt="TimeProofs logo"/><span>TimeProofs</span>
+    </a>
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
+      <span aria-hidden="true">☰</span>
+    </button>
+    <nav id="tp-nav" class="tp-nav" data-state="closed">
+      <a href="/proofspec.html">Protocol (ProofSpec)</a>
+      <a href="/use-cases.html">Use Cases</a>
+      <!-- Verify tab removed site-wide -->
+      <a href="/docs.html">API Docs</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/legal.html">Legal</a>
+    </nav>
+  </header>
+
+  <!-- 404 -->
+  <main role="main" aria-labelledby="title">
+    <section class="card" aria-describedby="desc">
+      <h1 id="title">404 — Page not found</h1>
+      <p id="desc" class="lead">This page doesn’t exist or has moved.</p>
+      <div class="actions" role="group" aria-label="Primary actions">
+        <a class="btn primary" href="/verify.html" aria-label="Create or verify a proof">Create/Verify a Proof</a>
+        <a class="btn ghost" href="/index.html" aria-label="Go to TimeProofs home">Go Home</a>
+        <a class="btn ghost" href="/docs.html" aria-label="Open API docs">Read API Docs</a>
+        <a class="btn ghost" href="/use-cases.html" aria-label="See use cases">See Use Cases</a>
+        <a class="btn ghost" href="/proofspec.html" aria-label="Read the protocol spec">Read the Protocol</a>
+      </div>
+      <p style="margin-top:16px">If you believe this is an error, contact <a href="mailto:hello@timeproofs.io">hello@timeproofs.io</a>.</p>
+    </section>
   </main>
+
+  <!-- Footer -->
+  <footer role="contentinfo" aria-label="Site footer">
+    © 2025 TimeProofs — Proof of Existence. For Everything.
+    <div style="margin-top:6px">
+      <a href="/index.html">Home</a> •
+      <a href="/proofspec.html">Protocol</a> •
+      <a href="/use-cases.html">Use Cases</a> •
+      <a href="/docs.html">API Docs</a> •
+      <a href="/privacy.html">Privacy</a> •
+      <a href="/legal.html">Legal</a> •
+      <a href="https://x.com/timeproofs" target="_blank" rel="noopener">X/Twitter</a> •
+      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv2" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </footer>
+
+  <!-- Nav script -->
+  <script defer nonce="TP-2025">
+    (function(){
+      const burger=document.getElementById('tp-burger');
+      const nav=document.getElementById('tp-nav');
+      function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+      function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+      function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
+      burger.addEventListener('click', toggleMenu, { passive:true });
+      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
+    })();
+  </script>
 </body>
 </html>
