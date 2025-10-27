@@ -115,7 +115,7 @@ upgrade-insecure-requests">
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
-      border:1px solid var(--line); border-radius:12px; background:#0d1628; color:var(--text); cursor:pointer
+      border:1px solid var(--line); border-radius:12px; background:#0d1628; color:#text; cursor:pointer
     }
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none }
     .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
@@ -273,6 +273,7 @@ upgrade-insecure-requests">
 
   <!-- Header -->
   <header class="tp-header" id="hdr" role="banner">
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
     <a class="tp-brand" href="/" aria-label="TimeProofs Home" aria-current="page">
       <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
       <span>TimeProofs</span>
@@ -281,13 +282,12 @@ upgrade-insecure-requests">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html">Create/Verify</a>
-      <a href="#regulatory">Regulations</a>
       <a href="/docs.html">API Docs</a>
+      <a href="/regulations.html">Regulations</a>
       <a href="/security.html">Security</a>
       <a href="/privacy.html">Privacy</a>
       <a href="/legal.html">Legal</a>
     </nav>
-    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
   </header>
 
   <!-- Progress -->
@@ -315,7 +315,7 @@ upgrade-insecure-requests">
             <input id="in-create" class="in" placeholder="Paste text to hash & timestamp (local hashing)" aria-label="Text to hash"/>
             <button type="button" id="btn-create" class="btn">Create Proof</button>
           </div>
-          <div class="mini">We hash locally, then call <code>/api/timestamp</code>.</div>
+          <div class="mini">We hash locally, then call <code>/timestamp</code>.</div>
           <div id="out-create" class="kv" role="region" aria-live="polite"></div>
           <div id="status-create" class="status" aria-live="polite" hidden></div>
         </form>
@@ -329,7 +329,7 @@ upgrade-insecure-requests">
             <input id="in-verify" class="in" placeholder="Enter a 64-hex SHA-256 to verify" aria-label="Hash to verify"/>
             <button type="button" id="btn-verify" class="btn">Verify Proof</button>
           </div>
-          <div class="mini">Calls <code>/api/verify?hash=...</code>. Result shows green/red.</div>
+          <div class="mini">Calls <code>/verify?hash=...</code>. Result shows green/red.</div>
           <div id="out-verify" class="kv" role="region" aria-live="polite"></div>
           <div id="status-verify" class="status" aria-live="polite" hidden></div>
         </form>
@@ -384,16 +384,15 @@ const hash = [...new Uint8Array(digest)]
   .map(b => b.toString(16).padStart(2,'0')).join('');</code></pre>
         </article>
         <article class="card"><h3>2) Timestamp</h3>
-<pre><code>const r = await fetch("https://api.timeproofs.io/api/timestamp", {
-  method:"POST",
-  headers:{ "Content-Type":"application/json", "Accept":"application/json" },
+<pre><code>const r = await fetch("https://api.timeproofs.io/timestamp", {
+  method:"POST", headers:{ "Content-Type":"application/json", "Accept":"application/json" },
   body: JSON.stringify({ hash, type:"event", meta:{ source:"web" } })
 });
 const proof = await r.json();</code></pre>
         </article>
         <article class="card"><h3>3) Verify anywhere</h3>
 <pre><code>const res = await fetch(
-  "https://api.timeproofs.io/api/verify?hash="+hash,
+  "https://api.timeproofs.io/verify?hash="+hash,
   { headers:{ "Accept":"application/json" } }
 );
 const check = await res.json();</code></pre>
@@ -404,6 +403,9 @@ const check = await res.json();</code></pre>
     <!-- REGULATORY ERA -->
     <section class="section bg-solid reveal" id="regulatory" aria-labelledby="reg-title">
       <h2 id="reg-title">Built for the Regulatory Era</h2>
+      <p style="text-align:center;margin:-6px 0 12px">
+        <a href="/regulations.html" style="color:#9beefb">Read full Regulations & Compliance →</a>
+      </p>
       <div class="grid two">
         <article class="card">
           <h3>EU AI Act</h3>
@@ -449,7 +451,7 @@ const check = await res.json();</code></pre>
       <p>We publish a public proof of this website build. Anyone can check it.</p>
       <p>Release: <code>TP-v0.1</code> · Hash:
         <code id="rel-proof-hash">b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3</code>
-        · <a id="rel-proof-link" href="https://api.timeproofs.io/api/verify?hash=b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3" target="_blank" rel="noopener">Verify</a>
+        · <a id="rel-proof-link" href="https://api.timeproofs.io/verify?hash=b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3" target="_blank" rel="noopener">Verify</a>
       </p>
     </section>
 
@@ -536,6 +538,7 @@ const check = await res.json();</code></pre>
       <a href="/use-cases.html">Use Cases</a> •
       <a href="/verify.html">Create/Verify</a> •
       <a href="/docs.html">API Docs</a> •
+      <a href="/regulations.html">Regulations</a> •
       <a href="/.well-known/security.txt">Security.txt</a> •
       <a href="/privacy.html">Privacy</a> •
       <a href="/legal.html">Legal</a> •
@@ -647,7 +650,7 @@ const check = await res.json();</code></pre>
         const h=await sha256Hex(v);
         showKV($('out-create'), {hash:h}, 'Local SHA-256');
 
-        const r=await fetch('https://api.timeproofs.io/api/timestamp',{
+        const r=await fetch('https://api.timeproofs.io/timestamp',{
           method:'POST',
           headers:{'Content-Type':'application/json','Accept':'application/json'},
           body: JSON.stringify({ hash:h, type:'event', meta:{ source:'web:home' } })
@@ -661,16 +664,39 @@ const check = await res.json();</code></pre>
       }
     });
 
-    // VERIFY
+    // VERIFY (robuste + nettoyage hash)
     $('btn-verify').addEventListener('click', async ()=>{
-      const h=$('in-verify').value.trim();
-      if(!h){ showStatus($('status-verify'), false, 'Provide a hash to verify.'); return; }
-      if(!/^[a-f0-9]{64}$/i.test(h)){ showStatus($('status-verify'), false, 'Hash must be 64 hex chars'); return; }
+      let h=$('in-verify').value.trim().toLowerCase().replace(/[^a-f0-9]/g,'');
+      if(h.length!==64){ showStatus($('status-verify'), false, 'Hash must be 64 hex chars'); return; }
+
+      async function tryVerify(url, init){
+        const r=await fetch(url, init);
+        const j=await r.json().catch(()=>({ ok:false, error:'Bad JSON' }));
+        return j;
+      }
+
       try{
-        const r=await fetch('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(h),{ headers:{'Accept':'application/json'} });
-        const j=await r.json();
+        // 1) GET /verify?hash=
+        let j = await tryVerify('https://api.timeproofs.io/verify?hash='+encodeURIComponent(h), { headers:{'Accept':'application/json'} });
+
+        // 2) fallback GET /api/verify?hash=
+        if(!(j.valid||j.ok===true||j.result==='valid')){
+          if(j.error==='Missing params' || j.error==='Bad request' || j.ok===false){
+            j = await tryVerify('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(h), { headers:{'Accept':'application/json'} });
+          }
+        }
+
+        // 3) fallback POST /verify {hash}
+        if(!(j.valid||j.ok===true||j.result==='valid')){
+          j = await tryVerify('https://api.timeproofs.io/verify', {
+            method:'POST',
+            headers:{'Content-Type':'application/json','Accept':'application/json'},
+            body: JSON.stringify({ hash:h })
+          });
+        }
+
         showKV($('out-verify'), j, 'Verify response');
-        const ok=!!j.valid || j.ok===true || j.result==='valid';
+        const ok = !!j.valid || j.ok===true || j.result==='valid';
         showStatus($('status-verify'), ok, ok?'Valid proof':'Invalid or not found');
       }catch(e){
         showStatus($('status-verify'), false, 'Network or CORS error');
@@ -681,7 +707,7 @@ const check = await res.json();</code></pre>
     (function(){
       const hp=document.getElementById('rel-proof-hash'); if(!hp) return;
       const val=hp.textContent.trim(); const a=document.getElementById('rel-proof-link');
-      if(a && val && !val.startsWith('PUT_')) a.href='https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(val);
+      if(a && val && !val.startsWith('PUT_')) a.href='https://api.timeproofs.io/verify?hash='+encodeURIComponent(val);
     })();
   })();
   </script>
