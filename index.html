@@ -20,6 +20,7 @@
   <!-- Perf -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
   <link rel="dns-prefetch" href="//api.timeproofs.io"/>
+  <link rel="preconnect" href="https://plausible.io" crossorigin>
   <link rel="preload" as="image" href="/logo%20(1).png" fetchpriority="high"/>
 
   <!-- Icons / Manifest -->
@@ -56,20 +57,26 @@
   {"@context":"https://schema.org","@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"}
   </script>
 
-  <!-- CSP v01 -->
+  <!-- Security headers (meta fallbacks) -->
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()">
+
+  <!-- CSP v01 (SW + Analytics + API) -->
   <meta http-equiv="Content-Security-Policy" content="
 default-src 'self' https://api.timeproofs.io;
 worker-src 'self' blob:;
 img-src 'self' data: https:;
 style-src 'self' 'unsafe-inline';
-script-src 'self' 'nonce-TP-2025';
-connect-src 'self' https://api.timeproofs.io;
+script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
+connect-src 'self' https://api.timeproofs.io https://plausible.io;
 font-src 'self' https: data:;
 object-src 'none';
 base-uri 'self';
 form-action 'self';
 frame-ancestors 'none';
 upgrade-insecure-requests">
+
+  <!-- Analytics (Plausible) -->
+  <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
   <!-- Styles -->
   <style>
@@ -108,7 +115,7 @@ upgrade-insecure-requests">
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
-      border:1px solid var(--line); border-radius:12px; background:#0d1628; color:var(--text); cursor:pointer
+      border:1px solid var(--line); border-radius:12px; background:#0d1628; color:#var(--text); cursor:pointer
     }
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none }
     .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
@@ -426,7 +433,10 @@ const check = await res.json();</code></pre>
     <section class="section bg-solid reveal" aria-labelledby="site-proof">
       <h2 id="site-proof">This site is verified by TimeProofs</h2>
       <p>We publish a public proof of this website build. Anyone can check it.</p>
-      <p>Release: <code>TP-v0.1</code> · Hash: <code id="rel-proof-hash">PUT_YOUR_RELEASE_HASH_HERE</code> · <a id="rel-proof-link" href="/verify.html">Verify</a></p>
+      <p>Release: <code>TP-v0.1</code> · Hash:
+        <code id="rel-proof-hash">b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3</code>
+        · <a id="rel-proof-link" href="https://api.timeproofs.io/api/verify?hash=b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3" target="_blank" rel="noopener">Verify</a>
+      </p>
     </section>
 
     <!-- WHY CHOOSE -->
@@ -643,7 +653,14 @@ const check = await res.json();</code></pre>
   })();
   </script>
 
+  <!-- Register Service Worker v0.1 -->
+  <script nonce="TP-2025">
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js', { type: 'module', scope: '/' }).catch(()=>{});
+    }
+  </script>
+
   <!-- Toast container -->
   <div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
-</html>
+  </html>
