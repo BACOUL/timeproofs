@@ -57,7 +57,7 @@
   {"@context":"https://schema.org","@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"}
   </script>
 
-  <!-- Security headers (meta fallbacks) -->
+  <!-- Security meta fallbacks -->
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()">
 
   <!-- CSP v01 (SW + Analytics + API) -->
@@ -115,7 +115,7 @@ upgrade-insecure-requests">
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
-      border:1px solid var(--line); border-radius:12px; background:#0d1628; color:#var(--text); cursor:pointer
+      border:1px solid var(--line); border-radius:12px; background:#0d1628; color:var(--text); cursor:pointer
     }
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none }
     .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
@@ -213,6 +213,14 @@ upgrade-insecure-requests">
     .table thead th{ position:sticky; top:0; background:#0b1426; z-index:1 }
     .tag{ display:inline-block; padding:3px 8px; border-radius:999px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; font-size:.78rem }
 
+    /* Status badges */
+    .status{
+      display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:10px; border:1px solid transparent;
+      font-weight:700; width:max-content
+    }
+    .status.ok{ color:#a7f3d0; background:#052f2a; border-color:#065f46 }
+    .status.err{ color:#fecaca; background:#2a0d0d; border-color:#7f1d1d }
+
     /* Footer */
     footer{ border-top:1px solid var(--line); margin-top:44px; padding:18px; color:#7c8aa5; text-align:center }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
@@ -265,11 +273,11 @@ upgrade-insecure-requests">
 
   <!-- Header -->
   <header class="tp-header" id="hdr" role="banner">
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
     <a class="tp-brand" href="/" aria-label="TimeProofs Home" aria-current="page">
       <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
       <span>TimeProofs</span>
     </a>
-    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
@@ -297,30 +305,33 @@ upgrade-insecure-requests">
         <a class="cta secondary" href="/verify.html" aria-label="Create or verify a proof">Create or Verify a Proof</a>
       </div>
 
-      <!-- Live demo -->
+      <!-- Live demo (Create / Verify) -->
       <div class="demo" aria-label="Instant demo">
-        <form id="demo-form" autocomplete="off">
+        <!-- CREATE -->
+        <form id="form-create" autocomplete="off" style="display:grid;gap:10px">
+          <strong>Create a Proof</strong>
           <div class="row">
-            <input id="demo-input" class="in" placeholder="Paste text, JSON, or any string. We hash locally." aria-label="Content to hash"/>
-            <button type="button" id="btn-hash" class="btn" aria-live="polite">Compute SHA-256</button>
+            <input id="in-create" class="in" placeholder="Paste text to hash & timestamp (local hashing)" aria-label="Text to hash"/>
+            <button type="button" id="btn-create" class="btn">Create Proof</button>
           </div>
-          <div class="row">
-            <input id="demo-hash" class="in" placeholder="SHA-256 will appear here" aria-label="SHA-256 hash" readonly/>
-            <button type="button" id="btn-stamp" class="btn" aria-busy="false" aria-controls="demo-out">
-              <span id="sp-stamp" aria-hidden="true">Create Proof</span>
-              <svg id="spin" width="16" height="16" viewBox="0 0 50 50" style="display:none" aria-hidden="true"><circle cx="25" cy="25" r="20" stroke="currentColor" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="31.4 31.4"><animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.9s" repeatCount="indefinite"/></circle></svg>
-            </button>
-          </div>
-          <div class="row">
-            <input id="demo-hash-verify" class="in" placeholder="Hash to verify" aria-label="Hash to verify"/>
-            <button type="button" id="btn-verify" class="btn" aria-controls="demo-out">Verify Proof</button>
-          </div>
-          <div class="row">
-            <button type="button" id="btn-download" class="btn" aria-label="Download proof JSON" disabled>Download Proof (.tproof.json)</button>
-          </div>
+          <div class="mini">We hash locally, then call <code>/timestamp</code>.</div>
+          <div id="out-create" class="kv" role="region" aria-live="polite"></div>
+          <div id="status-create" class="status" aria-live="polite" hidden></div>
         </form>
-        <div class="mini">✓ Hash-only. Original content never leaves the device. Timestamp and verification use the public API.</div>
-        <div id="demo-out" class="kv" role="region" aria-live="polite"></div>
+
+        <hr style="border:none;border-top:1px solid #1f2a44;margin:8px 0"/>
+
+        <!-- VERIFY -->
+        <form id="form-verify" autocomplete="off" style="display:grid;gap:10px">
+          <strong>Verify a Proof</strong>
+          <div class="row">
+            <input id="in-verify" class="in" placeholder="Enter a 64-hex SHA-256 to verify" aria-label="Hash to verify"/>
+            <button type="button" id="btn-verify" class="btn">Verify Proof</button>
+          </div>
+          <div class="mini">Calls <code>/verify?hash=...</code>. Result shows green/red.</div>
+          <div id="out-verify" class="kv" role="region" aria-live="polite"></div>
+          <div id="status-verify" class="status" aria-live="polite" hidden></div>
+        </form>
       </div>
 
       <div class="bullets" aria-label="Key features" style="margin-top:8px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center; color:#a3b7c7;">
@@ -372,15 +383,16 @@ const hash = [...new Uint8Array(digest)]
   .map(b => b.toString(16).padStart(2,'0')).join('');</code></pre>
         </article>
         <article class="card"><h3>2) Timestamp</h3>
-<pre><code>const r = await fetch("https://api.timeproofs.io/api/timestamp", {
-  method:"POST", headers:{ "Content-Type":"application/json" },
+<pre><code>const r = await fetch("https://api.timeproofs.io/timestamp", {
+  method:"POST", headers:{ "Content-Type":"application/json", "Accept":"application/json" },
   body: JSON.stringify({ hash, type:"event", meta:{ source:"web" } })
 });
 const proof = await r.json();</code></pre>
         </article>
         <article class="card"><h3>3) Verify anywhere</h3>
 <pre><code>const res = await fetch(
-  "https://api.timeproofs.io/api/verify?hash="+hash
+  "https://api.timeproofs.io/verify?hash="+hash,
+  { headers:{ "Accept":"application/json" } }
 );
 const check = await res.json();</code></pre>
         </article>
@@ -435,7 +447,7 @@ const check = await res.json();</code></pre>
       <p>We publish a public proof of this website build. Anyone can check it.</p>
       <p>Release: <code>TP-v0.1</code> · Hash:
         <code id="rel-proof-hash">b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3</code>
-        · <a id="rel-proof-link" href="https://api.timeproofs.io/api/verify?hash=b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3" target="_blank" rel="noopener">Verify</a>
+        · <a id="rel-proof-link" href="https://api.timeproofs.io/verify?hash=b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3" target="_blank" rel="noopener">Verify</a>
       </p>
     </section>
 
@@ -608,47 +620,66 @@ const check = await res.json();</code></pre>
     // Toast helper
     const toast=(msg)=>{ let t=document.querySelector('.toast'); if(!t){ t=document.createElement('div'); t.className='toast'; document.body.appendChild(t); } t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600); };
 
-    // Demo logic
+    // Helpers
     const $=(id)=>document.getElementById(id);
-    const inTxt=$('demo-input'), out=$('demo-out'), inHash=$('demo-hash'), inVerify=$('demo-hash-verify');
-    const btnStamp=$('btn-stamp'), spinner=$('spin'), spLbl=$('sp-stamp'), btnDl=$('btn-download');
-
     async function sha256Hex(str){
       const buf=new TextEncoder().encode(str);
       const digest=await crypto.subtle.digest('SHA-256', buf);
       return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
     }
-    function print(obj,label){ const t=typeof obj==='string'?obj:JSON.stringify(obj,null,2); const l=label?`// ${label}\n`:''; out.textContent=l+t; }
+    function showKV(el, obj, label){
+      const t=typeof obj==='string'?obj:JSON.stringify(obj,null,2);
+      el.textContent=(label?`// ${label}\n`:'')+t;
+    }
+    function showStatus(el, ok, text){
+      el.hidden=false;
+      el.className='status '+(ok?'ok':'err');
+      el.textContent=(ok?'✓ ':'✗ ')+text;
+    }
 
-    $('btn-hash').addEventListener('click', async ()=>{
-      const v=inTxt.value||''; if(!v.trim()){ print('Provide content to hash.','Info'); return; }
-      const h=await sha256Hex(v); inHash.value=h; inVerify.value=h; print({hash:h},'Local SHA-256'); toast('SHA-256 computed');
-    });
-
-    btnStamp.addEventListener('click', async ()=>{
-      const h=inHash.value.trim(); if(!h){ print('No hash to timestamp.','Warn'); return; }
+    // CREATE
+    $('btn-create').addEventListener('click', async ()=>{
+      const v=$('in-create').value||'';
+      if(!v.trim()){ showStatus($('status-create'), false, 'Provide content to hash.'); return; }
       try{
-        btnStamp.setAttribute('aria-busy','true'); spinner.style.display='inline'; spLbl.textContent='Creating...'; btnStamp.disabled=true;
-        const r=await fetch('https://api.timeproofs.io/api/timestamp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({hash:h,type:'event',meta:{source:'web'}})});
-        const j=await r.json(); print(j,'Timestamp response'); toast('Proof created');
-        btnDl.disabled=false; btnDl.onclick=()=>{ const blob=new Blob([JSON.stringify(j,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='proof.tproof.json'; a.click(); URL.revokeObjectURL(a.href); };
-      }catch(e){ print('Timestamp failed. Check network or CORS.','Error'); }
-      finally{ spinner.style.display='none'; spLbl.textContent='Create Proof'; btnStamp.disabled=false; btnStamp.setAttribute('aria-busy','false'); }
+        const h=await sha256Hex(v);
+        showKV($('out-create'), {hash:h}, 'Local SHA-256');
+
+        const r=await fetch('https://api.timeproofs.io/timestamp',{
+          method:'POST',
+          headers:{'Content-Type':'application/json','Accept':'application/json'},
+          body: JSON.stringify({ hash:h, type:'event', meta:{ source:'web:home' } })
+        });
+        const j=await r.json();
+        showKV($('out-create'), j, 'Timestamp response');
+        const ok=!!j.ok || (!!j.signature && !!j.timestamp);
+        showStatus($('status-create'), ok, ok?'Proof created':'Create failed');
+      }catch(e){
+        showStatus($('status-create'), false, 'Network or CORS error');
+      }
     });
 
+    // VERIFY
     $('btn-verify').addEventListener('click', async ()=>{
-      const h=inVerify.value.trim(); if(!h){ print('Provide a hash to verify.','Warn'); return; }
+      const h=$('in-verify').value.trim();
+      if(!h){ showStatus($('status-verify'), false, 'Provide a hash to verify.'); return; }
+      if(!/^[a-f0-9]{64}$/i.test(h)){ showStatus($('status-verify'), false, 'Hash must be 64 hex chars'); return; }
       try{
-        const r=await fetch('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(h));
-        const j=await r.json(); print(j,'Verify response'); toast('Verification complete');
-      }catch(e){ print('Verify failed. Check network or CORS.','Error'); }
+        const r=await fetch('https://api.timeproofs.io/verify?hash='+encodeURIComponent(h),{ headers:{'Accept':'application/json'} });
+        const j=await r.json();
+        showKV($('out-verify'), j, 'Verify response');
+        const ok=!!j.valid || j.ok===true || j.result==='valid';
+        showStatus($('status-verify'), ok, ok?'Valid proof':'Invalid or not found');
+      }catch(e){
+        showStatus($('status-verify'), false, 'Network or CORS error');
+      }
     });
 
     // Release proof link auto-fill
     (function(){
       const hp=document.getElementById('rel-proof-hash'); if(!hp) return;
       const val=hp.textContent.trim(); const a=document.getElementById('rel-proof-link');
-      if(a && val && !val.startsWith('PUT_')) a.href='https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(val);
+      if(a && val && !val.startsWith('PUT_')) a.href='https://api.timeproofs.io/verify?hash='+encodeURIComponent(val);
     })();
   })();
   </script>
