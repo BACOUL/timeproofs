@@ -75,7 +75,7 @@
       border-bottom:1px solid var(--line);
       display:flex; align-items:center; justify-content:space-between;
     }
-    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem }
+    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none }
     .tp-brand img{ height:40px; width:auto; object-fit:contain; vertical-align:middle }
     @media (max-width:899px){ .tp-brand img{ height:34px } }
     .tp-brand:hover{ color:var(--accent) }
@@ -102,7 +102,7 @@
     }
 
     /* Layout */
-    .wrap{ max-width:980px; width:100%; margin-left:auto; margin-right:auto; margin-bottom:40px; padding:0 }
+    .wrap{ max-width:980px; width:100%; margin-left:auto; margin-right:auto; margin-bottom:40px; }
     h1{ margin:14px 0 8px; font-size:clamp(1.6rem, 4.5vw, 1.9rem); text-align:center }
     p.lead{ margin:0 0 22px; color:var(--muted); text-align:center; padding:0 4px }
 
@@ -110,10 +110,10 @@
     .tab{ padding:10px 14px; background:#0b1220; border:1px solid #1f2937; border-radius:10px; cursor:pointer; color:#cbd5e1 }
     .tab.active{ background:var(--panel); color:var(--text); border-color:#263244 }
 
-    .grid{ display:grid; grid-template-columns:1fr; gap:16px }
+    .grid{ display:grid; grid-template-columns:1fr; gap:16px; align-items:start }
     @media(min-width:860px){ .grid{ grid-template-columns:1fr 1fr } }
 
-    .card{ background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px }
+    .card{ background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px; min-height:520px; display:flex; flex-direction:column }
     label{ display:block; font-size:13px; color:#a7b1c2; margin:8px 0 6px }
     input[type="text"], textarea{ width:100%; background:#0b1220; color:#f8fafc; border:1px solid #1f2937; border-radius:10px; padding:10px 12px }
     textarea{ min-height:110px; max-height:180px; overflow:auto; line-height:1.4; resize:vertical }
@@ -140,7 +140,6 @@
     .drop{ margin-top:10px; padding:14px; border:1px dashed #2b3b55; border-radius:10px; background:#0b1220; color:#cfe3f5; text-align:center; font-size:.92rem }
     .drop.drag{ border-color:#22d3ee; background:#0f1f33 }
 
-    /* Résumé lisible */
     .summary{ display:grid; grid-template-columns:1fr; gap:8px; margin-top:10px }
     .summary .row{ display:flex; gap:8px; align-items:center; flex-wrap:wrap }
     .k{ color:#9fb3c9; min-width:120px }
@@ -150,7 +149,7 @@
     footer{ margin:26px 0 0; text-align:center; color:#7c8aa5; font-size:12px; padding:8px 0; padding-bottom:calc(12px + var(--safe-btm)) }
 
     @media (max-width:480px){
-      .card{ padding:14px }
+      .card{ padding:14px; min-height:unset }
       .row{ gap:8px }
       .btn, .row .btn{ width:100%; min-height:44px }
       .tab{ padding:8px 10px; font-size:.95rem }
@@ -188,75 +187,79 @@
     <div class="grid">
       <!-- CREATE -->
       <section class="card" id="panel-create" role="tabpanel" aria-labelledby="tab-create" aria-busy="false">
-        <label>Choose input</label>
-        <div class="row" role="group" aria-label="Input mode">
-          <button class="btn ghost" id="choose-text" type="button">Text</button>
-          <button class="btn ghost" id="choose-file" type="button">File</button>
-          <button class="btn ghost" id="choose-hash" type="button">Raw hash</button>
-        </div>
-
-        <div id="input-text" style="margin-top:14px;">
-          <label for="text">Text to hash (SHA-256 runs locally)</label>
-          <textarea id="text" placeholder="Paste or type your text here..." spellcheck="false" enterkeyhint="done"></textarea>
-          <div id="hash-preview-text" class="hint" aria-live="polite"></div>
-        </div>
-
-        <div id="input-file" style="display:none; margin-top:14px;">
-          <label for="file">File to hash (processed locally)</label>
-          <input type="file" id="file" aria-describedby="file-hint"/>
-          <p id="file-hint" class="hint">We only compute a hash in your browser. The file is never uploaded. Max 50 MB.</p>
-          <div id="drop" class="drop">…or drag & drop a file here</div>
-          <div id="file-info" class="hint" aria-live="polite"></div>
-          <div id="hash-preview-file" class="hint" aria-live="polite"></div>
-        </div>
-
-        <div id="input-hash" style="display:none; margin-top:14px;">
-          <label for="raw-hash">Existing SHA-256 hash (hex)</label>
-          <input type="text" id="raw-hash" placeholder="e3b0c44298fc1c149a..." inputmode="latin" autocapitalize="off" autocomplete="off" spellcheck="false" pattern="[A-Fa-f0-9]{64}" enterkeyhint="done"/>
-          <p class="hint">64 hex characters, case-insensitive.</p>
-          <div id="hash-preview-raw" class="hint" aria-live="polite"></div>
-        </div>
-
-        <div class="row" style="margin-top:16px;">
-          <div>
-            <label for="type">Type (optional)</label>
-            <input type="text" id="type" placeholder="prompt | gen | file | webhook | other" autocomplete="off" maxlength="32"/>
+        <div>
+          <label>Choose input</label>
+          <div class="row" role="group" aria-label="Input mode">
+            <button class="btn ghost" id="choose-text" type="button">Text</button>
+            <button class="btn ghost" id="choose-file" type="button">File</button>
+            <button class="btn ghost" id="choose-hash" type="button">Raw hash</button>
           </div>
-          <div>
-            <label for="meta">Meta (optional JSON, small)</label>
-            <input type="text" id="meta" placeholder='{"model":"gpt-4o","mime":"text/plain"}' autocomplete="off" spellcheck="false" maxlength="1024"/>
+
+          <div id="input-text" style="margin-top:14px;">
+            <label for="text">Text to hash (SHA-256 runs locally)</label>
+            <textarea id="text" placeholder="Paste or type your text here..." spellcheck="false" enterkeyhint="done"></textarea>
+            <div id="hash-preview-text" class="hint" aria-live="polite"></div>
           </div>
-        </div>
 
-        <div class="row" style="margin-top:16px;">
-          <button class="btn" id="btn-create" type="button" aria-controls="create-output create-status">Create Proof</button>
-          <span class="hint">Outputs: hash, timestamp, signature, verify URL</span>
-        </div>
+          <div id="input-file" style="display:none; margin-top:14px;">
+            <label for="file">File to hash (processed locally)</label>
+            <input type="file" id="file" aria-describedby="file-hint"/>
+            <p id="file-hint" class="hint">We only compute a hash in your browser. The file is never uploaded. Max 50 MB.</p>
+            <div id="drop" class="drop">…or drag & drop a file here</div>
+            <div id="file-info" class="hint" aria-live="polite"></div>
+            <div id="hash-preview-file" class="hint" aria-live="polite"></div>
+          </div>
 
-        <div id="create-status" style="margin-top:12px;" aria-live="polite"></div>
-        <div id="create-summary" class="summary" aria-live="polite"></div>
-        <pre id="create-output" style="margin-top:12px;" aria-live="polite"></pre>
-        <div class="actions" id="create-actions" style="display:none;">
-          <a class="btn ghost" id="open-verify-link" href="#" target="_blank" rel="noopener noreferrer" style="display:none">Open verify link</a>
-          <button class="btn ghost" id="copy-create-json" type="button" disabled>Copy JSON</button>
-          <button class="btn ghost" id="copy-create-curl" type="button" disabled>Copy cURL</button>
+          <div id="input-hash" style="display:none; margin-top:14px;">
+            <label for="raw-hash">Existing SHA-256 hash (hex)</label>
+            <input type="text" id="raw-hash" placeholder="e3b0c44298fc1c149a..." inputmode="latin" autocapitalize="off" autocomplete="off" spellcheck="false" pattern="[A-Fa-f0-9]{64}" enterkeyhint="done"/>
+            <p class="hint">64 hex characters, case-insensitive.</p>
+            <div id="hash-preview-raw" class="hint" aria-live="polite"></div>
+          </div>
+
+          <div class="row" style="margin-top:16px;">
+            <div>
+              <label for="type">Type (optional)</label>
+              <input type="text" id="type" placeholder="prompt | gen | file | webhook | other" autocomplete="off" maxlength="32"/>
+            </div>
+            <div>
+              <label for="meta">Meta (optional JSON, small)</label>
+              <input type="text" id="meta" placeholder='{"model":"gpt-4o","mime":"text/plain"}' autocomplete="off" spellcheck="false" maxlength="1024"/>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:16px;">
+            <button class="btn" id="btn-create" type="button" aria-controls="create-output create-status">Create Proof</button>
+            <span class="hint">Outputs: hash, timestamp, signature, verify URL</span>
+          </div>
+
+          <div id="create-status" style="margin-top:12px;" aria-live="polite"></div>
+          <div id="create-summary" class="summary" aria-live="polite"></div>
+          <pre id="create-output" style="margin-top:12px;" aria-live="polite"></pre>
+          <div class="actions" id="create-actions" style="display:none;">
+            <a class="btn ghost" id="open-verify-link" href="#" target="_blank" rel="noopener noreferrer" style="display:none">Open verify link</a>
+            <button class="btn ghost" id="copy-create-json" type="button" disabled>Copy JSON</button>
+            <button class="btn ghost" id="copy-create-curl" type="button" disabled>Copy cURL</button>
+          </div>
         </div>
       </section>
 
       <!-- VERIFY -->
       <section class="card" id="panel-verify" role="tabpanel" aria-labelledby="tab-verify" aria-busy="false" style="display:none;">
-        <label for="verify-hash">Hash to verify (SHA-256, hex)</label>
-        <input type="text" id="verify-hash" placeholder="Paste an existing hash" inputmode="latin" autocapitalize="off" autocomplete="off" spellcheck="false" pattern="[A-Fa-f0-9]{64}" enterkeyhint="go"/>
-        <div class="row" style="margin-top:12px;">
-          <button class="btn" id="btn-verify" type="button" aria-controls="verify-output verify-status">Verify</button>
-          <span class="hint">Checks existence, timestamp, and server signature.</span>
-        </div>
-        <div id="verify-status" style="margin-top:12px;" aria-live="polite"></div>
-        <div id="verify-summary" class="summary" aria-live="polite"></div>
-        <pre id="verify-output" style="margin-top:12px;" aria-live="polite"></pre>
-        <div class="actions" id="verify-actions" style="display:none;">
-          <button class="btn ghost" id="copy-verify-json" type="button" disabled>Copy JSON</button>
-          <button class="btn ghost" id="copy-verify-curl" type="button" disabled>Copy cURL</button>
+        <div>
+          <label for="verify-hash">Hash to verify (SHA-256, hex)</label>
+          <input type="text" id="verify-hash" placeholder="Paste an existing hash" inputmode="latin" autocapitalize="off" autocomplete="off" spellcheck="false" pattern="[A-Fa-f0-9]{64}" enterkeyhint="go"/>
+          <div class="row" style="margin-top:12px;">
+            <button class="btn" id="btn-verify" type="button" aria-controls="verify-output verify-status">Verify</button>
+            <span class="hint">Checks existence, timestamp, and server signature.</span>
+          </div>
+          <div id="verify-status" style="margin-top:12px;" aria-live="polite"></div>
+          <div id="verify-summary" class="summary" aria-live="polite"></div>
+          <pre id="verify-output" style="margin-top:12px;" aria-live="polite"></pre>
+          <div class="actions" id="verify-actions" style="display:none;">
+            <button class="btn ghost" id="copy-verify-json" type="button" disabled>Copy JSON</button>
+            <button class="btn ghost" id="copy-verify-curl" type="button" disabled>Copy cURL</button>
+          </div>
         </div>
       </section>
     </div>
@@ -301,7 +304,7 @@
       return { ...options, signal: ctrl.signal, _timeoutId: t };
     }
 
-    // Fallback uniquement si la réponse n'est pas OK
+    // Fallback only when the response is not OK
     async function fetchAPI(path, options={}){
       let lastRes, lastErr;
       for (const base of API_BASES){
@@ -309,8 +312,8 @@
           const opt = withTimeout(options);
           const res = await fetch(`${base}${path}`, opt);
           clearTimeout(opt._timeoutId);
-          if (res.ok) return res;      // on garde seulement OK
-          lastRes = res;               // sinon on essaie l'autre base
+          if (res.ok) return res;
+          lastRes = res;
         }catch(e){ lastErr = e; }
       }
       if (lastRes) return lastRes;
@@ -326,7 +329,7 @@
     }
     function setHTML(id, html){ const el=document.getElementById(id); if(el) el.innerHTML=html; }
 
-    // Unification {ok,true,data:{...}} ou flat
+    // Normalize various shapes {ok:true,data:{...}} or flat
     function unwrap(j){
       const d = (j && typeof j.data === 'object') ? j.data : j || {};
       return {
@@ -337,7 +340,8 @@
         signature: d?.signature ?? d?.sig ?? j?.signature ?? j?.sig ?? null,
         verify_url: d?.verify_url ?? j?.verify_url ?? undefined,
         type: d?.type ?? j?.type ?? undefined,
-        meta: d?.meta ?? j?.meta ?? undefined
+        meta: d?.meta ?? j?.meta ?? undefined,
+        error: j?.error || d?.error
       };
     }
 
@@ -431,7 +435,7 @@
     function fail(msg){ throw new Error(msg); }
     function setBusy(el, busy){ el?.setAttribute('aria-busy', busy ? 'true' : 'false'); }
 
-    /* Clipboard util */
+    /* Clipboard */
     function copyToClipboard(text){
       navigator.clipboard?.writeText(text).then(()=>alert('Copied to clipboard'))
       .catch(()=>prompt('Copy manually:', text));
@@ -550,12 +554,25 @@
         const j = await r.json().catch(()=> ({}));
         const n = unwrap(j);
 
-        const found = n.found === true || !!(n.timestamp || n.signature);
-        if (n.ok && found) statusVerify.innerHTML = `<span class="pill ok" role="status">✅ Valid</span>`;
-        else if (r.status === 404 || j.error === 'not_found') statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Not found</span>`;
-        else statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Invalid</span>`;
+        // Determine state robustly
+        const found = (n.found === true) || (!!n.timestamp) || (!!n.signature);
+        if (n.ok && found) {
+          statusVerify.innerHTML = `<span class="pill ok" role="status">✅ Valid</span>`;
+        } else if (r.status === 404 || n.error === 'hash_not_found' || n.error === 'not_found' || n.found === false) {
+          statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Not found</span>`;
+        } else {
+          statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Invalid</span>`;
+        }
 
-        const normalized = { ok: n.ok, found, hash: n.hash || hash, timestamp: n.timestamp || null, signature: n.signature || null, type: n.type || null, meta: n.meta || null };
+        const normalized = {
+          ok: n.ok === true,
+          found,
+          hash: n.hash || hash,
+          timestamp: n.timestamp || null,
+          signature: n.signature || null,
+          type: n.type ?? null,
+          meta: n.meta ?? null
+        };
 
         setHTML('verify-summary', `
           <div class="row"><span class="k">Hash</span><span class="v">${shortHash(normalized.hash)}</span></div>
