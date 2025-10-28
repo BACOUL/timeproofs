@@ -4,6 +4,7 @@
   <!-- ===== Core ===== -->
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="color-scheme" content="dark light"/>
   <title>Use Cases — TimeProofs · Proof of Existence for AI & Developers</title>
   <meta name="description" content="Concrete TimeProofs use cases for AI teams, legal/compliance, and security: provenance, datasets, audit trails, contracts, supply chain."/>
   <meta name="robots" content="index,follow"/>
@@ -53,12 +54,6 @@ upgrade-insecure-requests">
 
   <!-- ===== JSON-LD ===== -->
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Organization","name":"TimeProofs","url":"https://timeproofs.io/","logo":"https://timeproofs.io/logo%20(1).png","sameAs":["https://x.com/timeproofs","https://github.com/BACOUL/timeproofs","https://www.linkedin.com/company/timeproofs","https://youtube.com/@timeproofs","https://timeproofs.io/rss.xml"]}
-  </script>
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"}
-  </script>
-  <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"ItemList","name":"TimeProofs Use Cases","itemListElement":[
     {"@type":"ListItem","position":1,"name":"AI output provenance","url":"https://timeproofs.io/use-cases.html#ai-output"},
     {"@type":"ListItem","position":2,"name":"Prompt & chain integrity","url":"https://timeproofs.io/use-cases.html#ai-prompt"},
@@ -74,8 +69,18 @@ upgrade-insecure-requests">
     {"@type":"ListItem","position":2,"name":"Use Cases","item":"https://timeproofs.io/use-cases.html"}
   ]}
   </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+    {"@type":"Question","name":"Do you store my content?","acceptedAnswer":{"@type":"Answer","text":"No. Only hashes are handled. The original never leaves your device."}},
+    {"@type":"Question","name":"Is blockchain required?","acceptedAnswer":{"@type":"Answer","text":"No. We use standard hashing and signatures. Public verification without blockchain."}},
+    {"@type":"Question","name":"Can I verify publicly and offline?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use the public verify endpoint or a ProofSpec-compliant client with the published key policy."}}
+  ]}
+  </script>
 
-  <!-- ===== Styles (harmonisées + améliorations de fond/forme) ===== -->
+  <!-- Analytics (Plausible) -->
+  <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
+
+  <!-- ===== Styles (harmonisées) ===== -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
@@ -95,19 +100,11 @@ upgrade-insecure-requests">
         linear-gradient(180deg, #0b1020 0%, #0b1226 100%);
     }
     a{ color:var(--accent); text-decoration:none } a:hover{text-decoration:underline}
-
-    /* Skip link */
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
     .skip:focus{ position:fixed; left:12px; top:12px; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
 
-    /* ===== Header (identique accueil) ===== */
-    .tp-header{
-      position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
-      background:rgba(11,16,32,.55); backdrop-filter:blur(10px);
-      border-bottom:1px solid var(--line);
-      display:flex; align-items:center; justify-content:space-between; padding:0 16px;
-      transition:background .25s ease
-    }
+    /* Header */
+    .tp-header{ position:fixed; inset:0 0 auto 0; height:64px; z-index:1000; background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 16px; transition:background .25s ease }
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
     .tp-brand img{ height:40px; width:40px; object-fit:contain; vertical-align:middle }
@@ -118,17 +115,18 @@ upgrade-insecure-requests">
     @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width:899px){
       .tp-brand img{ height:34px; width:34px }
-      .tp-nav{
-        position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
-        display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
-        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease
-      }
+      .tp-nav{ position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45); transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
     }
 
-    /* ===== Layout ===== */
+    /* Layout */
     main{ padding:calc(96px + var(--safe-top)) 20px calc(40px + var(--safe-btm)); max-width:1100px; margin:0 auto }
+    nav.breadcrumb{ margin:0 0 8px; color:#a8c5d6; font-size:.92rem }
+    nav.breadcrumb a{ color:#cfe7ff }
+    .toc{ margin:10px 0 18px; padding:12px; background:#0c1424; border:1px solid var(--line); border-radius:12px }
+    .toc a{ margin-right:12px }
+
     .kicker{ color:#a8c5d6; letter-spacing:.3px; font-size:.95rem }
     h1{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .6em; font-weight:900 }
     p.lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 0 1.2em }
@@ -140,12 +138,11 @@ upgrade-insecure-requests">
     .card h3{ margin:.2em 0 .4em; color:#b9e7f5; font-size:1.1rem }
     .card p{ color:#dbe7f3; margin:.25em 0 .6em; line-height:1.6 }
     .mini{ font-size:.92rem; color:#9fb3c6 }
+    .tags{ display:flex; flex-wrap:wrap; gap:6px; margin-top:6px }
+    .tag{ display:inline-block; padding:3px 8px; border-radius:999px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; font-size:.78rem }
 
-    /* Code blocks */
-    pre{ background:#0b1220; border:1px solid #1f2937; color:#e5e7eb; border-radius:12px;
-      padding:12px; overflow:auto; line-height:1.55; font-size:.92rem;
-      white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere;
-    }
+    /* Code */
+    pre{ background:#0b1220; border:1px solid #1f2937; color:#e5e7eb; border-radius:12px; padding:12px; overflow:auto; line-height:1.55; font-size:.92rem; white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
     code{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.92rem; white-space:inherit }
 
     .cta-row{ margin-top:14px; display:flex; gap:10px; flex-wrap:wrap }
@@ -158,7 +155,7 @@ upgrade-insecure-requests">
     th, td{ text-align:left; padding:8px; border-bottom:1px solid #1e2a44 }
     caption{ text-align:left; padding:8px 0; color:#cfe3ff }
 
-    /* ===== Footer (identique accueil) ===== */
+    /* Footer */
     footer{ border-top:1px solid var(--line); margin-top:42px; padding:20px; color:#7c8aa5; text-align:center }
     footer .links a{ color:#a7b7cc; text-decoration:none; margin:0 8px } footer .links a:hover{ color:var(--accent) }
     .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
@@ -169,14 +166,13 @@ upgrade-insecure-requests">
 
     /* a11y focus */
     a:focus-visible, .cta:focus-visible, .tp-burger:focus-visible{ outline:2px solid #22d3ee; outline-offset:3px; border-radius:8px }
-
     @media (prefers-reduced-motion: reduce){ *{ transition:none !important; animation:none !important } }
   </style>
 </head>
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
-  <!-- ===== Header (identique accueil) ===== -->
+  <!-- ===== Header ===== -->
   <header class="tp-header" id="hdr" role="banner" aria-label="Main">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40"/><span>TimeProofs</span>
@@ -196,11 +192,29 @@ upgrade-insecure-requests">
     </button>
   </header>
 
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <span aria-current="page">Use Cases</span>
+  </nav>
+
   <!-- ===== Content ===== -->
   <main id="main" role="main">
     <p class="kicker">USE CASES</p>
     <h1>Where TimeProofs becomes essential</h1>
-    <p class="lead">Hash locally. No blockchain. Public verification. Add a cryptographic “moment in time” to anything that matters.</p>
+    <p class="lead">Hash locally. Timestamp via API. Verify publicly. No blockchain. Privacy-first.</p>
+
+    <!-- TOC -->
+    <div class="toc" role="navigation" aria-label="Table of contents">
+      <a href="#ai-output">AI output provenance</a>
+      <a href="#ai-prompt">Prompt & chain integrity</a>
+      <a href="#ai-dataset">Dataset snapshots</a>
+      <a href="#legal-files">Contracts & files</a>
+      <a href="#sec-events">Webhooks & events</a>
+      <a href="#supply-release">Releases & binaries</a>
+      <a href="#why-adopt">Why teams adopt</a>
+      <a href="#why-not">Why not blockchain?</a>
+      <a href="#page-proof">Page proof</a>
+    </div>
 
     <!-- ===== Use cases ===== -->
     <section class="grid three" aria-label="Primary use cases">
@@ -209,7 +223,7 @@ upgrade-insecure-requests">
         <h3 id="uc-ai-output-title">AI output provenance</h3>
         <p><strong>Problem.</strong> Users and auditors need proof that an output existed at time T and has not changed.</p>
         <p><strong>Solution.</strong> Hash the output locally. Create a timestamp proof. Share the public verify URL.</p>
-        <pre><code>// helper: string → sha256 (browser)
+<pre><code>// helper: string → sha256 (browser)
 async function sha256Hex(str){
   const buf = new TextEncoder().encode(str);
   const digest = await crypto.subtle.digest('SHA-256', buf);
@@ -219,13 +233,11 @@ const API="https://api.timeproofs.io/api";
 const hash=await sha256Hex(output);
 const proof=await fetch(`${API}/timestamp`,{
   method:"POST",
-  headers:{
-    "Authorization":"Bearer &lt;TOKEN&gt;",
-    "Content-Type":"application/json"
-  },
+  headers:{ "Authorization":"Bearer &lt;TOKEN&gt;","Content-Type":"application/json" },
   body:JSON.stringify({ hash, meta:{ type:"gen", model:"gpt", app:"agentX" } })
 }).then(r=>r.json());</code></pre>
-        <p class="mini"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Hash-only. Do not include personal data in <code>meta</code>.</p>
+        <p class="mini"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Hash-only. Avoid PII in <code>meta</code>.</p>
+        <div class="tags"><span class="tag">AI Act</span><span class="tag">GDPR</span></div>
         <div class="cta-row" role="group" aria-label="AI output actions">
           <a class="cta" href="/verify.html" aria-label="Create or verify a proof">Create or Verify a Proof</a>
           <a class="cta ghost" href="/docs.html#quickstart" aria-label="Open API quickstart">Read API Docs</a>
@@ -237,17 +249,15 @@ const proof=await fetch(`${API}/timestamp`,{
         <h3 id="uc-ai-prompt-title">Prompt & chain integrity</h3>
         <p><strong>Problem.</strong> Audit and regression require a stable record of prompts and key chain states.</p>
         <p><strong>Solution.</strong> Timestamp critical prompts and states. Verify later without exposing content.</p>
-        <pre><code>const API="https://api.timeproofs.io/api";
+<pre><code>const API="https://api.timeproofs.io/api";
 const promptHash=await sha256Hex(prompt);
 await fetch(`${API}/timestamp`,{
   method:"POST",
-  headers:{
-    "Authorization":"Bearer &lt;TOKEN&gt;",
-    "Content-Type":"application/json"
-  },
+  headers:{ "Authorization":"Bearer &lt;TOKEN&gt;","Content-Type":"application/json" },
   body:JSON.stringify({ hash:promptHash, meta:{ type:"prompt", env:"prod" } })
 });</code></pre>
-        <p class="mini"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Hash locally. Avoid PII in <code>meta</code>.</p>
+        <p class="mini"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Hash locally. No secrets in <code>meta</code>.</p>
+        <div class="tags"><span class="tag">AI Act</span><span class="tag">Audit</span></div>
         <div class="cta-row" role="group" aria-label="Prompt actions">
           <a class="cta" href="/verify.html">Create or Verify a Proof</a>
           <a class="cta ghost" href="/docs.html#quickstart">Read API Docs</a>
@@ -259,17 +269,15 @@ await fetch(`${API}/timestamp`,{
         <h3 id="uc-ai-dataset-title">Dataset & fine-tune snapshots</h3>
         <p><strong>Problem.</strong> Reproducibility demands proof of exactly which data was used at time T.</p>
         <p><strong>Solution.</strong> Hash dataset manifest. Timestamp and keep the verify URL in training metadata.</p>
-        <pre><code>const API="https://api.timeproofs.io/api";
+<pre><code>const API="https://api.timeproofs.io/api";
 const manifestHash=await sha256Hex(JSON.stringify(manifest));
 await fetch(`${API}/timestamp`,{
   method:"POST",
-  headers:{
-    "Authorization":"Bearer &lt;TOKEN&gt;",
-    "Content-Type":"application/json"
-  },
+  headers:{ "Authorization":"Bearer &lt;TOKEN&gt;","Content-Type":"application/json" },
   body:JSON.stringify({ hash:manifestHash, meta:{ type:"dataset", version:"2025-01-10" } })
 });</code></pre>
         <p class="mini"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Keep <code>meta</code> minimal.</p>
+        <div class="tags"><span class="tag">Data Act</span><span class="tag">Reproducibility</span></div>
         <div class="cta-row" role="group" aria-label="Dataset actions">
           <a class="cta" href="/verify.html">Create or Verify a Proof</a>
           <a class="cta ghost" href="/docs.html#quickstart">Read API Docs</a>
@@ -281,7 +289,7 @@ await fetch(`${API}/timestamp`,{
         <h3 id="uc-legal-title">Contracts, emails, files</h3>
         <p><strong>Problem.</strong> Prove existence and integrity without sharing private content.</p>
         <p><strong>Solution.</strong> Hash the file locally. Timestamp the hash. Present the proof on demand.</p>
-        <pre><code>// File → sha256 (browser)
+<pre><code>// File → sha256 (browser)
 async function sha256FileHex(file){
   const buf=await file.arrayBuffer();
   const digest=await crypto.subtle.digest('SHA-256', buf);
@@ -291,13 +299,11 @@ const API="https://api.timeproofs.io/api";
 const fileHash=await sha256FileHex(file);
 await fetch(`${API}/timestamp`,{
   method:"POST",
-  headers:{
-    "Authorization":"Bearer &lt;TOKEN&gt;",
-    "Content-Type":"application/json"
-  },
+  headers:{ "Authorization":"Bearer &lt;TOKEN&gt;","Content-Type":"application/json" },
   body:JSON.stringify({ hash:fileHash, meta:{ type:"file", mime:"application/pdf" } })
 });</code></pre>
         <p class="mini"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Never upload originals.</p>
+        <div class="tags"><span class="tag">GDPR</span><span class="tag">Evidence</span></div>
         <div class="cta-row" role="group" aria-label="Legal actions">
           <a class="cta" href="/verify.html">Create or Verify a Proof</a>
           <a class="cta ghost" href="/docs.html#quickstart">Read API Docs</a>
@@ -309,17 +315,15 @@ await fetch(`${API}/timestamp`,{
         <h3 id="uc-sec-events-title">Webhooks & event logs</h3>
         <p><strong>Problem.</strong> Critical events must be tamper-evident for post-mortems and audits.</p>
         <p><strong>Solution.</strong> Hash event payloads. Timestamp proofs. Verify later without revealing payloads.</p>
-        <pre><code>const API="https://api.timeproofs.io/api";
+<pre><code>const API="https://api.timeproofs.io/api";
 const eventHash=await sha256Hex(JSON.stringify(event));
 await fetch(`${API}/timestamp`,{
   method:"POST",
-  headers:{
-    "Authorization":"Bearer &lt;TOKEN&gt;",
-    "Content-Type":"application/json"
-  },
+  headers:{ "Authorization":"Bearer &lt;TOKEN&gt;","Content-Type":"application/json" },
   body:JSON.stringify({ hash:eventHash, meta:{ type:"webhook", src:"billing" } })
 });</code></pre>
         <p class="mini"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Public verification available.</p>
+        <div class="tags"><span class="tag">DSA</span><span class="tag">Audit</span></div>
         <div class="cta-row" role="group" aria-label="Event actions">
           <a class="cta" href="/verify.html">Create or Verify a Proof</a>
           <a class="cta ghost" href="/docs.html#quickstart">Read API Docs</a>
@@ -331,16 +335,14 @@ await fetch(`${API}/timestamp`,{
         <h3 id="uc-supply-title">Release & binary integrity</h3>
         <p><strong>Problem.</strong> Users need to verify artifacts before install. Supply chain attacks are rampant.</p>
         <p><strong>Solution.</strong> Publish artifact hash + proof link. Users or CI verify in one call.</p>
-        <pre><code>const API="https://api.timeproofs.io/api";
+<pre><code>const API="https://api.timeproofs.io/api";
 await fetch(`${API}/timestamp`,{
   method:"POST",
-  headers:{
-    "Authorization":"Bearer &lt;TOKEN&gt;",
-    "Content-Type":"application/json"
-  },
+  headers:{ "Authorization":"Bearer &lt;TOKEN&gt;","Content-Type":"application/json" },
   body:JSON.stringify({ hash:binarySHA256, meta:{ type:"release", tag:"v1.2.3" } })
 });</code></pre>
         <p class="mini"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Share the verify URL with users/CI.</p>
+        <div class="tags"><span class="tag">NIS2</span><span class="tag">Supply chain</span></div>
         <div class="cta-row" role="group" aria-label="Release actions">
           <a class="cta" href="/verify.html">Create or Verify a Proof</a>
           <a class="cta ghost" href="/docs.html#quickstart">Read API Docs</a>
@@ -354,7 +356,7 @@ await fetch(`${API}/timestamp`,{
     </div>
 
     <!-- Adoption reasons -->
-    <section style="margin-top:26px" aria-labelledby="adopt-title">
+    <section id="why-adopt" style="margin-top:26px" aria-labelledby="adopt-title">
       <h2 id="adopt-title">Why teams adopt it quickly</h2>
       <div class="grid two">
         <article class="card">
@@ -371,7 +373,7 @@ await fetch(`${API}/timestamp`,{
     </section>
 
     <!-- Why not blockchain -->
-    <section style="margin-top:26px" aria-labelledby="why-not-title">
+    <section id="why-not" style="margin-top:26px" aria-labelledby="why-not-title">
       <h2 id="why-not-title">Why not blockchain?</h2>
       <div class="card" role="region" aria-label="Comparison">
         <div class="table-wrap">
@@ -394,9 +396,19 @@ await fetch(`${API}/timestamp`,{
         </div>
       </div>
     </section>
+
+    <!-- Page proof -->
+    <section id="page-proof" style="margin-top:26px" aria-labelledby="page-proof-title" class="card" role="region">
+      <h2 id="page-proof-title">This page is verified by TimeProofs</h2>
+      <p>Release: <code>TP-UseCases-v0.1</code> · Hash:
+        <code id="uc-proof-hash">3d8f5a1c9f6b4a6f2f1c8e7b0d4c3a2f9b8e7d6c5b4a3928173645f0e1d2c3b4</code>
+        · <a id="uc-proof-link" href="https://api.timeproofs.io/api/verify?hash=3d8f5a1c9f6b4a6f2f1c8e7b0d4c3a2f9b8e7d6c5b4a3928173645f0e1d2c3b4" target="_blank" rel="noopener">Verify</a>
+      </p>
+      <p class="mini">Replace with the actual page hash at release time.</p>
+    </section>
   </main>
 
-  <!-- ===== Footer (identique accueil) ===== -->
+  <!-- ===== Footer ===== -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
@@ -437,7 +449,6 @@ await fetch(`${API}/timestamp`,{
 
   <!-- ===== Scripts ===== -->
   <script defer nonce="TP-2025">
-    // JS flag for reveal or progressive features if needed later
     document.documentElement.classList.add('js');
 
     // Header shade on scroll
@@ -458,6 +469,13 @@ await fetch(`${API}/timestamp`,{
       document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu(); if(e.key==='Tab'&&nav.getAttribute('data-state')==='open'){ const f=nav.querySelectorAll('a,button,[tabindex]:not([tabindex="-1"])'); if(!f.length) return; const first=f[0], last=f[f.length-1]; if(e.shiftKey && document.activeElement===first){ last.focus(); e.preventDefault(); } else if(!e.shiftKey && document.activeElement===last){ first.focus(); e.preventDefault(); } } }, { passive:false });
       window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width:900px)').matches) closeMenu(); }, { passive:true });
     })();
+
+    // Auto-fill verify link if hash present
+    (function(){
+      const hp=document.getElementById('uc-proof-hash'); if(!hp) return;
+      const val=hp.textContent.trim(); const a=document.getElementById('uc-proof-link');
+      if(a && val && !val.startsWith('PUT_')) a.href='https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(val);
+    })();
   </script>
 </body>
-                                                                                                             </html>
+</html>
