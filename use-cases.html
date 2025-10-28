@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="top">
 <head>
   <!-- ===== Core ===== -->
   <meta charset="utf-8"/>
@@ -13,21 +13,23 @@
 
   <!-- ===== Security (aligned with site) ===== -->
   <meta http-equiv="Content-Security-Policy" content="
-default-src 'self' https://api.timeproofs.io;
+default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
 worker-src 'self' blob:;
 img-src 'self' data: https:;
 style-src 'self' 'unsafe-inline';
-script-src 'self' 'nonce-TP-2025';
-connect-src 'self' https://api.timeproofs.io;
+script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
+connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io;
 font-src 'self' https: data:;
+object-src 'none';
 base-uri 'self';
-frame-ancestors 'self';
+form-action 'self';
+frame-ancestors 'none';
 upgrade-insecure-requests">
 
   <!-- ===== Perf ===== -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin>
   <link rel="dns-prefetch" href="//api.timeproofs.io"/>
-  <link rel="preload" as="image" href="/logo%20(1).png" imagesrcset="/logo%20(1).png 1x" fetchpriority="high"/>
+  <link rel="preload" as="image" href="/logo%20(1).png" fetchpriority="high"/>
 
   <!-- ===== Icons / Manifest ===== -->
   <link rel="icon" href="/favicon.ico" sizes="any"/>
@@ -73,53 +75,60 @@ upgrade-insecure-requests">
   ]}
   </script>
 
+  <!-- ===== Styles (harmonisées + améliorations de fond/forme) ===== -->
   <style>
     :root{
-      --bg:#0b1020; --panel:#0f172a; --line:#1e293b;
+      --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
-      --safe-btm: env(safe-area-inset-bottom, 0px);
+      --safe-top:env(safe-area-inset-top,0px); --safe-btm:env(safe-area-inset-bottom,0px);
     }
     *{ box-sizing:border-box }
     html,body{ margin:0; height:100%; max-width:100%; overflow-x:hidden }
+    html{ scroll-behavior:smooth }
     body{
-      background:radial-gradient(1000px 400px at 65% -10%, rgba(34,211,238,.10), transparent 60%), var(--bg);
       color:var(--text);
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-      text-rendering:optimizeLegibility;
+      background:
+        radial-gradient(1200px 560px at 80% -10%, rgba(34,211,238,.08), transparent 60%),
+        conic-gradient(from 220deg at 12% -20%, rgba(34,211,238,.05), transparent 32%),
+        linear-gradient(180deg, #0b1020 0%, #0b1226 100%);
     }
-    a{ color:var(--accent); text-decoration:none }
-    a:hover{ text-decoration:underline }
+    a{ color:var(--accent); text-decoration:none } a:hover{text-decoration:underline}
 
-    /* ===== Header (shared) ===== */
-    .tp-header{ position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
-      background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
+    /* Skip link */
+    .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
+    .skip:focus{ position:fixed; left:12px; top:12px; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
+
+    /* ===== Header (identique accueil) ===== */
+    .tp-header{
+      position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
+      background:rgba(11,16,32,.55); backdrop-filter:blur(10px);
       border-bottom:1px solid var(--line);
       display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+      transition:background .25s ease
     }
-    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none }
-    .tp-brand img{ height:40px; width:auto; object-fit:contain; vertical-align:middle }
-    .tp-brand:hover{ color:var(--accent) }
-    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
-      border:1px solid var(--line); border-radius:10px; background:#0d1628; color:var(--text); cursor:pointer;
-    }
-    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block; text-decoration:none }
-    .tp-nav a[aria-current="page"]{ color:#9beefb }
-    .tp-nav a:hover{ color:var(--accent) }
-    @media (min-width: 900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
-    @media (max-width: 899px){
-      .tp-brand img{ height:34px }
-      .tp-nav{ position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
+    .tp-header.scrolled{ background:rgba(11,16,32,.88) }
+    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
+    .tp-brand img{ height:40px; width:40px; object-fit:contain; vertical-align:middle }
+    .tp-nav{ margin-left:auto }
+    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block }
+    .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
+    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid var(--line); border-radius:12px; background:#0d1628; color:var(--text); cursor:pointer }
+    @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
+    @media (max-width:899px){
+      .tp-brand img{ height:34px; width:34px }
+      .tp-nav{
+        position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
         display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
-        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
+        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease
       }
-      .tp-nav a{ margin:4px 0 } .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
+      .tp-nav a{ margin:4px 0 }
+      .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
     }
 
     /* ===== Layout ===== */
-    .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
-    .skip:focus{ position:fixed; left:12px; top:12px; width:auto; height:auto; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
-    main{ padding:96px 20px 40px; max-width:1100px; margin:0 auto }
+    main{ padding:calc(96px + var(--safe-top)) 20px calc(40px + var(--safe-btm)); max-width:1100px; margin:0 auto }
     .kicker{ color:#a8c5d6; letter-spacing:.3px; font-size:.95rem }
     h1{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .6em; font-weight:900 }
     p.lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 0 1.2em }
@@ -137,7 +146,7 @@ upgrade-insecure-requests">
       padding:12px; overflow:auto; line-height:1.55; font-size:.92rem;
       white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere;
     }
-    code{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace; font-size:.92rem; white-space:inherit }
+    code{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.92rem; white-space:inherit }
 
     .cta-row{ margin-top:14px; display:flex; gap:10px; flex-wrap:wrap }
     .cta{ display:inline-block; background:var(--accent); color:#06202a; font-weight:900; padding:10px 14px; border-radius:10px; text-decoration:none; transition:transform .15s ease,filter .15s ease }
@@ -149,11 +158,17 @@ upgrade-insecure-requests">
     th, td{ text-align:left; padding:8px; border-bottom:1px solid #1e2a44 }
     caption{ text-align:left; padding:8px 0; color:#cfe3ff }
 
-    footer{ border-top:1px solid var(--line); margin-top:42px; padding:20px; padding-bottom:calc(20px + var(--safe-btm)); color:#7c8aa5; text-align:center }
-    footer a{ color:#a7b7cc; text-decoration:none; margin:0 8px } footer a:hover{ color:var(--accent) }
+    /* ===== Footer (identique accueil) ===== */
+    footer{ border-top:1px solid var(--line); margin-top:42px; padding:20px; color:#7c8aa5; text-align:center }
+    footer .links a{ color:#a7b7cc; text-decoration:none; margin:0 8px } footer .links a:hover{ color:var(--accent) }
+    .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
+    .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
+    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
+    .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; color:#cfefff; transition:transform .18s ease }
+    .social a:hover{ transform:translateY(-2px) }
 
     /* a11y focus */
-    a:focus-visible, .cta:focus-visible{ outline:2px solid #22d3ee; outline-offset:3px; border-radius:8px }
+    a:focus-visible, .cta:focus-visible, .tp-burger:focus-visible{ outline:2px solid #22d3ee; outline-offset:3px; border-radius:8px }
 
     @media (prefers-reduced-motion: reduce){ *{ transition:none !important; animation:none !important } }
   </style>
@@ -161,22 +176,24 @@ upgrade-insecure-requests">
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
-  <!-- ===== Header ===== -->
-  <header class="tp-header" role="banner">
-    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">
-      <img src="/logo%20(1).png" alt="TimeProofs logo"/><span>TimeProofs</span>
+  <!-- ===== Header (identique accueil) ===== -->
+  <header class="tp-header" id="hdr" role="banner" aria-label="Main">
+    <a class="tp-brand" href="/" aria-label="TimeProofs Home">
+      <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40"/><span>TimeProofs</span>
     </a>
-    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
-      <span aria-hidden="true">☰</span>
-    </button>
-    <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation">
+    <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Primary">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html" aria-current="page">Use Cases</a>
       <a href="/verify.html">Create/Verify</a>
       <a href="/docs.html">API Docs</a>
+      <a href="/regulations.html">Regulations</a>
+      <a href="/security.html">Security</a>
       <a href="/privacy.html">Privacy</a>
       <a href="/legal.html">Legal</a>
     </nav>
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
+      <span aria-hidden="true">☰</span>
+    </button>
   </header>
 
   <!-- ===== Content ===== -->
@@ -379,60 +396,68 @@ await fetch(`${API}/timestamp`,{
     </section>
   </main>
 
-  <!-- ===== Footer ===== -->
+  <!-- ===== Footer (identique accueil) ===== -->
   <footer role="contentinfo" aria-label="Site footer">
+    <div class="badges">
+      <span class="badge">⚡ Edge Native</span>
+      <span class="badge">🛡 Privacy First</span>
+      <a class="badge" href="/proofspec.html">🔍 Open Spec v0.1</a>
+    </div>
     © 2025 TimeProofs — Proof of Existence. For Everything.
-    <div style="margin-top:6px">
-      <a href="/index.html">Home</a> •
+    <div class="links" style="margin-top:6px">
+      <a href="/">Home</a> •
       <a href="/proofspec.html">Protocol</a> •
       <a href="/use-cases.html" aria-current="page">Use Cases</a> •
       <a href="/verify.html">Create/Verify</a> •
       <a href="/docs.html">API Docs</a> •
+      <a href="/regulations.html">Regulations</a> •
+      <a href="/.well-known/security.txt">Security.txt</a> •
       <a href="/privacy.html">Privacy</a> •
       <a href="/legal.html">Legal</a> •
-      <a href="https://x.com/timeproofs" target="_blank" rel="noopener">X/Twitter</a> •
-      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv2" target="_blank" rel="noopener">GitHub</a>
+      <a href="/humans.txt">humans.txt</a>
+    </div>
+    <div class="social" aria-label="Social links">
+      <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on X">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
+      </a>
+      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg>
+      </a>
+      <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on YouTube">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.5s-.2-1.6-.8-2.3c-.8-.8-1.7-.8-2.1-.9C16.8 4 12 4 12 4s-4.8 0-8.1.3c-.4 0-1.3 0-2.1.9C1.2 5.9 1 7.5 1 7.5S.8 9.3.8 11v2c0 1.7.2 3.5.2 3.5s.2 1.6.8 2.3c.8.8 1.9.8 2.4.9C6.2 19.9 12 20 12 20s4.8 0 8.1-.3c.4 0 1.3 0 2.1-.9.6-.7.8-2.3.8-2.3s.2-1.8.2-3.5v-2c0-1.7-.2-3.5-.2-3.5ZM9.8 15.5v-7l6.2 3.5-6.2 3.5Z"/></svg>
+      </a>
+      <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/></svg>
+      </a>
     </div>
   </footer>
 
+  <!-- ===== Scripts ===== -->
   <script defer nonce="TP-2025">
+    // JS flag for reveal or progressive features if needed later
+    document.documentElement.classList.add('js');
+
+    // Header shade on scroll
     (function(){
-      const burger = document.getElementById('tp-burger');
-      const nav = document.getElementById('tp-nav');
-      let lastFocus=null;
+      const hdr=document.getElementById('hdr');
+      function onScroll(){ if(window.scrollY>6) hdr.classList.add('scrolled'); else hdr.classList.remove('scrolled'); }
+      onScroll(); window.addEventListener('scroll', onScroll, { passive:true });
+    })();
 
-      function focusTrap(e){
-        if(nav.getAttribute('data-state')!=='open') return;
-        if(e.key!=='Tab') return;
-        const f = nav.querySelectorAll('a,button,[tabindex]:not([tabindex="-1"])');
-        if(!f.length) return;
-        const first=f[0], last=f[f.length-1];
-        if(e.shiftKey && document.activeElement===first){ last.focus(); e.preventDefault(); }
-        else if(!e.shiftKey && document.activeElement===last){ first.focus(); e.preventDefault(); }
-      }
-
-      function openMenu(){
-        lastFocus=document.activeElement;
-        nav.setAttribute('data-state','open');
-        burger.setAttribute('aria-expanded','true');
-        document.body.style.overflow='hidden';
-        const first=nav.querySelector('a'); first && first.focus();
-        document.addEventListener('keydown', focusTrap, { passive:false });
-      }
-      function closeMenu(){
-        nav.setAttribute('data-state','closed');
-        burger.setAttribute('aria-expanded','false');
-        document.body.style.overflow='';
-        document.removeEventListener('keydown', focusTrap, { passive:false });
-        burger.focus();
-      }
-      function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
-
+    // Burger + focus management
+    (function(){
+      const burger=document.getElementById('tp-burger'); const nav=document.getElementById('tp-nav');
+      function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; const a=nav.querySelector('a'); a && a.focus(); }
+      function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; burger.focus(); }
+      function toggleMenu(){ (nav.getAttribute('data-state')==='open')?closeMenu():openMenu(); }
       burger.addEventListener('click', toggleMenu, { passive:true });
-      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
-      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
-      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      document.addEventListener('click', (e)=>{ if(window.matchMedia('(min-width:900px)').matches) return; if(!e.target.closest('.tp-header')&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu(); if(e.key==='Tab'&&nav.getAttribute('data-state')==='open'){ const f=nav.querySelectorAll('a,button,[tabindex]:not([tabindex="-1"])'); if(!f.length) return; const first=f[0], last=f[f.length-1]; if(e.shiftKey && document.activeElement===first){ last.focus(); e.preventDefault(); } else if(!e.shiftKey && document.activeElement===last){ first.focus(); e.preventDefault(); } } }, { passive:false });
+      window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width:900px)').matches) closeMenu(); }, { passive:true });
     })();
   </script>
 </body>
-        </html>
+                                                                                                             </html>
