@@ -60,14 +60,14 @@
   <!-- Security meta fallbacks -->
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()">
 
-  <!-- CSP v01 (SW + Analytics + API) -->
+  <!-- CSP v01 (SW + Analytics + API + fallback) -->
   <meta http-equiv="Content-Security-Policy" content="
-default-src 'self' https://api.timeproofs.io;
+default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
 worker-src 'self' blob:;
 img-src 'self' data: https:;
 style-src 'self' 'unsafe-inline';
 script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
-connect-src 'self' https://api.timeproofs.io https://plausible.io;
+connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io;
 font-src 'self' https: data:;
 object-src 'none';
 base-uri 'self';
@@ -111,11 +111,12 @@ upgrade-insecure-requests">
       transition:background .25s var(--e)
     }
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
-    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none }
+    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
+    .tp-nav{ margin-left:auto }
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
-      border:1px solid var(--line); border-radius:12px; background:#0d1628; color:#text; cursor:pointer
+      border:1px solid var(--line); border-radius:12px; background:#0d1628; color:var(--text); cursor:pointer
     }
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none }
     .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
@@ -273,7 +274,6 @@ upgrade-insecure-requests">
 
   <!-- Header -->
   <header class="tp-header" id="hdr" role="banner">
-    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
     <a class="tp-brand" href="/" aria-label="TimeProofs Home" aria-current="page">
       <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
       <span>TimeProofs</span>
@@ -288,6 +288,7 @@ upgrade-insecure-requests">
       <a href="/privacy.html">Privacy</a>
       <a href="/legal.html">Legal</a>
     </nav>
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
   </header>
 
   <!-- Progress -->
@@ -585,6 +586,12 @@ const check = await res.json();</code></pre>
   <!-- App Scripts -->
   <script defer nonce="TP-2025">
   (function(){
+    // API bases + fetch options
+    const API1='https://api.timeproofs.io';
+    const API2='https://timeproofs-api.jeason-bacoul.workers.dev';
+    const FOPTS={ mode:'cors', credentials:'omit', referrerPolicy:'no-referrer', cache:'no-store' };
+    async function jfetch(url, init){ const r=await fetch(url,{...FOPTS,...(init||{})}); return r.json(); }
+
     // Header + progress
     const hdr=document.getElementById('hdr'); const bar=document.getElementById('progress');
     function onScroll(){
@@ -650,12 +657,21 @@ const check = await res.json();</code></pre>
         const h=await sha256Hex(v);
         showKV($('out-create'), {hash:h}, 'Local SHA-256');
 
-        const r=await fetch('https://api.timeproofs.io/timestamp',{
-          method:'POST',
-          headers:{'Content-Type':'application/json','Accept':'application/json'},
-          body: JSON.stringify({ hash:h, type:'event', meta:{ source:'web:home' } })
-        });
-        const j=await r.json();
+        let j;
+        try{
+          j = await jfetch(`${API1}/timestamp`, {
+            method:'POST',
+            headers:{'Content-Type':'application/json','Accept':'application/json'},
+            body: JSON.stringify({ hash:h, type:'event', meta:{ source:'web:home' } })
+          });
+        }catch{
+          j = await jfetch(`${API2}/timestamp`, {
+            method:'POST',
+            headers:{'Content-Type':'application/json','Accept':'application/json'},
+            body: JSON.stringify({ hash:h, type:'event', meta:{ source:'web:home' } })
+          });
+        }
+
         showKV($('out-create'), j, 'Timestamp response');
         const ok=!!j.ok || (!!j.signature && !!j.timestamp);
         showStatus($('status-create'), ok, ok?'Proof created':'Create failed');
@@ -664,35 +680,33 @@ const check = await res.json();</code></pre>
       }
     });
 
-    // VERIFY (robuste + nettoyage hash)
+    // VERIFY
     $('btn-verify').addEventListener('click', async ()=>{
       let h=$('in-verify').value.trim().toLowerCase().replace(/[^a-f0-9]/g,'');
       if(h.length!==64){ showStatus($('status-verify'), false, 'Hash must be 64 hex chars'); return; }
 
-      async function tryVerify(url, init){
-        const r=await fetch(url, init);
-        const j=await r.json().catch(()=>({ ok:false, error:'Bad JSON' }));
-        return j;
-      }
-
       try{
-        // 1) GET /verify?hash=
-        let j = await tryVerify('https://api.timeproofs.io/verify?hash='+encodeURIComponent(h), { headers:{'Accept':'application/json'} });
-
-        // 2) fallback GET /api/verify?hash=
-        if(!(j.valid||j.ok===true||j.result==='valid')){
-          if(j.error==='Missing params' || j.error==='Bad request' || j.ok===false){
-            j = await tryVerify('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(h), { headers:{'Accept':'application/json'} });
-          }
+        let j;
+        try{
+          j = await jfetch(`${API1}/verify?hash=${encodeURIComponent(h)}`, { headers:{'Accept':'application/json'} });
+        }catch{
+          j = await jfetch(`${API2}/verify?hash=${encodeURIComponent(h)}`, { headers:{'Accept':'application/json'} });
         }
 
-        // 3) fallback POST /verify {hash}
         if(!(j.valid||j.ok===true||j.result==='valid')){
-          j = await tryVerify('https://api.timeproofs.io/verify', {
-            method:'POST',
-            headers:{'Content-Type':'application/json','Accept':'application/json'},
-            body: JSON.stringify({ hash:h })
-          });
+          try{
+            j = await jfetch(`${API1}/verify`, {
+              method:'POST',
+              headers:{'Content-Type':'application/json','Accept':'application/json'},
+              body: JSON.stringify({ hash:h })
+            });
+          }catch{
+            j = await jfetch(`${API2}/verify`, {
+              method:'POST',
+              headers:{'Content-Type':'application/json','Accept':'application/json'},
+              body: JSON.stringify({ hash:h })
+            });
+          }
         }
 
         showKV($('out-verify'), j, 'Verify response');
@@ -722,4 +736,4 @@ const check = await res.json();</code></pre>
   <!-- Toast container -->
   <div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
-</html>
+        </html>
