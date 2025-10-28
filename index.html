@@ -316,7 +316,7 @@ upgrade-insecure-requests">
             <input id="in-create" class="in" placeholder="Paste text to hash & timestamp (local hashing)" aria-label="Text to hash"/>
             <button type="button" id="btn-create" class="btn">Create Proof</button>
           </div>
-          <div class="mini">We hash locally, then call <code>/timestamp</code>.</div>
+          <div class="mini">We hash locally, then call <code>/api/timestamp</code>.</div>
           <div id="out-create" class="kv" role="region" aria-live="polite"></div>
           <div id="status-create" class="status" aria-live="polite" hidden></div>
         </form>
@@ -330,7 +330,7 @@ upgrade-insecure-requests">
             <input id="in-verify" class="in" placeholder="Enter a 64-hex SHA-256 to verify" aria-label="Hash to verify"/>
             <button type="button" id="btn-verify" class="btn">Verify Proof</button>
           </div>
-          <div class="mini">Calls <code>/verify?hash=...</code>. Result shows green/red.</div>
+          <div class="mini">Calls <code>/api/verify?hash=...</code>. Result shows green/red.</div>
           <div id="out-verify" class="kv" role="region" aria-live="polite"></div>
           <div id="status-verify" class="status" aria-live="polite" hidden></div>
         </form>
@@ -385,15 +385,16 @@ const hash = [...new Uint8Array(digest)]
   .map(b => b.toString(16).padStart(2,'0')).join('');</code></pre>
         </article>
         <article class="card"><h3>2) Timestamp</h3>
-<pre><code>const r = await fetch("https://api.timeproofs.io/timestamp", {
-  method:"POST", headers:{ "Content-Type":"application/json", "Accept":"application/json" },
+<pre><code>const r = await fetch("https://api.timeproofs.io/api/timestamp", {
+  method:"POST",
+  headers:{ "Content-Type":"application/json", "Accept":"application/json" },
   body: JSON.stringify({ hash, type:"event", meta:{ source:"web" } })
 });
 const proof = await r.json();</code></pre>
         </article>
         <article class="card"><h3>3) Verify anywhere</h3>
 <pre><code>const res = await fetch(
-  "https://api.timeproofs.io/verify?hash="+hash,
+  "https://api.timeproofs.io/api/verify?hash="+hash,
   { headers:{ "Accept":"application/json" } }
 );
 const check = await res.json();</code></pre>
@@ -452,7 +453,7 @@ const check = await res.json();</code></pre>
       <p>We publish a public proof of this website build. Anyone can check it.</p>
       <p>Release: <code>TP-v0.1</code> · Hash:
         <code id="rel-proof-hash">b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3</code>
-        · <a id="rel-proof-link" href="https://api.timeproofs.io/verify?hash=b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3" target="_blank" rel="noopener">Verify</a>
+        · <a id="rel-proof-link" href="https://api.timeproofs.io/api/verify?hash=b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3" target="_blank" rel="noopener">Verify</a>
       </p>
     </section>
 
@@ -659,13 +660,13 @@ const check = await res.json();</code></pre>
 
         let j;
         try{
-          j = await jfetch(`${API1}/timestamp`, {
+          j = await jfetch(`${API1}/api/timestamp`, {
             method:'POST',
             headers:{'Content-Type':'application/json','Accept':'application/json'},
             body: JSON.stringify({ hash:h, type:'event', meta:{ source:'web:home' } })
           });
         }catch{
-          j = await jfetch(`${API2}/timestamp`, {
+          j = await jfetch(`${API2}/api/timestamp`, {
             method:'POST',
             headers:{'Content-Type':'application/json','Accept':'application/json'},
             body: JSON.stringify({ hash:h, type:'event', meta:{ source:'web:home' } })
@@ -688,20 +689,20 @@ const check = await res.json();</code></pre>
       try{
         let j;
         try{
-          j = await jfetch(`${API1}/verify?hash=${encodeURIComponent(h)}`, { headers:{'Accept':'application/json'} });
+          j = await jfetch(`${API1}/api/verify?hash=${encodeURIComponent(h)}`, { headers:{'Accept':'application/json'} });
         }catch{
-          j = await jfetch(`${API2}/verify?hash=${encodeURIComponent(h)}`, { headers:{'Accept':'application/json'} });
+          j = await jfetch(`${API2}/api/verify?hash=${encodeURIComponent(h)}`, { headers:{'Accept':'application/json'} });
         }
 
         if(!(j.valid||j.ok===true||j.result==='valid')){
           try{
-            j = await jfetch(`${API1}/verify`, {
+            j = await jfetch(`${API1}/api/verify`, {
               method:'POST',
               headers:{'Content-Type':'application/json','Accept':'application/json'},
               body: JSON.stringify({ hash:h })
             });
           }catch{
-            j = await jfetch(`${API2}/verify`, {
+            j = await jfetch(`${API2}/api/verify`, {
               method:'POST',
               headers:{'Content-Type':'application/json','Accept':'application/json'},
               body: JSON.stringify({ hash:h })
@@ -721,7 +722,7 @@ const check = await res.json();</code></pre>
     (function(){
       const hp=document.getElementById('rel-proof-hash'); if(!hp) return;
       const val=hp.textContent.trim(); const a=document.getElementById('rel-proof-link');
-      if(a && val && !val.startsWith('PUT_')) a.href='https://api.timeproofs.io/verify?hash='+encodeURIComponent(val);
+      if(a && val && !val.startsWith('PUT_')) a.href='https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(val);
     })();
   })();
   </script>
