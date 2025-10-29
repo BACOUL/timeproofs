@@ -127,8 +127,19 @@ upgrade-insecure-requests">
     .muted{ color:var(--muted) }
     .panel{ background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:14px }
     .two{ display:grid; gap:14px; grid-template-columns:1fr } @media(min-width:900px){ .two{ grid-template-columns:1fr 1fr } }
-    pre{ background:#0b1220; border:1px solid #1f2937; color:#e5e7eb; border-radius:10px; padding:12px; overflow:auto; white-space:pre }
-    code{ font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-size:.95em }
+
+    /* Code blocks: mobile-safe */
+    pre{
+      background:#0b1220; border:1px solid #1f2937; color:#e5e7eb; border-radius:10px;
+      padding:12px; overflow:auto; white-space:pre;
+      -webkit-overflow-scrolling:touch; max-width:100%
+    }
+    @media (max-width:899px){
+      pre{ white-space:pre-wrap; word-break:break-word }
+    }
+    code{ font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-size:.95em;
+      overflow-wrap:anywhere; word-break:break-word }
+
     .toc{ position:relative } @media(min-width:900px){ .toc{ position:sticky; top:96px } }
     .toc a{ display:block; padding:6px 8px; color:#cfe7ff } .toc a:hover{ color:#9beefb }
     .crumb{ margin:80px 16px 12px; font-size:.9rem }
