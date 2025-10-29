@@ -89,7 +89,7 @@ upgrade-insecure-requests">
     }
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); color:var(--text) }
-    html{ scroll-behavior:smooth; scroll-padding-top:88px } /* <-- évite le titre masqué */
+    html{ scroll-behavior:smooth; scroll-padding-top:88px } /* évite le titre masqué sous le header */
     body{
       margin:0; font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
@@ -129,9 +129,22 @@ upgrade-insecure-requests">
       .tp-brand img{ height:34px; width:34px }
     }
 
+    /* HERO cohérent (icône + kicker + titre + lead) */
+    .tp-hero{
+      margin:96px auto 8px; padding:0 16px; max-width:980px;
+    }
+    .tp-hero__card{
+      display:block; border:1px solid var(--line); border-radius:16px; background:linear-gradient(180deg,#0c1424, #0a1120);
+      padding:18px; box-shadow: var(--ring);
+    }
+    .tp-hero__icon{ font-size:28px; line-height:1; margin-bottom:8px }
+    .tp-hero__kicker{ margin:0 0 6px; color:#b5d8e8; font-size:.95rem }
+    .tp-hero__lead{ margin:6px 0 0; color:#cfe7ff }
+    .tp-hero h1{ margin:.2em 0 0; font-size:clamp(1.7rem,3.8vw,2.2rem); scroll-margin-top:88px }
+
     /* Layout */
-    .wrap{ max-width:980px; margin:0 auto; padding:96px 16px 28px }
-    h1{ font-size:clamp(1.7rem,3.8vw,2.3rem); margin:.2em 0; scroll-margin-top:88px }
+    .wrap{ max-width:980px; margin:0 auto; padding:16px 16px 28px }
+    h1{ font-size:clamp(1.7rem,3.8vw,2.3rem); margin:1.2em 0 .4em; scroll-margin-top:88px }
     h2{ font-size:clamp(1.2rem,2.4vw,1.5rem); margin:1.6em 0 .5em; color:#b9e7f5; scroll-margin-top:88px }
     h3{ font-size:1.08rem; margin:1.2em 0 .35em; color:#8feaff; scroll-margin-top:88px }
     .muted{ color:var(--muted) }
@@ -197,8 +210,19 @@ upgrade-insecure-requests">
     <a href="/">Home</a> › <span aria-current="page">Protocol (ProofSpec)</span>
   </nav>
 
+  <!-- HERO cohérent -->
+  <section class="tp-hero" role="region" aria-labelledby="page-title">
+    <div class="tp-hero__card">
+      <div class="tp-hero__icon" aria-hidden="true">📘</div>
+      <p class="tp-hero__kicker">Status: <strong>Draft for public review</strong> · Protocol · Privacy-first · No blockchain</p>
+      <h1 id="page-title">Protocol (ProofSpec)</h1>
+      <p class="tp-hero__lead">Defines how to create, sign, timestamp, and verify proofs that a specific data artifact existed at a point in time and has not changed since, without exposing the original content.</p>
+    </div>
+  </section>
+
   <main id="main" class="wrap" role="main">
-    <p class="muted">Status: <strong>Draft for public review</strong> · Protocol · Privacy-first · No blockchain</p>
+    <!-- On garde les éléments d’intro existants pour ne rien perdre -->
+    <p class="muted" id="intro-status">Status: <strong>Draft for public review</strong> · Protocol · Privacy-first · No blockchain</p>
     <h1>ProofSpec — TimeProofs Open Protocol for Digital Proof of Existence</h1>
     <p class="muted">Defines how to create, sign, timestamp, and verify proofs that a specific data artifact existed at a point in time and has not changed since, without exposing the original content.</p>
 
