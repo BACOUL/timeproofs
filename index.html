@@ -103,7 +103,7 @@ upgrade-insecure-requests">
     .tp-nav{ margin-left:auto }
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
-      border:1px solid var(--line); border-radius:12px; background:#0d1628; color:#text; cursor:pointer
+      border:1px solid var(--line); border-radius:12px; background:#0d1628; color:var(--text); cursor:pointer
     }
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none }
     .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
@@ -346,7 +346,7 @@ const check = await res.json();</code></pre></article>
         <article class="card"><h3>NIS2 / Supply chain</h3><p>Release & binary integrity for software.</p><p><span class="tag">Proof links</span> · <span class="tag">CI/CD verify</span></p></article>
       </div>
     </section>
-    <section class="section bg-alt reveal" id="privacy" aria-labelledby="privacy-title">
+    <section class="section bg-alt reveal" aria-labelledby="privacy-title">
       <h2 id="privacy-title">Data & Privacy, by design</h2>
       <div class="grid two">
         <article class="card"><h3>Keep content private</h3><p>Only SHA-256 hashes are sent. The original never leaves your device.</p></article>
@@ -486,16 +486,15 @@ const check = await res.json();</code></pre></article>
       const io=new IntersectionObserver((ents)=>{
         ents.forEach(e=>{
           if(e.isIntersecting){
-            const el=e.target;
-            const idx=[...el.parentElement?.children||[]].indexOf?.(el) ?? 0;
-            el.style.transitionDelay = (idx*60)+'ms';
-            el.classList.add('reveal','is-in');
+            constel.classList.add('reveal','is-in');
             io.unobserve(el);
           }
         });
       }, { rootMargin:'-10% 0px -10% 0px', threshold:0.08 });
       targets.forEach(el=>{ el.classList.add('reveal'); io.observe(el); });
     }
+
+    // UI helpers
     const toast=(msg)=>{ let t=document.querySelector('.toast'); if(!t){ t=document.createElement('div'); t.className='toast'; document.body.appendChild(t); } t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600); };
     const $=(id)=>document.getElementById(id);
     async function sha256Hex(str){
@@ -513,15 +512,17 @@ const check = await res.json();</code></pre></article>
       el.textContent=(ok?'✓ ':'✗ ')+text;
     }
     function copy(text){ navigator.clipboard?.writeText(text).then(()=>toast('Copied')); }
+
+    // Create flow
     let lastCreate = {hash:null, json:null};
-    $('btn-create').addEventListener('click', async ()=>{
+    $('btn-create')?.addEventListener('click', async ()=>{
       const v=$('in-create').value||'';
       if(!v.trim()){ showStatus($('status-create'), false, 'Provide content to hash.'); return; }
       try{
         const h=await sha256Hex(v);
         showKV($('out-create'), {hash:h}, 'Local SHA-256');
-        let j;
         const body=JSON.stringify({ hash:h, type:'event', meta:{ source:'web:home' } });
+        let j;
         try{
           j = await jfetch(`${API1}/api/timestamp`, { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body });
         }catch{
@@ -533,11 +534,20 @@ const check = await res.json();</code></pre></article>
         lastCreate={ hash:h, json:j };
       }catch(e){ showStatus($('status-create'), false, 'Network or CORS error'); }
     });
-    $('copy-create-json').addEventListener('click', ()=>{ if(!lastCreate.json){ toast('Nothing to copy'); return; } copy(JSON.stringify(lastCreate.json,null,2)); });
-    $('copy-create-curl').addEventListener('click', ()=>{ const h=lastCreate.hash; if(!h){ toast('Nothing to copy'); return; } const cmd=`curl -sS -X POST https://api.timeproofs.io/api/timestamp -H "Content-Type: application/json" --data '{"hash":"${h}","type":"event","meta":{"source":"web:home"}}'`; copy(cmd); });
-    $('open-create-verify').addEventListener('click', ()=>{ const h=lastCreate.hash; if(!h){ toast('Nothing to open'); return; } window.open(`/verify.html?hash=${encodeURIComponent(h)}`,'_blank','noopener'); });
+    $('copy-create-json')?.addEventListener('click', ()=>{ if(!lastCreate.json){ toast('Nothing to copy'); return; } copy(JSON.stringify(lastCreate.json,null,2)); });
+    $('copy-create-curl')?.addEventListener('click', ()=>{
+      const h=lastCreate.hash; if(!h){ toast('Nothing to copy'); return; }
+      const cmd=`curl -sS -X POST https://api.timeproofs.io/api/timestamp -H "Content-Type: application/json" --data '{"hash":"${h}","type":"event","meta":{"source":"web:home"}}'`;
+      copy(cmd);
+    });
+    $('open-create-verify')?.addEventListener('click', ()=>{
+      const h=lastCreate.hash; if(!h){ toast('Nothing to open'); return; }
+      window.open(`/verify.html?hash=${encodeURIComponent(h)}`,'_blank','noopener');
+    });
+
+    // Verify flow
     let lastVerify = {hash:null, json:null};
-    $('btn-verify').addEventListener('click', async ()=>{
+    $('btn-verify')?.addEventListener('click', async ()=>{
       let h=$('in-verify').value.trim().toLowerCase().replace(/[^a-f0-9]/g,'');
       if(h.length!==64){ showStatus($('status-verify'), false, 'Hash must be 64 hex chars'); return; }
       try{
@@ -560,8 +570,10 @@ const check = await res.json();</code></pre></article>
         lastVerify={ hash:h, json:j };
       }catch(e){ showStatus($('status-verify'), false, 'Network or CORS error'); }
     });
-    $('copy-verify-json').addEventListener('click', ()=>{ if(!lastVerify.json){ toast('Nothing to copy'); return; } copy(JSON.stringify(lastVerify.json,null,2)); });
-    $('copy-verify-curl').addEventListener('click', ()=>{ const h=lastVerify.hash; if(!h){ toast('Nothing to copy'); return; } copy(`curl -sS https://api.timeproofs.io/api/verify?hash=${h}`); });
+    $('copy-verify-json')?.addEventListener('click', ()=>{ if(!lastVerify.json){ toast('Nothing to copy'); return; } copy(JSON.stringify(lastVerify.json,null,2)); });
+    $('copy-verify-curl')?.addEventListener('click', ()=>{ const h=lastVerify.hash; if(!h){ toast('Nothing to copy'); return; } copy(`curl -sS https://api.timeproofs.io/api/verify?hash=${h}`); });
+
+    // Link the release proof hash if present
     (function(){
       const hp=document.getElementById('rel-proof-hash'); if(!hp) return;
       const val=hp.textContent.trim(); const a=document.getElementById('rel-proof-link');
@@ -569,11 +581,15 @@ const check = await res.json();</code></pre></article>
     })();
   })();
   </script>
+
+  <!-- SW register -->
   <script nonce="TP-2025">
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js', { type: 'module', scope: '/' }).catch(()=>{});
     }
   </script>
+
+  <!-- Toast container -->
   <div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
 </html>
