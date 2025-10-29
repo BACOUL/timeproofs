@@ -14,7 +14,7 @@
   <link rel="canonical" href="https://timeproofs.io/proofspec.html"/>
   <link rel="alternate" type="application/pdf" href="/proofspec-v1.pdf"/>
 
-  <!-- CSP unifiée v0.1 (alignée index) -->
+  <!-- CSP v0.1 (alignée index) -->
   <meta http-equiv="Content-Security-Policy" content="
 default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
 worker-src 'self' blob:;
@@ -65,6 +65,16 @@ upgrade-insecure-requests">
   <!-- JSON-LD: Breadcrumb -->
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://timeproofs.io/"},{"@type":"ListItem","position":2,"name":"Protocol (ProofSpec)","item":"https://timeproofs.io/proofspec.html"}]}
+  </script>
+
+  <!-- JSON-LD: FAQ (spécifique Spec) -->
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+    {"@type":"Question","name":"What is ProofSpec?","acceptedAnswer":{"@type":"Answer","text":"ProofSpec defines how to create, sign, timestamp, and verify digital proofs of existence using hash-only data and signed timestamps."}},
+    {"@type":"Question","name":"Is personal data required?","acceptedAnswer":{"@type":"Answer","text":"No. ProofSpec is hash-only. Meta fields must avoid any personal data."}},
+    {"@type":"Question","name":"Which algorithms are used?","acceptedAnswer":{"@type":"Answer","text":"Profile v1 uses SHA-256 for hashing and HMAC-SHA256 for signatures; Ed25519 is planned for v1.1."}},
+    {"@type":"Question","name":"Can I verify offline?","acceptedAnswer":{"@type":"Answer","text":"Yes. With the proof object and the verification key policy for the given key id (kid)."}}
+  ]}
   </script>
 
   <!-- Analytics (Plausible) -->
@@ -121,30 +131,33 @@ upgrade-insecure-requests">
 
     /* Layout */
     .wrap{ max-width:980px; margin:0 auto; padding:96px 16px 28px }
-    h1{ font-size:clamp(1.7rem,3.8vw,2.3rem); margin:.2em 0 }
-    h2{ font-size:clamp(1.2rem,2.4vw,1.5rem); margin:1.6em 0 .5em; color:#b9e7f5 }
-    h3{ font-size:1.08rem; margin:1.2em 0 .35em; color:#8feaff }
+    h1{ font-size:clamp(1.7rem,3.8vw,2.3rem); margin:.2em 0; scroll-margin-top:88px }
+    h2{ font-size:clamp(1.2rem,2.4vw,1.5rem); margin:1.6em 0 .5em; color:#b9e7f5; scroll-margin-top:88px }
+    h3{ font-size:1.08rem; margin:1.2em 0 .35em; color:#8feaff; scroll-margin-top:88px }
     .muted{ color:var(--muted) }
     .panel{ background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:14px }
     .two{ display:grid; gap:14px; grid-template-columns:1fr } @media(min-width:900px){ .two{ grid-template-columns:1fr 1fr } }
 
-    /* Code blocks: mobile-safe */
+    /* Code blocks + Copy */
     pre{
       background:#0b1220; border:1px solid #1f2937; color:#e5e7eb; border-radius:10px;
-      padding:12px; overflow:auto; white-space:pre;
-      -webkit-overflow-scrolling:touch; max-width:100%
+      padding:12px; overflow:auto; white-space:pre; -webkit-overflow-scrolling:touch; max-width:100%; position:relative
     }
-    @media (max-width:899px){
-      pre{ white-space:pre-wrap; word-break:break-word }
-    }
-    code{ font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-size:.95em;
-      overflow-wrap:anywhere; word-break:break-word }
+    @media (max-width:899px){ pre{ white-space:pre-wrap; word-break:break-word } }
+    code{ font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-size:.95em; overflow-wrap:anywhere; word-break:break-word }
+    .copy-btn{ position:absolute; top:8px; right:8px; padding:6px 8px; border-radius:8px; border:1px solid #22455a; background:#0c1a2e; color:#cfefff; cursor:pointer; font-weight:700 }
 
-    .toc{ position:relative } @media(min-width:900px){ .toc{ position:sticky; top:96px } }
-    .toc a{ display:block; padding:6px 8px; color:#cfe7ff } .toc a:hover{ color:#9beefb }
+    /* TOC sticky + active */
+    .toc{ position:relative; margin:16px 0 24px }
+    @media(min-width:900px){ .toc{ position:sticky; top:88px } }
+    .toc strong{ display:block; margin-bottom:6px }
+    .toc a{ display:block; padding:6px 8px; color:#cfe7ff; border-radius:8px }
+    .toc a:hover{ color:#9beefb; background:#0d2330 }
+    .toc a.active{ color:#9beefb; background:#0d2330; border:1px solid #214a57 }
+
     .crumb{ margin:80px 16px 12px; font-size:.9rem }
 
-    /* Footer (identique à l’accueil) */
+    /* Footer */
     footer{ border-top:1px solid var(--line); margin-top:44px; padding:18px; color:#7c8aa5; text-align:center }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
@@ -240,25 +253,25 @@ upgrade-insecure-requests">
     <section id="datamodel" class="section reveal">
       <h2>3. Data Model</h2>
       <div class="panel">
-<pre><code>{
+<pre><button class="copy-btn" aria-label="Copy code">Copy</button><code>{
   "spec": "proofspec/1.0",
-  "hash": "&lt;64-hex&gt;",
+  "hash": "<64-hex>",
   "alg":  "HMAC-SHA256",
   "ts":   "2025-10-22T14:00:00.000Z",
-  "sig":  "&lt;hex(hmac_sha256(secret, `${hash}|${ts}`))&gt;",
+  "sig":  "<hex(hmac_sha256(secret, `${hash}|${ts}`))>",
   "kid":  "tp-admin-v0",
   "meta": { "type":"event", "source":"api" },
-  "ver":  { "endpoint":"https://timeproofs.io/verify.html?hash=&lt;hash&gt;", "method":"GET" }
+  "ver":  { "endpoint":"https://timeproofs.io/verify.html?hash=<hash>", "method":"GET" }
 }</code></pre>
       </div>
-      <p class="muted">Official media type: <code>application/tproof+json</code> · File extension: <code>.tproof.json</code></p>
+      <p class="muted">Official media type: <code>application/tproof+json</code> · File extension: <code>.tproof.json</code> · <a href="/schema/proofspec-1.0.json" download>Download schema (JSON)</a></p>
       <p class="muted"><code>meta</code> is optional. Exclude personal data.</p>
     </section>
 
     <section id="schema" class="section reveal">
       <h2>4. JSON Schema</h2>
       <div class="panel">
-<pre><code>{
+<pre><button class="copy-btn" aria-label="Copy code">Copy</button><code>{
   "$schema":"https://json-schema.org/draft/2020-12/schema",
   "$id":"https://timeproofs.io/schema/proofspec-1.0.json",
   "title":"ProofSpec Proof",
@@ -300,20 +313,28 @@ upgrade-insecure-requests">
       <ul>
         <li><strong>Hash-only</strong>: content not transmitted.</li>
         <li><strong>No personal data</strong> in <code>meta</code>.</li>
-        <li><strong>Keys</strong>: rotate; bind <code>kid</code> to rotation policy.</li>
-        <li><strong>Replay</strong>: if needed, add a nonce in <code>meta</code> and include it in server logs only.</li>
-        <li><strong>Time</strong>: NTP-synchronized service clocks.</li>
+        <li><strong>Keys</strong>: rotate; bind <code>kid</code> to rotation policy. Suggested: 90–180 days.</li>
+        <li><strong>Clock</strong>: NTP-synchronized; tolerance ≤ 5 s across regions.</li>
+        <li><strong>Replay</strong>: if needed, include a nonce in <code>meta</code> and log server-side only.</li>
+        <li><strong>Rate limiting</strong>: per IP and per key to mitigate abuse.</li>
       </ul>
-      <p class="muted">Clock tolerance ≤ 5 s — service synchronized via multi-source NTP.</p>
+      <p class="muted">Threats considered: collision impracticality (SHA-256), key compromise (rotation & revocation), network MITM (TLS), timestamp drift (multi-source NTP).</p>
     </section>
 
     <section id="compliance" class="section reveal">
       <h2>7. Regulatory Mapping</h2>
-      <div class="two">
-        <div class="panel"><h3>EU AI Act / Data Act / DSA</h3><p>Supports traceability logs, integrity checks, and auditability for generated/processed content.</p></div>
-        <div class="panel"><h3>GDPR</h3><p>No personal data required. Keep <code>meta</code> non-identifying.</p></div>
+      <div class="panel">
+        <table class="table" role="table" style="width:100%;border-collapse:separate;border-spacing:0;border:1px solid #1f2a44;border-radius:12px;background:#0b1426">
+          <thead><tr><th>Regulation</th><th>Relevance</th><th>ProofSpec signals</th></tr></thead>
+          <tbody>
+            <tr><td>EU AI Act</td><td>Traceability of AI outputs / prompts</td><td><code>hash</code>, signed <code>ts</code>, public verification</td></tr>
+            <tr><td>GDPR</td><td>Data minimization / privacy by design</td><td>Hash-only; no personal data in <code>meta</code></td></tr>
+            <tr><td>Data Act / DSA</td><td>Data portability / integrity</td><td>Open format; verifiable integrity</td></tr>
+            <tr><td>NIS2 / Supply chain</td><td>Release integrity</td><td>Proof links for artifacts / CI</td></tr>
+          </tbody>
+        </table>
       </div>
-      <p class="muted">ProofSpec complements C2PA — existence + integrity layer for all digital assets.</p>
+      <p class="muted">See also: <a href="/regulations.html">Regulations & Compliance</a>.</p>
     </section>
 
     <section id="proof" class="section reveal">
@@ -328,26 +349,44 @@ upgrade-insecure-requests">
     <section id="versioning" class="section reveal">
       <h2>9. Versioning</h2>
       <ul>
-        <li><code>spec</code> = <code>proofspec/MAJOR.MINOR</code>.</li>
-        <li>MINOR is backward compatible. MAJOR breaks.</li>
-        <li>Reference implementation tags match protocol.</li>
+        <li><code>spec</code> = <code>proofspec/MAJOR.MINOR</code>. MINOR is backward-compatible; MAJOR may break.</li>
+        <li>Status: <strong>v1.0.0-draft</strong>. Changes tracked in <a href="#changelog">Changelog</a>.</li>
       </ul>
+      <div class="panel">
+        <strong>Compatibility matrix</strong>
+        <ul>
+          <li><code>proofspec/1.0</code> ↔ TimeProofs API v1.x (HMAC-SHA256)</li>
+          <li>Planned: <code>proofspec/1.1</code> adds Ed25519 (non-breaking; new <code>alg</code> enum)</li>
+        </ul>
+      </div>
     </section>
 
     <section id="impl" class="section reveal">
       <h2>10. Reference Implementation</h2>
       <p>Open reference implementation with public verification.</p>
       <div class="two">
-        <div class="panel"><h3>Create</h3>
-<pre><code>POST https://api.timeproofs.io/api/timestamp
-Content-Type: application/json
-Accept: application/json
+        <div class="panel"><h3>Create (cURL)</h3>
+<pre><button class="copy-btn" aria-label="Copy code">Copy</button><code>curl -sS -X POST https://api.timeproofs.io/api/timestamp \
+  -H "Content-Type: application/json" \
+  --data '{"hash":"<64-hex>","type":"event","meta":{"source":"spec"}}'</code></pre>
+        </div>
+        <div class="panel"><h3>Verify (cURL)</h3>
+<pre><button class="copy-btn" aria-label="Copy code">Copy</button><code>curl -sS "https://api.timeproofs.io/api/verify?hash=<64-hex>"</code></pre>
+        </div>
+      </div>
+      <div class="panel"><h3>JS (fetch)</h3>
+<pre><button class="copy-btn" aria-label="Copy code">Copy</button><code>// Create
+const resp = await fetch("https://api.timeproofs.io/api/timestamp",{
+  method:"POST",
+  headers:{ "Content-Type":"application/json","Accept":"application/json" },
+  body: JSON.stringify({ hash:"<64-hex>", type:"event", meta:{ source:"spec" } })
+});
+const proof = await resp.json();
 
-{"hash":"&lt;64-hex&gt;","meta":{"source":"spec"}}</code></pre>
-        </div>
-        <div class="panel"><h3>Verify</h3>
-<pre><code>GET https://api.timeproofs.io/api/verify?hash=&lt;64-hex&gt;</code></pre>
-        </div>
+// Verify
+const ok = await fetch("https://api.timeproofs.io/api/verify?hash=<64-hex>",{
+  headers:{ "Accept":"application/json" }
+}).then(r=>r.json());</code></pre>
       </div>
       <p>OpenAPI and examples: <a href="/docs.html">API Docs</a>.</p>
     </section>
@@ -355,7 +394,7 @@ Accept: application/json
     <section id="tests" class="section reveal">
       <h2>11. Test Vectors</h2>
       <div class="panel">
-<pre><code># Input (UTF-8): "TimeProofs"
+<pre><button class="copy-btn" aria-label="Copy code">Copy</button><code># Input (UTF-8): "TimeProofs"
 hash = "3940cae79aa443bfcdfc09b4f9fbb49bf16f0be354dee96e014a236d1c7ac9c3"  # example
 ts   = "2025-10-22T14:00:00.000Z"
 msg  = `${hash}|${ts}`
@@ -432,7 +471,7 @@ kid  = "tp-admin-v0"</code></pre>
       onScroll(); window.addEventListener('scroll', onScroll, { passive:true });
     })();
 
-    // Burger
+    // Burger (même logique que Home/Verify)
     (function(){
       const burger=document.getElementById('tp-burger'); const nav=document.getElementById('tp-nav');
       function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
@@ -442,6 +481,49 @@ kid  = "tp-admin-v0"</code></pre>
       document.addEventListener('click', (e)=>{ if(window.matchMedia('(min-width:900px)').matches) return; if(!e.target.closest('.tp-header')&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
       document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
       window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width:900px)').matches) closeMenu(); }, { passive:true });
+    })();
+
+    // TOC active link + scroll-margin
+    (function(){
+      const toc = document.querySelector('.toc');
+      const links = toc ? Array.from(toc.querySelectorAll('a[href^="#"]')) : [];
+      const ids = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+      const io = new IntersectionObserver((ents)=>{
+        ents.forEach(ent=>{
+          const id = ent.target.getAttribute('id');
+          const a = links.find(l => l.getAttribute('href')==='#'+id);
+          if(a){
+            if(ent.isIntersecting) {
+              links.forEach(x=>x.classList.remove('active'));
+              a.classList.add('active');
+            }
+          }
+        });
+      }, { rootMargin:'-40% 0% -55% 0%', threshold:0.01 });
+      ids.forEach(sec=>io.observe(sec));
+    })();
+
+    // Copy buttons on all <pre><code>
+    (function(){
+      function attach(btn, pre){
+        btn.addEventListener('click', ()=>{
+          const code = pre.querySelector('code');
+          const txt = code ? code.innerText : pre.innerText;
+          navigator.clipboard?.writeText(txt).then(()=>{
+            btn.textContent='Copied';
+            setTimeout(()=>btn.textContent='Copy', 1200);
+          });
+        }, { passive:true });
+      }
+      document.querySelectorAll('pre').forEach(pre=>{
+        let btn = pre.querySelector('.copy-btn');
+        if(!btn){
+          btn = document.createElement('button');
+          btn.className='copy-btn'; btn.type='button'; btn.textContent='Copy'; btn.setAttribute('aria-label','Copy code');
+          pre.appendChild(btn);
+        }
+        attach(btn, pre);
+      });
     })();
 
     // Reveal on scroll
@@ -467,4 +549,4 @@ kid  = "tp-admin-v0"</code></pre>
     }
   </script>
 </body>
-</html>
+      </html>
