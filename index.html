@@ -10,14 +10,18 @@
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <link rel="canonical" href="https://timeproofs.io/"/>
+
   <!-- Alt feeds -->
   <link rel="alternate" type="application/rss+xml" title="TimeProofs RSS" href="/rss.xml"/>
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
+
   <!-- Perf -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
   <link rel="dns-prefetch" href="//api.timeproofs.io"/>
   <link rel="preconnect" href="https://plausible.io" crossorigin>
   <link rel="preload" as="image" href="/logo%20(1).png" fetchpriority="high"/>
+  <link rel="preload" as="image" href="/og.png"/>
+
   <!-- Icons / Manifest -->
   <link rel="icon" href="/favicon.ico" sizes="any"/>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
@@ -26,6 +30,7 @@
   <link rel="alternate" type="application/yaml" href="/openapi.yaml"/>
   <link rel="author" href="/humans.txt"/>
   <link rel="status" href="https://status.timeproofs.io"/>
+
   <!-- Social -->
   <meta property="og:title" content="TimeProofs — The Open Standard for Digital Proof of Existence"/>
   <meta property="og:description" content="Open protocol + simple API to prove when something existed and that it hasn't changed — for any data."/>
@@ -42,6 +47,7 @@
   <meta name="twitter:title" content="TimeProofs — The Open Standard for Digital Proof of Existence"/>
   <meta name="twitter:description" content="Hash locally. Timestamp instantly. Verify publicly. For AI, data, and every digital creation."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
+
   <!-- JSON-LD Org + Site -->
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Organization","name":"TimeProofs","url":"https://timeproofs.io/","logo":"https://timeproofs.io/logo%20(1).png","sameAs":["https://x.com/timeproofs","https://github.com/BACOUL/timeproofs/tree/timeproofsv2","https://www.linkedin.com/company/timeproofs","https://youtube.com/@timeproofs","https://timeproofs.io/rss.xml"]}
@@ -49,8 +55,10 @@
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"}
   </script>
+
   <!-- Security meta fallbacks -->
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()">
+
   <!-- CSP v01 (SW + Analytics + API + fallback) -->
   <meta http-equiv="Content-Security-Policy" content="
 default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
@@ -65,8 +73,10 @@ base-uri 'self';
 form-action 'self';
 frame-ancestors 'none';
 upgrade-insecure-requests">
+
   <!-- Analytics (Plausible) -->
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
+
   <!-- Styles -->
   <style>
     :root{
@@ -221,6 +231,7 @@ upgrade-insecure-requests">
 </head>
 <body>
   <a href="#main" class="skip">Skip to main content</a>
+
   <header class="tp-header" id="hdr" role="banner">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home" aria-current="page">
       <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
@@ -238,7 +249,9 @@ upgrade-insecure-requests">
     </nav>
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
   </header>
+
   <div class="progress" id="progress" aria-hidden="true"></div>
+
   <main id="main" class="wrap" role="main">
     <section class="hero" aria-labelledby="hero-title">
       <div class="label">🔐 Privacy-first • ⚡ Edge-native • 🌍 Open Protocol</div>
@@ -249,6 +262,7 @@ upgrade-insecure-requests">
         <a class="cta" href="/proofspec.html" aria-label="Read the ProofSpec">Read the ProofSpec</a>
         <a class="cta secondary" href="/verify.html" aria-label="Create or verify a proof">Create or Verify a Proof</a>
       </div>
+
       <div class="demo" aria-label="Instant demo">
         <form id="form-create" autocomplete="off" style="display:grid;gap:10px">
           <strong>Create a Proof</strong>
@@ -265,7 +279,9 @@ upgrade-insecure-requests">
           </div>
           <div id="status-create" class="status" aria-live="polite" hidden></div>
         </form>
+
         <hr style="border:none;border-top:1px solid #1f2a44;margin:8px 0"/>
+
         <form id="form-verify" autocomplete="off" style="display:grid;gap:10px">
           <strong>Verify a Proof</strong>
           <div class="row">
@@ -281,10 +297,12 @@ upgrade-insecure-requests">
           <div id="status-verify" class="status" aria-live="polite" hidden></div>
         </form>
       </div>
+
       <div class="bullets" aria-label="Key features" style="margin-top:8px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center; color:#a3b7c7;">
         <span class="tag">Hash-only</span><span class="tag">Signed timestamp (HMAC-SHA256)</span><span class="tag">Public verification</span>
       </div>
     </section>
+
     <section class="section bg-alt reveal" aria-labelledby="built">
       <h2 id="built">What we’ve built and why it matters</h2>
       <div class="grid two">
@@ -298,6 +316,7 @@ upgrade-insecure-requests">
         </article>
       </div>
     </section>
+
     <section class="section bg-solid reveal" aria-labelledby="pva">
       <h2 id="pva">Protocol vs API</h2>
       <div class="grid two">
@@ -313,6 +332,7 @@ upgrade-insecure-requests">
         </article>
       </div>
     </section>
+
     <section class="section bg-alt reveal" aria-labelledby="how">
       <h2 id="how">How it works</h2>
       <p style="text-align:center; color:#9fb3c9; margin:-6px 0 12px">Model: <strong>Hash locally → Signed timestamp → Public verification</strong></p>
@@ -334,6 +354,7 @@ const proof = await r.json();</code></pre></article>
 const check = await res.json();</code></pre></article>
       </div>
     </section>
+
     <section class="section bg-solid reveal" id="regulatory" aria-labelledby="reg-title">
       <h2 id="reg-title">Built for the Regulatory Era</h2>
       <p style="text-align:center;margin:-6px 0 12px">
@@ -346,6 +367,7 @@ const check = await res.json();</code></pre></article>
         <article class="card"><h3>NIS2 / Supply chain</h3><p>Release & binary integrity for software.</p><p><span class="tag">Proof links</span> · <span class="tag">CI/CD verify</span></p></article>
       </div>
     </section>
+
     <section class="section bg-alt reveal" aria-labelledby="privacy-title">
       <h2 id="privacy-title">Data & Privacy, by design</h2>
       <div class="grid two">
@@ -353,6 +375,7 @@ const check = await res.json();</code></pre></article>
         <article class="card"><h3>You stay in control</h3><p>No personal data in proofs. Use metadata sparingly and without PII.</p></article>
       </div>
     </section>
+
     <section class="section bg-solid reveal" aria-labelledby="site-proof">
       <h2 id="site-proof">This site is verified by TimeProofs</h2>
       <p>We publish a public proof of this website build. Anyone can check it.</p>
@@ -361,6 +384,7 @@ const check = await res.json();</code></pre></article>
         · <a id="rel-proof-link" href="https://api.timeproofs.io/api/verify?hash=b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3" target="_blank" rel="noopener">Verify</a>
       </p>
     </section>
+
     <section class="section bg-solid reveal" aria-labelledby="why">
       <h2 id="why">Why organizations choose TimeProofs</h2>
       <div class="grid three">
@@ -374,6 +398,7 @@ const check = await res.json();</code></pre></article>
         <article class="card"><h3>Edge-native</h3><p>Fast, efficient, built for modern architectures.</p></article>
       </div>
     </section>
+
     <section class="section bg-alt reveal" aria-labelledby="personas">
       <h2 id="personas">Pick your path</h2>
       <div class="grid three">
@@ -382,6 +407,7 @@ const check = await res.json();</code></pre></article>
         <article class="card persona"><div class="ico" aria-hidden="true">🛡️</div><div><h3>CISO & Security</h3><p>Attest integrity for code, SBOMs, releases. Verify in CI/CD or at the edge.</p><p><a href="/use-cases.html#supply-release">Secure your supply chain →</a></p></div></article>
       </div>
     </section>
+
     <section class="section bg-solid reveal" aria-labelledby="proof">
       <h2 id="proof">Trusted signals</h2>
       <div class="grid two">
@@ -389,6 +415,7 @@ const check = await res.json();</code></pre></article>
         <article class="card quote">“TimeProofs slots into our privacy model. <strong>No data leaves the device</strong>, yet auditors can verify everything.” — Head of Compliance</article>
       </div>
     </section>
+
     <section class="section bg-alt reveal" aria-labelledby="created">
       <h2 id="created">What we’ve created</h2>
       <div class="grid two">
@@ -403,6 +430,7 @@ const check = await res.json();</code></pre></article>
         </article>
       </div>
     </section>
+
     <section class="section bg-solid reveal" aria-labelledby="faq">
       <h2 id="faq">FAQ</h2>
       <details><summary>Do you store my content?</summary><p>No. We only handle hashes. Original content never leaves your device.</p></details>
@@ -410,6 +438,7 @@ const check = await res.json();</code></pre></article>
       <details><summary>How do I verify a proof?</summary><p>Use our verify endpoint or any ProofSpec-compliant client. The proof is self-describing.</p></details>
       <details><summary>How does this help with the EU AI Act?</summary><p>It provides timestamped, verifiable trails for AI outputs and model interactions to meet traceability needs.</p></details>
     </section>
+
     <section class="section bg-alt reveal" aria-labelledby="final-cta">
       <h2 id="final-cta">Ready to prove it?</h2>
       <div class="cta-wrap" role="group" aria-label="Final actions">
@@ -418,6 +447,7 @@ const check = await res.json();</code></pre></article>
       </div>
     </section>
   </main>
+
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
@@ -445,6 +475,7 @@ const check = await res.json();</code></pre></article>
       <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/></svg></a>
     </div>
   </footer>
+
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
     {"@type":"Question","name":"Do you store my content?","acceptedAnswer":{"@type":"Answer","text":"No. We only handle hashes. Original content never leaves your device."}},
@@ -453,18 +484,22 @@ const check = await res.json();</code></pre></article>
     {"@type":"Question","name":"How does this help with the EU AI Act?","acceptedAnswer":{"@type":"Answer","text":"It provides timestamped, verifiable trails for AI outputs and model interactions to meet traceability needs."}}
   ]}
   </script>
+
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
     {"@type":"ListItem","position":1,"name":"Home","item":"https://timeproofs.io/"},
     {"@type":"ListItem","position":2,"name":"Create/Verify","item":"https://timeproofs.io/verify.html"}
   ]}
   </script>
+
+  <!-- Main JS (defer) -->
   <script defer nonce="TP-2025">
   (function(){
     const API1='https://api.timeproofs.io';
     const API2='https://timeproofs-api.jeason-bacoul.workers.dev';
     const FOPTS={ mode:'cors', credentials:'omit', referrerPolicy:'no-referrer', cache:'no-store' };
     async function jfetch(url, init){ const r=await fetch(url,{...FOPTS,...(init||{})}); return r.json(); }
+
     const hdr=document.getElementById('hdr'); const bar=document.getElementById('progress');
     function onScroll(){
       if(window.scrollY>6) hdr.classList.add('scrolled'); else hdr.classList.remove('scrolled');
@@ -472,6 +507,7 @@ const check = await res.json();</code></pre></article>
       bar.style.transform=`scaleX(${Math.max(0,Math.min(1,p))})`;
     }
     onScroll(); window.addEventListener('scroll', onScroll, { passive:true });
+
     const burger=document.getElementById('tp-burger'); const nav=document.getElementById('tp-nav');
     function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
     function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
@@ -480,13 +516,16 @@ const check = await res.json();</code></pre></article>
     document.addEventListener('click', (e)=>{ if(window.matchMedia('(min-width: 900px)').matches) return; if(!e.target.closest('.tp-header')&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
     document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
     window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
+
+    // Reveal on view (bugfix: el reference)
     const prefersReduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(!prefersReduced){
       const targets=[...document.querySelectorAll('.section'), ...document.querySelectorAll('.card'), ...document.querySelectorAll('details')];
-      const io=new IntersectionObserver((ents)=>{
-        ents.forEach(e=>{
-          if(e.isIntersecting){
-            constel.classList.add('reveal','is-in');
+      const io=new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting){
+            const el=entry.target;
+            el.classList.add('reveal','is-in');
             io.unobserve(el);
           }
         });
@@ -528,17 +567,21 @@ const check = await res.json();</code></pre></article>
         }catch{
           j = await jfetch(`${API2}/api/timestamp`, { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body });
         }
-        showKV($('out-create'), j, 'Timestamp response');
-        const ok=!!j.ok || (!!j.signature && !!j.timestamp);
-        showStatus($('status-create'), ok, ok?'Proof created':'Create failed');
-        lastCreate={ hash:h, json:j };
-      }catch(e){ showStatus($('status-create'), false, 'Network or CORS error'); }
+        showKV($('out-create'), j, 'Timestamp response showKV($('out-create'), j, 'Timestamp response');
+        const ok = !!j.ok || (!!j.signature && !!j.timestamp);
+        showStatus($('status-create'), ok, ok ? 'Proof created' : 'Create failed');
+        lastCreate = { hash: h, json: j };
+      }catch(e){
+        showStatus($('status-create'), false, 'Network or CORS error');
+      }
     });
-    $('copy-create-json')?.addEventListener('click', ()=>{ if(!lastCreate.json){ toast('Nothing to copy'); return; } copy(JSON.stringify(lastCreate.json,null,2)); });
+    $('copy-create-json')?.addEventListener('click', ()=>{
+      if(!lastCreate.json){ toast('Nothing to copy'); return; }
+      copy(JSON.stringify(lastCreate.json,null,2));
+    });
     $('copy-create-curl')?.addEventListener('click', ()=>{
       const h=lastCreate.hash; if(!h){ toast('Nothing to copy'); return; }
-      const cmd=`curl -sS -X POST https://api.timeproofs.io/api/timestamp -H "Content-Type: application/json" --data '{"hash":"${h}","type":"event","meta":{"source":"web:home"}}'`;
-      copy(cmd);
+      copy(`curl -sS -X POST https://api.timeproofs.io/api/timestamp -H "Content-Type: application/json" --data '{"hash":"${h}","type":"event","meta":{"source":"web:home"}}'`);
     });
     $('open-create-verify')?.addEventListener('click', ()=>{
       const h=lastCreate.hash; if(!h){ toast('Nothing to open'); return; }
@@ -567,25 +610,33 @@ const check = await res.json();</code></pre></article>
         showKV($('out-verify'), j, 'Verify response');
         const ok = !!j.valid || j.ok===true || j.result==='valid';
         showStatus($('status-verify'), ok, ok?'Valid proof':'Invalid or not found');
-        lastVerify={ hash:h, json:j };
-      }catch(e){ showStatus($('status-verify'), false, 'Network or CORS error'); }
+        lastVerify = { hash:h, json:j };
+      }catch(e){
+        showStatus($('status-verify'), false, 'Network or CORS error');
+      }
     });
-    $('copy-verify-json')?.addEventListener('click', ()=>{ if(!lastVerify.json){ toast('Nothing to copy'); return; } copy(JSON.stringify(lastVerify.json,null,2)); });
-    $('copy-verify-curl')?.addEventListener('click', ()=>{ const h=lastVerify.hash; if(!h){ toast('Nothing to copy'); return; } copy(`curl -sS https://api.timeproofs.io/api/verify?hash=${h}`); });
+    $('copy-verify-json')?.addEventListener('click', ()=>{
+      if(!lastVerify.json){ toast('Nothing to copy'); return; }
+      copy(JSON.stringify(lastVerify.json,null,2));
+    });
+    $('copy-verify-curl')?.addEventListener('click', ()=>{
+      const h=lastVerify.hash; if(!h){ toast('Nothing to copy'); return; }
+      copy(`curl -sS https://api.timeproofs.io/api/verify?hash=${h}`);
+    });
 
-    // Link the release proof hash if present
+    // Link release-proof anchor if hash present
     (function(){
       const hp=document.getElementById('rel-proof-hash'); if(!hp) return;
       const val=hp.textContent.trim(); const a=document.getElementById('rel-proof-link');
-      if(a && val && !val.startsWith('PUT_')) a.href='https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(val);
+      if(a && val) a.href='https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(val);
     })();
   })();
   </script>
 
   <!-- SW register -->
   <script nonce="TP-2025">
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js', { type: 'module', scope: '/' }).catch(()=>{});
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('/sw.js', { type:'module', scope:'/' }).catch(()=>{});
     }
   </script>
 
@@ -593,3 +644,4 @@ const check = await res.json();</code></pre></article>
   <div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
 </html>
+```0
