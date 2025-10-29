@@ -65,7 +65,7 @@ default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacou
 worker-src 'self' blob:;
 img-src 'self' data: https:;
 style-src 'self' 'unsafe-inline';
-script-src 'self' 'unsafe-inline' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
+script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
 connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io;
 font-src 'self' https: data:;
 object-src 'none';
@@ -303,9 +303,11 @@ upgrade-insecure-requests">
       </div>
     </section>
 
-    <section class="section bg-alt reveal" aria-labelledby="built">
-      <h2 id="built">What we’ve built and why it matters</h2>
-      <div class="grid two">
+    <!-- FUSION des deux sections en une seule (#built) -->
+    <section class="section bg-alt reveal" id="built" aria-labelledby="built-title">
+      <h2 id="built-title">What we’ve built — and why it matters</h2>
+      <div class="grid two" style="margin-top:12px">
+        <!-- Ancien bloc 'built' -->
         <article class="card">
           <h3>What we’ve built</h3>
           <p>TimeProofs is an open, neutral protocol for digital proof of existence. Not just for AI. For every digital creation and dataset. One proof readable by any ProofSpec-compliant tool.</p>
@@ -313,6 +315,17 @@ upgrade-insecure-requests">
         <article class="card">
           <h3>Why it matters</h3>
           <p>In a world of generated and modified content, proof is essential like HTTPS. TimeProofs gives each file and API a verifiable history: when it existed and what hasn’t changed.</p>
+        </article>
+
+        <!-- Ancien bloc 'created' -->
+        <article class="card">
+          <h3>ProofSpec — our invention</h3>
+          <p>A universal framework to certify when any data existed and that it hasn’t changed, without storing the content itself.</p>
+          <p><a href="/proofspec.html">Explore ProofSpec →</a></p>
+        </article>
+        <article class="card">
+          <h3>Protected and open</h3>
+          <p>Open-source licensed (e.g., MPL/Apache) with official filings (e-Soleau, trademark, ProofSpec publication). TimeProofs is the reference implementation of the protocol.</p>
         </article>
       </div>
     </section>
@@ -416,20 +429,7 @@ const check = await res.json();</code></pre></article>
       </div>
     </section>
 
-    <section class="section bg-alt reveal" aria-labelledby="created">
-      <h2 id="created">What we’ve created</h2>
-      <div class="grid two">
-        <article class="card">
-          <h3>ProofSpec — our invention</h3>
-          <p>A universal framework to certify when any data existed and that it hasn’t changed, without storing the content itself.</p>
-          <p><a href="/proofspec.html">Explore ProofSpec →</a></p>
-        </article>
-        <article class="card">
-          <h3>Protected and open</h3>
-          <p>Open-source licensed (e.g., MPL/Apache) with official filings (e-Soleau, trademark, ProofSpec publication). TimeProofs is the reference implementation of the protocol.</p>
-        </article>
-      </div>
-    </section>
+    <!-- (Section #created supprimée car fusionnée dans #built) -->
 
     <section class="section bg-solid reveal" aria-labelledby="faq">
       <h2 id="faq">FAQ</h2>
@@ -567,7 +567,8 @@ const check = await res.json();</code></pre></article>
         }catch{
           j = await jfetch(`${API2}/api/timestamp`, { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body });
         }
-        showKV($('out-create'), j, 'Timestamp response showKV($('out-create'), j, 'Timestamp response');
+        /* FIX: ligne corrigée pour éviter l'erreur JS qui cassait le menu mobile */
+        showKV($('out-create'), j, 'Timestamp response');
         const ok = !!j.ok || (!!j.signature && !!j.timestamp);
         showStatus($('status-create'), ok, ok ? 'Proof created' : 'Create failed');
         lastCreate = { hash: h, json: j };
