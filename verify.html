@@ -13,8 +13,6 @@
   <link rel="canonical" href="https://timeproofs.io/verify.html"/>
 
   <!-- Feeds & misc -->
-  <link rel="alternate" type="application/rss+xml" title="TimeProofs RSS" href="/rss.xml"/>
-  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
   <link rel="alternate" type="application/yaml" href="/openapi.yaml"/>
   <link rel="author" href="/humans.txt"/>
   <link rel="status" href="https://status.timeproofs.io"/>
@@ -26,7 +24,6 @@
   <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev">
   <link rel="preconnect" href="https://plausible.io" crossorigin>
   <link rel="preload" as="image" href="/logo%20(1).png" fetchpriority="high"/>
-  <link rel="preload" as="image" href="/og.png"/>
 
   <!-- Icons / Manifest -->
   <link rel="icon" href="/favicon.ico" sizes="any"/>
@@ -40,24 +37,12 @@
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/verify.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
-  <meta property="og:image:alt" content="TimeProofs — Open protocol for proof of existence"/>
-  <meta property="og:image:width" content="1200"/>
-  <meta property="og:image:height" content="630"/>
   <meta property="og:site_name" content="TimeProofs"/>
   <meta property="og:locale" content="en_US"/>
-  <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Verify & Create Proof — TimeProofs"/>
   <meta name="twitter:description" content="Instant proof-of-existence for AI, data and every digital creation."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
-
-  <!-- JSON-LD Org + Site (aligné à l’accueil) -->
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Organization","name":"TimeProofs","url":"https://timeproofs.io/","logo":"https://timeproofs.io/logo%20(1).png","sameAs":["https://x.com/timeproofs","https://github.com/BACOUL/timeproofs/tree/timeproofsv2","https://www.linkedin.com/company/timeproofs","https://youtube.com/@timeproofs","https://timeproofs.io/rss.xml"]}
-  </script>
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"}
-  </script>
 
   <!-- Security meta fallbacks -->
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()">
@@ -97,53 +82,54 @@ upgrade-insecure-requests">
     html,body{ height:100%; max-width:100%; background:var(--bg) }
     body{
       margin:0;
-      background:
-        radial-gradient(1200px 600px at 80% -10%, rgba(34,211,238,.06), transparent 60%),
-        conic-gradient(from 220deg at 10% -20%, rgba(34,211,238,.04), transparent 30%),
-        var(--bg);
+      background: radial-gradient(1000px 420px at 70% -10%, rgba(34,211,238,.10), transparent 60%), var(--bg);
       color:var(--text);
       font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
       text-rendering:optimizeLegibility;
       padding-top: calc(var(--header-h) + var(--safe-top));
-      padding-left: max(16px, var(--safe-l));
-      padding-right: max(16px, var(--safe-r));
+      padding-left: max(20px, var(--safe-l));
+      padding-right: max(20px, var(--safe-r));
       overflow-x:hidden;
     }
     a{ color:var(--accent); text-decoration:none } a:hover{ text-decoration:underline }
 
-    /* Header (identique index) */
+    /* Header (identique à l'accueil) */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:1000;
       padding-top: var(--safe-top);
       padding-left: max(16px, var(--safe-l));
       padding-right: max(16px, var(--safe-r));
-      background:rgba(11,16,32,.55); backdrop-filter:blur(10px);
+      background:rgba(11,16,32,.7); backdrop-filter:blur(8px);
       border-bottom:1px solid var(--line);
       display:flex; align-items:center; justify-content:space-between;
-      transition:background .25s cubic-bezier(.22,.61,.36,1);
     }
-    .tp-header.scrolled{ background:rgba(11,16,32,.88) }
-    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
-    .tp-brand img{ height:40px; width:40px; object-fit:contain }
-    @media (max-width:899px){ .tp-brand img{ height:34px; width:34px } }
-    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid var(--line); border-radius:12px; background:#0d1628; color:var(--text); cursor:pointer }
-    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none }
-    .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
+    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem }
+    .tp-brand img{ height:40px; width:auto; object-fit:contain; vertical-align:middle }
+    @media (max-width:899px){ .tp-brand img{ height:34px } }
+    .tp-brand:hover{ color:var(--accent) }
+    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border:1px solid var(--line); border-radius:10px; background:#0d1628; color:#f8fafc; cursor:pointer }
+    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block }
+    .tp-nav a[aria-current="page"]{ color:#9beefb }
+    .tp-nav a:hover{ color:var(--accent) }
     @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width:899px){
       .tp-nav{
-        position:fixed; top:calc(var(--header-h) + var(--safe-top)); left:0; right:0;
+        position:fixed;
+        top:calc(var(--header-h) + var(--safe-top));
+        left:0; right:0;
         background:#0c1424; border-top:1px solid var(--line);
         display:flex; flex-direction:column; gap:10px; padding:14px max(16px, var(--safe-r)) 14px max(16px, var(--safe-l));
         box-shadow:0 16px 40px rgba(0,0,0,.45);
-        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease
+        max-height: calc(100dvh - var(--header-h) - var(--safe-btm) - var(--safe-top));
+        overflow:auto;
+        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
       }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
     }
 
-    .wrap{ max-width:980px; margin:0 auto 40px; padding:0 16px }
+    .wrap{ max-width:980px; margin:0 auto 40px; padding:0 }
     h1{ margin:14px 0 8px; font-size:clamp(1.6rem, 4.5vw, 1.9rem) }
     p.lead{ margin:0 0 22px; color:var(--muted) }
 
@@ -203,13 +189,14 @@ upgrade-insecure-requests">
   <noscript><style>.reveal{opacity:1 !important; transform:none !important}</style></noscript>
 </head>
 <body>
-  <!-- Header (identique index) -->
-  <header class="tp-header" id="hdr" role="banner">
-    <a class="tp-brand" href="/" aria-label="TimeProofs Home">
-      <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
+  <!-- Header (identique à l’accueil) -->
+  <header class="tp-header" role="navigation" aria-label="Main">
+    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">
+      <img src="/logo%20(1).png" alt="TimeProofs logo" fetchpriority="high" decoding="async"/>
       <span>TimeProofs</span>
     </a>
-    <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation">
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
+    <nav id="tp-nav" class="tp-nav" data-state="closed">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html" aria-current="page">Create/Verify</a>
@@ -219,11 +206,10 @@ upgrade-insecure-requests">
       <a href="/privacy.html">Privacy</a>
       <a href="/legal.html">Legal</a>
     </nav>
-    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
   </header>
 
-  <div class="wrap" id="main" role="main" aria-labelledby="page-title">
-    <h1 id="page-title">🔐 Verify & Create Proof</h1>
+  <div class="wrap" id="main" role="main">
+    <h1>🔐 Verify & Create Proof</h1>
     <p class="lead">Hash locally → timestamp & sign via API → verify publicly. No content ever leaves your device. (Max file: 50 MB)</p>
 
     <div class="tabs" role="tablist" aria-label="Create or Verify">
@@ -306,7 +292,7 @@ upgrade-insecure-requests">
     </div>
   </div>
 
-  <!-- Footer (identique index) -->
+  <!-- Footer (identique à l’accueil) -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
@@ -315,10 +301,10 @@ upgrade-insecure-requests">
     </div>
     © 2025 TimeProofs — Reference implementation of the ProofSpec protocol.
     <div class="links" style="margin-top:6px">
-      <a href="/" aria-current="page">Home</a> •
+      <a href="/index.html">Home</a> •
       <a href="/proofspec.html">Protocol</a> •
       <a href="/use-cases.html">Use Cases</a> •
-      <a href="/verify.html">Create/Verify</a> •
+      <a href="/verify.html" aria-current="page">Create/Verify</a> •
       <a href="/docs.html">API Docs</a> •
       <a href="/regulations.html">Regulations</a> •
       <a href="/.well-known/security.txt">Security.txt</a> •
@@ -327,31 +313,63 @@ upgrade-insecure-requests">
       <a href="/humans.txt">humans.txt</a>
     </div>
     <div class="social" aria-label="Social links">
-      <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg></a>
-      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg></a>
-      <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg></a>
-      <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on YouTube"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.5s-.2-1.6-.8-2.3c-.8-.8-1.7-.8-2.1-.9C16.8 4 12 4 12 4h0s-4.8 0-8.1.3c-.4 0-1.3 0-2.1.9C1.2 5.9 1 7.5 1 7.5S.8 9.3.8 11v2c0 1.7.2 3.5.2 3.5s.2 1.6.8 2.3c.8.8 1.9.8 2.4.9C6.2 19.9 12 20 12 20s4.8 0 8.1-.3c.4 0 1.3 0 2.1-.9.6-.7.8-2.3.8-2.3s.2-1.8.2-3.5v-2c0-1.7-.2-3.5-.2-3.5ZM9.8 15.5v-7l6.2 3.5-6.2 3.5Z"/></svg></a>
-      <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/></svg></a>
+      <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
+      </a>
+      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg>
+      </a>
+      <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on YouTube">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.5s-.2-1.6-.8-2.3c-.8-.8-1.7-.8-2.1-.9C16.8 4 12 4 12 4h0s-4.8 0-8.1.3c-.4 0-1.3 0-2.1.9C1.2 5.9 1 7.5 1 7.5S.8 9.3.8 11v2c0 1.7.2 3.5.2 3.5s.2 1.6.8 2.3c.8.8 1.9.8 2.4.9C6.2 19.9 12 20 12 20s4.8 0 8.1-.3c.4 0 1.3 0 2.1-.9.6-.7.8-2.3.8-2.3s.2-1.8.2-3.5v-2c0-1.7-.2-3.5-.2-3.5ZM9.8 15.5v-7l6.2 3.5-6.2 3.5Z"/></svg>
+      </a>
+      <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/></svg>
+      </a>
     </div>
   </footer>
 
-  <!-- Header burger + scroll state (identique index) -->
+  <!-- Header burger (robuste, identique à l’accueil) -->
   <script defer nonce="TP-2025">
-    (function(){
-      const hdr=document.getElementById('hdr');
-      function onScroll(){ if(window.scrollY>6) hdr.classList.add('scrolled'); else hdr.classList.remove('scrolled'); }
-      onScroll(); window.addEventListener('scroll', onScroll, { passive:true });
+  document.addEventListener('DOMContentLoaded', function(){
+    const burger = document.getElementById('tp-burger');
+    const nav = document.getElementById('tp-nav');
+    if(!burger || !nav) return;
 
-      const burger = document.getElementById('tp-burger');
-      const nav = document.getElementById('tp-nav');
-      function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.documentElement.style.overflow='hidden'; }
-      function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.documentElement.style.overflow=''; }
-      function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
-      burger.addEventListener('click', toggleMenu, { passive:true });
-      document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
-      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
-      window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
-    })();
+    function openMenu(){
+      nav.setAttribute('data-state','open');
+      burger.setAttribute('aria-expanded','true');
+      document.documentElement.style.overflow='hidden';
+    }
+    function closeMenu(){
+      nav.setAttribute('data-state','closed');
+      burger.setAttribute('aria-expanded','false');
+      document.documentElement.style.overflow='';
+    }
+    function toggleMenu(){
+      (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu();
+    }
+
+    burger.addEventListener('click', toggleMenu, { passive:true });
+
+    // Ferme si on clique hors header (mobile uniquement)
+    document.addEventListener('click', (e)=>{
+      if (window.matchMedia('(min-width: 900px)').matches) return;
+      if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu();
+    }, { passive:true });
+
+    // ESC pour fermer
+    document.addEventListener('keydown', (e)=>{
+      if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu();
+    }, { passive:true });
+
+    // Ferme si on repasse en desktop
+    window.addEventListener('resize', ()=>{
+      if (window.matchMedia('(min-width: 900px)').matches) closeMenu();
+    }, { passive:true });
+  });
   </script>
 
   <!-- Prevent full-page drop -->
@@ -365,7 +383,7 @@ upgrade-insecure-requests">
     })();
   </script>
 
-  <!-- App Scripts -->
+  <!-- App Scripts (inchangé) -->
   <script defer nonce="TP-2025">
     const API_BASES = [
       "https://api.timeproofs.io/api",
@@ -470,9 +488,6 @@ upgrade-insecure-requests">
     function fail(msg){ throw new Error(msg); }
     function setBusy(el, busy){ el?.setAttribute('aria-busy', busy ? 'true' : 'false'); }
 
-    const panelCreate = document.getElementById('panel-create');
-    const panelVerify = document.getElementById('panel-verify');
-
     const btnCreate = document.getElementById('btn-create');
     const outCreate = document.getElementById('create-output');
     const statusCreate = document.getElementById('create-status');
@@ -564,30 +579,11 @@ upgrade-insecure-requests">
     const copyVerifyJSON = document.getElementById('copy-verify-json');
     const copyVerifyCURL = document.getElementById('copy-verify-curl');
 
-    // Tabs logic (ensure keyboard/ARIA works)
-    const tabCreate = document.getElementById('tab-create');
-    const tabVerify = document.getElementById('tab-verify');
-    function selectTab(which){
-      const isCreate = which==='create';
-      tabCreate.classList.toggle('active', isCreate);
-      tabVerify.classList.toggle('active', !isCreate);
-      tabCreate.setAttribute('aria-selected', String(isCreate));
-      tabVerify.setAttribute('aria-selected', String(!isCreate));
-      panelCreate.style.display = isCreate ? '' : 'none';
-      panelVerify.style.display = isCreate ? 'none' : '';
-      (isCreate ? tabCreate : tabVerify).focus();
-    }
-    tabCreate.addEventListener('click', ()=>selectTab('create'));
-    tabVerify.addEventListener('click', ()=>selectTab('verify'));
-    tabCreate.addEventListener('keydown', (e)=>{ if(e.key==='ArrowRight') selectTab('verify'); });
-    tabVerify.addEventListener('keydown', (e)=>{ if(e.key==='ArrowLeft') selectTab('create'); });
-
-    // Pre-fill from ?hash=
     const params = new URLSearchParams(location.search);
     const preHash = params.get('hash');
     if (preHash && /^[a-f0-9]{64}$/i.test(preHash)) {
       document.getElementById('verify-hash').value = preHash;
-      selectTab('verify');
+      document.getElementById('tab-verify').click();
       setTimeout(()=>btnVerify.click(), 60);
     }
 
@@ -636,13 +632,5 @@ upgrade-insecure-requests">
       navigator.serviceWorker.register('/sw.js', { type: 'module', scope: '/' }).catch(()=>{});
     }
   </script>
-
-  <!-- Breadcrumb JSON-LD (tu le gardes si tu veux) -->
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
-    {"@type":"ListItem","position":1,"name":"Home","item":"https://timeproofs.io/"},
-    {"@type":"ListItem","position":2,"name":"Create/Verify","item":"https://timeproofs.io/verify.html"}
-  ]}
-  </script>
 </body>
-  </html>
+        </html>
