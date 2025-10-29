@@ -7,6 +7,7 @@
   <meta name="color-scheme" content="dark light"/>
   <title>Protocol (ProofSpec) — TimeProofs</title>
   <meta name="description" content="ProofSpec is the public specification of the TimeProofs protocol: how to create, sign, timestamp, and verify digital proofs of existence. Privacy-first, edge-native, interoperable."/>
+  <meta name="keywords" content="proofspec,digital proof,timestamp,hash,verification,schema,open protocol"/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -40,12 +41,42 @@ upgrade-insecure-requests">
   <link rel="manifest" href="/site.webmanifest"/>
   <link rel="author" href="/humans.txt"/>
 
-  <!-- Social -->
-  <meta property="og:title" content="ProofSpec — TimeProofs Protocol"/>
+  <!-- Open Graph -->
+  <meta property="og:title" content="Protocol (ProofSpec) — TimeProofs"/>
   <meta property="og:description" content="Public specification for creating, signing, timestamping, and verifying digital proofs of existence. Open, verifiable, privacy-first."/>
   <meta property="og:type" content="article"/>
   <meta property="og:url" content="https://timeproofs.io/proofspec.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
+  <meta property="og:image:alt" content="TimeProofs — Open protocol for proof of existence"/>
+  <meta property="og:site_name" content="TimeProofs"/>
+  <meta property="og:locale" content="en_US"/>
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Protocol (ProofSpec) — TimeProofs"/>
+  <meta name="twitter:description" content="Open protocol for digital proof of existence. Interoperable and privacy-first."/>
+  <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
+
+  <!-- JSON-LD: TechArticle -->
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"TechArticle","headline":"Protocol (ProofSpec) — TimeProofs","about":["digital signatures","timestamping","data integrity","hashing","interoperability"],"author":{"@type":"Organization","name":"TimeProofs Editorial"},"publisher":{"@type":"Organization","name":"TimeProofs","logo":{"@type":"ImageObject","url":"https://timeproofs.io/logo%20(1).png"}},"datePublished":"2025-10-22","version":"1.0.0-draft","url":"https://timeproofs.io/proofspec.html"}
+  </script>
+
+  <!-- JSON-LD: Breadcrumb -->
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://timeproofs.io/"},{"@type":"ListItem","position":2,"name":"Protocol (ProofSpec)","item":"https://timeproofs.io/proofspec.html"}]}
+  </script>
+
+  <!-- JSON-LD: FAQ -->
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+    {"@type":"Question","name":"What is ProofSpec?","acceptedAnswer":{"@type":"Answer","text":"ProofSpec defines how to create, sign, timestamp, and verify digital proofs of existence using hash-only data and signed timestamps."}},
+    {"@type":"Question","name":"Is personal data required?","acceptedAnswer":{"@type":"Answer","text":"No. ProofSpec is hash-only. Meta fields must avoid any personal data."}},
+    {"@type":"Question","name":"Which algorithms are used?","acceptedAnswer":{"@type":"Answer","text":"Profile v1 uses SHA-256 for hashing and HMAC-SHA256 for signatures; Ed25519 is planned for v1.1."}},
+    {"@type":"Question","name":"Can I verify offline?","acceptedAnswer":{"@type":"Answer","text":"Yes. With the proof object and the verification key policy for the given key id (kid)."}},
+    {"@type":"Question","name":"How big can inputs be?","acceptedAnswer":{"@type":"Answer","text":"Hashing is client-side. Practical UI limit is 50 MB in the public demo; servers can accept any hash computed offline."}}
+  ]}
+  </script>
 
   <!-- Analytics -->
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
@@ -53,17 +84,13 @@ upgrade-insecure-requests">
   <!-- Styles -->
   <style>
     :root{
-      --bg:#0b1020; --panel:#0f172a; --line:#1e293b;
+      --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
       --ring:0 0 0 1px #1e293b, 0 10px 40px rgba(34,211,238,.14)
     }
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); color:var(--text) }
-    /* Le header fixe ne masque plus jamais les ancres */
-    html{ scroll-behavior:smooth; scroll-padding-top:88px }
-    /* Correctif universel d’ancrage */
-    [id]::before{ content:""; display:block; height:88px; margin-top:-88px; visibility:hidden }
-
+    html{ scroll-behavior:smooth; scroll-padding-top:88px } /* ancrage non masqué */
     body{
       margin:0; font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
@@ -73,15 +100,19 @@ upgrade-insecure-requests">
         var(--bg)
     }
     a{ color:var(--accent); text-decoration:none } a:hover{text-decoration:underline}
+    .skip{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+    .skip:focus{position:fixed;left:12px;top:12px;padding:8px 12px;background:#0d2330;color:#bff1ff;border:1px solid #214a57;border-radius:8px;z-index:2000}
 
-    /* Header */
+    /* Header (aligné gauche, identique Home/Verify) */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.55); backdrop-filter:blur(10px);
       border-bottom:1px solid var(--line);
-      display:flex; align-items:center; justify-content:space-between; padding:0 16px
+      display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+      transition:background .25s ease
     }
-    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none }
+    .tp-header.scrolled{ background:rgba(11,16,32,.88) }
+    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
     .tp-nav{ margin-left:auto }
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block }
@@ -99,29 +130,37 @@ upgrade-insecure-requests">
       .tp-brand img{ height:34px; width:34px }
     }
 
-    /* HERO identique à Verify */
-    .tp-hero{ margin:96px auto 8px; padding:0 16px; max-width:980px }
-    .tp-hero__card{ border:1px solid var(--line); border-radius:16px; background:linear-gradient(180deg,#0c1424,#0a1120); padding:18px; box-shadow:var(--ring) }
-    .tp-hero__icon{ font-size:28px; line-height:1; margin-bottom:8px }
-    .tp-hero__kicker{ margin:0 0 6px; color:#b5d8e8; font-size:.95rem }
-    .tp-hero h1{ margin:.2em 0 0; font-size:clamp(1.7rem,3.8vw,2.2rem) }
-    .tp-hero__lead{ margin:6px 0 0; color:#cfe7ff }
+    /* HERO uniforme (comme Verify) */
+    .tp-hero{ margin:96px auto 18px; max-width:980px; padding:0 16px }
+    .tp-hero .card{
+      background:#0b1220; border:1px solid #1f2937; border-radius:18px; padding:18px 16px; box-shadow:var(--ring)
+    }
+    .tp-hero__icon{ font-size:28px; margin-bottom:8px }
+    .tp-hero__kicker{ color:#9ccde4; margin:0 0 6px 0 }
+    .tp-hero h1{ font-size:clamp(1.8rem,4.2vw,2.5rem); margin:.2em 0 }
+    .tp-hero__lead{ color:var(--muted); margin:.4em 0 0 0 }
 
-    /* Layout */
-    .wrap{ max-width:980px; margin:0 auto; padding:16px 16px 28px }
-    h2{ font-size:clamp(1.2rem,2.4vw,1.5rem); margin:1.6em 0 .5em; color:#b9e7f5 }
-    h3{ font-size:1.08rem; margin:1.2em 0 .35em; color:#8feaff }
+    /* Layout contenu */
+    .wrap{ max-width:980px; margin:0 auto; padding:8px 16px 28px }
+    h1{ font-size:clamp(1.7rem,3.8vw,2.3rem); margin:.2em 0; scroll-margin-top:88px }
+    h2{ font-size:clamp(1.2rem,2.4vw,1.5rem); margin:1.6em 0 .5em; color:#b9e7f5; scroll-margin-top:88px }
+    /* assurance anti-masquage supplémentaire */
+    h2::before{ content:""; display:block; height:88px; margin-top:-88px; visibility:hidden }
+    h3{ font-size:1.08rem; margin:1.2em 0 .35em; color:#8feaff; scroll-margin-top:88px }
     .muted{ color:var(--muted) }
     .panel{ background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:14px }
     .two{ display:grid; gap:14px; grid-template-columns:1fr } @media(min-width:900px){ .two{ grid-template-columns:1fr 1fr } }
 
-    /* Code */
-    pre{ background:#0b1220; border:1px solid #1f2937; color:#e5e7eb; border-radius:10px; padding:12px; overflow:auto; white-space:pre; position:relative }
+    /* Code + Copy */
+    pre{
+      background:#0b1220; border:1px solid #1f2937; color:#e5e7eb; border-radius:10px;
+      padding:12px; overflow:auto; white-space:pre; -webkit-overflow-scrolling:touch; max-width:100%; position:relative
+    }
     @media (max-width:899px){ pre{ white-space:pre-wrap; word-break:break-word } }
-    code{ font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-size:.95em }
+    code{ font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-size:.95em; overflow-wrap:anywhere; word-break:break-word }
     .copy-btn{ position:absolute; top:8px; right:8px; padding:6px 8px; border-radius:8px; border:1px solid #22455a; background:#0c1a2e; color:#cfefff; cursor:pointer; font-weight:700 }
 
-    /* TOC */
+    /* TOC sticky + active */
     .toc{ position:relative; margin:16px 0 24px }
     @media(min-width:900px){ .toc{ position:sticky; top:88px } }
     .toc strong{ display:block; margin-bottom:6px }
@@ -129,20 +168,27 @@ upgrade-insecure-requests">
     .toc a:hover{ color:#9beefb; background:#0d2330 }
     .toc a.active{ color:#9beefb; background:#0d2330; border:1px solid #214a57 }
 
-    /* Footer */
+    /* Footer (identique Home/Verify) */
     footer{ border-top:1px solid var(--line); margin-top:44px; padding:18px; color:#7c8aa5; text-align:center }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
+    .links{ margin-top:6px }
     .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
-    .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628 }
+    .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; transition:transform .18s ease; color:#cfefff }
+    .social a:hover{ transform:translateY(-2px) }
+
+    /* Focus */
+    a:focus-visible, button:focus-visible, .tp-burger:focus-visible{ outline:2px solid #22d3ee; outline-offset:3px; border-radius:8px }
   </style>
 
   <noscript><style>.reveal{opacity:1 !important; transform:none !important}</style></noscript>
 </head>
 <body>
+  <a href="#main" class="skip">Skip to main content</a>
+
   <!-- Header -->
   <header class="tp-header" id="hdr" role="banner" aria-label="Main">
-    <a class="tp-brand" href="/" aria-label="TimeProofs Home">
+    <a class="tp-brand" href="/" aria-label="TimeProofs Home" aria-current="false">
       <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40"><span>TimeProofs</span>
     </a>
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Primary">
@@ -158,9 +204,9 @@ upgrade-insecure-requests">
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
   </header>
 
-  <!-- HERO identique à Verify -->
+  <!-- HERO uniforme -->
   <section class="tp-hero" role="region" aria-labelledby="page-title">
-    <div class="tp-hero__card">
+    <div class="card">
       <div class="tp-hero__icon" aria-hidden="true">📘</div>
       <p class="tp-hero__kicker">Status: <strong>Draft for public review</strong> · Protocol · Privacy-first · No blockchain</p>
       <h1 id="page-title">Protocol (ProofSpec)</h1>
@@ -188,34 +234,34 @@ upgrade-insecure-requests">
       <a href="#top" class="muted">↑ Back to top</a>
     </nav>
 
-    <section id="abstract" class="section">
+    <section id="abstract" class="section reveal">
       <h2>1. Abstract</h2>
       <p>ProofSpec binds a content-derived SHA-256 hash to a signed timestamp and a verification method. Transport-agnostic. Verifiable by anyone. Original content stays local.</p>
     </section>
 
-    <section id="model" class="section">
+    <section id="model" class="section reveal">
       <h2>2. Model & Terms</h2>
       <div class="two">
         <div class="panel">
           <h3>Actors</h3>
           <ul>
             <li><strong>Author</strong>: computes the hash locally.</li>
-            <li><strong>Timestamping Service</strong>: signs tuple <em>(hash, ts)</em> and returns a proof.</li>
+            <li><strong>Timestamping Service</strong>: signs a tuple <em>(hash, ts)</em> and returns a proof.</li>
             <li><strong>Verifier</strong>: checks integrity and signature.</li>
           </ul>
         </div>
         <div class="panel">
           <h3>Core flow</h3>
           <ol>
-            <li>Hash input <em>M</em> with SHA-256 → <code>hash</code> 64-hex.</li>
-            <li>POST <code>hash</code> (+ optional <code>meta</code>) → get signed <em>Proof</em>.</li>
-            <li>Verify signature and hash equality. Apply time policy on <code>ts</code> if needed.</li>
+            <li>Hash input <em>M</em> with SHA-256 → <code>hash</code> as 64-hex.</li>
+            <li>Submit <code>hash</code> (+ optional <code>meta</code>) → receive signed <em>Proof</em>.</li>
+            <li>Verify signature and hash equality. Optionally, policy checks on <code>ts</code>.</li>
           </ol>
         </div>
       </div>
     </section>
 
-    <section id="datamodel" class="section">
+    <section id="datamodel" class="section reveal">
       <h2>3. Data Model</h2>
       <div class="panel">
 <pre><button class="copy-btn" aria-label="Copy code">Copy</button><code>{
@@ -229,10 +275,11 @@ upgrade-insecure-requests">
   "ver":  { "endpoint":"https://timeproofs.io/verify.html?hash=<hash>", "method":"GET" }
 }</code></pre>
       </div>
-      <p class="muted">Media type: <code>application/tproof+json</code> · File: <code>.tproof.json</code></p>
+      <p class="muted">Official media type: <code>application/tproof+json</code> · File extension: <code>.tproof.json</code> · <a href="/schema/proofspec-1.0.json" download>Download schema (JSON)</a></p>
+      <p class="muted"><code>meta</code> is optional. Exclude personal data.</p>
     </section>
 
-    <section id="schema" class="section">
+    <section id="schema" class="section reveal">
       <h2>4. JSON Schema</h2>
       <div class="panel">
 <pre><button class="copy-btn" aria-label="Copy code">Copy</button><code>{
@@ -256,73 +303,78 @@ upgrade-insecure-requests">
       </div>
     </section>
 
-    <section id="algorithms" class="section">
+    <section id="algorithms" class="section reveal">
       <h2>5. Algorithms</h2>
-      <h3>5.1 Hashing</h3><p>SHA-256. Text = UTF-8. Lowercase 64-hex.</p>
-      <h3>5.2 Signing</h3><p>HMAC-SHA256 with service key <code>kid</code>.</p>
+      <h3>5.1 Hashing</h3><p>Use SHA-256. Text is UTF-8. Emit lowercase 64-hex.</p>
+      <h3>5.2 Signing</h3><p>HMAC-SHA256 with service key <code>kid</code>. Message is UTF-8:</p>
       <div class="panel"><code>message = `${hash}|${ts}`</code></div>
+      <p>Emit signature as lowercase hex.</p>
       <h3>5.3 Verification</h3>
       <ol>
-        <li>Recompute <code>hash</code>.</li>
-        <li>Verify <code>sig</code> for <code>message</code> and <code>kid</code>.</li>
-        <li>Validate <code>spec</code>/<code>alg</code> and any time policy.</li>
+        <li>Recompute <code>hash</code> from input; compare to proof.</li>
+        <li>Rebuild <code>message</code>; verify <code>sig</code> using the key bound to <code>kid</code>.</li>
+        <li>Validate <code>spec</code>/<code>alg</code> and time policy on <code>ts</code> if applicable.</li>
       </ol>
-      <p class="muted">Planned: Ed25519 in ProofSpec v1.1.</p>
+      <p class="muted">Future profile planned: <code>Ed25519</code> in ProofSpec v1.1.</p>
+      <h3>5.4 Transport</h3><p>Out of scope. HTTP reference in <code>ver.endpoint</code>. HTTPS required.</p>
     </section>
 
-    <section id="security" class="section">
+    <section id="security" class="section reveal">
       <h2>6. Security & Privacy</h2>
       <ul>
-        <li>Hash-only. No content transmitted.</li>
-        <li>No personal data in <code>meta</code>.</li>
-        <li>Key rotation. Bind policy to <code>kid</code>.</li>
-        <li>NTP clock. Drift ≤ 5 s.</li>
-        <li>Rate limiting per IP and per key.</li>
+        <li><strong>Hash-only</strong>: content not transmitted.</li>
+        <li><strong>No personal data</strong> in <code>meta</code>.</li>
+        <li><strong>Keys</strong>: rotate; bind <code>kid</code> to rotation policy. Suggested: 90–180 days.</li>
+        <li><strong>Clock</strong>: NTP-synchronized; tolerance ≤ 5 s across regions.</li>
+        <li><strong>Replay</strong>: if needed, include a nonce in <code>meta</code> and log server-side only.</li>
+        <li><strong>Rate limiting</strong>: per IP and per key to mitigate abuse.</li>
       </ul>
+      <p class="muted">Threats considered: collision impracticality (SHA-256), key compromise (rotation & revocation), network MITM (TLS), timestamp drift (multi-source NTP).</p>
     </section>
 
-    <section id="compliance" class="section">
+    <section id="compliance" class="section reveal">
       <h2>7. Regulatory Mapping</h2>
       <div class="panel">
         <table role="table" style="width:100%;border-collapse:separate;border-spacing:0;border:1px solid #1f2a44;border-radius:12px;background:#0b1426">
-          <thead><tr><th>Regulation</th><th>Relevance</th><th>Signals</th></tr></thead>
+          <thead><tr><th>Regulation</th><th>Relevance</th><th>ProofSpec signals</th></tr></thead>
           <tbody>
-            <tr><td>EU AI Act</td><td>Traceability of AI outputs</td><td><code>hash</code>, signed <code>ts</code>, public verify</td></tr>
-            <tr><td>GDPR</td><td>Data minimization</td><td>Hash-only; no PII</td></tr>
-            <tr><td>Data Act / DSA</td><td>Portability / integrity</td><td>Open format; verifiable</td></tr>
-            <tr><td>NIS2</td><td>Release integrity</td><td>Proof links in CI</td></tr>
+            <tr><td>EU AI Act</td><td>Traceability of AI outputs / prompts</td><td><code>hash</code>, signed <code>ts</code>, public verification</td></tr>
+            <tr><td>GDPR</td><td>Data minimization / privacy by design</td><td>Hash-only; no personal data in <code>meta</code></td></tr>
+            <tr><td>Data Act / DSA</td><td>Data portability / integrity</td><td>Open format; verifiable integrity</td></tr>
+            <tr><td>NIS2 / Supply chain</td><td>Release integrity</td><td>Proof links for artifacts / CI</td></tr>
           </tbody>
         </table>
       </div>
       <p class="muted">See also: <a href="/regulations.html">Regulations & Compliance</a>.</p>
     </section>
 
-    <section id="proof" class="section">
+    <section id="proof" class="section reveal">
       <h2>8. Document Proof</h2>
       <p>This document is cryptographically timestamped by TimeProofs.</p>
       <p>Proof: <code>TP-ProofSpec-v1</code> · Hash:
-        <code>7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2</code> ·
-        <a href="https://api.timeproofs.io/api/verify?hash=7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2" target="_blank" rel="noopener">Verify</a>
+        <code>b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3</code> ·
+        <a href="https://api.timeproofs.io/api/verify?hash=b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3" target="_blank" rel="noopener">Verify</a>
       </p>
     </section>
 
-    <section id="versioning" class="section">
+    <section id="versioning" class="section reveal">
       <h2>9. Versioning</h2>
       <ul>
-        <li><code>spec</code> = <code>proofspec/MAJOR.MINOR</code>.</li>
-        <li>Status: <strong>v1.0.0-draft</strong>.</li>
+        <li><code>spec</code> = <code>proofspec/MAJOR.MINOR</code>. MINOR is backward-compatible; MAJOR may break.</li>
+        <li>Status: <strong>v1.0.0-draft</strong>. Changes tracked in <a href="#changelog">Changelog</a>.</li>
       </ul>
       <div class="panel">
-        <strong>Compatibility</strong>
+        <strong>Compatibility matrix</strong>
         <ul>
           <li><code>proofspec/1.0</code> ↔ TimeProofs API v1.x (HMAC-SHA256)</li>
-          <li>Planned: <code>proofspec/1.1</code> adds Ed25519</li>
+          <li>Planned: <code>proofspec/1.1</code> adds Ed25519 (non-breaking; new <code>alg</code> enum)</li>
         </ul>
       </div>
     </section>
 
-    <section id="impl" class="section">
+    <section id="impl" class="section reveal">
       <h2>10. Reference Implementation</h2>
+      <p>Open reference implementation with public verification.</p>
       <div class="two">
         <div class="panel"><h3>Create (cURL)</h3>
 <pre><button class="copy-btn" aria-label="Copy code">Copy</button><code>curl -sS -X POST https://api.timeproofs.io/api/timestamp \
@@ -350,7 +402,7 @@ const ok = await fetch("https://api.timeproofs.io/api/verify?hash=<64-hex>",{
       <p>OpenAPI and examples: <a href="/docs.html">API Docs</a>.</p>
     </section>
 
-    <section id="tests" class="section">
+    <section id="tests" class="section reveal">
       <h2>11. Test Vectors</h2>
       <div class="panel">
 <pre><button class="copy-btn" aria-label="Copy code">Copy</button><code># Input (UTF-8): "TimeProofs"
@@ -360,22 +412,31 @@ msg  = `${hash}|${ts}`
 sig  = hex( HMAC_SHA256(key=K1, msg=msg) ).lower()
 kid  = "tp-admin-v0"</code></pre>
       </div>
+      <p class="muted">Example only. Publish official vectors before final release.</p>
     </section>
 
-    <section id="faq" class="section">
+    <section id="faq" class="section reveal">
       <h2>12. FAQ</h2>
-      <h3>Is blockchain required?</h3><p>No.</p>
-      <h3>Can I verify offline?</h3><p>Yes, with the proof object and the key policy for <code>kid</code>.</p>
+      <h3>Is blockchain required?</h3>
+      <p>No. Standard hashing and signatures. Lower cost. Higher privacy.</p>
+      <h3>What does the timestamp guarantee?</h3>
+      <p>It proves the hash existed at or before the recorded time and has not changed since when matched again.</p>
+      <h3>What goes in <code>meta</code>?</h3>
+      <p>Optional context like <code>type</code> or <code>source</code>. Do not include personal data.</p>
+      <h3>How are keys rotated?</h3>
+      <p>Each signature references a <code>kid</code>. Operators publish rotation policy and verification config per <code>kid</code>.</p>
+      <h3>Can proofs be exported?</h3>
+      <p>Yes. Use <code>.tproof.json</code> bundles for offline or third-party verification.</p>
     </section>
 
-    <section id="license" class="section">
+    <section id="license" class="section reveal">
       <h2>13. License & Copyright</h2>
-      <p>© 2025 <strong>TimeProofs</strong>. Text under Apache-2.0 (or MPL-2.0). “TimeProofs” is a trademark.</p>
+      <p>© 2025 <strong>TimeProofs</strong>. ProofSpec text under <strong>Apache-2.0</strong> (or MPL-2.0). “TimeProofs” is a trademark. Reference code is open-source under a compatible license.</p>
     </section>
 
-    <section id="changelog" class="section">
+    <section id="changelog" class="section reveal">
       <h2>14. Changelog</h2>
-      <ul><li><strong>1.0.0-draft</strong> — Initial public draft.</li></ul>
+      <ul><li><strong>1.0.0-draft</strong> — Initial public draft: data model, schema, HMAC-SHA256 profile, example vectors.</li></ul>
     </section>
   </main>
 
@@ -387,7 +448,7 @@ kid  = "tp-admin-v0"</code></pre>
       <a class="badge" href="/proofspec.html" aria-current="page">🔍 Open Spec v0.1</a>
     </div>
     © 2025 TimeProofs — Reference implementation of the ProofSpec protocol.
-    <div class="links" style="margin-top:6px">
+    <div class="links">
       <a href="/">Home</a> •
       <a href="/proofspec.html" aria-current="page">Protocol</a> •
       <a href="/use-cases.html">Use Cases</a> •
@@ -400,31 +461,45 @@ kid  = "tp-admin-v0"</code></pre>
       <a href="/humans.txt">humans.txt</a>
     </div>
     <div class="social" aria-label="Social links">
-      <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="X">@timeproofs</a>
-      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv2" target="_blank" rel="noopener" aria-label="GitHub">GitHub</a>
-      <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="LinkedIn">LinkedIn</a>
-      <a href="/rss.xml" target="_blank" rel="noopener" aria-label="RSS">RSS</a>
+      <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
+      </a>
+      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg>
+      </a>
+      <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on YouTube">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.5s-.2-1.6-.8-2.3c-.8-.8-1.7-.8-2.1-.9C16.8 4 12 4 12 4s-4.8 0 8.1.3c.4 0 1.3 0 2.1-.9.6-.7.8-2.3.8-2.3s.2-1.8.2-3.5v-2c0-1.7-.2-3.5-.2-3.5ZM9.8 15.5v-7l6.2 3.5-6.2 3.5Z"/></svg>
+      </a>
+      <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/></svg>
+      </a>
     </div>
   </footer>
 
-  <!-- Scripts -->
+  <!-- App Scripts -->
   <script defer nonce="TP-2025">
-    // Header shade
+    document.documentElement.classList.add('js');
+
+    // Header shade on scroll
     (function(){
       const hdr=document.getElementById('hdr');
-      function onScroll(){ hdr.classList.toggle('scrolled', window.scrollY>6); }
+      function onScroll(){ if(window.scrollY>6) hdr.classList.add('scrolled'); else hdr.classList.remove('scrolled'); }
       onScroll(); window.addEventListener('scroll', onScroll, { passive:true });
     })();
 
     // Burger
     (function(){
       const burger=document.getElementById('tp-burger'); const nav=document.getElementById('tp-nav');
-      const open=()=>{ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; };
-      const close=()=>{ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; };
-      burger.addEventListener('click', ()=> nav.getAttribute('data-state')==='open'?close():open(), { passive:true });
-      document.addEventListener('click', (e)=>{ if(window.matchMedia('(min-width:900px)').matches) return; if(!e.target.closest('.tp-header')&&nav.getAttribute('data-state')==='open') close(); }, { passive:true });
-      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') close(); }, { passive:true });
-      window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width:900px)').matches) close(); }, { passive:true });
+      function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+      function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+      function toggleMenu(){ (nav.getAttribute('data-state')==='open')?closeMenu():openMenu(); }
+      burger.addEventListener('click', toggleMenu, { passive:true });
+      document.addEventListener('click', (e)=>{ if(window.matchMedia('(min-width:900px)').matches) return; if(!e.target.closest('.tp-header')&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width:900px)').matches) closeMenu(); }, { passive:true });
     })();
 
     // TOC active link
@@ -434,15 +509,59 @@ kid  = "tp-admin-v0"</code></pre>
       const ids = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
       const io = new IntersectionObserver((ents)=>{
         ents.forEach(ent=>{
-          const a = links.find(l => l.getAttribute('href')==='#'+ent.target.id);
-          if(a){ a.classList.toggle('active', ent.isIntersecting); }
+          const id = ent.target.getAttribute('id');
+          const a = links.find(l => l.getAttribute('href')==='#'+id);
+          if(a){
+            if(ent.isIntersecting) {
+              links.forEach(x=>x.classList.remove('active'));
+              a.classList.add('active');
+            }
+          }
         });
       }, { rootMargin:'-40% 0% -55% 0%', threshold:0.01 });
       ids.forEach(sec=>io.observe(sec));
     })();
+
+    // Copy buttons
+    (function(){
+      function attach(btn, pre){
+        btn.addEventListener('click', ()=>{
+          const code = pre.querySelector('code');
+          const txt = code ? code.innerText : pre.innerText;
+          navigator.clipboard?.writeText(txt).then(()=>{
+            btn.textContent='Copied';
+            setTimeout(()=>btn.textContent='Copy', 1200);
+          });
+        }, { passive:true });
+      }
+      document.querySelectorAll('pre').forEach(pre=>{
+        let btn = pre.querySelector('.copy-btn');
+        if(!btn){
+          btn = document.createElement('button');
+          btn.className='copy-btn'; btn.type='button'; btn.textContent='Copy'; btn.setAttribute('aria-label','Copy code');
+          pre.appendChild(btn);
+        }
+        attach(btn, pre);
+      });
+    })();
+
+    // Reveal on scroll
+    (function(){
+      const prefersReduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches; if(prefersReduced) return;
+      const items=document.querySelectorAll('.reveal');
+      const io=new IntersectionObserver((ents)=>{
+        ents.forEach(e=>{
+          if(e.isIntersecting){
+            const el=e.target; const idx=[...el.parentElement?.children||[]].indexOf?.(el) ?? 0;
+            el.style.transitionDelay=(idx*60)+'ms'; el.classList.add('is-in'); io.unobserve(el);
+          }
+        });
+      }, { rootMargin:'-10% 0 -10% 0', threshold:0.08 });
+      items.forEach(el=>io.observe(el));
+    })();
   </script>
 
-  <!-- SW -->
+  <!-- Service Worker -->
   <script nonce="TP-2025">
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js', { type: 'module', scope: '/' }).catch(()=>{});
