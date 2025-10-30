@@ -87,10 +87,21 @@ upgrade-insecure-requests">
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
       --safe-top:env(safe-area-inset-top,0px); --safe-btm:env(safe-area-inset-bottom,0px);
+      --header-h:64px; /* header fixed height */
+      --anchor-offset:calc(var(--header-h) + 28px); /* offset for anchors */
     }
     *{ box-sizing:border-box }
     html,body{ margin:0; height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); color:var(--text) }
-    html{ scroll-behavior:smooth; scroll-padding-top:88px } /* évite les titres masqués par le header */
+    html{
+      scroll-behavior:smooth;
+      scroll-padding-top:var(--anchor-offset); /* évite titres masqués au scroll-to */
+    }
+    @media (max-width:899px){
+      :root{ --header-h:72px; --anchor-offset:calc(var(--header-h) + 34px) }
+    }
+    /* Assure l’offset sur toute cible d’ancre, même si l’id est porté par <article> */
+    [id]{ scroll-margin-top:var(--anchor-offset) }
+
     body{
       font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
@@ -104,24 +115,24 @@ upgrade-insecure-requests">
     .skip:focus{ position:fixed; left:12px; top:12px; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
 
     /* Header */
-    .tp-header{ position:fixed; inset:0 0 auto 0; height:64px; z-index:1000; background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 16px; transition:background .25s ease }
+    .tp-header{ position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:1000; background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 16px; transition:background .25s ease }
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
     .tp-brand img{ height:40px; width:40px; object-fit:contain; vertical-align:middle }
     .tp-nav{ margin-left:auto }
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block }
     .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
-    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid var(--line); border-radius:12px; background:#0d1628; color:#text; color:var(--text); cursor:pointer }
+    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid var(--line); border-radius:12px; background:#0d1628; color:#fff; cursor:pointer }
     @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width:899px){
       .tp-brand img{ height:34px; width:34px }
-      .tp-nav{ position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45); transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease }
+      .tp-nav{ position:fixed; top:var(--header-h); left:0; right:0; background:#0c1424; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45); transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
     }
 
     /* HERO (cohérent Verify) */
-    .tp-hero{ padding:calc(96px + var(--safe-top)) 20px 18px; max-width:1100px; margin:0 auto }
+    .tp-hero{ padding:calc(var(--header-h) + 32px + var(--safe-top)) 20px 18px; max-width:1100px; margin:0 auto }
     .tp-hero__icon{ font-size:2rem; line-height:1; margin-bottom:6px }
     .tp-hero__kicker{ color:#a8c5d6; letter-spacing:.3px; font-size:.95rem; margin:0 }
     #page-title{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900 }
@@ -134,8 +145,8 @@ upgrade-insecure-requests">
 
     /* Layout content */
     main{ padding:10px 20px calc(40px + var(--safe-btm)); max-width:1100px; margin:0 auto }
-    h2{ font-size:clamp(1.25rem,2.6vw,1.6rem); margin:1.6em 0 .5em; color:#b9e7f5; scroll-margin-top:96px }
-    h3{ font-size:1.1rem; margin:.2em 0 .4em; color:#b9e7f5; scroll-margin-top:96px }
+    h2{ font-size:clamp(1.25rem,2.6vw,1.6rem); margin:1.6em 0 .5em; color:#b9e7f5 }
+    h3{ font-size:1.1rem; margin:.2em 0 .4em; color:#b9e7f5 }
 
     .grid{ display:grid; gap:16px }
     @media(min-width:900px){ .grid.two{ grid-template-columns:1fr 1fr } .grid.three{ grid-template-columns:1fr 1fr 1fr } }
@@ -235,8 +246,7 @@ upgrade-insecure-requests">
 async function sha256Hex(str){
   const buf = new TextEncoder().encode(str);
   const digest = await crypto.subtle.digest('SHA-256', buf);
-  return [...new Uint8Array(digest)]
-    .map(b=>b.toString(16).padStart(2,'0')).join('');
+  return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
 }
 const API="https://api.timeproofs.io/api";
 const hash=await sha256Hex(output);
@@ -302,8 +312,7 @@ await fetch(`${API}/timestamp`,{
 async function sha256FileHex(file){
   const buf=await file.arrayBuffer();
   const digest=await crypto.subtle.digest('SHA-256', buf);
-  return [...new Uint8Array(digest)]
-    .map(b=>b.toString(16).padStart(2,'0')).join('');
+  return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
 }
 const API="https://api.timeproofs.io/api";
 const fileHash=await sha256FileHex(file);
@@ -366,7 +375,7 @@ await fetch(`${API}/timestamp`,{
     </div>
 
     <!-- Adoption reasons -->
-    <section id="why-adopt" style="margin-top:26px" aria-labelledby="adopt-title">
+    <section id="why-adopt" aria-labelledby="adopt-title" style="margin-top:26px">
       <h2 id="adopt-title">Why teams adopt it quickly</h2>
       <div class="grid two">
         <article class="card">
@@ -383,7 +392,7 @@ await fetch(`${API}/timestamp`,{
     </section>
 
     <!-- Why not blockchain -->
-    <section id="why-not" style="margin-top:26px" aria-labelledby="why-not-title">
+    <section id="why-not" aria-labelledby="why-not-title" style="margin-top:26px">
       <h2 id="why-not-title">Why not blockchain?</h2>
       <div class="card" role="region" aria-label="Comparison">
         <div class="table-wrap">
@@ -408,7 +417,7 @@ await fetch(`${API}/timestamp`,{
     </section>
 
     <!-- Page proof -->
-    <section id="page-proof" style="margin-top:26px" aria-labelledby="page-proof-title" class="card" role="region">
+    <section id="page-proof" class="card" role="region" aria-labelledby="page-proof-title" style="margin-top:26px">
       <h2 id="page-proof-title">This page is verified by TimeProofs</h2>
       <p>Release: <code>TP-UseCases-v0.1</code> · Hash:
         <code id="uc-proof-hash">3d8f5a1c9f6b4a6f2f1c8e7b0d4c3a2f9b8e7d6c5b4a3928173645f0e1d2c3b4</code>
@@ -476,7 +485,13 @@ await fetch(`${API}/timestamp`,{
       function toggleMenu(){ (nav.getAttribute('data-state')==='open')?closeMenu():openMenu(); }
       burger.addEventListener('click', toggleMenu, { passive:true });
       document.addEventListener('click', (e)=>{ if(window.matchMedia('(min-width:900px)').matches) return; if(!e.target.closest('.tp-header')&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
-      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu(); if(e.key==='Tab'&&nav.getAttribute('data-state')==='open'){ const f=nav.querySelectorAll('a,button,[tabindex]:not([tabindex="-1"])'); if(!f.length) return; const first=f[0], last=f[f.length-1]; if(e.shiftKey && document.activeElement===first){ last.focus(); e.preventDefault(); } else if(!e.shiftKey && document.activeElement===last){ first.focus(); e.preventDefault(); } } }, { passive:false });
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu();
+        if(e.key==='Tab'&&nav.getAttribute('data-state')==='open'){
+          const f=nav.querySelectorAll('a,button,[tabindex]:not([tabindex="-1"])'); if(!f.length) return;
+          const first=f[0], last=f[f.length-1];
+          if(e.shiftKey && document.activeElement===first){ last.focus(); e.preventDefault(); }
+          else if(!e.shiftKey && document.activeElement===last){ first.focus(); e.preventDefault(); }
+        } }, { passive:false });
       window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width:900px)').matches) closeMenu(); }, { passive:true });
     })();
 
@@ -497,23 +512,6 @@ await fetch(`${API}/timestamp`,{
             setTimeout(()=>btn.textContent='Copy', 1200);
           });
         }, { passive:true });
-      });
-    })();
-
-    // Anchor offset fix (au cas où le navigateur ignore scroll-padding-top)
-    (function(){
-      const OFFSET = 88; // header height compensation
-      document.querySelectorAll('a[href^="#"]').forEach(a=>{
-        a.addEventListener('click',e=>{
-          const id=a.getAttribute('href').slice(1);
-          const el=document.getElementById(id);
-          if(el){
-            e.preventDefault();
-            const y = el.getBoundingClientRect().top + window.pageYOffset - OFFSET;
-            window.scrollTo({ top:y, behavior:'smooth' });
-            history.replaceState(null,'',`#${id}`);
-          }
-        }, { passive:false });
       });
     })();
 
