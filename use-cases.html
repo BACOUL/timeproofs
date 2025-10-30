@@ -111,7 +111,7 @@ upgrade-insecure-requests">
     .tp-nav{ margin-left:auto }
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block }
     .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
-    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid var(--line); border-radius:12px; background:#0d1628; color:var(--text); cursor:pointer }
+    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid var(--line); border-radius:12px; background:#0d1628; color:#text; color:var(--text); cursor:pointer }
     @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width:899px){
       .tp-brand img{ height:34px; width:34px }
@@ -208,7 +208,7 @@ upgrade-insecure-requests">
     <p class="tp-hero__lead">Hash locally. Timestamp via API. Verify publicly — for AI, legal, and security workflows.</p>
   </section>
 
-  <!-- TOC sticky inline -->
+  <!-- TOC -->
   <nav class="toc" role="navigation" aria-label="Table of contents">
     <a href="#ai-output">AI output provenance</a>
     <a href="#ai-prompt">Prompt & chain integrity</a>
@@ -497,6 +497,23 @@ await fetch(`${API}/timestamp`,{
             setTimeout(()=>btn.textContent='Copy', 1200);
           });
         }, { passive:true });
+      });
+    })();
+
+    // Anchor offset fix (au cas où le navigateur ignore scroll-padding-top)
+    (function(){
+      const OFFSET = 88; // header height compensation
+      document.querySelectorAll('a[href^="#"]').forEach(a=>{
+        a.addEventListener('click',e=>{
+          const id=a.getAttribute('href').slice(1);
+          const el=document.getElementById(id);
+          if(el){
+            e.preventDefault();
+            const y = el.getBoundingClientRect().top + window.pageYOffset - OFFSET;
+            window.scrollTo({ top:y, behavior:'smooth' });
+            history.replaceState(null,'',`#${id}`);
+          }
+        }, { passive:false });
       });
     })();
 
