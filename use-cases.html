@@ -87,19 +87,15 @@ upgrade-insecure-requests">
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
       --safe-top:env(safe-area-inset-top,0px); --safe-btm:env(safe-area-inset-bottom,0px);
-      --header-h:64px; /* header fixed height */
-      --anchor-offset:calc(var(--header-h) + 28px); /* offset for anchors */
+      --header-h:64px;
+      --anchor-offset:calc(var(--header-h) + 28px);
     }
     *{ box-sizing:border-box }
     html,body{ margin:0; height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); color:var(--text) }
-    html{
-      scroll-behavior:smooth;
-      scroll-padding-top:var(--anchor-offset); /* évite titres masqués au scroll-to */
-    }
+    html{ scroll-behavior:smooth; scroll-padding-top:var(--anchor-offset) }
     @media (max-width:899px){
       :root{ --header-h:72px; --anchor-offset:calc(var(--header-h) + 34px) }
     }
-    /* Assure l’offset sur toute cible d’ancre, même si l’id est porté par <article> */
     [id]{ scroll-margin-top:var(--anchor-offset) }
 
     body{
@@ -131,7 +127,7 @@ upgrade-insecure-requests">
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
     }
 
-    /* HERO (cohérent Verify) */
+    /* HERO */
     .tp-hero{ padding:calc(var(--header-h) + 32px + var(--safe-top)) 20px 18px; max-width:1100px; margin:0 auto }
     .tp-hero__icon{ font-size:2rem; line-height:1; margin-bottom:6px }
     .tp-hero__kicker{ color:#a8c5d6; letter-spacing:.3px; font-size:.95rem; margin:0 }
@@ -172,7 +168,7 @@ upgrade-insecure-requests">
     th, td{ text-align:left; padding:8px; border-bottom:1px solid #1e2a44 }
     caption{ text-align:left; padding:8px 0; color:#cfe3ff }
 
-    /* Footer (identique Home/Verify) */
+    /* Footer */
     footer{ border-top:1px solid var(--line); margin-top:42px; padding:20px; color:#7c8aa5; text-align:center }
     footer .links a{ color:#a7b7cc; text-decoration:none; margin:0 8px } footer .links a:hover{ color:var(--accent) }
     .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
@@ -181,7 +177,6 @@ upgrade-insecure-requests">
     .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; color:#cfefff; transition:transform .18s ease }
     .social a:hover{ transform:translateY(-2px) }
 
-    /* a11y focus */
     a:focus-visible, .cta:focus-visible, .tp-burger:focus-visible, .copy-btn:focus-visible{ outline:2px solid #22d3ee; outline-offset:3px; border-radius:8px }
     @media (prefers-reduced-motion: reduce){ *{ transition:none !important; animation:none !important } }
   </style>
@@ -211,7 +206,7 @@ upgrade-insecure-requests">
     </button>
   </header>
 
-  <!-- ===== HERO (comme Verify) ===== -->
+  <!-- ===== HERO ===== -->
   <section class="tp-hero" role="region" aria-labelledby="page-title">
     <div class="tp-hero__icon" aria-hidden="true">🧩</div>
     <p class="tp-hero__kicker">Use Cases · Privacy-first · No blockchain</p>
@@ -419,15 +414,16 @@ await fetch(`${API}/timestamp`,{
     <!-- Page proof -->
     <section id="page-proof" class="card" role="region" aria-labelledby="page-proof-title" style="margin-top:26px">
       <h2 id="page-proof-title">This page is verified by TimeProofs</h2>
-      <p>Release: <code>TP-UseCases-v0.1</code> · Hash:
-        <code id="uc-proof-hash">3d8f5a1c9f6b4a6f2f1c8e7b0d4c3a2f9b8e7d6c5b4a3928173645f0e1d2c3b4</code>
-        · <a id="uc-proof-link" href="https://api.timeproofs.io/api/verify?hash=3d8f5a1c9f6b4a6f2f1c8e7b0d4c3a2f9b8e7d6c5b4a3928173645f0e1d2c3b4" target="_blank" rel="noopener">Verify</a>
+      <p>
+        Release: <code>TP-UseCases-v0.1</code> ·
+        Hash: <code id="uc-proof-hash">2caa895ed2b7444e2073e39849c581947228e160d1af02fdde1e0405790bb87</code> ·
+        <a id="uc-proof-link" href="https://api.timeproofs.io/api/verify?hash=2caa895ed2b7444e2073e39849c581947228e160d1af02fdde1e0405790bb87" target="_blank" rel="noopener">Verify</a>
       </p>
-      <p class="mini">Replace with the actual page hash at release time.</p>
+      <p class="mini">Timestamp created via TimeProofs API (public, privacy-first, no blockchain).</p>
     </section>
   </main>
 
-  <!-- ===== Footer (identique Home/Verify) ===== -->
+  <!-- ===== Footer ===== -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
@@ -485,13 +481,15 @@ await fetch(`${API}/timestamp`,{
       function toggleMenu(){ (nav.getAttribute('data-state')==='open')?closeMenu():openMenu(); }
       burger.addEventListener('click', toggleMenu, { passive:true });
       document.addEventListener('click', (e)=>{ if(window.matchMedia('(min-width:900px)').matches) return; if(!e.target.closest('.tp-header')&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
-      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu();
+      document.addEventListener('keydown', (e)=>{
+        if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu();
         if(e.key==='Tab'&&nav.getAttribute('data-state')==='open'){
           const f=nav.querySelectorAll('a,button,[tabindex]:not([tabindex="-1"])'); if(!f.length) return;
           const first=f[0], last=f[f.length-1];
           if(e.shiftKey && document.activeElement===first){ last.focus(); e.preventDefault(); }
           else if(!e.shiftKey && document.activeElement===last){ first.focus(); e.preventDefault(); }
-        } }, { passive:false });
+        }
+      }, { passive:false });
       window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width:900px)').matches) closeMenu(); }, { passive:true });
     })();
 
