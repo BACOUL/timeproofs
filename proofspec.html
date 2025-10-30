@@ -6,14 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta name="color-scheme" content="dark light"/>
   <title>Protocol (ProofSpec) — TimeProofs</title>
-  <meta name="description" content="ProofSpec — public spec of the TimeProofs protocol: how to create, sign, timestamp, and verify proofs of existence. Privacy-first, edge-native, interoperable."/>
+  <meta name="description" content="ProofSpec defines how to create, sign, timestamp, and verify proofs of existence — privacy-first, edge-native, interoperable."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <link rel="canonical" href="https://timeproofs.io/proofspec.html"/>
 
-  <!-- Perf -->
+  <!-- Perf (v0.1) -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
+  <link rel="dns-prefetch" href="//api.timeproofs.io"/>
   <link rel="preload" as="image" href="/logo%20(1).png" fetchpriority="high"/>
 
   <!-- Icons / Manifest -->
@@ -37,9 +38,14 @@
   <meta name="twitter:description" content="Interoperable, privacy-first digital proof of existence."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
-  <!-- JSON-LD -->
+  <!-- JSON-LD (TechArticle + Breadcrumb) -->
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"TechArticle","headline":"Protocol (ProofSpec) — TimeProofs","about":["timestamping","data integrity","hashing","verification","interoperability"],"author":{"@type":"Organization","name":"TimeProofs Editorial"},"publisher":{"@type":"Organization","name":"TimeProofs","logo":{"@type":"ImageObject","url":"https://timeproofs.io/logo%20(1).png"}},"datePublished":"2025-10-30","version":"1.0.0-draft","url":"https://timeproofs.io/proofspec.html"}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://timeproofs.io/"},
+    {"@type":"ListItem","position":2,"name":"Protocol (ProofSpec)","item":"https://timeproofs.io/proofspec.html"}]}
   </script>
 
   <!-- CSP unifiée v0.1 -->
@@ -57,14 +63,13 @@
     upgrade-insecure-requests;
   ">
 
-  <!-- Styles (Squelette v0.1 unifié) -->
+  <!-- Styles — Squelette v0.1 -->
   <style>
     :root{
       --bg:#0B1020; --panel:#0F172A; --line:#1E293B;
       --text:#F8FAFC; --muted:#94A3B8; --accent:#22D3EE;
       --ok:#22C55E; --warn:#F59E0B; --info:#7DD3FC;
-      --max:1120px; --radius:14px; --header-h:64px;
-      --anchor:calc(var(--header-h) + 28px);
+      --max:1120px; --radius:14px; --header-h:64px; --anchor:calc(var(--header-h) + 28px);
     }
     *{box-sizing:border-box}
     html,body{margin:0;height:100%;max-width:100%;overflow-x:hidden;background:var(--bg);color:var(--text)}
@@ -83,7 +88,7 @@
     .skip{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
     .skip:focus{position:fixed;left:12px;top:12px;padding:8px 12px;background:#0d2330;color:#bff1ff;border:1px solid #214a57;border-radius:8px;z-index:2000}
 
-    /* Header identique (logo+texte à gauche) */
+    /* Header identique (logo + “TimeProofs” à gauche) */
     .tp-header{position:fixed;inset:0 0 auto 0;height:var(--header-h);z-index:1000;background:rgba(11,16,32,.55);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 16px;transition:background .25s ease}
     .tp-header.scrolled{background:rgba(11,16,32,.88)}
     .tp-brand{display:flex;align-items:center;gap:10px;color:var(--text);font-weight:900;letter-spacing:.2px;font-size:1.08rem;text-decoration:none;margin-right:auto}
@@ -101,25 +106,24 @@
       .tp-nav[data-state="open"]{transform:translateY(0);opacity:1;pointer-events:auto}
     }
 
-    /* HERO unifié (📘) */
+    /* HERO uniforme */
     .tp-hero{padding:calc(var(--header-h) + 32px) 20px 18px;max-width:var(--max);margin:0 auto}
     .tp-hero__icon{font-size:2rem;line-height:1;margin-bottom:6px}
     .tp-hero__kicker{color:#a8c5d6;letter-spacing:.3px;font-size:.95rem;margin:0}
     #page-title{font-size:clamp(1.9rem,4.5vw,2.2rem);margin:.2em 0 .4em;font-weight:900}
     .tp-hero__lead{color:var(--muted);max-width:880px;line-height:1.7;margin:0}
 
-    /* Layout */
+    /* Layout & cards */
     main{padding:10px 20px calc(40px + env(safe-area-inset-bottom,0px));max-width:var(--max);margin:0 auto}
     h2{color:#b9e7f5;margin:1.6em 0 .6em;font-size:1.35rem}
     h3{color:#aee9f7;margin:1.1em 0 .4em;font-size:1.05rem}
     .muted{color:var(--muted)}
     .card{background:#0c1424;border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin:16px 0}
     .panel{background:#0b1220;border:1px solid #1f2937;border-radius:12px;padding:14px}
-
     .two{display:grid;gap:14px;grid-template-columns:1fr}
     @media(min-width:900px){.two{grid-template-columns:1fr 1fr}}
 
-    /* Code */
+    /* Code blocks */
     pre{background:#0b1220;border:1px solid #1f2937;color:#e5e7eb;border-radius:10px;padding:12px;overflow:auto;white-space:pre;position:relative}
     @media(max-width:899px){pre{white-space:pre-wrap;word-break:break-word}}
     code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:.95em;overflow-wrap:anywhere;word-break:break-word}
@@ -132,7 +136,7 @@
     th{background:#0b1426;color:#e5e7eb}
     tr:last-child td{border-bottom:none}
 
-    /* Footer */
+    /* Footer identique */
     footer{border-top:1px solid var(--line);margin-top:28px;padding:20px;color:#7c8aa5;text-align:center}
     footer .badges{display:flex;gap:8px;justify-content:center;margin:10px 0}
     footer .badge{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:#0d1628;font-size:.9rem;color:#cfefff}
@@ -157,6 +161,7 @@
       <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/><span>TimeProofs</span>
     </a>
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Primary">
+      <!-- ordre strict (mémoire v0.1) -->
       <a href="/proofspec.html" aria-current="page">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html">Create/Verify</a>
@@ -169,12 +174,12 @@
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
   </header>
 
-  <!-- HERO -->
+  <!-- HERO (modèle mémorisé) -->
   <section class="tp-hero" role="region" aria-labelledby="page-title">
     <div class="tp-hero__icon" aria-hidden="true">📘</div>
     <p class="tp-hero__kicker">Status: <strong>Draft for public review</strong> · Protocol · Privacy-first · No blockchain</p>
     <h1 id="page-title">Protocol (ProofSpec)</h1>
-    <p class="tp-hero__lead">Defines how to create, sign, timestamp, and verify proofs that a specific data artifact existed at a point in time and has not changed since — without exposing the original content.</p>
+    <p class="tp-hero__lead">Defines how to create, sign, timestamp, and verify proofs that a specific data artifact existed at a point in time and has not changed since, without exposing the original content.</p>
   </section>
 
   <main id="main" role="main" aria-describedby="page-title">
@@ -219,8 +224,8 @@
           <h3>Core flow</h3>
           <ol>
             <li>Hash input <em>M</em> with SHA-256 → <code>hash</code> (64-hex).</li>
-            <li>Submit <code>hash</code> (+ optional <code>meta</code>) → receive signed proof.</li>
-            <li>Verify signature and hash equality; apply time policy on <code>ts</code> if needed.</li>
+            <li>POST <code>hash</code> (+ optional <code>meta</code>) → receive signed proof.</li>
+            <li>Verify signature and equality; apply time policy on <code>ts</code> if needed.</li>
           </ol>
         </div>
       </div>
@@ -272,16 +277,16 @@
     <!-- 5. Algorithms -->
     <section class="card" id="algorithms" aria-labelledby="h-algo">
       <h2 id="h-algo">5) Algorithms</h2>
-      <h3>5.1 Hashing</h3><p>SHA-256 (text = UTF-8). Emit lowercase 64-hex.</p>
-      <h3>5.2 Signing</h3><p>HMAC-SHA256 with service key <code>kid</code>. Message:</p>
+      <h3>5.1 Hashing</h3><p>SHA-256 (UTF-8). Emit lowercase 64-hex.</p>
+      <h3>5.2 Signing</h3><p>HMAC-SHA256 with service key referenced by <code>kid</code>. Message:</p>
       <div class="panel"><code>message = `${hash}|${ts}`</code></div>
       <h3>5.3 Verification</h3>
       <ol>
         <li>Recompute <code>hash</code> from input; compare to proof.</li>
-        <li>Verify <code>sig</code> against <code>kid</code> policy; check <code>spec</code>/<code>alg</code>.</li>
-        <li>Apply time policy on <code>ts</code> if applicable.</li>
+        <li>Verify <code>sig</code> against the key policy for <code>kid</code>.</li>
+        <li>Validate <code>spec</code>/<code>alg</code> and timestamp policy.</li>
       </ol>
-      <p class="muted">Planned: add <code>Ed25519</code> profile in <code>proofspec/1.1</code> (non-breaking).</p>
+      <p class="muted">Planned: add <code>Ed25519</code> profile in <code>proofspec/1.1</code> (non-breaking enum extension).</p>
     </section>
 
     <!-- 6. Security & Privacy -->
@@ -290,9 +295,9 @@
       <ul>
         <li><strong>Hash-only</strong>: content never leaves the device.</li>
         <li><strong>No personal data</strong> in <code>meta</code>.</li>
-        <li><strong>Keys</strong>: rotate; bind <code>kid</code> to rotation policy (90–180 days suggested).</li>
+        <li><strong>Keys</strong>: rotation & revocation policy; bind via <code>kid</code>.</li>
         <li><strong>Clock</strong>: multi-source NTP; tolerance ≤ 5 s.</li>
-        <li><strong>Abuse</strong>: IP/key rate limiting; optional nonce in <code>meta</code>.</li>
+        <li><strong>Abuse</strong>: per-IP & per-key rate limiting; optional nonce.</li>
       </ul>
     </section>
 
@@ -304,16 +309,16 @@
           <thead><tr><th>Regulation</th><th>Relevance</th><th>ProofSpec signals</th></tr></thead>
           <tbody>
             <tr><td>EU AI Act</td><td>Traceability of AI outputs</td><td><code>hash</code>, signed <code>ts</code>, public verify</td></tr>
-            <tr><td>GDPR / UK GDPR</td><td>Data minimization</td><td>Hash-only; <code>meta</code> without personal data</td></tr>
+            <tr><td>GDPR / UK GDPR</td><td>Data minimization</td><td>Hash-only; no personal data in <code>meta</code></td></tr>
             <tr><td>EU Data Act</td><td>Portability / reversibility</td><td>Open format; BYOI</td></tr>
-            <tr><td>NIS2</td><td>Supply-chain integrity</td><td>Release proofs for artifacts/CI</td></tr>
+            <tr><td>NIS2</td><td>Release integrity</td><td>Proofs for artifacts / CI</td></tr>
           </tbody>
         </table>
       </div>
       <p class="muted">See also <a href="/regulations.html">Regulations & Compliance</a>.</p>
     </section>
 
-    <!-- 8. Document Proof -->
+    <!-- 8. Document Proof (hash mémorisé v0.1 home) -->
     <section class="card" id="proof" aria-labelledby="h-proof">
       <h2 id="h-proof">8) Document Proof</h2>
       <p>This page is cryptographically timestamped by TimeProofs.</p>
@@ -327,7 +332,7 @@
     <section class="card" id="versioning" aria-labelledby="h-ver">
       <h2 id="h-ver">9) Versioning</h2>
       <ul>
-        <li><code>spec</code> = <code>proofspec/MAJOR.MINOR</code> (MINOR = backward-compatible).</li>
+        <li><code>spec</code> = <code>proofspec/MAJOR.MINOR</code> (MINOR is backward-compatible).</li>
         <li>Status: <strong>1.0.0-draft</strong>. Changes tracked in <a href="#changelog">Changelog</a>.</li>
       </ul>
     </section>
@@ -380,9 +385,9 @@ kid  = "tp-admin-v0"</code></pre>
       <h2 id="h-faq">12) FAQ</h2>
       <h3>Is blockchain required?</h3><p>No. Standard hashing + signatures. Lower cost, higher privacy.</p>
       <h3>What does the timestamp guarantee?</h3><p>That the hash existed at or before the recorded time and matches unchanged content.</p>
-      <h3>What goes in <code>meta</code>?</h3><p>Optional context (e.g., <code>type</code>, <code>source</code>) — exclude personal data.</p>
+      <h3>What goes in <code>meta</code>?</h3><p>Optional context (e.g., <code>type</code>, <code>source</code>). Do not include personal data.</p>
       <h3>How are keys rotated?</h3><p>Each proof references a <code>kid</code>; rotation policy is published per <code>kid</code>.</p>
-      <h3>Can proofs be exported?</h3><p>Yes — use <code>.tproof.json</code> bundles for offline verification.</p>
+      <h3>Can proofs be exported?</h3><p>Yes — <code>.tproof.json</code> bundles for offline verification.</p>
     </section>
 
     <!-- 13. License -->
@@ -398,7 +403,7 @@ kid  = "tp-admin-v0"</code></pre>
     </section>
   </main>
 
-  <!-- Footer -->
+  <!-- Footer (ordre strict) -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
@@ -437,7 +442,7 @@ kid  = "tp-admin-v0"</code></pre>
     </div>
   </footer>
 
-  <!-- Scripts -->
+  <!-- Scripts (nonce TP-2025) -->
   <script defer nonce="TP-2025">
     // Header shade on scroll
     (function(){
@@ -460,8 +465,7 @@ kid  = "tp-admin-v0"</code></pre>
           const first=f[0], last=f[f.length-1];
           if(e.shiftKey && document.activeElement===first){ last.focus(); e.preventDefault(); }
           else if(!e.shiftKey && document.activeElement===last){ first.focus(); e.preventDefault(); }
-        }
-      }, { passive:false });
+        } }, { passive:false });
       window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width:900px)').matches) closeMenu(); }, { passive:true });
     })();
 
@@ -476,12 +480,12 @@ kid  = "tp-admin-v0"</code></pre>
     })();
 
     // Footer year
-    document.getElementById('y').textContent=new Date().getFullYear();
+    document.getElementById('y')?.textContent = new Date().getFullYear();
 
-    // Service Worker (module) — nonce TP-2025
+    // Service Worker (module)
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js', { type: 'module', scope: '/' }).catch(()=>{});
     }
   </script>
 </body>
-</html>
+                                                                    </html>
