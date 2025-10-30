@@ -5,14 +5,14 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <meta name="color-scheme" content="dark light"/>
-  <title>API Docs — TimeProofs · Timestamp & Verify API</title>
+  <title>API Docs — TimeProofs</title>
   <meta name="description" content="TimeProofs API — hash locally, timestamp via API, verify publicly. Privacy-first, edge-native, no blockchain."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <link rel="canonical" href="https://timeproofs.io/docs.html"/>
 
-  <!-- ===== Security (CSP unifiée) ===== -->
+  <!-- ===== Security (CSP unifiée v0.1) ===== -->
   <meta http-equiv="Content-Security-Policy" content="
 default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
 worker-src 'self' blob:;
@@ -40,7 +40,7 @@ upgrade-insecure-requests">
   <link rel="author" href="/humans.txt"/>
 
   <!-- ===== Social ===== -->
-  <meta property="og:title" content="API Docs — TimeProofs · Timestamp & Verify API"/>
+  <meta property="og:title" content="API Docs — TimeProofs"/>
   <meta property="og:description" content="Hash locally. Timestamp via API. Verify publicly. No blockchain."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/docs.html"/>
@@ -135,7 +135,7 @@ upgrade-insecure-requests">
     .copy-btn{ position:absolute; top:8px; right:8px; padding:6px 8px; border-radius:8px; border:1px solid #22455a; background:#0c1a2e; color:#cfefff; cursor:pointer; font-weight:700 }
 
     .table-wrap{ position:relative; width:100%; overflow:auto; -webkit-overflow-scrolling:touch }
-    table{ width:100%; border-collapse:collapse; margin:8px 0 0; min-width:640px }
+    table{ width:100%; border-collapse:collapse; margin:8px 0 0; min-width:680px }
     th,td{ border:1px solid #334155; padding:8px; text-align:left; vertical-align:top }
     th{ background:#0b1426; color:#e5e7eb }
 
@@ -143,7 +143,7 @@ upgrade-insecure-requests">
     .btn{ background:#111d33; color:#e2f6ff; border:1px solid var(--line); padding:8px 12px; border-radius:8px; font-weight:700; cursor:pointer; text-decoration:none }
     .btn:hover{ filter:brightness(1.05) }
 
-    /* Footer (identique Home/Verify) */
+    /* Footer (identique Home/Verify, ordre strict) */
     footer{ border-top:1px solid var(--line); margin-top:28px; padding:20px; color:#7c8aa5; text-align:center }
     footer .links a{ color:#a7b7cc; text-decoration:none; margin:0 8px } footer .links a:hover{ color:var(--accent) }
     .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
@@ -181,7 +181,7 @@ upgrade-insecure-requests">
   <!-- ===== HERO (unifié 📚) ===== -->
   <section class="tp-hero" role="region" aria-labelledby="page-title">
     <div class="tp-hero__icon" aria-hidden="true">📚</div>
-    <p class="tp-hero__kicker">Status: <strong>Public Beta</strong> · API · Privacy-first · No blockchain</p>
+    <p class="tp-hero__kicker">Status: <strong>Public Beta v0.1</strong> · API · Privacy-first · No blockchain</p>
     <h1 id="page-title">API Docs</h1>
     <p class="tp-hero__lead">Hash locally. Timestamp via API. Verify publicly. The universal proof layer for AI, data, and every digital artifact.</p>
   </section>
@@ -222,6 +222,7 @@ upgrade-insecure-requests">
           <tbody>
             <tr><td><a href="#ping"><code>/ping</code></a></td><td>GET</td><td>Healthcheck.</td><td>—</td><td>Yes</td><td>∞</td></tr>
             <tr><td><a href="#verify"><code>/verify?hash=…</code></a></td><td>GET</td><td>Returns timestamp + signature if proof exists.</td><td>—</td><td>Yes</td><td>60 rpm / IP</td></tr>
+            <tr><td><a href="#verify-post"><code>/verify</code></a></td><td>POST</td><td>Verify by JSON body (fallback / automation use).</td><td>—</td><td>Yes</td><td>60 rpm / IP</td></tr>
             <tr><td><a href="#timestamp"><code>/timestamp</code></a></td><td>POST</td><td>Create a proof for a SHA-256 hash.</td><td>Bearer</td><td>Yes (same hash)</td><td>30 rpm / token</td></tr>
           </tbody>
         </table>
@@ -241,10 +242,15 @@ upgrade-insecure-requests">
   -H "Content-Type: application/json" \
   -d '{"hash":"&lt;64-hex-sha256&gt;","meta":{"source":"docs"}}'</code></pre>
 
-      <h3>3) cURL — verify a proof</h3>
-      <pre id="curl-verify"><button class="copy-btn" aria-label="Copy code">Copy</button><code>curl -s "https://api.timeproofs.io/api/verify?hash=&lt;64-hex-sha256&gt;"</code></pre>
+      <h3>3) cURL — verify a proof (GET)</h3>
+      <pre id="curl-verify-get"><button class="copy-btn" aria-label="Copy code">Copy</button><code>curl -s "https://api.timeproofs.io/api/verify?hash=&lt;64-hex-sha256&gt;"</code></pre>
 
-      <h3>4) JavaScript (fetch)</h3>
+      <h3 id="verify-post">4) cURL — verify a proof (POST)</h3>
+      <pre id="curl-verify"><button class="copy-btn" aria-label="Copy code">Copy</button><code>curl -s -X POST https://api.timeproofs.io/api/verify \
+  -H "Content-Type: application/json" \
+  -d '{"hash":"&lt;64-hex-sha256&gt;"}'</code></pre>
+
+      <h3>5) JavaScript (fetch)</h3>
       <pre id="js-fetch"><button class="copy-btn" aria-label="Copy code">Copy</button><code>const res = await fetch("https://api.timeproofs.io/api/timestamp",{
   method:"POST",
   headers:{ "Authorization":"Bearer &lt;TOKEN&gt;","Content-Type":"application/json" },
@@ -252,7 +258,7 @@ upgrade-insecure-requests">
 });
 const proof = await res.json();</code></pre>
 
-      <h3>5) Node.js (verify HMAC)</h3>
+      <h3>6) Node.js (verify HMAC)</h3>
       <pre id="node-verify"><button class="copy-btn" aria-label="Copy code">Copy</button><code>import crypto from "node:crypto";
 function verify({ hash, ts, sig }, secret){
   const msg = `${hash}|${ts}`;
@@ -286,7 +292,7 @@ const hash = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,'0')
     <!-- Verify -->
     <section class="card" id="verify" aria-labelledby="verify-title">
       <h2 id="verify-title">🧾 Verify a proof</h2>
-      <p>Use <code>GET /verify?hash=…</code> or the public page to validate a proof (hash, timestamp, signature).</p>
+      <p>Use <code>GET /verify?hash=…</code> or <code>POST /verify</code> to validate a proof (hash, timestamp, signature).</p>
       <p class="lead">Signature format: <code>HMAC-SHA256(secret, `${hash}|${ts}`)</code>. Server clock: UTC with ±5 s tolerance.</p>
     </section>
 
@@ -397,13 +403,13 @@ const hash = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,'0')
       <a href="/">Home</a> •
       <a href="/proofspec.html">Protocol</a> •
       <a href="/use-cases.html">Use Cases</a> •
+      <a href="/verify.html">Create/Verify</a> •
       <a href="/docs.html" aria-current="page">API Docs</a> •
       <a href="/regulations.html">Regulations</a> •
       <a href="/.well-known/security.txt">Security.txt</a> •
       <a href="/privacy.html">Privacy</a> •
       <a href="/legal.html">Legal</a> •
-      <a href="/humans.txt">humans.txt</a> •
-      <a href="/rss.xml">RSS</a>
+      <a href="/humans.txt">humans.txt</a>
     </div>
     <div class="social" aria-label="Social links">
       <a href="https://x.com/timeproofs" target="_blank" rel="noopener me" aria-label="Follow @timeproofs on X">
@@ -493,4 +499,4 @@ const hash = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,'0')
     }
   </script>
 </body>
-</html>
+  </html>
