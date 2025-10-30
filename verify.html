@@ -47,7 +47,7 @@
   <!-- Security meta fallbacks -->
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()">
 
-  <!-- CSP v01 (SW + Analytics + API) -->
+  <!-- CSP v0.1 (SW + Analytics + API) -->
   <meta http-equiv="Content-Security-Policy" content="
 default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
 worker-src 'self' blob:;
@@ -82,7 +82,9 @@ upgrade-insecure-requests">
     html,body{ height:100%; max-width:100%; background:var(--bg) }
     body{
       margin:0;
-      background: radial-gradient(1000px 420px at 70% -10%, rgba(34,211,238,.10), transparent 60%), var(--bg);
+      background:
+        radial-gradient(1000px 420px at 70% -10%, rgba(34,211,238,.10), transparent 60%),
+        var(--bg);
       color:var(--text);
       font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
@@ -94,7 +96,7 @@ upgrade-insecure-requests">
     }
     a{ color:var(--accent); text-decoration:none } a:hover{ text-decoration:underline }
 
-    /* Header (identique à l'accueil) */
+    /* Header (identique au Home) */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:1000;
       padding-top: var(--safe-top);
@@ -130,12 +132,18 @@ upgrade-insecure-requests">
     }
 
     .wrap{ max-width:980px; margin:0 auto 40px; padding:0 }
-    h1{ margin:14px 0 8px; font-size:clamp(1.6rem, 4.5vw, 1.9rem) }
-    p.lead{ margin:0 0 22px; color:var(--muted) }
 
-    .tabs{ display:flex; gap:8px; margin:10px 0 18px; flex-wrap:wrap }
+    /* HERO uniforme */
+    .tp-hero{ margin-top:14px; padding:18px 0 12px; border-bottom:1px solid var(--line); text-align:left }
+    .tp-hero__icon{ font-size:1.6rem; line-height:1 }
+    .tp-hero__kicker{ color:#9fb3c9; margin:.3rem 0 .2rem }
+    .tp-hero__lead{ color:var(--muted); margin:.2rem 0 1rem; max-width:60ch }
+
+    h1{ margin:.2rem 0 .4rem; font-size:clamp(1.7rem, 4.6vw, 2rem); font-weight:900 }
+
+    .tabs{ display:flex; gap:8px; margin:14px 0 18px; flex-wrap:wrap }
     .tab{ padding:10px 14px; background:#0b1220; border:1px solid #1f2937; border-radius:10px; cursor:pointer; color:#cbd5e1 }
-    .tab.active{ background:var(--panel); color:var(--text); border-color:#263244 }
+    .tab[aria-selected="true"]{ background:var(--panel); color:var(--text); border-color:#263244 }
 
     .grid{ display:grid; grid-template-columns:1fr; gap:16px }
     @media(min-width:860px){ .grid{ grid-template-columns:1fr 1fr } }
@@ -189,14 +197,14 @@ upgrade-insecure-requests">
   <noscript><style>.reveal{opacity:1 !important; transform:none !important}</style></noscript>
 </head>
 <body>
-  <!-- Header (identique à l’accueil) -->
-  <header class="tp-header" role="navigation" aria-label="Main">
-    <a class="tp-brand" href="/index.html" aria-label="TimeProofs Home">
+  <!-- Header -->
+  <header class="tp-header" role="banner">
+    <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/logo%20(1).png" alt="TimeProofs logo" fetchpriority="high" decoding="async"/>
       <span>TimeProofs</span>
     </a>
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
-    <nav id="tp-nav" class="tp-nav" data-state="closed">
+    <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html" aria-current="page">Create/Verify</a>
@@ -208,12 +216,17 @@ upgrade-insecure-requests">
     </nav>
   </header>
 
-  <div class="wrap" id="main" role="main">
-    <h1>🔐 Verify & Create Proof</h1>
-    <p class="lead">Hash locally → timestamp & sign via API → verify publicly. No content ever leaves your device. (Max file: 50 MB)</p>
+  <main class="wrap" id="main" role="main">
+    <!-- HERO unifié -->
+    <section class="tp-hero" role="region" aria-labelledby="page-title">
+      <div class="tp-hero__icon" aria-hidden="true">🔐</div>
+      <p class="tp-hero__kicker">Status: <strong>Public Beta v0.1</strong> · Verify & Create · Privacy-first · No blockchain</p>
+      <h1 id="page-title">Verify & Create Proof</h1>
+      <p class="tp-hero__lead">Hash locally → timestamp & sign via API → verify publicly. Your content never leaves your device. <strong>Max file: 50&nbsp;MB</strong>.</p>
+    </section>
 
     <div class="tabs" role="tablist" aria-label="Create or Verify">
-      <button id="tab-create" class="tab active" role="tab" aria-selected="true" aria-controls="panel-create">Create Proof</button>
+      <button id="tab-create" class="tab" role="tab" aria-selected="true" aria-controls="panel-create">Create Proof</button>
       <button id="tab-verify" class="tab" role="tab" aria-selected="false" aria-controls="panel-verify">Verify Proof</button>
     </div>
 
@@ -290,9 +303,9 @@ upgrade-insecure-requests">
         </div>
       </section>
     </div>
-  </div>
+  </main>
 
-  <!-- Footer (identique à l’accueil) -->
+  <!-- Footer -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
@@ -301,7 +314,7 @@ upgrade-insecure-requests">
     </div>
     © 2025 TimeProofs — Reference implementation of the ProofSpec protocol.
     <div class="links" style="margin-top:6px">
-      <a href="/index.html">Home</a> •
+      <a href="/">Home</a> •
       <a href="/proofspec.html">Protocol</a> •
       <a href="/use-cases.html">Use Cases</a> •
       <a href="/verify.html" aria-current="page">Create/Verify</a> •
@@ -331,44 +344,21 @@ upgrade-insecure-requests">
     </div>
   </footer>
 
-  <!-- Header burger (robuste, identique à l’accueil) -->
+  <!-- Header burger -->
   <script defer nonce="TP-2025">
   document.addEventListener('DOMContentLoaded', function(){
     const burger = document.getElementById('tp-burger');
     const nav = document.getElementById('tp-nav');
     if(!burger || !nav) return;
 
-    function openMenu(){
-      nav.setAttribute('data-state','open');
-      burger.setAttribute('aria-expanded','true');
-      document.documentElement.style.overflow='hidden';
-    }
-    function closeMenu(){
-      nav.setAttribute('data-state','closed');
-      burger.setAttribute('aria-expanded','false');
-      document.documentElement.style.overflow='';
-    }
-    function toggleMenu(){
-      (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu();
-    }
+    function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.documentElement.style.overflow='hidden'; }
+    function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.documentElement.style.overflow=''; }
+    function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
 
     burger.addEventListener('click', toggleMenu, { passive:true });
-
-    // Ferme si on clique hors header (mobile uniquement)
-    document.addEventListener('click', (e)=>{
-      if (window.matchMedia('(min-width: 900px)').matches) return;
-      if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu();
-    }, { passive:true });
-
-    // ESC pour fermer
-    document.addEventListener('keydown', (e)=>{
-      if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu();
-    }, { passive:true });
-
-    // Ferme si on repasse en desktop
-    window.addEventListener('resize', ()=>{
-      if (window.matchMedia('(min-width: 900px)').matches) closeMenu();
-    }, { passive:true });
+    document.addEventListener('click', (e)=>{ if (window.matchMedia('(min-width: 900px)').matches) return; if (!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+    document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+    window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
   });
   </script>
 
@@ -383,7 +373,7 @@ upgrade-insecure-requests">
     })();
   </script>
 
-  <!-- App Scripts (inchangé) -->
+  <!-- App Scripts -->
   <script defer nonce="TP-2025">
     const API_BASES = [
       "https://api.timeproofs.io/api",
@@ -391,6 +381,25 @@ upgrade-insecure-requests">
     ];
     const MAX_FILE_BYTES = 50 * 1024 * 1024;
     const REQ_TIMEOUT_MS = 15000;
+
+    const panelCreate = document.getElementById('panel-create');
+    const panelVerify = document.getElementById('panel-verify');
+
+    // Tabs switching (fix: manquait)
+    (function tabs(){
+      const tCreate = document.getElementById('tab-create');
+      const tVerify = document.getElementById('tab-verify');
+      function act(which){
+        const isCreate = which==='create';
+        tCreate.setAttribute('aria-selected', isCreate?'true':'false');
+        tVerify.setAttribute('aria-selected', isCreate?'false':'true');
+        panelCreate.style.display = isCreate?'block':'none';
+        panelVerify.style.display = isCreate?'none':'block';
+      }
+      tCreate.addEventListener('click', ()=>act('create'));
+      tVerify.addEventListener('click', ()=>act('verify'));
+      act('create');
+    })();
 
     function withTimeout(options={}){
       const ctrl = new AbortController();
@@ -422,16 +431,18 @@ upgrade-insecure-requests">
       return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
     }
 
+    // Input mode toggles
     const chooseText = document.getElementById('choose-text');
     const chooseFile = document.getElementById('choose-file');
     const chooseHash = document.getElementById('choose-hash');
     const inputText = document.getElementById('input-text');
     const inputFile = document.getElementById('input-file');
     const inputHash = document.getElementById('input-hash');
-    chooseText.onclick = ()=>{ inputText.style.display='block'; inputFile.style.display='none'; inputHash.style.display='none'; }
-    chooseFile.onclick = ()=>{ inputText.style.display='none'; inputFile.style.display='block'; inputHash.style.display='none'; }
-    chooseHash.onclick = ()=>{ inputText.style.display='none'; inputFile.style.display='none'; inputHash.style.display='block'; }
+    chooseText.onclick = ()=>{ inputText.style.display='block'; inputFile.style.display='none'; inputHash.style.display='none'; };
+    chooseFile.onclick = ()=>{ inputText.style.display='none'; inputFile.style.display='block'; inputHash.style.display='none'; };
+    chooseHash.onclick = ()=>{ inputText.style.display='none'; inputFile.style.display='none'; inputHash.style.display='block'; };
 
+    // Live previews
     const textArea = document.getElementById('text');
     const hashPrevText = document.getElementById('hash-preview-text');
     const hashPrevFile = document.getElementById('hash-preview-file');
@@ -488,6 +499,7 @@ upgrade-insecure-requests">
     function fail(msg){ throw new Error(msg); }
     function setBusy(el, busy){ el?.setAttribute('aria-busy', busy ? 'true' : 'false'); }
 
+    // Create
     const btnCreate = document.getElementById('btn-create');
     const outCreate = document.getElementById('create-output');
     const statusCreate = document.getElementById('create-status');
@@ -512,7 +524,7 @@ upgrade-insecure-requests">
       copyCreateJSON.onclick = () => copyToClipboard(outCreate.textContent);
       copyCreateCURL.onclick = () => {
         const curlBody = JSON.stringify(req).replace(/'/g, "'\\''");
-        copyToClipboard(`curl -X POST 'https://api.timeproofs.io/api/timestamp' -H 'Content-Type: application/json' -d '${curlBody}'`);
+        copyToClipboard(`curl -sS -X POST 'https://api.timeproofs.io/api/timestamp' -H 'Content-Type: application/json' -d '${curlBody}'`);
       };
     }
 
@@ -572,6 +584,7 @@ upgrade-insecure-requests">
       }
     };
 
+    // Verify
     const btnVerify = document.getElementById('btn-verify');
     const outVerify = document.getElementById('verify-output');
     const statusVerify = document.getElementById('verify-status');
@@ -579,6 +592,7 @@ upgrade-insecure-requests">
     const copyVerifyJSON = document.getElementById('copy-verify-json');
     const copyVerifyCURL = document.getElementById('copy-verify-curl');
 
+    // Support ?hash=... auto-verify
     const params = new URLSearchParams(location.search);
     const preHash = params.get('hash');
     if (preHash && /^[a-f0-9]{64}$/i.test(preHash)) {
@@ -596,17 +610,28 @@ upgrade-insecure-requests">
         const hash = (document.getElementById('verify-hash').value || '').trim().toLowerCase();
         if (!/^[a-f0-9]{64}$/i.test(hash)) fail('Paste a valid 64-hex SHA-256 hash.');
 
-        const r = await fetchAPI(`/verify?hash=${encodeURIComponent(hash)}`);
-        const j = await r.json().catch(()=> ({}));
+        // Try GET first
+        let r = await fetchAPI(`/verify?hash=${encodeURIComponent(hash)}`);
+        let j = await r.json().catch(()=> ({}));
 
-        const ok = j.ok === true;
-        const found = j.found === true || j.verified === true || (ok && !!(j.timestamp || j.ts || j.signature || j.sig));
-        if (ok && found) statusVerify.innerHTML = `<span class="pill ok" role="status">✅ Valid</span>`;
+        // Fallback: POST /verify if GET doesn't return a decisive result
+        const decisive = (resp)=> (resp.ok===true) || resp.valid===true || resp.found===true || !!(resp.timestamp||resp.ts||resp.signature||resp.sig);
+        if (!decisive(j)) {
+          try{
+            r = await fetchAPI(`/verify`, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ hash }) });
+            j = await r.json().catch(()=> ({}));
+          }catch(_e){}
+        }
+
+        const okFlag = (j.ok===true) || (j.valid===true);
+        const found = (j.found===true) || okFlag || !!(j.timestamp||j.ts||j.signature||j.sig);
+
+        if (okFlag && found) statusVerify.innerHTML = `<span class="pill ok" role="status">✅ Valid</span>`;
         else if (j.error === 'not_found' || r.status === 404) statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Not found</span>`;
         else statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Invalid</span>`;
 
         const normalized = {
-          ok: ok, found: !!found,
+          ok: !!okFlag, found: !!found,
           hash: j.hash || hash,
           timestamp: j.timestamp || j.ts || null,
           signature: j.signature || j.sig || null,
@@ -617,7 +642,7 @@ upgrade-insecure-requests">
         verifyActions.style.display='flex';
         copyVerifyJSON.disabled=false; copyVerifyCURL.disabled=false;
         copyVerifyJSON.onclick = () => copyToClipboard(outVerify.textContent);
-        copyVerifyCURL.onclick = () => copyToClipboard(`curl 'https://api.timeproofs.io/api/verify?hash=${encodeURIComponent(hash)}'`);
+        copyVerifyCURL.onclick = () => copyToClipboard(`curl -sS 'https://api.timeproofs.io/api/verify?hash=${encodeURIComponent(hash)}'`);
       }catch(e){
         statusVerify.innerHTML = `<span class="pill bad" role="alert">❌ ${String(e.message || e)}</span>`;
       }finally{
@@ -633,4 +658,4 @@ upgrade-insecure-requests">
     }
   </script>
 </body>
-        </html>
+  </html>
