@@ -52,6 +52,9 @@
   <link rel="manifest" href="/site.webmanifest"/>
   <link rel="author" href="/humans.txt"/>
 
+  <!-- Analytics -->
+  <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
+
   <!-- JSON-LD -->
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"TechArticle","headline":"TimeProofs — Regulations & Compliance","about":["AI Act","Data Act","GDPR","privacy by design","auditability"],"author":{"@type":"Organization","name":"TimeProofs Editorial"},"publisher":{"@type":"Organization","name":"TimeProofs","logo":{"@type":"ImageObject","url":"https://timeproofs.io/logo%20(1).png"}},"datePublished":"2025-10-27","dateModified":"2025-10-27","url":"https://timeproofs.io/regulations.html"}
@@ -70,10 +73,13 @@
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
       --ok:#22c55e; --warn:#f59e0b; --info:#7dd3fc;
       --header-h:64px; --radius:14px; --max:1120px;
+      --anchor-offset:calc(var(--header-h) + 28px);
     }
+    @media (max-width:899px){ :root{ --header-h:72px; --anchor-offset:calc(var(--header-h) + 34px) } }
     *{ box-sizing:border-box }
     html,body{ margin:0; height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); color:var(--text) }
-    html{ scroll-behavior:smooth }
+    html{ scroll-behavior:smooth; scroll-padding-top:var(--anchor-offset) }
+    [id]{ scroll-margin-top:var(--anchor-offset) }
     body{
       font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
@@ -113,6 +119,13 @@
       }
       .tp-nav a{ margin:4px 0 } .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
     }
+
+    /* HERO (unifié) */
+    .tp-hero{ padding:calc(var(--header-h) + 32px) 20px 18px; max-width:var(--max); margin:0 auto }
+    .tp-hero__icon{ font-size:2rem; line-height:1; margin-bottom:6px }
+    .tp-hero__kicker{ color:#a8c5d6; letter-spacing:.3px; font-size:.95rem; margin:0 }
+    #page-title{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900 }
+    .tp-hero__lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 }
 
     /* Layout */
     .wrap{ max-width:var(--max); margin:0 auto; padding:24px }
@@ -169,6 +182,14 @@
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
   </header>
 
+  <!-- HERO unifié 🛡️ -->
+  <section class="tp-hero" role="region" aria-labelledby="page-title">
+    <div class="tp-hero__icon" aria-hidden="true">🛡️</div>
+    <p class="tp-hero__kicker">Status: <strong>Public Draft</strong> · Regulations · Privacy-first · No blockchain</p>
+    <h1 id="page-title">Regulations & Compliance</h1>
+    <p class="tp-hero__lead">Global legal readiness and compliance-by-design for TimeProofs. EU/US/UK/Canada/Brazil/Japan/Australia/Singapore/India.</p>
+  </section>
+
   <!-- Ancien header préservé via template (pas d’affichage) -->
   <template id="__original_header_preserved__">
     <header class="wrap" role="banner">
@@ -183,13 +204,7 @@
   </nav>
 
   <main id="main" class="wrap" role="main">
-    <section aria-label="Intro">
-      <h1>Regulations & Compliance</h1>
-      <p class="lead">Global view. Updated <time datetime="2025-10-27">Oct 27, 2025</time>.</p>
-    </section>
-
-    <!-- 1. Overview -->
-    <section class="card">
+    <section aria-label="Intro" class="card">
       <h2>1) Overview</h2>
       <p><strong>TimeProofs</strong> is a <strong>privacy-first, stateless, interoperable</strong> proof-of-existence protocol and API. Hashing occurs locally; proofs are timestamped and publicly verifiable. No blockchain.</p>
       <p>Goal: lawful, ethical, portable proofs across jurisdictions. No personal data required by default. Minimal logs.</p>
@@ -476,14 +491,15 @@
       <p class="muted">Informational only. Not legal advice.</p>
     </section>
 
-    <!-- 9. Document Proof -->
-    <section class="card">
-      <h2>9) Document Proof</h2>
-      <p>This page is cryptographically timestamped by TimeProofs.</p>
+    <!-- 9. Document Proof (placeholder jusqu’à release) -->
+    <section class="card" id="page-proof" aria-labelledby="page-proof-title">
+      <h2 id="page-proof-title">9) Document Proof</h2>
+      <p>This page will be cryptographically timestamped by TimeProofs at release.</p>
       <p>Hash:
-        <code>7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2</code> ·
-        <a href="/verify.html?hash=7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2" rel="noopener">Verify</a>
+        <code id="reg-proof-hash">PUT_REAL_HASH</code> ·
+        <a id="reg-proof-link" href="https://api.timeproofs.io/api/verify?hash=PUT_REAL_HASH" rel="noopener" target="_blank">Verify</a>
       </p>
+      <p class="muted">Replace with the actual page hash when v0.1 is sealed.</p>
     </section>
   </main>
 
@@ -518,7 +534,7 @@
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg>
       </a>
       <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="YouTube">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.5s-.2-1.6-.8-2.3c-.8-.8-1.7-.8-2.1-.9C16.8 4 12 4 12 4s-4.8 0-8.1.3c-.4 0-1.3 0-2.1.9C1.2 5.9 1 7.5 1 7.5S.8 9.3.8 11v2c0 1.7.2 3.5.2 3.5s.2 1.6.8 2.3c.8.8 1.9.8 2.4.9C6.2 19.9 12 20 12 20s4.8 0 8.1-.3c.4 0 1.3 0 2.1-.9.6-.7.8-2.3.8-2.3s.2-1.8.2-3.5v-2c0-1.7-.2-3.5-.2-3.5ZM9.8 15.5v-7l6.2 3.5-6.2 3.5Z"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.5s-.2-1.6-.8-2.3c-.8-.8-1.7-.8-2.1-.9C16.8 4 12 4 12 4s-4.8 0 8.1.3c.4 0 1.3 0 2.1-.9.6-.7.8-2.3.8-2.3s.2-1.8.2-3.5v-2c0-1.7-.2-3.5-.2-3.5ZM9.8 15.5v-7l6.2 3.5-6.2 3.5Z"/></svg>
       </a>
       <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/></svg>
@@ -535,6 +551,8 @@
 
   <!-- Scripts -->
   <script defer nonce="TP-2025">
+    document.documentElement.classList.add('js');
+
     // Header shade on scroll
     (function(){
       const hdr=document.getElementById('hdr');
@@ -553,7 +571,7 @@
       window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width:900px)').matches) closeMenu(); }, { passive:true });
     })();
 
-    // Wrap all tables if not already wrapped
+    // Auto-wrap tables
     (function(){
       document.querySelectorAll('table').forEach(tb=>{
         if(tb.parentElement && tb.parentElement.classList.contains('table-wrap')) return;
@@ -564,6 +582,18 @@
 
     // Footer year
     document.getElementById('y').textContent=new Date().getFullYear();
+
+    // Page proof link autocorrect (placeholder-safe)
+    (function(){
+      const h=document.getElementById('reg-proof-hash');
+      const a=document.getElementById('reg-proof-link');
+      if(h&&a){
+        const v=h.textContent.trim();
+        if(v && !v.startsWith('PUT_')){
+          a.href='https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(v);
+        }
+      }
+    })();
   </script>
 </body>
-                                                                                                                   </html>
+          </html>
