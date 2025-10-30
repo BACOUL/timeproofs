@@ -26,7 +26,7 @@
   <meta name="twitter:description" content="Privacy-first. Stateless. Open verification. See the regulatory matrix."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
-  <!-- Perf & Security (CSP unifiée site) -->
+  <!-- Perf & Security (CSP unifiée) -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin />
   <link rel="dns-prefetch" href="//api.timeproofs.io" />
   <link rel="preload" as="image" href="/logo%20(1).png" fetchpriority="high"/>
@@ -45,15 +45,15 @@
     upgrade-insecure-requests;
   ">
 
+  <!-- Analytics -->
+  <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
+
   <!-- Icons / Manifest -->
   <link rel="icon" href="/favicon.ico" sizes="any"/>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
   <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
   <link rel="manifest" href="/site.webmanifest"/>
   <link rel="author" href="/humans.txt"/>
-
-  <!-- Analytics -->
-  <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
   <!-- JSON-LD -->
   <script type="application/ld+json">
@@ -72,10 +72,8 @@
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
       --ok:#22c55e; --warn:#f59e0b; --info:#7dd3fc;
-      --header-h:64px; --radius:14px; --max:1120px;
-      --anchor-offset:calc(var(--header-h) + 28px);
+      --header-h:64px; --radius:14px; --max:1120px; --anchor-offset:calc(var(--header-h) + 28px);
     }
-    @media (max-width:899px){ :root{ --header-h:72px; --anchor-offset:calc(var(--header-h) + 34px) } }
     *{ box-sizing:border-box }
     html,body{ margin:0; height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); color:var(--text) }
     html{ scroll-behavior:smooth; scroll-padding-top:var(--anchor-offset) }
@@ -83,8 +81,7 @@
     body{
       font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-      text-rendering:optimizeLegibility;
-      padding-top:var(--header-h);
+      text-rendering:optimizeLegibility; padding-top:var(--header-h);
       background:
         radial-gradient(1200px 520px at 80% -10%, rgba(34,211,238,.08), transparent 60%),
         conic-gradient(from 220deg at 10% -20%, rgba(34,211,238,.04), transparent 30%),
@@ -92,49 +89,44 @@
     }
     a{ color:var(--accent); text-decoration:none } a:hover{ text-decoration:underline }
 
-    /* Skip link */
+    /* a11y */
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
     .skip:focus{ position:fixed; left:12px; top:12px; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
 
     /* Header identique site */
-    .tp-header{
-      position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:1000;
-      background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
-      display:flex; align-items:center; justify-content:space-between; padding:0 16px; transition:background .25s ease;
-    }
+    .tp-header{ position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:1000; background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 16px; transition:background .25s ease }
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
-    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none }
+    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
     .tp-brand img{ height:40px; width:40px; object-fit:contain; vertical-align:middle }
     .tp-nav{ margin-left:auto }
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block; text-decoration:none }
     .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
-    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid var(--line); border-radius:12px; background:#0d1628; color:var(--text); cursor:pointer }
+    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid var(--line); border-radius:12px; background:#0d1628; color:#fff; cursor:pointer }
     @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width:899px){
       .tp-brand img{ height:34px; width:34px }
-      .tp-nav{
-        position:fixed; top:var(--header-h); left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
-        display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
-        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
-      }
-      .tp-nav a{ margin:4px 0 } .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
+      .tp-nav{ position:fixed; top:var(--header-h); left:0; right:0; background:#0c1424; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45); transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease }
+      .tp-nav a{ margin:4px 0 }
+      .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
     }
 
-    /* HERO (unifié) */
-    .tp-hero{ padding:calc(var(--header-h) + 32px) 20px 18px; max-width:var(--max); margin:0 auto }
+    /* HERO unifié */
+    .tp-hero{ padding:calc(var(--header-h) + 32px) 20px 18px; max-width:1100px; margin:0 auto }
     .tp-hero__icon{ font-size:2rem; line-height:1; margin-bottom:6px }
     .tp-hero__kicker{ color:#a8c5d6; letter-spacing:.3px; font-size:.95rem; margin:0 }
     #page-title{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900 }
     .tp-hero__lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 }
 
-    /* Layout */
-    .wrap{ max-width:var(--max); margin:0 auto; padding:24px }
-    .crumb{ margin:80px 16px 8px; color:#a8c5d6; font-size:.95rem }
-    h1{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900 }
+    /* TOC chips */
+    .toc{ max-width:1100px; margin:14px auto 0; padding:12px; background:#0c1424; border:1px solid var(--line); border-radius:12px; display:flex; flex-wrap:wrap; gap:8px }
+    .toc a{ padding:6px 10px; border-radius:10px; color:#cfe7ff } .toc a:hover{ background:#0d2330 }
+
+    /* Content */
+    main{ padding:10px 20px calc(40px + env(safe-area-inset-bottom,0px)); max-width:1100px; margin:0 auto }
     h2{ color:#b9e7f5; margin:1.6em 0 .6em; font-size:1.35rem }
     h3{ color:#aee9f7; margin:1.1em 0 .4em; font-size:1.05rem }
     .lead,.muted{ color:var(--muted) }
-    .card{ background:#0c1424; border:1px solid var(--line); border-radius:var(--radius); padding:18px; margin:16px 0 }
+    .card{ background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px; margin:16px 0 }
 
     /* Tables */
     .table-wrap{ width:100%; overflow:auto; -webkit-overflow-scrolling:touch }
@@ -147,7 +139,7 @@
     .tag{ display:inline-block; padding:3px 8px; font-size:12px; border-radius:999px; border:1px solid var(--line); color:var(--muted) }
     .ok{ color:var(--ok); border-color:var(--ok) } .warn{ color:var(--warn); border-color:var(--warn) } .info{ color:var(--info); border-color:var(--info) }
 
-    /* Footer identique site */
+    /* Footer identique */
     footer{ border-top:1px solid var(--line); margin-top:28px; padding:20px; color:#7c8aa5; text-align:center }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
@@ -156,7 +148,6 @@
     .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; color:#cfefff; transition:transform .18s }
     .social a:hover{ transform:translateY(-2px) }
 
-    /* a11y */
     a:focus-visible, .tp-burger:focus-visible{ outline:2px solid #22d3ee; outline-offset:3px; border-radius:10px }
     @media (prefers-reduced-motion: reduce){ *{ transition:none!important; animation:none!important } }
   </style>
@@ -164,12 +155,12 @@
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
-  <!-- Header partagé -->
+  <!-- Header -->
   <header class="tp-header" id="hdr" role="banner" aria-label="Site header">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
-      <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40"/><span>TimeProofs</span>
+      <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/><span>TimeProofs</span>
     </a>
-    <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation">
+    <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Primary">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html">Create/Verify</a>
@@ -182,37 +173,39 @@
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
   </header>
 
-  <!-- HERO unifié 🛡️ -->
+  <!-- HERO -->
   <section class="tp-hero" role="region" aria-labelledby="page-title">
     <div class="tp-hero__icon" aria-hidden="true">🛡️</div>
-    <p class="tp-hero__kicker">Status: <strong>Public Draft</strong> · Regulations · Privacy-first · No blockchain</p>
+    <p class="tp-hero__kicker">Status: <strong>Public Beta</strong> · Regulations · Privacy-first · No blockchain</p>
     <h1 id="page-title">Regulations & Compliance</h1>
-    <p class="tp-hero__lead">Global legal readiness and compliance-by-design for TimeProofs. EU/US/UK/Canada/Brazil/Japan/Australia/Singapore/India.</p>
+    <p class="tp-hero__lead">Global alignment across EU, US, UK, Canada, Brazil, Japan, Australia, Singapore, and India. Compliance-by-design, stateless API, open verification.</p>
   </section>
 
-  <!-- Ancien header préservé via template (pas d’affichage) -->
-  <template id="__original_header_preserved__">
-    <header class="wrap" role="banner">
-      <nav class="muted"><a href="/">Home</a> / Regulations & Compliance</nav>
-      <h1>Regulations & Compliance</h1>
-      <p class="muted">Global view. Updated <time datetime="2025-10-27">Oct 27, 2025</time>.</p>
-    </header>
-  </template>
-
-  <nav aria-label="Breadcrumb" class="muted crumb">
-    <a href="/">Home</a> › <span aria-current="page">Regulations</span>
+  <!-- TOC -->
+  <nav class="toc" role="navigation" aria-label="Table of contents">
+    <a href="#overview">Overview</a>
+    <a href="#regs">Applicable Regulations</a>
+    <a href="#cbd">Compliance by Design</a>
+    <a href="#standards">Legal & Security Standards</a>
+    <a href="#matrix">Global Compliance Matrix</a>
+    <a href="#roadmap">Roadmap</a>
+    <a href="#refs">Official References</a>
+    <a href="#contact">Contact</a>
+    <a href="#proof">Document Proof</a>
+    <a href="#top" class="btn" style="padding:4px 10px">↑ Top</a>
   </nav>
 
-  <main id="main" class="wrap" role="main">
-    <section aria-label="Intro" class="card">
-      <h2>1) Overview</h2>
+  <main id="main" role="main" aria-describedby="page-title">
+    <!-- 1. Overview -->
+    <section class="card" id="overview" aria-labelledby="overview-title">
+      <h2 id="overview-title">1) Overview</h2>
       <p><strong>TimeProofs</strong> is a <strong>privacy-first, stateless, interoperable</strong> proof-of-existence protocol and API. Hashing occurs locally; proofs are timestamped and publicly verifiable. No blockchain.</p>
-      <p>Goal: lawful, ethical, portable proofs across jurisdictions. No personal data required by default. Minimal logs.</p>
+      <p class="lead">Goal: lawful, ethical, portable proofs across jurisdictions. No personal data required by default. Minimal logs.</p>
     </section>
 
     <!-- 2. Applicable Regulations — Regional tables -->
-    <section class="card">
-      <h2>2) Applicable Regulations (by region)</h2>
+    <section class="card" id="regs" aria-labelledby="regs-title">
+      <h2 id="regs-title">2) Applicable Regulations (by region)</h2>
 
       <!-- EU -->
       <h3>European Union</h3>
@@ -408,8 +401,8 @@
     </section>
 
     <!-- 3. Compliance by Design -->
-    <section class="card">
-      <h2>3) Compliance by Design</h2>
+    <section class="card" id="cbd" aria-labelledby="cbd-title">
+      <h2 id="cbd-title">3) Compliance by Design</h2>
       <ul>
         <li><strong>Privacy-first:</strong> hashing is local; no uploads required.</li>
         <li><strong>Stateless API:</strong> independent requests; minimal logs.</li>
@@ -421,8 +414,8 @@
     </section>
 
     <!-- 4. Legal & Security Standards -->
-    <section class="card">
-      <h2>4) Legal & Security Standards</h2>
+    <section class="card" id="standards" aria-labelledby="standards-title">
+      <h2 id="standards-title">4) Legal & Security Standards</h2>
       <ul>
         <li><a href="https://www.iso.org/standard/82875.html" target="_blank" rel="noopener">ISO/IEC 27001</a> — target alignment.</li>
         <li><a href="https://www.iso.org/standard/76559.html" target="_blank" rel="noopener">ISO/IEC 27018</a> — informational.</li>
@@ -433,8 +426,8 @@
     </section>
 
     <!-- 5. Global Compliance Matrix -->
-    <section class="card">
-      <h2>5) Global Compliance Matrix</h2>
+    <section class="card" id="matrix" aria-labelledby="matrix-title">
+      <h2 id="matrix-title">5) Global Compliance Matrix</h2>
       <div class="table-wrap">
         <table aria-label="Compliance matrix">
           <thead><tr><th>Area</th><th>Key Obligation</th><th>Control / Evidence</th><th>Status</th></tr></thead>
@@ -451,8 +444,8 @@
     </section>
 
     <!-- 6. Roadmap -->
-    <section class="card">
-      <h2>6) Roadmap</h2>
+    <section class="card" id="roadmap" aria-labelledby="roadmap-title">
+      <h2 id="roadmap-title">6) Roadmap</h2>
       <ul>
         <li><strong>v0.2:</strong> offline verify; Ed25519 with <code>kid</code>; proof bundles.</li>
         <li><strong>v1.0:</strong> Data Act checklist; “Regulatory Readiness” section; DPA template.</li>
@@ -462,8 +455,8 @@
     </section>
 
     <!-- 7. Official References -->
-    <section class="card">
-      <h2>7) Official References</h2>
+    <section class="card" id="refs" aria-labelledby="refs-title">
+      <h2 id="refs-title">7) Official References</h2>
       <div class="table-wrap">
         <table aria-label="Official links">
           <thead><tr><th>Jurisdiction</th><th>Links</th></tr></thead>
@@ -485,25 +478,24 @@
     </section>
 
     <!-- 8. Contact -->
-    <section class="card">
-      <h2>8) Contact</h2>
+    <section class="card" id="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title">8) Contact</h2>
       <p>Compliance inquiries: <a href="mailto:contact@timeproofs.io">contact@timeproofs.io</a></p>
       <p class="muted">Informational only. Not legal advice.</p>
     </section>
 
-    <!-- 9. Document Proof (placeholder jusqu’à release) -->
-    <section class="card" id="page-proof" aria-labelledby="page-proof-title">
-      <h2 id="page-proof-title">9) Document Proof</h2>
-      <p>This page will be cryptographically timestamped by TimeProofs at release.</p>
+    <!-- 9. Document Proof -->
+    <section class="card" id="proof" aria-labelledby="proof-title">
+      <h2 id="proof-title">9) Document Proof</h2>
+      <p>This page is cryptographically timestamped by TimeProofs.</p>
       <p>Hash:
-        <code id="reg-proof-hash">PUT_REAL_HASH</code> ·
-        <a id="reg-proof-link" href="https://api.timeproofs.io/api/verify?hash=PUT_REAL_HASH" rel="noopener" target="_blank">Verify</a>
+        <code id="reg-proof-hash">7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2</code> ·
+        <a id="reg-proof-link" href="https://api.timeproofs.io/api/verify?hash=7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2" rel="noopener" target="_blank">Verify</a>
       </p>
-      <p class="muted">Replace with the actual page hash when v0.1 is sealed.</p>
     </section>
   </main>
 
-  <!-- Footer partagé -->
+  <!-- Footer -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
@@ -524,16 +516,16 @@
       <a href="/humans.txt">humans.txt</a>
     </div>
     <div class="social" aria-label="Social links">
-      <a href="https://x.com/timeproofs" target="_blank" rel="noopener noreferrer me" aria-label="X/Twitter">
+      <a href="https://x.com/timeproofs" target="_blank" rel="noopener me" aria-label="Follow @timeproofs on X">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
       </a>
-      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv2" target="_blank" rel="noopener noreferrer me" aria-label="GitHub">
+      <a href="https://github.com/BACOUL/timeproofs" target="_blank" rel="noopener me" aria-label="TimeProofs on GitHub">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
       </a>
-      <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+      <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg>
       </a>
-      <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="YouTube">
+      <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on YouTube">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.5s-.2-1.6-.8-2.3c-.8-.8-1.7-.8-2.1-.9C16.8 4 12 4 12 4s-4.8 0 8.1.3c.4 0 1.3 0 2.1-.9.6-.7.8-2.3.8-2.3s.2-1.8.2-3.5v-2c0-1.7-.2-3.5-.2-3.5ZM9.8 15.5v-7l6.2 3.5-6.2 3.5Z"/></svg>
       </a>
       <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS">
@@ -542,17 +534,8 @@
     </div>
   </footer>
 
-  <!-- Ancien footer préservé, non affiché -->
-  <template id="__original_footer_preserved__">
-    <footer class="wrap" role="contentinfo">
-      <p class="muted">© <span>2025</span> TimeProofs • <a href="/privacy.html">Privacy</a> • <a href="/legal.html">Legal</a> • <a href="/sitemap.xml">Sitemap</a></p>
-    </footer>
-  </template>
-
   <!-- Scripts -->
   <script defer nonce="TP-2025">
-    document.documentElement.classList.add('js');
-
     // Header shade on scroll
     (function(){
       const hdr=document.getElementById('hdr');
@@ -560,40 +543,41 @@
       onScroll(); window.addEventListener('scroll', onScroll, { passive:true });
     })();
 
-    // Burger
+    // Burger + focus management
     (function(){
       const burger=document.getElementById('tp-burger'); const nav=document.getElementById('tp-nav');
-      function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
-      function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+      function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; const a=nav.querySelector('a'); a && a.focus(); }
+      function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; burger.focus(); }
       function toggleMenu(){ (nav.getAttribute('data-state')==='open')?closeMenu():openMenu(); }
-      burger?.addEventListener('click', toggleMenu, { passive:true });
+      burger.addEventListener('click', toggleMenu, { passive:true });
       document.addEventListener('click', (e)=>{ if(window.matchMedia('(min-width:900px)').matches) return; if(!e.target.closest('.tp-header')&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu();
+        if(e.key==='Tab'&&nav.getAttribute('data-state')==='open'){
+          const f=nav.querySelectorAll('a,button,[tabindex]:not([tabindex="-1"])'); if(!f.length) return;
+          const first=f[0], last=f[f.length-1];
+          if(e.shiftKey && document.activeElement===first){ last.focus(); e.preventDefault(); }
+          else if(!e.shiftKey && document.activeElement===last){ first.focus(); e.preventDefault(); }
+        } }, { passive:false });
       window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width:900px)').matches) closeMenu(); }, { passive:true });
     })();
 
-    // Auto-wrap tables
-    (function(){
-      document.querySelectorAll('table').forEach(tb=>{
-        if(tb.parentElement && tb.parentElement.classList.contains('table-wrap')) return;
-        const wrap=document.createElement('div'); wrap.className='table-wrap';
-        tb.parentNode.insertBefore(wrap, tb); wrap.appendChild(tb);
-      });
-    })();
-
-    // Footer year
-    document.getElementById('y').textContent=new Date().getFullYear();
-
-    // Page proof link autocorrect (placeholder-safe)
+    // Autocorrect verify link when hash replaced
     (function(){
       const h=document.getElementById('reg-proof-hash');
       const a=document.getElementById('reg-proof-link');
       if(h&&a){
         const v=h.textContent.trim();
-        if(v && !v.startsWith('PUT_')){
-          a.href='https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(v);
-        }
+        if(v && !v.startsWith('PUT_')) a.href='https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(v);
       }
     })();
+
+    // Footer year
+    document.getElementById('y').textContent=new Date().getFullYear();
+
+    // Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js', { type: 'module', scope: '/' }).catch(()=>{});
+    }
   </script>
 </body>
-          </html>
+  </html>
