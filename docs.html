@@ -12,6 +12,10 @@
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <link rel="canonical" href="https://timeproofs.io/docs.html"/>
 
+  <!-- ===== Extra head links (conformité page maître) ===== -->
+  <link rel="status" href="https://status.timeproofs.io"/>
+  <link rel="alternate" type="application/yaml" href="/openapi.yaml"/>
+
   <!-- ===== Security (CSP unifiée v0.1) ===== -->
   <meta http-equiv="Content-Security-Policy" content="
 default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
@@ -146,13 +150,22 @@ upgrade-insecure-requests">
     /* Footer (identique Home/Verify, ordre strict) */
     footer{ border-top:1px solid var(--line); margin-top:28px; padding:20px; color:#7c8aa5; text-align:center }
     footer .links a{ color:#a7b7cc; text-decoration:none; margin:0 8px } footer .links a:hover{ color:var(--accent) }
+    .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
+    .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
     .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
     .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; color:#cfefff; transition:transform .18s ease }
     .social a:hover{ transform:translateY(-2px) }
 
+    /* Reveal animation (homogénéité UI) */
+    .reveal{ opacity:0; transform:translateY(8px); transition:opacity .35s ease, transform .35s ease }
+    .reveal.in{ opacity:1; transform:none }
+
     /* a11y focus */
     a:focus-visible, .btn:focus-visible, .tp-burger:focus-visible, .copy-btn:focus-visible{ outline:2px solid #22d3ee; outline-offset:3px; border-radius:10px }
-    @media (prefers-reduced-motion: reduce){ *{ transition:none !important; animation:none !important } }
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; animation:none !important }
+      .reveal{ opacity:1 !important; transform:none !important }
+    }
   </style>
 
   <noscript><style>.reveal{opacity:1 !important; transform:none !important}</style></noscript>
@@ -203,7 +216,7 @@ upgrade-insecure-requests">
   <!-- ===== Content ===== -->
   <main id="main" role="main" aria-describedby="page-title">
     <!-- Base URL -->
-    <section class="card" id="base" aria-labelledby="base-title">
+    <section class="card reveal" id="base" aria-labelledby="base-title">
       <h2 id="base-title">🌐 Base URL</h2>
       <pre><code>https://api.timeproofs.io/api</code></pre>
       <p style="margin:.6em 0 0" class="lead">CORS allowed origin: <code>https://timeproofs.io</code>. Responses in UTC.</p>
@@ -214,7 +227,7 @@ upgrade-insecure-requests">
     </section>
 
     <!-- Endpoints -->
-    <section class="card" id="endpoints" aria-labelledby="endpoints-title">
+    <section class="card reveal" id="endpoints" aria-labelledby="endpoints-title">
       <h2 id="endpoints-title">⚡ Endpoints</h2>
       <div class="table-wrap" data-table="endpoints">
         <table role="table" aria-label="API Endpoints">
@@ -230,7 +243,7 @@ upgrade-insecure-requests">
     </section>
 
     <!-- Quickstart -->
-    <section class="card" id="quickstart" aria-labelledby="quickstart-title">
+    <section class="card reveal" id="quickstart" aria-labelledby="quickstart-title">
       <h2 id="quickstart-title">⚙️ Quickstart</h2>
 
       <h3 id="ping">1) cURL — ping</h3>
@@ -281,7 +294,7 @@ function verify({ hash, ts, sig }, secret){
     </section>
 
     <!-- Client-side hashing -->
-    <section class="card" id="hash" aria-labelledby="hash-title">
+    <section class="card reveal" id="hash" aria-labelledby="hash-title">
       <h2 id="hash-title">🔐 Client-side hash (browser)</h2>
       <pre><button class="copy-btn" aria-label="Copy code">Copy</button><code>const buf = new TextEncoder().encode(text);
 const digest = await crypto.subtle.digest('SHA-256', buf);
@@ -290,14 +303,14 @@ const hash = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,'0')
     </section>
 
     <!-- Verify -->
-    <section class="card" id="verify" aria-labelledby="verify-title">
+    <section class="card reveal" id="verify" aria-labelledby="verify-title">
       <h2 id="verify-title">🧾 Verify a proof</h2>
       <p>Use <code>GET /verify?hash=…</code> or <code>POST /verify</code> to validate a proof (hash, timestamp, signature).</p>
       <p class="lead">Signature format: <code>HMAC-SHA256(secret, `${hash}|${ts}`)</code>. Server clock: UTC with ±5 s tolerance.</p>
     </section>
 
     <!-- JSON schema -->
-    <section class="card" id="schemas" aria-labelledby="schemas-title">
+    <section class="card reveal" id="schemas" aria-labelledby="schemas-title">
       <h2 id="schemas-title">📦 JSON Schemas</h2>
 
       <h3>GET /verify — response</h3>
@@ -349,7 +362,7 @@ const hash = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,'0')
     </section>
 
     <!-- Status & errors -->
-    <section class="card" id="errors" aria-labelledby="errors-title">
+    <section class="card reveal" id="errors" aria-labelledby="errors-title">
       <h2 id="errors-title">🚦 Status & Errors</h2>
       <div class="table-wrap" data-table="errors">
         <table role="table" aria-label="HTTP status codes">
@@ -368,7 +381,7 @@ const hash = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,'0')
     </section>
 
     <!-- Security -->
-    <section class="card" id="security" aria-labelledby="security-title">
+    <section class="card reveal" id="security" aria-labelledby="security-title">
       <h2 id="security-title">🔒 Security & Best Practices</h2>
       <ul>
         <li>Hash on client. Never upload original content.</li>
@@ -381,7 +394,7 @@ const hash = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,'0')
     </section>
 
     <!-- Page proof -->
-    <section class="card" id="page-proof" aria-labelledby="page-proof-title">
+    <section class="card reveal" id="page-proof" aria-labelledby="page-proof-title">
       <h2 id="page-proof-title">This page is verified by TimeProofs</h2>
       <p>Release: <code>TP-APIDocs-v0.1</code> · Hash:
         <code id="docs-proof-hash">PUT_REAL_HASH</code> ·
@@ -393,10 +406,10 @@ const hash = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,'0')
 
   <!-- ===== Footer ===== -->
   <footer role="contentinfo" aria-label="Site footer">
-    <div class="badges" style="display:flex;gap:8px;justify-content:center;margin:10px 0">
-      <span class="btn" style="pointer-events:none">⚡ Edge Native</span>
-      <span class="btn" style="pointer-events:none">🛡 Privacy First</span>
-      <a class="btn" href="/proofspec.html">🔍 Open Spec v0.1</a>
+    <div class="badges">
+      <span class="badge">⚡ Edge Native</span>
+      <span class="badge">🛡 Privacy First</span>
+      <a class="badge" href="/proofspec.html">🔍 Open Spec v0.1</a>
     </div>
     © 2025 TimeProofs — Proof of Existence. For Everything.
     <div class="links" style="margin-top:6px">
@@ -477,6 +490,16 @@ const hash = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,'0')
           });
         }, { passive:true });
       });
+    })();
+
+    // Reveal: appliquer la classe .in quand visible
+    (function(){
+      const els = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) { els.forEach(el=>el.classList.add('in')); return; }
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+      },{ rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+      els.forEach(el=>io.observe(el));
     })();
 
     // Page proof link autocorrect
