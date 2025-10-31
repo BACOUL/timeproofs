@@ -12,7 +12,13 @@
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <link rel="canonical" href="https://timeproofs.io/use-cases.html"/>
 
-  <!-- ===== Security (aligned with site) ===== -->
+  <!-- Feeds & misc (homogénéisés v0.1) -->
+  <link rel="alternate" type="application/rss+xml" title="TimeProofs RSS" href="/rss.xml"/>
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
+  <link rel="author" href="/humans.txt"/>
+  <link rel="status" href="https://status.timeproofs.io"/>
+
+  <!-- ===== Security (aligné site) ===== -->
   <meta http-equiv="Content-Security-Policy" content="
 default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
 worker-src 'self' blob:;
@@ -30,6 +36,9 @@ upgrade-insecure-requests">
   <!-- ===== Perf ===== -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin>
   <link rel="dns-prefetch" href="//api.timeproofs.io"/>
+  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin>
+  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev"/>
+  <link rel="preconnect" href="https://plausible.io" crossorigin>
   <link rel="preload" as="image" href="/logo%20(1).png" fetchpriority="high"/>
 
   <!-- ===== Icons / Manifest ===== -->
@@ -37,7 +46,6 @@ upgrade-insecure-requests">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
   <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
   <link rel="manifest" href="/site.webmanifest"/>
-  <link rel="author" href="/humans.txt"/>
 
   <!-- ===== Social ===== -->
   <meta property="og:title" content="Use Cases — TimeProofs"/>
@@ -48,6 +56,7 @@ upgrade-insecure-requests">
   <meta property="og:image:alt" content="TimeProofs use cases for AI, legal, and security"/>
   <meta property="og:site_name" content="TimeProofs"/>
   <meta property="og:locale" content="en_US"/>
+  <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Use Cases — TimeProofs"/>
   <meta name="twitter:description" content="Provenance, datasets, audit trails, contracts, supply chain — in minutes."/>
@@ -416,6 +425,7 @@ await fetch(`${API}/timestamp`,{
       <h2 id="page-proof-title">This page is verified by TimeProofs</h2>
       <p>
         Release: <code>TP-UseCases-v0.1</code> ·
+        <!-- TODO: fix 64-hex -->
         Hash: <code id="uc-proof-hash">2caa895ed2b7444e2073e39849c581947228e160d1af02fdde1e0405790bb87</code> ·
         <a id="uc-proof-link" href="https://api.timeproofs.io/api/verify?hash=2caa895ed2b7444e2073e39849c581947228e160d1af02fdde1e0405790bb87" target="_blank" rel="noopener">Verify</a>
       </p>
@@ -430,7 +440,7 @@ await fetch(`${API}/timestamp`,{
       <span class="badge">🛡 Privacy First</span>
       <a class="badge" href="/proofspec.html">🔍 Open Spec v0.1</a>
     </div>
-    © 2025 TimeProofs — Proof of Existence. For Everything.
+    © <span id="y"></span> TimeProofs — Proof of Existence. For Everything.
     <div class="links" style="margin-top:6px">
       <a href="/">Home</a> •
       <a href="/proofspec.html">Protocol</a> •
@@ -513,12 +523,15 @@ await fetch(`${API}/timestamp`,{
       });
     })();
 
-    // Auto-fill verify link if hash present
+    // Auto-fill verify link if/when hash corrected
     (function(){
       const hp=document.getElementById('uc-proof-hash'); if(!hp) return;
       const val=hp.textContent.trim(); const a=document.getElementById('uc-proof-link');
-      if(a && val && !val.startsWith('PUT_')) a.href='https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(val);
+      if(a && val && val.length===64) a.href='https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(val);
     })();
+
+    // Footer year
+    document.getElementById('y')?.textContent = new Date().getFullYear();
   </script>
 
   <!-- Service Worker -->
@@ -528,4 +541,4 @@ await fetch(`${API}/timestamp`,{
     }
   </script>
 </body>
-</html>
+          </html>
