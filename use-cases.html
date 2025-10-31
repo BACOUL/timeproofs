@@ -30,6 +30,7 @@ upgrade-insecure-requests">
   <!-- ===== Perf ===== -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin>
   <link rel="dns-prefetch" href="//api.timeproofs.io"/>
+  <link rel="preconnect" href="https://plausible.io" crossorigin>
   <link rel="preload" as="image" href="/logo%20(1).png" fetchpriority="high"/>
 
   <!-- ===== Icons / Manifest ===== -->
@@ -84,33 +85,36 @@ upgrade-insecure-requests">
   <!-- Analytics -->
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
-  <!-- ===== Styles (harmonisées v0.1) ===== -->
+  <!-- ===== Styles (harmonisées avec Protocol) ===== -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
+      --ok:#22c55e; --warn:#f59e0b; --info:#7dd3fc;
+      --max:1120px; --radius:14px;
       --safe-top:env(safe-area-inset-top,0px); --safe-btm:env(safe-area-inset-bottom,0px);
-      --header-h:64px; --anchor-offset:calc(var(--header-h) + 28px);
+      --header-h:64px; --anchor:calc(var(--header-h) + 28px);
     }
-    @media (max-width:899px){ :root{ --header-h:72px; --anchor-offset:calc(var(--header-h) + 34px) } }
+    @media (max-width:899px){ :root{ --header-h:72px; --anchor:calc(var(--header-h) + 34px) } }
     *{ box-sizing:border-box }
     html,body{ margin:0; height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); color:var(--text) }
-    html{ scroll-behavior:smooth; scroll-padding-top:var(--anchor-offset) }
-    [id]{ scroll-margin-top:var(--anchor-offset) }
+    html{ scroll-behavior:smooth; scroll-padding-top:var(--anchor) }
+    [id]{ scroll-margin-top:var(--anchor) }
 
     body{
       font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      text-rendering:optimizeLegibility; padding-top:var(--header-h);
       background:
         radial-gradient(1200px 560px at 80% -10%, rgba(34,211,238,.08), transparent 60%),
         conic-gradient(from 220deg at 12% -20%, rgba(34,211,238,.05), transparent 32%),
-        linear-gradient(180deg, #0b1020 0%, #0b1226 100%);
+        linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
     }
     a{ color:var(--accent); text-decoration:none } a:hover{text-decoration:underline}
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
     .skip:focus{ position:fixed; left:12px; top:12px; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
 
-    /* Header (identique Protocol) */
+    /* Header (identique) */
     .tp-header{ position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:1000; background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 16px; transition:background .25s ease }
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
@@ -128,56 +132,47 @@ upgrade-insecure-requests">
     }
 
     /* HERO */
-    .tp-hero{ padding:calc(var(--header-h) + 32px + var(--safe-top)) 20px 18px; max-width:1100px; margin:0 auto; border-bottom:1px solid var(--line) }
+    .tp-hero{ padding:calc(var(--header-h) + 32px + var(--safe-top)) 20px 18px; max-width:var(--max); margin:0 auto; border-bottom:1px solid var(--line) }
     .tp-hero__icon{ font-size:2rem; line-height:1; margin-bottom:6px }
     .tp-hero__kicker{ color:#a8c5d6; letter-spacing:.3px; font-size:.95rem; margin:0 }
-    #page-title{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900 }
-    .tp-hero__lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 }
+    #page-title{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900; letter-spacing:.1px }
+    .tp-hero__lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0; font-size:1.05rem }
 
-    /* TOC chips */
-    .toc{ max-width:1100px; margin:14px auto 0; padding:12px; background:#0c1424; border:1px solid var(--line); border-radius:12px; display:flex; flex-wrap:wrap; gap:8px }
-    .toc a{ padding:6px 10px; border-radius:10px; color:#cfe7ff }
-    .toc a:hover{ background:#0d2330 }
-
-    /* Layout content */
-    main{ padding:10px 20px calc(40px + var(--safe-btm)); max-width:1100px; margin:0 auto }
-    h2{ font-size:clamp(1.25rem,2.6vw,1.6rem); margin:1.6em 0 .5em; color:#b9e7f5 }
-    h3{ font-size:1.1rem; margin:.2em 0 .4em; color:#b9e7f5 }
-
+    /* Layout & cards */
+    main{ padding:10px 20px calc(40px + var(--safe-btm)); max-width:var(--max); margin:0 auto }
+    h2{ color:#b9e7f5; margin:1.6em 0 .6em; font-size:1.35rem }
+    h3{ color:#aee9f7; margin:1.1em 0 .4em; font-size:1.05rem }
+    .muted{ color:var(--muted) }
+    .card{ background:#0c1424; border:1px solid var(--line); border-radius:var(--radius); padding:18px; box-shadow:0 2px 0 rgba(0,0,0,.12); margin:16px 0 }
     .grid{ display:grid; gap:16px }
     @media(min-width:900px){ .grid.two{ grid-template-columns:1fr 1fr } .grid.three{ grid-template-columns:1fr 1fr 1fr } }
 
-    .card{ background:#0c1424; border:1px solid var(--line); border-radius:14px; padding:18px }
-    .card p{ color:#dbe7f3; margin:.25em 0 .6em; line-height:1.6 }
-    .mini{ font-size:.92rem; color:#9fb3c6 }
-    .tags{ display:flex; flex-wrap:wrap; gap:6px; margin-top:6px }
-    .tag{ display:inline-block; padding:3px 8px; border-radius:999px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; font-size:.78rem }
+    /* TOC encadré comme Protocol */
+    .toc{ display:flex; flex-wrap:wrap; gap:10px; align-items:flex-start }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border-radius:12px;
+      background:#0d1a2e; border:1px solid #20384e;
+      color:#d8f3ff; font-weight:800; text-decoration:none; line-height:1; white-space:nowrap;
+    }
+    .chip:hover{ background:#0f2336; border-color:#285072; text-decoration:none }
+    .chip.mini{ font-weight:700; opacity:.9 }
 
     /* Code */
     pre{ background:#0b1220; border:1px solid #1f2937; color:#e5e7eb; border-radius:12px; padding:12px; overflow:auto; line-height:1.55; font-size:.92rem; white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere; position:relative }
-    code{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.92rem; overflow-wrap:anywhere; word-break:break-word }
+    code{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.92rem }
     .copy-btn{ position:absolute; top:8px; right:8px; padding:6px 8px; border-radius:8px; border:1px solid #22455a; background:#0c1a2e; color:#cfefff; cursor:pointer; font-weight:700 }
 
-    .cta-row{ margin-top:14px; display:flex; gap:10px; flex-wrap:wrap }
-    .cta{ display:inline-block; background:var(--accent); color:#06202a; font-weight:900; padding:10px 14px; border-radius:10px; text-decoration:none; transition:transform .15s ease,filter .15s ease }
-    .cta:hover{ transform:translateY(-1px); filter:brightness(1.05) }
-    .ghost{ background:#0f1b30; color:#d7f7ff; border:1px solid var(--line) }
-
-    .table-wrap{ width:100%; overflow:auto; -webkit-overflow-scrolling:touch }
-    table{ width:100%; border-collapse:collapse }
-    th, td{ text-align:left; padding:8px; border-bottom:1px solid #1e2a44 }
-    caption{ text-align:left; padding:8px 0; color:#cfe3ff }
-
-    /* Footer */
+    /* Footer (identique) */
     footer{ border-top:1px solid var(--line); margin-top:28px; padding:20px; color:#7c8aa5; text-align:center }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
-    footer .links a{ color:#a7b7cc; text-decoration:none; margin:0 8px } footer .links a:hover{ color:var(--accent) }
+    footer .links a{ color:#a7b7cc; margin:0 8px } footer .links a:hover{ color:var(--accent) }
     .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
-    .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; color:#cfefff; transition:transform .18s ease }
+    .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; color:#cfefff; transition:transform .18s }
     .social a:hover{ transform:translateY(-2px) }
 
-    a:focus-visible, .cta:focus-visible, .tp-burger:focus-visible, .copy-btn:focus-visible{ outline:2px solid #22d3ee; outline-offset:3px; border-radius:8px }
+    a:focus-visible, .tp-burger:focus-visible, .copy-btn:focus-visible{ outline:2px solid #22d3ee; outline-offset:3px; border-radius:10px }
     @media (prefers-reduced-motion: reduce){ *{ transition:none !important; animation:none !important } }
   </style>
 
@@ -186,8 +181,8 @@ upgrade-insecure-requests">
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
-  <!-- ===== Header (identique Protocol) ===== -->
-  <header class="tp-header" id="hdr" role="banner" aria-label="Site header">
+  <!-- ===== Header ===== -->
+  <header class="tp-header" id="hdr" role="banner" aria-label="Main">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/><span>TimeProofs</span>
     </a>
@@ -201,7 +196,9 @@ upgrade-insecure-requests">
       <a href="/privacy.html">Privacy</a>
       <a href="/legal.html">Legal</a>
     </nav>
-    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
+      <span aria-hidden="true">☰</span>
+    </button>
   </header>
 
   <!-- ===== HERO ===== -->
@@ -212,18 +209,18 @@ upgrade-insecure-requests">
     <p class="tp-hero__lead">Hash locally. Timestamp via API. Verify publicly — for AI, legal, and security workflows.</p>
   </section>
 
-  <!-- TOC -->
-  <nav class="toc" role="navigation" aria-label="Table of contents">
-    <a href="#ai-output">AI output provenance</a>
-    <a href="#ai-prompt">Prompt & chain integrity</a>
-    <a href="#ai-dataset">Dataset snapshots</a>
-    <a href="#legal-files">Contracts & files</a>
-    <a href="#sec-events">Webhooks & events</a>
-    <a href="#supply-release">Releases & binaries</a>
-    <a href="#why-adopt">Why teams adopt</a>
-    <a href="#why-not">Why not blockchain?</a>
-    <a href="#page-proof">Page proof</a>
-    <a href="#top" class="mini">↑ Back to top</a>
+  <!-- ===== TOC (encadré, même style que Protocol) ===== -->
+  <nav class="card toc" role="navigation" aria-label="Table of contents">
+    <a class="chip" href="#ai-output">AI output provenance</a>
+    <a class="chip" href="#ai-prompt">Prompt & chain integrity</a>
+    <a class="chip" href="#ai-dataset">Dataset snapshots</a>
+    <a class="chip" href="#legal-files">Contracts & files</a>
+    <a class="chip" href="#sec-events">Webhooks & events</a>
+    <a class="chip" href="#supply-release">Releases & binaries</a>
+    <a class="chip" href="#why-adopt">Why teams adopt</a>
+    <a class="chip" href="#why-not">Why not blockchain?</a>
+    <a class="chip" href="#page-proof">Page proof</a>
+    <a class="chip mini" href="#top">↑ Top</a>
   </nav>
 
   <!-- ===== Content ===== -->
@@ -247,12 +244,7 @@ const proof=await fetch(`${API}/timestamp`,{
   headers:{ "Authorization":"Bearer &lt;TOKEN&gt;","Content-Type":"application/json" },
   body:JSON.stringify({ hash, meta:{ type:"gen", model:"gpt", app:"agentX" } })
 }).then(r=>r.json());</code></pre>
-        <p class="mini"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Hash-only. Avoid PII in <code>meta</code>.</p>
-        <div class="tags"><span class="tag">AI Act</span><span class="tag">GDPR</span></div>
-        <div class="cta-row" role="group" aria-label="AI output actions">
-          <a class="cta" href="/verify.html">Create or Verify a Proof</a>
-          <a class="cta ghost" href="/docs.html#quickstart">Read API Docs</a>
-        </div>
+        <p class="muted"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Hash-only. Avoid PII in <code>meta</code>.</p>
       </article>
 
       <!-- Prompt & chain integrity -->
@@ -267,12 +259,7 @@ await fetch(`${API}/timestamp`,{
   headers:{ "Authorization":"Bearer &lt;TOKEN&gt;","Content-Type":"application/json" },
   body:JSON.stringify({ hash:promptHash, meta:{ type:"prompt", env:"prod" } })
 });</code></pre>
-        <p class="mini"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Hash locally. No secrets in <code>meta</code>.</p>
-        <div class="tags"><span class="tag">AI Act</span><span class="tag">Audit</span></div>
-        <div class="cta-row" role="group" aria-label="Prompt actions">
-          <a class="cta" href="/verify.html">Create or Verify a Proof</a>
-          <a class="cta ghost" href="/docs.html#quickstart">Read API Docs</a>
-        </div>
+        <p class="muted"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • No secrets in <code>meta</code>.</p>
       </article>
 
       <!-- Dataset snapshots -->
@@ -287,12 +274,7 @@ await fetch(`${API}/timestamp`,{
   headers:{ "Authorization":"Bearer &lt;TOKEN&gt;","Content-Type":"application/json" },
   body:JSON.stringify({ hash:manifestHash, meta:{ type:"dataset", version:"2025-01-10" } })
 });</code></pre>
-        <p class="mini"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Keep <code>meta</code> minimal.</p>
-        <div class="tags"><span class="tag">Data Act</span><span class="tag">Reproducibility</span></div>
-        <div class="cta-row" role="group" aria-label="Dataset actions">
-          <a class="cta" href="/verify.html">Create or Verify a Proof</a>
-          <a class="cta ghost" href="/docs.html#quickstart">Read API Docs</a>
-        </div>
+        <p class="muted"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Keep <code>meta</code> minimal.</p>
       </article>
 
       <!-- Legal: files -->
@@ -313,12 +295,7 @@ await fetch(`${API}/timestamp`,{
   headers:{ "Authorization":"Bearer &lt;TOKEN&gt;","Content-Type":"application/json" },
   body:JSON.stringify({ hash:fileHash, meta:{ type:"file", mime:"application/pdf" } })
 });</code></pre>
-        <p class="mini"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Never upload originals.</p>
-        <div class="tags"><span class="tag">GDPR</span><span class="tag">Evidence</span></div>
-        <div class="cta-row" role="group" aria-label="Legal actions">
-          <a class="cta" href="/verify.html">Create or Verify a Proof</a>
-          <a class="cta ghost" href="/docs.html#quickstart">Read API Docs</a>
-        </div>
+        <p class="muted"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Never upload originals.</p>
       </article>
 
       <!-- Security: events -->
@@ -333,12 +310,7 @@ await fetch(`${API}/timestamp`,{
   headers:{ "Authorization":"Bearer &lt;TOKEN&gt;","Content-Type":"application/json" },
   body:JSON.stringify({ hash:eventHash, meta:{ type:"webhook", src:"billing" } })
 });</code></pre>
-        <p class="mini"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Public verification available.</p>
-        <div class="tags"><span class="tag">DSA</span><span class="tag">Audit</span></div>
-        <div class="cta-row" role="group" aria-label="Event actions">
-          <a class="cta" href="/verify.html">Create or Verify a Proof</a>
-          <a class="cta ghost" href="/docs.html#quickstart">Read API Docs</a>
-        </div>
+        <p class="muted"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Public verification available.</p>
       </article>
 
       <!-- Supply chain: releases -->
@@ -352,22 +324,16 @@ await fetch(`${API}/timestamp`,{
   headers:{ "Authorization":"Bearer &lt;TOKEN&gt;","Content-Type":"application/json" },
   body:JSON.stringify({ hash:binarySHA256, meta:{ type:"release", tag:"v1.2.3" } })
 });</code></pre>
-        <p class="mini"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Share the verify URL with users/CI.</p>
-        <div class="tags"><span class="tag">NIS2</span><span class="tag">Supply chain</span></div>
-        <div class="cta-row" role="group" aria-label="Release actions">
-          <a class="cta" href="/verify.html">Create or Verify a Proof</a>
-          <a class="cta ghost" href="/docs.html#quickstart">Read API Docs</a>
-        </div>
+        <p class="muted"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Share the verify URL with users/CI.</p>
       </article>
     </section>
 
-    <div class="cta-row" role="group" aria-label="Get started">
-      <a class="cta" href="/verify.html">Create or Verify a Proof</a>
-      <a class="cta ghost" href="/docs.html">See full API docs</a>
+    <div class="card" role="region" aria-label="Get started" style="display:flex;gap:10px;flex-wrap:wrap">
+      <a class="chip" href="/verify.html">Create or Verify a Proof</a>
+      <a class="chip" href="/docs.html">See full API docs</a>
     </div>
 
-    <!-- Adoption reasons -->
-    <section id="why-adopt" aria-labelledby="adopt-title" style="margin-top:26px">
+    <section id="why-adopt" aria-labelledby="adopt-title">
       <h2 id="adopt-title">Why teams adopt it quickly</h2>
       <div class="grid two">
         <article class="card">
@@ -383,19 +349,14 @@ await fetch(`${API}/timestamp`,{
       </div>
     </section>
 
-    <!-- Why not blockchain -->
-    <section id="why-not" aria-labelledby="why-not-title" style="margin-top:26px">
+    <section id="why-not" aria-labelledby="why-not-title">
       <h2 id="why-not-title">Why not blockchain?</h2>
       <div class="card" role="region" aria-label="Comparison">
         <div class="table-wrap">
           <table>
             <caption>TimeProofs vs typical blockchain approaches</caption>
             <thead>
-              <tr>
-                <th scope="col">Criterion</th>
-                <th scope="col">TimeProofs</th>
-                <th scope="col">Typical blockchain</th>
-              </tr>
+              <tr><th>Criterion</th><th>TimeProofs</th><th>Typical blockchain</th></tr>
             </thead>
             <tbody>
               <tr><td>Latency</td><td>Instant</td><td>Seconds to minutes</td></tr>
@@ -408,28 +369,25 @@ await fetch(`${API}/timestamp`,{
       </div>
     </section>
 
-    <!-- Page proof -->
-    <section id="page-proof" class="card" role="region" aria-labelledby="page-proof-title" style="margin-top:26px">
+    <section id="page-proof" class="card" role="region" aria-labelledby="page-proof-title">
       <h2 id="page-proof-title">This page is verified by TimeProofs</h2>
       <p>
         Release: <code>TP-UseCases-v0.1</code> ·
         Hash: <code id="uc-proof-hash">2caa895ed2b7444e2073e39849c581947228e160d1af02fdde1e0405790bb87</code> ·
         <a id="uc-proof-link" href="https://api.timeproofs.io/api/verify?hash=2caa895ed2b7444e2073e39849c581947228e160d1af02fdde1e0405790bb87" target="_blank" rel="noopener">Verify</a>
       </p>
-      <p class="mini">Timestamp created via TimeProofs API (public, privacy-first, no blockchain).</p>
+      <p class="muted">Timestamp created via TimeProofs API (public, privacy-first, no blockchain).</p>
     </section>
   </main>
 
-  <!-- ===== Footer (identique Protocol) ===== -->
+  <!-- ===== Footer ===== -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
       <span class="badge">🛡 Privacy First</span>
-      <span class="badge">🔎 Open Spec v0.1</span>
+      <a class="badge" href="/proofspec.html">🔎 Open Spec v0.1</a>
     </div>
-
     © 2025 TimeProofs — Proof of Existence. For Everything.
-
     <div class="links" style="margin-top:6px">
       <a href="/">Home</a> •
       <a href="/proofspec.html">Protocol</a> •
@@ -442,9 +400,8 @@ await fetch(`${API}/timestamp`,{
       <a href="/legal.html">Legal</a> •
       <a href="/humans.txt">humans.txt</a>
     </div>
-
     <div class="social" aria-label="Social links">
-      <a href="https://x.com/timeproofs" target="_blank" rel="noopener me" aria-label="Follow @timeproofs on X">
+      <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on X">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
       </a>
       <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
@@ -454,8 +411,9 @@ await fetch(`${API}/timestamp`,{
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg>
       </a>
       <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on YouTube">
+        <!-- Correct YouTube logo -->
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="currentColor" d="M21.6 7.2c-.2-.8-.8-1.5-1.6-1.7C18.2 5.1 12 5.1 12 5.1s-6.2 0-8 .4c-.8.2-1.4.9-1.6 1.7C2 9 2 12 2 12s0 3 .4 4.8c.2.8.8 1.5 1.6 1.7 1.8.4 8 .4 8 .4s6.2 0 8-.4c.8-.2 1.4-.9 1.6-1.7.4-1.8.4-4.8.4-4.8s0-3-.4-4.8ZM10 15V9l5.2 3L10 15Z"/>
+          <path fill="currentColor" d="M23.5 6.8a4 4 0 0 0-2.8-2.8C18.8 3.5 12 3.5 12 3.5s-6.8 0-8.7.5A4 4 0 0 0 .5 6.8 41 41 0 0 0 0 12a41 41 0 0 0 .5 5.2 4 4 0 0 0 2.8 2.8c1.9.5 8.7.5 8.7.5s6.8 0 8.7-.5a4 4 0 0 0 2.8-2.8A41 41 0 0 0 24 12a41 41 0 0 0-.5-5.2ZM9.75 15.02V8.98L15.5 12l-5.75 3.02Z"/>
         </svg>
       </a>
       <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS">
@@ -521,10 +479,8 @@ await fetch(`${API}/timestamp`,{
       const val=hp.textContent.trim(); const a=document.getElementById('uc-proof-link');
       if(a && val && val.length===64) a.href='https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(val);
     })();
-  </script>
 
-  <!-- Service Worker -->
-  <script nonce="TP-2025">
+    // Service Worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js', { type: 'module', scope: '/' }).catch(()=>{});
     }
