@@ -15,20 +15,24 @@
   <!-- ===== Perf ===== -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin>
   <link rel="dns-prefetch" href="//api.timeproofs.io">
+  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin>
+  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev">
+  <link rel="preconnect" href="https://plausible.io" crossorigin>
   <link rel="preload" as="image" href="/logo%20(1).png" fetchpriority="high"/>
 
   <!-- ===== Security (CSP v0.1 + analytics/API) ===== -->
   <meta http-equiv="Content-Security-Policy" content="
-default-src 'self' https://api.timeproofs.io;
+default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
 worker-src 'self' blob:;
 img-src 'self' data: https:;
 style-src 'self' 'unsafe-inline';
 script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
-connect-src 'self' https://api.timeproofs.io https://plausible.io;
+connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io;
 font-src 'self' https: data:;
-base-uri 'self';
-frame-ancestors 'none';
 object-src 'none';
+base-uri 'self';
+form-action 'self';
+frame-ancestors 'none';
 upgrade-insecure-requests">
 
   <!-- ===== Icons / Manifest ===== -->
@@ -47,6 +51,7 @@ upgrade-insecure-requests">
   <meta property="og:image:alt" content="TimeProofs regulatory readiness"/>
   <meta property="og:site_name" content="TimeProofs"/>
   <meta property="og:locale" content="en_US"/>
+  <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="TimeProofs — Regulations & Compliance"/>
   <meta name="twitter:description" content="Privacy-first. Stateless. Open verification. See the regulatory matrix."/>
@@ -56,15 +61,9 @@ upgrade-insecure-requests">
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
   <!-- ===== JSON-LD ===== -->
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"TechArticle","headline":"TimeProofs — Regulations & Compliance","about":["AI Act","Data Act","GDPR","privacy by design","auditability"],"author":{"@type":"Organization","name":"TimeProofs Editorial"},"publisher":{"@type":"Organization","name":"TimeProofs","logo":{"@type":"ImageObject","url":"https://timeproofs.io/logo%20(1).png"}},"datePublished":"2025-10-27","dateModified":"2025-10-30","url":"https://timeproofs.io/regulations.html"}
-  </script>
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://timeproofs.io/"},{"@type":"ListItem","position":2,"name":"Regulations","item":"https://timeproofs.io/regulations.html"}]}
-  </script>
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Organization","name":"TimeProofs","url":"https://timeproofs.io/","logo":"https://timeproofs.io/logo%20(1).png","sameAs":["https://x.com/timeproofs","https://github.com/BACOUL/timeproofs","https://www.linkedin.com/company/timeproofs","https://youtube.com/@timeproofs","https://timeproofs.io/rss.xml"]}
-  </script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"TimeProofs — Regulations & Compliance","about":["AI Act","Data Act","GDPR","privacy by design","auditability"],"author":{"@type":"Organization","name":"TimeProofs Editorial"},"publisher":{"@type":"Organization","name":"TimeProofs","logo":{"@type":"ImageObject","url":"https://timeproofs.io/logo%20(1).png"}},"datePublished":"2025-10-27","dateModified":"2025-10-30","url":"https://timeproofs.io/regulations.html"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://timeproofs.io/"},{"@type":"ListItem","position":2,"name":"Regulations","item":"https://timeproofs.io/regulations.html"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"TimeProofs","url":"https://timeproofs.io/","logo":"https://timeproofs.io/logo%20(1).png","sameAs":["https://x.com/timeproofs","https://github.com/BACOUL/timeproofs","https://www.linkedin.com/company/timeproofs","https://youtube.com/@timeproofs","https://timeproofs.io/rss.xml"]}</script>
 
   <!-- ===== Styles (unifiés) ===== -->
   <style>
@@ -75,6 +74,7 @@ upgrade-insecure-requests">
       --header-h:64px; --radius:14px; --max:1120px; --anchor-offset:calc(var(--header-h) + 28px);
       --safe-top:env(safe-area-inset-top,0px); --safe-btm:env(safe-area-inset-bottom,0px);
     }
+    @media (max-width:899px){ :root{ --header-h:72px; --anchor-offset:calc(var(--header-h) + 34px) } }
     *{ box-sizing:border-box }
     html,body{ margin:0; height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); color:var(--text) }
     html{ scroll-behavior:smooth; scroll-padding-top:var(--anchor-offset) }
@@ -87,7 +87,7 @@ upgrade-insecure-requests">
       background:
         radial-gradient(1200px 520px at 80% -10%, rgba(34,211,238,.08), transparent 60%),
         conic-gradient(from 220deg at 10% -20%, rgba(34,211,238,.04), transparent 30%),
-        var(--bg);
+        linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
     }
     a{ color:var(--accent); text-decoration:none } a:hover{ text-decoration:underline }
 
@@ -95,7 +95,7 @@ upgrade-insecure-requests">
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
     .skip:focus{ position:fixed; left:12px; top:12px; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
 
-    /* Header identique (logo + TimeProofs à gauche) */
+    /* Header identique */
     .tp-header{ position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:1000; background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 16px; transition:background .25s ease }
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
@@ -112,8 +112,8 @@ upgrade-insecure-requests">
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
     }
 
-    /* HERO (unifié) */
-    .tp-hero{ padding:calc(var(--header-h) + 32px + var(--safe-top)) 20px 18px; max-width:1100px; margin:0 auto }
+    /* HERO */
+    .tp-hero{ padding:calc(var(--header-h) + 32px + var(--safe-top)) 20px 18px; max-width:1100px; margin:0 auto; border-bottom:1px solid var(--line) }
     .tp-hero__icon{ font-size:2rem; line-height:1; margin-bottom:6px }
     .tp-hero__kicker{ color:#a8c5d6; letter-spacing:.3px; font-size:.95rem; margin:0 }
     #page-title{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900 }
@@ -534,7 +534,7 @@ upgrade-insecure-requests">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg>
       </a>
       <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on YouTube">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.5s-.2-1.6-.8-2.3c-.8-.8-1.7-.8-2.1-.9C16.8 4 12 4 12 4s-4.8 0 8.1.3c.4 0 1.3 0 2.1-.9.6-.7.8-2.3.8-2.3s.2-1.8.2-3.5v-2c0-1.7-.2-3.5-.2-3.5ZM9.8 15.5v-7l6.2 3.5-6.2 3.5Z"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.5s-.2-1.6-.8-2.3c-.8-.8-1.7-.8-2.1-.9C16.8 4 12 4 12 4s-4.8 0-9.1.3c.4 0 1.3 0 2.1-.9.6-.7.8-2.3.8-2.3s.2-1.8.2-3.5v-2c0-1.7-.2-3.5-.2-3.5ZM9.8 15.5v-7l6.2 3.5-6.2 3.5Z"/></svg>
       </a>
       <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/></svg>
@@ -605,4 +605,4 @@ upgrade-insecure-requests">
     }
   </script>
 </body>
-  </html>
+</html>
