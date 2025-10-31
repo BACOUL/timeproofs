@@ -15,6 +15,9 @@
   <!-- Perf (v0.1) -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
   <link rel="dns-prefetch" href="//api.timeproofs.io"/>
+  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin/>
+  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev"/>
+  <link rel="preconnect" href="https://plausible.io" crossorigin/>
   <link rel="preload" as="image" href="/logo%20(1).png" fetchpriority="high"/>
 
   <!-- Icons / Manifest -->
@@ -23,6 +26,10 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
   <link rel="manifest" href="/site.webmanifest"/>
   <link rel="author" href="/humans.txt"/>
+  <link rel="alternate" type="application/rss+xml" title="TimeProofs RSS" href="/rss.xml"/>
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
+  <link rel="status" href="https://status.timeproofs.io"/>
+  <link rel="alternate" type="application/yaml" href="/openapi.yaml"/>
 
   <!-- Social -->
   <meta property="og:title" content="Protocol (ProofSpec) — TimeProofs"/>
@@ -31,8 +38,11 @@
   <meta property="og:url" content="https://timeproofs.io/proofspec.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
   <meta property="og:image:alt" content="TimeProofs — Open protocol for proof of existence"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
   <meta property="og:site_name" content="TimeProofs"/>
   <meta property="og:locale" content="en_US"/>
+  <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Protocol (ProofSpec) — TimeProofs"/>
   <meta name="twitter:description" content="Interoperable, privacy-first digital proof of existence."/>
@@ -50,18 +60,21 @@
 
   <!-- CSP unifiée v0.1 -->
   <meta http-equiv="Content-Security-Policy" content="
-    default-src 'self' https://api.timeproofs.io;
-    worker-src 'self' blob:;
-    img-src 'self' data: https:;
-    style-src 'self' 'unsafe-inline';
-    script-src 'self' 'nonce-TP-2025';
-    connect-src 'self' https://api.timeproofs.io;
-    font-src 'self' https: data:;
-    base-uri 'self';
-    frame-ancestors 'none';
-    object-src 'none';
-    upgrade-insecure-requests;
-  ">
+default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
+worker-src 'self' blob:;
+img-src 'self' data: https:;
+style-src 'self' 'unsafe-inline';
+script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
+connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io;
+font-src 'self' https: data:;
+object-src 'none';
+base-uri 'self';
+form-action 'self';
+frame-ancestors 'none';
+upgrade-insecure-requests">
+
+  <!-- Analytics (Plausible) -->
+  <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
   <!-- Styles — Squelette v0.1 -->
   <style>
@@ -84,11 +97,12 @@
         conic-gradient(from 220deg at 10% -20%, rgba(34,211,238,.04), transparent 30%),
         var(--bg);
     }
-    a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
     .skip{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
     .skip:focus{position:fixed;left:12px;top:12px;padding:8px 12px;background:#0d2330;color:#bff1ff;border:1px solid #214a57;border-radius:8px;z-index:2000}
 
-    /* Header identique (logo + “TimeProofs” à gauche) */
+    /* Header identique */
     .tp-header{position:fixed;inset:0 0 auto 0;height:var(--header-h);z-index:1000;background:rgba(11,16,32,.55);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 16px;transition:background .25s ease}
     .tp-header.scrolled{background:rgba(11,16,32,.88)}
     .tp-brand{display:flex;align-items:center;gap:10px;color:var(--text);font-weight:900;letter-spacing:.2px;font-size:1.08rem;text-decoration:none;margin-right:auto}
@@ -107,7 +121,7 @@
     }
 
     /* HERO uniforme */
-    .tp-hero{padding:calc(var(--header-h) + 32px) 20px 18px;max-width:var(--max);margin:0 auto}
+    .tp-hero{padding:calc(var(--header-h) + 32px) 20px 18px;max-width:var(--max);margin:0 auto;border-bottom:1px solid var(--line)}
     .tp-hero__icon{font-size:2rem;line-height:1;margin-bottom:6px}
     .tp-hero__kicker{color:#a8c5d6;letter-spacing:.3px;font-size:.95rem;margin:0}
     #page-title{font-size:clamp(1.9rem,4.5vw,2.2rem);margin:.2em 0 .4em;font-weight:900}
@@ -136,7 +150,8 @@
     th{background:#0b1426;color:#e5e7eb}
     tr:last-child td{border-bottom:none}
 
-    /* Footer identique */
+    /* Footer identique + progress */
+    .progress{ position:fixed; left:0; top:var(--header-h); width:100%; height:2px; background:linear-gradient(90deg, rgba(34,211,238,.0), rgba(34,211,238,.35)); transform-origin:left; scale:0 1; z-index:900 }
     footer{border-top:1px solid var(--line);margin-top:28px;padding:20px;color:#7c8aa5;text-align:center}
     footer .badges{display:flex;gap:8px;justify-content:center;margin:10px 0}
     footer .badge{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:#0d1628;font-size:.9rem;color:#cfefff}
@@ -161,7 +176,6 @@
       <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/><span>TimeProofs</span>
     </a>
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Primary">
-      <!-- ordre strict (mémoire v0.1) -->
       <a href="/proofspec.html" aria-current="page">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html">Create/Verify</a>
@@ -174,13 +188,15 @@
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
   </header>
 
-  <!-- HERO (modèle mémorisé) -->
+  <!-- HERO -->
   <section class="tp-hero" role="region" aria-labelledby="page-title">
     <div class="tp-hero__icon" aria-hidden="true">📘</div>
     <p class="tp-hero__kicker">Status: <strong>Draft for public review</strong> · Protocol · Privacy-first · No blockchain</p>
     <h1 id="page-title">Protocol (ProofSpec)</h1>
     <p class="tp-hero__lead">Defines how to create, sign, timestamp, and verify proofs that a specific data artifact existed at a point in time and has not changed since, without exposing the original content.</p>
   </section>
+
+  <div class="progress" id="progress" aria-hidden="true"></div>
 
   <main id="main" role="main" aria-describedby="page-title">
     <!-- TOC chips -->
@@ -318,7 +334,7 @@
       <p class="muted">See also <a href="/regulations.html">Regulations & Compliance</a>.</p>
     </section>
 
-    <!-- 8. Document Proof (hash mémorisé v0.1 home) -->
+    <!-- 8. Document Proof -->
     <section class="card" id="proof" aria-labelledby="h-proof">
       <h2 id="h-proof">8) Document Proof</h2>
       <p>This page is cryptographically timestamped by TimeProofs.</p>
@@ -444,17 +460,21 @@ kid  = "tp-admin-v0"</code></pre>
 
   <!-- Scripts (nonce TP-2025) -->
   <script defer nonce="TP-2025">
-    // Header shade on scroll
+    // Header shade + progress bar
     (function(){
-      const hdr=document.getElementById('hdr');
-      function onScroll(){ if(window.scrollY>6) hdr.classList.add('scrolled'); else hdr.classList.remove('scrolled'); }
+      const hdr=document.getElementById('hdr'); const bar=document.getElementById('progress');
+      function onScroll(){
+        if(window.scrollY>6) hdr.classList.add('scrolled'); else hdr.classList.remove('scrolled');
+        const h=document.documentElement; const p=(h.scrollTop)/((h.scrollHeight-h.clientHeight)||1);
+        if(bar) bar.style.transform=`scaleX(${Math.max(0,Math.min(1,p))})`;
+      }
       onScroll(); window.addEventListener('scroll', onScroll, { passive:true });
     })();
 
-    // Burger + focus management
+    // Burger + focus trap
     (function(){
       const burger=document.getElementById('tp-burger'); const nav=document.getElementById('tp-nav');
-      function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; const a=nav.querySelector('a'); a && a.focus(); }
+      function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; nav.querySelector('a')?.focus(); }
       function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; burger.focus(); }
       function toggleMenu(){ (nav.getAttribute('data-state')==='open')?closeMenu():openMenu(); }
       burger.addEventListener('click', toggleMenu, { passive:true });
@@ -469,7 +489,19 @@ kid  = "tp-admin-v0"</code></pre>
       window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width:900px)').matches) closeMenu(); }, { passive:true });
     })();
 
-    // Autocorrect verify link when hash replaced
+    // Copy buttons
+    (function(){
+      document.querySelectorAll('.copy-btn').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const pre = btn.parentElement;
+          const code = pre?.querySelector('code')?.innerText || '';
+          (navigator.clipboard?.writeText(code) || Promise.reject()).then(()=>{ btn.textContent='Copied'; setTimeout(()=>btn.textContent='Copy',1200); })
+          .catch(()=>{ prompt('Copy manually:', code); });
+        }, { passive:true });
+      });
+    })();
+
+    // Autocorrect verify link if hash changes
     (function(){
       const h=document.getElementById('spec-proof-hash');
       const a=document.getElementById('spec-proof-link');
@@ -488,4 +520,4 @@ kid  = "tp-admin-v0"</code></pre>
     }
   </script>
 </body>
-                                                                    </html>
+      </html>
