@@ -159,7 +159,7 @@ upgrade-insecure-requests">
     code{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.92rem }
     .copy-btn{ position:absolute; top:8px; right:8px; padding:6px 8px; border-radius:8px; border:1px solid #22455a; background:#0c1a2e; color:#cfefff; cursor:pointer; font-weight:700 }
 
-    /* Footer */
+    /* Footer (identique index/Protocol) */
     footer{ border-top:1px solid var(--line); margin-top:28px; padding:20px; color:#7c8aa5; text-align:center }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
@@ -366,8 +366,8 @@ await fetch(`${API}/timestamp`,{
       <h2 id="page-proof-title">This page is verified by TimeProofs</h2>
       <p>
         Release: <code>TP-UseCases-v0.1</code> ·
-        Hash: <code id="uc-proof-hash">PUT_64_HEX_HASH_HERE</code> ·
-        <a id="uc-proof-link" href="https://api.timeproofs.io/api/verify?hash=" target="_blank" rel="noopener">Verify</a>
+        Hash: <code id="uc-proof-hash"></code> ·
+        <a id="uc-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
       </p>
       <p class="muted">Timestamp created via TimeProofs API (public, privacy-first, no blockchain).</p>
     </section>
@@ -378,10 +378,10 @@ await fetch(`${API}/timestamp`,{
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
       <span class="badge">🛡 Privacy First</span>
-      <a class="badge" href="/proofspec.html">🔍 Open Spec v0.1</a>
+      <span class="badge">🔎 Open Spec v0.1</span>
     </div>
 
-    © 2025 TimeProofs — Proof of Existence. For Everything.
+    © 2025 TimeProofs — Reference implementation of the ProofSpec protocol.
 
     <div class="links" style="margin-top:6px">
       <a href="/">Home</a> •
@@ -470,13 +470,17 @@ await fetch(`${API}/timestamp`,{
       });
     })();
 
-    // Auto-fill verify link once hash is valid
-    (function(){
-      const el=document.getElementById('uc-proof-hash');
-      const a=document.getElementById('uc-proof-link');
-      if(el && a){
-        const v=el.textContent.trim();
-        if(/^[0-9a-f]{64}$/.test(v)) a.href='https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(v);
+    // Hash dynamique depuis JSON central
+    (async function(){
+      try{
+        const r = await fetch('/releases/TP-v0.1.json', { cache:'no-cache' });
+        const j = await r.json();
+        const h = document.getElementById('uc-proof-hash');
+        const a = document.getElementById('uc-proof-link');
+        if(h) h.textContent = j.hash || '';
+        if(a) a.href = j.verified || ('https://api.timeproofs.io/api/verify?hash=' + encodeURIComponent(j.hash||''));
+      }catch(e){
+        // silencieux
       }
     })();
 
