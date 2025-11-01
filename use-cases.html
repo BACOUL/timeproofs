@@ -140,7 +140,7 @@ upgrade-insecure-requests">
     #page-title{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900 }
     .tp-hero__lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 }
 
-    /* “Chips” encadrés identiques Protocol */
+    /* “Chips” encadrés identique Protocol */
     .chip-panel{ background:#0c1424; border:1px solid var(--line); border-radius:var(--radius); padding:16px; margin:16px auto 0; max-width:var(--max); display:flex; flex-wrap:wrap; gap:12px }
     .chip{ display:inline-flex; align-items:center; padding:10px 14px; border:1px solid #1e2a44; border-radius:14px; background:#0d1b2e; color:#d8ecff; font-weight:800; letter-spacing:.2px }
 
@@ -160,12 +160,31 @@ upgrade-insecure-requests">
     .copy-btn{ position:absolute; top:8px; right:8px; padding:6px 8px; border-radius:8px; border:1px solid #22455a; background:#0c1a2e; color:#cfefff; cursor:pointer; font-weight:700 }
 
     /* Footer (identique index/Protocol) */
-    footer{ border-top:1px solid var(--line); margin-top:28px; padding:20px; color:#7c8aa5; text-align:center }
+    footer{
+      background: var(--panel);
+      border-top:1px solid var(--line);
+      margin-top:28px; padding:20px;
+      color:#a7b7cc;
+      text-align:center
+    }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
-    footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
-    footer .links a{ color:#a7b7cc; margin:0 8px } footer .links a:hover{ color:var(--accent) }
+    footer .badge{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px; border:1px solid var(--line);
+      border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff
+    }
+    footer .links a{
+      color:#a7b7cc; margin:0 8px; font-weight:700; text-decoration:none
+    }
+    footer .links a:hover{ color:var(--accent) }
+    footer .links a[aria-current="page"]{ color:#9beefb }
     .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
-    .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; color:#cfefff; transition:transform .18s }
+    .social a{
+      display:inline-flex; width:40px; height:40px;
+      border:1px solid var(--line); border-radius:12px;
+      align-items:center; justify-content:center;
+      background:#0d1628; color:#cfefff; transition:transform .18s
+    }
     .social a:hover{ transform:translateY(-2px) }
 
     a:focus-visible, .tp-burger:focus-visible, .copy-btn:focus-visible{ outline:2px solid #22d3ee; outline-offset:3px; border-radius:10px }
@@ -366,8 +385,8 @@ await fetch(`${API}/timestamp`,{
       <h2 id="page-proof-title">This page is verified by TimeProofs</h2>
       <p>
         Release: <code>TP-UseCases-v0.1</code> ·
-        Hash: <code id="uc-proof-hash"></code> ·
-        <a id="uc-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
+        Hash: <code id="uc-proof-hash">PUT_64_HEX_HASH_HERE</code> ·
+        <a id="uc-proof-link" href="https://api.timeproofs.io/api/verify?hash=" target="_blank" rel="noopener">Verify</a>
       </p>
       <p class="muted">Timestamp created via TimeProofs API (public, privacy-first, no blockchain).</p>
     </section>
@@ -381,7 +400,7 @@ await fetch(`${API}/timestamp`,{
       <span class="badge">🔎 Open Spec v0.1</span>
     </div>
 
-    © 2025 TimeProofs — Reference implementation of the ProofSpec protocol.
+    © 2025 TimeProofs — Proof of Existence. For Everything.
 
     <div class="links" style="margin-top:6px">
       <a href="/">Home</a> •
@@ -470,7 +489,7 @@ await fetch(`${API}/timestamp`,{
       });
     })();
 
-    // Hash dynamique depuis JSON central
+    // Load immutable site release hash and wire the verify link
     (async function(){
       try{
         const r = await fetch('/releases/TP-v0.1.json', { cache:'no-cache' });
@@ -478,10 +497,8 @@ await fetch(`${API}/timestamp`,{
         const h = document.getElementById('uc-proof-hash');
         const a = document.getElementById('uc-proof-link');
         if(h) h.textContent = j.hash || '';
-        if(a) a.href = j.verified || ('https://api.timeproofs.io/api/verify?hash=' + encodeURIComponent(j.hash||''));
-      }catch(e){
-        // silencieux
-      }
+        if(a) a.href = j.verified || ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(j.hash||''));
+      }catch(e){ /* silent */ }
     })();
 
     // Service Worker
