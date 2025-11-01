@@ -337,8 +337,8 @@ upgrade-insecure-requests">
       <h2 id="h-proof">8) Document Proof</h2>
       <p>This page is cryptographically timestamped by TimeProofs.</p>
       <p>Hash:
-        <code class="hash" id="spec-proof-hash">b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3</code> ·
-        <a id="spec-proof-link" href="https://api.timeproofs.io/api/verify?hash=b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3" target="_blank" rel="noopener">Verify</a>
+        <code class="hash" id="spec-proof-hash"></code> ·
+        <a id="spec-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
       </p>
     </section>
 
@@ -512,15 +512,17 @@ kid  = "tp-admin-v0"</code></pre>
       });
     })();
 
-    // Autocorrect verify link if hash changes
-    (function(){
-      const h=document.getElementById('spec-proof-hash');
-      const a=document.getElementById('spec-proof-link');
-      if(h&&a){
-        const v=h.textContent.trim();
-        if(v && !v.startsWith('PUT_')){
-          a.href='https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(v);
-        }
+    // Load immutable release hash at runtime
+    (async function(){
+      try{
+        const r = await fetch('/releases/TP-v0.1.json', { cache:'no-cache' });
+        const j = await r.json();
+        const h = document.getElementById('spec-proof-hash');
+        const a = document.getElementById('spec-proof-link');
+        if(h) h.textContent = j.hash || '';
+        if(a) a.href = j.verified || ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(j.hash||''));
+      }catch(e){
+        // silent failure, keeps page usable
       }
     })();
 
