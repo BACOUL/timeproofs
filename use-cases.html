@@ -478,18 +478,19 @@ await fetch(`${API}/timestamp`,{
       });
     })();
 
-    // Hash JSON central + lien Verify
+    // ===== Hash JSON central + lien Verify (version pages["/use-cases.html"]) =====
     (async function(){
       try{
-        const r = await fetch('/releases/TP-v0.1.json', { cache:'no-cache' });
+        const r = await fetch('/releases/TP-v0.1.json', { cache:'no-store' });
         if(!r.ok) return;
         const j = await r.json();
-        const hash = j.use_cases_hash || j.hash || '';
-        const verify = j.use_cases_verify || (hash ? ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(hash)) : '');
-        const h = document.getElementById('uc-proof-hash');
-        const a = document.getElementById('uc-proof-link');
-        if(h && hash) h.textContent = hash;
-        if(a && verify) a.href = verify;
+        const rec = j.pages && j.pages["/use-cases.html"];
+        if(!rec) return;
+        // Support des deux jeux d’IDs pour compat totale
+        const elHash = document.getElementById('uc-proof-hash') || document.getElementById('rel-proof-hash');
+        const elLink = document.getElementById('uc-proof-link') || document.getElementById('rel-proof-link');
+        if(elHash) elHash.textContent = rec.hash;
+        if(elLink){ elLink.href = rec.proofUrl || ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(rec.hash)); }
       }catch(e){}
     })();
 
@@ -499,4 +500,4 @@ await fetch(`${API}/timestamp`,{
     }
   </script>
 </body>
-        </html>
+</html>
