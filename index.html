@@ -99,7 +99,6 @@ upgrade-insecure-requests">
     }
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
-    /* Hover underline cohérent pour les liens de nav/footer */
     .tp-nav a, footer .links a { text-underline-offset:3px; }
     .tp-nav a:hover, footer .links a:hover { text-decoration:underline; }
 
@@ -119,7 +118,7 @@ upgrade-insecure-requests">
     .tp-nav{ margin-left:auto }
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
-      border:1px solid var(--line); border-radius:12px; background:#0d1628; color:var(--text); cursor:pointer
+      border:1px solid var(--line); border-radius:12px; background:#0d1628; color:#text; cursor:pointer
     }
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none }
     .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
@@ -140,7 +139,6 @@ upgrade-insecure-requests">
       min-height:calc(100svh - 64px); padding-top:92px; padding-bottom:34px;
       display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; position:relative; isolation:isolate
     }
-    /* Bandeau release vérifiée (discret, collé au hero) */
     .rel-banner{
       position:absolute; top:16px; right:16px; display:inline-flex; gap:8px; align-items:center;
       padding:6px 10px; border:1px solid #214a57; background:#0d2330; color:#aee9f7; border-radius:999px; font-size:.82rem;
@@ -164,7 +162,6 @@ upgrade-insecure-requests">
     .cta.secondary{ background:#111d33; color:#e2f6ff; border:1px solid #1e2a3e; font-weight:600 }
     .cta:hover{ transform:translateY(-2px); box-shadow:0 12px 38px rgba(34,211,238,.25) }
 
-    /* Micro-métriques sous CTA */
     .micro{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; color:#9fb3c9; margin:10px 0 0 }
     .micro .chip{ display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border:1px solid #214a57; background:#0d2330; border-radius:999px; font-size:.82rem }
 
@@ -226,7 +223,7 @@ upgrade-insecure-requests">
     footer{ border-top:1px solid var(--line); margin-top:44px; padding:18px; color:#7c8aa5; text-align:center }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
-    footer .links a{ color:#9beefb } /* bleu cohérent partout */
+    footer .links a{ color:#9beefb }
     .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
     .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; transition:transform .18s var(--e); color:#cfefff }
     .social a:hover{ transform:translateY(-2px) }
@@ -277,8 +274,8 @@ upgrade-insecure-requests">
 
   <main id="main" class="wrap" role="main">
     <section class="hero reveal" aria-labelledby="hero-title">
-      <!-- Bandeau release vérifiée -->
-      <a class="rel-banner" href="#site-proof" aria-label="View site release proof">🔏 Release v0.1 — Verified</a>
+      <!-- Release banner (will be filled from release.json) -->
+      <a class="rel-banner" id="rel-banner" href="#site-proof" aria-label="View site release proof">🔏 Release — Verified</a>
 
       <div class="label">🔐 Privacy-first • ⚡ Edge-native • 🌍 Open Protocol</div>
       <h1 id="hero-title" class="title">The Open Standard for Digital Proof of Existence</h1>
@@ -290,7 +287,6 @@ upgrade-insecure-requests">
         <a class="cta secondary" href="/verify.html" aria-label="Create or verify a proof">Create or Verify a Proof</a>
       </div>
 
-      <!-- Micro-métriques -->
       <div class="micro" aria-label="Key performance and privacy claims">
         <span class="chip">⚡ &lt; 100 ms edge</span>
         <span class="chip">🕊️ Hash-only, no uploads</span>
@@ -422,9 +418,9 @@ const check = await res.json();</code></pre></article>
     <section class="section bg-solid reveal" aria-labelledby="site-proof" id="site-proof">
       <h2 id="site-proof">This site is verified by TimeProofs</h2>
       <p>We publish a public proof of this website build. Anyone can check it.</p>
-      <p>Release: <code>TP-v0.1</code> · Hash:
-        <code id="rel-proof-hash">b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3</code>
-        · <a id="rel-proof-link" href="https://api.timeproofs.io/api/verify?hash=b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3" target="_blank" rel="noopener">Verify</a>
+      <p>Release: <code id="rel-proof-release">…</code> · Hash:
+        <code id="rel-proof-hash">…</code>
+        · <a id="rel-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
       </p>
     </section>
 
@@ -644,11 +640,27 @@ const check = await res.json();</code></pre></article>
       copy(`curl -sS https://api.timeproofs.io/api/verify?hash=${h}`);
     });
 
-    // Link release-proof anchor if hash present
-    (function(){
-      const hp=document.getElementById('rel-proof-hash'); if(!hp) return;
-      const val=hp.textContent.trim(); const a=document.getElementById('rel-proof-link');
-      if(a && val) a.href='https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(val);
+    // ---- Load release info dynamically from /release.json (central hash) ----
+    (async function loadRelease(){
+      try{
+        const r = await fetch('/release.json', { cache: 'no-store' });
+        if(!r.ok) throw new Error('release.json not found');
+        const rel = await r.json();
+
+        const elRel  = document.getElementById('rel-proof-release');
+        const elHash = document.getElementById('rel-proof-hash');
+        const elLink = document.getElementById('rel-proof-link');
+        const banner = document.getElementById('rel-banner');
+
+        if (banner && rel.release) banner.textContent = `🔏 ${rel.release} — Verified`;
+        if (elRel && rel.release)  elRel.textContent  = rel.release;
+        if (elHash && rel.hash)    elHash.textContent = rel.hash;
+        if (elLink && (rel.verify || rel.hash)) {
+          elLink.href = rel.verify || ('https://api.timeproofs.io/api/verify?hash=' + encodeURIComponent(rel.hash));
+        }
+      }catch(e){
+        console.warn('Release info not available:', e);
+      }
     })();
   })();
   </script>
@@ -663,4 +675,4 @@ const check = await res.json();</code></pre></article>
   <!-- Toast container -->
   <div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
-        </html>
+    </html>
