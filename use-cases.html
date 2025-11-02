@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" id="top" data-page="use-cases.html">
 <head>
-  <!-- ===== Core ===== -->
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <!-- Core -->
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <meta name="color-scheme" content="dark light"/>
   <title>Use Cases — TimeProofs</title>
   <meta name="description" content="Concrete TimeProofs use cases for AI teams, legal/compliance, and security: provenance, datasets, audit trails, contracts, supply chain."/>
@@ -12,7 +12,7 @@
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <link rel="canonical" href="https://timeproofs.io/use-cases.html"/>
 
-  <!-- ===== Security (CSP unifiée v0.1) ===== -->
+  <!-- CSP v0.1 -->
   <meta http-equiv="Content-Security-Policy" content="
 default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
 worker-src 'self' blob:;
@@ -21,13 +21,9 @@ style-src 'self' 'unsafe-inline';
 script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
 connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io;
 font-src 'self' https: data:;
-object-src 'none';
-base-uri 'self';
-form-action 'self';
-frame-ancestors 'none';
-upgrade-insecure-requests">
+object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
 
-  <!-- ===== Perf ===== -->
+  <!-- Perf -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin>
   <link rel="dns-prefetch" href="//api.timeproofs.io"/>
   <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin>
@@ -35,7 +31,7 @@ upgrade-insecure-requests">
   <link rel="preconnect" href="https://plausible.io" crossorigin>
   <link rel="preload" as="image" href="/logo%20(1).png" fetchpriority="high"/>
 
-  <!-- ===== Icons / Manifest ===== -->
+  <!-- Icons/manifest -->
   <link rel="icon" href="/favicon.ico" sizes="any"/>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
   <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
@@ -44,7 +40,7 @@ upgrade-insecure-requests">
   <link rel="alternate" type="application/rss+xml" title="TimeProofs RSS" href="/rss.xml"/>
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
 
-  <!-- ===== Social ===== -->
+  <!-- Social -->
   <meta property="og:title" content="Use Cases — TimeProofs"/>
   <meta property="og:description" content="Add a cryptographic moment-in-time to anything that matters — instant, private, verifiable."/>
   <meta property="og:type" content="website"/>
@@ -53,12 +49,13 @@ upgrade-insecure-requests">
   <meta property="og:image:alt" content="TimeProofs use cases for AI, legal, and security"/>
   <meta property="og:site_name" content="TimeProofs"/>
   <meta property="og:locale" content="en_US"/>
+  <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Use Cases — TimeProofs"/>
   <meta name="twitter:description" content="Provenance, datasets, audit trails, contracts, supply chain — in minutes."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
-  <!-- ===== JSON-LD ===== -->
+  <!-- JSON-LD -->
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"ItemList","name":"TimeProofs Use Cases","itemListElement":[
     {"@type":"ListItem","position":1,"name":"AI output provenance","url":"https://timeproofs.io/use-cases.html#ai-output"},
@@ -77,14 +74,13 @@ upgrade-insecure-requests">
   {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
     {"@type":"Question","name":"Do you store my content?","acceptedAnswer":{"@type":"Answer","text":"No. Only hashes are handled. The original never leaves your device."}},
     {"@type":"Question","name":"Is blockchain required?","acceptedAnswer":{"@type":"Answer","text":"No. We use standard hashing and signatures. Public verification without blockchain."}},
-    {"@type":"Question","name":"Can I verify publicly and offline?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use the public verify endpoint or a ProofSpec-compliant client with the published key policy."}}
-  ]}
+    {"@type":"Question","name":"Can I verify publicly and offline?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use the public verify endpoint or a ProofSpec-compliant client with the published key policy."}}]}
   </script>
 
-  <!-- ===== Analytics ===== -->
+  <!-- Analytics -->
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
-  <!-- ===== Styles (squelette index/Protocol unifié) ===== -->
+  <!-- Styles (identiques à Protocol) -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
@@ -113,14 +109,15 @@ upgrade-insecure-requests">
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
     .skip:focus{ position:fixed; left:12px; top:12px; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
 
-    /* Header (identique Protocol) */
+    /* Header (comme Protocol) */
     .tp-header{ position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:1000; background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 16px; transition:background .25s ease }
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
     .tp-brand img{ height:40px; width:40px; object-fit:contain; vertical-align:middle }
     .tp-nav{ margin-left:auto }
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block }
-    .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
+    .tp-nav a[aria-current="page"]{ color:#9beefb }
+    .tp-nav a:hover{ color:var(--accent) }
     .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid var(--line); border-radius:12px; background:#0d1628; color:#fff; cursor:pointer }
     @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width:899px){
@@ -130,14 +127,16 @@ upgrade-insecure-requests">
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
     }
 
-    /* HERO (identique Protocol) */
+    /* HERO */
     .tp-hero{ padding:calc(var(--header-h) + 32px + var(--safe-top)) 20px 18px; max-width:var(--max); margin:0 auto; border-bottom:1px solid var(--line) }
     .tp-hero__icon{ font-size:2rem; line-height:1; margin-bottom:6px }
     .tp-hero__kicker{ color:#a8c5d6; letter-spacing:.3px; font-size:.95rem; margin:0 }
     #page-title{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900 }
     .tp-hero__lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 }
 
-    /* Layout & cards */
+    /* Chips, layout, cards */
+    .chip-panel{ background:#0c1424; border:1px solid var(--line); border-radius:var(--radius); padding:16px; margin:16px auto 0; max-width:var(--max); display:flex; flex-wrap:wrap; gap:16px }
+    .chip{ display:inline-flex; align-items:center; padding:10px 14px; border:1px solid #1e2a44; border-radius:14px; background:#0d1b2e; color:#cfe7ff; font-weight:800; letter-spacing:.2px }
     main{ padding:10px 20px calc(40px + var(--safe-btm)); max-width:var(--max); margin:0 auto }
     h2{ color:#b9e7f5; margin:1.6em 0 .6em; font-size:1.35rem }
     h3{ color:#aee9f7; margin:1.1em 0 .4em; font-size:1.05rem }
@@ -152,13 +151,13 @@ upgrade-insecure-requests">
     code{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.92rem }
     .copy-btn{ position:absolute; top:8px; right:8px; padding:6px 8px; border-radius:8px; border:1px solid #22455a; background:#0c1a2e; color:#cfefff; cursor:pointer; font-weight:700 }
 
-    /* Footer (identique Protocol) */
-    footer{ border-top:1px solid var(--line); margin-top:28px; padding:20px; color:#7c8aa5; text-align:center }
+    /* Footer (comme Protocol) */
+    footer{ background:var(--panel); border-top:1px solid var(--line); margin-top:28px; padding:20px; text-align:center; color:#a7b7cc }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
     footer .links{ margin-top:6px; line-height:1.9; font-size:1.02rem }
-    footer .links a{ color:#cfefff }
-    footer .links a:hover{ color:#9beefb }
+    footer .links a{ color:#cfefff; font-weight:600; text-decoration:none }
+    footer .links a:hover{ color:#9beefb; text-decoration:underline }
     .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
     .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; color:#cfefff; transition:transform .18s }
     .social a:hover{ transform:translateY(-2px) }
@@ -172,10 +171,10 @@ upgrade-insecure-requests">
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
-  <!-- ===== Header ===== -->
+  <!-- Header -->
   <header class="tp-header" id="hdr" role="banner" aria-label="Site header">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
-      <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/><span>TimeProofs</span>
+      <img src="/logo%20(1).png" alt="" width="40" height="40" decoding="async" fetchpriority="high"/><span>TimeProofs</span>
     </a>
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Primary">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
@@ -190,7 +189,7 @@ upgrade-insecure-requests">
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
   </header>
 
-  <!-- ===== HERO ===== -->
+  <!-- HERO -->
   <section class="tp-hero" role="region" aria-labelledby="page-title">
     <div class="tp-hero__icon" aria-hidden="true">🧩</div>
     <p class="tp-hero__kicker">Use Cases · Privacy-first · No blockchain</p>
@@ -198,24 +197,23 @@ upgrade-insecure-requests">
     <p class="tp-hero__lead">Hash locally. Timestamp via API. Verify publicly — for AI, legal, and security workflows.</p>
   </section>
 
-  <!-- ===== TOC pills ===== -->
-  <nav class="card panel" role="navigation" aria-label="Table of contents" style="max-width:1120px;margin:16px auto 0;display:flex;flex-wrap:wrap;gap:12px">
-    <a class="badge" href="#ai-output">AI output provenance</a>
-    <a class="badge" href="#ai-prompt">Prompt & chain integrity</a>
-    <a class="badge" href="#ai-dataset">Dataset snapshots</a>
-    <a class="badge" href="#legal-files">Contracts & files</a>
-    <a class="badge" href="#sec-events">Webhooks & events</a>
-    <a class="badge" href="#supply-release">Releases & binaries</a>
-    <a class="badge" href="#why-adopt">Why teams adopt</a>
-    <a class="badge" href="#why-not">Why not blockchain?</a>
-    <a class="badge" href="#page-proof">Page proof</a>
-    <a class="badge" href="#top">↑ Top</a>
+  <!-- TOC chips -->
+  <nav class="chip-panel" role="navigation" aria-label="Table of contents">
+    <a class="chip" href="#ai-output">AI output provenance</a>
+    <a class="chip" href="#ai-prompt">Prompt & chain integrity</a>
+    <a class="chip" href="#ai-dataset">Dataset snapshots</a>
+    <a class="chip" href="#legal-files">Contracts & files</a>
+    <a class="chip" href="#sec-events">Webhooks & events</a>
+    <a class="chip" href="#supply-release">Releases & binaries</a>
+    <a class="chip" href="#why-adopt">Why teams adopt</a>
+    <a class="chip" href="#why-not">Why not blockchain?</a>
+    <a class="chip" href="#page-proof">Page proof</a>
+    <a class="chip" href="#top">↑ Top</a>
   </nav>
 
-  <!-- ===== Content ===== -->
+  <!-- Content -->
   <main id="main" role="main" aria-describedby="page-title">
     <section class="grid three" aria-label="Primary use cases">
-      <!-- AI output provenance -->
       <article class="card" id="ai-output" aria-labelledby="uc-ai-output-title">
         <h3 id="uc-ai-output-title">AI output provenance</h3>
         <p><strong>Problem.</strong> Users and auditors need proof that an output existed at time T and has not changed.</p>
@@ -236,7 +234,6 @@ const proof=await fetch(`${API}/timestamp`,{
         <p class="muted"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Hash-only. Avoid PII in <code>meta</code>.</p>
       </article>
 
-      <!-- Prompt & chain integrity -->
       <article class="card" id="ai-prompt" aria-labelledby="uc-ai-prompt-title">
         <h3 id="uc-ai-prompt-title">Prompt & chain integrity</h3>
         <p><strong>Problem.</strong> Audit and regression require a stable record of prompts and chain states.</p>
@@ -251,7 +248,6 @@ await fetch(`${API}/timestamp`,{
         <p class="muted"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • No secrets in <code>meta</code>.</p>
       </article>
 
-      <!-- Dataset snapshots -->
       <article class="card" id="ai-dataset" aria-labelledby="uc-ai-dataset-title">
         <h3 id="uc-ai-dataset-title">Dataset & fine-tune snapshots</h3>
         <p><strong>Problem.</strong> Reproducibility demands proof of exactly which data was used at time T.</p>
@@ -266,7 +262,6 @@ await fetch(`${API}/timestamp`,{
         <p class="muted"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Keep <code>meta</code> minimal.</p>
       </article>
 
-      <!-- Legal: files -->
       <article class="card" id="legal-files" aria-labelledby="uc-legal-title">
         <h3 id="uc-legal-title">Contracts, emails, files</h3>
         <p><strong>Problem.</strong> Prove existence and integrity without sharing private content.</p>
@@ -287,7 +282,6 @@ await fetch(`${API}/timestamp`,{
         <p class="muted"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Never upload originals.</p>
       </article>
 
-      <!-- Security: events -->
       <article class="card" id="sec-events" aria-labelledby="uc-sec-events-title">
         <h3 id="uc-sec-events-title">Webhooks & event logs</h3>
         <p><strong>Problem.</strong> Critical events must be tamper-evident for post-mortems and audits.</p>
@@ -302,7 +296,6 @@ await fetch(`${API}/timestamp`,{
         <p class="muted"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Public verification available.</p>
       </article>
 
-      <!-- Supply chain: releases -->
       <article class="card" id="supply-release" aria-labelledby="uc-supply-title">
         <h3 id="uc-supply-title">Release & binary integrity</h3>
         <p><strong>Problem.</strong> Users need to verify artifacts before install. Supply chain attacks are rampant.</p>
@@ -319,12 +312,11 @@ await fetch(`${API}/timestamp`,{
 
     <div class="card" role="region" aria-label="Get started">
       <div class="panel" style="display:flex;gap:10px;flex-wrap:wrap">
-        <a class="badge" href="/verify.html">Create or Verify a Proof</a>
-        <a class="badge" href="/docs.html">See full API docs</a>
+        <a class="chip" href="/verify.html">Create or Verify a Proof</a>
+        <a class="chip" href="/docs.html">See full API docs</a>
       </div>
     </div>
 
-    <!-- Adoption reasons -->
     <section id="why-adopt" aria-labelledby="adopt-title" style="margin-top:6px">
       <h2 id="adopt-title">Why teams adopt it quickly</h2>
       <div class="grid two">
@@ -341,7 +333,6 @@ await fetch(`${API}/timestamp`,{
       </div>
     </section>
 
-    <!-- Why not blockchain -->
     <section id="why-not" aria-labelledby="why-not-title" style="margin-top:6px">
       <h2 id="why-not-title">Why not blockchain?</h2>
       <div class="card" role="region" aria-label="Comparison">
@@ -362,13 +353,13 @@ await fetch(`${API}/timestamp`,{
       <p>
         Release: <code id="page-proof-release"></code> ·
         Hash: <code id="page-proof-hash"></code> ·
-        <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
+        <a id="page-proof-link" href="#" target="_blank" rel="noopener nofollow">Verify</a>
       </p>
       <p class="muted">Timestamp created via TimeProofs API (public, privacy-first, no blockchain).</p>
     </section>
   </main>
 
-  <!-- ===== Footer (identique Protocol) ===== -->
+  <!-- Footer -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
@@ -378,7 +369,7 @@ await fetch(`${API}/timestamp`,{
 
     © 2025 TimeProofs — Reference implementation of the ProofSpec protocol.
 
-    <div class="links" style="margin-top:6px">
+    <div class="links" aria-label="Footer links">
       <a href="/">Home</a> •
       <a href="/proofspec.html">Protocol</a> •
       <a href="/use-cases.html" aria-current="page">Use Cases</a> •
@@ -395,7 +386,7 @@ await fetch(`${API}/timestamp`,{
       <a href="https://x.com/timeproofs" target="_blank" rel="noopener me" aria-label="Follow @timeproofs on X">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
       </a>
-      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv2" target="_blank" rel="noopener me" aria-label="TimeProofs on GitHub">
+      <a href="https://github.com/BACOUL/timeproofs" target="_blank" rel="noopener me" aria-label="TimeProofs on GitHub">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
       </a>
       <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn">
@@ -414,7 +405,7 @@ await fetch(`${API}/timestamp`,{
     </div>
   </footer>
 
-  <!-- ===== Scripts ===== -->
+  <!-- Scripts -->
   <script defer nonce="TP-2025">
     document.documentElement.classList.add('js');
 
@@ -465,7 +456,7 @@ await fetch(`${API}/timestamp`,{
       });
     })();
 
-    // ===== Hash JSON central (stable across edits) =====
+    // Hash JSON central + Verify
     (async function(){
       try{
         const res = await fetch('/releases/v0.1.json', { cache:'no-store' });
@@ -499,4 +490,4 @@ await fetch(`${API}/timestamp`,{
     }
   </script>
 </body>
-</html>
+  </html>
