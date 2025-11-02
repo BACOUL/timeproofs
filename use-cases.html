@@ -39,6 +39,9 @@ object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; 
   <link rel="author" href="/humans.txt"/>
   <link rel="alternate" type="application/rss+xml" title="TimeProofs RSS" href="/rss.xml"/>
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
+  <!-- Head commun (status + OpenAPI) -->
+  <link rel="status" href="https://status.timeproofs.io"/>
+  <link rel="alternate" href="/openapi.yaml" type="application/yaml"/>
 
   <!-- Social -->
   <meta property="og:title" content="Use Cases — TimeProofs"/>
@@ -120,7 +123,6 @@ object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; 
     #tp-nav{ margin-left:auto }
     #tp-nav a{ color:#a7b7cc; font-weight:600; letter-spacing:.2px; margin-left:18px; padding:8px 0; display:inline-block }
     #tp-nav a:hover{ color:var(--accent); text-decoration:underline }
-    [aria-current="page"]{ text-decoration:underline; color:var(--accent) }
     .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid var(--line); border-radius:12px; background:#0d1628; color:#fff; cursor:pointer }
     @media (min-width:900px){ .tp-burger{ display:none } #tp-nav{ display:flex; align-items:center } }
     @media (max-width:899px){
@@ -159,7 +161,7 @@ object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; 
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
     footer .links{ margin-top:6px; line-height:1.9; font-size:1.02rem }
-    /* Styles nav/footer forcés en fin pour écraser le global a{...} */
+    /* Styles nav/footer forcés (spécifiques) */
     #tp-nav a, footer .links a { color:#a7b7cc; font-weight:600; text-decoration:none }
     #tp-nav a:hover, footer .links a:hover { color:var(--accent); text-decoration:underline }
     #tp-nav a[aria-current="page"], footer .links a[aria-current="page"] { color:var(--accent); text-decoration:underline }
@@ -179,7 +181,7 @@ object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; 
   <!-- Header -->
   <header class="tp-header" id="hdr" role="banner" aria-label="Site header">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
-      <img src="/logo%20(1).png" alt="" width="40" height="40" decoding="async" fetchpriority="high"/><span>TimeProofs</span>
+      <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/><span>TimeProofs</span>
     </a>
     <nav id="tp-nav" data-state="closed" aria-label="Primary">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
@@ -219,6 +221,7 @@ object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; 
   <!-- Content -->
   <main id="main" role="main" aria-describedby="page-title">
     <section class="grid three" aria-label="Primary use cases">
+      <!-- AI output provenance -->
       <article class="card" id="ai-output" aria-labelledby="uc-ai-output-title">
         <h3 id="uc-ai-output-title">AI output provenance</h3>
         <p><strong>Problem.</strong> Users and auditors need proof that an output existed at time T and has not changed.</p>
@@ -239,6 +242,7 @@ const proof=await fetch(`${API}/timestamp`,{
         <p class="muted"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Hash-only. Avoid PII in <code>meta</code>.</p>
       </article>
 
+      <!-- Prompt & chain integrity -->
       <article class="card" id="ai-prompt" aria-labelledby="uc-ai-prompt-title">
         <h3 id="uc-ai-prompt-title">Prompt & chain integrity</h3>
         <p><strong>Problem.</strong> Audit and regression require a stable record of prompts and chain states.</p>
@@ -253,6 +257,7 @@ await fetch(`${API}/timestamp`,{
         <p class="muted"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • No secrets in <code>meta</code>.</p>
       </article>
 
+      <!-- Dataset snapshots -->
       <article class="card" id="ai-dataset" aria-labelledby="uc-ai-dataset-title">
         <h3 id="uc-ai-dataset-title">Dataset & fine-tune snapshots</h3>
         <p><strong>Problem.</strong> Reproducibility demands proof of exactly which data was used at time T.</p>
@@ -267,6 +272,7 @@ await fetch(`${API}/timestamp`,{
         <p class="muted"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Keep <code>meta</code> minimal.</p>
       </article>
 
+      <!-- Legal: files -->
       <article class="card" id="legal-files" aria-labelledby="uc-legal-title">
         <h3 id="uc-legal-title">Contracts, emails, files</h3>
         <p><strong>Problem.</strong> Prove existence and integrity without sharing private content.</p>
@@ -287,6 +293,7 @@ await fetch(`${API}/timestamp`,{
         <p class="muted"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Never upload originals.</p>
       </article>
 
+      <!-- Security: events -->
       <article class="card" id="sec-events" aria-labelledby="uc-sec-events-title">
         <h3 id="uc-sec-events-title">Webhooks & event logs</h3>
         <p><strong>Problem.</strong> Critical events must be tamper-evident for post-mortems and audits.</p>
@@ -301,6 +308,7 @@ await fetch(`${API}/timestamp`,{
         <p class="muted"><strong>Endpoint.</strong> <code>POST /api/timestamp</code> • Public verification available.</p>
       </article>
 
+      <!-- Supply chain: releases -->
       <article class="card" id="supply-release" aria-labelledby="uc-supply-title">
         <h3 id="uc-supply-title">Release & binary integrity</h3>
         <p><strong>Problem.</strong> Users need to verify artifacts before install. Supply chain attacks are rampant.</p>
@@ -322,6 +330,7 @@ await fetch(`${API}/timestamp`,{
       </div>
     </div>
 
+    <!-- Adoption reasons -->
     <section id="why-adopt" aria-labelledby="adopt-title" style="margin-top:6px">
       <h2 id="adopt-title">Why teams adopt it quickly</h2>
       <div class="grid two">
@@ -338,6 +347,7 @@ await fetch(`${API}/timestamp`,{
       </div>
     </section>
 
+    <!-- Why not blockchain -->
     <section id="why-not" aria-labelledby="why-not-title" style="margin-top:6px">
       <h2 id="why-not-title">Why not blockchain?</h2>
       <div class="card" role="region" aria-label="Comparison">
