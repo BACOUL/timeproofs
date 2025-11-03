@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="top" data-page="verify.html">
 <head>
   <!-- Core -->
   <meta charset="UTF-8"/>
@@ -70,6 +70,17 @@ upgrade-insecure-requests">
 
   <!-- Analytics (Plausible) -->
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Organization","name":"TimeProofs","url":"https://timeproofs.io/","logo":"https://timeproofs.io/logo%20(1).png","sameAs":["https://x.com/timeproofs","https://github.com/BACOUL/timeproofs","https://www.linkedin.com/company/timeproofs","https://youtube.com/@timeproofs","https://timeproofs.io/rss.xml"]}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebPage","name":"Verify & Create Proof","url":"https://timeproofs.io/verify.html","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"},"datePublished":"2025-10-22","dateModified":"2025-11-03","description":"Verify or create cryptographic proofs of existence. Hash locally, timestamp via API, verify publicly."}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://timeproofs.io/"},{"@type":"ListItem","position":2,"name":"Create/Verify","item":"https://timeproofs.io/verify.html"}]}
+  </script>
 
   <style>
     :root{
@@ -173,6 +184,7 @@ upgrade-insecure-requests">
     footer{ border-top:1px solid var(--line); margin-top:44px; padding:18px; color:#7c8aa5; text-align:center }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
+    footer .links a{ color:#a7b7cc; margin:0 8px } footer .links a:hover{ color:var(--accent) }
     .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
     .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; transition:transform .18s var(--e); color:#cfefff }
     .social a:hover{ transform:translateY(-2px) }
@@ -193,15 +205,15 @@ upgrade-insecure-requests">
   <a href="#main" class="skip">Skip to main content</a>
 
   <!-- Header -->
-  <header class="tp-header" id="hdr" role="banner">
+  <header class="tp-header" id="hdr" role="banner" aria-label="Site header">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
       <span>TimeProofs</span>
     </a>
-    <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation">
+    <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
-      <a href="/verify.html" aria-current="page">Create/Verify</a>
+      <a href="/verify.html">Create/Verify</a>
       <a href="/docs.html">API Docs</a>
       <a href="/regulations.html">Regulations</a>
       <a href="/security.html">Security</a>
@@ -300,6 +312,17 @@ upgrade-insecure-requests">
         </div>
       </section>
     </div>
+
+    <!-- Document proof (central manifest) -->
+    <section class="card" aria-labelledby="doc-proof" style="margin-top:12px">
+      <h2 id="doc-proof">This page is verified by TimeProofs</h2>
+      <p>
+        Release: <span id="page-proof-release"></span><br/>
+        Hash: <code id="page-proof-hash"></code> ·
+        <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
+      </p>
+      <p class="hint">Loaded from the central release manifest.</p>
+    </section>
   </main>
 
   <!-- Footer -->
@@ -314,13 +337,14 @@ upgrade-insecure-requests">
       <a href="/">Home</a> •
       <a href="/proofspec.html">Protocol</a> •
       <a href="/use-cases.html">Use Cases</a> •
-      <a href="/verify.html" aria-current="page">Create/Verify</a> •
+      <a href="/verify.html">Create/Verify</a> •
       <a href="/docs.html">API Docs</a> •
       <a href="/regulations.html">Regulations</a> •
       <a href="/.well-known/security.txt">Security.txt</a> •
       <a href="/privacy.html">Privacy</a> •
       <a href="/legal.html">Legal</a> •
-      <a href="/humans.txt">humans.txt</a>
+      <a href="/humans.txt">humans.txt</a> •
+      <a href="/rss.xml">RSS</a>
     </div>
     <div class="social" aria-label="Social links">
       <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg></a>
@@ -619,7 +643,7 @@ upgrade-insecure-requests">
         const found = (j.found===true) || okFlag || !!(j.timestamp||j.ts||j.signature||j.sig);
 
         if (okFlag && found) statusVerify.innerHTML = `<span class="pill ok" role="status">✅ Valid</span>`;
-        else if (j.error === 'not_found' || r.status === 404) statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Not found</span>`;
+        else if (j.error === 'not_found' || (r && r.status === 404)) statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Not found</span>`;
         else statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Invalid</span>`;
 
         const normalized = {
@@ -641,6 +665,32 @@ upgrade-insecure-requests">
         btnVerify.disabled=false; setBusy(panelVerify,false);
       }
     };
+
+    // aria-current auto for header + footer
+    (function(){
+      const here=new URL(location.href).pathname.replace(/\/index\.html$/,'/');
+      document.querySelectorAll('header nav a, footer .links a').forEach(a=>{
+        const path=new URL(a.href,location.origin).pathname;
+        if(path===here) a.setAttribute('aria-current','page');
+      });
+    })();
+
+    // Central release hash loader (from /releases/v0.1.json)
+    (async()=>{
+      try{
+        const res=await fetch('/releases/v0.1.json',{cache:'no-store'});
+        if(!res.ok) return;
+        const map=await res.json();
+        const id=document.documentElement.dataset.page||location.pathname.replace(/^\//,'');
+        const e=map[id]; if(!e) return;
+        const rel=document.getElementById('page-proof-release');
+        const h=document.getElementById('page-proof-hash');
+        const l=document.getElementById('page-proof-link');
+        rel && (rel.textContent=e.release||'');
+        h && (h.textContent=e.hash||'');
+        if(l){ l.href = e.verify || ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(e.hash||'')); }
+      }catch{}
+    })();
   </script>
 
   <!-- Register Service Worker v0.1 -->
@@ -650,4 +700,4 @@ upgrade-insecure-requests">
     }
   </script>
 </body>
-  </html>
+    </html>
