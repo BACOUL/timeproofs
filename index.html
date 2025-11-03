@@ -9,7 +9,7 @@
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
-  <link rel="canonical" href="https://timeproofs.io/"/>
+  <link rel="canonical" href="https://timeproofs.io"/>
 
   <!-- Alt feeds -->
   <link rel="alternate" type="application/rss+xml" title="TimeProofs RSS" href="/rss.xml"/>
@@ -45,7 +45,7 @@
   <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="TimeProofs — The Open Standard for Digital Proof of Existence"/>
-  <meta name="twitter:description" content="Hash locally. Timestamp instantly. Verify publicly. For AI, data, and every digital creation."/>
+  <meta name="twitter:description" content="Hash locally. Timestamp instantly. Verify publicly. For AI, data, and every digital creation.""/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- JSON-LD Org + Site -->
@@ -107,10 +107,8 @@ upgrade-insecure-requests">
 
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
-      background:rgba(11,16,32,.55); backdrop-filter:blur(10px);
-      border-bottom:1px solid var(--line);
-      display:flex; align-items:center; justify-content:space-between; padding:0 16px;
-      transition:background .25s var(--e)
+      background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between; padding:0 16px; transition:background .25s var(--e)
     }
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
@@ -141,8 +139,7 @@ upgrade-insecure-requests">
     }
     .rel-banner{
       position:absolute; top:16px; right:16px; display:inline-flex; gap:8px; align-items:center;
-      padding:6px 10px; border:1px solid #214a57; background:#0d2330; color:#aee9f7; border-radius:999px; font-size:.82rem;
-      box-shadow:var(--ring)
+      padding:6px 10px; border:1px solid #214a57; background:#0d2330; color:#aee9f7; border-radius:999px; font-size:.82rem; box-shadow:var(--ring)
     }
     .label{
       display:inline-flex; gap:8px; align-items:center; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem; margin-bottom:12px; box-shadow:var(--ring)
@@ -223,8 +220,8 @@ upgrade-insecure-requests">
     footer{ border-top:1px solid var(--line); margin-top:44px; padding:18px; color:#7c8aa5; text-align:center }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
-    footer .links a{ color:#cfefff }              /* aligné sur l’index */
-    footer .links a:hover{ color:#9beefb }        /* bleu au survol */
+    footer .links a{ color:#cfefff }
+    footer .links a:hover{ color:#9beefb }
     .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
     .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; transition:transform .18s var(--e); color:#cfefff }
     .social a:hover{ transform:translateY(-2px) }
@@ -303,6 +300,11 @@ upgrade-insecure-requests">
           </div>
           <div class="mini">We hash locally, then call <code>/api/timestamp</code>.</div>
           <div id="out-create" class="kv" role="region" aria-live="polite"></div>
+          <!-- NEW: exact date/time for create -->
+          <div class="mini" id="dt-create" hidden>
+            <strong>Timestamp:</strong>
+            <code id="dt-create-utc"></code> • <span>Local:</span> <code id="dt-create-local"></code>
+          </div>
           <div class="btn-row">
             <button type="button" id="copy-create-json" class="btn small" aria-label="Copy create JSON">Copy JSON</button>
             <button type="button" id="copy-create-curl" class="btn small" aria-label="Copy create cURL">Copy cURL</button>
@@ -321,6 +323,11 @@ upgrade-insecure-requests">
           </div>
           <div class="mini">Calls <code>/api/verify?hash=...</code>. Result shows green/red.</div>
           <div id="out-verify" class="kv" role="region" aria-live="polite"></div>
+          <!-- NEW: exact date/time for verify -->
+          <div class="mini" id="dt-verify" hidden>
+            <strong>Proof time:</strong>
+            <code id="dt-verify-utc"></code> • <span>Local:</span> <code id="dt-verify-local"></code>
+          </div>
           <div class="btn-row">
             <button type="button" id="copy-verify-json" class="btn small" aria-label="Copy verify JSON">Copy JSON</button>
             <button type="button" id="copy-verify-curl" class="btn small" aria-label="Copy verify cURL">Copy cURL</button>
@@ -463,9 +470,8 @@ const check = await res.json();</code></pre></article>
         <a class="cta secondary" href="/proofspec.html">Learn the Spec</a>
       </div>
     </section>
-  </main>
-
-  <footer role="contentinfo" aria-label="Site footer">
+    </main>
+    <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
       <span class="badge">🛡 Privacy First</span>
@@ -569,6 +575,46 @@ const check = await res.json();</code></pre></article>
     }
     function copy(text){ navigator.clipboard?.writeText(text).then(()=>toast('Copied')); }
 
+    // --- Timestamp formatting helpers (NEW) ---
+    function parseTimestamp(ts){
+      if(ts==null) return null;
+      try{
+        // Accept ISO string, seconds, or milliseconds
+        if(typeof ts==='number'){
+          // Heuristic: if > 10^12 it's ms, else seconds
+          const ms = ts > 1e12 ? ts : ts*1000;
+          return new Date(ms);
+        }
+        const n = Number(ts);
+        if(!Number.isNaN(n)) return new Date(n > 1e12 ? n : n*1000);
+        // else string
+        const d = new Date(ts);
+        return isNaN(d.getTime()) ? null : d;
+      }catch{ return null; }
+    }
+    function fmtUTC(d){
+      return d ? d.toISOString().replace('T',' ').replace('Z','Z') : '';
+    }
+    function fmtLocal(d){
+      if(!d) return '';
+      try{
+        return d.toLocaleString(undefined, {
+          year:'numeric', month:'2-digit', day:'2-digit',
+          hour:'2-digit', minute:'2-digit', second:'2-digit'
+        });
+      }catch{ return d.toString(); }
+    }
+    function setCreateTimes(d){
+      const box=$('dt-create'); if(!box) return;
+      if(d){ $('dt-create-utc').textContent=fmtUTC(d); $('dt-create-local').textContent=fmtLocal(d); box.hidden=false; }
+      else { box.hidden=true; }
+    }
+    function setVerifyTimes(d){
+      const box=$('dt-verify'); if(!box) return;
+      if(d){ $('dt-verify-utc').textContent=fmtUTC(d); $('dt-verify-local').textContent=fmtLocal(d); box.hidden=false; }
+      else { box.hidden=true; }
+    }
+
     // Create flow
     let lastCreate = {hash:null, json:null};
     $('btn-create')?.addEventListener('click', async ()=>{
@@ -588,8 +634,13 @@ const check = await res.json();</code></pre></article>
         const ok = !!j.ok || (!!j.signature && !!j.timestamp);
         showStatus($('status-create'), ok, ok ? 'Proof created' : 'Create failed');
         lastCreate = { hash: h, json: j };
+
+        // NEW: extract timestamp and show times
+        const d = parseTimestamp(j?.timestamp ?? j?.ts ?? j?.time ?? j?.createdAt);
+        setCreateTimes(d);
       }catch(e){
         showStatus($('status-create'), false, 'Network or CORS error');
+        setCreateTimes(null);
       }
     });
     $('copy-create-json')?.addEventListener('click', ()=>{
@@ -628,8 +679,15 @@ const check = await res.json();</code></pre></article>
         const ok = !!j.valid || j.ok===true || j.result==='valid';
         showStatus($('status-verify'), ok, ok?'Valid proof':'Invalid or not found');
         lastVerify = { hash:h, json:j };
+
+        // NEW: extract timestamp from verify response and show times
+        const d = parseTimestamp(
+          j?.timestamp ?? j?.ts ?? j?.time ?? j?.createdAt ?? j?.proof?.timestamp ?? j?.data?.timestamp
+        );
+        setVerifyTimes(d);
       }catch(e){
         showStatus($('status-verify'), false, 'Network or CORS error');
+        setVerifyTimes(null);
       }
     });
     $('copy-verify-json')?.addEventListener('click', ()=>{
