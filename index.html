@@ -45,7 +45,7 @@
   <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="TimeProofs — The Open Standard for Digital Proof of Existence"/>
-  <meta name="twitter:description" content="Hash locally. Timestamp instantly. Verify publicly. For AI, data, and every digital creation.""/>
+  <meta name="twitter:description" content="Hash locally. Timestamp instantly. Verify publicly. For AI, data, and every digital creation."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- JSON-LD Org + Site -->
@@ -231,6 +231,22 @@ upgrade-insecure-requests">
     .progress{ position:fixed; left:0; top:64px; width:100%; height:2px; background:linear-gradient(90deg, rgba(34,211,238,.0), rgba(34,211,238,.35)); transform-origin:left; scale:0 1; z-index:900 }
 
     a:focus-visible, .cta:focus-visible, .btn:focus-visible, .tp-burger:focus-visible{ outline:2px solid #22d3ee; outline-offset:3px; border-radius:12px; }
+
+    /* ---- Pretty proof summary (front-only) ---- */
+    .proof-summary{
+      border:1px solid #22455a; background:#0b1426; border-radius:12px;
+      padding:12px; margin:8px 0; box-shadow:var(--ring);
+      color:#e6f6ff; text-align:left
+    }
+    .proof-summary .h{font-weight:800; margin:0 0 6px; color:#9beefb}
+    .proof-summary .grid{display:grid; grid-template-columns:160px 1fr; gap:6px 10px}
+    .proof-summary .k{color:#9beefb; opacity:.9}
+    .proof-summary .v{color:#dbe7f3; word-break:break-word; overflow-wrap:anywhere}
+    .proof-summary.ok{border-color:#065f46; background:#0c1f22}
+    .proof-summary.err{border-color:#7f1d1d; background:#231114}
+    .proof-summary .hint{margin-top:8px; font-size:.88rem; color:#9fb3c9}
+    .proof-raw pre{max-height:220px; overflow:auto; margin:8px 0 0}
+
     @media (max-width:899px){
       .hero{ padding-top:92px; padding-bottom:24px }
       .section{ padding:28px 0 }
@@ -300,11 +316,6 @@ upgrade-insecure-requests">
           </div>
           <div class="mini">We hash locally, then call <code>/api/timestamp</code>.</div>
           <div id="out-create" class="kv" role="region" aria-live="polite"></div>
-          <!-- NEW: exact date/time for create -->
-          <div class="mini" id="dt-create" hidden>
-            <strong>Timestamp:</strong>
-            <code id="dt-create-utc"></code> • <span>Local:</span> <code id="dt-create-local"></code>
-          </div>
           <div class="btn-row">
             <button type="button" id="copy-create-json" class="btn small" aria-label="Copy create JSON">Copy JSON</button>
             <button type="button" id="copy-create-curl" class="btn small" aria-label="Copy create cURL">Copy cURL</button>
@@ -323,11 +334,6 @@ upgrade-insecure-requests">
           </div>
           <div class="mini">Calls <code>/api/verify?hash=...</code>. Result shows green/red.</div>
           <div id="out-verify" class="kv" role="region" aria-live="polite"></div>
-          <!-- NEW: exact date/time for verify -->
-          <div class="mini" id="dt-verify" hidden>
-            <strong>Proof time:</strong>
-            <code id="dt-verify-utc"></code> • <span>Local:</span> <code id="dt-verify-local"></code>
-          </div>
           <div class="btn-row">
             <button type="button" id="copy-verify-json" class="btn small" aria-label="Copy verify JSON">Copy JSON</button>
             <button type="button" id="copy-verify-curl" class="btn small" aria-label="Copy verify cURL">Copy cURL</button>
@@ -575,44 +581,63 @@ const check = await res.json();</code></pre></article>
     }
     function copy(text){ navigator.clipboard?.writeText(text).then(()=>toast('Copied')); }
 
-    // --- Timestamp formatting helpers (NEW) ---
-    function parseTimestamp(ts){
-      if(ts==null) return null;
-      try{
-        // Accept ISO string, seconds, or milliseconds
-        if(typeof ts==='number'){
-          // Heuristic: if > 10^12 it's ms, else seconds
-          const ms = ts > 1e12 ? ts : ts*1000;
-          return new Date(ms);
-        }
-        const n = Number(ts);
-        if(!Number.isNaN(n)) return new Date(n > 1e12 ? n : n*1000);
-        // else string
-        const d = new Date(ts);
-        return isNaN(d.getTime()) ? null : d;
-      }catch{ return null; }
+    // ---- Pretty renderer (front-only, no backend change) ----
+    function escapeHTML(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+    function toISO(x){
+      if(!x && x!==0) return null;
+      if(typeof x==='number') return new Date(x < 2e10 ? x*1000 : x).toISOString();
+      const n=Number(x);
+      if(!Number.isNaN(n) && isFinite(n)) return new Date(n < 2e10 ? n*1000 : n).toISOString();
+      const d=new Date(x); return isNaN(d.getTime())? null : d.toISOString();
     }
-    function fmtUTC(d){
-      return d ? d.toISOString().replace('T',' ').replace('Z','Z') : '';
-    }
-    function fmtLocal(d){
-      if(!d) return '';
+    function fmtLocal(iso){
       try{
-        return d.toLocaleString(undefined, {
-          year:'numeric', month:'2-digit', day:'2-digit',
+        if(!iso) return '—';
+        return new Intl.DateTimeFormat('fr-FR', {
+          timeZone: 'Europe/Paris', year:'numeric', month:'2-digit', day:'2-digit',
           hour:'2-digit', minute:'2-digit', second:'2-digit'
-        });
-      }catch{ return d.toString(); }
+        }).format(new Date(iso));
+      }catch{ return iso || '—'; }
     }
-    function setCreateTimes(d){
-      const box=$('dt-create'); if(!box) return;
-      if(d){ $('dt-create-utc').textContent=fmtUTC(d); $('dt-create-local').textContent=fmtLocal(d); box.hidden=false; }
-      else { box.hidden=true; }
+    function pick(obj, keys, dflt=null){
+      for(const k of keys){ if(obj && obj[k]!=null) return obj[k]; }
+      return dflt;
     }
-    function setVerifyTimes(d){
-      const box=$('dt-verify'); if(!box) return;
-      if(d){ $('dt-verify-utc').textContent=fmtUTC(d); $('dt-verify-local').textContent=fmtLocal(d); box.hidden=false; }
-      else { box.hidden=true; }
+    function renderProof(container, j, ctx){
+      const hash = ctx?.hash || pick(j,['hash','inputHash','data','h']);
+      const ts   = pick(j,['timestamp_iso','timestampISO','timestamp','time','created_at','createdAt','t', 'proof?.timestamp']);
+      const iso  = toISO(ts) || (typeof ts==='string' && ts.match(/Z|T/) ? ts : null);
+      const whenLocal = fmtLocal(iso);
+      const valid = !!(j?.valid || j?.ok===true || j?.result==='valid');
+      const issuer = pick(j,['issuer','issued_by','authority','signer']) || pick(j?.meta,['issuer','owner','account']);
+      const algo = pick(j,['algorithm','alg'],'HMAC-SHA256');
+      const sig  = pick(j,['signature','sig']);
+      const rid  = pick(j,['request_id','reqId','id']);
+      const verifyURL = j?.verify_url || (hash ? `${API1}/api/verify?hash=${encodeURIComponent(hash)}` : null);
+      const version = pick(j,['version','spec','spec_version'],'v0.1');
+
+      const statusClass = valid ? 'ok' : 'err';
+      const statusText  = valid ? '✓ Valid proof' : '✗ Not found / invalid';
+      const topTitle = ctx?.mode==='verify' ? 'Verify Result' : 'Timestamp Result';
+
+      const summaryHTML = `
+      <div class="proof-summary ${statusClass}">
+        <div class="h">${topTitle} — <strong>${statusText}</strong></div>
+        <div class="grid">
+          <div class="k">Hash</div><div class="V v">${escapeHTML(hash||'—')}</div>
+          <div class="k">Timestamp (ISO)</div><div class="v">${escapeHTML(iso||'—')}</div>
+          <div class="k">Timestamp (Paris)</div><div class="v">${escapeHTML(whenLocal)}</div>
+          <div class="k">Issuer</div><div class="v">${escapeHTML(issuer||'TimeProofs')}</div>
+          <div class="k">Algorithm</div><div class="v">${escapeHTML(algo)}</div>
+          <div class="k">Signature</div><div class="v">${escapeHTML(sig||'—')}</div>
+          <div class="k">Request ID</div><div class="v">${escapeHTML(rid||'—')}</div>
+          <div class="k">Spec</div><div class="v">${escapeHTML(version)}</div>
+          <div class="k">Verify URL</div><div class="v">${verifyURL ? `<a href="${verifyURL}" target="_blank" rel="noopener">${escapeHTML(verifyURL)}</a>` : '—'}</div>
+        </div>
+        <div class="hint">Readable summary. Raw JSON response below.</div>
+      </div>`;
+      const rawJSON = escapeHTML(JSON.stringify(j, null, 2));
+      container.innerHTML = summaryHTML + `<div class="proof-raw"><pre>// Raw response\n${rawJSON}</pre></div>`;
     }
 
     // Create flow
@@ -630,17 +655,13 @@ const check = await res.json();</code></pre></article>
         }catch{
           j = await jfetch(`${API2}/api/timestamp`, { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body });
         }
-        showKV($('out-create'), j, 'Timestamp response');
-        const ok = !!j.ok || (!!j.signature && !!j.timestamp);
+        // replaced: showKV(..., 'Timestamp response');
+        renderProof($('out-create'), j, { mode:'timestamp', hash:h });
+        const ok = !!j.ok || (!!j.signature && !!j.timestamp) || j.valid===true;
         showStatus($('status-create'), ok, ok ? 'Proof created' : 'Create failed');
         lastCreate = { hash: h, json: j };
-
-        // NEW: extract timestamp and show times
-        const d = parseTimestamp(j?.timestamp ?? j?.ts ?? j?.time ?? j?.createdAt);
-        setCreateTimes(d);
       }catch(e){
         showStatus($('status-create'), false, 'Network or CORS error');
-        setCreateTimes(null);
       }
     });
     $('copy-create-json')?.addEventListener('click', ()=>{
@@ -675,19 +696,13 @@ const check = await res.json();</code></pre></article>
             j = await jfetch(`${API2}/api/verify`, { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body: JSON.stringify({ hash:h }) });
           }
         }
-        showKV($('out-verify'), j, 'Verify response');
+        // replaced: showKV(..., 'Verify response');
+        renderProof($('out-verify'), j, { mode:'verify', hash:h });
         const ok = !!j.valid || j.ok===true || j.result==='valid';
         showStatus($('status-verify'), ok, ok?'Valid proof':'Invalid or not found');
         lastVerify = { hash:h, json:j };
-
-        // NEW: extract timestamp from verify response and show times
-        const d = parseTimestamp(
-          j?.timestamp ?? j?.ts ?? j?.time ?? j?.createdAt ?? j?.proof?.timestamp ?? j?.data?.timestamp
-        );
-        setVerifyTimes(d);
       }catch(e){
         showStatus($('status-verify'), false, 'Network or CORS error');
-        setVerifyTimes(null);
       }
     });
     $('copy-verify-json')?.addEventListener('click', ()=>{
@@ -734,4 +749,4 @@ const check = await res.json();</code></pre></article>
   <!-- Toast container -->
   <div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
-  </html>
+    </html>
