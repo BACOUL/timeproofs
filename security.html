@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" id="top">
+<html lang="en" id="top" data-page="security.html">
 <head>
   <!-- ===== Core ===== -->
   <meta charset="UTF-8" />
@@ -11,21 +11,6 @@
   <meta name="theme-color" content="#0b1020" />
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <link rel="canonical" href="https://timeproofs.io/security.html" />
-
-  <!-- ===== Social ===== -->
-  <meta property="og:title" content="Security — TimeProofs" />
-  <meta property="og:description" content="Hash-only, privacy-first architecture with open verification and strong operational controls." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://timeproofs.io/security.html" />
-  <meta property="og:image" content="https://timeproofs.io/og.png" />
-  <meta property="og:image:alt" content="TimeProofs security overview" />
-  <meta property="og:site_name" content="TimeProofs"/>
-  <meta property="og:locale" content="en_US"/>
-  <meta property="og:locale:alternate" content="fr_FR"/>
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Security — TimeProofs"/>
-  <meta name="twitter:description" content="Stateless API, encryption in transit, security headers, disclosure policy, and planned audits."/>
-  <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- ===== Perf ===== -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin />
@@ -51,6 +36,21 @@
     upgrade-insecure-requests;
   ">
 
+  <!-- ===== Social ===== -->
+  <meta property="og:title" content="Security — TimeProofs" />
+  <meta property="og:description" content="Hash-only, privacy-first architecture with open verification and strong operational controls." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://timeproofs.io/security.html" />
+  <meta property="og:image" content="https://timeproofs.io/og.png" />
+  <meta property="og:image:alt" content="TimeProofs security overview" />
+  <meta property="og:site_name" content="TimeProofs"/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:locale:alternate" content="fr_FR"/>
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Security — TimeProofs"/>
+  <meta name="twitter:description" content="Stateless API, encryption in transit, security headers, disclosure policy, and planned audits."/>
+  <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
+
   <!-- ===== Analytics ===== -->
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
@@ -63,7 +63,7 @@
 
   <!-- ===== JSON-LD ===== -->
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"TechArticle","headline":"TimeProofs — Security","about":["security","encryption","privacy by design","disclosure","SBOM"],"publisher":{"@type":"Organization","name":"TimeProofs","logo":{"@type":"ImageObject","url":"https://timeproofs.io/logo%20(1).png"}},"datePublished":"2025-10-30","dateModified":"2025-10-31","url":"https://timeproofs.io/security.html"}
+  {"@context":"https://schema.org","@type":"TechArticle","headline":"TimeProofs — Security","about":["security","encryption","privacy by design","disclosure","SBOM"],"publisher":{"@type":"Organization","name":"TimeProofs","logo":{"@type":"ImageObject","url":"https://timeproofs.io/logo%20(1).png"}},"datePublished":"2025-10-30","dateModified":"2025-11-03","url":"https://timeproofs.io/security.html"}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://timeproofs.io/"},{"@type":"ListItem","position":2,"name":"Security","item":"https://timeproofs.io/security.html"}]}
@@ -102,7 +102,7 @@
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
     .skip:focus{ position:fixed; left:12px; top:12px; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
 
-    /* Header identique site */
+    /* Header */
     .tp-header{ position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:1000; background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 16px; transition:background .25s ease }
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
@@ -302,12 +302,13 @@
     <!-- 10) Proof -->
     <section class="card" id="proof" aria-labelledby="proof-title">
       <h2 id="proof-title">10) Document Proof</h2>
-      <p>This page is cryptographically timestamped by TimeProofs.</p>
-      <p>Hash:
-        <code id="sec-proof-hash">PUT_HASH_HERE</code> ·
-        <a id="sec-proof-link" href="https://api.timeproofs.io/api/verify?hash=PUT_HASH_HERE" rel="noopener" target="_blank">Verify</a>
+      <p>This page is verified by TimeProofs.</p>
+      <p>
+        Release: <span id="page-proof-release"></span><br/>
+        Hash: <code id="page-proof-hash"></code> ·
+        <a id="page-proof-link" href="#" rel="noopener" target="_blank">Verify</a>
       </p>
-      <p class="muted">Replace with the actual page hash at release time and seal via TimeProofs.</p>
+      <p class="muted">Loaded from the central release manifest.</p>
     </section>
   </main>
 
@@ -318,7 +319,7 @@
       <span class="badge">🛡 Privacy First</span>
       <a class="badge" href="/proofspec.html">🔍 Open Spec v0.1</a>
     </div>
-    © <span id="y"></span> TimeProofs — Proof of Existence. For Everything.
+    © 2025 TimeProofs — Reference implementation of the ProofSpec protocol.
     <div class="links" style="margin-top:6px">
       <a href="/">Home</a> •
       <a href="/proofspec.html">Protocol</a> •
@@ -326,7 +327,6 @@
       <a href="/verify.html">Create/Verify</a> •
       <a href="/docs.html">API Docs</a> •
       <a href="/regulations.html">Regulations</a> •
-      <a href="/security.html" aria-current="page">Security</a> •
       <a href="/.well-known/security.txt">Security.txt</a> •
       <a href="/privacy.html">Privacy</a> •
       <a href="/legal.html">Legal</a> •
@@ -396,18 +396,31 @@
       els.forEach(el=>io.observe(el));
     })();
 
-    // Autocorrect verify link when hash replaced
+    // aria-current auto for header + footer
     (function(){
-      const h=document.getElementById('sec-proof-hash');
-      const a=document.getElementById('sec-proof-link');
-      if(h&&a){
-        const v=h.textContent.trim();
-        if(v && !v.startsWith('PUT_')) a.href='https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(v);
-      }
+      const here=new URL(location.href).pathname.replace(/\/index\.html$/,'/');
+      document.querySelectorAll('header nav a, footer .links a').forEach(a=>{
+        const path=new URL(a.href,location.origin).pathname;
+        if(path===here) a.setAttribute('aria-current','page');
+      });
     })();
 
-    // Footer year
-    document.getElementById('y').textContent=new Date().getFullYear();
+    // Central release hash loader
+    (async()=>{
+      try{
+        const res=await fetch('/releases/v0.1.json',{cache:'no-store'});
+        if(!res.ok) return;
+        const map=await res.json();
+        const id=document.documentElement.dataset.page||location.pathname.replace(/^\//,'');
+        const e=map[id]; if(!e) return;
+        const rel=document.getElementById('page-proof-release');
+        const h=document.getElementById('page-proof-hash');
+        const l=document.getElementById('page-proof-link');
+        rel && (rel.textContent=e.release||'');
+        h && (h.textContent=e.hash||'');
+        if(l){ l.href = e.verify || ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(e.hash||'')); }
+      }catch{}
+    })();
 
     // Service Worker
     if ('serviceWorker' in navigator) {
@@ -415,4 +428,4 @@
     }
   </script>
 </body>
-</html>
+  </html>
