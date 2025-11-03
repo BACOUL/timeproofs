@@ -139,13 +139,13 @@ object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; 
     .btn{ background:#111d33; color:#e2f6ff; border:1px solid var(--line); padding:8px 12px; border-radius:8px; font-weight:700; cursor:pointer; text-decoration:none }
     .btn:hover{ filter:brightness(1.05) }
 
-    /* Footer (identique Protocol) */
-    footer{ background:var(--panel); border-top:1px solid var(--line); margin-top:28px; padding:20px; text-align:center; color:#a7b7cc }
+    /* Footer — modèle unique (identique partout) */
+    footer{ border-top:1px solid var(--line); margin-top:28px; padding:20px; text-align:center; color:#7c8aa5; background:var(--panel) }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
     footer .links{ margin-top:6px; line-height:1.9; font-size:1.02rem }
-    footer .links a{ color:#cfefff; font-weight:600; text-decoration:none }
-    footer .links a:hover{ color:#9beefb; text-decoration:underline }
+    footer .links a{ color:#a7b7cc; font-weight:600; text-decoration:none }
+    footer .links a:hover{ color:var(--accent); text-decoration:underline }
     .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
     .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; color:#cfefff; transition:transform .18s }
     .social a:hover{ transform:translateY(-2px) }
@@ -359,7 +359,7 @@ const hash = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,'0')
     </section>
   </main>
 
-  <!-- ===== Footer ===== -->
+  <!-- ===== Footer (identique partout) ===== -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
@@ -374,12 +374,13 @@ const hash = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,'0')
       <a href="/proofspec.html">Protocol</a> •
       <a href="/use-cases.html">Use Cases</a> •
       <a href="/verify.html">Create/Verify</a> •
-      <a href="/docs.html" aria-current="page">API Docs</a> •
+      <a href="/docs.html">API Docs</a> •
       <a href="/regulations.html">Regulations</a> •
       <a href="/.well-known/security.txt">Security.txt</a> •
       <a href="/privacy.html">Privacy</a> •
       <a href="/legal.html">Legal</a> •
-      <a href="/humans.txt">humans.txt</a>
+      <a href="/humans.txt">humans.txt</a> •
+      <a href="/rss.xml">RSS</a>
     </div>
 
     <div class="social" aria-label="Social links">
@@ -423,6 +424,7 @@ const hash = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,'0')
       function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; burger.focus(); }
       function toggleMenu(){ (nav.getAttribute('data-state')==='open')?closeMenu():openMenu(); }
       burger.addEventListener('click', toggleMenu, { passive:true });
+      document.addEventListener('click,', (e)=>{}, { passive:true });
       document.addEventListener('click', (e)=>{ if(window.matchMedia('(min-width:900px)').matches) return; if(!e.target.closest('.tp-header')&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
       document.addEventListener('keydown', (e)=>{
         if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu();
@@ -490,4 +492,4 @@ const hash = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,'0')
     }
   </script>
 </body>
-        </html>
+</html>
