@@ -1,0 +1,159 @@
+openapi: 3.1.0
+info:
+  title: TimeProofs API
+  version: v0.1
+  description: |
+    TimeProofs is a privacy-first, edge-native API for digital proof of existence.
+    It lets you prove that specific data existed at a given time, without revealing
+    the original content.
+
+    **Principles**
+    - Hash locally (SHA-256)
+    - Timestamp via API
+    - Verify publicly
+    - Stateless, no personal data
+
+    **Base URL**
+    `https://api.timeproofs.io`
+
+    **SDKs**
+    - JS SDK coming in v0.2
+    - CLI & Proof Bundles planned
+
+  contact:
+    name: TimeProofs
+    url: https://timeproofs.io
+    email: contact@timeproofs.io
+  license:
+    name: MPL-2.0
+    url: https://www.mozilla.org/en-US/MPL/2.0/
+
+servers:
+  - url: https://api.timeproofs.io
+    description: Public edge API (Cloudflare Workers)
+
+tags:
+  - name: Core
+    description: Core proof creation and verification endpoints
+  - name: Utility
+    description: Diagnostic and health endpoints
+
+paths:
+  /api/ping:
+    get:
+      summary: Health check
+      description: Returns a simple pong response to confirm API availability.
+      operationId: ping
+      tags: [Utility]
+      responses:
+        '200':
+          description: API is reachable
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pong:
+                    type: string
+                    example: pong
+
+  /api/timestamp:
+    post:
+      summary: Create a timestamp proof
+      description: |
+        Submit a SHA-256 hash to create a proof of existence.
+        The API returns a signed proof with timestamp, algorithm, and HMAC.
+      operationId: createTimestamp
+      tags: [Core]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [hash]
+              properties:
+                hash:
+                  type: string
+                  description: SHA-256 hex string of your file or data.
+                  example: "b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3"
+      responses:
+        '200':
+          description: Proof successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  hash:
+                    type: string
+                    example: "b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3"
+                  timestamp:
+                    type: string
+                    format: date-time
+                    example: "2025-11-04T18:32:00Z"
+                  signature:
+                    type: string
+                    description: HMAC-SHA256 signature
+                    example: "5a7d91f6d3212c5b8b3e..."
+                  algorithm:
+                    type: string
+                    example: "HMAC-SHA256"
+                  issuer:
+                    type: string
+                    example: "timeproofs.io"
+        '400':
+          description: Invalid hash format
+
+  /api/verify:
+    get:
+      summary: Verify an existing proof
+      description: |
+        Verify that a given SHA-256 hash has a valid proof and timestamp.
+        Returns proof details and verification status.
+      operationId: verifyProof
+      tags: [Core]
+      parameters:
+        - name: hash
+          in: query
+          required: true
+          schema:
+            type: string
+          description: SHA-256 hex string to verify.
+          example: "b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3"
+      responses:
+        '200':
+          description: Proof found and valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valid:
+                    type: boolean
+                    example: true
+                  hash:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+                  signature:
+                    type: string
+                  issuer:
+                    type: string
+                    example: "timeproofs.io"
+        '404':
+          description: Proof not found
+        '400':
+          description: Invalid hash format
+
+components:
+  securitySchemes:
+    none:
+      type: http
+      scheme: none
+
+security: []
+externalDocs:
+  description: Full documentation and examples
+  url: https://timeproofs.io/docs.html
