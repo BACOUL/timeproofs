@@ -109,14 +109,24 @@ upgrade-insecure-requests">
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
-      display:flex; align-items:center; justify-content:space-between; padding:0 16px; transition:background .25s var(--e)
+      display:flex; align-items:center; gap:12px; padding:0 16px; transition:background .25s var(--e)
     }
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
-    .tp-nav{ margin-left:auto }
 
-    /* Bouton menu visible */
+    /* Header nav */
+    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none }
+    .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
+
+    /* Header CTA */
+    .cta-header{
+      display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
+      border-radius:10px; background:var(--accent); color:#06202a; font-weight:800; box-shadow:0 6px 24px rgba(34,211,238,.25)
+    }
+    .cta-header:hover{ filter:brightness(1.05) }
+
+    /* Burger */
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
       border:1px solid var(--line); border-radius:12px; background:#0c1a2e; color:var(--text);
@@ -124,10 +134,13 @@ upgrade-insecure-requests">
     }
     .tp-burger span{ font-size:20px; line-height:1 }
 
-    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none }
-    .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
-    @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
+    @media (min-width:900px){
+      .tp-burger{ display:none }
+      .tp-nav{ display:flex; align-items:center }
+      .cta-header{ display:inline-flex }
+    }
     @media (max-width:899px){
+      .tp-brand img{ height:34px; width:34px }
       .tp-nav{
         position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
         display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
@@ -135,7 +148,8 @@ upgrade-insecure-requests">
       }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
-      .tp-brand img{ height:34px; width:34px }
+      /* Mobile CTA inside nav */
+      .nav-cta{ display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px; background:var(--accent); color:#06202a; font-weight:800 }
     }
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
@@ -181,7 +195,7 @@ upgrade-insecure-requests">
     .btn:hover{ filter:brightness(1.08) }
     .kv{
       display:grid; gap:8px; background:#0b1220; border:1px solid #1f2937; border-radius:12px; padding:10px;
-      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.92rem; color:#dbe7f3; text-align:left; max-height:220px; overflow:auto
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.92rem; color:#dbe7f3; text-align:left; max-height:260px; overflow:auto
     }
     .mini{ color:#9fb3c9; font-size:.9rem; text-align:left }
 
@@ -253,8 +267,8 @@ upgrade-insecure-requests">
     }
     @media (prefers-reduced-motion: reduce){ .reveal{ opacity:1 !important; transform:none !important } }
 
-    /* === Copy button visible dans les blocs code (How it works) === */
-    #how pre{ position:relative; padding-top:38px } /* place pour le bouton */
+    /* Copy button in HOW blocks */
+    #how pre{ position:relative; padding-top:38px }
     .copy-btn{
       position:absolute; top:8px; right:8px;
       display:inline-flex; align-items:center; gap:6px;
@@ -280,13 +294,16 @@ upgrade-insecure-requests">
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
-      <a href="/verify.html">Create/Verify</a>
       <a href="/docs.html">API Docs</a>
       <a href="/regulations.html">Regulations</a>
       <a href="/security.html">Security</a>
       <a href="/privacy.html">Privacy</a>
       <a href="/legal.html">Legal</a>
+      <!-- Mobile CTA at end -->
+      <a href="/verify.html" class="nav-cta">Create / Verify</a>
     </nav>
+    <!-- Desktop CTA -->
+    <a class="cta-header" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu"><span aria-hidden="true">☰</span></button>
   </header>
 
@@ -294,7 +311,7 @@ upgrade-insecure-requests">
 
   <main id="main" class="wrap" role="main">
     <section class="hero reveal" aria-labelledby="hero-title">
-      <!-- Release banner (will be filled from release.json) -->
+      <!-- Release banner -->
       <a class="rel-banner" id="rel-banner" href="#site-proof" aria-label="View site release proof">🔏 Release — Verified</a>
 
       <div class="label">🔐 Privacy-first • ⚡ Edge-native • 🌍 Open Protocol</div>
@@ -303,8 +320,8 @@ upgrade-insecure-requests">
       <p class="subnote">Hash locally · Timestamp via API · Verify publicly</p>
 
       <div class="cta-wrap" role="group" aria-label="Primary actions">
-        <a class="cta" href="/proofspec.html" aria-label="Read the ProofSpec">Read the ProofSpec</a>
-        <a class="cta secondary" href="/verify.html" aria-label="Create or verify a proof">Create or Verify a Proof</a>
+        <a class="cta" href="#try-demo" aria-label="Try the demo">Try the Demo</a>
+        <a class="cta secondary" href="/verify.html" aria-label="Create or verify a proof">Open Full Tool</a>
       </div>
 
       <div class="micro" aria-label="Key performance and privacy claims">
@@ -313,18 +330,20 @@ upgrade-insecure-requests">
         <span class="chip">🔍 Public verification</span>
       </div>
 
-      <div class="demo" aria-label="Instant demo">
-        <form id="form-create" autocomplete="off" style="display:grid;gap:10px">
-          <strong>Create a Proof</strong>
+      <!-- DEMO: local-only create, API verify -->
+      <div id="try-demo" class="demo" aria-label="Instant demo">
+        <!-- Create (local only) -->
+        <form id="form-create" autocomplete="off">
+          <strong>Create a Proof (Demo — local only)</strong>
           <div class="row">
-            <input id="in-create" class="in" placeholder="Paste text to hash & timestamp (local hashing)" aria-label="Text to hash"/>
-            <button type="button" id="btn-create" class="btn">Create Proof</button>
+            <input id="in-create" class="in" placeholder="Paste text to hash locally" aria-label="Text to hash"/>
+            <button type="button" id="btn-create" class="btn">Generate Demo</button>
           </div>
-          <div class="mini">We hash locally, then call <code>/api/timestamp</code>.</div>
+          <div class="mini">We hash locally and show current time. For signed proofs, use the full tool.</div>
           <div id="out-create" class="kv" role="region" aria-live="polite"></div>
           <div class="btn-row">
-            <button type="button" id="copy-create-json" class="btn small" aria-label="Copy create JSON">Copy JSON</button>
-            <button type="button" id="copy-create-curl" class="btn small" aria-label="Copy create cURL">Copy cURL</button>
+            <button type="button" id="copy-create-json" class="btn small" aria-label="Copy demo JSON">Copy JSON</button>
+            <button type="button" id="copy-create-curl" class="btn small" aria-label="Copy cURL for API">Copy cURL (real API)</button>
             <button type="button" id="open-create-verify" class="btn small" aria-label="Open in Verify">Open in Verify</button>
           </div>
           <div id="status-create" class="status" aria-live="polite" hidden></div>
@@ -332,13 +351,14 @@ upgrade-insecure-requests">
 
         <hr style="border:none;border-top:1px solid #1f2a44;margin:8px 0"/>
 
-        <form id="form-verify" autocomplete="off" style="display:grid;gap:10px">
-          <strong>Verify a Proof</strong>
+        <!-- Verify (real API) -->
+        <form id="form-verify" autocomplete="off">
+          <strong>Verify a Proof (real API)</strong>
           <div class="row">
             <input id="in-verify" class="in" placeholder="Enter a 64-hex SHA-256 to verify" aria-label="Hash to verify"/>
-            <button type="button" id="btn-verify" class="btn">Verify Proof</button>
+            <button type="button" id="btn-verify" class="btn">Verify</button>
           </div>
-          <div class="mini">Calls <code>/api/verify?hash=...</code>. Result shows green/red.</div>
+          <div class="mini">Calls <code>/api/verify</code>. Shows status and timestamps.</div>
           <div id="out-verify" class="kv" role="region" aria-live="polite"></div>
           <div class="btn-row">
             <button type="button" id="copy-verify-json" class="btn small" aria-label="Copy verify JSON">Copy JSON</button>
@@ -414,8 +434,8 @@ const check = await res.json();</code></pre></article>
       </div>
     </section>
 
-    <section class="section bg-solid reveal" id="regulatory" aria-labelledby="reg-title">
-      <h2 id="reg-title">Built for the Regulatory Era</h2>
+    <section class="section bg-solid reveal" aria-labelledby="regulatory" id="regulatory">
+      <h2 id="regulatory">Built for the Regulatory Era</h2>
       <p style="text-align:center;margin:-6px 0 12px">
         <a href="/regulations.html" style="color:#9beefb">Read full Regulations & Compliance →</a>
       </p>
@@ -507,7 +527,7 @@ const check = await res.json();</code></pre></article>
         <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg></a>
         <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv01" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg></a>
         <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg></a>
-        <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on YouTube"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.5s-.2-1.6-.8-2.3c-.8-.8-1.7-.8-2.1-.9C16.8 4 12 4 12 4h0s-4.8 0-8.1.3c-.4 0-1.3 0-2.1.9C1.2 5.9 1 7.5 1 7.5S.8 9.3.8 11v2c0 1.7.2 3.5.2 3.5s.2 1.6.8 2.3c.8.8 1.9.8 2.4.9C6.2 19.9 12 20 12 20s4.8 0 8.1-.3c.4 0 1.3 0 2.1-.9.6-.7.8-2.3.8-2.3s.2-1.8.2-3.5v-2c0-1.7-.2-3.5-.2-3.5ZM9.8 15.5v-7l6.2 3.5-6.2 3.5Z"/></svg></a>
+        <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on YouTube"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.5s-.2-1.6-.8-2.3c-.8-.8-1.7-.8-2.1-.9C16.8 4 12 4 12 4h0s-4.8 0 -8.1.3c-.4 0 -1.3 0 -2.1.9C1.2 5.9 1 7.5 1 7.5S.8 9.3.8 11v2c0 1.7.2 3.5.2 3.5s.2 1.6.8 2.3c.8.8 1.9.8 2.4.9C6.2 19.9 12 20 12 20s4.8 0 8.1-.3c.4 0 1.3 0 2.1-.9.6-.7.8-2.3.8-2.3s.2-1.8.2-3.5v-2c0-1.7-.2-3.5-.2-3.5ZM9.8 15.5v-7l6.2 3.5-6.2 3.5Z"/></svg></a>
         <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/></svg></a>
       </div>
     </footer>
@@ -563,7 +583,7 @@ const check = await res.json();</code></pre></article>
       targets.forEach(el=>{ el.classList.add('reveal'); io.observe(el); });
     }
 
-    // UI helpers
+    // Helpers
     const toast=(msg)=>{ let t=document.querySelector('.toast'); if(!t){ t=document.createElement('div'); t.className='toast'; document.body.appendChild(t); } t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600); };
     const $=(id)=>document.getElementById(id);
     async function sha256Hex(str){
@@ -571,6 +591,13 @@ const check = await res.json();</code></pre></article>
       const digest=await crypto.subtle.digest('SHA-256', buf);
       return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
     }
+    function isoNow(){ return new Date().toISOString(); }
+    function fmtParis(iso){
+      try{
+        return new Intl.DateTimeFormat('fr-FR',{ timeZone:'Europe/Paris', year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit' }).format(new Date(iso));
+      }catch{ return iso; }
+    }
+    function escapeHTML(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
     function showKV(el, obj, label){
       const t=typeof obj==='string'?obj:JSON.stringify(obj,null,2);
       el.textContent=(label?`// ${label}\n`:'')+t;
@@ -582,87 +609,53 @@ const check = await res.json();</code></pre></article>
     }
     function copy(text){ navigator.clipboard?.writeText(text).then(()=>toast('Copied')); }
 
-    // ---- Pretty renderer (front-only) ----
-    function escapeHTML(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-    function toISO(x){
-      if(!x && x!==0) return null;
-      if(typeof x==='number') return new Date(x < 2e10 ? x*1000 : x).toISOString();
-      const n=Number(x);
-      if(!Number.isNaN(n) && isFinite(n)) return new Date(n < 2e10 ? n*1000 : n).toISOString();
-      const d=new Date(x); return isNaN(d.getTime())? null : d.toISOString();
-    }
-    function fmtLocal(iso){
-      try{
-        if(!iso) return '—';
-        return new Intl.DateTimeFormat('fr-FR', {
-          timeZone: 'Europe/Paris', year:'numeric', month:'2-digit', day:'2-digit',
-          hour:'2-digit', minute:'2-digit', second:'2-digit'
-        }).format(new Date(iso));
-      }catch{ return iso || '—'; }
-    }
-    function pick(obj, keys, dflt=null){
-      for(const k of keys){ if(obj && obj[k]!=null) return obj[k]; }
-      return dflt;
-    }
+    // Render summary + raw
     function renderProof(container, j, ctx){
-      const hash = ctx?.hash || pick(j,['hash','inputHash','data','h']);
-      const ts   = pick(j,['timestamp_iso','timestampISO','timestamp','time','created_at','createdAt','t','proof?.timestamp']);
-      const iso  = toISO(ts) || (typeof ts==='string' && ts.match(/Z|T/) ? ts : null);
-      const whenLocal = fmtLocal(iso);
-      const valid = !!(j?.valid || j?.ok===true || j?.result==='valid');
-      const issuer = pick(j,['issuer','issued_by','authority','signer']) || pick(j?.meta,['issuer','owner','account']);
-      const algo = pick(j,['algorithm','alg'],'HMAC-SHA256');
-      const sig  = pick(j,['signature','sig']);
-      const rid  = pick(j,['request_id','reqId','id']);
+      const hash  = ctx?.hash || j?.hash || null;
+      const iso   = j?.timestamp_iso || j?.timestamp || null;
+      const paris = j?.timestamp_paris || (iso ? fmtParis(iso) : null);
+      const valid = !!(j?.valid || j?.ok===true);
+      const sig   = j?.signature || null;
       const verifyURL = j?.verify_url || (hash ? `${API1}/api/verify?hash=${encodeURIComponent(hash)}` : null);
-      const version = pick(j,['version','spec','spec_version'],'v0.1');
 
-      const statusClass = valid ? 'ok' : 'err';
-      const statusText  = valid ? '✓ Valid proof' : '✗ Not found / invalid';
-      const topTitle = ctx?.mode==='verify' ? 'Verify Result' : 'Timestamp Result';
+      const statusClass = valid ? 'ok' : 'ok'; // demo is always OK visually
+      const topTitle = ctx?.mode==='verify' ? 'Verify Result' : 'Demo Result';
 
       const summaryHTML = `
       <div class="proof-summary ${statusClass}">
-        <div class="h">${topTitle} — <strong>${statusText}</strong></div>
-        <div class="grid">
+        <div class="h">${topTitle}</div>
+        <div class="grid" style="grid-template-columns:140px 1fr; gap:6px">
           <div class="k">Hash</div><div class="V v">${escapeHTML(hash||'—')}</div>
           <div class="k">Timestamp (ISO)</div><div class="v">${escapeHTML(iso||'—')}</div>
-          <div class="k">Timestamp (Paris)</div><div class="v">${escapeHTML(whenLocal)}</div>
-          <div class="k">Issuer</div><div class="v">${escapeHTML(issuer||'TimeProofs')}</div>
-          <div class="k">Algorithm</div><div class="v">${escapeHTML(algo)}</div>
+          <div class="k">Timestamp (Paris)</div><div class="v">${escapeHTML(paris||'—')}</div>
           <div class="k">Signature</div><div class="v">${escapeHTML(sig||'—')}</div>
-          <div class="k">Request ID</div><div class="v">${escapeHTML(rid||'—')}</div>
-          <div class="k">Spec</div><div class="v">${escapeHTML(version)}</div>
           <div class="k">Verify URL</div><div class="v">${verifyURL ? `<a href="${verifyURL}" target="_blank" rel="noopener">${escapeHTML(verifyURL)}</a>` : '—'}</div>
         </div>
-        <div class="hint">Readable summary. Raw JSON response below.</div>
+        <div class="hint">${ctx?.mode==='verify' ? 'Raw JSON below.' : 'This is a local demo. Use the full tool for signed proofs.'}</div>
       </div>`;
       const rawJSON = escapeHTML(JSON.stringify(j, null, 2));
-      container.innerHTML = summaryHTML + `<div class="proof-raw"><pre>// Raw response\n${rawJSON}</pre></div>`;
+      container.innerHTML = summaryHTML + `<div class="proof-raw"><pre>// Raw${ctx?.mode==='verify'?' verify':' demo'} response\n${rawJSON}</pre></div>`;
     }
 
-    // Create flow
+    // ---- DEMO CREATE: 100% LOCAL ----
     let lastCreate = {hash:null, json:null};
     $('btn-create')?.addEventListener('click', async ()=>{
       const v=$('in-create').value||'';
       if(!v.trim()){ showStatus($('status-create'), false, 'Provide content to hash.'); return; }
-      try{
-        const h=await sha256Hex(v);
-        showKV($('out-create'), {hash:h}, 'Local SHA-256');
-        const body=JSON.stringify({ hash:h, type:'event', meta:{ source:'web:home' } });
-        let j;
-        try{
-          j = await jfetch(`${API1}/api/timestamp`, { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body });
-        }catch{
-          j = await jfetch(`${API2}/api/timestamp`, { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body });
-        }
-        renderProof($('out-create'), j, { mode:'timestamp', hash:h });
-        const ok = !!j.ok || (!!j.signature && !!j.timestamp) || j.valid===true;
-        showStatus($('status-create'), ok, ok ? 'Proof created' : 'Create failed');
-        lastCreate = { hash: h, json: j };
-      }catch(e){
-        showStatus($('status-create'), false, 'Network or CORS error');
-      }
+      const h=await sha256Hex(v);
+      const tsISO=isoNow();
+      const demo = {
+        demo:true,
+        ok:true,
+        hash:h,
+        timestamp:tsISO,
+        timestamp_iso:tsISO,
+        timestamp_paris:fmtParis(tsISO),
+        note:"Local-only demo. No server call."
+      };
+      renderProof($('out-create'), demo, { mode:'demo', hash:h });
+      showStatus($('status-create'), true, 'Demo generated locally');
+      lastCreate = { hash:h, json:demo };
     });
     $('copy-create-json')?.addEventListener('click', ()=>{
       if(!lastCreate.json){ toast('Nothing to copy'); return; }
@@ -670,14 +663,14 @@ const check = await res.json();</code></pre></article>
     });
     $('copy-create-curl')?.addEventListener('click', ()=>{
       const h=lastCreate.hash; if(!h){ toast('Nothing to copy'); return; }
-      copy(`curl -sS -X POST https://api.timeproofs.io/api/timestamp -H "Content-Type: application/json" --data '{"hash":"${h}","type":"event","meta":{"source":"web:home"}}'`);
+      copy(`curl -sS -X POST https://api.timeproofs.io/api/timestamp -H "Content-Type: application/json" --data '{"hash":"${h}","type":"event","meta":{"source":"web:home-demo"}}'`);
     });
     $('open-create-verify')?.addEventListener('click', ()=>{
       const h=lastCreate.hash; if(!h){ toast('Nothing to open'); return; }
       window.open(`/verify.html?hash=${encodeURIComponent(h)}`,'_blank','noopener');
     });
 
-    // Verify flow
+    // ---- VERIFY: REAL API ----
     let lastVerify = {hash:null, json:null};
     $('btn-verify')?.addEventListener('click', async ()=>{
       let h=$('in-verify').value.trim().toLowerCase().replace(/[^a-f0-9]/g,'');
@@ -713,7 +706,7 @@ const check = await res.json();</code></pre></article>
       copy(`curl -sS https://api.timeproofs.io/api/verify?hash=${h}`);
     });
 
-    // Auto aria-current for header + footer
+    // Auto aria-current
     (function markCurrent(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
       document.querySelectorAll('header nav a, footer .links a').forEach(a=>{
@@ -722,7 +715,7 @@ const check = await res.json();</code></pre></article>
       });
     })();
 
-    // Boutons "Copy" dans les blocs code du HOW
+    // Copy buttons in HOW
     (function installCopyButtons(){
       document.querySelectorAll('#how pre').forEach((pre)=>{
         if(pre.querySelector('.copy-btn')) return;
@@ -749,7 +742,7 @@ const check = await res.json();</code></pre></article>
       });
     })();
 
-    // Load release info (canonical: /releases/v0.1.json)
+    // Release info
     (async function loadRelease(){
       try{
         const r = await fetch('/releases/v0.1.json',{cache:'no-store'});
@@ -782,4 +775,4 @@ const check = await res.json();</code></pre></article>
   <!-- Toast container -->
   <div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
-</html>
+  </html>
