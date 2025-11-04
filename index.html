@@ -115,10 +115,15 @@ upgrade-insecure-requests">
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
     .tp-nav{ margin-left:auto }
+
+    /* FIX visibilité du bouton menu */
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
-      border:1px solid var(--line); border-radius:12px; background:#0d1628; color:#var(--text); cursor:pointer
+      border:1px solid var(--line); border-radius:12px; background:#0c1a2e; color:var(--text); /* <- corrigé */
+      cursor:pointer; box-shadow:var(--ring)
     }
+    .tp-burger span{ font-size:20px; line-height:1 }
+
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none }
     .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
     @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
@@ -233,20 +238,9 @@ upgrade-insecure-requests">
 
     a:focus-visible, .cta:focus-visible, .btn:focus-visible, .tp-burger:focus-visible{ outline:2px solid #22d3ee; outline-offset:3px; border-radius:12px; }
 
-    /* ---- Pretty proof summary (front-only) ---- */
-    .proof-summary{
-      border:1px solid #22455a; background:#0b1426; border-radius:12px;
-      padding:12px; margin:8px 0; box-shadow:var(--ring);
-      color:#e6f6ff; text-align:left
-    }
-    .proof-summary .h{font-weight:800; margin:0 0 6px; color:#9beefb}
-    .proof-summary .grid{display:grid; grid-template-columns:160px 1fr; gap:6px 10px}
-    .proof-summary .k{color:#9beefb; opacity:.9}
-    .proof-summary .v{color:#dbe7f3; word-break:break-word; overflow-wrap:anywhere}
-    .proof-summary.ok{border-color:#065f46; background:#0c1f22}
-    .proof-summary.err{border-color:#7f1d1d; background:#231114}
-    .proof-summary .hint{margin-top:8px; font-size:.88rem; color:#9fb3c9}
-    .proof-raw pre{max-height:220px; overflow:auto; margin:8px 0 0}
+    /* Copy button pour How it works */
+    .copy-btn{ margin-top:6px }
+    @media (max-width:899px){ .copy-btn{ width:100% } }
 
     @media (max-width:899px){
       .hero{ padding-top:92px; padding-bottom:24px }
@@ -502,7 +496,7 @@ const check = await res.json();</code></pre></article>
         <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg></a>
         <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv01" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg></a>
         <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg></a>
-        <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on YouTube"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.5s-.2-1.6-.8-2.3c-.8-.8-1.7-.8-2.1-.9C16.8 4 12 4 12 4h0s-4.8 0-8.1.3c-.4 0-1.3 0-2.1.9C1.2 5.9 1 7.5 1 7.5S.8 9.3.8 11v2c0 1.7.2 3.5.2 3.5s.2 1.6.8 2.3c.8.8 1.9.8 2.4.9C6.2 19.9 12 20 12 20s4.8 0 8.1-.3c.4 0 1.3 0 2.1-.9.6-.7.8-2.3.8-2.3s.2-1.8.2-3.5v-2c0-1.7-.2-3.5-.2-3.5ZM9.8 15.5v-7l6.2 3.5-6.2 3.5Z"/></svg></a>
+        <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on YouTube"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.5s-.2-1.6-.8-2.3c-.8-.8-1.7-.8-2.1-.9C16.8 4 12 4 12 4h0s-4.8 0-8.1.3c-.4 0-1.3 0-2.1.9C1.2 5.9 1 7.5 1 7.5S.8 9.3.8 11v2c0 1.7.2 3.5.2 3.5s.2 1.6.8 2.3c.8.8 1.9.8 2.4.9C6.2 19.9 12 20 12 20s4.8 0 8.1-.3c.4 0 1.3 0 2.1-.9.6-.7.8-2.3.8-2.3 s.2-1.8.2-3.5v-2c0-1.7-.2-3.5-.2-3.5ZM9.8 15.5v-7l6.2 3.5-6.2 3.5Z"/></svg></a>
         <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/></svg></a>
       </div>
     </footer>
@@ -717,6 +711,18 @@ const check = await res.json();</code></pre></article>
       });
     })();
 
+    // Boutons "Copy" pour la section How it works
+    (function installCopyButtons(){
+      document.querySelectorAll('#how pre').forEach((pre)=>{
+        const btn=document.createElement('button');
+        btn.type='button';
+        btn.className='btn small copy-btn';
+        btn.textContent='Copy';
+        btn.addEventListener('click', ()=> copy(pre.innerText));
+        pre.insertAdjacentElement('afterend', btn);
+      });
+    })();
+
     // Load release info (canonical: /releases/v0.1.json)
     (async function loadRelease(){
       try{
@@ -752,4 +758,4 @@ const check = await res.json();</code></pre></article>
   <!-- Toast container -->
   <div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
-        </html>
+  </html>
