@@ -12,7 +12,8 @@
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <link rel="canonical" href="https://timeproofs.io/use-cases.html"/>
 
-  <!-- CSP v0.1 -->
+  <!-- Security -->
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()">
   <meta http-equiv="Content-Security-Policy" content="
 default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
 worker-src 'self' blob:;
@@ -30,6 +31,7 @@ object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; 
   <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev"/>
   <link rel="preconnect" href="https://plausible.io" crossorigin>
   <link rel="preload" as="image" href="/logo%20(1).png" fetchpriority="high"/>
+  <link rel="preload" as="image" href="/og.png"/>
 
   <!-- Icons/manifest -->
   <link rel="icon" href="/favicon.ico" sizes="any"/>
@@ -47,6 +49,8 @@ object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; 
   <meta property="og:url" content="https://timeproofs.io/use-cases.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
   <meta property="og:image:alt" content="TimeProofs use cases for AI, legal, and security"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
   <meta property="og:site_name" content="TimeProofs"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:locale:alternate" content="fr_FR"/>
@@ -80,7 +84,7 @@ object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; 
   <!-- Analytics -->
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
-  <!-- Styles (identiques à Protocol) -->
+  <!-- Styles (unifiés) -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
@@ -109,7 +113,7 @@ object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; 
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
     .skip:focus{ position:fixed; left:12px; top:12px; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
 
-    /* Header (comme Protocol) */
+    /* Header */
     .tp-header{ position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:1000; background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 16px; transition:background .25s ease }
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
@@ -151,7 +155,7 @@ object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; 
     code{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.92rem }
     .copy-btn{ position:absolute; top:8px; right:8px; padding:6px 8px; border-radius:8px; border:1px solid #22455a; background:#0c1a2e; color:#cfefff; cursor:pointer; font-weight:700 }
 
-    /* Footer (comme Protocol) */
+    /* Footer */
     footer{ background:var(--panel); border-top:1px solid var(--line); margin-top:28px; padding:20px; text-align:center; color:#a7b7cc }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
@@ -174,11 +178,11 @@ object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; 
   <!-- Header -->
   <header class="tp-header" id="hdr" role="banner" aria-label="Site header">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
-      <img src="/logo%20(1).png" alt="" width="40" height="40" decoding="async" fetchpriority="high"/><span>TimeProofs</span>
+      <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/><span>TimeProofs</span>
     </a>
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Primary">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
-      <a href="/use-cases.html" aria-current="page">Use Cases</a>
+      <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html">Create/Verify</a>
       <a href="/docs.html">API Docs</a>
       <a href="/regulations.html">Regulations</a>
@@ -372,7 +376,7 @@ await fetch(`${API}/timestamp`,{
     <div class="links" aria-label="Footer links">
       <a href="/">Home</a> •
       <a href="/proofspec.html">Protocol</a> •
-      <a href="/use-cases.html" aria-current="page">Use Cases</a> •
+      <a href="/use-cases.html">Use Cases</a> •
       <a href="/verify.html">Create/Verify</a> •
       <a href="/docs.html">API Docs</a> •
       <a href="/regulations.html">Regulations</a> •
@@ -386,7 +390,7 @@ await fetch(`${API}/timestamp`,{
       <a href="https://x.com/timeproofs" target="_blank" rel="noopener me" aria-label="Follow @timeproofs on X">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
       </a>
-      <a href="https://github.com/BACOUL/timeproofs" target="_blank" rel="noopener me" aria-label="TimeProofs on GitHub">
+      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv2" target="_blank" rel="noopener me" aria-label="TimeProofs on GitHub">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
       </a>
       <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn">
@@ -490,4 +494,4 @@ await fetch(`${API}/timestamp`,{
     }
   </script>
 </body>
-  </html>
+</html>
