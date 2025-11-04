@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en" id="top" data-page="/">
 <head>
   <!-- Core -->
   <meta charset="UTF-8"/>
@@ -56,16 +57,16 @@
   {"@context":"https://schema.org","@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"}
   </script>
 
-  <!-- Security meta fallbacks -->
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()">
+  <!-- Security meta -->
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 
-  <!-- CSP v01 (SW + Analytics + API + fallback) -->
+  <!-- CSP v0.1 (SW + Analytics + API + fallback) -->
   <meta http-equiv="Content-Security-Policy" content="
 default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
 worker-src 'self' blob:;
 img-src 'self' data: https:;
 style-src 'self' 'unsafe-inline';
-script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
+script-src 'self' 'nonce-TP-2025' https://plausible.io;
 connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io;
 font-src 'self' https: data:;
 object-src 'none';
@@ -116,7 +117,7 @@ upgrade-insecure-requests">
     .tp-nav{ margin-left:auto }
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
-      border:1px solid var(--line); border-radius:12px; background:#0d1628; color:var(--text); cursor:pointer
+      border:1px solid var(--line); border-radius:12px; background:#0d1628; color:#var(--text); cursor:pointer
     }
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none }
     .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
@@ -506,19 +507,13 @@ const check = await res.json();</code></pre></article>
       </div>
     </footer>
 
+  <!-- FAQPage JSON-LD -->
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
     {"@type":"Question","name":"Do you store my content?","acceptedAnswer":{"@type":"Answer","text":"No. We only handle hashes. Original content never leaves your device."}},
     {"@type":"Question","name":"Is there a blockchain involved?","acceptedAnswer":{"@type":"Answer","text":"No. Cryptographic timestamps and public verification without blockchain overhead."}},
     {"@type":"Question","name":"How do I verify a proof?","acceptedAnswer":{"@type":"Answer","text":"Use our verify endpoint or any ProofSpec-compliant client. The proof is self-describing."}},
     {"@type":"Question","name":"How does this help with the EU AI Act?","acceptedAnswer":{"@type":"Answer","text":"It provides timestamped, verifiable trails for AI outputs and model interactions to meet traceability needs."}}
-  ]}
-  </script>
-
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
-    {"@type":"ListItem","position":1,"name":"Home","item":"https://timeproofs.io/"},
-    {"@type":"ListItem","position":2,"name":"Create/Verify","item":"https://timeproofs.io/verify.html"}
   ]}
   </script>
 
@@ -722,13 +717,12 @@ const check = await res.json();</code></pre></article>
       });
     })();
 
-    // Load release info with fallback to /releases/v0.1.json
+    // Load release info (canonical: /releases/v0.1.json)
     (async function loadRelease(){
-      async function fetchJSON(u){ const r=await fetch(u,{cache:'no-store'}); if(!r.ok) throw new Error('not found'); return r.json(); }
       try{
-        let rel;
-        try{ rel = await fetchJSON('/release.json'); }
-        catch{ rel = await fetchJSON('/releases/v0.1.json'); }
+        const r = await fetch('/releases/v0.1.json',{cache:'no-store'});
+        if(!r.ok) return;
+        const rel = await r.json();
 
         const elRel  = document.getElementById('rel-proof-release');
         const elHash = document.getElementById('rel-proof-hash');
@@ -758,4 +752,4 @@ const check = await res.json();</code></pre></article>
   <!-- Toast container -->
   <div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
-</html>
+        </html>
