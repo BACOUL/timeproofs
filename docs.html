@@ -94,7 +94,7 @@ object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; 
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
     .skip:focus{ position:fixed; left:12px; top:12px; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
 
-    /* Header (identique) */
+    /* Header */
     .tp-header{ position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:1000; background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 16px; transition:background .25s ease }
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
@@ -103,12 +103,19 @@ object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; 
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:8px 0; display:inline-block }
     .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
     .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid var(--line); border-radius:12px; background:#0d1628; color:#fff; cursor:pointer }
-    @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
+
+    /* Desktop CTA in header */
+    .cta-header{ display:none; align-items:center; justify-content:center; height:40px; padding:0 14px; border-radius:10px; background:var(--accent); color:#06202a; font-weight:800; margin-left:12px; box-shadow:0 6px 24px rgba(34,211,238,.25) }
+    .cta-header:hover{ filter:brightness(1.05) }
+
+    @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } .cta-header{ display:inline-flex } }
     @media (max-width:899px){
       .tp-brand img{ height:34px; width:34px }
       .tp-nav{ position:fixed; top:var(--header-h); left:0; right:0; background:#0c1424; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45); transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
+      /* CTA bouton menu mobile */
+      .nav-cta{ display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px; background:var(--accent); color:#06202a; font-weight:800 }
     }
 
     /* HERO */
@@ -139,7 +146,7 @@ object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; 
     .btn{ background:#111d33; color:#e2f6ff; border:1px solid var(--line); padding:8px 12px; border-radius:8px; font-weight:700; cursor:pointer; text-decoration:none }
     .btn:hover{ filter:brightness(1.05) }
 
-    /* Footer — modèle unique (identique partout) */
+    /* Footer — modèle unique */
     footer{ border-top:1px solid var(--line); margin-top:28px; padding:20px; text-align:center; color:#7c8aa5; background:var(--panel) }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
@@ -173,7 +180,10 @@ object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; 
       <a href="/security.html">Security</a>
       <a href="/privacy.html">Privacy</a>
       <a href="/legal.html">Legal</a>
+      <!-- CTA pour menu mobile -->
+      <a class="nav-cta" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
     </nav>
+    <a class="cta-header" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
   </header>
 
@@ -491,4 +501,4 @@ const hash = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,'0')
     }
   </script>
 </body>
-</html>
+                                                                                                                                         </html>
