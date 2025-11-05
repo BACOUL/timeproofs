@@ -60,7 +60,7 @@ upgrade-insecure-requests">
 
   <!-- ===== JSON-LD ===== -->
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Organization","name":"TimeProofs","url":"https://timeproofs.io/","logo":"https://timeproofs.io/logo%20(1).png","foundingDate":"2025-01-01","contactPoint":{"@type":"ContactPoint","contactType":"general","email":"contact@timeproofs.io"},"sameAs":["https://x.com/timeproofs","https://github.com/BACOUL/timeproofs/tree/timeproofsv01","https://www.linkedin.com/company/timeproofs","https://youtube.com/@timeproofs","https://timeproofs.io/rss.xml"]}
+  {"@context":"https://schema.org","@type":"Organization","name":"TimeProofs","url":"https://timeproofs.io/","logo":"https://timeproofs.io/logo%20(1).png","foundingDate":"2025-01-01","contactPoint":{"@type":"ContactPoint","contactType":"general","email":"contact@timeproofs.io"},"sameAs":["https://x.com/timeproofs","https://github.com/BACOUL/timeproofs/tree/timeproofsv2","https://www.linkedin.com/company/timeproofs","https://youtube.com/@timeproofs","https://timeproofs.io/rss.xml"]}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"WebPage","name":"Protocol (ProofSpec)","url":"https://timeproofs.io/proofspec.html","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"},"datePublished":"2025-10-22","dateModified":"2025-11-05","description":"ProofSpec defines how to create, sign, timestamp, and verify proofs of existence — privacy-first, edge-native, interoperable."}
@@ -103,7 +103,7 @@ upgrade-insecure-requests">
     .skip:focus{ position:fixed; left:12px; top:12px; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
     a:focus-visible, .tp-burger:focus-visible, .cta-header:focus-visible{ outline:2px solid #22d3ee; outline-offset:3px; border-radius:10px }
 
-    /* Header identique à l’accueil (sans lien Create/Verify dans la nav) */
+    /* Header (aligné à l’accueil) */
     .tp-header{ position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:1300; padding-top:var(--safe-top);
       background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
       display:flex; align-items:center; gap:12px; padding:0 16px;
@@ -114,12 +114,12 @@ upgrade-insecure-requests">
     .tp-nav a{ color:#e6f6ff; font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none }
     .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:#22d3ee }
     .cta-header{
-      display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
+      display:inline-flex; align-items:center; justify-content:center; height:40px; padding:0 14px;
       border-radius:10px; background:var(--accent); color:#06202a; font-weight:800; box-shadow:0 6px 24px rgba(34,211,238,.25)
     }
     .cta-header:hover{ filter:brightness(1.05) }
     .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid #2a3b55; border-radius:12px; background:#0d1628; color:#e6f6ff; cursor:pointer }
-    @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } .cta-header{ display:inline-flex } }
+    @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
     @media (max-width:899px){
       .tp-brand img{ height:34px; width:34px }
       .tp-nav{ position:fixed; top:calc(var(--header-h) + var(--safe-top)); left:0; right:0; background:#0b1020; border-top:1px solid #22304a;
@@ -128,6 +128,7 @@ upgrade-insecure-requests">
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
       .nav-cta{ display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px; background:var(--accent); color:#06202a; font-weight:800 }
+      .cta-header{ display:none }
     }
 
     /* HERO */
@@ -160,7 +161,7 @@ upgrade-insecure-requests">
     .copy-btn:hover{ filter:brightness(1.08) }
     .copy-btn .ok{ display:none } .copy-btn.copied .ok{ display:inline } .copy-btn.copied .txt{ display:none }
 
-    /* Print (PDF du spec) */
+    /* Print */
     @media print{
       body{ background:white; color:black }
       .tp-header, .tp-burger, .toc, .cta-header, footer, .social{ display:none !important }
@@ -169,11 +170,13 @@ upgrade-insecure-requests">
       pre{ border:1px solid #ddd; background:#fff }
     }
 
-    /* Footer identique */
+    /* Footer (identique à l’accueil) */
     footer{ border-top:1px solid var(--line); margin-top:28px; padding:20px; color:#7c8aa5; text-align:center }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
-    footer .links a{ color:#a7b7cc; margin:0 8px } footer .links a:hover{ color:var(--accent) }
+    footer .links a{ color:#a7b7cc; margin:0 8px; font-weight:600; text-decoration:none }
+    footer .links a:hover{ color:var(--accent); text-decoration:underline }
+    footer .links a[aria-current="page"]{ color:var(--accent); text-decoration:underline }
     .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
     .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; color:#cfefff; transition:transform .18s }
     .social a:hover{ transform:translateY(-2px) }
@@ -197,10 +200,8 @@ upgrade-insecure-requests">
       <a href="/security.html">Security</a>
       <a href="/privacy.html">Privacy</a>
       <a href="/legal.html">Legal</a>
-      <!-- Mobile CTA at end -->
       <a href="/verify.html" class="nav-cta">Create / Verify</a>
     </nav>
-    <!-- Desktop CTA identical to Home -->
     <a class="cta-header" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
   </header>
@@ -262,7 +263,7 @@ upgrade-insecure-requests">
   "meta": { /* optional tiny JSON, non-personal */ },
   "kid":  "optional key id for rotation"
 }</code></pre>
-      <p class="muted">Signature input is ASCII with delimiter <code>|</code> as <code>hash|ts</code>. <code>meta</code> MUST NOT contain personal data and SHOULD be &lt;= 512 bytes.</p>
+      <p class="muted">Signature input is ASCII with delimiter <code>|</code> as <code>hash|ts</code>. <code>meta</code> MUST NOT contain personal data and SHOULD be &le; 512 bytes.</p>
     </section>
 
     <section class="card" id="schema" aria-labelledby="schema-title">
@@ -406,7 +407,7 @@ sig:  &lt;base64url of HMAC_SHA256("hash|ts", key[k1])&gt;</code></pre>
     </section>
   </main>
 
-  <!-- ===== Footer ===== -->
+  <!-- ===== Footer (identique à l’accueil) ===== -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
@@ -416,8 +417,9 @@ sig:  &lt;base64url of HMAC_SHA256("hash|ts", key[k1])&gt;</code></pre>
     © 2025 TimeProofs — Reference implementation of the ProofSpec protocol.
     <div class="links" style="margin-top:6px">
       <a href="/">Home</a> •
-      <a href="/proofspec.html" aria-current="page">Protocol</a> •
+      <a href="/proofspec.html">Protocol</a> •
       <a href="/use-cases.html">Use Cases</a> •
+      <a href="/verify.html">Create/Verify</a> •
       <a href="/docs.html">API Docs</a> •
       <a href="/regulations.html">Regulations</a> •
       <a href="/.well-known/security.txt">Security.txt</a> •
@@ -430,8 +432,14 @@ sig:  &lt;base64url of HMAC_SHA256("hash|ts", key[k1])&gt;</code></pre>
       <a href="https://x.com/timeproofs" target="_blank" rel="noopener me" aria-label="Follow @timeproofs on X">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
       </a>
-      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv01" target="_blank" rel="noopener me" aria-label="TimeProofs on GitHub">
+      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv2" target="_blank" rel="noopener me" aria-label="TimeProofs on GitHub">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg>
+      </a>
+      <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on YouTube">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.1s-.2-1.6-.8-2.3c-.8-.8-1.7-.8-2.1-.9C17.4 3.6 12 3.6 12 3.6h0s-5.4 0-8.1.3c-.4 0-1.3.1-2.1.9C1.2 5.5 1 7.1 1 7.1S.8 9 .8 10.8v1.7C.8 14.4 1 16.3 1 16.3s.2 1.6.8 2.3c.8.8 1.9.8 2.4.9 1.7.2 7.8.3 7.8.3s5.4 0 8.1-.3c.4 0 1.3-.1 2.1-.9.6-.7.8-2.3.8-2.3s.2-1.9.2-3.7v-1.7c0-1.8-.2-3.7-.2-3.7ZM9.8 14.6V7.9l6.2 3.4-6.2 3.3Z"/></svg>
       </a>
       <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/></svg>
@@ -450,7 +458,7 @@ sig:  &lt;base64url of HMAC_SHA256("hash|ts", key[k1])&gt;</code></pre>
       onScroll(); window.addEventListener('scroll', onScroll, { passive:true });
     })();
 
-    // Burger + focus + mobile CTA present
+    // Burger + focus + mobile CTA
     (function(){
       const burger=document.getElementById('tp-burger'); const nav=document.getElementById('tp-nav');
       function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; const a=nav.querySelector('a'); a && a.focus(); }
@@ -529,4 +537,4 @@ sig:  &lt;base64url of HMAC_SHA256("hash|ts", key[k1])&gt;</code></pre>
     }
   </script>
 </body>
-        </html>
+</html>
