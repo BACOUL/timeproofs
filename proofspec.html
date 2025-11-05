@@ -168,14 +168,45 @@ upgrade-insecure-requests">
     h3{ color:#aee9f7; font-size:1.05rem; margin:1em 0 .3em }
     ul{ margin:.4em 0 .8em; padding-left:20px } li{ margin:.25em 0 }
     .muted{ color:#94a3b8 }
-    pre, code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
-    pre{ max-width:100%; overflow:auto; padding:12px; border-radius:12px; background:#0b1426; border:1px solid #1f2a44; font-size:.95rem }
 
-    /* Table */
-    .table{ width:100%; border-collapse:separate; border-spacing:0; border:1px solid #1f2a44; border-radius:14px; background:#0b1426; display:block; overflow:auto }
-    .table th,.table td{ padding:12px; text-align:left; border-bottom:1px solid #1a2846; font-size:.98rem; white-space:nowrap }
-    .table th{ color:#9beefb }
-    .table thead th{ position:sticky; top:0; background:#0b1426; z-index:1 }
+    /* Code blocks + Copy button */
+    pre, code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
+    pre{
+      position:relative;
+      max-width:100%;
+      overflow:auto;
+      padding:12px 12px 12px 12px;
+      border-radius:12px;
+      background:#0b1426;
+      border:1px solid #1f2a44;
+      font-size:.95rem
+    }
+    .copy-btn{
+      position:absolute; top:8px; right:8px;
+      padding:6px 10px; border:1px solid #214a57; border-radius:10px;
+      background:#0d2330; color:#cfefff; font-weight:700; cursor:pointer;
+      transition:transform .15s var(--e), background .15s var(--e)
+    }
+    .copy-btn:hover{ transform:translateY(-1px); background:#0e2637 }
+    .copy-btn[aria-live]{ outline:none }
+
+    /* Table (Error model) */
+    .table{
+      display:block;
+      width:100%;
+      max-width:100%;
+      border:1px solid #1f2a44;
+      border-radius:14px;
+      background:#0b1426;
+      overflow-x:auto;
+      -webkit-overflow-scrolling:touch
+    }
+    .table table{ width:100%; border-collapse:separate; border-spacing:0; min-width:680px }
+    .table th,.table td{
+      padding:12px; text-align:left; border-bottom:1px solid #1a2846; font-size:.98rem;
+      white-space:normal; word-break:break-word
+    }
+    .table th{ color:#9beefb; position:sticky; top:0; background:#0b1426; z-index:1 }
 
     /* Footer — identical to Home */
     footer{ border-top:1px solid var(--line); margin-top:28px; padding:18px; color:#7c8aa5; text-align:center }
@@ -187,7 +218,6 @@ upgrade-insecure-requests">
     .social a:hover{ transform:translateY(-2px) }
 
     @media (max-width:899px){
-      .table{ min-width:720px }
       .tp-hero{ padding-top:calc(64px + 32px) }
     }
   </style>
@@ -495,6 +525,31 @@ sig:  qwertyZXCVbnNmTW9ja2JhU2U (example)</code></pre>
         });
       })();
 
+      // Add Copy buttons to all <pre><code>
+      (function(){
+        const blocks = document.querySelectorAll('pre > code');
+        blocks.forEach((code)=>{
+          const pre = code.parentElement;
+          const btn = document.createElement('button');
+          btn.className = 'copy-btn';
+          btn.type = 'button';
+          btn.setAttribute('aria-label','Copy code');
+          btn.textContent = 'Copy';
+          btn.addEventListener('click', async ()=>{
+            try{
+              await navigator.clipboard.writeText(code.innerText);
+              const old = btn.textContent;
+              btn.textContent = 'Copied';
+              setTimeout(()=>{ btn.textContent = old; }, 1400);
+            }catch{
+              btn.textContent = 'Error';
+              setTimeout(()=>{ btn.textContent = 'Copy'; }, 1400);
+            }
+          }, { passive:true });
+          pre.appendChild(btn);
+        });
+      })();
+
       // Release hash from central manifest
       (async()=>{
         try{
@@ -518,4 +573,4 @@ sig:  qwertyZXCVbnNmTW9ja2JhU2U (example)</code></pre>
     })();
   </script>
 </body>
-  </html>
+                                                                                                                                                                                                              </html>
