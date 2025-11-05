@@ -129,7 +129,7 @@ upgrade-insecure-requests">
     /* Burger */
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
-      border:1px solid var(--line); border-radius:12px; background:#0c1a2e; color:var(--text);
+      border:1px solid var(--line); border-radius:12px; background:#0c1a2e; color:#fff;
       cursor:pointer; box-shadow:var(--ring)
     }
     .tp-burger span{ font-size:20px; line-height:1 }
@@ -149,7 +149,6 @@ upgrade-insecure-requests">
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
       /* Mobile CTA inside nav */
-      <a class="nav-cta">display:block;</a>
       .nav-cta{ display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px; background:var(--accent); color:#06202a; font-weight:800 }
     }
 
@@ -187,12 +186,10 @@ upgrade-insecure-requests">
       margin-top:18px; display:grid; gap:12px; width:min(900px,100%); padding:14px; border-radius:16px;
       background:linear-gradient(180deg,#0b1324,#0a152e); border:1px solid #1f2a44; box-shadow:var(--ring)
     }
-    .demo form{ display:grid; gap:10px }
     .row{ display:grid; grid-template-columns:1fr auto; gap:10px }
     .in{ width:100%; padding:12px 12px; border-radius:12px; background:#0d1628; border:1px solid #22314f; color:#e6f6ff; font:inherit }
     .btn{ padding:12px 16px; min-height:48px; border-radius:12px; border:1px solid #22455a; background:#0c1a2e; color:#cfefff; cursor:pointer; font-weight:800; display:inline-flex; align-items:center; gap:8px }
     .btn.small{ min-height:40px; padding:8px 12px; font-weight:700 }
-    .btn-row{ display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end }
     .btn:hover{ filter:brightness(1.08) }
     .kv{
       display:grid; gap:8px; background:#0b1220; border:1px solid #1f2937; border-radius:12px; padding:10px;
@@ -332,42 +329,24 @@ upgrade-insecure-requests">
         <span class="chip">🔍 Public verification</span>
       </div>
 
-      <!-- DEMO: local-only create, API verify -->
-      <div id="try-demo" class="demo" aria-label="Instant demo">
-        <!-- Create (local only) -->
-        <form id="form-create" autocomplete="off">
-          <strong>Create a Proof (Demo — local only)</strong>
-          <div class="row">
-            <input id="in-create" class="in" placeholder="Paste text to hash locally" aria-label="Text to hash"/>
-            <button type="button" id="btn-create" class="btn">Generate Demo</button>
-          </div>
-          <div class="mini">We hash locally and show current time. For signed proofs, use the full tool.</div>
-          <div id="out-create" class="kv" role="region" aria-live="polite"></div>
-          <div class="btn-row">
-            <button type="button" id="copy-create-json" class="btn small" aria-label="Copy demo JSON">Copy JSON</button>
-            <button type="button" id="copy-create-curl" class="btn small" aria-label="Copy cURL for API">Copy cURL (real API)</button>
-            <button type="button" id="open-create-verify" class="btn small" aria-label="Open in Verify">Open in Verify</button>
-          </div>
-          <div id="status-create" class="status" aria-live="polite" hidden></div>
-        </form>
-
-        <hr style="border:none;border-top:1px solid #1f2a44;margin:8px 0"/>
-
-        <!-- Verify (real API) -->
-        <form id="form-verify" autocomplete="off">
-          <strong>Verify a Proof (real API)</strong>
-          <div class="row">
-            <input id="in-verify" class="in" placeholder="Enter a 64-hex SHA-256 to verify" aria-label="Hash to verify"/>
-            <button type="button" id="btn-verify" class="btn">Verify</button>
-          </div>
-          <div class="mini">Calls <code>/api/verify</code>. Shows status and timestamps.</div>
-          <div id="out-verify" class="kv" role="region" aria-live="polite"></div>
-          <div class="btn-row">
-            <button type="button" id="copy-verify-json" class="btn small" aria-label="Copy verify JSON">Copy JSON</button>
-            <button type="button" id="copy-verify-curl" class="btn small" aria-label="Copy verify cURL">Copy cURL</button>
-          </div>
-          <div id="status-verify" class="status" aria-live="polite" hidden></div>
-        </form>
+      <!-- ONE-BAR Quick Check -->
+      <div id="try-demo" class="demo" aria-label="One-bar proof checker">
+        <strong>Quick Check</strong>
+        <div class="row">
+          <input id="in-one" class="in"
+            placeholder="Paste text OR a SHA-256 hash (64 hex)"
+            aria-label="Text or hash"/>
+          <button type="button" id="btn-one" class="btn">Check</button>
+        </div>
+        <div class="mini">
+          If you type text, we hash it <em>locally</em> first, then verify via the API.
+          For full signed proofs and options, open the full tool.
+        </div>
+        <div id="out-one" class="kv" role="region" aria-live="polite"></div>
+        <div class="btn-row">
+          <a class="btn small" href="/verify.html" aria-label="Open full tool">Open Full Tool</a>
+        </div>
+        <div id="status-one" class="status" aria-live="polite" hidden></div>
       </div>
 
       <div class="bullets" aria-label="Key features" style="margin-top:8px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center; color:#a3b7c7;">
@@ -589,125 +568,73 @@ const check = await res.json();</code></pre></article>
     // Helpers
     const toast=(msg)=>{ let t=document.querySelector('.toast'); if(!t){ t=document.createElement('div'); t.className='toast'; document.body.appendChild(t); } t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600); };
     const $=(id)=>document.getElementById(id);
-    async function sha256Hex(str){
-      const buf=new TextEncoder().encode(str);
-      const digest=await crypto.subtle.digest('SHA-256', buf);
-      return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
-    }
-    function isoNow(){ return new Date().toISOString(); }
     function fmtParis(iso){
       try{
         return new Intl.DateTimeFormat('fr-FR',{ timeZone:'Europe/Paris', year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit' }).format(new Date(iso));
       }catch{ return iso; }
     }
-    function escapeHTML(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-    function showKV(el, obj, label){
-      const t=typeof obj==='string'?obj:JSON.stringify(obj,null,2);
-      el.textContent=(label?`// ${label}\n`:'')+t;
-    }
-    function showStatus(el, ok, text){
-      el.hidden=false;
-      el.className='status '+(ok?'ok':'err');
-      el.textContent=(ok?'✓ ':'✗ ')+text;
-    }
-    function copy(text){ navigator.clipboard?.writeText(text).then(()=>toast('Copied')); }
 
-    // Render summary + raw
-    function renderProof(container, j, ctx){
-      const hash  = ctx?.hash || j?.hash || null;
-      const iso   = j?.timestamp_iso || j?.timestamp || null;
-      const paris = j?.timestamp_paris || (iso ? fmtParis(iso) : null);
-      const valid = !!(j?.valid || j?.ok===true);
-      const sig   = j?.signature || null;
-      const verifyURL = j?.verify_url || (hash ? `${API1}/api/verify?hash=${encodeURIComponent(hash)}` : null);
-
-      const statusClass = valid ? 'ok' : 'ok'; // demo is always OK visually
-      const topTitle = ctx?.mode==='verify' ? 'Verify Result' : 'Demo Result';
-
-      const summaryHTML = `
-      <div class="proof-summary ${statusClass}">
-        <div class="h">${topTitle}</div>
-        <div class="grid" style="grid-template-columns:140px 1fr; gap:6px">
-          <div class="k">Hash</div><div class="V v">${escapeHTML(hash||'—')}</div>
-          <div class="k">Timestamp (ISO)</div><div class="v">${escapeHTML(iso||'—')}</div>
-          <div class="k">Timestamp (Paris)</div><div class="v">${escapeHTML(paris||'—')}</div>
-          <div class="k">Signature</div><div class="v">${escapeHTML(sig||'—')}</div>
-          <div class="k">Verify URL</div><div class="v">${verifyURL ? `<a href="${verifyURL}" target="_blank" rel="noopener">${escapeHTML(verifyURL)}</a>` : '—'}</div>
-        </div>
-        <div class="hint">${ctx?.mode==='verify' ? 'Raw JSON below.' : 'This is a local demo. Use the full tool for signed proofs.'}</div>
-      </div>`;
-      const rawJSON = escapeHTML(JSON.stringify(j, null, 2));
-      container.innerHTML = summaryHTML + `<div class="proof-raw"><pre>// Raw${ctx?.mode==='verify'?' verify':' demo'} response\n${rawJSON}</pre></div>`;
-    }
-
-    // ---- DEMO CREATE: 100% LOCAL ----
-    let lastCreate = {hash:null, json:null};
-    $('btn-create')?.addEventListener('click', async ()=>{
-      const v=$('in-create').value||'';
-      if(!v.trim()){ showStatus($('status-create'), false, 'Provide content to hash.'); return; }
-      const h=await sha256Hex(v);
-      const tsISO=isoNow();
-      const demo = {
-        demo:true,
-        ok:true,
-        hash:h,
-        timestamp:tsISO,
-        timestamp_iso:tsISO,
-        timestamp_paris:fmtParis(tsISO),
-        note:"Local-only demo. No server call."
-      };
-      renderProof($('out-create'), demo, { mode:'demo', hash:h });
-      showStatus($('status-create'), true, 'Demo generated locally');
-      lastCreate = { hash:h, json:demo };
-    });
-    $('copy-create-json')?.addEventListener('click', ()=>{
-      if(!lastCreate.json){ toast('Nothing to copy'); return; }
-      copy(JSON.stringify(lastCreate.json,null,2));
-    });
-    $('copy-create-curl')?.addEventListener('click', ()=>{
-      const h=lastCreate.hash; if(!h){ toast('Nothing to copy'); return; }
-      copy(`curl -sS -X POST https://api.timeproofs.io/api/timestamp -H "Content-Type: application/json" --data '{"hash":"${h}","type":"event","meta":{"source":"web:home-demo"}}'`);
-    });
-    $('open-create-verify')?.addEventListener('click', ()=>{
-      const h=lastCreate.hash; if(!h){ toast('Nothing to open'); return; }
-      window.open(`/verify.html?hash=${encodeURIComponent(h)}`,'_blank','noopener');
-    });
-
-    // ---- VERIFY: REAL API ----
-    let lastVerify = {hash:null, json:null};
-    $('btn-verify')?.addEventListener('click', async ()=>{
-      let h=$('in-verify').value.trim().toLowerCase().replace(/[^a-f0-9]/g,'');
-      if(h.length!==64){ showStatus($('status-verify'), false, 'Hash must be 64 hex chars'); return; }
-      try{
-        let j;
-        try{
-          j = await jfetch(`${API1}/api/verify?hash=${encodeURIComponent(h)}`, { headers:{'Accept':'application/json'} });
-        }catch{
-          j = await jfetch(`${API2}/api/verify?hash=${encodeURIComponent(h)}`, { headers:{'Accept':'application/json'} });
-        }
-        if(!(j.valid||j.ok===true||j.result==='valid')){
-          try{
-            j = await jfetch(`${API1}/api/verify`, { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body: JSON.stringify({ hash:h }) });
-          }catch{
-            j = await jfetch(`${API2}/api/verify`, { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body: JSON.stringify({ hash:h }) });
-          }
-        }
-        renderProof($('out-verify'), j, { mode:'verify', hash:h });
-        const ok = !!j.valid || j.ok===true || j.result==='valid';
-        showStatus($('status-verify'), ok, ok?'Valid proof':'Invalid or not found');
-        lastVerify = { hash:h, json:j };
-      }catch(e){
-        showStatus($('status-verify'), false, 'Network or CORS error');
+    // ---- ONE-BAR TOOL: local hash + API verify ----
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+      async function sha256Hex(str){
+        const buf = new TextEncoder().encode(str);
+        const digest = await crypto.subtle.digest('SHA-256', buf);
+        return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
       }
-    });
-    $('copy-verify-json')?.addEventListener('click', ()=>{
-      if(!lastVerify.json){ toast('Nothing to copy'); return; }
-      copy(JSON.stringify(lastVerify.json,null,2));
-    });
-    $('copy-verify-curl')?.addEventListener('click', ()=>{
-      const h=lastVerify.hash; if(!h){ toast('Nothing to copy'); return; }
-      copy(`curl -sS https://api.timeproofs.io/api/verify?hash=${h}`);
-    });
+      function escapeHTML(s){ return String(s).replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
+      function show(el, ok, txt){ el.hidden=false; el.className='status '+(ok?'ok':'err'); el.textContent=(ok?'✓ ':'✗ ')+txt; }
+
+      document.getElementById('btn-one')?.addEventListener('click', async ()=>{
+        const input = document.getElementById('in-one').value || '';
+        const out   = document.getElementById('out-one');
+        const stat  = document.getElementById('status-one');
+        out.textContent = ''; stat.hidden = true;
+
+        if(!input.trim()){ show(stat,false,'Enter text or a hash.'); return; }
+
+        // 1) Determine hash: if not 64-hex, hash the text locally
+        let hash = input.trim().toLowerCase().replace(/[^a-f0-9]/g,'');
+        if(hash.length !== 64){
+          try{ hash = await sha256Hex(input); }
+          catch{ show(stat,false,'Cannot compute SHA-256.'); return; }
+        }
+
+        // 2) Verify via API (GET → POST fallback; API1 → API2 fallback)
+        async function doVerify(api){
+          try{
+            let j = await fetch(`${api}/api/verify?hash=${encodeURIComponent(hash)}`, { headers:{'Accept':'application/json'}, mode:'cors', credentials:'omit', cache:'no-store' }).then(r=>r.json());
+            if(!(j.valid||j.ok===true||j.result==='valid')){
+              j = await fetch(`${api}/api/verify`, {
+                method:'POST',
+                headers:{'Content-Type':'application/json','Accept':'application/json'},
+                body: JSON.stringify({ hash }),
+                mode:'cors', credentials:'omit', cache:'no-store'
+              }).then(r=>r.json());
+            }
+            return j;
+          }catch{ return null; }
+        }
+        let res = await doVerify(API1); if(!res) res = await doVerify(API2);
+        if(!res){ show(stat,false,'Network or CORS error.'); return; }
+
+        const ok = !!res.valid || res.ok===true || res.result==='valid';
+        const iso = res.timestamp_iso || res.timestamp || null;
+        const verifyURL = res.verify_url || `${API1}/api/verify?hash=${encodeURIComponent(hash)}`;
+
+        const view =
+`// Summary
+hash: ${hash}
+valid: ${ok}
+timestamp: ${iso ? iso + ' (Paris: ' + fmtParis(iso) + ')' : '—'}
+verify: ${verifyURL}
+
+// Raw response
+${escapeHTML(JSON.stringify(res, null, 2))}`;
+        out.textContent = view;
+        show(stat, ok, ok?'Valid proof':'Invalid or not found');
+      });
+    })();
 
     // Auto aria-current
     (function markCurrent(){
@@ -778,4 +705,4 @@ const check = await res.json();</code></pre></article>
   <!-- Toast container -->
   <div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
-  </html>
+</html>
