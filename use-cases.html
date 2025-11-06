@@ -166,7 +166,7 @@ upgrade-insecure-requests">
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* HERO standard pages */
+    /* HERO standard pages (ancien .tp-hero peut rester inutile) */
     .tp-hero{ padding:96px 20px 18px; max-width:1100px; margin:0 auto; text-align:center; border-bottom:1px solid var(--line) }
     .tp-hero__icon{ font-size:2rem; line-height:1; margin-bottom:6px }
     .tp-hero__kicker{ display:inline-block; margin:0 0 10px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.9rem; box-shadow:var(--ring) }
@@ -208,6 +208,18 @@ upgrade-insecure-requests">
     .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
     .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; transition:transform .18s var(--e); color:#cfefff }
     .social a:hover{ transform:translateY(-2px) }
+
+    /* === HERO standard shim pour .hero/.icon/.status/.lead/.proof-strip === */
+    .hero{ padding:96px 20px 18px; max-width:1100px; margin:0 auto; text-align:center; border-bottom:1px solid var(--line) }
+    .hero .icon{ font-size:2rem; line-height:1; margin-bottom:6px }
+    .hero .status{ display:inline-block; margin:0 0 10px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.9rem; box-shadow:var(--ring) }
+    .hero h1{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900;
+      background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent }
+    .hero .lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 auto 12px }
+    .hero .proof-strip{ display:inline-flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center;
+      margin-top:6px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem }
+    .hero .btn{ display:inline-block; padding:6px 10px; border:1px solid #22455a; border-radius:10px; background:#0c1a2e; color:#cfefff; font-weight:700; text-decoration:none }
+    .hero .btn:hover{ text-decoration:underline }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
@@ -236,13 +248,22 @@ upgrade-insecure-requests">
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu"><span aria-hidden="true">☰</span></button>
   </header>
 
-  <!-- HERO -->
-  <section class="tp-hero" role="region" aria-labelledby="page-title">
-    <div class="tp-hero__icon" aria-hidden="true">🧩</div>
-    <p class="tp-hero__kicker">Status: Public Beta v0.1 · Use Cases · Privacy-first · No blockchain</p>
+  <!-- HERO standard (à placer tout en haut de <main>) -->
+  <section class="hero card" role="region" aria-labelledby="page-title">
+    <div class="icon" aria-hidden="true">🧩</div>
+    <p class="status">Status: Public Beta v0.1 · API · Privacy-first · No blockchain</p>
     <h1 id="page-title">Use Cases</h1>
-    <p class="tp-hero__lead">Hash locally. Timestamp via API. Verify publicly — for AI, legal, and security workflows.</p>
-    <p class="proof-badge">🔏 Proof of Release · <code id="page-proof-hash">…</code> · <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a></p>
+    <p class="lead">
+      Hash locally. Timestamp via API. Verify publicly — for AI, legal, and security workflows.
+    </p>
+
+    <!-- Proof of Release strip — IDs standard -->
+    <div class="proof-strip">
+      <strong>Proof of Release</strong>
+      <span>Release: <code id="page-proof-release"></code></span>
+      <span>· Hash: <code id="page-proof-hash"></code></span>
+      <a id="page-proof-link" href="#" class="btn" target="_blank" rel="noopener">Verify</a>
+    </div>
   </section>
 
   <!-- TOC chips -->
@@ -253,8 +274,8 @@ upgrade-insecure-requests">
     <a href="#legal-files">Contracts & files</a>
     <a href="#sec-events">Webhooks & events</a>
     <a href="#supply-release">Releases & binaries</a>
-    <a href="#why-adopt">Why teams adopt</a>
-    <a href="#why-not">Why not blockchain?</a>
+    <a href="#adopt-title">Why teams adopt</a>
+    <a href="#why-not-title">Why not blockchain?</a>
     <a href="#page-proof">Page proof</a>
     <a href="#top" style="padding:4px 10px">↑ Top</a>
   </nav>
