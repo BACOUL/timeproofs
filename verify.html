@@ -76,7 +76,7 @@ upgrade-insecure-requests">
   {"@context":"https://schema.org","@type":"Organization","name":"TimeProofs","url":"https://timeproofs.io/","logo":"https://timeproofs.io/logo%20(1).png","sameAs":["https://x.com/timeproofs","https://github.com/BACOUL/timeproofs/tree/timeproofsv01","https://www.linkedin.com/company/timeproofs","https://youtube.com/@timeproofs","https://timeproofs.io/rss.xml"]}
   </script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebPage","name":"Create & Verify","url":"https://timeproofs.io/verify.html","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"},"datePublished":"2025-10-22","dateModified":"2025-11-05","description":"Create or verify cryptographic proofs of existence. Local hashing, signed timestamp, public verification."}
+  {"@context":"https://schema.org","@type":"WebPage","name":"Create & Verify","url":"https://timeproofs.io/verify.html","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"},"datePublished":"2025-10-22","dateModified":"2025-11-06","description":"Create or verify cryptographic proofs of existence. Local hashing, signed timestamp, public verification."}
   </script>
 
   <style>
@@ -85,11 +85,8 @@ upgrade-insecure-requests">
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
       --ok:#34d399; --warn:#f59e0b; --err:#ef4444;
       --ring:0 0 0 1px #1e293b, 0 10px 40px rgba(34,211,238,.14);
-      --e:cubic-bezier(.22,.61,.36,1);
-      --header-h:64px
+      --e:cubic-bezier(.22,.61,.36,1)
     }
-    @media (max-width:900px){ :root{ --header-h:56px } }
-
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg) }
     body{
@@ -103,61 +100,62 @@ upgrade-insecure-requests">
     }
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
-    /* unify nav/footer links like Home */
-    #tp-nav a, footer .links a { color:#a7b7cc; font-weight:600; text-decoration:none }
-    #tp-nav a:hover, footer .links a:hover { color:var(--accent); text-decoration:underline }
-    #tp-nav a[aria-current="page"], footer .links a[aria-current="page"] { color:var(--accent); text-decoration:underline }
-    .tp-nav a, footer .links a { text-underline-offset:3px }
-
-    .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
-    .skip:focus{ position:fixed; left:12px; top:12px; width:auto; height:auto; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
 
     /* Header */
     .tp-header{
-      position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:1000;
-      background:rgba(11,16,32,.55); backdrop-filter:blur(10px);
-      border-bottom:1px solid var(--line);
-      display:flex; align-items:center; justify-content:space-between; padding:0 16px; transition:background .25s var(--e)
+      position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
+      background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
+      display:flex; align-items:center; gap:12px; padding:0 16px; transition:background .25s var(--e)
     }
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
-    @media (max-width:899px){ .tp-brand img{ height:34px; width:34px } }
 
+    /* Nav canonique */
+    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none; text-underline-offset:3px }
+    .tp-nav a[aria-current="page"]{ color:#9beefb }
+    .tp-nav a:hover{ color:var(--accent) }
+
+    /* Header CTA */
+    .cta-header{
+      display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
+      border-radius:10px; background:var(--accent); color:#06202a; font-weight:800; box-shadow:0 6px 24px rgba(34,211,238,.25)
+    }
+    .cta-header:hover{ filter:brightness(1.05) }
+
+    /* Burger + mobile menu */
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
-      border:1px solid var(--line); border-radius:12px; background:#0d1628; color:#cfefff; cursor:pointer
+      border:1px solid var(--line); border-radius:12px; background:#0c1a2e; color:#fff; cursor:pointer
     }
-    @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } }
+    @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } .cta-header{ display:inline-flex } }
     @media (max-width:899px){
+      .tp-brand img{ height:34px; width:34px }
       .tp-nav{
-        position:fixed; top:var(--header-h); left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
+        position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
         display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
-        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease; max-height:calc(100dvh - var(--header-h)); overflow:auto
+        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease
       }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
+      .nav-cta{ display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px; background:var(--accent); color:#06202a; font-weight:800 }
     }
 
-    .wrap{ max-width:980px; margin:0 auto; padding:0 16px }
+    .wrap{ max-width:1000px; margin:0 auto; padding:0 16px }
 
-    /* HERO */
-    .tp-hero{ margin-top:calc(var(--header-h) + 12px); padding:18px 0 12px; border-bottom:1px solid var(--line); text-align:left }
-    .tp-hero__kicker{ color:#9fb3c9; margin:.3rem 0 .2rem }
-    .tp-hero__lead{ color:var(--muted); margin:.2rem 0 1rem; max-width:60ch }
-    h1{ margin:.2rem 0 .4rem; font-size:clamp(1.7rem, 4.6vw, 2rem); font-weight:900 }
+    /* HERO standard (centré comme About/Protocol) */
+    .hero{ padding:96px 20px 18px; max-width:1100px; margin:0 auto; text-align:center; border-bottom:1px solid var(--line) }
+    .hero .icon{ font-size:2rem; line-height:1; margin-bottom:6px }
+    .hero .status{ display:inline-block; margin:0 0 10px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.9rem; box-shadow:var(--ring) }
+    .hero h1{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900;
+      background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent }
+    .hero .lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 auto 12px }
+    .hero .proof-strip{ display:inline-flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center;
+      margin-top:6px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem }
+    .hero .btn{ display:inline-block; padding:6px 10px; border:1px solid #22455a; border-radius:10px; background:#0c1a2e; color:#cfefff; font-weight:700; text-decoration:none }
+    .hero .btn:hover{ text-decoration:underline }
 
-    /* HERO icon like Protocol */
-    .tp-hero__icon{width:56px;height:56px;border-radius:14px;background:#0d1628;border:1px solid var(--line);
-      display:inline-flex;align-items:center;justify-content:center;box-shadow:var(--ring)}
-    .tp-hero__icon svg{width:30px;height:30px;color:#9beefb}
-
-    .cta-row{ display:flex; gap:10px; margin-top:8px; flex-wrap:wrap }
-    .btn{ background:var(--accent); color:#06202a; border:none; padding:11px 16px; border-radius:10px; font-weight:800; cursor:pointer }
-    .btn:hover{ filter:brightness(1.05) }
-    .ghost{ background:#111d33; color:#e2f6ff; border:1px solid var(--line) }
-
-    /* Tabs + cards */
+    /* Tabs + tool cards */
     .tabs{ display:flex; gap:8px; margin:16px 0 18px; flex-wrap:wrap }
     .tab{ padding:10px 14px; background:#0b1220; border:1px solid #1f2937; border-radius:10px; cursor:pointer; color:#cbd5e1 }
     .tab[aria-selected="true"]{ background:var(--panel); color:var(--text); border-color:#263244 }
@@ -165,14 +163,13 @@ upgrade-insecure-requests">
 
     label{ display:block; font-size:13px; color:#a7b1c2; margin:8px 0 6px }
     input[type="text"], textarea{ width:100%; background:#0b1220; color:#f8fafc; border:1px solid #1f2937; border-radius:10px; padding:10px 12px }
-    /* mobile typing overflow fix */
     textarea{ min-height:110px; resize:vertical; overflow:auto; word-wrap:break-word; overflow-wrap:anywhere }
     input[type="text"]{ overflow:auto; text-overflow:ellipsis }
 
     .row{ display:flex; gap:12px; flex-wrap:wrap; align-items:center }
     .row > *{ flex:1 1 240px }
-
     .hint{ font-size:12px; color:#93a1b5 }
+
     .pill{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; font-size:12px; margin-left:8px }
     .ok{ background:#0f3b22; color:#b7f7ce; border:1px solid #1c6b3d }
     .bad{ background:#3b0f12; color:#ffc1c6; border:1px solid #6b1c22 }
@@ -181,7 +178,14 @@ upgrade-insecure-requests">
       width:100%; background:#0b1220; color:#a7f3d0; border:1px solid #1f2937; border-radius:10px; padding:12px;
       white-space:pre-wrap; word-break:break-all; overflow-wrap:anywhere; font-size:13px; max-height:40vh; overflow:auto; position:relative;
     }
-    .actions{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap }
+    .copy-btn{
+      position:absolute; top:8px; right:8px;
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px; border-radius:10px;
+      border:1px solid #22455a; background:#0c1a2e; color:#cfefff;
+      font-weight:700; cursor:pointer
+    }
+    .copy-btn:hover{ filter:brightness(1.1) }
 
     .drop{ margin-top:10px; padding:14px; border:1px dashed #2b3b55; border-radius:10px; background:#0b1220; color:#cfe3f5; text-align:center; font-size:.92rem }
     .drop.drag{ border-color:#22d3ee; background:#0f1f33 }
@@ -191,26 +195,15 @@ upgrade-insecure-requests">
     .summary .k{ color:#9fb3c9; min-width:116px }
     .summary code{ font-size:.92rem }
 
-    .copy-btn{
-      position:absolute; top:8px; right:8px;
-      display:inline-flex; align-items:center; gap:6px;
-      padding:6px 10px; border-radius:10px;
-      border:1px solid #22455a; background:#0c1a2e; color:#cfefff;
-      font-weight:700; cursor:pointer
-    }
-    .copy-btn:hover{ filter:brightness(1.1) }
-    .copy-btn .ok{ display:none }
-    .copy-btn.copied .ok{ display:inline }
-    .copy-btn.copied .txt{ display:none }
+    .progress{ position:fixed; left:0; top:64px; width:100%; height:2px; background:linear-gradient(90deg, rgba(34,211,238,.0), rgba(34,211,238,.35)); transform-origin:left; scale:0 1; z-index:900 }
+    a:focus-visible, .tab:focus-visible, .copy-btn:focus-visible, .tp-burger:focus-visible, .cta-header:focus-visible{ outline:2px solid #22d3ee; outline-offset:3px; border-radius:12px }
 
-    .progress{ position:fixed; left:0; top:var(--header-h); width:100%; height:2px; background:linear-gradient(90deg, rgba(34,211,238,.0), rgba(34,211,238,.35)); transform-origin:left; scale:0 1; z-index:900 }
-    a:focus-visible, .btn:focus-visible, .tp-burger:focus-visible{ outline:2px solid #22d3ee; outline-offset:3px; border-radius:12px }
-
-    footer{ border-top:1px solid var(--line); margin-top:44px; padding:18px; color:#7c8aa5; text-align:center }
+    /* Footer canonique */
+    footer{ border-top:1px solid var(--line); margin-top:28px; padding:18px; color:#7c8aa5; text-align:center }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
-    footer .links a{ color:#a7b7cc; margin:0 8px }
-    footer .links a:hover{ color:var(--accent); text-decoration:underline }
+    footer .links a{ color:#cfefff; font-weight:600; text-decoration:none; margin:0 6px }
+    footer .links a:hover{ color:#9beefb; text-decoration:underline }
     .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
     .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; transition:transform .18s var(--e); color:#cfefff }
     .social a:hover{ transform:translateY(-2px) }
@@ -218,7 +211,6 @@ upgrade-insecure-requests">
     @media (max-width:480px){
       .card{ padding:14px }
       .row{ gap:8px }
-      .btn{ width:100%; min-height:44px }
       .tab{ padding:8px 10px; font-size:.95rem }
       input[type="text"], textarea{ padding:9px 10px; font-size:14px }
     }
@@ -241,44 +233,44 @@ upgrade-insecure-requests">
       <a href="/docs.html">API Docs</a>
       <a href="/regulations.html">Regulations</a>
       <a href="/security.html">Security</a>
-      <a href="/about.html">About</a>
       <a href="/privacy.html">Privacy</a>
       <a href="/legal.html">Legal</a>
+      <a href="/about.html">About</a>
+      <!-- Mobile CTA en fin -->
+      <a class="nav-cta" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
     </nav>
+    <a class="cta-header" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav"><span aria-hidden="true">☰</span></button>
   </header>
 
   <div class="progress" id="progress" aria-hidden="true"></div>
 
+  <!-- HERO standard centré -->
+  <section class="hero card" role="region" aria-labelledby="page-title">
+    <div class="icon" aria-hidden="true">🔐</div>
+    <p class="status"><strong>Status:</strong> Public Beta v0.1 · Tool · Privacy-first · No blockchain</p>
+    <h1 id="page-title">Create & Verify a Proof</h1>
+    <p class="lead">
+      Hash locally → timestamp & sign via API → verify publicly. Your content never leaves your device.
+      <strong>Max file size: 50&nbsp;MB.</strong>
+    </p>
+    <!-- Proof of Release strip — IDs standard -->
+    <div class="proof-strip">
+      <strong>Proof of Release</strong>
+      <span>Release: <code id="page-proof-release"></code></span>
+      <span>· Hash: <code id="page-proof-hash"></code></span>
+      <a id="page-proof-link" href="#" class="btn" target="_blank" rel="noopener">Verify</a>
+    </div>
+    <!-- Actions to jump to tabs -->
+    <div style="margin-top:10px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <a href="#tool" class="btn" id="focus-create">Create</a>
+      <a href="#tool" class="btn" style="background:#111d33;color:#e2f6ff;border:1px solid var(--line)" id="focus-verify">Verify</a>
+    </div>
+  </section>
+
   <main class="wrap" id="main" role="main">
-    <!-- HERO (icon + status like Protocol) -->
-    <section class="tp-hero" role="region" aria-labelledby="page-title">
-      <div class="row" style="align-items:center;gap:14px;margin:0 0 10px">
-        <div class="tp-hero__icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M6 2h8.5L20 7.5V20a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm8.5 1.5V7H20"/>
-            <path d="M9.5 13.5l2 2 4-4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <p class="tp-hero__kicker" style="margin:0">
-          <strong>Status:</strong> Public Beta v0.1 · Tool · Privacy-first · No blockchain
-        </p>
-      </div>
-
-      <h1 id="page-title">Create & Verify a Proof</h1>
-      <p class="tp-hero__lead">
-        Hash locally → timestamp & sign via API → verify publicly. Your content never leaves your device.
-        <strong>Max file size: 50&nbsp;MB.</strong>
-      </p>
-
-      <div class="cta-row" role="group" aria-label="Primary actions">
-        <button class="btn" id="focus-create" type="button">Create</button>
-        <button class="btn ghost" id="focus-verify" type="button">Verify</button>
-      </div>
-    </section>
-
     <!-- Tabs -->
-    <div class="tabs" role="tablist" aria-label="Create or Verify">
+    <div class="tabs" role="tablist" aria-label="Create or Verify" id="tool" style="scroll-margin-top:90px">
       <button id="tab-create" class="tab" role="tab" aria-selected="true" aria-controls="panel-create">Create</button>
       <button id="tab-verify" class="tab" role="tab" aria-selected="false" aria-controls="panel-verify">Verify</button>
       <button id="tab-url" class="tab" role="tab" aria-selected="false" aria-controls="panel-url">URL</button>
@@ -294,9 +286,9 @@ upgrade-insecure-requests">
 
       <label>Choose a mode</label>
       <div class="row" role="group" aria-label="Input mode">
-        <button class="btn ghost" id="choose-text" type="button">Text</button>
-        <button class="btn ghost" id="choose-file" type="button">File</button>
-        <button class="btn ghost" id="choose-hash" type="button">Hash</button>
+        <button class="tab" id="choose-text" type="button" style="cursor:pointer">Text</button>
+        <button class="tab" id="choose-file" type="button" style="cursor:pointer">File</button>
+        <button class="tab" id="choose-hash" type="button" style="cursor:pointer">Hash</button>
       </div>
 
       <div id="input-text" style="margin-top:14px;">
@@ -333,7 +325,7 @@ upgrade-insecure-requests">
       </div>
 
       <div class="row" style="margin-top:16px;">
-        <button class="btn" id="btn-create" type="button" aria-controls="create-output create-status create-summary">Timestamp</button>
+        <button class="tab" id="btn-create" type="button" aria-controls="create-output create-status create-summary" style="cursor:pointer">Timestamp</button>
         <span class="hint">Output: hash, signature, verify URL</span>
       </div>
 
@@ -344,16 +336,16 @@ upgrade-insecure-requests">
         <div class="item"><span class="k">Hash</span><code id="create-s-hash">—</code></div>
         <div class="item"><span class="k">Signature</span><code id="create-s-sign">—</code></div>
         <div class="item" id="create-s-ts-wrap" style="display:none"><span class="k">Timestamp (Paris)</span><span id="create-s-ts">—</span></div>
-        <div class="item" id="create-s-link-wrap" style="display:none"><span class="k">Verify here</span><button id="open-verify-here" class="btn ghost" type="button">Open</button></div>
+        <div class="item" id="create-s-link-wrap" style="display:none"><span class="k">Verify here</span><button id="open-verify-here" class="tab" type="button" style="cursor:pointer">Open</button></div>
       </div>
 
       <pre id="create-output" style="margin-top:12px;" aria-live="polite"><button type="button" class="copy-btn" data-target="create-output"><span class="txt">Copy</span><span class="ok">✓ Copied</span></button></pre>
 
-      <div class="actions" id="create-actions" style="display:none;">
-        <button class="btn ghost" id="copy-create-json" type="button" disabled>Copy JSON</button>
-        <button class="btn ghost" id="copy-create-curl" type="button" disabled>Copy cURL</button>
-        <a class="btn ghost" id="share-verify-link" href="#" target="_blank" rel="noopener noreferrer" style="display:none">Share public verify link</a>
-        <button class="btn ghost" id="download-bundle" type="button" disabled>Download .tproof.json</button>
+      <div class="row" id="create-actions" style="display:none; gap:8px; margin-top:10px;">
+        <button class="tab" id="copy-create-json" type="button" disabled style="cursor:pointer">Copy JSON</button>
+        <button class="tab" id="copy-create-curl" type="button" disabled style="cursor:pointer">Copy cURL</button>
+        <a class="tab" id="share-verify-link" href="#" target="_blank" rel="noopener noreferrer" style="display:none; text-align:center">Share public verify link</a>
+        <button class="tab" id="download-bundle" type="button" disabled style="cursor:pointer">Download .tproof.json</button>
       </div>
     </section>
 
@@ -367,7 +359,7 @@ upgrade-insecure-requests">
       <div class="drop" id="drop-bundle" aria-label="Drop a .tproof.json">…or drag & drop a <strong>.tproof.json</strong> here</div>
 
       <div class="row" style="margin-top:12px;">
-        <button class="btn" id="btn-verify" type="button" aria-controls="verify-output verify-status verify-summary">Verify</button>
+        <button class="tab" id="btn-verify" type="button" aria-controls="verify-output verify-status verify-summary" style="cursor:pointer">Verify</button>
         <span class="hint">Checks existence and server signature.</span>
       </div>
 
@@ -382,10 +374,10 @@ upgrade-insecure-requests">
 
       <pre id="verify-output" style="margin-top:12px;" aria-live="polite"><button type="button" class="copy-btn" data-target="verify-output"><span class="txt">Copy</span><span class="ok">✓ Copied</span></button></pre>
 
-      <div class="actions" id="verify-actions" style="display:none;">
-        <button class="btn ghost" id="copy-verify-json" type="button" disabled>Copy JSON</button>
-        <button class="btn ghost" id="copy-verify-curl" type="button" disabled>Copy cURL</button>
-        <button class="btn ghost" id="share-verify-link-2" type="button" disabled>Copy share link</button>
+      <div class="row" id="verify-actions" style="display:none; gap:8px; margin-top:10px;">
+        <button class="tab" id="copy-verify-json" type="button" disabled style="cursor:pointer">Copy JSON</button>
+        <button class="tab" id="copy-verify-curl" type="button" disabled style="cursor:pointer">Copy cURL</button>
+        <button class="tab" id="share-verify-link-2" type="button" disabled style="cursor:pointer">Copy share link</button>
       </div>
     </section>
 
@@ -479,19 +471,19 @@ POST /api/verify
       <p><strong>GDPR / AI Act?</strong><br/>Privacy-by-design, hash-only. See <a href="/regulations.html">Regulations & Compliance</a>.</p>
     </section>
 
-    <!-- Page proof -->
+    <!-- Page proof (duplicata) -->
     <section class="card" aria-labelledby="doc-proof" style="margin-top:12px">
       <h2 id="doc-proof">This page is verified by TimeProofs</h2>
       <p>
         Release: <span id="page-proof-release"></span><br/>
-        Hash: <code id="page-proof-hash"></code> ·
-        <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
+        Hash: <code id="page-proof-hash-dup">…</code> ·
+        <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener">Verify</a>
       </p>
       <p class="hint">Loaded from the central release manifest.</p>
     </section>
   </main>
 
-  <!-- Footer identical to Home -->
+  <!-- Footer canonique -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
@@ -507,18 +499,23 @@ POST /api/verify
       <a href="/docs.html">API Docs</a> •
       <a href="/regulations.html">Regulations</a> •
       <a href="/.well-known/security.txt">Security.txt</a> •
-      <a href="/about.html">About</a> •
       <a href="/privacy.html">Privacy</a> •
       <a href="/legal.html">Legal</a> •
       <a href="/humans.txt">humans.txt</a> •
       <a href="/rss.xml">RSS</a>
     </div>
-    <div class="social" aria-label="Social">
-      <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="X">@</a>
-      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv01" target="_blank" rel="noopener" aria-label="GitHub">GH</a>
-      <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
-      <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="YouTube">▶</a>
-      <a href="/rss.xml" target="_blank" rel="noopener" aria-label="RSS">RSS</a>
+    <div class="social" aria-label="Social links">
+      <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg></a>
+      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv01" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg></a>
+      <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg></a>
+      <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on YouTube">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M23.498 6.186a3.001 3.001 0 0 0-2.113-2.123C19.8 3.5 12 3.5 12 3.5s-7.8 0-9.385.563A3.001 3.001 0 0 0 .502 6.186C0 7.778 0 12 0 12s0 4.222.502 5.814a3.001 3.001 0 0 0 2.113 2.123C4.2 20.5 12 20.5 12 20.5s7.8 0 9.385-.563a3.001 3.001 0 0 0 2.113-2.123C24 16.222 24 12 24 12s0-4.222-.502-5.814Z"/>
+          <path fill="#000" fill-opacity=".0" d="M0 0h24v24H0z"/>
+          <path fill="#fff" d="M9.75 15.02V8.98L15.5 12l-5.75 3.02Z"/>
+        </svg>
+      </a>
+      <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/></svg></a>
     </div>
   </footer>
 
@@ -550,17 +547,6 @@ POST /api/verify
     document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
     window.addEventListener('resize', ()=>{ if (window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
 
-    // Avoid global drops
-    (function(){
-      ['dragover','drop'].forEach(type=>{
-        document.addEventListener(type, e=>{
-          if (!e.target || !(e.target.closest && (e.target.closest('#drop') || e.target.closest('#drop-bundle')))) {
-            e.preventDefault(); e.stopPropagation();
-          }
-        });
-      });
-    })();
-
     // Tabs
     const panels = {
       create: document.getElementById('panel-create'),
@@ -581,7 +567,6 @@ POST /api/verify
     function showTab(name){
       Object.entries(panels).forEach(([k,el])=> el.style.display = (k===name)?'block':'none');
       Object.entries(tabs).forEach(([k,btn])=> btn.setAttribute('aria-selected', k===name ? 'true':'false'));
-      // scroll into view for better mobile UX
       if (panels[name]) panels[name].scrollIntoView({ behavior:'smooth', block:'start' });
     }
     tabs.create.addEventListener('click', ()=>showTab('create'));
@@ -592,9 +577,9 @@ POST /api/verify
     tabs.faq.addEventListener('click', ()=>showTab('faq'));
     showTab('create');
 
-    // Hero primary buttons
-    document.getElementById('focus-create').onclick = ()=>showTab('create');
-    document.getElementById('focus-verify').onclick = ()=>showTab('verify');
+    // HERO buttons → tabs
+    document.getElementById('focus-create').onclick = (e)=>{ e.preventDefault(); showTab('create'); };
+    document.getElementById('focus-verify').onclick = (e)=>{ e.preventDefault(); showTab('verify'); };
 
     // Utils
     function withTimeout(options={}){
@@ -712,7 +697,7 @@ POST /api/verify
     const statusCreate = document.getElementById('create-status');
     const createActions = document.getElementById('create-actions');
     const copyCreateJSON = document.getElementById('copy-create-json');
-    const copyCreateCURL = document.getElementById('copy-create-curl');
+    theCopyCurl = document.getElementById('copy-create-curl');
     const downloadBundle = document.getElementById('download-bundle');
     const shareVerifyLink = document.getElementById('share-verify-link');
     const openVerifyHere = document.getElementById('open-verify-here');
@@ -729,14 +714,13 @@ POST /api/verify
 
     function enableCreateActions(data, req){
       createActions.style.display='flex';
-      copyCreateJSON.disabled=false; copyCreateCURL.disabled=false; downloadBundle.disabled=false;
+      copyCreateJSON.disabled=false; theCopyCurl.disabled=false; downloadBundle.disabled=false;
 
       const vurl = data?.verify_url || (data?.hash ? `/verify.html?hash=${encodeURIComponent(data.hash)}` : '');
-      // Share link opens new tab, but "Open" button switches in-page
       if (vurl){ shareVerifyLink.style.display='inline-block'; shareVerifyLink.href=vurl; } else { shareVerifyLink.style.display='none'; }
 
       copyCreateJSON.onclick = () => copyToClipboard(outCreate.textContent);
-      copyCreateCURL.onclick = () => {
+      theCopyCurl.onclick = () => {
         const curlBody = JSON.stringify(req).replace(/'/g, "'\\''");
         copyToClipboard(`curl -sS -X POST 'https://api.timeproofs.io/api/timestamp' -H 'Content-Type: application/json' -d '${curlBody}'`);
       };
@@ -758,7 +742,6 @@ POST /api/verify
         document.body.appendChild(a); a.click(); document.body.removeChild(a);
       };
 
-      // In-page verify switch
       openVerifyHere.onclick = ()=>{
         if (!lastCreated?.hash) return;
         document.getElementById('verify-hash').value = lastCreated.hash;
@@ -771,7 +754,7 @@ POST /api/verify
       if (btnCreate.disabled) return;
       btnCreate.disabled=true; setBusy(document.getElementById('panel-create'),true);
       outCreate.textContent=''; statusCreate.innerHTML=''; createActions.style.display='none';
-      copyCreateJSON.disabled=true; copyCreateCURL.disabled=true; downloadBundle.disabled=true;
+      copyCreateJSON.disabled=true; theCopyCurl.disabled=true; downloadBundle.disabled=true;
       createSummary.style.display='none'; lastCreated=null; csLinkWrap.style.display='none';
 
       try{
@@ -962,7 +945,7 @@ POST /api/verify
       });
     })();
 
-    // Central release manifest /releases/v0.1.json
+    // Central release manifest /releases/v0.1.json (HERO + duplicata)
     (async()=>{
       try{
         const res=await fetch('/releases/v0.1.json',{cache:'no-store'});
@@ -971,11 +954,14 @@ POST /api/verify
         const id=document.documentElement.dataset.page||location.pathname.replace(/^\//,'');
         const e=map[id]; if(!e) return;
         const rel=document.getElementById('page-proof-release');
-        const h=document.getElementById('page-proof-hash');
-        const l=document.getElementById('page-proof-link');
+        const h1=document.getElementById('page-proof-hash');
+        const l1=document.getElementById('page-proof-link');
+        const h2=document.getElementById('page-proof-hash-dup');
+        const l2=document.getElementById('page-proof-link-dup');
         rel && (rel.textContent=e.release||'');
-        h && (h.textContent=e.hash||'');
-        if(l){ l.href = e.verify || ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(e.hash||'')); }
+        if(e.hash){ h1 && (h1.textContent=e.hash); h2 && (h2.textContent=e.hash); }
+        const url=e.verify || (e.hash ? ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(e.hash)) : '#');
+        if(l1) l1.href=url; if(l2) l2.href=url;
       }catch{}
     })();
 
@@ -986,4 +972,4 @@ POST /api/verify
   })();
   </script>
 </body>
-  </html>
+</html>
