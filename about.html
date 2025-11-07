@@ -51,7 +51,7 @@
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- Security meta -->
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 
   <!-- CSP v0.1 harmonisée -->
   <meta http-equiv="Content-Security-Policy" content="
@@ -85,7 +85,7 @@ upgrade-insecure-requests">
   <!-- Styles -->
   <style>
     :root{
-      --bg:#0b1020; --panel:#0c1424; --line:#1e293b;
+      --bg:#0b1020; --bg2:#0b1226; --panel:#0c1424; --line:#1e293b;
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
       --ok:#34d399; --warn:#f59e0b; --err:#ef4444;
       --ring:0 0 0 1px #1e293b, 0 10px 40px rgba(34,211,238,.14);
@@ -93,16 +93,17 @@ upgrade-insecure-requests">
     }
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); scroll-behavior:smooth }
+    /* offset d’ancre sous header fixe comme proofspec */
     html{ scroll-padding-top:84px }
-    section[id], h2[id], h3[id]{ scroll-margin-top:92px }
+    section[id], h2[id], h3[id]{ scroll-margin-top:84px }
 
     body{
       margin:0; color:var(--text);
       font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
       background:
-        radial-gradient(1200px 600px at 85% -10%, rgba(34,211,238,.06), transparent 60%),
-        conic-gradient(from 210deg at 10% -15%, rgba(34,211,238,.05), transparent 28%),
+        radial-gradient(1200px 600px at 80% -10%, rgba(34,211,238,.06), transparent 60%),
+        conic-gradient(from 220deg at 10% -20%, rgba(34,211,238,.04), transparent 30%),
         var(--bg)
     }
     a{ color:var(--accent); text-decoration:none }
@@ -130,7 +131,11 @@ upgrade-insecure-requests">
 
     .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid var(--line); border-radius:12px; background:#0c1a2e; color:#fff; cursor:pointer; box-shadow:var(--ring) }
     .tp-burger span{ font-size:20px; line-height:1 }
-    @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } .cta-header{ display:inline-flex } }
+    @media (min-width:900px){
+      .tp-burger{ display:none }
+      .tp-nav{ display:flex; align-items:center }
+      .cta-header{ display:inline-flex }
+    }
     @media (max-width:899px){
       .tp-brand img{ height:34px; width:34px }
       .tp-nav{
@@ -145,61 +150,37 @@ upgrade-insecure-requests">
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
+    /* Content */
     main{ padding:10px 20px 40px; max-width:1100px; margin:0 auto }
     .card{
-      background:var(--panel); border:1px solid rgba(34,211,238,.18); border-radius:16px; padding:18px; margin:14px 0; position:relative; overflow:hidden;
+      background:#0c1424; border:1px solid var(--line); border-radius:16px; padding:18px; margin:14px 0; position:relative; overflow:hidden
     }
     .card::before{
-      content:""; position:absolute; inset:0; pointer-events:none; border-radius:inherit; padding:1px;
+      content:""; position:absolute; inset:0; border-radius:inherit; padding:1px;
       background:linear-gradient(135deg, rgba(34,211,238,.35), rgba(34,211,238,.12));
-      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude;
+      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none
     }
-    .card h3{ color:#bff1ff; margin:.2em 0 .3em; font-size:1.05rem }
-    h2.section-title{
-      color:#e6fbff; font-size:1.25rem; margin:2.0em 0 .8em; position:relative; text-align:center; letter-spacing:.2px
-    }
-    h2.section-title .kicker{
-      display:block; color:#7cdff1; font-size:.82rem; font-weight:700; text-transform:uppercase; letter-spacing:.12em; margin-bottom:6px
-    }
-    h2.section-title::after{
-      content:""; display:block; height:2px; width:120px; margin:8px auto 0;
-      background:linear-gradient(90deg, transparent, var(--accent), var(--accent), transparent);
-      filter:drop-shadow(0 0 8px rgba(34,211,238,.28));
-    }
+    h2{ color:#e6fbff; font-size:1.25rem; margin:1.6em 0 .6em; text-align:center; letter-spacing:.2px }
+    h3{ color:#bff1ff; font-size:1.05rem; margin:1em 0 .3em }
+    .lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 auto 12px; text-align:center }
 
+    /* HERO standard */
     .hero{ padding:96px 20px 18px; max-width:1100px; margin:0 auto; text-align:center; border-bottom:1px solid var(--line) }
     .hero .icon{ font-size:2rem; line-height:1; margin-bottom:6px }
     .hero .status{ display:inline-block; margin:0 0 10px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.9rem; box-shadow:var(--ring) }
-    .hero h1{ font-size:clamp(2rem,5vw,2.6rem); margin:.2em 0 .4em; font-weight:900; color:var(--accent) }
-    .hero .lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 auto 12px }
+    .hero h1{ font-size:clamp(2rem,5vw,2.6rem); margin:.2em 0 .4em; font-weight:900;
+      background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent }
     .proof-strip{ display:inline-flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center; margin-top:6px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem }
-    .hero .btn{ display:inline-block; padding:6px 10px; border:1px solid #22455a; border-radius:10px; background:#0c1a2e; color:#cfefff; font-weight:700; text-decoration:none }
-    .hero .btn:hover{ text-decoration:underline }
+    .btn{ display:inline-block; padding:6px 10px; border:1px solid #22455a; border-radius:10px; background:#0c1a2e; color:#cfefff; font-weight:700; text-decoration:none }
+    .btn:hover{ text-decoration:underline }
 
+    /* TOC chips */
     .toc{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; padding:14px 20px; border-bottom:1px solid var(--line) }
-    .toc a{ display:inline-block; padding:6px 10px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.9rem; text-decoration:none }
-    .toc a:hover{ text-decoration:underline }
-
-    .grid{ display:grid; gap:16px }
-    .grid.two{ grid-template-columns:1fr } @media(min-width:900px){ .grid.two{ grid-template-columns:1fr 1fr } }
-
-    .stats{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:8px }
-    @media(min-width:900px){ .stats{ grid-template-columns:repeat(4,minmax(0,1fr)) } }
-    .stat{ padding:14px; border:1px dashed rgba(34,211,238,.28); border-radius:14px; text-align:center; background:rgba(13,35,48,.35) }
-    .stat strong{ display:block; font-size:1.2rem }
-    .muted{ color:#94a3b8 }
-
-    /* Social block */
-    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
-    .social a{
-      display:inline-flex; width:40px; height:40px;
-      border:1px solid var(--line); border-radius:12px;
-      align-items:center; justify-content:center;
-      background:#0d1628; color:#cfefff;
-      transition:transform .18s var(--e)
+    .toc a{
+      display:inline-block; padding:6px 10px; border:1px solid #214a57; background:#0d2330; color:#bff1ff;
+      border-radius:999px; font-size:.9rem; text-decoration:none
     }
-    .social a:hover{ transform:translateY(-2px) }
-    .social a:focus-visible{ outline:2px solid var(--accent); outline-offset:3px }
+    .toc a:hover{ text-decoration:underline }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
@@ -263,8 +244,8 @@ upgrade-insecure-requests">
   <main id="main" role="main" class="wrap" aria-describedby="page-title">
     <!-- 1 -->
     <section class="card" id="company-legal" aria-labelledby="company-legal-title">
-      <h2 class="section-title" id="company-legal-title"><span class="kicker">Section 1</span>Company & Legal</h2>
-      <div class="grid two">
+      <h2 id="company-legal-title">Company &amp; Legal</h2>
+      <div class="grid two" style="margin-top:12px">
         <article class="card">
           <h3>Identity</h3>
           <p><strong>Name:</strong> TimeProofs</p>
@@ -274,10 +255,9 @@ upgrade-insecure-requests">
           <p><strong>Contact:</strong> <a href="mailto:contact@timeproofs.io">contact@timeproofs.io</a></p>
         </article>
         <article class="card">
-          <h3>Hosting & License</h3>
+          <h3>Hosting &amp; License</h3>
           <p><strong>Hosting:</strong> Vercel (site), Cloudflare (API/Workers/KV)</p>
           <p><strong>License:</strong> MPL-2.0</p>
-          <p><strong>Repository:</strong> <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv01" target="_blank" rel="noopener">GitHub</a></p>
           <p>
             <a href="/privacy.html">Privacy</a> ·
             <a href="/legal.html">Legal</a> ·
@@ -287,23 +267,17 @@ upgrade-insecure-requests">
           </p>
         </article>
       </div>
-      <div class="stats" aria-label="Quick facts">
-        <div class="stat"><strong>Edge-native</strong><span class="muted">Global &lt; 100 ms</span></div>
-        <div class="stat"><strong>Zero-upload</strong><span class="muted">Privacy by design</span></div>
-        <div class="stat"><strong>Open verify</strong><span class="muted">Public endpoint</span></div>
-        <div class="stat"><strong>MPL-2.0</strong><span class="muted">Open source</span></div>
-      </div>
     </section>
 
     <!-- 2 -->
     <section class="card" id="why" aria-labelledby="why-title">
-      <h2 class="section-title" id="why-title"><span class="kicker">Section 2</span>Why it matters now</h2>
+      <h2 id="why-title">Why it matters now</h2>
       <p>AI systems can rewrite, generate, and remix faster than humans can react. In this infinite remix era, <strong>trust begins with an anchor in time</strong>. Proof of existence is becoming the new HTTPS — a baseline for authenticity, authorship, and audit.</p>
     </section>
 
     <!-- 3 -->
     <section class="card" id="what" aria-labelledby="what-title">
-      <h2 class="section-title" id="what-title"><span class="kicker">Section 3</span>What TimeProofs does</h2>
+      <h2 id="what-title">What TimeProofs does</h2>
       <div class="grid two">
         <article class="card">
           <h3>How it works</h3>
@@ -320,23 +294,23 @@ upgrade-insecure-requests">
 
     <!-- 4 -->
     <section class="card" id="compare" aria-labelledby="compare-title">
-      <h2 class="section-title" id="compare-title"><span class="kicker">Section 4</span>How it compares</h2>
+      <h2 id="compare-title">How it compares</h2>
       <p>Other systems rely on blockchains (slow, costly), e-sign platforms (heavy, proprietary), or content metadata (fragile, inconsistent). <strong>TimeProofs</strong> is a neutral layer that fits anywhere — for AI outputs, datasets, contracts, or research.</p>
     </section>
 
     <!-- 5 -->
     <section class="card" id="future" aria-labelledby="future-title">
-      <h2 class="section-title" id="future-title"><span class="kicker">Section 5</span>The bigger picture</h2>
+      <h2 id="future-title">The bigger picture</h2>
       <p>By 2030, AI-generated data will exceed human content. The web will need a neutral timestamp backbone — a proof of <em>when</em> something first existed. <strong>That’s what TimeProofs is building.</strong></p>
       <p style="margin-top:.6em">
-        <a href="/verify.html" class="hero btn">Try it now</a>
-        <a href="/docs.html" class="hero btn" style="margin-left:10px">Read the docs</a>
+        <a href="/verify.html" class="btn">Try it now</a>
+        <a href="/docs.html" class="btn" style="margin-left:10px">Read the docs</a>
       </p>
     </section>
 
     <!-- Corporate -->
     <section class="card" id="corp-details" aria-labelledby="corp-details-title">
-      <h2 class="section-title" id="corp-details-title"><span class="kicker">Corporate</span>Company details</h2>
+      <h2 id="corp-details-title">Company details</h2>
       <div class="grid two">
         <article class="card">
           <h3>Legal identity</h3>
@@ -358,7 +332,7 @@ upgrade-insecure-requests">
 
     <!-- Compliance & Security -->
     <section class="card" id="compliance-security" aria-labelledby="compliance-security-title">
-      <h2 class="section-title" id="compliance-security-title"><span class="kicker">Trust</span>Compliance & Security</h2>
+      <h2 id="compliance-security-title">Compliance &amp; Security</h2>
       <div class="grid two">
         <article class="card">
           <h3>Compliance</h3>
@@ -379,7 +353,7 @@ upgrade-insecure-requests">
 
     <!-- Accessibility & Analytics -->
     <section class="card" id="access-analytics" aria-labelledby="access-analytics-title">
-      <h2 class="section-title" id="access-analytics-title"><span class="kicker">UX</span>Accessibility & Analytics</h2>
+      <h2 id="access-analytics-title">Accessibility &amp; Analytics</h2>
       <div class="grid two">
         <article class="card">
           <h3>Accessibility</h3>
@@ -397,7 +371,7 @@ upgrade-insecure-requests">
 
     <!-- IP & Licensing -->
     <section class="card" id="ip-licensing" aria-labelledby="ip-licensing-title">
-      <h2 class="section-title" id="ip-licensing-title"><span class="kicker">Legal</span>IP & Licensing</h2>
+      <h2 id="ip-licensing-title">IP &amp; Licensing</h2>
       <div class="grid two">
         <article class="card">
           <h3>Trademark</h3>
@@ -414,7 +388,7 @@ upgrade-insecure-requests">
 
     <!-- Team -->
     <section class="card" id="team" aria-labelledby="team-title">
-      <h2 class="section-title" id="team-title"><span class="kicker">People</span>Team</h2>
+      <h2 id="team-title">Team</h2>
       <p><strong>Core team:</strong> In progress</p>
       <p><strong>Advisors:</strong> In progress</p>
       <p><strong>Hiring:</strong> In progress</p>
@@ -422,7 +396,7 @@ upgrade-insecure-requests">
 
     <!-- Roadmap -->
     <section class="card" id="roadmap" aria-labelledby="roadmap-title">
-      <h2 class="section-title" id="roadmap-title"><span class="kicker">Plan</span>Roadmap</h2>
+      <h2 id="roadmap-title">Roadmap</h2>
       <ul>
         <li><strong>Q4 2025:</strong> In progress</li>
         <li><strong>Q1 2026:</strong> In progress</li>
@@ -432,7 +406,7 @@ upgrade-insecure-requests">
 
     <!-- Press & Community -->
     <section class="card" id="press-community" aria-labelledby="press-community-title">
-      <h2 class="section-title" id="press-community-title"><span class="kicker">Grow</span>Press & Community</h2>
+      <h2 id="press-community-title">Press &amp; Community</h2>
       <p><strong>Press kit:</strong> In progress</p>
       <p><strong>Brand guidelines:</strong> In progress</p>
       <p><strong>Contribute / Code of Conduct:</strong> In progress</p>
@@ -445,7 +419,7 @@ upgrade-insecure-requests">
 
     <!-- Proof -->
     <section class="card" id="site-proof" aria-labelledby="site-proof-title">
-      <h2 class="section-title" id="site-proof-title"><span class="kicker">Verify</span>Document Proof</h2>
+      <h2 id="site-proof-title">Document Proof</h2>
       <p>Release: <span id="page-proof-release">…</span> · Hash: <code id="page-proof-hash-dup">…</code> ·
         <a id="page-proof-link-dup" href="#" rel="noopener" target="_blank">Verify</a>
       </p>
@@ -453,7 +427,7 @@ upgrade-insecure-requests">
     </section>
   </main>
 
-  <!-- Footer (copié à l’identique de proofspec.html) -->
+  <!-- Footer identique à proofspec.html -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <a class="badge" href="/proofspec.html" aria-current="page">🔍 Open Spec v0.1</a>
@@ -505,7 +479,7 @@ upgrade-insecure-requests">
     document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
     window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
 
-    // aria-current auto
+    // aria-current auto (identique au pattern proofspec)
     (function(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
       document.querySelectorAll('header nav a, footer .links a').forEach(a=>{
@@ -514,17 +488,17 @@ upgrade-insecure-requests">
       });
     })();
 
-    // Release manifest
+    // Release manifest fill + duplicate fields
     (async()=>{
       try{
         const r=await fetch('/releases/v0.1.json',{cache:'no-store'}); if(!r.ok) return;
         const map=await r.json(); const id=document.documentElement.dataset.page||'about.html';
         const e=map[id] || map['/'] || map;
-        const elR=document.getElementById('page-proof-release');
         const elH1=document.getElementById('page-proof-hash');
         const elL1=document.getElementById('page-proof-link');
         const elH2=document.getElementById('page-proof-hash-dup');
         const elL2=document.getElementById('page-proof-link-dup');
+        const elR =document.getElementById('page-proof-release');
         if(elR && e.release) elR.textContent=e.release;
         if(e.hash){ elH1 && (elH1.textContent=e.hash); elH2 && (elH2.textContent=e.hash); }
         const url=e.verify || (e.hash ? ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(e.hash)) : '#');
