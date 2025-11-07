@@ -14,10 +14,6 @@
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <link rel="canonical" href="https://timeproofs.io/"/>
 
-  <!-- Language alternates -->
-  <link rel="alternate" href="https://timeproofs.io/" hreflang="en"/>
-  <link rel="alternate" href="https://timeproofs.io/" hreflang="x-default"/>
-
   <!-- Alt feeds -->
   <link rel="alternate" type="application/rss+xml" title="TimeProofs RSS" href="/rss.xml"/>
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
@@ -28,9 +24,6 @@
   <link rel="preconnect" href="https://plausible.io" crossorigin>
   <link rel="preload" as="image" href="/logo%20(1).png" fetchpriority="high"/>
   <link rel="preload" as="image" href="/og.png"/>
-  <!-- Critical preloads to tighten LCP -->
-  <link rel="preload" as="script" href="https://plausible.io/js/script.js" crossorigin nonce="TP-2025"/>
-  <link rel="preload" as="fetch" href="/releases/v0.1.json" crossorigin fetchpriority="low"/>
 
   <!-- Icons / Manifest -->
   <link rel="icon" href="/favicon.ico" sizes="any"/>
@@ -82,71 +75,8 @@
     }]
   }
   </script>
-
-  <!-- SoftwareApplication (new) -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"SoftwareApplication",
-    "name":"TimeProofs",
-    "applicationCategory":"Utility",
-    "operatingSystem":"Web",
-    "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},
-    "url":"https://timeproofs.io/",
-    "description":"Open, privacy-first protocol and tools to prove when data existed and that it has not changed.",
-    "publisher":{"@type":"Organization","name":"TimeProofs","url":"https://timeproofs.io/"},
-    "sameAs":[
-      "https://x.com/timeproofs",
-      "https://github.com/BACOUL/timeproofs/tree/timeproofsv01",
-      "https://www.linkedin.com/company/timeproofs",
-      "https://youtube.com/@timeproofs"
-    ]
-  }
-  </script>
-
-  <!-- Existing WebSite (kept) -->
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"}
-  </script>
-
-  <!-- WebSite with SearchAction (new, additive) -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"WebSite",
-    "url":"https://timeproofs.io/",
-    "name":"TimeProofs",
-    "potentialAction":{
-      "@type":"SearchAction",
-      "target":"https://timeproofs.io/search.html?q={query}",
-      "query-input":"required name=query"
-    }
-  }
-  </script>
-
-  <!-- BreadcrumbList (new) -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"BreadcrumbList",
-    "itemListElement":[
-      {"@type":"ListItem","position":1,"name":"Home","item":"https://timeproofs.io/"},
-      {"@type":"ListItem","position":2,"name":"Create/Verify","item":"https://timeproofs.io/verify.html"}
-    ]
-  }
-  </script>
-
-  <!-- Speakable (new, optional but useful) -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"WebPage",
-    "url":"https://timeproofs.io/",
-    "speakable": {
-      "@type": "SpeakableSpecification",
-      "cssSelector": ["#hero-title",".subtitle"]
-    }
-  }
   </script>
 
   <!-- Security meta -->
@@ -369,10 +299,10 @@ upgrade-insecure-requests">
       <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
       <span>TimeProofs</span>
     </a>
+    <!-- REPLACED NAV ONLY: exact same structure as ProofSpec page -->
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
-      <a href="/verify.html">Create/Verify</a>
       <a href="/docs.html">API Docs</a>
       <a href="/regulations.html">Regulations</a>
       <a href="/security.html">Security</a>
@@ -506,15 +436,6 @@ const proof = await r.json();</code></pre></article>
 );
 const check = await res.json();</code></pre></article>
       </div>
-
-      <!-- Internal links block (new) -->
-      <p class="mini" style="text-align:center; margin-top:10px">
-        See also:
-        <a href="/proofspec.html">Protocol (ProofSpec)</a> ·
-        <a href="/use-cases.html">Use Cases</a> ·
-        <a href="/docs.html">API Docs</a> ·
-        <a href="/regulations.html">Regulations</a>
-      </p>
     </section>
 
     <section class="section bg-alt reveal" aria-labelledby="pva">
@@ -880,15 +801,10 @@ verify: ${verifyURL}`;
         console.warn('Release info not available:', e);
       }
     })();
-
-    // SW register
-    if('serviceWorker' in navigator){
-      navigator.serviceWorker.register('/sw.js', { type:'module', scope:'/' }).catch(()=>{});
-    }
   })();
   </script>
 
-  <!-- SW register (kept for redundancy pattern used in site) -->
+  <!-- SW register -->
   <script nonce="TP-2025">
     if('serviceWorker' in navigator){
       navigator.serviceWorker.register('/sw.js', { type:'module', scope:'/' }).catch(()=>{});
