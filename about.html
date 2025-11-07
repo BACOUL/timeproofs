@@ -93,9 +93,8 @@ upgrade-insecure-requests">
     }
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); scroll-behavior:smooth }
-    /* offset d’ancre sous header fixe comme proofspec */
-    html{ scroll-padding-top:84px }
-    section[id], h2[id], h3[id]{ scroll-margin-top:84px }
+    html{ scroll-padding-top:84px } /* offset ancre sous header fixe */
+    h2[id], h3[id], section[id]{ scroll-margin-top:84px }
 
     body{
       margin:0; color:var(--text);
@@ -145,21 +144,15 @@ upgrade-insecure-requests">
       }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
-      .nav-cta{ display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px; background:var(--accent); color:#06202a; font-weight:800 }
+      .nav-cta{ display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px; background:#22d3ee; color:#06202a; font-weight:800 }
     }
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
     /* Content */
     main{ padding:10px 20px 40px; max-width:1100px; margin:0 auto }
-    .card{
-      background:#0c1424; border:1px solid var(--line); border-radius:16px; padding:18px; margin:14px 0; position:relative; overflow:hidden
-    }
-    .card::before{
-      content:""; position:absolute; inset:0; border-radius:inherit; padding:1px;
-      background:linear-gradient(135deg, rgba(34,211,238,.35), rgba(34,211,238,.12));
-      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none
-    }
+    .card{ background:#0c1424; border:1px solid var(--line); border-radius:16px; padding:18px; margin:14px 0; position:relative; overflow:hidden }
+    .card::before{ content:""; position:absolute; inset:0; border-radius:inherit; padding:1px; background:linear-gradient(135deg, rgba(34,211,238,.35), rgba(34,211,238,.12)); -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none }
     h2{ color:#e6fbff; font-size:1.25rem; margin:1.6em 0 .6em; text-align:center; letter-spacing:.2px }
     h3{ color:#bff1ff; font-size:1.05rem; margin:1em 0 .3em }
     .lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 auto 12px; text-align:center }
@@ -168,18 +161,14 @@ upgrade-insecure-requests">
     .hero{ padding:96px 20px 18px; max-width:1100px; margin:0 auto; text-align:center; border-bottom:1px solid var(--line) }
     .hero .icon{ font-size:2rem; line-height:1; margin-bottom:6px }
     .hero .status{ display:inline-block; margin:0 0 10px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.9rem; box-shadow:var(--ring) }
-    .hero h1{ font-size:clamp(2rem,5vw,2.6rem); margin:.2em 0 .4em; font-weight:900;
-      background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent }
+    .hero h1{ font-size:clamp(2rem,5vw,2.6rem); margin:.2em 0 .4em; font-weight:900; background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent }
     .proof-strip{ display:inline-flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center; margin-top:6px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem }
     .btn{ display:inline-block; padding:6px 10px; border:1px solid #22455a; border-radius:10px; background:#0c1a2e; color:#cfefff; font-weight:700; text-decoration:none }
     .btn:hover{ text-decoration:underline }
 
     /* TOC chips */
     .toc{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; padding:14px 20px; border-bottom:1px solid var(--line) }
-    .toc a{
-      display:inline-block; padding:6px 10px; border:1px solid #214a57; background:#0d2330; color:#bff1ff;
-      border-radius:999px; font-size:.9rem; text-decoration:none
-    }
+    .toc a{ display:inline-block; padding:6px 10px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.9rem; text-decoration:none }
     .toc a:hover{ text-decoration:underline }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
@@ -224,25 +213,24 @@ upgrade-insecure-requests">
 
   <!-- TOC -->
   <nav class="toc" aria-label="Contents">
-    <a href="#company-legal-title">Company & Legal</a>
-    <a href="#why-title">Why it matters</a>
-    <a href="#what-title">What we do</a>
-    <a href="#compare-title">How it compares</a>
-    <a href="#future-title">Bigger picture</a>
-    <a href="#corp-details-title">Company details</a>
-    <a href="#compliance-security-title">Compliance & Security</a>
-    <a href="#access-analytics-title">Accessibility & Analytics</a>
-    <a href="#ip-licensing-title">IP & Licensing</a>
-    <a href="#team-title">Team</a>
-    <a href="#roadmap-title">Roadmap</a>
-    <a href="#press-community-title">Press & Community</a>
-    <a href="#site-proof-title">Document Proof</a>
+    <a href="#company-legal">Company & Legal</a>
+    <a href="#why">Why it matters</a>
+    <a href="#what">What we do</a>
+    <a href="#compare">How it compares</a>
+    <a href="#future">Bigger picture</a>
+    <a href="#corp-details">Company details</a>
+    <a href="#compliance-security">Compliance & Security</a>
+    <a href="#access-analytics">Accessibility & Analytics</a>
+    <a href="#ip-licensing">IP & Licensing</a>
+    <a href="#team">Team</a>
+    <a href="#roadmap">Roadmap</a>
+    <a href="#press-community">Press & Community</a>
+    <a href="#site-proof">Document Proof</a>
     <a href="#top" style="padding:4px 10px">↑ Top</a>
   </nav>
 
   <!-- Main -->
   <main id="main" role="main" class="wrap" aria-describedby="page-title">
-    <!-- 1 -->
     <section class="card" id="company-legal" aria-labelledby="company-legal-title">
       <h2 id="company-legal-title">Company &amp; Legal</h2>
       <div class="grid two" style="margin-top:12px">
@@ -269,13 +257,11 @@ upgrade-insecure-requests">
       </div>
     </section>
 
-    <!-- 2 -->
     <section class="card" id="why" aria-labelledby="why-title">
       <h2 id="why-title">Why it matters now</h2>
       <p>AI systems can rewrite, generate, and remix faster than humans can react. In this infinite remix era, <strong>trust begins with an anchor in time</strong>. Proof of existence is becoming the new HTTPS — a baseline for authenticity, authorship, and audit.</p>
     </section>
 
-    <!-- 3 -->
     <section class="card" id="what" aria-labelledby="what-title">
       <h2 id="what-title">What TimeProofs does</h2>
       <div class="grid two">
@@ -292,13 +278,11 @@ upgrade-insecure-requests">
       </div>
     </section>
 
-    <!-- 4 -->
     <section class="card" id="compare" aria-labelledby="compare-title">
       <h2 id="compare-title">How it compares</h2>
       <p>Other systems rely on blockchains (slow, costly), e-sign platforms (heavy, proprietary), or content metadata (fragile, inconsistent). <strong>TimeProofs</strong> is a neutral layer that fits anywhere — for AI outputs, datasets, contracts, or research.</p>
     </section>
 
-    <!-- 5 -->
     <section class="card" id="future" aria-labelledby="future-title">
       <h2 id="future-title">The bigger picture</h2>
       <p>By 2030, AI-generated data will exceed human content. The web will need a neutral timestamp backbone — a proof of <em>when</em> something first existed. <strong>That’s what TimeProofs is building.</strong></p>
@@ -308,7 +292,6 @@ upgrade-insecure-requests">
       </p>
     </section>
 
-    <!-- Corporate -->
     <section class="card" id="corp-details" aria-labelledby="corp-details-title">
       <h2 id="corp-details-title">Company details</h2>
       <div class="grid two">
@@ -330,7 +313,6 @@ upgrade-insecure-requests">
       </div>
     </section>
 
-    <!-- Compliance & Security -->
     <section class="card" id="compliance-security" aria-labelledby="compliance-security-title">
       <h2 id="compliance-security-title">Compliance &amp; Security</h2>
       <div class="grid two">
@@ -351,7 +333,6 @@ upgrade-insecure-requests">
       </div>
     </section>
 
-    <!-- Accessibility & Analytics -->
     <section class="card" id="access-analytics" aria-labelledby="access-analytics-title">
       <h2 id="access-analytics-title">Accessibility &amp; Analytics</h2>
       <div class="grid two">
@@ -369,7 +350,6 @@ upgrade-insecure-requests">
       </div>
     </section>
 
-    <!-- IP & Licensing -->
     <section class="card" id="ip-licensing" aria-labelledby="ip-licensing-title">
       <h2 id="ip-licensing-title">IP &amp; Licensing</h2>
       <div class="grid two">
@@ -386,7 +366,6 @@ upgrade-insecure-requests">
       </div>
     </section>
 
-    <!-- Team -->
     <section class="card" id="team" aria-labelledby="team-title">
       <h2 id="team-title">Team</h2>
       <p><strong>Core team:</strong> In progress</p>
@@ -394,7 +373,6 @@ upgrade-insecure-requests">
       <p><strong>Hiring:</strong> In progress</p>
     </section>
 
-    <!-- Roadmap -->
     <section class="card" id="roadmap" aria-labelledby="roadmap-title">
       <h2 id="roadmap-title">Roadmap</h2>
       <ul>
@@ -404,7 +382,6 @@ upgrade-insecure-requests">
       </ul>
     </section>
 
-    <!-- Press & Community -->
     <section class="card" id="press-community" aria-labelledby="press-community-title">
       <h2 id="press-community-title">Press &amp; Community</h2>
       <p><strong>Press kit:</strong> In progress</p>
@@ -417,7 +394,6 @@ upgrade-insecure-requests">
       </p>
     </section>
 
-    <!-- Proof -->
     <section class="card" id="site-proof" aria-labelledby="site-proof-title">
       <h2 id="site-proof-title">Document Proof</h2>
       <p>Release: <span id="page-proof-release">…</span> · Hash: <code id="page-proof-hash-dup">…</code> ·
@@ -454,7 +430,7 @@ upgrade-insecure-requests">
       <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg></a>
       <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on YouTube">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path fill="currentColor" d="M23.498 6.186a3.001 3.001 0 0 0-2.113-2.123C19.8 3.5 12 3.5 12 3.5s-7.8 0-9.385.563A3.001 3.001 0 0 0 .502 6.186C0 7.778 0 12 0 12s0 4.222.502 5.814a3.001 3.001 0 0 0 2.113 2.123C4.2 20.5 12 20.5 12 20.5s7.8 0 9.385-.563a3.001 3.001 0 0 0 2.113-2.123C24 16.222 24 12 24 12s0-4.222-.502-5.814Z"/>
+          <path fill="currentColor" d="M23.498 6.186a3.001 3.001 0 0 0-2.113-2.123C19.8 3.5 12 3.5 12 3.5s-7.8 0-9.385.563A3.001 3.001 0 0 0 .502 6.186C0 7.778 0 12 0 12s0 4.222.502 5.814a3.001 3.001 0 0 0 2.113 2.123C24 16.222 24 12 24 12s0-4.222-.502-5.814Z"/>
           <path fill="#000" fill-opacity=".0" d="M0 0h24v24H0z"/>
           <path fill="#fff" d="M9.75 15.02V8.98L15.5 12l-5.75 3.02Z"/>
         </svg>
@@ -479,7 +455,7 @@ upgrade-insecure-requests">
     document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
     window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
 
-    // aria-current auto (identique au pattern proofspec)
+    // aria-current auto
     (function(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
       document.querySelectorAll('header nav a, footer .links a').forEach(a=>{
@@ -488,7 +464,7 @@ upgrade-insecure-requests">
       });
     })();
 
-    // Release manifest fill + duplicate fields
+    // Release manifest fill + duplicates
     (async()=>{
       try{
         const r=await fetch('/releases/v0.1.json',{cache:'no-store'}); if(!r.ok) return;
