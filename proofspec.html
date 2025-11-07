@@ -69,7 +69,7 @@ upgrade-insecure-requests">
   <!-- Analytics -->
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
-  <!-- JSON-LD Org + Site + Article -->
+  <!-- JSON-LD Org + Site + Article + FAQ -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -93,12 +93,22 @@ upgrade-insecure-requests">
   }
   </script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"TechArticle","headline":"ProofSpec — TimeProofs Protocol","about":"Digital proof of existence protocol","datePublished":"2025-10-22","dateModified":"2025-11-05","maintainer":{"@type":"Organization","name":"TimeProofs"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://timeproofs.io/proofspec.html"}}
+  {"@context":"https://schema.org","@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/","inLanguage":"en"}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"TechArticle","headline":"ProofSpec — TimeProofs Protocol","about":"Digital proof of existence protocol","datePublished":"2025-10-22","dateModified":"2025-11-05","inLanguage":"en","maintainer":{"@type":"Organization","name":"TimeProofs"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://timeproofs.io/proofspec.html"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
     {"@type":"ListItem","position":1,"name":"Home","item":"https://timeproofs.io/"},
     {"@type":"ListItem","position":2,"name":"Protocol (ProofSpec)","item":"https://timeproofs.io/proofspec.html"}
+  ]}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+    {"@type":"Question","name":"What is ProofSpec?","acceptedAnswer":{"@type":"Answer","text":"An open specification for creating, signing, timestamping, and publicly verifying proofs of existence without uploading original content."}},
+    {"@type":"Question","name":"Does it use a blockchain?","acceptedAnswer":{"@type":"Answer","text":"No. It uses cryptographic timestamps and public verification for speed and predictability."}},
+    {"@type":"Question","name":"How do I verify a proof?","acceptedAnswer":{"@type":"Answer","text":"Call /api/verify with the SHA-256 hash. Any ProofSpec-compliant tool can verify."}}
   ]}
   </script>
 
@@ -140,13 +150,22 @@ upgrade-insecure-requests">
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
 
+    /* Header nav */
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none }
     .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
 
-    .cta-header{ display:none; align-items:center; justify-content:center; height:40px; padding:0 14px; border-radius:10px; background:var(--accent); color:#06202a; font-weight:800; box-shadow:0 6px 24px rgba(34,211,238,.25) }
+    /* Header CTA */
+    .cta-header{
+      display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
+      border-radius:10px; background:var(--accent); color:#06202a; font-weight:800; box-shadow:0 6px 24px rgba(34,211,238,.25)
+    }
     .cta-header:hover{ filter:brightness(1.05) }
 
-    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid var(--line); border-radius:12px; background:#0c1a2e; color:#fff; cursor:pointer; box-shadow:var(--ring) }
+    /* Burger */
+    .tp-burger{
+      display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
+      border:1px solid var(--line); border-radius:12px; background:#0c1a2e; color:#fff; cursor:pointer; box-shadow:var(--ring)
+    }
     .tp-burger span{ font-size:20px; line-height:1 }
 
     @media (min-width:900px){
@@ -170,14 +189,16 @@ upgrade-insecure-requests">
 
     /* Content */
     main{ padding:10px 20px 40px; max-width:1100px; margin:0 auto }
-    .crumb{ color:#9fb3c9; margin:12px 0 8px; font-size:.92rem }
     .meta{ color:#94a3b8; margin:0 0 1.1em }
     .card{
       background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:18px; margin:14px 0;
       transition:transform .18s var(--e)
     }
-    h2{ color:#b9e7f5; font-size:1.25rem; margin:1.2em 0 .5em; scroll-margin-top:84px }
-    h3{ color:#aee9f7; font-size:1.05rem; margin:1em 0 .3em; scroll-margin-top:84px }
+    h2{ color:#b9e7f5; font-size:1.25rem; margin:1.2em 0 .5em; }
+    h3{ color:#aee9f7; font-size:1.05rem; margin:1em 0 .3em; }
+    /* Assure la visibilité des titres et des sections ciblées par les ancres */
+    h2, h3, .card, section, [id]{ scroll-margin-top:84px }
+
     pre, code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
     pre{
       position:relative; max-width:100%; overflow:auto; padding:12px; border-radius:12px;
@@ -190,6 +211,7 @@ upgrade-insecure-requests">
     .table{ display:block; width:100%; border:1px solid #1f2a44; border-radius:14px; background:#0b1426; overflow-x:auto }
     .table table{ width:100%; border-collapse:separate; border-spacing:0; min-width:680px }
     .table th,.table td{ padding:12px; text-align:left; border-bottom:1px solid #1a2846; font-size:.98rem; white-space:normal }
+    .table th{ scope: col; }
 
     /* Footer identical */
     footer{ border-top:1px solid var(--line); margin-top:28px; padding:18px; color:#7c8aa5; text-align:center }
@@ -204,14 +226,9 @@ upgrade-insecure-requests">
     /* HERO standard */
     .hero{ padding:96px 20px 18px; max-width:1100px; margin:0 auto; text-align:center; border-bottom:1px solid var(--line) }
     .hero .icon{ font-size:2rem; line-height:1; margin-bottom:6px }
-    .hero .status{ display:inline-block; margin:0 0 10px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.9rem; box-shadow:var(--ring) }
     .hero h1{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900;
       background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent }
     .hero .lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 auto 12px }
-    .hero .proof-strip{ display:inline-flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center;
-      margin-top:6px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem }
-    .hero .btn{ display:inline-block; padding:6px 10px; border:1px solid #22455a; border-radius:10px; background:#0c1a2e; color:#cfefff; font-weight:700; text-decoration:none }
-    .hero .btn:hover{ text-decoration:underline }
 
     /* TOC chips standard */
     .toc{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; padding:14px 20px; border-bottom:1px solid var(--line) }
@@ -232,9 +249,11 @@ upgrade-insecure-requests">
       <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
       <span>TimeProofs</span>
     </a>
+    <!-- Menu aligné sur la page d’accueil validée -->
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
-      <a href="/proofspec.html">Protocol (ProofSpec)</a>
+      <a href="/proofspec.html" aria-current="page">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
+      <a href="/verify.html">Create/Verify</a>
       <a href="/docs.html">API Docs</a>
       <a href="/regulations.html">Regulations</a>
       <a href="/security.html">Security</a>
@@ -250,16 +269,9 @@ upgrade-insecure-requests">
   <!-- HERO standard -->
   <section class="hero card" role="region" aria-labelledby="page-title">
     <div class="icon" aria-hidden="true">📘</div>
-    <p class="status">Status: Public Beta v0.1 · Protocol · Privacy-first · No blockchain</p>
     <h1 id="page-title">Protocol (ProofSpec)</h1>
     <p class="lead">Defines how to create, sign, timestamp, and verify proofs that a specific data artifact existed at a point in time and has not changed since, without exposing the original content.</p>
-
-    <div class="proof-strip">
-      <strong>Proof of Release</strong>
-      <span>Release: <code id="page-proof-release"></code></span>
-      <span>· Hash: <code id="page-proof-hash"></code></span>
-      <a id="page-proof-link" href="#" class="btn" target="_blank" rel="noopener">Verify</a>
-    </div>
+    <!-- Proof-of-release strip retiré ici, conservé plus bas dans #proof -->
   </section>
 
   <!-- TOC chips -->
@@ -283,7 +295,8 @@ upgrade-insecure-requests">
 
   <!-- Main -->
   <main id="main" role="main" class="wrap" aria-describedby="page-title">
-    <nav aria-label="Breadcrumb" class="crumb"><a href="/">Home</a> › <span aria-current="page">Protocol (ProofSpec)</span></nav>
+    <!-- Breadcrumb retiré à la demande -->
+
     <p class="meta">Spec: <strong>ProofSpec v0.1</strong> · Effective: <strong>2025-10-22</strong> · Last updated: <strong>2025-11-05</strong> · See also: <a href="/regulations.html">Regulatory Readiness</a></p>
 
     <section class="card" id="overview" aria-labelledby="overview-title">
@@ -455,17 +468,9 @@ sig:  qwertyZXCVbnNmTW9ja2JhU2U (example)</code></pre>
       </ul>
     </section>
 
-    <!-- REPLACED: proof section styled like homepage -->
     <section class="card" id="proof" aria-labelledby="proof-title">
       <h2 id="proof-title">14. Document Proof</h2>
-
-      <div class="proof-strip" style="margin-top:8px">
-        <strong>🔏 Proof of Release</strong>
-        <span>Release: <code id="page-proof-release"></code></span>
-        <span>· Hash: <code id="page-proof-hash-dup">…</code></span>
-        <a id="page-proof-link-dup" href="#" class="btn" target="_blank" rel="noopener">Verify</a>
-      </div>
-
+      <p>Release: <span id="page-proof-release"></span><br/>Hash: <code id="page-proof-hash-dup">…</code> · <a id="page-proof-link-dup" href="#" rel="noopener" target="_blank">Verify</a></p>
       <p class="muted">Loaded from the central release manifest.</p>
     </section>
   </main>
@@ -546,21 +551,18 @@ sig:  qwertyZXCVbnNmTW9ja2JhU2U (example)</code></pre>
       });
     })();
 
-    // Release manifest fill + duplicate fields
+    // Release manifest fill for #proof only
     (async()=>{
       try{
         const r=await fetch('/releases/v0.1.json',{cache:'no-store'}); if(!r.ok) return;
         const map=await r.json(); const id=document.documentElement.dataset.page||'proofspec.html';
         const e=map[id] || map['/'] || map;
-        const elH1=document.getElementById('page-proof-hash');
-        const elL1=document.getElementById('page-proof-link');
         const elH2=document.getElementById('page-proof-hash-dup');
         const elL2=document.getElementById('page-proof-link-dup');
         const elR =document.getElementById('page-proof-release');
         if(elR && e.release) elR.textContent=e.release;
-        if(e.hash){ elH1 && (elH1.textContent=e.hash); elH2 && (elH2.textContent=e.hash); }
+        if(e.hash){ elH2 && (elH2.textContent=e.hash); }
         const url=e.verify || (e.hash ? ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(e.hash)) : '#');
-        if(elL1 && url) elL1.href=url;
         if(elL2 && url) elL2.href=url;
       }catch{}
     })();
@@ -572,4 +574,4 @@ sig:  qwertyZXCVbnNmTW9ja2JhU2U (example)</code></pre>
   })();
   </script>
 </body>
-  </html>
+</html>
