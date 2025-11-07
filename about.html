@@ -69,24 +69,25 @@ upgrade-insecure-requests">
   <!-- Analytics -->
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
-  <!-- Styles (parité proofspec) -->
+  <!-- Styles (parité + identité visuelle renforcée) -->
   <style>
     :root{
-      --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
-      --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
+      --bg:#0b1020; --bg2:#0b1226; --panel:#0c1424; --line:#1e293b;
+      --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --accent2:#60a5fa;
+      --ok:#34d399; --warn:#f59e0b; --err:#ef4444;
       --ring:0 0 0 1px #1e293b, 0 10px 40px rgba(34,211,238,.14);
       --e:cubic-bezier(.22,.61,.36,1)
     }
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); scroll-behavior:smooth }
-    html{ scroll-padding-top:84px } /* pour header fixe + ancres */
+    html{ scroll-padding-top:84px } /* header fixe + ancres */
     body{
       margin:0; color:var(--text);
       font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
       background:
-        radial-gradient(1200px 600px at 80% -10%, rgba(34,211,238,.06), transparent 60%),
-        conic-gradient(from 220deg at 10% -20%, rgba(34,211,238,.04), transparent 30%),
+        radial-gradient(1200px 600px at 85% -10%, rgba(34,211,238,.06), transparent 60%),
+        conic-gradient(from 210deg at 10% -15%, rgba(34,211,238,.05), transparent 28%),
         var(--bg)
     }
     a{ color:var(--accent); text-decoration:none }
@@ -129,30 +130,53 @@ upgrade-insecure-requests">
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* Content parity with proofspec */
     main{ padding:10px 20px 40px; max-width:1100px; margin:0 auto }
-    .card{ background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:18px; margin:14px 0 }
-    h2{ color:#b9e7f5; font-size:1.25rem; margin:1.2em 0 .5em; scroll-margin-top:84px }
+    .card{
+      background:var(--panel); border:1px solid rgba(34,211,238,.18); border-radius:16px; padding:18px; margin:14px 0; position:relative;
+      overflow:hidden;
+    }
+    .card::before{
+      content:""; position:absolute; inset:0; pointer-events:none; border-radius:inherit; padding:1px;
+      background:linear-gradient(135deg, rgba(34,211,238,.35), rgba(96,165,250,.15));
+      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude;
+    }
+    .card h3{ color:#c7f4ff; margin:.2em 0 .3em; font-size:1.05rem }
+    h2.section-title{
+      color:#e6fbff; font-size:1.25rem; margin:2.0em 0 .8em; position:relative; text-align:center; letter-spacing:.2px
+    }
+    h2.section-title .kicker{
+      display:block; color:#7cdff1; font-size:.82rem; font-weight:700; text-transform:uppercase; letter-spacing:.12em; margin-bottom:6px
+    }
+    h2.section-title::after{
+      content:""; display:block; height:2px; width:120px; margin:8px auto 0;
+      background:linear-gradient(90deg, transparent, var(--accent), var(--accent2), transparent);
+      filter:drop-shadow(0 0 8px rgba(34,211,238,.28));
+    }
 
-    /* HERO standard */
     .hero{ padding:96px 20px 18px; max-width:1100px; margin:0 auto; text-align:center; border-bottom:1px solid var(--line) }
     .hero .icon{ font-size:2rem; line-height:1; margin-bottom:6px }
     .hero .status{ display:inline-block; margin:0 0 10px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.9rem; box-shadow:var(--ring) }
-    .hero h1{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900;
-      background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent }
+    .hero h1{ font-size:clamp(2rem,5vw,2.6rem); margin:.2em 0 .4em; font-weight:900;
+      background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#a5b4fc 70%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent }
     .hero .lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 auto 12px }
-    .proof-strip{ display:inline-flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center;
-      margin-top:6px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem }
+    .proof-strip{ display:inline-flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center; margin-top:6px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem }
     .hero .btn{ display:inline-block; padding:6px 10px; border:1px solid #22455a; border-radius:10px; background:#0c1a2e; color:#cfefff; font-weight:700; text-decoration:none }
     .hero .btn:hover{ text-decoration:underline }
 
-    /* TOC chips */
     .toc{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; padding:14px 20px; border-bottom:1px solid var(--line) }
     .toc a{ display:inline-block; padding:6px 10px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.9rem; text-decoration:none }
     .toc a:hover{ text-decoration:underline }
 
-    /* Footer identical */
-    footer{ border-top:1px solid var(--line); margin-top:28px; padding:18px; color:#7c8aa5; text-align:center }
+    .grid{ display:grid; gap:16px }
+    .grid.two{ grid-template-columns:1fr } @media(min-width:900px){ .grid.two{ grid-template-columns:1fr 1fr } }
+
+    .stats{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:8px }
+    @media(min-width:900px){ .stats{ grid-template-columns:repeat(4,minmax(0,1fr)) } }
+    .stat{ padding:14px; border:1px dashed rgba(34,211,238,.28); border-radius:14px; text-align:center; background:rgba(13,35,48,.35) }
+    .stat strong{ display:block; font-size:1.2rem }
+    .muted{ color:#94a3b8 }
+
+    footer{ border-top:1px solid var(--line); margin-top:32px; padding:18px; color:#7c8aa5; text-align:center }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
     footer .links a{ color:#cfefff; font-weight:600; text-decoration:none }
@@ -193,7 +217,6 @@ upgrade-insecure-requests">
     <p class="status">Status: Public Beta v0.1 · About · Privacy-first · No blockchain</p>
     <h1 id="page-title">About TimeProofs</h1>
     <p class="lead">Learn the mission, ethics, and proof principles behind TimeProofs — the open, privacy-first protocol for digital proof of existence.</p>
-
     <div class="proof-strip">
       <strong>Proof of Release</strong>
       <span>Release: <code id="page-proof-release"></code></span>
@@ -209,48 +232,204 @@ upgrade-insecure-requests">
     <a href="#what">What we do</a>
     <a href="#compare">How it compares</a>
     <a href="#future">Bigger picture</a>
+    <a href="#corp-details">Company details</a>
+    <a href="#compliance-security">Compliance & Security</a>
+    <a href="#access-analytics">Accessibility & Analytics</a>
+    <a href="#ip-licensing">IP & Licensing</a>
+    <a href="#team">Team</a>
+    <a href="#roadmap">Roadmap</a>
+    <a href="#press-community">Press & Community</a>
     <a href="#site-proof">Document Proof</a>
     <a href="#top" style="padding:4px 10px">↑ Top</a>
   </nav>
 
   <!-- Main -->
   <main id="main" role="main" class="wrap" aria-describedby="page-title">
+    <!-- 1 -->
     <section class="card" id="company-legal" aria-labelledby="company-legal-title">
-      <h2 id="company-legal-title">1. Company & Legal</h2>
-      <p><strong>Name:</strong> TimeProofs · <strong>Status:</strong> Public Beta v0.1 · <strong>Location:</strong> Paris, France · <strong>Publisher:</strong> Jeason Bacoul · <strong>Contact:</strong> <a href="mailto:contact@timeproofs.io">contact@timeproofs.io</a></p>
-      <p><strong>Hosting:</strong> Vercel (site), Cloudflare (API/Workers/KV) · <strong>IP & License:</strong> TimeProofs™ (INPI, pending) · MPL-2.0</p>
-      <p><a href="/privacy.html">Privacy</a> · <a href="/legal.html">Legal</a> · <a href="/regulations.html">Regulations</a> · <a href="/.well-known/security.txt">security.txt</a> · <a href="/humans.txt">humans.txt</a></p>
+      <h2 class="section-title" id="company-legal-title"><span class="kicker">Section 1</span>Company & Legal</h2>
+      <div class="grid two">
+        <article class="card">
+          <h3>Identity</h3>
+          <p><strong>Name:</strong> TimeProofs</p>
+          <p><strong>Status:</strong> Public Beta v0.1 · Open-source project</p>
+          <p><strong>Location:</strong> Paris, France</p>
+          <p><strong>Publisher:</strong> Jeason Bacoul</p>
+          <p><strong>Contact:</strong> <a href="mailto:contact@timeproofs.io">contact@timeproofs.io</a></p>
+        </article>
+        <article class="card">
+          <h3>Hosting & Compliance</h3>
+          <p><strong>Hosting:</strong> Vercel (site), Cloudflare (API/Workers/KV)</p>
+          <p><strong>IP & License:</strong> TimeProofs™ (INPI, pending) · Code under MPL-2.0</p>
+          <p>
+            <a href="/privacy.html">Privacy</a> ·
+            <a href="/legal.html">Legal</a> ·
+            <a href="/regulations.html">Regulations</a> ·
+            <a href="/.well-known/security.txt">security.txt</a> ·
+            <a href="/humans.txt">humans.txt</a>
+          </p>
+        </article>
+      </div>
+      <div class="stats" aria-label="Quick facts">
+        <div class="stat"><strong>Edge-native</strong><span class="muted">Global < 100 ms</span></div>
+        <div class="stat"><strong>Zero-upload</strong><span class="muted">Privacy by design</span></div>
+        <div class="stat"><strong>Open verify</strong><span class="muted">Public endpoint</span></div>
+        <div class="stat"><strong>MPL-2.0</strong><span class="muted">Open source</span></div>
+      </div>
     </section>
 
+    <!-- 2 -->
     <section class="card" id="why" aria-labelledby="why-title">
-      <h2 id="why-title">2. Why it matters now</h2>
+      <h2 class="section-title" id="why-title"><span class="kicker">Section 2</span>Why it matters now</h2>
       <p>AI systems can rewrite, generate, and remix faster than humans can react. In this infinite remix era, <strong>trust begins with an anchor in time</strong>. Proof of existence is becoming the new HTTPS — a baseline for authenticity, authorship, and audit.</p>
     </section>
 
+    <!-- 3 -->
     <section class="card" id="what" aria-labelledby="what-title">
-      <h2 id="what-title">3. What TimeProofs does</h2>
-      <ul>
-        <li><strong>Hash locally:</strong> compute SHA-256 on any artifact.</li>
-        <li><strong>Timestamp via API:</strong> send the hash, get back a timestamp + signature.</li>
-        <li><strong>Verify publicly:</strong> confirm existence at <code>/api/verify?hash=…</code>.</li>
-      </ul>
-      <p>No uploads · No blockchain · Edge-native · Public verify endpoint.</p>
+      <h2 class="section-title" id="what-title"><span class="kicker">Section 3</span>What TimeProofs does</h2>
+      <div class="grid two">
+        <article class="card">
+          <h3>How it works</h3>
+          <p><strong>1) Hash locally.</strong> Compute SHA-256 on any artifact.</p>
+          <p><strong>2) Timestamp via API.</strong> Send the hash, get back a timestamp + signature.</p>
+          <p><strong>3) Verify publicly.</strong> Confirm existence at <code>/api/verify?hash=…</code>.</p>
+        </article>
+        <article class="card">
+          <h3>Why it’s different</h3>
+          <p>• No uploads — privacy by design<br/>• No blockchain — instant & predictable<br/>• Edge-native — worldwide latency<br/>• Public verify — open & transparent</p>
+        </article>
+      </div>
     </section>
 
+    <!-- 4 -->
     <section class="card" id="compare" aria-labelledby="compare-title">
-      <h2 id="compare-title">4. How it compares</h2>
-      <p>Blockchains = slow/costly, e-sign = heavy/proprietary, metadata = fragile. <strong>TimeProofs</strong> is a neutral layer for AI outputs, datasets, contracts, research.</p>
+      <h2 class="section-title" id="compare-title"><span class="kicker">Section 4</span>How it compares</h2>
+      <p>Other systems rely on blockchains (slow, costly), e-sign platforms (heavy, proprietary), or content metadata (fragile, inconsistent). <strong>TimeProofs</strong> is a neutral layer that fits anywhere — for AI outputs, datasets, contracts, or research.</p>
     </section>
 
+    <!-- 5 -->
     <section class="card" id="future" aria-labelledby="future-title">
-      <h2 id="future-title">5. The bigger picture</h2>
+      <h2 class="section-title" id="future-title"><span class="kicker">Section 5</span>The bigger picture</h2>
       <p>By 2030, AI-generated data will exceed human content. The web will need a neutral timestamp backbone — a proof of <em>when</em> something first existed. <strong>That’s what TimeProofs is building.</strong></p>
-      <p style="margin-top:.6em"><a href="/verify.html">Try it now</a> · <a href="/docs.html">Read the docs</a></p>
+      <p style="margin-top:.6em">
+        <a href="/verify.html" class="hero btn">Try it now</a>
+        <a href="/docs.html" class="hero btn" style="margin-left:10px">Read the docs</a>
+      </p>
     </section>
 
+    <!-- NEW: Company details -->
+    <section class="card" id="corp-details" aria-labelledby="corp-details-title">
+      <h2 class="section-title" id="corp-details-title"><span class="kicker">Corporate</span>Company details</h2>
+      <div class="grid two">
+        <article class="card">
+          <h3>Legal identity</h3>
+          <p><strong>Legal form:</strong> In progress</p>
+          <p><strong>SIREN/SIRET:</strong> In progress</p>
+          <p><strong>VAT:</strong> In progress</p>
+          <p><strong>Registered address:</strong> In progress</p>
+          <p><strong>Jurisdiction:</strong> In progress</p>
+        </article>
+        <article class="card">
+          <h3>Governance & contacts</h3>
+          <p><strong>Founder(s):</strong> In progress</p>
+          <p><strong>Press contact:</strong> In progress</p>
+          <p><strong>Response time:</strong> In progress</p>
+          <p><strong>Postal address:</strong> In progress</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- NEW: Compliance & Security -->
+    <section class="card" id="compliance-security" aria-labelledby="compliance-security-title">
+      <h2 class="section-title" id="compliance-security-title"><span class="kicker">Trust</span>Compliance & Security</h2>
+      <div class="grid two">
+        <article class="card">
+          <h3>Compliance</h3>
+          <p><strong>DPA:</strong> In progress</p>
+          <p><strong>GDPR lawful basis:</strong> In progress</p>
+          <p><strong>Retention periods:</strong> In progress</p>
+          <p><strong>Subprocessors:</strong> In progress</p>
+        </article>
+        <article class="card">
+          <h3>Security</h3>
+          <p><strong>Encryption:</strong> In progress</p>
+          <p><strong>Key rotation:</strong> In progress</p>
+          <p><strong>Incident response:</strong> In progress</p>
+          <p><strong>Certifications (ISO/SOC2):</strong> In progress</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- NEW: Accessibility & Analytics -->
+    <section class="card" id="access-analytics" aria-labelledby="access-analytics-title">
+      <h2 class="section-title" id="access-analytics-title"><span class="kicker">UX</span>Accessibility & Analytics</h2>
+      <div class="grid two">
+        <article class="card">
+          <h3>Accessibility</h3>
+          <p><strong>WCAG target:</strong> In progress</p>
+          <p><strong>Accessibility contact:</strong> In progress</p>
+        </article>
+        <article class="card">
+          <h3>Analytics</h3>
+          <p><strong>Tool:</strong> Plausible</p>
+          <p><strong>Purpose:</strong> In progress</p>
+          <p><strong>Opt-out:</strong> In progress</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- NEW: IP & Licensing -->
+    <section class="card" id="ip-licensing" aria-labelledby="ip-licensing-title">
+      <h2 class="section-title" id="ip-licensing-title"><span class="kicker">Legal</span>IP & Licensing</h2>
+      <div class="grid two">
+        <article class="card">
+          <h3>Trademark</h3>
+          <p><strong>INPI number:</strong> In progress</p>
+          <p><strong>Status:</strong> In progress</p>
+        </article>
+        <article class="card">
+          <h3>Open source</h3>
+          <p><strong>License:</strong> MPL-2.0</p>
+          <p><strong>Repository:</strong> <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv01" target="_blank" rel="noopener">GitHub</a></p>
+        </article>
+      </div>
+    </section>
+
+    <!-- NEW: Team -->
+    <section class="card" id="team" aria-labelledby="team-title">
+      <h2 class="section-title" id="team-title"><span class="kicker">People</span>Team</h2>
+      <p><strong>Core team:</strong> In progress</p>
+      <p><strong>Advisors:</strong> In progress</p>
+      <p><strong>Hiring:</strong> In progress</p>
+    </section>
+
+    <!-- NEW: Roadmap -->
+    <section class="card" id="roadmap" aria-labelledby="roadmap-title">
+      <h2 class="section-title" id="roadmap-title"><span class="kicker">Plan</span>Roadmap</h2>
+      <ul>
+        <li><strong>Q4 2025:</strong> In progress</li>
+        <li><strong>Q1 2026:</strong> In progress</li>
+        <li><strong>Q2 2026:</strong> In progress</li>
+      </ul>
+    </section>
+
+    <!-- NEW: Press & Community -->
+    <section class="card" id="press-community" aria-labelledby="press-community-title">
+      <h2 class="section-title" id="press-community-title"><span class="kicker">Grow</span>Press & Community</h2>
+      <p><strong>Press kit:</strong> In progress</p>
+      <p><strong>Brand guidelines:</strong> In progress</p>
+      <p><strong>Contribute / Code of Conduct:</strong> In progress</p>
+      <p>
+        <a href="https://x.com/timeproofs" target="_blank" rel="noopener">X</a> ·
+        <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="/rss.xml" target="_blank" rel="noopener">RSS</a>
+      </p>
+    </section>
+
+    <!-- Proof -->
     <section class="card" id="site-proof" aria-labelledby="site-proof-title">
-      <h2 id="site-proof-title">6. Document Proof</h2>
-      <p>Release: <span id="page-proof-release"></span> · Hash: <code id="page-proof-hash-dup">…</code> ·
+      <h2 class="section-title" id="site-proof-title"><span class="kicker">Verify</span>Document Proof</h2>
+      <p>Release: <span id="page-proof-release">…</span> · Hash: <code id="page-proof-hash-dup">…</code> ·
         <a id="page-proof-link-dup" href="#" rel="noopener" target="_blank">Verify</a>
       </p>
       <p class="muted">Loaded from the central release manifest.</p>
@@ -333,4 +512,4 @@ upgrade-insecure-requests">
     }
   </script>
 </body>
-</html>
+  </html>
