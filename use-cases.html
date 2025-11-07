@@ -148,7 +148,7 @@ upgrade-insecure-requests">
   }
   </script>
 
-  <!-- Styles (unifié v01) -->
+  <!-- Styles (unifié v01, identique au “source de vérité”) -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
@@ -187,14 +187,18 @@ upgrade-insecure-requests">
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
 
-    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block }
-    .tp-nav a[aria-current="page"]{ color:#9beefb }
+    /* Nav (identique au “source de vérité”) */
+    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none }
+    .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
+
+    /* CTA */
     .cta-header{
       display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
       border-radius:10px; background:var(--accent); color:#06202a; font-weight:800; box-shadow:0 6px 24px rgba(34,211,238,.25)
     }
     .cta-header:hover{ filter:brightness(1.05) }
 
+    /* Burger */
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
       border:1px solid var(--line); border-radius:12px; background:#0c1a2e; color:#fff; cursor:pointer; box-shadow:var(--ring)
@@ -213,63 +217,51 @@ upgrade-insecure-requests">
         display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
         transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease
       }
-      .tp-nav a{ margin:2px 0 }
+      .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
-      /* pas de CTA en menu mobile selon v01 */
+      .nav-cta{ display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px; background:var(--accent); color:#06202a; font-weight:800 }
     }
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
-    .progress{ position:fixed; left:0; top:64px; width:100%; height:2px; background:linear-gradient(90deg, rgba(34,211,238,.0), rgba(34,211,238,.35)); transform-origin:left; scale:0 1; z-index:900 }
+
+    /* Content */
+    main{ padding:10px 20px 40px; max-width:1100px; margin:0 auto }
+    .mini{ color:#9fb3c9; font-size:.92rem }
+    .card{
+      background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:18px; margin:14px 0;
+      transition:transform .18s var(--e)
+    }
+    .card a{ color:#8be9f7; text-decoration:underline; text-underline-offset:2px } /* contraste léger ↑ */
+    h1, h2, h3, section, [id]{ scroll-margin-top:84px } /* ancre visible sous header */
 
     /* Hero */
-    .hero{
-      min-height:calc(60svh - 64px); padding-top:92px; padding-bottom:24px;
-      display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center
-    }
-    .label{
-      display:inline-flex; gap:8px; align-items:center; padding:6px 12px; border:1px solid #214a57;
-      background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem; box-shadow:var(--ring)
-    }
-    .title{
-      font-size:clamp(2rem, 5.6vw, 3rem); line-height:1.06; margin:.4em auto .3em; font-weight:900; max-width:1000px;
-      background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent
-    }
-    .subtitle{ color:var(--muted); max-width:860px; margin:0 auto 4px; line-height:1.7; font-size:clamp(1rem, 2.8vw, 1.15rem) }
-    .rel-proof{ display:inline-flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center;
-      margin-top:10px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem }
-
-    /* Sections */
-    .section{ padding:28px 0 }
-    .grid{ display:grid; gap:16px }
-    .grid.two{ grid-template-columns:1fr }
-    .grid.three{ grid-template-columns:1fr }
-    @media(min-width:900px){ .grid.two{ grid-template-columns:1fr 1fr } .grid.three{ grid-template-columns:repeat(3,1fr) } }
-
-    .card{
-      position:relative; border-radius:16px; padding:18px; background:#0c1424; color:#dbe7f3; border:1px solid #1f2a44; max-width:760px; margin-inline:auto
-    }
-    .card h3, .card h2{ color:#22d3ee; margin:.2em 0 .3em; font-size:1.08rem }
-    .card p{ margin:.15em 0 .5em; line-height:1.6 }
-    pre, code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
-    pre{ max-width:100%; overflow:auto; padding:12px; border-radius:12px; background:#0b1426; border:1px solid #1f2a44; font-size:.95rem }
-    .tag{ display:inline-block; padding:3px 8px; border-radius:999px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; font-size:.78rem }
-    .mini{ color:#9fb3c9; font-size:.92rem }
+    .hero{ padding:96px 20px 18px; max-width:1100px; margin:0 auto; text-align:center; border-bottom:1px solid var(--line) }
+    .hero .icon{ font-size:2rem; line-height:1; margin-bottom:6px }
+    .hero h1{ font-size:clamp(2rem,5.6vw,3rem); margin:.2em 0 .4em; font-weight:900;
+      background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent }
+    .hero .lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 auto 12px }
+    .rel-proof{ display:inline-flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center; margin-top:10px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem }
     .toc{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; padding:8px 0 0 }
-    .toc a{ display:inline-block; padding:6px 10px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.9rem }
+    .toc a{ display:inline-block; padding:6px 10px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.9rem; text-decoration:none }
+    .toc a:hover{ text-decoration:underline }
+
+    pre, code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
+    pre{ position:relative; max-width:100%; overflow:auto; padding:12px; border-radius:12px; background:#0b1426; border:1px solid #1f2a44; font-size:.95rem }
+    .copy-btn{ position:absolute; top:8px; right:8px; padding:6px 10px; border:1px solid #22455a; border-radius:10px; background:#0c1a2e; color:#cfefff; font-weight:700; cursor:pointer }
 
     /* Footer */
-    footer{ border-top:1px solid var(--line); margin-top:44px; padding:18px; color:#7c8aa5; text-align:center }
+    footer{ border-top:1px solid var(--line); margin-top:28px; padding:18px; color:#7c8aa5; text-align:center }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
-    footer .links a{ color:#cfefff; font-weight:600 }
-    footer .links a:hover{ color:#9beefb }
+    footer .links a{ color:#cfefff; font-weight:600; text-decoration:none }
+    footer .links a:hover{ color:#9beefb; text-decoration:underline }
     .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
     .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; transition:transform .18s var(--e); color:#cfefff }
     .social a:hover{ transform:translateY(-2px) }
 
     a:focus-visible, .tp-burger:focus-visible, .cta-header:focus-visible{ outline:2px solid #22d3ee; outline-offset:3px; border-radius:12px }
   </style>
-  <noscript><style>.reveal{opacity:1 !important; transform:none !important}</style></noscript>
+  <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
 <body>
   <a href="#main" class="skip">Skip to main content</a>
@@ -280,6 +272,7 @@ upgrade-insecure-requests">
       <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
       <span>TimeProofs</span>
     </a>
+    <!-- Menu identique au “source de vérité” -->
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html" aria-current="page">Use Cases</a>
@@ -289,26 +282,23 @@ upgrade-insecure-requests">
       <a href="/privacy.html">Privacy</a>
       <a href="/legal.html">Legal</a>
       <a href="/about.html">About</a>
-      <!-- no mobile CTA in menu per v01 -->
+      <a class="nav-cta" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
     </nav>
-    <!-- Desktop CTA only -->
     <a class="cta-header" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu"><span aria-hidden="true">☰</span></button>
   </header>
 
-  <div class="progress" id="progress" aria-hidden="true"></div>
-
-  <main id="main" class="wrap" role="main">
-    <!-- Breadcrumb visible -->
+  <main id="main" class="wrap" role="main" aria-describedby="hero-title">
+    <!-- Fil d’Ariane -->
     <nav aria-label="Breadcrumb" class="mini" style="margin-top:84px;margin-bottom:6px">
       <a href="/">Home</a> › <span aria-current="page">Use Cases</span>
     </nav>
 
     <!-- Hero -->
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="label">🎯 Use Cases</div>
-      <h1 id="hero-title" class="title">Where proof of existence adds value</h1>
-      <p class="subtitle">Private by design. One open format. Fully verifiable.</p>
+    <section class="hero card" aria-labelledby="hero-title">
+      <div class="icon" aria-hidden="true">🎯</div>
+      <h1 id="hero-title">Where proof of existence adds value</h1>
+      <p class="lead">Private by design. One open format. Fully verifiable.</p>
       <p class="rel-proof">
         🔏 Proof of Release · Release: <code id="page-proof-release">…</code> · Hash: <code id="page-proof-hash">…</code> ·
         <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
@@ -324,11 +314,10 @@ upgrade-insecure-requests">
     </section>
 
     <!-- Scenarios -->
-    <section class="section" id="ai-provenance" aria-labelledby="ai-title">
-      <article class="card">
-        <h2 id="ai-title">1) AI provenance (prompts, outputs)</h2>
-        <p><strong>What it solves.</strong> Prove origin and integrity for prompts and model outputs. Share a public verify URL without exposing content.</p>
-        <p><strong>Why TimeProofs.</strong> Local hashing · Signed edge timestamp · Public verification.</p>
+    <section class="card" id="ai-provenance" aria-labelledby="ai-title">
+      <h2 id="ai-title">1) AI provenance (prompts, outputs)</h2>
+      <p><strong>What it solves.</strong> Prove origin and integrity for prompts and model outputs. Share a public verify URL without exposing content.</p>
+      <p><strong>Why TimeProofs.</strong> Local hashing · Signed edge timestamp · Public verification.</p>
 <pre><code>// How it works
 1) Client hashes prompt/output bytes (SHA-256).
 2) POST /api/timestamp { hash, type:"ai", meta:{ model:"gpt-4o", run:"2025-11-07" } }
@@ -339,109 +328,92 @@ curl -s https://api.timeproofs.io/api/timestamp \
   -H "Content-Type: application/json" \
   -d "{\"hash\":\"$HASH\",\"type\":\"ai\",\"meta\":{\"model\":\"my-model\"}}"
 </code></pre>
-        <p class="mini">Compliance: EU AI Act (traceability). GDPR: hash-only, no content.</p>
-        <p class="mini">Learn more: <a href="/docs.html">API Docs</a> · <a href="/regulations.html">Regulations</a></p>
-      </article>
+      <p class="mini">Compliance: EU AI Act (traceability). GDPR: hash-only, no content.</p>
+      <p class="mini">Learn more: <a href="/docs.html">API Docs</a> · <a href="/regulations.html">Regulations</a></p>
     </section>
 
-    <section class="section" id="legal-audit" aria-labelledby="legal-title">
-      <article class="card">
-        <h2 id="legal-title">2) Legal & compliance audit trails</h2>
-        <p><strong>What it solves.</strong> Immutable proofs for filings, evidence chains, policies, NDAs, and disclosures.</p>
-        <p><strong>Why TimeProofs.</strong> Time anchoring with public verification. Zero content retention.</p>
+    <section class="card" id="legal-audit" aria-labelledby="legal-title">
+      <h2 id="legal-title">2) Legal & compliance audit trails</h2>
+      <p><strong>What it solves.</strong> Immutable proofs for filings, evidence chains, policies, NDAs, and disclosures.</p>
+      <p><strong>Why TimeProofs.</strong> Time anchoring with public verification. Zero content retention.</p>
 <pre><code>// How it works
 Hash each PDF/policy. Store the returned {hash|ts|sig}.
 Publish verify URLs inside the case or policy dossier.</code></pre>
-        <p class="mini">Compliance: GDPR (data minimization). eIDAS-like evidence: time-bound integrity.</p>
-      </article>
+      <p class="mini">Compliance: GDPR (data minimization). eIDAS-like evidence: time-bound integrity.</p>
     </section>
 
-    <section class="section" id="devops" aria-labelledby="devops-title">
-      <article class="card">
-        <h2 id="devops-title">3) DevOps & secure releases</h2>
-        <p><strong>What it solves.</strong> Build and artifact integrity across CI/CD. Release time proof.</p>
-        <p><strong>Why TimeProofs.</strong> Edge timestamps &lt;100 ms. Public verify page for each artifact hash.</p>
+    <section class="card" id="devops" aria-labelledby="devops-title">
+      <h2 id="devops-title">3) DevOps & secure releases</h2>
+      <p><strong>What it solves.</strong> Build and artifact integrity across CI/CD. Release time proof.</p>
+      <p><strong>Why TimeProofs.</strong> Edge timestamps &lt;100 ms. Public verify page for each artifact hash.</p>
 <pre><code># CI sample
 HASH=$(sha256sum dist/app.min.js | awk '{print $1}')
 curl -s https://api.timeproofs.io/api/timestamp \
   -H "Content-Type: application/json" \
   -d "{\"hash\":\"$HASH\",\"type\":\"release\",\"meta\":{\"source\":\"ci\"}}"
 </code></pre>
-        <p class="mini">Compliance: NIS2/SBOM attestations with public verification.</p>
-      </article>
+      <p class="mini">Compliance: NIS2/SBOM attestations with public verification.</p>
     </section>
 
-    <section class="section" id="creators" aria-labelledby="creators-title">
-      <article class="card">
-        <h2 id="creators-title">4) Creators & media certificates</h2>
-        <p><strong>What it solves.</strong> Portable “proof bundles” for images, audio, documents.</p>
-        <p><strong>Why TimeProofs.</strong> Hash-only provenance and shareable verify link.</p>
+    <section class="card" id="creators" aria-labelledby="creators-title">
+      <h2 id="creators-title">4) Creators & media certificates</h2>
+      <p><strong>What it solves.</strong> Portable “proof bundles” for images, audio, documents.</p>
+      <p><strong>Why TimeProofs.</strong> Hash-only provenance and shareable verify link.</p>
 <pre><code>// How it works
 bundle = {
   version:"v0.1", hash, ts, sig, type:"media",
   meta:{ creator:"@handle" }
 };
 // Distribute the .tproof.json with the work.</code></pre>
-      </article>
     </section>
 
-    <section class="section" id="data-integrity" aria-labelledby="data-title">
-      <article class="card">
-        <h2 id="data-title">5) Data & research integrity</h2>
-        <p><strong>What it solves.</strong> Snapshot datasets and notebooks. Enable peer verification.</p>
+    <section class="card" id="data-integrity" aria-labelledby="data-title">
+      <h2 id="data-title">5) Data & research integrity</h2>
+      <p><strong>What it solves.</strong> Snapshot datasets and notebooks. Enable peer verification.</p>
 <pre><code># Dataset example
 HASH=$(sha256sum data.csv | awk '{print $1}')
 curl -s https://api.timeproofs.io/api/timestamp \
   -H "Content-Type: application/json" \
   -d "{\"hash\":\"$HASH\",\"type\":\"dataset\",\"meta\":{\"version\":\"v1\"}}"
 </code></pre>
-        <p class="mini">Compliance: Data Act — shared data provenance.</p>
-      </article>
+      <p class="mini">Compliance: Data Act — shared data provenance.</p>
     </section>
 
-    <section class="section" id="supply-chain" aria-labelledby="supply-title">
-      <article class="card">
-        <h2 id="supply-title">6) Supply chain transparency</h2>
-        <p><strong>What it solves.</strong> Publish proofs for SBOMs, licenses, vendor deliverables.</p>
+    <section class="card" id="supply-chain" aria-labelledby="supply-title">
+      <h2 id="supply-title">6) Supply chain transparency</h2>
+      <p><strong>What it solves.</strong> Publish proofs for SBOMs, licenses, vendor deliverables.</p>
 <pre><code>// How it works
 Hash SBOM JSON. Timestamp. Include verify URL in procurement docs.</code></pre>
-        <p class="mini">Compliance: NIS2 / supply chain integrity.</p>
-      </article>
+      <p class="mini">Compliance: NIS2 / supply chain integrity.</p>
     </section>
 
     <!-- Comparison -->
-    <section class="section" aria-labelledby="compare-title">
-      <article class="card">
-        <h2 id="compare-title">Compare options</h2>
-        <p><span class="tag">TimeProofs</span> hash-only, signed timestamp, public verify, no blockchain.</p>
-        <p><span class="tag">Traditional notarization</span> manual, costly, content exposure.</p>
-        <p><span class="tag">Blockchains</span> heavy, fees, PII risks.</p>
-      </article>
+    <section class="card" aria-labelledby="compare-title">
+      <h2 id="compare-title">Compare options</h2>
+      <p><span style="display:inline-block;padding:3px 8px;border:1px solid #214a57;border-radius:999px;background:#0d2330;color:#bff1ff">TimeProofs</span> hash-only, signed timestamp, public verify, no blockchain.</p>
+      <p><span style="display:inline-block;padding:3px 8px;border:1px solid #214a57;border-radius:999px;background:#0d2330;color:#bff1ff">Traditional notarization</span> manual, costly, content exposure.</p>
+      <p><span style="display:inline-block;padding:3px 8px;border:1px solid #214a57;border-radius:999px;background:#0d2330;color:#bff1ff">Blockchains</span> heavy, fees, PII risks.</p>
     </section>
 
     <!-- Mini FAQ -->
-    <section class="section" aria-labelledby="faq-title">
-      <article class="card">
-        <h2 id="faq-title">Quick FAQ</h2>
-        <p><strong>Do you store my files?</strong> No. Only hashes. Original content never leaves your device.</p>
-        <p><strong>Can anyone verify?</strong> Yes. Public verify endpoint or any ProofSpec client.</p>
-        <p><strong>How fast?</strong> Typical edge latency under 100 ms.</p>
-        <p><strong>Key rotation?</strong> Signatures support key IDs; verification remains stable.</p>
-        <p class="mini">Next: <a href="/verify.html">Create / Verify</a> · <a href="/docs.html">Read the API</a> · <a href="/proofspec.html">Learn the Spec</a></p>
-      </article>
+    <section class="card" aria-labelledby="faq-title">
+      <h2 id="faq-title">Quick FAQ</h2>
+      <p><strong>Do you store my files?</strong> No. Only hashes. Original content never leaves your device.</p>
+      <p><strong>Can anyone verify?</strong> Yes. Public verify endpoint or any ProofSpec client.</p>
+      <p><strong>How fast?</strong> Typical edge latency under 100 ms.</p>
+      <p><strong>Key rotation?</strong> Signatures support key IDs; verification remains stable.</p>
+      <p class="mini">Next: <a href="/verify.html">Create / Verify</a> · <a href="/docs.html">Read the API</a> · <a href="/proofspec.html">Learn the Spec</a></p>
     </section>
 
     <!-- Page proof -->
-    <section class="section" aria-labelledby="site-proof">
-      <article class="card">
-        <p class="label" style="margin-bottom:8px">🔏 Proof of Release</p>
-        <h2 id="site-proof">Verified by TimeProofs</h2>
-        <p>Release: <code id="page-proof-release-dup">…</code> · Hash:
-          <code id="page-proof-hash-dup">…</code>
-          · <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener">Verify</a>
-        </p>
-        <p class="mini">Loaded from the central release manifest.</p>
-      </article>
+    <section class="card" aria-labelledby="site-proof">
+      <p class="mini" style="margin-bottom:8px">🔏 Proof of Release</p>
+      <h2 id="site-proof">Verified by TimeProofs</h2>
+      <p>Release: <code id="page-proof-release-dup">…</code> · Hash:
+        <code id="page-proof-hash-dup">…</code>
+        · <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener">Verify</a>
+      </p>
+      <p class="mini">Loaded from the central release manifest.</p>
     </section>
   </main>
 
@@ -467,23 +439,17 @@ Hash SBOM JSON. Timestamp. Include verify URL in procurement docs.</code></pre>
       <a href="/rss.xml">RSS</a>
     </div>
     <div class="social" aria-label="Social links">
-      <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
-      </a>
-      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv01" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
-      </a>
-      <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg>
-      </a>
+      <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg></a>
+      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv01" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg></a>
+      <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg></a>
       <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on YouTube">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="currentColor" d="M23.498 6.186c-.142-1.062-1.12-1.897-2.33-2.006C18.848 3.9 12 3.9 12 3.9s-6.848 0-9.168.28c-1.21.109-2.188.944-2.33 2.006C.25 8.035.25 12 .25 12s0 3.965.252 5.814c.142 1.062 1.12 1.897 2.33 2.006C5.152 20.1 12 20.1 12 20.1s6.848 0 9.168-.28c1.21-.109 2.188-.944 2.33-2.006.252-1.849.252-5.814.252-5.814s0-3.965-.252-5.814ZM9.8 15.5v-7l6.2 3.5-6.2 3.5Z"/>
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M23.498 6.186a3.001 3.001 0 0 0-2.113-2.123C19.8 3.5 12 3.5 12 3.5s-7.8 0-9.385.563A3.001 3.001 0 0 0 .502 6.186C0 7.778 0 12 0 12s0 4.222.502 5.814a3.001 3.001 0 0 0 2.113 2.123C4.2 20.5 12 20.5 12 20.5s7.8 0 9.385-.563a3.001 3.001 0 0 0 2.113-2.123C24 16.222 24 12 24 12s0-4.222-.502-5.814Z"/>
+          <path fill="#000" fill-opacity=".0" d="M0 0h24v24H0z"/>
+          <path fill="#fff" d="M9.75 15.02V8.98L15.5 12l-5.75 3.02Z"/>
         </svg>
       </a>
-      <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/></svg>
-      </a>
+      <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/></svg></a>
     </div>
   </footer>
 
@@ -491,31 +457,15 @@ Hash SBOM JSON. Timestamp. Include verify URL in procurement docs.</code></pre>
   <script defer nonce="TP-2025">
   (function(){
     const hdr=document.getElementById('hdr');
-    const bar=document.getElementById('progress');
-    function onScroll(){
-      if(window.scrollY>6) hdr.classList.add('scrolled'); else hdr.classList.remove('scrolled');
-      const h=document.documentElement; const p=(h.scrollTop)/((h.scrollHeight-h.clientHeight)||1);
-      bar.style.transform=`scaleX(${Math.max(0,Math.min(1,p))})`;
-    }
+    function onScroll(){ if(window.scrollY>6) hdr.classList.add('scrolled'); else hdr.classList.remove('scrolled'); }
     onScroll(); window.addEventListener('scroll', onScroll, { passive:true });
 
-    // Burger + mobile menu
+    // Burger + mobile menu (identique au “source de vérité”)
     const burger=document.getElementById('tp-burger'); const nav=document.getElementById('tp-nav');
     let prevFocus=null;
     function focusFirstLink(){ const f=nav.querySelector('a'); f && f.focus(); }
-    function openMenu(){
-      nav.setAttribute('data-state','open');
-      burger.setAttribute('aria-expanded','true');
-      prevFocus=document.activeElement;
-      document.body.style.overflow='hidden';
-      setTimeout(focusFirstLink, 0);
-    }
-    function closeMenu(){
-      nav.setAttribute('data-state','closed');
-      burger.setAttribute('aria-expanded','false');
-      document.body.style.overflow='';
-      prevFocus && prevFocus.focus();
-    }
+    function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); prevFocus=document.activeElement; document.body.style.overflow='hidden'; setTimeout(focusFirstLink, 0); }
+    function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; prevFocus && prevFocus.focus(); }
     function toggleMenu(){ (nav.getAttribute('data-state')==='open')?closeMenu():openMenu(); }
     burger?.addEventListener('click', toggleMenu, { passive:true });
     document.addEventListener('click', (e)=>{ if(window.matchMedia('(min-width: 900px)').matches) return; if(!e.target.closest('.tp-header')&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
@@ -531,7 +481,22 @@ Hash SBOM JSON. Timestamp. Include verify URL in procurement docs.</code></pre>
       });
     })();
 
-    // Release manifest → fill proof fields
+    // Copy buttons
+    (function(){
+      document.querySelectorAll('pre').forEach((pre)=>{
+        if(pre.querySelector('.copy-btn')) return;
+        const btn=document.createElement('button');
+        btn.className='copy-btn'; btn.type='button'; btn.textContent='Copy';
+        btn.addEventListener('click', async ()=>{
+          const code = pre.querySelector('code')?.innerText ?? pre.innerText;
+          try{ await navigator.clipboard.writeText(code); btn.textContent='Copied'; setTimeout(()=>btn.textContent='Copy',1200); }
+          catch{ btn.textContent='Error'; setTimeout(()=>btn.textContent='Copy',1200); }
+        }, { passive:true });
+        pre.appendChild(btn);
+      });
+    })();
+
+    // Release manifest → fill proof fields (top + duplicate)
     (async()=>{
       try{
         const r=await fetch('/releases/v0.1.json',{cache:'no-store'}); if(!r.ok) return;
