@@ -154,10 +154,16 @@ upgrade-insecure-requests">
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none }
     .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
 
-    .cta-header{ display:none; align-items:center; justify-content:center; height:40px; padding:0 14px; border-radius:10px; background:var(--accent); color:#06202a; font-weight:800; box-shadow:0 6px 24px rgba(34,211,238,.25) }
+    .cta-header{
+      display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
+      border-radius:10px; background:var(--accent); color:#06202a; font-weight:800; box-shadow:0 6px 24px rgba(34,211,238,.25)
+    }
     .cta-header:hover{ filter:brightness(1.05) }
 
-    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid var(--line); border-radius:12px; background:#0c1a2e; color:#fff; cursor:pointer; box-shadow:var(--ring) }
+    .tp-burger{
+      display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
+      border:1px solid var(--line); border-radius:12px; background:#0c1a2e; color:#fff; cursor:pointer; box-shadow:var(--ring)
+    }
     .tp-burger span{ font-size:20px; line-height:1 }
 
     @media (min-width:900px){
@@ -186,12 +192,18 @@ upgrade-insecure-requests">
     h2{ color:#b9e7f5; font-size:1.25rem; margin:1.2em 0 .5em }
     h3{ color:#aee9f7; font-size:1.05rem; margin:1em 0 .3em }
 
-    /* Ancres sous header fixe */
+    /* Assure que les ancres s'affichent sous le header fixe */
     h1, h2, h3, section, [id]{ scroll-margin-top:84px }
 
     pre, code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
-    pre{ position:relative; max-width:100%; overflow:auto; padding:12px; border-radius:12px; background:#0b1426; border:1px solid #1f2a44; font-size:.95rem }
-    .copy-btn{ position:absolute; top:8px; right:8px; padding:6px 10px; border:1px solid #22455a; border-radius:10px; background:#0c1a2e; color:#cfefff; font-weight:700; cursor:pointer }
+    pre{
+      position:relative; max-width:100%; overflow:auto; padding:12px; border-radius:12px;
+      background:#0b1426; border:1px solid #1f2a44; font-size:.95rem
+    }
+    .copy-btn{
+      position:absolute; top:8px; right:8px; padding:6px 10px; border:1px solid #22455a; border-radius:10px;
+      background:#0c1a2e; color:#cfefff; font-weight:700; cursor:pointer
+    }
     .table{ display:block; width:100%; border:1px solid #1f2a44; border-radius:14px; background:#0b1426; overflow-x:auto }
     .table table{ width:100%; border-collapse:separate; border-spacing:0; min-width:680px }
     .table th,.table td{ padding:12px; text-align:left; border-bottom:1px solid #1a2846; font-size:.98rem; white-space:normal }
@@ -207,16 +219,22 @@ upgrade-insecure-requests">
     .social a:hover{ transform:translateY(-2px) }
 
     /* HERO standard */
-    <style id="remove-proof-strip"></style>
     .hero{ padding:96px 20px 18px; max-width:1100px; margin:0 auto; text-align:center; border-bottom:1px solid var(--line) }
     .hero .icon{ font-size:2rem; line-height:1; margin-bottom:6px }
     .hero h1{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900;
       background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent }
-    .hero .lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 auto 12px }
+    .hero .lead{ color:{var(--muted); max-width:880px; line-height:1.7; margin:0 auto 12px }
+    .hero .proof-strip{ display:inline-flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center;
+      margin-top:6px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem }
+    .hero .btn{ display:inline-block; padding:6px 10px; border:1px solid #22455a; border-radius:10px; background:#0c1a2e; color:#cfefff; font-weight:700; text-decoration:none }
+    .hero .btn:hover{ text-decoration:underline }
 
-    /* TOC chips */
+    /* TOC chips standard */
     .toc{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; padding:14px 20px; border-bottom:1px solid var(--line) }
-    .toc a{ display:inline-block; padding:6px 10px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.9rem; text-decoration:none }
+    .toc a{
+      display:inline-block; padding:6px 10px; border:1px solid #214a57; background:#0d2330; color:#bff1ff;
+      border-radius:999px; font-size:.9rem; text-decoration:none
+    }
     .toc a:hover{ text-decoration:underline }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
@@ -247,11 +265,12 @@ upgrade-insecure-requests">
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu"><span aria-hidden="true">☰</span></button>
   </header>
 
-  <!-- HERO standard (sans encadré Proof of Release) -->
+  <!-- HERO standard -->
   <section class="hero card" role="region" aria-labelledby="page-title">
     <div class="icon" aria-hidden="true">📚</div>
     <h1 id="page-title">API Docs</h1>
     <p class="lead">Minimal, fast, verifiable. Hash client-side, timestamp via API, verify publicly. Privacy-first, no blockchain.</p>
+    <!-- proof-strip retiré ici -->
   </section>
 
   <!-- TOC chips -->
@@ -434,7 +453,7 @@ const sha256Hex = (buf) => createHash("sha256").update(buf).digest("hex");</code
       <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg></a>
       <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on YouTube">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path fill="currentColor" d="M23.498 6.186a3.001 3.001 0 0 0-2.113-2.123C19.8 3.5 12 3.5 12 3.5s-7.8 0-9.385.563A3.001 3.001 0 0 0 .502 6.186C0 7.778 0 12 0 12s0 4.222.502 5.814a3.001 3.001 0 0 0 2.113 2.123C4.2 20.1 12 20.1 12 20.1s7.8 0 9.385-.563a3.001 3.001 0 0 0 2.113-2.123C24 16.222 24 12 24 12s0-4.222-.502-5.814Z"/>
+          <path fill="currentColor" d="M23.498 6.186a3.001 3.001 0 0 0-2.113-2.123C19.8 3.5 12 3.5 12 3.5s-7.8 0-9.385.563A3.001 3.001 0 0 0 .502 6.186C0 7.778 0 12 0 12s0 4.222.502 5.814a3.001 3.001 0 0 0 2.113 2.123C4.2 20.5 12 20.5 12 20.5s7.8 0 9.385-.563a3.001 3.001 0 0 0 2.113-2.123C24 16.222 24 12 24 12s0-4.222-.502-5.814Z"/>
           <path fill="#000" fill-opacity=".0" d="M0 0h24v24H0z"/>
           <path fill="#fff" d="M9.75 15.02V8.98L15.5 12l-5.75 3.02Z"/>
         </svg>
@@ -483,17 +502,17 @@ const sha256Hex = (buf) => createHash("sha256").update(buf).digest("hex");</code
       });
     })();
 
-    // Release manifest fill + duplicates (hero strip supprimé, les refs nulles sont ignorées)
+    // Release manifest fill + duplicates
     (async()=>{
       try{
         const r=await fetch('/releases/v0.1.json',{cache:'no-store'}); if(!r.ok) return;
         const map=await r.json(); const id=document.documentElement.dataset.page||'docs.html';
         const e=map[id] || map['/'] || map;
-        const elH1=document.getElementById('page-proof-hash');           // inexistant ici
-        const elL1=document.getElementById('page-proof-link');           // inexistant ici
+        const elH1=document.getElementById('page-proof-hash');
+        const elL1=document.getElementById('page-proof-link');
         const elH2=document.getElementById('page-proof-hash-dup');
         const elL2=document.getElementById('page-proof-link-dup');
-        const elR =document.getElementById('page-proof-release');        // inexistant ici
+        const elR =document.getElementById('page-proof-release');
         const elR2=document.getElementById('page-proof-release-dup');
         if(e.release){ elR && (elR.textContent=e.release); elR2 && (elR2.textContent=e.release); }
         if(e.hash){ elH1 && (elH1.textContent=e.hash); elH2 && (elH2.textContent=e.hash); }
@@ -509,4 +528,4 @@ const sha256Hex = (buf) => createHash("sha256").update(buf).digest("hex");</code
   })();
   </script>
 </body>
-  </html>
+</html>
