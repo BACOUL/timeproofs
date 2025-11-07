@@ -42,6 +42,7 @@
   <meta property="og:image:alt" content="TimeProofs ProofSpec"/>
   <meta property="og:site_name" content="TimeProofs"/>
   <meta property="og:locale" content="en_US"/>
+  <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Protocol (ProofSpec) — TimeProofs"/>
   <meta name="twitter:description" content="Open, privacy-first protocol to create, sign, timestamp, and verify proofs of existence."/>
@@ -87,12 +88,9 @@ upgrade-insecure-requests">
       "@type":"ContactPoint",
       "email":"contact@timeproofs.io",
       "contactType":"general",
-      "availableLanguage":["en"]
+      "availableLanguage":["en","fr"]
     }]
   }
-  </script>
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/","inLanguage":"en"}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"TechArticle","headline":"ProofSpec — TimeProofs Protocol","about":"Digital proof of existence protocol","datePublished":"2025-10-22","dateModified":"2025-11-05","maintainer":{"@type":"Organization","name":"TimeProofs"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://timeproofs.io/proofspec.html"}}
@@ -115,7 +113,7 @@ upgrade-insecure-requests">
     }
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); scroll-behavior:smooth }
-    html{ scroll-padding-top:84px } /* anchors under fixed header */
+    html{ scroll-padding-top:84px } /* ancres sous header fixe */
     body{
       margin:0; color:var(--text);
       font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
@@ -204,15 +202,16 @@ upgrade-insecure-requests">
     .social a:hover{ transform:translateY(-2px) }
 
     /* HERO standard */
-    .hero{ padding:96px 20px 18px; max-width:1100px; margin:0 auto; text-align:center; border-bottom:1px solid var(--line); position:relative }
+    .hero{ padding:96px 20px 18px; max-width:1100px; margin:0 auto; text-align:center; border-bottom:1px solid var(--line) }
     .hero .icon{ font-size:2rem; line-height:1; margin-bottom:6px }
     .hero .status{ display:inline-block; margin:0 0 10px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.9rem; box-shadow:var(--ring) }
     .hero h1{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900;
       background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent }
-    .label{
-      display:inline-flex; gap:8px; align-items:center; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem; margin:8px 0 0; box-shadow:var(--ring)
-    }
     .hero .lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 auto 12px }
+    .hero .proof-strip{ display:inline-flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center;
+      margin-top:6px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem }
+    .hero .btn{ display:inline-block; padding:6px 10px; border:1px solid #22455a; border-radius:10px; background:#0c1a2e; color:#cfefff; font-weight:700; text-decoration:none }
+    .hero .btn:hover{ text-decoration:underline }
 
     /* TOC chips standard */
     .toc{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; padding:14px 20px; border-bottom:1px solid var(--line) }
@@ -234,7 +233,7 @@ upgrade-insecure-requests">
       <span>TimeProofs</span>
     </a>
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
-      <a href="/proofspec.html" aria-current="page">Protocol (ProofSpec)</a>
+      <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
       <a href="/docs.html">API Docs</a>
       <a href="/regulations.html">Regulations</a>
@@ -248,37 +247,37 @@ upgrade-insecure-requests">
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu"><span aria-hidden="true">☰</span></button>
   </header>
 
-  <!-- HERO -->
+  <!-- HERO standard -->
   <section class="hero card" role="region" aria-labelledby="page-title">
-    <a class="label" id="rel-banner" href="#proof" aria-label="View site release proof">🔏 Release — Verified</a>
     <div class="icon" aria-hidden="true">📘</div>
     <p class="status">Status: Public Beta v0.1 · Protocol · Privacy-first · No blockchain</p>
     <h1 id="page-title">Protocol (ProofSpec)</h1>
     <p class="lead">Defines how to create, sign, timestamp, and verify proofs that a specific data artifact existed at a point in time and has not changed since, without exposing the original content.</p>
 
-    <!-- Proof badge like homepage -->
-    <p class="label" style="margin-top:6px">
-      🔏 Proof of Release · <code id="page-proof-hash">…</code> ·
-      <a id="page-proof-link" href="#" target="_blank" rel="noopener" title="View verification on API">Verify</a>
-    </p>
+    <div class="proof-strip">
+      <strong>Proof of Release</strong>
+      <span>Release: <code id="page-proof-release"></code></span>
+      <span>· Hash: <code id="page-proof-hash"></code></span>
+      <a id="page-proof-link" href="#" class="btn" target="_blank" rel="noopener">Verify</a>
+    </div>
   </section>
 
   <!-- TOC chips -->
   <nav class="toc" aria-label="Contents">
-    <a href="#overview" aria-label="Jump to Overview">Overview</a>
-    <a href="#model" aria-label="Jump to Data model">Data model</a>
-    <a href="#create" aria-label="Jump to Create">Create</a>
-    <a href="#timestamp" aria-label="Jump to Timestamp">Timestamp</a>
-    <a href="#verify" aria-label="Jump to Verify">Verify</a>
-    <a href="#signature" aria-label="Jump to Signatures">Signatures</a>
-    <a href="#textnorm" aria-label="Jump to Text normalization">Text normalization</a>
-    <a href="#errors" aria-label="Jump to Error model">Error model & status codes</a>
-    <a href="#schema" aria-label="Jump to JSON Schema">JSON Schema</a>
-    <a href="#tests" aria-label="Jump to Test vectors">Test vectors</a>
-    <a href="#security" aria-label="Jump to Security">Security</a>
-    <a href="#interop" aria-label="Jump to Interoperability">Interoperability</a>
-    <a href="#versioning" aria-label="Jump to Spec versioning">Spec versioning</a>
-    <a href="#proof" aria-label="Jump to Document Proof">Document Proof</a>
+    <a href="#overview">Overview</a>
+    <a href="#model">Data model</a>
+    <a href="#create">Create</a>
+    <a href="#timestamp">Timestamp</a>
+    <a href="#verify">Verify</a>
+    <a href="#signature">Signatures</a>
+    <a href="#textnorm">Text normalization</a>
+    <a href="#errors">Error model & status codes</a>
+    <a href="#schema">JSON Schema</a>
+    <a href="#tests">Test vectors</a>
+    <a href="#security">Security</a>
+    <a href="#interop">Interoperability</a>
+    <a href="#versioning">Spec versioning</a>
+    <a href="#proof">Document Proof</a>
     <a href="#top" style="padding:4px 10px">↑ Top</a>
   </nav>
 
@@ -456,15 +455,17 @@ sig:  qwertyZXCVbnNmTW9ja2JhU2U (example)</code></pre>
       </ul>
     </section>
 
-    <!-- Proof block like homepage -->
+    <!-- REPLACED: proof section styled like homepage -->
     <section class="card" id="proof" aria-labelledby="proof-title">
-      <p class="label" style="margin-bottom:8px">🔏 Proof of Release</p>
-      <h2 id="proof-title">Verified by TimeProofs</h2>
-      <p>We publish a public proof of this document build. Anyone can check it.</p>
-      <p>Release: <code id="page-proof-release">…</code> · Hash:
-        <code id="page-proof-hash-dup">…</code>
-        · <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener" title="View verification on API">Verify</a>
-      </p>
+      <h2 id="proof-title">14. Document Proof</h2>
+
+      <div class="proof-strip" style="margin-top:8px">
+        <strong>🔏 Proof of Release</strong>
+        <span>Release: <code id="page-proof-release"></code></span>
+        <span>· Hash: <code id="page-proof-hash-dup">…</code></span>
+        <a id="page-proof-link-dup" href="#" class="btn" target="_blank" rel="noopener">Verify</a>
+      </div>
+
       <p class="muted">Loaded from the central release manifest.</p>
     </section>
   </main>
@@ -504,14 +505,6 @@ sig:  qwertyZXCVbnNmTW9ja2JhU2U (example)</code></pre>
       <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/></svg></a>
     </div>
   </footer>
-
-  <!-- FAQPage JSON-LD for rich results -->
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
-    {"@type":"Question","name":"What is ProofSpec?","acceptedAnswer":{"@type":"Answer","text":"An open protocol that defines how to hash locally, timestamp with a signed tuple, and verify publicly that data existed at a given time without revealing the original content."}},
-    {"@type":"Question","name":"How do I verify a proof from the spec?","acceptedAnswer":{"@type":"Answer","text":"Use the public verify endpoint or any ProofSpec-compliant client. The response includes existence, validity, timestamp, and signature."}}
-  ]}
-  </script>
 
   <!-- Scripts -->
   <script defer nonce="TP-2025">
@@ -553,7 +546,7 @@ sig:  qwertyZXCVbnNmTW9ja2JhU2U (example)</code></pre>
       });
     })();
 
-    // Release manifest fill + duplicate fields + banner
+    // Release manifest fill + duplicate fields
     (async()=>{
       try{
         const r=await fetch('/releases/v0.1.json',{cache:'no-store'}); if(!r.ok) return;
@@ -564,15 +557,8 @@ sig:  qwertyZXCVbnNmTW9ja2JhU2U (example)</code></pre>
         const elH2=document.getElementById('page-proof-hash-dup');
         const elL2=document.getElementById('page-proof-link-dup');
         const elR =document.getElementById('page-proof-release');
-        const banner=document.getElementById('rel-banner');
-
         if(elR && e.release) elR.textContent=e.release;
-        if(banner && e.release) banner.textContent = `🔏 ${e.release} — Verified`;
-
-        if(e.hash){
-          elH1 && (elH1.textContent=e.hash);
-          elH2 && (elH2.textContent=e.hash);
-        }
+        if(e.hash){ elH1 && (elH1.textContent=e.hash); elH2 && (elH2.textContent=e.hash); }
         const url=e.verify || (e.hash ? ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(e.hash)) : '#');
         if(elL1 && url) elL1.href=url;
         if(elL2 && url) elL2.href=url;
