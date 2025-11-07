@@ -51,7 +51,7 @@
   <!-- Security meta -->
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 
-  <!-- CSP v0.1 -->
+  <!-- CSP v0.1 unifiée -->
   <meta http-equiv="Content-Security-Policy" content="
 default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
 worker-src 'self' blob:;
@@ -69,14 +69,50 @@ upgrade-insecure-requests">
   <!-- Analytics -->
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
-  <!-- JSON-LD -->
+  <!-- JSON-LD Org + Site + TechArticle + Breadcrumb + FAQ -->
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"TechArticle","headline":"TimeProofs API Docs",
-   "about":"Timestamp proofs API","proficiencyLevel":"Beginner/Advanced",
-   "publisher":{"@type":"Organization","name":"TimeProofs"},"inLanguage":"en"}
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"TimeProofs",
+    "url":"https://timeproofs.io/",
+    "logo":"https://timeproofs.io/logo%20(1).png",
+    "sameAs":[
+      "https://x.com/timeproofs",
+      "https://github.com/BACOUL/timeproofs/tree/timeproofsv01",
+      "https://www.linkedin.com/company/timeproofs",
+      "https://youtube.com/@timeproofs",
+      "https://timeproofs.io/rss.xml"
+    ],
+    "contactPoint":[{
+      "@type":"ContactPoint",
+      "email":"contact@timeproofs.io",
+      "contactType":"general",
+      "availableLanguage":["en","fr"]
+    }]
+  }
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/","inLanguage":"en"}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"TechArticle","headline":"TimeProofs API Docs","about":"Timestamp proofs API","datePublished":"2025-10-22","dateModified":"2025-11-07","inLanguage":"en","maintainer":{"@type":"Organization","name":"TimeProofs"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://timeproofs.io/docs.html"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://timeproofs.io/"},
+    {"@type":"ListItem","position":2,"name":"API Docs","item":"https://timeproofs.io/docs.html"}
+  ]}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+    {"@type":"Question","name":"Do you store my files?","acceptedAnswer":{"@type":"Answer","text":"No. Only hashes. Your original content never leaves your device."}},
+    {"@type":"Question","name":"How do I verify a proof?","acceptedAnswer":{"@type":"Answer","text":"Call /api/verify with the SHA-256 hash or use any ProofSpec-compliant client."}},
+    {"@type":"Question","name":"What algorithm is used for signatures?","acceptedAnswer":{"@type":"Answer","text":"HMAC-SHA256 over the ASCII string 'hash|ts' with Base64URL-encoded signature."}}
+  ]}
   </script>
 
-  <!-- Styles -->
+  <!-- Styles (identiques protocole) -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
@@ -87,6 +123,7 @@ upgrade-insecure-requests">
     }
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); scroll-behavior:smooth }
+    html{ scroll-padding-top:84px }
     body{
       margin:0; color:var(--text);
       font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
@@ -98,6 +135,11 @@ upgrade-insecure-requests">
     }
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
+    .tp-nav a, footer .links a { text-underline-offset:3px; }
+    .tp-nav a:hover, footer .links a:hover { text-decoration:underline; }
+
+    .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
+    .skip:focus{ position:fixed; left:12px; top:12px; width:auto; height:auto; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
 
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
@@ -108,6 +150,7 @@ upgrade-insecure-requests">
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
 
+    /* Nav identique protocole */
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none }
     .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
 
@@ -124,14 +167,16 @@ upgrade-insecure-requests">
     .tp-burger span{ font-size:20px; line-height:1 }
 
     @media (min-width:900px){
-      .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } .cta-header{ display:inline-flex }
+      .tp-burger{ display:none }
+      .tp-nav{ display:flex; align-items:center }
+      .cta-header{ display:inline-flex }
     }
     @media (max-width:899px){
       .tp-brand img{ height:34px; width:34px }
       .tp-nav{
         position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
         display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
-        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .2s, transform .2s
+        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease
       }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
@@ -140,31 +185,16 @@ upgrade-insecure-requests">
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* HERO standard */
-    .hero{ padding:96px 20px 18px; max-width:1100px; margin:0 auto; text-align:center; border-bottom:1px solid var(--line) }
-    .hero .icon{ font-size:2rem; margin-bottom:6px }
-    .hero .status{ display:inline-block; margin:0 0 10px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.9rem; box-shadow:var(--ring) }
-    .hero h1{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900;
-      background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent }
-    .hero .lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 auto 12px }
-    .hero .proof-strip{ display:inline-flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center;
-      margin-top:6px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem }
-    .hero .btn{ display:inline-block; padding:6px 10px; border:1px solid #22455a; border-radius:10px; background:#0c1a2e; color:#cfefff; font-weight:700; text-decoration:none }
-    .hero .btn:hover{ text-decoration:underline }
-
-    /* TOC chips */
-    nav.toc{ display:flex; flex-wrap:wrap; gap:8px; margin:14px auto 0; padding:12px; max-width:1100px;
-      background:#0c1424; border:1px solid var(--line); border-radius:12px }
-    nav.toc a{ background:transparent; border:1px solid #1f2a44; padding:6px 10px; border-radius:10px; color:#cfe7ff }
-    nav.toc a:hover{ background:#0d2330 }
-
     /* Content */
     main{ padding:10px 20px 40px; max-width:1100px; margin:0 auto }
-    .card{ background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:18px; margin:14px 0 }
+    .meta{ color:#94a3b8; margin:0 0 1.1em }
+    .card{ background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:18px; margin:14px 0; transition:transform .18s var(--e) }
     h2{ color:#b9e7f5; font-size:1.25rem; margin:1.2em 0 .5em }
     h3{ color:#aee9f7; font-size:1.05rem; margin:1em 0 .3em }
 
-    /* Code blocks */
+    /* Assure que les ancres s'affichent sous le header fixe */
+    h1, h2, h3, section, [id]{ scroll-margin-top:84px }
+
     pre, code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
     pre{
       position:relative; max-width:100%; overflow:auto; padding:12px; border-radius:12px;
@@ -174,14 +204,11 @@ upgrade-insecure-requests">
       position:absolute; top:8px; right:8px; padding:6px 10px; border:1px solid #22455a; border-radius:10px;
       background:#0c1a2e; color:#cfefff; font-weight:700; cursor:pointer
     }
+    .table{ display:block; width:100%; border:1px solid #1f2a44; border-radius:14px; background:#0b1426; overflow-x:auto }
+    .table table{ width:100%; border-collapse:separate; border-spacing:0; min-width:680px }
+    .table th,.table td{ padding:12px; text-align:left; border-bottom:1px solid #1a2846; font-size:.98rem; white-space:normal }
 
-    /* Tables responsive */
-    .table-wrap{ overflow:auto; border:1px solid var(--line); border-radius:12px }
-    table{ border-collapse:collapse; min-width:640px; width:100% }
-    th,td{ border-bottom:1px solid #203047; padding:10px 12px; text-align:left }
-    th{ color:#cfefff; font-weight:700 }
-
-    /* Footer */
+    /* Footer identical */
     footer{ border-top:1px solid var(--line); margin-top:28px; padding:18px; color:#7c8aa5; text-align:center }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
@@ -190,6 +217,25 @@ upgrade-insecure-requests">
     .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
     .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; transition:transform .18s var(--e); color:#cfefff }
     .social a:hover{ transform:translateY(-2px) }
+
+    /* HERO standard */
+    .hero{ padding:96px 20px 18px; max-width:1100px; margin:0 auto; text-align:center; border-bottom:1px solid var(--line) }
+    .hero .icon{ font-size:2rem; line-height:1; margin-bottom:6px }
+    .hero h1{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900;
+      background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent }
+    .hero .lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 auto 12px }
+    .hero .proof-strip{ display:inline-flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center;
+      margin-top:6px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem }
+    .hero .btn{ display:inline-block; padding:6px 10px; border:1px solid #22455a; border-radius:10px; background:#0c1a2e; color:#cfefff; font-weight:700; text-decoration:none }
+    .hero .btn:hover{ text-decoration:underline }
+
+    /* TOC chips standard */
+    .toc{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; padding:14px 20px; border-bottom:1px solid var(--line) }
+    .toc a{
+      display:inline-block; padding:6px 10px; border:1px solid #214a57; background:#0d2330; color:#bff1ff;
+      border-radius:999px; font-size:.9rem; text-decoration:none
+    }
+    .toc a:hover{ text-decoration:underline }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
@@ -202,6 +248,7 @@ upgrade-insecure-requests">
       <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
       <span>TimeProofs</span>
     </a>
+    <!-- Menu identique protocole -->
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
@@ -218,13 +265,12 @@ upgrade-insecure-requests">
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu"><span aria-hidden="true">☰</span></button>
   </header>
 
-  <!-- HERO -->
+  <!-- HERO standard -->
   <section class="hero card" role="region" aria-labelledby="page-title">
     <div class="icon" aria-hidden="true">📚</div>
-    <p class="status">Status: Public Beta v0.1 · API · Privacy-first · No blockchain</p>
     <h1 id="page-title">API Docs</h1>
-    <p class="lead">Minimal, fast, verifiable. Use standard hashing client-side, then call our endpoints. Public verification for anyone.</p>
-    <div class="proof-strip">
+    <p class="lead">Minimal, fast, verifiable. Hash client-side, timestamp via API, verify publicly. Privacy-first, no blockchain.</p>
+    <div class="proof-strip" aria-label="Proof of Release">
       <strong>Proof of Release</strong>
       <span>Release: <code id="page-proof-release"></code></span>
       <span>· Hash: <code id="page-proof-hash"></code></span>
@@ -232,43 +278,47 @@ upgrade-insecure-requests">
     </div>
   </section>
 
-  <!-- TOC -->
+  <!-- TOC chips -->
   <nav class="toc" aria-label="Contents">
-    <a href="#base-url">Base URL</a>
-    <a href="#auth">Auth</a>
-    <a href="#timestamp">POST /api/timestamp</a>
-    <a href="#verify">GET/POST /api/verify</a>
-    <a href="#models">Models</a>
-    <a href="#errors">Errors</a>
-    <a href="#sdk">Client helpers</a>
-    <a href="#page-proof">Page proof</a>
-    <a href="#top" style="padding:4px 10px">↑ Top</a>
+    <a href="#base-url-title">Base URL</a>
+    <a href="#auth-title">Auth</a>
+    <a href="#timestamp-title">POST /api/timestamp</a>
+    <a href="#verify-title">GET/POST /api/verify</a>
+    <a href="#models-title">Models</a>
+    <a href="#errors-title">Errors</a>
+    <a href="#sdk-title">Client helpers</a>
+    <a href="#page-proof-title">Page proof</a>
+    <a href="#page-title" style="padding:4px 10px">↑ Top</a>
   </nav>
 
+  <!-- Main -->
   <main id="main" role="main" class="wrap" aria-describedby="page-title">
+    <p class="meta">API: <strong>v0.1</strong> · Last updated: <strong>2025-11-07</strong> · Spec: <a href="/proofspec.html">ProofSpec v0.1</a></p>
 
-    <section class="card" id="base-url">
-      <h2>Base URL</h2>
-      <div class="table-wrap"><table>
-        <thead><tr><th>Env</th><th>URL</th><th>Notes</th></tr></thead>
-        <tbody>
-          <tr><td>Primary</td><td><code>https://api.timeproofs.io/api</code></td><td>Global edge</td></tr>
-          <tr><td>Fallback</td><td><code>https://timeproofs-api.jeason-bacoul.workers.dev/api</code></td><td>Same contract</td></tr>
-        </tbody>
-      </table></div>
+    <section class="card" id="base-url" aria-labelledby="base-url-title">
+      <h2 id="base-url-title">1. Base URL</h2>
+      <div class="table" role="region" aria-label="Base URLs">
+        <table>
+          <thead><tr><th>Env</th><th>URL</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Primary</td><td><code>https://api.timeproofs.io/api</code></td><td>Global edge</td></tr>
+            <tr><td>Fallback</td><td><code>https://timeproofs-api.jeason-bacoul.workers.dev/api</code></td><td>Same contract</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
-    <section class="card" id="auth">
-      <h2>Auth</h2>
-      <p>HTTP bearer token.</p>
-<pre><button class="copy-btn" aria-label="Copy">Copy</button><code>Authorization: Bearer &lt;API_TOKEN&gt;</code></pre>
+    <section class="card" id="auth" aria-labelledby="auth-title">
+      <h2 id="auth-title">2. Auth</h2>
+      <p>HTTP bearer token. Omit for public <code>GET /api/verify</code>.</p>
+<pre><code>Authorization: Bearer &lt;API_TOKEN&gt;</code></pre>
       <p class="muted">No PII in payloads. Hash-only.</p>
     </section>
 
-    <section class="card" id="timestamp">
-      <h2>POST /api/timestamp</h2>
-      <p>Create a timestamp proof for a SHA-256 hash.</p>
-<pre><button class="copy-btn" aria-label="Copy">Copy</button><code>POST /api/timestamp
+    <section class="card" id="timestamp" aria-labelledby="timestamp-title">
+      <h2 id="timestamp-title">3. POST /api/timestamp</h2>
+      <p>Create a timestamped proof for a SHA-256 hash.</p>
+<pre><code>POST /api/timestamp
 Content-Type: application/json
 Authorization: Bearer &lt;TOKEN&gt;
 
@@ -276,12 +326,12 @@ Authorization: Bearer &lt;TOKEN&gt;
   "hash": "7c040f...d76c2",
   "meta": { "type": "file", "hint": "optional-small-note" }
 }</code></pre>
-<pre><button class="copy-btn" aria-label="Copy">Copy</button><code>// cURL
+<pre><code># cURL
 curl -s -X POST https://api.timeproofs.io/api/timestamp \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"hash":"&lt;SHA256_HEX&gt;","meta":{"type":"file"}}'</code></pre>
-<pre><button class="copy-btn" aria-label="Copy">Copy</button><code>// JS (browser) — string → sha256
+<pre><code>// JS (browser) — string → sha256
 async function sha256Hex(str){
   const buf=new TextEncoder().encode(str);
   const digest=await crypto.subtle.digest('SHA-256', buf);
@@ -294,77 +344,90 @@ const proof=await fetch(`${API}/timestamp`,{
   headers:{ "Authorization":"Bearer &lt;TOKEN&gt;","Content-Type":"application/json" },
   body:JSON.stringify({ hash, meta:{ type:"text" } })
 }).then(r=>r.json());</code></pre>
-      <div class="table-wrap"><table>
-        <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td>hash</td><td>string</td><td>yes</td><td>Lowercase hex SHA-256 of your content</td></tr>
-          <tr><td>meta</td><td>object</td><td>no</td><td>Small hints. Avoid secrets/PII</td></tr>
-        </tbody>
-      </table></div>
+      <div class="table" role="region" aria-label="Timestamp fields">
+        <table>
+          <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>hash</td><td>string</td><td>yes</td><td>Lowercase hex SHA-256 of your content</td></tr>
+            <tr><td>meta</td><td>object</td><td>no</td><td>Small hints. Avoid secrets/PII</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
-    <section class="card" id="verify">
-      <h2>GET/POST /api/verify</h2>
-      <p>Check a proof by hash.</p>
-<pre><button class="copy-btn" aria-label="Copy">Copy</button><code>GET /api/verify?hash=&lt;SHA256_HEX&gt;</code></pre>
-<pre><button class="copy-btn" aria-label="Copy">Copy</button><code>// cURL
+    <section class="card" id="verify" aria-labelledby="verify-title">
+      <h2 id="verify-title">4. GET/POST /api/verify</h2>
+      <p>Check an existing proof by hash.</p>
+<pre><code>GET /api/verify?hash=&lt;SHA256_HEX&gt;</code></pre>
+<pre><code># cURL
 curl -s "https://api.timeproofs.io/api/verify?hash=&lt;SHA256_HEX&gt;"</code></pre>
-<pre><button class="copy-btn" aria-label="Copy">Copy</button><code>// JS
+<pre><code>// JS
 const API="https://api.timeproofs.io/api";
 const res=await fetch(`${API}/verify?hash=${encodeURIComponent(hash)}`);
 const data=await res.json();</code></pre>
-      <p class="muted">Public endpoint. Works without token for read.</p>
+      <p class="muted">Public read. No token required.</p>
     </section>
 
-    <section class="card" id="models">
-      <h2>Models</h2>
-      <div class="table-wrap"><table>
-        <thead><tr><th>Property</th><th>Type</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td>hash</td><td>string</td><td>SHA-256 hex</td></tr>
-          <tr><td>ts</td><td>string</td><td>ISO 8601 timestamp</td></tr>
-          <tr><td>sig</td><td>string</td><td>Ed25519 signature (policy v0.1)</td></tr>
-          <tr><td>meta</td><td>object</td><td>Optional hints</td></tr>
-          <tr><td>issuer</td><td>string</td><td>TimeProofs issuer id</td></tr>
-        </tbody>
-      </table></div>
+    <section class="card" id="models" aria-labelledby="models-title">
+      <h2 id="models-title">5. Models (ProofSpec v0.1)</h2>
+<pre><code>// Timestamp response
+{
+  "hash": "^[a-f0-9]{64}$",
+  "ts":   1730793600000,           // Unix epoch ms
+  "sig":  "base64url(HMAC_SHA256('hash|ts', key))",
+  "meta": { ... }                  // optional, small, non-personal
+}</code></pre>
+<pre><code>// Verify response
+{
+  "exists": true,
+  "valid":  true,
+  "hash":   "…",
+  "ts":     1730793600000,
+  "sig":    "…",
+  "meta":   { ... }
+}</code></pre>
+      <p class="muted">Signature policy: HMAC-SHA256 over ASCII <code>hash|ts</code>, Base64URL without padding.</p>
     </section>
 
-    <section class="card" id="errors">
-      <h2>Errors</h2>
-      <div class="table-wrap"><table>
-        <thead><tr><th>Status</th><th>Code</th><th>Meaning</th></tr></thead>
-        <tbody>
-          <tr><td>400</td><td>bad_hash</td><td>Missing/invalid SHA-256</td></tr>
-          <tr><td>401</td><td>unauthorized</td><td>Invalid token</td></tr>
-          <tr><td>429</td><td>rate_limited</td><td>Slow down</td></tr>
-          <tr><td>5xx</td><td>server_error</td><td>Temporary issue</td></tr>
-        </tbody>
-      </table></div>
+    <section class="card" id="errors" aria-labelledby="errors-title">
+      <h2 id="errors-title">6. Errors</h2>
+      <div class="table" role="region" aria-label="Error codes">
+        <table>
+          <thead><tr><th>Status</th><th>Code</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td>200</td><td>ok</td><td>Success</td></tr>
+            <tr><td>400</td><td>INVALID_HASH</td><td>Missing/invalid SHA-256</td></tr>
+            <tr><td>401</td><td>UNAUTHORIZED</td><td>Invalid token</td></tr>
+            <tr><td>404</td><td>NOT_FOUND</td><td>No proof for this hash</td></tr>
+            <tr><td>429</td><td>RATE_LIMIT</td><td>Too many requests</td></tr>
+            <tr><td>5xx</td><td>SERVER_ERROR</td><td>Temporary issue</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
-    <section class="card" id="sdk">
-      <h2>Client helpers</h2>
-<pre><button class="copy-btn" aria-label="Copy">Copy</button><code>// File → sha256 (browser)
+    <section class="card" id="sdk" aria-labelledby="sdk-title">
+      <h2 id="sdk-title">7. Client helpers</h2>
+<pre><code>// File → sha256 (browser)
 async function sha256FileHex(file){
   const buf=await file.arrayBuffer();
   const digest=await crypto.subtle.digest('SHA-256', buf);
   return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
 }</code></pre>
-<pre><button class="copy-btn" aria-label="Copy">Copy</button><code>// Node.js
+<pre><code>// Node.js
 import { createHash } from "crypto";
 const sha256Hex = (buf) => createHash("sha256").update(buf).digest("hex");</code></pre>
-      <p class="muted">SDKs full featured arrive with v0.2.</p>
+      <p class="muted">Full SDKs ship with v0.2.</p>
     </section>
 
-    <section id="page-proof" class="card" role="region" aria-labelledby="page-proof-title" style="margin-top:6px">
-      <h2 id="page-proof-title">This page is verified by TimeProofs</h2>
+    <section class="card" id="page-proof" role="region" aria-labelledby="page-proof-title">
+      <h2 id="page-proof-title">8. Page proof</h2>
       <p>
-        Release: <code id="page-proof-release"></code> ·
+        Release: <code id="page-proof-release-dup"></code> ·
         Hash: <code id="page-proof-hash-dup"></code> ·
-        <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener nofollow">Verify</a>
+        <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener">Verify</a>
       </p>
-      <p class="muted">Timestamp created via TimeProofs API (public, privacy-first, no blockchain).</p>
+      <p class="muted">Loaded from the central release manifest.</p>
     </section>
   </main>
 
@@ -390,15 +453,9 @@ const sha256Hex = (buf) => createHash("sha256").update(buf).digest("hex");</code
       <a href="/rss.xml">RSS</a>
     </div>
     <div class="social" aria-label="Social links">
-      <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
-      </a>
-      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv01" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
-      </a>
-      <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg>
-      </a>
+      <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg></a>
+      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv01" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg></a>
+      <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg></a>
       <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on YouTube">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path fill="currentColor" d="M23.498 6.186a3.001 3.001 0 0 0-2.113-2.123C19.8 3.5 12 3.5 12 3.5s-7.8 0-9.385.563A3.001 3.001 0 0 0 .502 6.186C0 7.778 0 12 0 12s0 4.222.502 5.814a3.001 3.001 0 0 0 2.113 2.123C4.2 20.5 12 20.5 12 20.5s7.8 0 9.385-.563a3.001 3.001 0 0 0 2.113-2.123C24 16.222 24 12 24 12s0-4.222-.502-5.814Z"/>
@@ -406,9 +463,7 @@ const sha256Hex = (buf) => createHash("sha256").update(buf).digest("hex");</code
           <path fill="#fff" d="M9.75 15.02V8.98L15.5 12l-5.75 3.02Z"/>
         </svg>
       </a>
-      <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/></svg>
-      </a>
+      <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/></svg></a>
     </div>
   </footer>
 
@@ -463,15 +518,15 @@ const sha256Hex = (buf) => createHash("sha256").update(buf).digest("hex");</code
         const elH2=document.getElementById('page-proof-hash-dup');
         const elL2=document.getElementById('page-proof-link-dup');
         const elR =document.getElementById('page-proof-release');
-        if(elR && e.release) elR.textContent=e.release;
+        const elR2=document.getElementById('page-proof-release-dup');
+        if(e.release){ elR && (elR.textContent=e.release); elR2 && (elR2.textContent=e.release); }
         if(e.hash){ elH1 && (elH1.textContent=e.hash); elH2 && (elH2.textContent=e.hash); }
         const url=e.verify || (e.hash ? ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(e.hash)) : '#');
-        if(elL1 && url) elL1.href=url;
-        if(elL2 && url) elL2.href=url;
+        if(url){ elL1 && (elL1.href=url); elL2 && (elL2.href=url); }
       }catch{}
     })();
 
-    // Service Worker
+    // SW
     if('serviceWorker' in navigator){
       navigator.serviceWorker.register('/sw.js', { type:'module', scope:'/' }).catch(()=>{});
     }
