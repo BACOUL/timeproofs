@@ -123,7 +123,7 @@ upgrade-insecure-requests">
     }
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); scroll-behavior:smooth }
-    html{ scroll-padding-top:84px }
+    html{ scroll-padding-top:84px } /* ancres sous header fixe */
     body{
       margin:0; color:var(--text);
       font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
@@ -147,17 +147,25 @@ upgrade-insecure-requests">
       display:flex; align-items:center; gap:12px; padding:0 16px; transition:background .25s var(--e)
     }
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
-    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; font-size:1.08rem; text-decoration:none; margin-right:auto }
+    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
 
-    /* Nav (identique à l’accueil) */
+    /* Header nav */
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none }
     .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
 
-    .cta-header{ display:none; align-items:center; justify-content:center; height:40px; padding:0 14px; border-radius:10px; background:var(--accent); color:#06202a; font-weight:800; box-shadow:0 6px 24px rgba(34,211,238,.25) }
+    /* Header CTA */
+    .cta-header{
+      display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
+      border-radius:10px; background:var(--accent); color:#06202a; font-weight:800; box-shadow:0 6px 24px rgba(34,211,238,.25)
+    }
     .cta-header:hover{ filter:brightness(1.05) }
 
-    .tp-burger{ display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid var(--line); border-radius:12px; background:#0c1a2e; color:#fff; cursor:pointer; box-shadow:var(--ring) }
+    /* Burger */
+    .tp-burger{
+      display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
+      border:1px solid var(--line); border-radius:12px; background:#0c1a2e; color:#fff; cursor:pointer; box-shadow:var(--ring)
+    }
     .tp-burger span{ font-size:20px; line-height:1 }
 
     @media (min-width:900px){
@@ -182,19 +190,28 @@ upgrade-insecure-requests">
     /* Content */
     main{ padding:10px 20px 40px; max-width:1100px; margin:0 auto }
     .meta{ color:#94a3b8; margin:0 0 1.1em }
-    .card{ background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:18px; margin:14px 0; transition:transform .18s var(--e) }
-    h2{ color:#b9e7f5; font-size:1.25rem; margin:1.2em 0 .5em }
-    h3{ color:#aee9f7; font-size:1.05rem; margin:1em 0 .3em }
-
-    /* Assure que les ancres affichent bien les titres sous le header fixe */
-    h1, h2, h3, section, [id]{ scroll-margin-top:84px }
+    .card{
+      background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:18px; margin:14px 0;
+      transition:transform .18s var(--e)
+    }
+    h2{ color:#b9e7f5; font-size:1.25rem; margin:1.2em 0 .5em; }
+    h3{ color:#aee9f7; font-size:1.05rem; margin:1em 0 .3em; }
+    /* Assure la visibilité des titres et des sections ciblées par les ancres */
+    h2, h3, .card, section, [id]{ scroll-margin-top:84px }
 
     pre, code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
-    pre{ position:relative; max-width:100%; overflow:auto; padding:12px; border-radius:12px; background:#0b1426; border:1px solid #1f2a44; font-size:.95rem }
-    .copy-btn{ position:absolute; top:8px; right:8px; padding:6px 10px; border:1px solid #22455a; border-radius:10px; background:#0c1a2e; color:#cfefff; font-weight:700; cursor:pointer }
+    pre{
+      position:relative; max-width:100%; overflow:auto; padding:12px; border-radius:12px;
+      background:#0b1426; border:1px solid #1f2a44; font-size:.95rem
+    }
+    .copy-btn{
+      position:absolute; top:8px; right:8px; padding:6px 10px; border:1px solid #22455a; border-radius:10px;
+      background:#0c1a2e; color:#cfefff; font-weight:700; cursor:pointer
+    }
     .table{ display:block; width:100%; border:1px solid #1f2a44; border-radius:14px; background:#0b1426; overflow-x:auto }
     .table table{ width:100%; border-collapse:separate; border-spacing:0; min-width:680px }
     .table th,.table td{ padding:12px; text-align:left; border-bottom:1px solid #1a2846; font-size:.98rem; white-space:normal }
+    .table th{ scope: col; }
 
     /* Footer identical */
     footer{ border-top:1px solid var(--line); margin-top:28px; padding:18px; color:#7c8aa5; text-align:center }
@@ -206,16 +223,20 @@ upgrade-insecure-requests">
     .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; transition:transform .18s var(--e); color:#cfefff }
     .social a:hover{ transform:translateY(-2px) }
 
-    /* HERO */
+    /* HERO standard */
+    <style>/* avoid nested style tags warning */</style>
     .hero{ padding:96px 20px 18px; max-width:1100px; margin:0 auto; text-align:center; border-bottom:1px solid var(--line) }
     .hero .icon{ font-size:2rem; line-height:1; margin-bottom:6px }
     .hero h1{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900;
       background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent }
     .hero .lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 auto 12px }
 
-    /* TOC chips */
+    /* TOC chips standard */
     .toc{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; padding:14px 20px; border-bottom:1px solid var(--line) }
-    .toc a{ display:inline-block; padding:6px 10px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.9rem; text-decoration:none }
+    .toc a{
+      display:inline-block; padding:6px 10px; border:1px solid #214a57; background:#0d2330; color:#bff1ff;
+      border-radius:999px; font-size:.9rem; text-decoration:none
+    }
     .toc a:hover{ text-decoration:underline }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
@@ -233,6 +254,7 @@ upgrade-insecure-requests">
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
       <a href="/proofspec.html" aria-current="page">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
+      <a href="/verify.html">Create/Verify</a>
       <a href="/docs.html">API Docs</a>
       <a href="/regulations.html">Regulations</a>
       <a href="/security.html">Security</a>
@@ -245,30 +267,31 @@ upgrade-insecure-requests">
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu"><span aria-hidden="true">☰</span></button>
   </header>
 
-  <!-- HERO -->
+  <!-- HERO standard -->
   <section class="hero card" role="region" aria-labelledby="page-title">
     <div class="icon" aria-hidden="true">📘</div>
     <h1 id="page-title">Protocol (ProofSpec)</h1>
     <p class="lead">Defines how to create, sign, timestamp, and verify proofs that a specific data artifact existed at a point in time and has not changed since, without exposing the original content.</p>
+    <!-- Proof-of-release strip retiré ici, conservé dans #proof -->
   </section>
 
   <!-- TOC chips -->
   <nav class="toc" aria-label="Contents">
-    <a href="#overview">Overview</a>
-    <a href="#model">Data model</a>
-    <a href="#create">Create</a>
-    <a href="#timestamp">Timestamp</a>
-    <a href="#verify">Verify</a>
-    <a href="#signature">Signatures</a>
-    <a href="#textnorm">Text normalization</a>
-    <a href="#errors">Error model & status codes</a>
-    <a href="#schema">JSON Schema</a>
-    <a href="#tests">Test vectors</a>
-    <a href="#security">Security</a>
-    <a href="#interop">Interoperability</a>
-    <a href="#versioning">Spec versioning</a>
-    <a href="#proof">Document Proof</a>
-    <a href="#top" style="padding:4px 10px">↑ Top</a>
+    <a href="#overview-title">Overview</a>
+    <a href="#model-title">Data model</a>
+    <a href="#create-title">Create</a>
+    <a href="#timestamp-title">Timestamp</a>
+    <a href="#verify-title">Verify</a>
+    <a href="#signature-title">Signatures</a>
+    <a href="#textnorm-title">Text normalization</a>
+    <a href="#errors-title">Error model & status codes</a>
+    <a href="#schema-title">JSON Schema</a>
+    <a href="#tests-title">Test vectors</a>
+    <a href="#security-title">Security</a>
+    <a href="#interop-title">Interoperability</a>
+    <a href="#versioning-title">Spec versioning</a>
+    <a href="#proof-title">Document Proof</a>
+    <a href="#hdr" style="padding:4px 10px">↑ Top</a>
   </nav>
 
   <!-- Main -->
@@ -503,6 +526,10 @@ sig:  qwertyZXCVbnNmTW9ja2JhU2U (example)</code></pre>
     document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
     window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
 
+    // Fermer le menu mobile quand on clique un lien du sommaire
+    const toc=document.querySelector('.toc');
+    toc?.addEventListener('click', (e)=>{ if(!window.matchMedia('(max-width: 899px)').matches) return; if(e.target.closest('a') && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
+
     // aria-current auto
     (function(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
@@ -527,7 +554,7 @@ sig:  qwertyZXCVbnNmTW9ja2JhU2U (example)</code></pre>
       });
     })();
 
-    // Release manifest fill (#proof)
+    // Release manifest fill for #proof only
     (async()=>{
       try{
         const r=await fetch('/releases/v0.1.json',{cache:'no-store'}); if(!r.ok) return;
@@ -550,4 +577,4 @@ sig:  qwertyZXCVbnNmTW9ja2JhU2U (example)</code></pre>
   })();
   </script>
 </body>
-</html>
+  </html>
