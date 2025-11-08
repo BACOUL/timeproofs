@@ -304,7 +304,30 @@ curl -s "https://api.timeproofs.io/api/verify?hash=&lt;SHA256_HEX&gt;"</code></p
 const API="https://api.timeproofs.io/api";
 const res=await fetch(`${API}/verify?hash=${encodeURIComponent(hash)}`);
 const data=await res.json();</code></pre>
-      <p class="muted">Public read. No token required.</p>
+
+      <h3 id="verify-post">POST variant</h3>
+<pre><code>POST /api/verify
+Content-Type: application/json
+
+{ "hash": "&lt;SHA256_HEX&gt;" }</code></pre>
+<pre><code># cURL
+curl -s -X POST https://api.timeproofs.io/api/verify \
+  -H "Content-Type: application/json" \
+  -d '{"hash":"&lt;SHA256_HEX&gt;"}'</code></pre>
+
+      <!-- Batch optionnel : supprimez si non supporté -->
+      <h3 id="verify-batch">Batch (optional)</h3>
+<pre><code>POST /api/verify
+Content-Type: application/json
+
+{ "hashes": ["&lt;HEX1&gt;","&lt;HEX2&gt;"] }</code></pre>
+<pre><code>// Response (same order)
+[
+  { "exists": true,  "valid": true,  "hash":"...","ts":1730793600000,"sig":"...","alg":"HMAC-SHA256","kid":"v1","issuer":"timeproofs.io" },
+  { "exists": false, "valid": false, "hash":"..." }
+]</code></pre>
+
+      <p class="muted">Public read. No token required. Caching: <code>GET /api/verify</code> may return <code>Cache-Control: public, max-age=60</code>.</p>
     </section>
 
     <section class="card" id="models" aria-labelledby="models-title">
@@ -343,6 +366,16 @@ const data=await res.json();</code></pre>
           </tbody>
         </table>
       </div>
+
+      <h3 id="error-bodies">Error bodies</h3>
+<pre><code>// JSON envelope
+{
+  "error": {
+    "code": "INVALID_HASH",
+    "message": "hash must be 64 lowercase hex"
+  }
+}</code></pre>
+      <p class="muted">429 responses include <code>Retry-After: &lt;seconds&gt;</code>.</p>
     </section>
 
     <section class="card" id="sdk" aria-labelledby="sdk-title">
@@ -407,7 +440,7 @@ const sha256Hex = (buf) => createHash("sha256").update(buf).digest("hex");</code
   </footer>
 
   <!-- Scripts -->
-  <script nonce="TP-2025">
+  <script defer nonce="TP-2025">
   (function(){
     const hdr=document.getElementById('hdr');
     function onScroll(){ if(window.scrollY>6) hdr.classList.add('scrolled'); else hdr.classList.remove('scrolled'); }
@@ -472,4 +505,4 @@ const sha256Hex = (buf) => createHash("sha256").update(buf).digest("hex");</code
   })();
   </script>
 </body>
-                                                                                                                                                                                                    </html>
+</html>
