@@ -48,28 +48,10 @@
   <meta name="twitter:description" content="Edge-native security controls with zero content upload."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
-  <!-- Security meta -->
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
-
-  <!-- CSP v0.1 -->
-  <meta http-equiv="Content-Security-Policy" content="
-default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
-worker-src 'self' blob:;
-img-src 'self' data: https:;
-style-src 'self' 'unsafe-inline';
-script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
-connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io;
-font-src 'self' https: data:;
-object-src 'none';
-base-uri 'self';
-form-action 'self';
-frame-ancestors 'none';
-upgrade-insecure-requests">
-
   <!-- Analytics -->
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
-  <!-- Styles (identiques à l’index/ProofSpec) -->
+  <!-- Styles -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
@@ -97,7 +79,6 @@ upgrade-insecure-requests">
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
     .skip:focus{ position:fixed; left:12px; top:12px; width:auto; height:auto; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
 
-    /* Header + mobile menu (exact comme index/ProofSpec) */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
@@ -142,7 +123,6 @@ upgrade-insecure-requests">
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* HERO */
     .hero{ padding:96px 20px 18px; max-width:1100px; margin:0 auto; text-align:center; border-bottom:1px solid var(--line) }
     .hero .icon{ font-size:2rem; margin-bottom:6px }
     .hero .status{ display:inline-block; margin:0 0 10px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.9rem; box-shadow:var(--ring) }
@@ -152,24 +132,20 @@ upgrade-insecure-requests">
     .hero .btn{ display:inline-block; padding:6px 10px; border:1px solid #22455a; border-radius:10px; background:#0c1a2e; color:#cfefff; font-weight:700; text-decoration:none }
     .hero .btn:hover{ text-decoration:underline }
 
-    /* TOC chips */
     nav.toc{ display:flex; flex-wrap:wrap; gap:8px; margin:14px auto 0; padding:12px; max-width:1100px; background:#0c1424; border:1px solid var(--line); border-radius:12px }
     nav.toc a{ background:transparent; border:1px solid #1f2a44; padding:6px 10px; border-radius:10px; color:#cfe7ff }
     nav.toc a:hover{ background:#0d2330 }
 
-    /* Content */
     main{ padding:10px 20px 40px; max-width:1100px; margin:0 auto }
     .card{ background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:18px; margin:14px 0 }
     h2{ color:#b9e7f5; font-size:1.25rem; margin:1.2em 0 .5em }
     h3{ color:#aee9f7; font-size:1.05rem; margin:1em 0 .3em }
 
-    /* Tables responsive */
     .table-wrap{ overflow:auto; border:1px solid var(--line); border-radius:12px }
     table{ border-collapse:collapse; min-width:720px; width:100% }
     th,td{ border-bottom:1px solid #203047; padding:10px 12px; text-align:left; text-wrap:nowrap }
     th{ color:#cfefff; font-weight:700 }
 
-    /* Code blocks + Copy */
     pre, code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
     pre{
       position:relative; max-width:100%; overflow:auto; padding:12px; border-radius:12px;
@@ -180,7 +156,6 @@ upgrade-insecure-requests">
       background:#0c1a2e; color:#cfefff; font-weight:700; cursor:pointer
     }
 
-    /* Footer */
     footer{ border-top:1px solid var(--line); margin-top:28px; padding:18px; color:#7c8aa5; text-align:center }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
@@ -195,7 +170,7 @@ upgrade-insecure-requests">
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
-  <!-- Header (identique ProofSpec) -->
+  <!-- Header -->
   <header class="tp-header" id="hdr" role="banner">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
@@ -210,10 +185,8 @@ upgrade-insecure-requests">
       <a href="/privacy.html">Privacy</a>
       <a href="/legal.html">Legal</a>
       <a href="/about.html">About</a>
-      <!-- Mobile-only CTA -->
       <a class="nav-cta" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
     </nav>
-    <!-- Desktop CTA -->
     <a class="cta-header" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu"><span aria-hidden="true">☰</span></button>
   </header>
@@ -230,6 +203,17 @@ upgrade-insecure-requests">
       <span>· Hash: <code id="page-proof-hash"></code></span>
       <a id="page-proof-link" href="#" class="btn" target="_blank" rel="noopener">Verify</a>
     </div>
+  </section>
+
+  <!-- Verification block -->
+  <section class="card" id="verification" style="max-width:1100px;margin:14px auto">
+    <h2>Security & Performance Verification</h2>
+    <p>Current results:</p>
+    <ul>
+      <li>SecurityHeaders: <strong>A+</strong> — <a href="https://securityheaders.com/?q=https://timeproofs.io" target="_blank" rel="noopener">view report</a></li>
+      <li>PageSpeed (mobile): <strong>Perf 100 · A11y 100 · BP 96 · SEO 100</strong> — <a href="https://pagespeed.web.dev/report?url=https://timeproofs.io" target="_blank" rel="noopener">view report</a></li>
+    </ul>
+    <p>HTTP headers enforced: <code>HSTS</code>, <code>CSP</code>, <code>X-Frame-Options</code>, <code>X-Content-Type-Options</code>, <code>Referrer-Policy</code>, <code>Permissions-Policy</code>.</p>
   </section>
 
   <!-- TOC -->
@@ -355,6 +339,7 @@ function verify({hash, ts, sig}, secret){
       <a class="badge" href="/proofspec.html">🔍 Open Spec v0.1</a>
       <span class="badge">⚡ Edge Native</span>
       <span class="badge">🛡 Privacy First</span>
+      <span class="badge">A+ Security</span>
     </div>
     © 2025 TimeProofs — Reference implementation of the ProofSpec protocol.
     <div class="links" style="margin-top:6px">
@@ -393,16 +378,14 @@ function verify({hash, ts, sig}, secret){
     </div>
   </footer>
 
-  <!-- Scripts (identiques index/ProofSpec) -->
+  <!-- Scripts -->
   <script defer nonce="TP-2025">
   (function(){
     const API1='https://api.timeproofs.io';
     const API2='https://timeproofs-api.jeason-bacoul.workers.dev';
 
     const hdr=document.getElementById('hdr'); const nav=document.getElementById('tp-nav'); const burger=document.getElementById('tp-burger');
-    function onScroll(){
-      if(window.scrollY>6) hdr.classList.add('scrolled'); else hdr.classList.remove('scrolled');
-    }
+    function onScroll(){ if(window.scrollY>6) hdr.classList.add('scrolled'); else hdr.classList.remove('scrolled'); }
     onScroll(); window.addEventListener('scroll', onScroll, { passive:true });
 
     function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
@@ -413,7 +396,6 @@ function verify({hash, ts, sig}, secret){
     document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
     window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
 
-    // Auto aria-current
     (function markCurrent(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
       document.querySelectorAll('header nav a, footer .links a').forEach(a=>{
@@ -422,7 +404,6 @@ function verify({hash, ts, sig}, secret){
       });
     })();
 
-    // Copy buttons
     (function installCopyButtons(){
       document.querySelectorAll('pre').forEach((pre)=>{
         if(pre.querySelector('.copy-btn')) return;
@@ -437,7 +418,6 @@ function verify({hash, ts, sig}, secret){
       });
     })();
 
-    // Release manifest fill
     (async()=>{
       try{
         const r=await fetch('/releases/v0.1.json',{cache:'no-store'}); if(!r.ok) return;
@@ -456,11 +436,10 @@ function verify({hash, ts, sig}, secret){
       }catch{}
     })();
 
-    // SW
     if('serviceWorker' in navigator){
       navigator.serviceWorker.register('/sw.js', { type:'module', scope:'/' }).catch(()=>{});
     }
   })();
   </script>
 </body>
-  </html>
+</html>
