@@ -2,5 +2,18 @@
   "version": 2,
   "routes": [
     { "src": "/((?!.*\\..*).*)", "dest": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
+        { "key": "Content-Security-Policy", "value": "default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev; worker-src 'self' blob:; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com; connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io; font-src 'self' https: data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; upgrade-insecure-requests;" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "geolocation=(), microphone=(), camera=()" }
+      ]
+    }
   ]
 }
