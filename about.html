@@ -232,10 +232,6 @@
     <h1 id="page-title">About TimeProofs</h1>
     <p class="lead">Open, privacy-first protocol for digital proof of existence. Hash locally. Timestamp instantly. Verify publicly.</p>
     <p class="meta">About · Last updated: <strong>2025-11-08</strong></p>
-    <p class="label" style="display:inline-block;margin:8px 0 0; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px">
-      🔏 Proof of Release · <code id="page-proof-hash">…</code> ·
-      <a id="page-proof-link" href="#" target="_blank" rel="noopener" title="View verification on API">Verify</a>
-    </p>
   </section>
 
   <!-- TOC -->
@@ -374,7 +370,7 @@
       });
     })();
 
-    // Copy buttons for any code blocks
+    // Copy buttons
     (function(){
       document.querySelectorAll('pre').forEach((pre)=>{
         if(pre.querySelector('.copy-btn')) return;
@@ -389,21 +385,18 @@
       });
     })();
 
-    // Release manifest fill
+    // Release manifest fill (dup targets only)
     (async()=>{
       try{
         const r=await fetch('/releases/v0.1.json',{cache:'no-store'}); if(!r.ok) return;
         const map=await r.json(); const id=document.documentElement.dataset.page||'about.html';
         const e=map[id] || map['/'] || map;
         const elRel=document.getElementById('page-proof-release');
-        const elH1=document.getElementById('page-proof-hash');
-        const elL1=document.getElementById('page-proof-link');
         const elH2=document.getElementById('page-proof-hash-dup');
         const elL2=document.getElementById('page-proof-link-dup');
         if(elRel && e.release) elRel.textContent=e.release;
-        if(e.hash){ elH1 && (elH1.textContent=e.hash); elH2 && (elH2.textContent=e.hash); }
+        if(e.hash && elH2) elH2.textContent=e.hash;
         const url=e.verify || (e.hash ? ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(e.hash)) : '#');
-        if(elL1 && url) elL1.href=url;
         if(elL2 && url) elL2.href=url;
       }catch{}
     })();
