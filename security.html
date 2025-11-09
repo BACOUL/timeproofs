@@ -168,7 +168,7 @@ upgrade-insecure-requests">
       }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
-      .nav-cta{ display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px; background:#0d2330; color:#06202a; font-weight:800 }
+      .nav-cta{ display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px; background:var(--accent); color:#06202a; font-weight:800 }
     }
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
@@ -184,7 +184,7 @@ upgrade-insecure-requests">
     h1, h2, h3, section, [id]{ scroll-margin-top:84px }
 
     pre, code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
-    pre{ position:relative; max-width:100%; overflow:auto; padding:12px; border-radius:12px; background:#0b1426; border:1px solid #1f2a44; font-size:.95rem }
+    pre{ position:relative; max-width:100%; overflow:auto; padding:12px; border-radius:12px; background:#0b1426; border:1f2a44; border:1px solid #1f2a44; font-size:.95rem }
     .copy-btn{ position:absolute; top:8px; right:8px; padding:6px 10px; border:1px solid #22455a; border-radius:10px; background:#0c1a2e; color:#cfefff; font-weight:700; cursor:pointer }
 
     .table-wrap{ overflow:auto; border:1px solid var(--line); border-radius:12px }
@@ -207,6 +207,7 @@ upgrade-insecure-requests">
     .hero .icon{ font-size:2rem; line-height:1; margin-bottom:6px }
     .hero h1{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900; background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent }
     .hero .lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 auto 12px }
+    @media (max-width:899px){ .hero{ padding-top:120px } } /* icône visible sous le header */
 
     /* TOC chips */
     .toc{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; padding:14px 20px; border-bottom:1px solid var(--line) }
@@ -324,8 +325,8 @@ upgrade-insecure-requests">
     <section class="card" id="keys" aria-labelledby="keys-title">
       <h2 id="keys-title">Key policy</h2>
       <ul>
-        <li>Signing algorithms: <code>HMAC-SHA256</code> now, <code>Ed25519</code> planned with public JWKS.</li>
-        <li>Key rotation with <code>kid</code>. Short-lived server tokens. Separate env keys.</li>
+        <li>Signing algorithms: <code>HMAC-SHA256</code> now, <code>Ed25519</code> prévu avec JWKS public.</li>
+        <li>Rotation avec <code>kid</code>. Tokens serveur courts. Clés séparées par environnement.</li>
       </ul>
 <pre><button class="copy-btn" aria-label="Copy">Copy</button><code>// Node.js verify (HMAC)
 import crypto from "node:crypto";
@@ -417,7 +418,6 @@ function verify({hash, ts, sig}, secret){
   <script defer nonce="TP-2025">
   (function(){
     const API1='https://api.timeproofs.io';
-    const API2='https://timeproofs-api.jeason-bacoul.workers.dev';
 
     const hdr=document.getElementById('hdr');
     function onScroll(){ if(window.scrollY>6) hdr.classList.add('scrolled'); else hdr.classList.remove('scrolled'); }
