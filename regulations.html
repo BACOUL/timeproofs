@@ -134,6 +134,7 @@ upgrade-insecure-requests">
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
     .skip:focus{ position:fixed; left:12px; top:12px; width:auto; height:auto; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
 
+    /* Header */
     .tp-header{ position:fixed; inset:0 0 auto 0; height:64px; z-index:1000; background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); display:flex; align-items:center; gap:12px; padding:0 16px; transition:background .25s var(--e) }
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
@@ -149,16 +150,26 @@ upgrade-insecure-requests">
     .tp-burger span{ font-size:20px; line-height:1 }
 
     @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } .cta-header{ display:inline-flex } }
+
+    /* Menu mobile identique Use Cases */
     @media (max-width:899px){
       .tp-brand img{ height:34px; width:34px }
       .tp-nav{
-        position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
-        display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
-        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease
+        position:fixed; inset:64px 0 0 0; /* plein écran sous le header */
+        background:#0c1424; border-top:1px solid var(--line);
+        display:flex; flex-direction:column; gap:16px; padding:18px 16px 88px; /* place pour CTA bas */
+        box-shadow:0 16px 40px rgba(0,0,0,.45);
+        transform:translateY(-12px); opacity:0; pointer-events:none;
+        transition:opacity .2s ease, transform .2s ease
       }
-      .tp-nav a{ margin:4px 0 }
+      .tp-nav a{ margin:0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
-      .nav-cta{ display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px; background:var(--accent); color:#06202a; font-weight:800 }
+      /* CTA collé bas */
+      .nav-cta{
+        position:fixed; left:16px; right:16px; bottom:16px;
+        display:block; padding:14px; text-align:center; border-radius:14px;
+        background:var(--accent); color:#06202a; font-weight:800; box-shadow:var(--ring)
+      }
     }
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
@@ -168,10 +179,7 @@ upgrade-insecure-requests">
     .hero .icon{ font-size:2rem; line-height:1; margin-bottom:6px }
     .hero h1{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900; background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent }
     .hero .lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 auto 12px }
-    /* Fallback mobile pour sortir l’icône du header */
-    @media (max-width:899px){
-      .hero{ padding-top:200px }
-    }
+    @media (max-width:899px){ .hero{ padding-top:200px } } /* fallback icône visible */
 
     /* TOC chips */
     nav.toc{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; padding:14px 20px; border-bottom:1px solid var(--line) }
@@ -218,6 +226,7 @@ upgrade-insecure-requests">
       <span>TimeProofs</span>
     </a>
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
+      <!-- ordre identique Use Cases -->
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html">Create/Verify</a>
@@ -423,8 +432,8 @@ upgrade-insecure-requests">
       const hero=document.querySelector('.hero');
       function adjustHero(){
         if(!hero) return;
-        const hh = (hdr?.offsetHeight)||64;            // header réel
-        const extra = 120;                              // marge visuelle sous le header
+        const hh = (hdr?.offsetHeight)||64;
+        const extra = 120;
         hero.style.paddingTop = (hh + extra) + 'px';
       }
       adjustHero();
