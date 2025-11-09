@@ -159,6 +159,7 @@ upgrade-insecure-requests">
       .tp-nav{ display:flex; align-items:center }
       .cta-header{ display:inline-flex }
     }
+    /* Menu mobile repris de use-cases.html */
     @media (max-width:899px){
       .tp-brand img{ height:34px; width:34px }
       .tp-nav{
@@ -168,7 +169,7 @@ upgrade-insecure-requests">
       }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
-      .nav-cta{ display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px; background:#0d2330; color:#06202a; font-weight:800 }
+      .nav-cta{ display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px; background:var(--accent); color:#06202a; font-weight:800 }
     }
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
@@ -203,11 +204,11 @@ upgrade-insecure-requests">
     .social a:hover{ transform:translateY(-2px) }
 
     /* HERO */
+    <style id="hero-style"></style>
     .hero{ padding:96px 20px 18px; max-width:1100px; margin:0 auto; text-align:center; border-bottom:1px solid var(--line) }
     .hero .icon{ font-size:2rem; line-height:1; margin-bottom:6px }
     .hero h1{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900; background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent }
     .hero .lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 auto 12px }
-    @media (max-width:899px){ .hero{ padding-top:120px } } /* icône visible sous le header */
 
     /* TOC chips */
     .toc{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; padding:14px 20px; border-bottom:1px solid var(--line) }
@@ -246,7 +247,7 @@ upgrade-insecure-requests">
     <h1 id="page-title">Security</h1>
     <p class="lead">Threat model, controls, and operational security for a hash-only, public-verify protocol.</p>
     <p class="meta">Security · Last updated: <strong>2025-11-08</strong></p>
-    <!-- Proof of Release retiré -->
+    <!-- Proof of Release removed -->
   </section>
 
   <!-- TOC -->
@@ -409,11 +410,9 @@ function verify({hash, ts, sig}, secret){
     </div>
   </footer>
 
-  <!-- Scripts (identiques squelette) -->
+  <!-- Scripts (menu mobile identique à use-cases) -->
   <script defer nonce="TP-2025">
   (function(){
-    const API1='https://api.timeproofs.io';
-
     const hdr=document.getElementById('hdr');
     function onScroll(){ if(window.scrollY>6) hdr.classList.add('scrolled'); else hdr.classList.remove('scrolled'); }
     onScroll(); window.addEventListener('scroll', onScroll, { passive:true });
@@ -457,16 +456,13 @@ function verify({hash, ts, sig}, secret){
         const r=await fetch('/releases/v0.1.json',{cache:'no-store'}); if(!r.ok) return;
         const map=await r.json(); const id=document.documentElement.dataset.page||'security.html';
         const e=map[id] || map['/'] || map;
-        const elH1=document.getElementById('page-proof-hash');
-        const elL1=document.getElementById('page-proof-link');
         const elH2=document.getElementById('page-proof-hash-dup');
         const elL2=document.getElementById('page-proof-link-dup');
         const elR =document.getElementById('page-proof-release');
 
         if(elR && e.release) elR.textContent=e.release;
-        if(e.hash){ elH1 && (elH1.textContent=e.hash); elH2 && (elH2.textContent=e.hash); }
-        const url=e.verify || (e.hash ? (API1+'/api/verify?hash='+encodeURIComponent(e.hash)) : '#');
-        if(elL1 && url) elL1.href=url;
+        if(e.hash){ elH2 && (elH2.textContent=e.hash); }
+        const url=e.verify || (e.hash ? ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(e.hash)) : '#');
         if(elL2 && url) elL2.href=url;
       }catch{}
     })();
