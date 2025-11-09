@@ -69,7 +69,7 @@ upgrade-insecure-requests">
   <!-- Analytics -->
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
-  <!-- JSON-LD (aligné gabarit) -->
+  <!-- JSON-LD (same as previous version) -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -105,7 +105,7 @@ upgrade-insecure-requests">
   ]}
   </script>
 
-  <!-- Styles (gabarit unifié) -->
+  <!-- Styles -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
@@ -151,25 +151,17 @@ upgrade-insecure-requests">
 
     @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } .cta-header{ display:inline-flex } }
 
-    /* Menu mobile identique Use Cases */
+    /* --- MOBILE MENU: copied verbatim from Use Cases --- */
     @media (max-width:899px){
       .tp-brand img{ height:34px; width:34px }
       .tp-nav{
-        position:fixed; inset:64px 0 0 0; /* plein écran sous le header */
-        background:#0c1424; border-top:1px solid var(--line);
-        display:flex; flex-direction:column; gap:16px; padding:18px 16px 88px; /* place pour CTA bas */
-        box-shadow:0 16px 40px rgba(0,0,0,.45);
-        transform:translateY(-12px); opacity:0; pointer-events:none;
-        transition:opacity .2s ease, transform .2s ease
+        position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
+        display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
+        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease
       }
-      .tp-nav a{ margin:0 }
+      .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
-      /* CTA collé bas */
-      .nav-cta{
-        position:fixed; left:16px; right:16px; bottom:16px;
-        display:block; padding:14px; text-align:center; border-radius:14px;
-        background:var(--accent); color:#06202a; font-weight:800; box-shadow:var(--ring)
-      }
+      .nav-cta{ display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px; background:var(--accent); color:#06202a; font-weight:800 }
     }
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
@@ -179,7 +171,6 @@ upgrade-insecure-requests">
     .hero .icon{ font-size:2rem; line-height:1; margin-bottom:6px }
     .hero h1{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900; background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent }
     .hero .lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 auto 12px }
-    @media (max-width:899px){ .hero{ padding-top:200px } } /* fallback icône visible */
 
     /* TOC chips */
     nav.toc{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; padding:14px 20px; border-bottom:1px solid var(--line) }
@@ -226,7 +217,6 @@ upgrade-insecure-requests">
       <span>TimeProofs</span>
     </a>
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
-      <!-- ordre identique Use Cases -->
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
       <a href="/verify.html">Create/Verify</a>
@@ -381,9 +371,7 @@ upgrade-insecure-requests">
           <path fill="#fff" d="M9.75 15.02V8.98L15.5 12l-5.75 3.02Z"/>
         </svg>
       </a>
-      <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/></svg>
-      </a>
+      <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/></svg></a>
     </div>
   </footer>
 
@@ -427,20 +415,7 @@ upgrade-insecure-requests">
       });
     })();
 
-    // Décalage HERO dynamique = hauteur header + marge
-    (function(){
-      const hero=document.querySelector('.hero');
-      function adjustHero(){
-        if(!hero) return;
-        const hh = (hdr?.offsetHeight)||64;
-        const extra = 120;
-        hero.style.paddingTop = (hh + extra) + 'px';
-      }
-      adjustHero();
-      window.addEventListener('resize', adjustHero, { passive:true });
-    })();
-
-    // Release manifest fill (#page-proof)
+    // Release manifest fill
     (async()=>{
       try{
         const r=await fetch('/releases/v0.1.json',{cache:'no-store'}); if(!r.ok) return;
@@ -463,4 +438,4 @@ upgrade-insecure-requests">
   })();
   </script>
 </body>
-</html>
+  </html>
