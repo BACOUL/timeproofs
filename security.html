@@ -235,6 +235,8 @@ upgrade-insecure-requests">
     <a href="#vuln">Disclosure</a>
     <a href="#sbom">Dependencies & SBOM</a>
     <a href="#status-errors">Status & errors</a>
+    <!-- ADDED: audits link -->
+    <a href="#audits">Audits & validation</a>
     <a href="#page-proof">Page proof</a>
   </nav>
 
@@ -335,6 +337,50 @@ function verify({hash, ts, sig}, secret){
       <ul>
         <li><code>/api/ping</code> → HTTP 200 when healthy.</li>
         <li>Errors: <code>{"ok":false,"error":"…"}</code> with 4xx/5xx.</li>
+      </ul>
+    </section>
+
+    <!-- ADDED: Audits & Validation -->
+    <section class="card" id="audits" aria-labelledby="audits-title">
+      <h2 id="audits-title">Audits & Validation</h2>
+      <div class="badges" aria-label="Audit badges">
+        <span class="badge">🟢 A+ SecurityHeaders</span>
+        <span class="badge">📱 Lighthouse 99/100</span>
+        <span class="badge">🛡️ Privacy-first · No cookies</span>
+      </div>
+
+      <div class="table-wrap" role="region" aria-label="External audits">
+        <table>
+          <thead><tr><th>Audit</th><th>Scope</th><th>Result</th><th>Link</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Google PageSpeed</td><td>Mobile</td><td>Perf 100 · A11y 100 · BP 96 · SEO 100</td>
+              <td><a href="https://pagespeed.web.dev/report?url=https://timeproofs.io" target="_blank" rel="noopener">view</a></td>
+            </tr>
+            <tr>
+              <td>Mozilla Observatory / SecurityHeaders</td><td>HTTP headers</td><td>A+</td>
+              <td><a href="https://securityheaders.com/?q=https://timeproofs.io" target="_blank" rel="noopener">view</a></td>
+            </tr>
+            <tr>
+              <td>SSL Labs</td><td>TLS/HTTPS</td><td>A+</td>
+              <td><a href="https://www.ssllabs.com/ssltest/analyze.html?d=timeproofs.io" target="_blank" rel="noopener">view</a></td>
+            </tr>
+            <tr>
+              <td>Rich Results / JSON-LD</td><td>Schema</td><td>Valid</td>
+              <td><a href="https://search.google.com/test/rich-results?url=https://timeproofs.io" target="_blank" rel="noopener">view</a></td>
+            </tr>
+            <tr>
+              <td>Mobile-Friendly Test</td><td>UX mobile</td><td>Compliant</td>
+              <td><a href="https://search.google.com/test/mobile-friendly?url=https://timeproofs.io" target="_blank" rel="noopener">view</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ul>
+        <li>Release manifest: <a href="/releases/v0.1.json">/releases/v0.1.json</a></li>
+        <li>GitHub v0.1: <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv01" target="_blank" rel="noopener">timeproofsv01</a></li>
+        <li>Verify release hash: <a href="https://api.timeproofs.io/api/verify?hash=7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2" target="_blank" rel="noopener">API verify</a></li>
       </ul>
     </section>
 
@@ -454,4 +500,4 @@ function verify({hash, ts, sig}, secret){
   })();
   </script>
 </body>
-          </html>
+</html>
