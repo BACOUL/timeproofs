@@ -24,7 +24,7 @@
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin>
   <link rel="dns-prefetch" href="//api.timeproofs.io">
   <link rel="preconnect" href="https://plausible.io" crossorigin>
-  <link rel="preload" as="image" href="/logo%20(1).png" fetchpriority="high">
+  <link rel="preload" as="image" href="/logo.svg" fetchpriority="high">
 
   <!-- Icons / Manifest -->
   <link rel="icon" href="/favicon.ico" sizes="any">
@@ -50,20 +50,32 @@
   <!-- Security meta -->
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 
-  <!-- CSP v0.1 unifiée -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev; worker-src 'self' blob:; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com; connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io; font-src 'self' https: data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
+  <!-- CSP v0.1 -->
+  <meta http-equiv="Content-Security-Policy" content="
+default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
+worker-src 'self' blob:;
+img-src 'self' data: https:;
+style-src 'self' 'unsafe-inline';
+script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
+connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io;
+font-src 'self' https: data:;
+object-src 'none';
+base-uri 'self';
+form-action 'self';
+frame-ancestors 'none';
+upgrade-insecure-requests">
 
   <!-- Analytics -->
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
-  <!-- JSON-LD Org + Site + TechArticle + Breadcrumb + FAQ -->
+  <!-- JSON-LD -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
     "@type":"Organization",
     "name":"TimeProofs",
     "url":"https://timeproofs.io/",
-    "logo":"https://timeproofs.io/logo%20(1).png",
+    "logo":"https://timeproofs.io/logo.svg",
     "sameAs":[
       "https://x.com/timeproofs",
       "https://github.com/BACOUL/timeproofs/tree/timeproofsv01",
@@ -99,18 +111,23 @@
   ]}
   </script>
 
-  <!-- Styles (squelette unifié) -->
+  <!-- Styles (gabarit Use Cases) -->
   <style>
     :root{ --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --ok:#34d399; --warn:#f59e0b; --err:#ef4444; --ring:0 0 0 1px #1e293b, 0 10px 40px rgba(34,211,238,.14); --e:cubic-bezier(.22,.61,.36,1) }
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); scroll-behavior:smooth }
     html{ scroll-padding-top:84px }
-    body{ margin:0; color:var(--text); font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; background: radial-gradient(1200px 600px at 80% -10%, rgba(34,211,238,.06), transparent 60%), conic-gradient(from 220deg at 10% -20%, rgba(34,211,238,.04), transparent 30%), var(--bg) }
+    body{ margin:0; color:var(--text);
+      font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      background: radial-gradient(1200px 600px at 80% -10%, rgba(34,211,238,.06), transparent 60%),
+                  conic-gradient(from 220deg at 10% -20%, rgba(34,211,238,.04), transparent 30%),
+                  var(--bg) }
     a{ color:var(--accent); text-decoration:none } a:hover{ text-decoration:underline }
     .tp-nav a, footer .links a{ text-underline-offset:3px } .tp-nav a:hover, footer .links a:hover{ text-decoration:underline }
 
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
-    .skip:focus{ position:fixed; left:12px; top:12px; width:auto; height:auto; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
+    .skip:focus{ position:fixed; left:12px; top:12px; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
 
     .tp-header{ position:fixed; inset:0 0 auto 0; height:64px; z-index:1000; background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); display:flex; align-items:center; gap:12px; padding:0 16px; transition:background .25s var(--e) }
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
@@ -129,7 +146,9 @@
     @media (min-width:900px){ .tp-burger{ display:none } .tp-nav{ display:flex; align-items:center } .cta-header{ display:inline-flex } }
     @media (max-width:899px){
       .tp-brand img{ height:34px; width:34px }
-      .tp-nav{ position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45); transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease }
+      .tp-nav{ position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
+               display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
+               transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
       .nav-cta{ display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px; background:var(--accent); color:#06202a; font-weight:800 }
@@ -140,10 +159,9 @@
     /* HERO */
     .hero{ padding:96px 20px 18px; max-width:1100px; margin:0 auto; text-align:center; border-bottom:1px solid var(--line) }
     .hero .icon{ font-size:2rem; line-height:1; margin-bottom:6px }
-    .hero h1{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900; background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent }
+    .hero h1{ font-size:clamp(1.9rem,4.5vw,2.2rem); margin:.2em 0 .4em; font-weight:900;
+      background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent }
     .hero .lead{ color:var(--muted); max-width:880px; line-height:1.7; margin:0 auto 12px }
-    .hero .proof-strip{ display:inline-flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center; margin-top:6px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem }
-    .hero .btn{ display:inline-block; padding:6px 10px; border:1px solid #22455a; border-radius:10px; background:#0c1a2e; color:#cfefff; font-weight:700; text-decoration:none } .hero .btn:hover{ text-decoration:underline }
 
     /* TOC chips */
     .toc{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; padding:14px 20px; border-bottom:1px solid var(--line) }
@@ -157,7 +175,6 @@
     h2{ color:#b9e7f5; font-size:1.25rem; margin:1.2em 0 .5em }
     h3{ color:#aee9f7; font-size:1.05rem; margin:1em 0 .3em }
 
-    /* Ancres sous header fixe */
     h1, h2, h3, section, [id]{ scroll-margin-top:84px }
 
     pre, code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
@@ -185,7 +202,10 @@
   <!-- Header -->
   <header class="tp-header" id="hdr" role="banner">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
-      <img src="/logo%20(1).png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high">
+      <picture>
+        <source srcset="/logo.svg" type="image/svg+xml">
+        <img src="/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high">
+      </picture>
       <span>TimeProofs</span>
     </a>
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
@@ -209,12 +229,6 @@
     <div class="icon" aria-hidden="true">📚</div>
     <h1 id="page-title">API Docs</h1>
     <p class="lead">Minimal, fast, verifiable. Hash client-side, timestamp via API, verify publicly. Privacy-first, no blockchain.</p>
-    <div class="proof-strip" aria-label="Proof of Release">
-      <strong>Proof of Release</strong>
-      <span>Release: <code id="page-proof-release"></code></span>
-      <span>· Hash: <code id="page-proof-hash"></code></span>
-      <a id="page-proof-link" href="#" class="btn" target="_blank" rel="noopener">Verify</a>
-    </div>
   </section>
 
   <!-- TOC -->
@@ -304,30 +318,7 @@ curl -s "https://api.timeproofs.io/api/verify?hash=&lt;SHA256_HEX&gt;"</code></p
 const API="https://api.timeproofs.io/api";
 const res=await fetch(`${API}/verify?hash=${encodeURIComponent(hash)}`);
 const data=await res.json();</code></pre>
-
-      <h3 id="verify-post">POST variant</h3>
-<pre><code>POST /api/verify
-Content-Type: application/json
-
-{ "hash": "&lt;SHA256_HEX&gt;" }</code></pre>
-<pre><code># cURL
-curl -s -X POST https://api.timeproofs.io/api/verify \
-  -H "Content-Type: application/json" \
-  -d '{"hash":"&lt;SHA256_HEX&gt;"}'</code></pre>
-
-      <!-- Batch optionnel : supprimez si non supporté -->
-      <h3 id="verify-batch">Batch (optional)</h3>
-<pre><code>POST /api/verify
-Content-Type: application/json
-
-{ "hashes": ["&lt;HEX1&gt;","&lt;HEX2&gt;"] }</code></pre>
-<pre><code>// Response (same order)
-[
-  { "exists": true,  "valid": true,  "hash":"...","ts":1730793600000,"sig":"...","alg":"HMAC-SHA256","kid":"v1","issuer":"timeproofs.io" },
-  { "exists": false, "valid": false, "hash":"..." }
-]</code></pre>
-
-      <p class="muted">Public read. No token required. Caching: <code>GET /api/verify</code> may return <code>Cache-Control: public, max-age=60</code>.</p>
+      <p class="muted">Public read. No token required.</p>
     </section>
 
     <section class="card" id="models" aria-labelledby="models-title">
@@ -335,9 +326,9 @@ Content-Type: application/json
 <pre><code>// Timestamp response
 {
   "hash": "^[a-f0-9]{64}$",
-  "ts":   1730793600000,           // Unix epoch ms
+  "ts":   1730793600000,
   "sig":  "base64url(HMAC_SHA256('hash|ts', key))",
-  "meta": { ... }                  // optional, small, non-personal
+  "meta": { ... }
 }</code></pre>
 <pre><code>// Verify response
 {
@@ -366,16 +357,6 @@ Content-Type: application/json
           </tbody>
         </table>
       </div>
-
-      <h3 id="error-bodies">Error bodies</h3>
-<pre><code>// JSON envelope
-{
-  "error": {
-    "code": "INVALID_HASH",
-    "message": "hash must be 64 lowercase hex"
-  }
-}</code></pre>
-      <p class="muted">429 responses include <code>Retry-After: &lt;seconds&gt;</code>.</p>
     </section>
 
     <section class="card" id="sdk" aria-labelledby="sdk-title">
@@ -455,7 +436,7 @@ const sha256Hex = (buf) => createHash("sha256").update(buf).digest("hex");</code
     document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
     window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
 
-    // aria-current auto
+    // aria-current
     (function(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
       document.querySelectorAll('header nav a, footer .links a').forEach(a=>{
@@ -479,30 +460,27 @@ const sha256Hex = (buf) => createHash("sha256").update(buf).digest("hex");</code
       });
     })();
 
-    // Release manifest fill + duplicates
+    // Release manifest → section Page proof uniquement
     (async()=>{
       try{
         const r=await fetch('/releases/v0.1.json',{cache:'no-store'}); if(!r.ok) return;
         const map=await r.json(); const id=document.documentElement.dataset.page||'docs.html';
         const e=map[id] || map['/'] || map;
-        const elH1=document.getElementById('page-proof-hash');
-        const elL1=document.getElementById('page-proof-link');
-        const elH2=document.getElementById('page-proof-hash-dup');
-        const elL2=document.getElementById('page-proof-link-dup');
-        const elR =document.getElementById('page-proof-release');
-        const elR2=document.getElementById('page-proof-release-dup');
-        if(e.release){ elR && (elR.textContent=e.release); elR2 && (elR2.textContent=e.release); }
-        if(e.hash){ elH1 && (elH1.textContent=e.hash); elH2 && (elH2.textContent=e.hash); }
+        const elR=document.getElementById('page-proof-release-dup');
+        const elH=document.getElementById('page-proof-hash-dup');
+        const elL=document.getElementById('page-proof-link-dup');
+        if(e.release && elR) elR.textContent=e.release;
+        if(e.hash && elH) elH.textContent=e.hash;
         const url=e.verify || (e.hash ? ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(e.hash)) : '#');
-        if(url){ elL1 && (elL1.href=url); elL2 && (elL2.href=url); }
+        if(url && elL) elL.href=url;
       }catch{}
     })();
 
     // SW
     if('serviceWorker' in navigator){
-      navigator.serviceWorker.register('/sw.js', { type:'module', scope:'/' }).catch(()=>{});
+      navigator.serviceWorker.register('/sw.js?v=2', { type:'module', scope:'/' }).catch(()=>{});
     }
   })();
   </script>
 </body>
-</html>
+                                                                                                                                                                                                                                                                                                                      </html>
