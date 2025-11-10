@@ -162,10 +162,24 @@ upgrade-insecure-requests">
     .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
     .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; transition:transform .18s var(--e); color:#cfefff }
     .social a:hover{ transform:translateY(-2px) }
+
+    /* Mobile refinements: better tap targets and readability */
+    @media (max-width:899px){
+      .toc{ position:sticky; top:64px; z-index:5; background:#0c1424; padding:12px 10px; gap:10px; overflow:auto; -webkit-overflow-scrolling:touch }
+      .toc a{ padding:10px 12px; font-size:.95rem; line-height:1.2; border-radius:12px; touch-action:manipulation; -webkit-tap-highlight-color:rgba(255,255,255,.08) }
+      .card{ padding:20px; margin:16px 0 }
+      .card p, .card li{ line-height:1.75 }
+      pre{ padding:14px; font-size:.9rem }
+      table{ display:block; width:100%; overflow-x:auto; border-collapse:collapse }
+      th, td{ padding:.55rem .6rem }
+    }
+
+    /* Optional visual feedback when section is targeted */
+    :target{ outline:2px solid #22d3ee; outline-offset:4px; border-radius:10px }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
-  <body>
+<body>
   <a href="#main" class="skip">Skip to main content</a>
 
   <!-- Header -->
@@ -215,14 +229,13 @@ upgrade-insecure-requests">
     <a href="#checklist">Checklist</a>
     <a href="#versioning">Versioning</a>
     <a href="#page-proof">Page proof</a>
-    <a href="#top" style="padding:4px 10px">↑ Top</a>
+    <!-- Removed the Top chip per request -->
   </nav>
 
   <main id="main" role="main" class="wrap" aria-describedby="page-title">
-    <!-- Meta line -->
     <p class="meta">Spec: <strong>v0.1</strong> · Last updated: <strong>2025-11-07</strong> · See also: <a href="/docs.html">API Docs</a> · <a href="/security.html">Security</a></p>
 
-    <section class="card" id="overview">
+    <section class="card" id="overview" tabindex="-1">
       <h2>Overview</h2>
       <p>ProofSpec defines a minimal, interoperable tuple for proof of existence. Implementations MUST NOT upload original content. All verification steps are public and deterministic.</p>
       <ul>
@@ -232,7 +245,7 @@ upgrade-insecure-requests">
       </ul>
     </section>
 
-    <section class="card" id="canon">
+    <section class="card" id="canon" tabindex="-1">
       <h2>Canonicalization</h2>
       <ul>
         <li><code>hash</code> — 64 lowercase hex.</li>
@@ -242,7 +255,7 @@ upgrade-insecure-requests">
       </ul>
     </section>
 
-    <section class="card" id="model">
+    <section class="card" id="model" tabindex="-1">
       <h2>Data model</h2>
       <div class="table-wrap" role="region" aria-label="Fields">
         <table>
@@ -261,7 +274,7 @@ upgrade-insecure-requests">
       </div>
     </section>
 
-    <section class="card" id="format">
+    <section class="card" id="format" tabindex="-1">
       <h2>Proof format</h2>
 <pre><button class="copy-btn" aria-label="Copy">Copy</button><code>{
   "hash": "7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2",
@@ -277,7 +290,7 @@ upgrade-insecure-requests">
 <pre><button class="copy-btn" aria-label="Copy">Copy</button><code>message = `${hash}|${ts}`</code></pre>
     </section>
 
-    <section class="card" id="signing">
+    <section class="card" id="signing" tabindex="-1">
       <h2>Signing</h2>
       <ul>
         <li>Required: <code>HMAC-SHA256</code> using server secret scoped by <code>kid</code>.</li>
@@ -292,7 +305,7 @@ export function sign(hash, ts, secret){
 }</code></pre>
     </section>
 
-    <section class="card" id="validation">
+    <section class="card" id="validation" tabindex="-1">
       <h2>Validation</h2>
       <ul>
         <li>Reject non-lowercase or non-hex <code>hash</code>.</li>
@@ -302,7 +315,7 @@ export function sign(hash, ts, secret){
       </ul>
     </section>
 
-    <section class="card" id="json">
+    <section class="card" id="json" tabindex="-1">
       <h2>JSON schema</h2>
 <pre><button class="copy-btn" aria-label="Copy">Copy</button><code>{
   "$schema":"https://json-schema.org/draft/2020-12/schema",
@@ -322,7 +335,7 @@ export function sign(hash, ts, secret){
 }</code></pre>
     </section>
 
-    <section class="card" id="vectors">
+    <section class="card" id="vectors" tabindex="-1">
       <h2>Test vectors</h2>
 <pre><button class="copy-btn" aria-label="Copy">Copy</button><code>// Vector 1
 hash = sha256("hello") // 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
@@ -332,7 +345,7 @@ kid  = "v1"
 sig  = base64url(HMAC_SHA256(secret, `${hash}|${ts}`))</code></pre>
     </section>
 
-    <section class="card" id="verify">
+    <section class="card" id="verify" tabindex="-1">
       <h2>Verification</h2>
       <ol>
         <li>Validate input formats.</li>
@@ -353,17 +366,17 @@ ok = timingSafeEqual(sig, HMAC_SHA256(secret[kid], `${hash}|${ts}`))</code></pre
 }</code></pre>
     </section>
 
-    <section class="card" id="verify-url">
+    <section class="card" id="verify-url" tabindex="-1">
       <h2>Verify URL</h2>
       <p>MUST be stable and publicly accessible: <code>/api/verify?hash=&lt;SHA256_HEX&gt;</code>. No token required.</p>
     </section>
 
-    <section class="card" id="bundle">
+    <section class="card" id="bundle" tabindex="-1">
       <h2>Proof bundle</h2>
       <p>Recommended portable file: <code>.tproof.json</code> containing the proof tuple. Distribute alongside the asset.</p>
     </section>
 
-    <section class="card" id="reserved">
+    <section class="card" id="reserved" tabindex="-1">
       <h2>Reserved fields</h2>
       <ul>
         <li><code>kid</code> namespace values starting with <code>v</code> are reserved for issuer rotation.</li>
@@ -371,7 +384,7 @@ ok = timingSafeEqual(sig, HMAC_SHA256(secret[kid], `${hash}|${ts}`))</code></pre
       </ul>
     </section>
 
-    <section class="card" id="errors">
+    <section class="card" id="errors" tabindex="-1">
       <h2>Errors</h2>
       <div class="table-wrap" role="region" aria-label="Error codes">
         <table>
@@ -388,7 +401,7 @@ ok = timingSafeEqual(sig, HMAC_SHA256(secret[kid], `${hash}|${ts}`))</code></pre
       </div>
     </section>
 
-    <section class="card" id="ops">
+    <section class="card" id="ops" tabindex="-1">
       <h2>Operational policy</h2>
       <ul>
         <li>Hash-only boundary. No uploads of original content.</li>
@@ -399,7 +412,7 @@ ok = timingSafeEqual(sig, HMAC_SHA256(secret[kid], `${hash}|${ts}`))</code></pre
       </ul>
     </section>
 
-    <section class="card" id="checklist">
+    <section class="card" id="checklist" tabindex="-1">
       <h2>Checklist</h2>
       <ul>
         <li>Compute SHA-256 locally.</li>
@@ -409,7 +422,7 @@ ok = timingSafeEqual(sig, HMAC_SHA256(secret[kid], `${hash}|${ts}`))</code></pre
       </ul>
     </section>
 
-    <section class="card" id="versioning">
+    <section class="card" id="versioning" tabindex="-1">
       <h2>Versioning</h2>
       <ul>
         <li>Current spec: <strong>v0.1</strong>.</li>
@@ -418,7 +431,7 @@ ok = timingSafeEqual(sig, HMAC_SHA256(secret[kid], `${hash}|${ts}`))</code></pre
     </section>
 
     <!-- Page proof -->
-    <section id="page-proof" class="card" role="region" aria-labelledby="page-proof-title">
+    <section id="page-proof" class="card" role="region" aria-labelledby="page-proof-title" tabindex="-1">
       <h2 id="page-proof-title">This page is verified by TimeProofs</h2>
       <p>
         Release: <code id="page-proof-release">…</code> ·
@@ -503,6 +516,24 @@ ok = timingSafeEqual(sig, HMAC_SHA256(secret[kid], `${hash}|${ts}`))</code></pre
       });
     })();
 
+    // Robust in-page navigation on mobile (iOS Safari offset + focus)
+    (function(){
+      const OFFSET = 76; // header height + margin
+      document.querySelectorAll('.toc a[href^="#"]').forEach(a=>{
+        a.addEventListener('click', function(e){
+          const id = this.getAttribute('href').slice(1);
+          const t = document.getElementById(id);
+          if(!t) return;
+          e.preventDefault();
+          if(!t.hasAttribute('tabindex')) t.setAttribute('tabindex','-1');
+          t.focus({ preventScroll:true });
+          const y = t.getBoundingClientRect().top + window.pageYOffset - OFFSET;
+          window.scrollTo({ top:y, behavior:'smooth' });
+          history.replaceState(null,'','#'+id);
+        }, { passive:false });
+      });
+    })();
+
     // Release manifest fill (preuve en bas)
     (async()=>{
       try{
@@ -527,4 +558,3 @@ ok = timingSafeEqual(sig, HMAC_SHA256(secret[kid], `${hash}|${ts}`))</code></pre
   </script>
 </body>
 </html>
-
