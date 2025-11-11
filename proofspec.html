@@ -467,36 +467,50 @@ function verify({hash, ts, sig}, secret){
       });
     })();
 
-    // TOC: laisser la navigation native, smooth-scroll seulement si la cible existe
+    // TOC: fermer le menu mobile AVANT de scroller, puis scroller
     (function(){
       const toc=document.getElementById('toc');
       if(!toc) return;
       toc.querySelectorAll('a').forEach(a=>{
         a.addEventListener('click',(ev)=>{
           const href = a.getAttribute('href') || '';
-          if(!href.startsWith('#')) return; // autre page: laisser faire
+          if(!href.startsWith('#')) return; // autre page
 
           const id = (a.dataset.target || href.slice(1)).trim();
           const t  = document.getElementById(id);
-          if(!t) return; // pas de preventDefault si l’ID n’existe pas
+          if(!t) return; // laisser la navigation native si pas trouvé
 
           ev.preventDefault();
-          if(!t.hasAttribute('tabindex')) t.setAttribute('tabindex','-1');
-          t.focus({preventScroll:true});
-          t.scrollIntoView({behavior:'smooth', block:'start'});
-          history.replaceState(null,'','#'+id);
 
-          if(nav.getAttribute('data-state')==='open') closeMenu();
+          // 1) fermer le menu si ouvert pour retirer body{overflow:hidden}
+          let needScroll = true;
+          if(nav.getAttribute('data-state')==='open'){
+            closeMenu();
+            // forcer le reflow avant scroll sur Android/Chrome
+            needScroll = false;
+            setTimeout(()=>{
+              if(!t.hasAttribute('tabindex')) t.setAttribute('tabindex','-1');
+              t.focus({preventScroll:true});
+              t.scrollIntoView({behavior:'smooth', block:'start'});
+              history.replaceState(null,'','#'+id);
+            },0);
+          }
+          if(needScroll){
+            if(!t.hasAttribute('tabindex')) t.setAttribute('tabindex','-1');
+            t.focus({preventScroll:true});
+            t.scrollIntoView({behavior:'smooth', block:'start'});
+            history.replaceState(null,'','#'+id);
+          }
         }, {passive:false});
       });
 
-      // Si on arrive avec un hash, assurer le scroll après paint
+      // Hash direct à l’arrivée
       window.addEventListener('load', ()=>{
         if(!location.hash) return;
-        const id = location.hash.slice(1);
+        const id = decodeURIComponent(location.hash.slice(1));
         const t  = document.getElementById(id);
         if(!t) return;
-        requestAnimationFrame(()=> t.scrollIntoView({behavior:'auto', block:'start'}));
+        setTimeout(()=> t.scrollIntoView({behavior:'auto', block:'start'}), 0);
       }, {once:true});
     })();
 
@@ -526,4 +540,4 @@ function verify({hash, ts, sig}, secret){
   })();
   </script>
 </body>
-</html>
+        </html>
