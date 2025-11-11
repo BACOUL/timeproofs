@@ -460,26 +460,60 @@ function verify({hash, ts, sig}, secret){
       });
     })();
 
-    // Sommaire: scroll fiable sur mobile (data-target)
+    // Sommaire: version finale robuste
     (function(){
-      const toc=document.getElementById('toc');
-      if(!toc) return;
-      toc.querySelectorAll('a[href^="#"]').forEach(a=>{
-        a.addEventListener('click',(ev)=>{
-          const targetId = a.dataset.target || (a.hash ? a.hash.slice(1) : '');
-          const target = targetId ? document.getElementById(targetId) : null;
-          if(!target) return;
-          ev.preventDefault();
-          // correctif: fermer le menu pour retirer overflow:hidden
-          closeMenu();
-          if(!target.hasAttribute('tabindex')) target.setAttribute('tabindex','-1');
-          target.focus({preventScroll:true});
-          requestAnimationFrame(()=>{
-            target.scrollIntoView({behavior:'smooth', block:'start'});
-            history.replaceState(null,'','#'+targetId);
-          });
-        },{passive:false});
-      });
+      const hdr  = document.getElementById('hdr');
+      const nav  = document.getElementById('tp-nav');
+      const burger = document.getElementById('tp-burger');
+
+      function closeTocMenu(){
+        if(!nav) return;
+        nav.setAttribute('data-state','closed');
+        if(burger) burger.setAttribute('aria-expanded','false');
+        document.body.style.overflow='';
+      }
+
+      function scrollToId(id){
+        const el = document.getElementById(id);
+        if(!el) return;
+        const headerH = hdr ? hdr.offsetHeight : 0;
+        const extra   = window.matchMedia('(max-width: 899px)').matches ? 48 : 32;
+        const y = Math.max(0, window.scrollY + el.getBoundingClientRect().top - headerH - extra);
+        const root = document.documentElement;
+        const prev = root.style.scrollBehavior;
+        root.style.scrollBehavior='auto';
+        window.scrollTo({ top:y, behavior:'smooth' });
+        root.style.scrollBehavior=prev;
+        if(!el.hasAttribute('tabindex')) el.setAttribute('tabindex','-1');
+        el.focus({ preventScroll:true });
+      }
+
+      function bindToc(container){
+        if(!container) return;
+        container.querySelectorAll('a[href^="#"]').forEach(a=>{
+          a.addEventListener('click',(ev)=>{
+            const id=(a.dataset.target||a.hash||'').replace(/^#/,'');
+            if(!id) return;
+            ev.preventDefault();
+            closeTocMenu();
+            requestAnimationFrame(()=>{
+              scrollToId(id);
+              history.replaceState(null,'','#'+id);
+            });
+          },{passive:false});
+        });
+      }
+
+      document.querySelectorAll('nav.toc').forEach(bindToc);
+
+      function handleHash(){
+        const id=location.hash.replace(/^#/,'');
+        if(!id) return;
+        closeTocMenu();
+        setTimeout(()=>scrollToId(id),0);
+      }
+      window.addEventListener('hashchange',handleHash,{passive:true});
+      if(location.hash) setTimeout(handleHash,0);
     })();
 
     // Release manifest fill
@@ -508,4 +542,4 @@ function verify({hash, ts, sig}, secret){
   })();
   </script>
 </body>
-</html>
+                    </html>
