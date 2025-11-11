@@ -49,7 +49,7 @@
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- Security meta -->
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation="()">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 
   <!-- CSP v0.1 -->
   <meta http-equiv="Content-Security-Policy" content="
@@ -77,7 +77,10 @@ upgrade-insecure-requests">
     }
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); scroll-behavior:smooth }
-    html{ scroll-padding-top:84px } /* offset fixe pour ancres */
+    /* offset fixe pour ancres */
+    html{ scroll-padding-top:96px }
+    @media (max-width:899px){ html{ scroll-padding-top:112px } }
+
     body{
       margin:0; color:var(--text);
       font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
@@ -91,7 +94,10 @@ upgrade-insecure-requests">
     a:hover{ text-decoration:underline }
     .tp-nav a, footer .links a { text-underline-offset:3px }
     .tp-nav a:hover, footer .links a:hover { text-decoration:underline }
-    [id]{ scroll-margin-top:84px }
+
+    /* assurer le décalage sur chaque cible */
+    [id]{ scroll-margin-top:112px }
+    @media (min-width:900px){ [id]{ scroll-margin-top:96px } }
 
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
     .skip:focus{ position:fixed; left:12px; top:12px; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
@@ -217,7 +223,7 @@ upgrade-insecure-requests">
     </section>
 
     <!-- TOC -->
-    <nav class="toc" aria-label="Contents">
+    <nav class="toc" aria-label="Contents" id="toc">
       <a href="#overview">Overview</a>
       <a href="#canonicalization">Canonicalization</a>
       <a href="#datamodel">Data model</a>
@@ -430,7 +436,7 @@ function verify({hash, ts, sig}, secret){
     function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
     function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
     function toggleMenu(){ (nav.getAttribute('data-state')==='open')?closeMenu():openMenu(); }
-    burger.addEventListener('click', toggleMenu, { passive:true });
+    burger&&burger.addEventListener('click', toggleMenu, { passive:true });
     document.addEventListener('click', (e)=>{ if(window.matchMedia('(min-width: 900px)').matches) return; if(!e.target.closest('.tp-header')&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
     document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
     window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
@@ -441,6 +447,27 @@ function verify({hash, ts, sig}, secret){
       document.querySelectorAll('header nav a, footer .links a').forEach(a=>{
         const path=new URL(a.getAttribute('href'), location.origin).pathname;
         if(path===here) a.setAttribute('aria-current','page');
+      });
+    })();
+
+    // Sommaire: scroll fiable sur mobile
+    (function(){
+      const toc=document.getElementById('toc');
+      if(!toc) return;
+      toc.querySelectorAll('a[href^="#"]').forEach(a=>{
+        a.addEventListener('click', (ev)=>{
+          const hash=a.getAttribute('href');
+          if(!hash || hash.length<2) return;
+          const id=hash.slice(1);
+          const target=document.getElementById(id);
+          if(!target) return;
+          ev.preventDefault();
+          // focus pour accessibilité puis scroll
+          if(!target.hasAttribute('tabindex')) target.setAttribute('tabindex','-1');
+          target.focus({preventScroll:true});
+          target.scrollIntoView({behavior:'smooth', block:'start'});
+          history.replaceState(null, '', '#'+id);
+        }, { passive:false });
       });
     })();
 
@@ -470,4 +497,4 @@ function verify({hash, ts, sig}, secret){
   })();
   </script>
 </body>
-</html>
+      </html>
