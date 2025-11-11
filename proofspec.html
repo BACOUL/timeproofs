@@ -49,7 +49,7 @@
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- Security meta -->
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation="()">
 
   <!-- CSP v0.1 -->
   <meta http-equiv="Content-Security-Policy" content="
@@ -69,7 +69,7 @@ upgrade-insecure-requests">
   <!-- Analytics -->
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
-  <!-- Styles -->
+  <!-- Styles (alignés sur index.html) -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
@@ -77,6 +77,7 @@ upgrade-insecure-requests">
     }
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); scroll-behavior:smooth }
+    html{ scroll-padding-top:84px } /* offset fixe pour ancres */
     body{
       margin:0; color:var(--text);
       font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
@@ -95,7 +96,7 @@ upgrade-insecure-requests">
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
     .skip:focus{ position:fixed; left:12px; top:12px; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
 
-    /* Header */
+    /* Header identique */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
@@ -139,7 +140,7 @@ upgrade-insecure-requests">
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* HERO */
+    /* HERO compact */
     .hero{
       padding-top:96px; padding-bottom:18px; text-align:center; position:relative; border-bottom:1px solid var(--line)
     }
@@ -151,16 +152,9 @@ upgrade-insecure-requests">
     .hero .lead{ color:var(--muted); max-width:900px; margin:0 auto 12px; line-height:1.7 }
     .badge{ display:inline-block; margin-top:6px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem }
 
-    /* TOC = même rendu “pills” que la capture */
-    nav.toc{
-      display:flex; flex-wrap:wrap; gap:8px; justify-content:center;
-      padding:14px 20px; border-bottom:1px solid var(--line)
-    }
-    nav.toc a{
-      display:inline-block; padding:6px 10px;
-      border:1px solid #214a57; background:#0d2330; color:#bff1ff;
-      border-radius:999px; font-size:.9rem; text-decoration:none
-    }
+    /* TOC pills */
+    nav.toc{ display:flex; flex-wrap:wrap; gap:12px; margin:14px auto 0; padding:12px 0 14px; max-width:1100px; border-bottom:1px solid var(--line) }
+    nav.toc a{ display:inline-block; background:#0d2330; border:1px solid #214a57; padding:8px 12px; border-radius:999px; color:#bff1ff; text-decoration:none; font-size:.9rem }
     nav.toc a:hover{ text-decoration:underline }
 
     /* Content */
@@ -192,7 +186,7 @@ upgrade-insecure-requests">
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
-  <!-- Header -->
+  <!-- Header identique à index -->
   <header class="tp-header" id="hdr" role="banner">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
@@ -241,7 +235,6 @@ upgrade-insecure-requests">
       <a href="#checklist">Checklist</a>
       <a href="#versioning">Versioning</a>
       <a href="#page-proof-sec">Page proof</a>
-      <a href="#top" style="padding:6px 12px">↑ Top</a>
     </nav>
 
     <!-- Content sections -->
@@ -415,9 +408,7 @@ function verify({hash, ts, sig}, secret){
       </a>
       <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on YouTube">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path fill="currentColor" d="M23.498 6.186a3.001 3.001 0 0 0-2.113-2.123C19.8 3.5 12 3.5 12 3.5s-7.8 0 -9.385.563A3.001 3.001 0 0 0 .502 6.186C0 7.778 0 12 0 12s0 4.222.502 5.814a3.001 3.001 0 0 0 2.113 2.123C24 16.222 24 12 24 12s0-4.222-.502-5.814Z"/>
-          <path fill="#000" fill-opacity=".0" d="M0 0h24v24H0z"/>
-          <path fill="#fff" d="M9.75 15.02V8.98L15.5 12l-5.75 3.02Z"/>
+          <path fill="currentColor" d="M23.498 6.186a3.001 3.001 0 0 0-2.113-2.123C19.8 3.5 12 3.5 12 3.5s-7.8 0-9.385.563A3.001 3.001 0 0 0 .502 6.186C0 7.778 0 12 0 12s0 3.965.502 5.814c.142 1.062 1.12 1.897 2.33 2.006C5.152 20.1 12 20.1 12 20.1s6.848 0 9.168-.28c1.21-.109 2.188-.944 2.33-2.006.252-1.849.252-5.814.252-5.814s0-3.965-.252-5.814ZM9.8 15.5v-7l6.2 3.5-6.2 3.5Z"/>
         </svg>
       </a>
       <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS">
@@ -429,10 +420,12 @@ function verify({hash, ts, sig}, secret){
   <!-- Scripts -->
   <script defer nonce="TP-2025">
   (function(){
+    // Header shade
     const hdr=document.getElementById('hdr');
     function onScroll(){ if(window.scrollY>6) hdr.classList.add('scrolled'); else hdr.classList.remove('scrolled'); }
     onScroll(); window.addEventListener('scroll', onScroll, { passive:true });
 
+    // Burger identique
     const burger=document.getElementById('tp-burger'); const nav=document.getElementById('tp-nav');
     function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
     function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
@@ -442,7 +435,7 @@ function verify({hash, ts, sig}, secret){
     document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
     window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
 
-    // aria-current
+    // Auto aria-current
     (function(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
       document.querySelectorAll('header nav a, footer .links a').forEach(a=>{
