@@ -444,6 +444,29 @@ function verify({hash, ts, sig}, secret){
       });
     })();
 
+    // Ensure sections are focusable targets for reliable anchor navigation
+    (function(){
+      document.querySelectorAll('main section.card[id]').forEach(s=>{ if(!s.hasAttribute('tabindex')) s.setAttribute('tabindex','-1'); });
+    })();
+
+    // Sommaire fiable desktop/mobile : scroll + focus + hash + fermeture menu
+    (function(){
+      const toc = document.querySelector('nav.toc');
+      if(!toc) return;
+      toc.addEventListener('click', function(e){
+        const a = e.target.closest('a[href^="#"]');
+        if(!a) return;
+        const sel = a.getAttribute('href');
+        const target = document.querySelector(sel);
+        if(!target) return;
+        e.preventDefault();
+        if(nav.getAttribute('data-state')==='open') burger?.click(); // ferme l’overlay mobile
+        target.scrollIntoView({ behavior:'smooth', block:'start' });
+        target.focus({ preventScroll:true });                         // fiabilise iOS
+        history.pushState(null, '', sel);                             // met à jour le hash
+      }, { passive:false });
+    })();
+
     // Release manifest fill
     (async()=>{
       try{
@@ -470,4 +493,4 @@ function verify({hash, ts, sig}, secret){
   })();
   </script>
 </body>
-        </html>
+  </html>
