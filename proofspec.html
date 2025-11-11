@@ -77,8 +77,6 @@ upgrade-insecure-requests">
     }
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); scroll-behavior:smooth }
-    /* AJOUT: offset global pour ancres sous header fixe */
-    html{ scroll-padding-top:84px }
     body{
       margin:0; color:var(--text);
       font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
@@ -92,7 +90,7 @@ upgrade-insecure-requests">
     a:hover{ text-decoration:underline }
     .tp-nav a, footer .links a { text-underline-offset:3px }
     .tp-nav a:hover, footer .links a:hover { text-decoration:underline }
-    [id]{ scroll-margin-top:84px } /* existant, conservé */
+    [id]{ scroll-margin-top:84px } /* ancres TOC visibles sous header */
 
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
     .skip:focus{ position:fixed; left:12px; top:12px; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
@@ -434,29 +432,7 @@ function verify({hash, ts, sig}, secret){
     function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
     function toggleMenu(){ (nav.getAttribute('data-state')==='open')?closeMenu():openMenu(); }
     burger.addEventListener('click', toggleMenu, { passive:true });
-
-    // REMPLACE: écouteur global pour ne pas intercepter les ancres
-    document.addEventListener('click', (e)=>{
-      const anchor = e.target.closest('a[href^="#"]');
-      if (anchor) {
-        if (!window.matchMedia('(min-width: 900px)').matches &&
-            nav.getAttribute('data-state')==='open') {
-          const id = anchor.getAttribute('href').slice(1);
-          closeMenu();
-          requestAnimationFrame(()=>{
-            const target = document.getElementById(id);
-            if (target) target.scrollIntoView({ behavior:'smooth', block:'start' });
-          });
-        }
-        return; // laisser le navigateur gérer l'ancre
-      }
-      if (!window.matchMedia('(min-width: 900px)').matches &&
-          !e.target.closest('.tp-header') &&
-          nav.getAttribute('data-state')==='open') {
-        closeMenu();
-      }
-    }, { passive:true });
-
+    document.addEventListener('click', (e)=>{ if(window.matchMedia('(min-width: 900px)').matches) return; if(!e.target.closest('.tp-header')&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
     document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
     window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
 
@@ -495,4 +471,4 @@ function verify({hash, ts, sig}, secret){
   })();
   </script>
 </body>
-</html>
+                     </html>
