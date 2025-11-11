@@ -48,7 +48,7 @@
   <meta name="twitter:description" content="Open, privacy-first spec for proof of existence."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
-  <!-- Security meta (fix) -->
+  <!-- Security meta -->
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 
   <!-- CSP v0.1 -->
@@ -77,7 +77,7 @@ upgrade-insecure-requests">
     }
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); scroll-behavior:smooth }
-    html{ scroll-padding-top:84px }
+    html{ scroll-padding-top:84px } /* offset fixe pour ancres */
     body{
       margin:0; color:var(--text);
       font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
@@ -238,9 +238,9 @@ upgrade-insecure-requests">
     </nav>
 
     <!-- Content sections -->
-    <section class="card" id="overview"><h2>Overview</h2><p>Hash locally → get a signed timestamped proof → anyone can verify later without your data.</p></section>
+    <section class="card" id="overview" tabindex="-1"><h2>Overview</h2><p>Hash locally → get a signed timestamped proof → anyone can verify later without your data.</p></section>
 
-    <section class="card" id="canonicalization">
+    <section class="card" id="canonicalization" tabindex="-1">
       <h2>Canonicalization</h2>
       <ul>
         <li>Bytes-in, bytes-out. Hash exact bytes.</li>
@@ -249,7 +249,7 @@ upgrade-insecure-requests">
       </ul>
     </section>
 
-    <section class="card" id="datamodel">
+    <section class="card" id="datamodel" tabindex="-1">
       <h2>Data model</h2>
       <div class="table-wrap">
         <table>
@@ -268,7 +268,7 @@ upgrade-insecure-requests">
       </div>
     </section>
 
-    <section class="card" id="proofformat">
+    <section class="card" id="proofformat" tabindex="-1">
       <h2>Proof format</h2>
 <pre><code>{
   "hash":"&lt;64-hex&gt;",
@@ -281,7 +281,7 @@ upgrade-insecure-requests">
 }</code></pre>
     </section>
 
-    <section class="card" id="signing">
+    <section class="card" id="signing" tabindex="-1">
       <h2>Signing</h2>
 <pre><code>// Node.js HMAC verify
 import crypto from "node:crypto";
@@ -292,7 +292,7 @@ function verify({hash, ts, sig}, secret){
 }</code></pre>
     </section>
 
-    <section class="card" id="validation">
+    <section class="card" id="validation" tabindex="-1">
       <h2>Validation</h2>
       <ul>
         <li>Hash is 64 hex.</li>
@@ -301,7 +301,7 @@ function verify({hash, ts, sig}, secret){
       </ul>
     </section>
 
-    <section class="card" id="schema">
+    <section class="card" id="schema" tabindex="-1">
       <h2>JSON schema</h2>
 <pre><code>{
   "$schema":"https://json-schema.org/draft/2020-12/schema",
@@ -320,55 +320,55 @@ function verify({hash, ts, sig}, secret){
 }</code></pre>
     </section>
 
-    <section class="card" id="vectors">
+    <section class="card" id="vectors" tabindex="-1">
       <h2>Test vectors</h2>
 <pre><code>// sha256("TimeProofs")
 7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2</code></pre>
     </section>
 
-    <section class="card" id="verification">
+    <section class="card" id="verification" tabindex="-1">
       <h2>Verification</h2>
 <pre><code>GET /api/verify?hash=&lt;64-hex&gt;
 → {"ok":true,"valid":true,"timestamp":"..."}</code></pre>
     </section>
 
-    <section class="card" id="verifyurl">
+    <section class="card" id="verifyurl" tabindex="-1">
       <h2>Verify URL</h2>
       <p>Stable endpoint that returns JSON status for the given hash. Link included in the proof JSON.</p>
     </section>
 
-    <section class="card" id="bundle">
+    <section class="card" id="bundle" tabindex="-1">
       <h2>Proof bundle</h2>
       <p>Ship artifacts with their <code>.tproof.json</code> or embed only the verify link.</p>
     </section>
 
-    <section class="card" id="reserved">
+    <section class="card" id="reserved" tabindex="-1">
       <h2>Reserved fields</h2>
       <p>Names starting with <code>_tp_</code> are reserved for the spec.</p>
     </section>
 
-    <section class="card" id="errors">
+    <section class="card" id="errors" tabindex="-1">
       <h2>Errors</h2>
 <pre><code>{"ok":false,"error":"invalid_hash"}</code></pre>
     </section>
 
-    <section class="card" id="policy">
+    <section class="card" id="policy" tabindex="-1">
       <h2>Operational policy</h2>
       <ul><li>Minimal logs</li><li>Rate limits</li><li>Key rotation with <code>kid</code></li></ul>
     </section>
 
-    <section class="card" id="checklist">
+    <section class="card" id="checklist" tabindex="-1">
       <h2>Checklist</h2>
       <ul><li>Hash locally</li><li>Keep proof JSON</li><li>Verify URL present</li></ul>
     </section>
 
-    <section class="card" id="versioning">
+    <section class="card" id="versioning" tabindex="-1">
       <h2>Versioning</h2>
       <p>Spec v0.1. Additive changes when possible. Breaking changes bump major.</p>
     </section>
 
     <!-- Page proof -->
-    <section class="card" id="page-proof-sec" aria-labelledby="pp-title">
+    <section class="card" id="page-proof-sec" tabindex="-1" aria-labelledby="pp-title">
       <h2 id="pp-title">This page is verified by TimeProofs</h2>
       <p>Release: <code id="page-proof-release"></code> · Hash: <code id="page-proof-hash-dup"></code> ·
         <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener">Verify</a></p>
@@ -444,32 +444,6 @@ function verify({hash, ts, sig}, secret){
       });
     })();
 
-    // Ensure sections are focusable targets for reliable anchor navigation
-    (function(){
-      document.querySelectorAll('main section.card[id]').forEach(s=>{ if(!s.hasAttribute('tabindex')) s.setAttribute('tabindex','-1'); });
-    })();
-
-    // Robust TOC navigation (mobile-friendly)
-    (function(){
-      const toc = document.querySelector('nav.toc');
-      if(!toc) return;
-      toc.addEventListener('click', function(e){
-        const a = e.target.closest('a[href^="#"]');
-        if(!a) return;
-        const id = a.getAttribute('href');
-        const target = document.querySelector(id);
-        if(!target) return;
-        e.preventDefault();
-        // Close mobile menu if open
-        if(nav.getAttribute('data-state')==='open') closeMenu();
-        // Scroll and focus
-        target.scrollIntoView({ behavior:'smooth', block:'start' });
-        target.focus({ preventScroll:true });
-        // Update hash without full jump
-        history.pushState(null, '', id);
-      }, { passive:false });
-    })();
-
     // Release manifest fill
     (async()=>{
       try{
@@ -496,4 +470,4 @@ function verify({hash, ts, sig}, secret){
   })();
   </script>
 </body>
-  </html>
+        </html>
