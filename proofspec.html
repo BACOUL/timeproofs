@@ -220,29 +220,31 @@ upgrade-insecure-requests">
 
     <!-- TOC -->
     <nav class="toc" aria-label="Contents" id="toc">
-      <a href="#overview" data-target="overview">Overview</a>
-      <a href="#canonicalization" data-target="canonicalization">Canonicalization</a>
-      <a href="#datamodel" data-target="datamodel">Data model</a>
-      <a href="#proofformat" data-target="proofformat">Proof format</a>
-      <a href="#signing" data-target="signing">Signing</a>
-      <a href="#validation" data-target="validation">Validation</a>
-      <a href="#schema" data-target="schema">JSON schema</a>
-      <a href="#vectors" data-target="vectors">Test vectors</a>
-      <a href="#verification" data-target="verification">Verification</a>
-      <a href="#verifyurl" data-target="verifyurl">Verify URL</a>
-      <a href="#bundle" data-target="bundle">Proof bundle</a>
-      <a href="#reserved" data-target="reserved">Reserved fields</a>
-      <a href="#errors" data-target="errors">Errors</a>
-      <a href="#policy" data-target="policy">Operational policy</a>
-      <a href="#checklist" data-target="checklist">Checklist</a>
-      <a href="#versioning" data-target="versioning">Versioning</a>
-      <a href="#page-proof-sec" data-target="page-proof-sec">Page proof</a>
+      <a href="#a-overview"          >Overview</a>
+      <a href="#a-canonicalization"  >Canonicalization</a>
+      <a href="#a-datamodel"         >Data model</a>
+      <a href="#a-proofformat"       >Proof format</a>
+      <a href="#a-signing"           >Signing</a>
+      <a href="#a-validation"        >Validation</a>
+      <a href="#a-schema"            >JSON schema</a>
+      <a href="#a-vectors"           >Test vectors</a>
+      <a href="#a-verification"      >Verification</a>
+      <a href="#a-verifyurl"         >Verify URL</a>
+      <a href="#a-bundle"            >Proof bundle</a>
+      <a href="#a-reserved"          >Reserved fields</a>
+      <a href="#a-errors"            >Errors</a>
+      <a href="#a-policy"            >Operational policy</a>
+      <a href="#a-checklist"         >Checklist</a>
+      <a href="#a-versioning"        >Versioning</a>
+      <a href="#a-page-proof-sec"    >Page proof</a>
     </nav>
 
     <!-- Content sections -->
+    <span id="a-overview" aria-hidden="true"></span>
     <section class="card" id="overview"><h2>Overview</h2><p>Hash locally → get a signed timestamped proof → anyone can verify later without your data.</p></section>
 
     <!-- Canonicalization (+ alias) -->
+    <span id="a-canonicalization" aria-hidden="true"></span>
     <span id="cannolization" aria-hidden="true"></span>
     <section class="card" id="canonicalization">
       <h2>Canonicalization</h2>
@@ -253,6 +255,7 @@ upgrade-insecure-requests">
       </ul>
     </section>
 
+    <span id="a-datamodel" aria-hidden="true"></span>
     <section class="card" id="datamodel">
       <h2>Data model</h2>
       <div class="table-wrap">
@@ -272,6 +275,7 @@ upgrade-insecure-requests">
       </div>
     </section>
 
+    <span id="a-proofformat" aria-hidden="true"></span>
     <section class="card" id="proofformat">
       <h2>Proof format</h2>
 <pre><code>{
@@ -285,6 +289,7 @@ upgrade-insecure-requests">
 }</code></pre>
     </section>
 
+    <span id="a-signing" aria-hidden="true"></span>
     <section class="card" id="signing">
       <h2>Signing</h2>
 <pre><code>// Node.js HMAC verify
@@ -296,6 +301,7 @@ function verify({hash, ts, sig}, secret){
 }</code></pre>
     </section>
 
+    <span id="a-validation" aria-hidden="true"></span>
     <section class="card" id="validation">
       <h2>Validation</h2>
       <ul>
@@ -306,6 +312,7 @@ function verify({hash, ts, sig}, secret){
     </section>
 
     <!-- JSON schema (+ alias) -->
+    <span id="a-schema" aria-hidden="true"></span>
     <span id="json-shema" aria-hidden="true"></span>
     <span id="jsonschema" aria-hidden="true"></span>
     <section class="card" id="schema">
@@ -327,12 +334,14 @@ function verify({hash, ts, sig}, secret){
 }</code></pre>
     </section>
 
+    <span id="a-vectors" aria-hidden="true"></span>
     <section class="card" id="vectors">
       <h2>Test vectors</h2>
 <pre><code>// sha256("TimeProofs")
 7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2</code></pre>
     </section>
 
+    <span id="a-verification" aria-hidden="true"></span>
     <section class="card" id="verification">
       <h2>Verification</h2>
 <pre><code>GET /api/verify?hash=&lt;64-hex&gt;
@@ -340,18 +349,21 @@ function verify({hash, ts, sig}, secret){
     </section>
 
     <!-- Verify URL (+ alias) -->
+    <span id="a-verifyurl" aria-hidden="true"></span>
     <span id="verify-url" aria-hidden="true"></span>
     <section class="card" id="verifyurl">
       <h2>Verify URL</h2>
       <p>Stable endpoint that returns JSON status for the given hash. Link included in the proof JSON.</p>
     </section>
 
+    <span id="a-bundle" aria-hidden="true"></span>
     <section class="card" id="bundle">
       <h2>Proof bundle</h2>
       <p>Ship artifacts with their <code>.tproof.json</code> or embed only the verify link.</p>
     </section>
 
     <!-- Reserved fields (+ alias) -->
+    <span id="a-reserved" aria-hidden="true"></span>
     <span id="reserved-field" aria-hidden="true"></span>
     <span id="reseverd-field" aria-hidden="true"></span>
     <section class="card" id="reserved">
@@ -359,29 +371,34 @@ function verify({hash, ts, sig}, secret){
       <p>Names starting with <code>_tp_</code> are reserved for the spec.</p>
     </section>
 
+    <span id="a-errors" aria-hidden="true"></span>
     <section class="card" id="errors">
       <h2>Errors</h2>
 <pre><code>{"ok":false,"error":"invalid_hash"}</code></pre>
     </section>
 
+    <span id="a-policy" aria-hidden="true"></span>
     <section class="card" id="policy">
       <h2>Operational policy</h2>
       <ul><li>Minimal logs</li><li>Rate limits</li><li>Key rotation with <code>kid</code></li></ul>
     </section>
 
     <!-- Checklist (+ alias) -->
+    <span id="a-checklist" aria-hidden="true"></span>
     <span id="check-list" aria-hidden="true"></span>
     <section class="card" id="checklist">
       <h2>Checklist</h2>
       <ul><li>Hash locally</li><li>Keep proof JSON</li><li>Verify URL present</li></ul>
     </section>
 
+    <span id="a-versioning" aria-hidden="true"></span>
     <section class="card" id="versioning">
       <h2>Versioning</h2>
       <p>Spec v0.1. Additive changes when possible. Breaking changes bump major.</p>
     </section>
 
     <!-- Page proof (+ alias) -->
+    <span id="a-page-proof-sec" aria-hidden="true"></span>
     <span id="page-proof" aria-hidden="true"></span>
     <span id="pageproof" aria-hidden="true"></span>
     <section class="card" id="page-proof-sec" aria-labelledby="pp-title">
@@ -465,7 +482,6 @@ function verify({hash, ts, sig}, secret){
       document.querySelectorAll('nav.toc a[href^="#"]').forEach(a=>{
         a.addEventListener('click', ()=>{ closeMenu(); }, { passive:true });
       });
-      // si la page s’ouvre avec un hash, rien à faire: scroll natif + CSS offset
     })();
 
     // Release manifest fill
