@@ -467,69 +467,37 @@ function verify({hash, ts, sig}, secret){
       });
     })();
 
-    // TOC click: scroll doux + fermeture menu mobile
+    // TOC: laisser la navigation native, smooth-scroll seulement si la cible existe
     (function(){
       const toc=document.getElementById('toc');
       if(!toc) return;
-      toc.querySelectorAll('a[href^="#"]').forEach(a=>{
+      toc.querySelectorAll('a').forEach(a=>{
         a.addEventListener('click',(ev)=>{
-          const id=a.dataset.target || (a.hash ? a.hash.slice(1) : '');
-          const t=document.getElementById(id);
-          if(!t) return; // la résolution d’alias gère le reste
+          const href = a.getAttribute('href') || '';
+          if(!href.startsWith('#')) return; // autre page: laisser faire
+
+          const id = (a.dataset.target || href.slice(1)).trim();
+          const t  = document.getElementById(id);
+          if(!t) return; // pas de preventDefault si l’ID n’existe pas
+
           ev.preventDefault();
           if(!t.hasAttribute('tabindex')) t.setAttribute('tabindex','-1');
           t.focus({preventScroll:true});
           t.scrollIntoView({behavior:'smooth', block:'start'});
           history.replaceState(null,'','#'+id);
+
           if(nav.getAttribute('data-state')==='open') closeMenu();
-        },{passive:false});
+        }, {passive:false});
       });
-    })();
 
-    // Résolution d’ancres: corrige fautes/variantes et scrolle
-    (function(){
-      const aliasMap = new Map([
-        // canonicalization
-        ['cannolization','canonicalization'],['cannonalization','canonicalization'],
-        // schema
-        ['json-shema','schema'],['json%20shema','schema'],['json shema','schema'],['jsonschema','schema'],
-        // verify url
-        ['verify-url','verifyurl'],['verify%20url','verifyurl'],['verify url','verifyurl'],
-        // reserved fields
-        ['reserved-field','reserved'],['reseverd-field','reserved'],['reserved%20field','reserved'],['reserved field','reserved'],
-        // checklist
-        ['check-list','checklist'],['check%20list','checklist'],['check list','checklist'],['chexklist','checklist'],
-        // page proof
-        ['page-proof','page-proof-sec'],['pageproof','page-proof-sec'],['page%20proof','page-proof-sec'],['page proof','page-proof-sec']
-      ]);
-
-      function normalizeHash(raw){
-        if(!raw) return '';
-        const h = raw.replace(/^#/,'').trim();
-        const key = h.toLowerCase();
-        return aliasMap.get(key) || h;
-      }
-
-      async function goTo(hash){
-        const id = normalizeHash(hash);
-        let el = document.getElementById(id);
-        if(!el){
-          // tente aussi l’ID brut si alias inexistant
-          el = document.getElementById(hash.replace(/^#/,''));
-        }
-        if(!el) return;
-        if(!el.hasAttribute('tabindex')) el.setAttribute('tabindex','-1');
-        el.focus({preventScroll:true});
-        el.scrollIntoView({behavior:'smooth', block:'start'});
-        const final = '#'+id;
-        if(location.hash !== final) history.replaceState(null,'',final);
-      }
-
-      // Au chargement si un hash est présent
-      if(location.hash){ goTo(location.hash); }
-
-      // À chaque changement de hash
-      window.addEventListener('hashchange', ()=>{ goTo(location.hash); }, {passive:true});
+      // Si on arrive avec un hash, assurer le scroll après paint
+      window.addEventListener('load', ()=>{
+        if(!location.hash) return;
+        const id = location.hash.slice(1);
+        const t  = document.getElementById(id);
+        if(!t) return;
+        requestAnimationFrame(()=> t.scrollIntoView({behavior:'auto', block:'start'}));
+      }, {once:true});
     })();
 
     // Release manifest fill
@@ -558,4 +526,4 @@ function verify({hash, ts, sig}, secret){
   })();
   </script>
 </body>
-            </html>
+</html>
