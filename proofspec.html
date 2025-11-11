@@ -220,23 +220,23 @@ upgrade-insecure-requests">
 
     <!-- TOC -->
     <nav class="toc" aria-label="Contents" id="toc">
-      <a href="/proofspec.html#overview"        data-target="overview">Overview</a>
-      <a href="/proofspec.html#canonicalization" data-target="canonicalization">Canonicalization</a>
-      <a href="/proofspec.html#datamodel"       data-target="datamodel">Data model</a>
-      <a href="/proofspec.html#proofformat"     data-target="proofformat">Proof format</a>
-      <a href="/proofspec.html#signing"         data-target="signing">Signing</a>
-      <a href="/proofspec.html#validation"      data-target="validation">Validation</a>
-      <a href="/proofspec.html#schema"          data-target="schema">JSON schema</a>
-      <a href="/proofspec.html#vectors"         data-target="vectors">Test vectors</a>
-      <a href="/proofspec.html#verification"    data-target="verification">Verification</a>
-      <a href="/proofspec.html#verifyurl"       data-target="verifyurl">Verify URL</a>
-      <a href="/proofspec.html#bundle"          data-target="bundle">Proof bundle</a>
-      <a href="/proofspec.html#reserved"        data-target="reserved">Reserved fields</a>
-      <a href="/proofspec.html#errors"          data-target="errors">Errors</a>
-      <a href="/proofspec.html#policy"          data-target="policy">Operational policy</a>
-      <a href="/proofspec.html#checklist"       data-target="checklist">Checklist</a>
-      <a href="/proofspec.html#versioning"      data-target="versioning">Versioning</a>
-      <a href="/proofspec.html#page-proof-sec"  data-target="page-proof-sec">Page proof</a>
+      <a href="#overview"        data-target="overview">Overview</a>
+      <a href="#canonicalization" data-target="canonicalization">Canonicalization</a>
+      <a href="#datamodel"       data-target="datamodel">Data model</a>
+      <a href="#proofformat"     data-target="proofformat">Proof format</a>
+      <a href="#signing"         data-target="signing">Signing</a>
+      <a href="#validation"      data-target="validation">Validation</a>
+      <a href="#schema"          data-target="schema">JSON schema</a>
+      <a href="#vectors"         data-target="vectors">Test vectors</a>
+      <a href="#verification"    data-target="verification">Verification</a>
+      <a href="#verifyurl"       data-target="verifyurl">Verify URL</a>
+      <a href="#bundle"          data-target="bundle">Proof bundle</a>
+      <a href="#reserved"        data-target="reserved">Reserved fields</a>
+      <a href="#errors"          data-target="errors">Errors</a>
+      <a href="#policy"          data-target="policy">Operational policy</a>
+      <a href="#checklist"       data-target="checklist">Checklist</a>
+      <a href="#versioning"      data-target="versioning">Versioning</a>
+      <a href="#page-proof-sec"  data-target="page-proof-sec">Page proof</a>
     </nav>
 
     <!-- Content sections -->
@@ -244,6 +244,7 @@ upgrade-insecure-requests">
 
     <!-- Canonicalization (+ alias) -->
     <span id="cannolization" aria-hidden="true"></span>
+    <span id="cannonalization" aria-hidden="true"></span>
     <section class="card" id="canonicalization">
       <h2>Canonicalization</h2>
       <ul>
@@ -308,6 +309,7 @@ function verify({hash, ts, sig}, secret){
     <!-- JSON schema (+ alias) -->
     <span id="json-shema" aria-hidden="true"></span>
     <span id="jsonschema" aria-hidden="true"></span>
+    <span id="json-shema-" aria-hidden="true"></span>
     <section class="card" id="schema">
       <h2>JSON schema</h2>
 <pre><code>{
@@ -341,6 +343,7 @@ function verify({hash, ts, sig}, secret){
 
     <!-- Verify URL (+ alias) -->
     <span id="verify-url" aria-hidden="true"></span>
+    <span id="verify url" aria-hidden="true"></span>
     <section class="card" id="verifyurl">
       <h2>Verify URL</h2>
       <p>Stable endpoint that returns JSON status for the given hash. Link included in the proof JSON.</p>
@@ -354,6 +357,7 @@ function verify({hash, ts, sig}, secret){
     <!-- Reserved fields (+ alias) -->
     <span id="reserved-field" aria-hidden="true"></span>
     <span id="reseverd-field" aria-hidden="true"></span>
+    <span id="reserved field" aria-hidden="true"></span>
     <section class="card" id="reserved">
       <h2>Reserved fields</h2>
       <p>Names starting with <code>_tp_</code> are reserved for the spec.</p>
@@ -371,6 +375,8 @@ function verify({hash, ts, sig}, secret){
 
     <!-- Checklist (+ alias) -->
     <span id="check-list" aria-hidden="true"></span>
+    <span id="check list" aria-hidden="true"></span>
+    <span id="chexklist" aria-hidden="true"></span>
     <section class="card" id="checklist">
       <h2>Checklist</h2>
       <ul><li>Hash locally</li><li>Keep proof JSON</li><li>Verify URL present</li></ul>
@@ -384,6 +390,7 @@ function verify({hash, ts, sig}, secret){
     <!-- Page proof (+ alias) -->
     <span id="page-proof" aria-hidden="true"></span>
     <span id="pageproof" aria-hidden="true"></span>
+    <span id="page proof" aria-hidden="true"></span>
     <section class="card" id="page-proof-sec" aria-labelledby="pp-title">
       <h2 id="pp-title">This page is verified by TimeProofs</h2>
       <p>Release: <code id="page-proof-release"></code> · Hash: <code id="page-proof-hash-dup"></code> ·
@@ -460,23 +467,69 @@ function verify({hash, ts, sig}, secret){
       });
     })();
 
-    // Sommaire: scroll fiable sur mobile (data-target) — on ne capture plus les liens absolus.
+    // TOC click: scroll doux + fermeture menu mobile
     (function(){
       const toc=document.getElementById('toc');
       if(!toc) return;
       toc.querySelectorAll('a[href^="#"]').forEach(a=>{
         a.addEventListener('click',(ev)=>{
-          const targetId = a.dataset.target || (a.hash ? a.hash.slice(1) : '');
-          const target = targetId ? document.getElementById(targetId) : null;
-          if(!target) return;
+          const id=a.dataset.target || (a.hash ? a.hash.slice(1) : '');
+          const t=document.getElementById(id);
+          if(!t) return; // la résolution d’alias gère le reste
           ev.preventDefault();
-          if(!target.hasAttribute('tabindex')) target.setAttribute('tabindex','-1');
-          target.focus({preventScroll:true});
-          target.scrollIntoView({behavior:'smooth', block:'start'});
-          history.replaceState(null,'','#'+targetId);
-          closeMenu();
+          if(!t.hasAttribute('tabindex')) t.setAttribute('tabindex','-1');
+          t.focus({preventScroll:true});
+          t.scrollIntoView({behavior:'smooth', block:'start'});
+          history.replaceState(null,'','#'+id);
+          if(nav.getAttribute('data-state')==='open') closeMenu();
         },{passive:false});
       });
+    })();
+
+    // Résolution d’ancres: corrige fautes/variantes et scrolle
+    (function(){
+      const aliasMap = new Map([
+        // canonicalization
+        ['cannolization','canonicalization'],['cannonalization','canonicalization'],
+        // schema
+        ['json-shema','schema'],['json%20shema','schema'],['json shema','schema'],['jsonschema','schema'],
+        // verify url
+        ['verify-url','verifyurl'],['verify%20url','verifyurl'],['verify url','verifyurl'],
+        // reserved fields
+        ['reserved-field','reserved'],['reseverd-field','reserved'],['reserved%20field','reserved'],['reserved field','reserved'],
+        // checklist
+        ['check-list','checklist'],['check%20list','checklist'],['check list','checklist'],['chexklist','checklist'],
+        // page proof
+        ['page-proof','page-proof-sec'],['pageproof','page-proof-sec'],['page%20proof','page-proof-sec'],['page proof','page-proof-sec']
+      ]);
+
+      function normalizeHash(raw){
+        if(!raw) return '';
+        const h = raw.replace(/^#/,'').trim();
+        const key = h.toLowerCase();
+        return aliasMap.get(key) || h;
+      }
+
+      async function goTo(hash){
+        const id = normalizeHash(hash);
+        let el = document.getElementById(id);
+        if(!el){
+          // tente aussi l’ID brut si alias inexistant
+          el = document.getElementById(hash.replace(/^#/,''));
+        }
+        if(!el) return;
+        if(!el.hasAttribute('tabindex')) el.setAttribute('tabindex','-1');
+        el.focus({preventScroll:true});
+        el.scrollIntoView({behavior:'smooth', block:'start'});
+        const final = '#'+id;
+        if(location.hash !== final) history.replaceState(null,'',final);
+      }
+
+      // Au chargement si un hash est présent
+      if(location.hash){ goTo(location.hash); }
+
+      // À chaque changement de hash
+      window.addEventListener('hashchange', ()=>{ goTo(location.hash); }, {passive:true});
     })();
 
     // Release manifest fill
@@ -505,4 +558,4 @@ function verify({hash, ts, sig}, secret){
   })();
   </script>
 </body>
-</html>
+            </html>
