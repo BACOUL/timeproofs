@@ -180,6 +180,12 @@ upgrade-insecure-requests">
     .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
     .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; transition:transform .18s var(--e); color:#cfefff }
     .social a:hover{ transform:translateY(-2px) }
+
+    /* Correction mobile: neutraliser toute capture de clic par le menu fermé */
+    @media (max-width:899px){
+      .tp-nav[data-state="closed"]{ pointer-events:none; opacity:0; }
+      .tp-nav[data-state="open"]{ pointer-events:auto; opacity:1; }
+    }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
@@ -493,4 +499,4 @@ function verify({hash, ts, sig}, secret){
   })();
   </script>
 </body>
-  </html>
+</html>
