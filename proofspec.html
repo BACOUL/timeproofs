@@ -470,10 +470,14 @@ function verify({hash, ts, sig}, secret){
           const target = targetId ? document.getElementById(targetId) : null;
           if(!target) return;
           ev.preventDefault();
+          // correctif: fermer le menu pour retirer overflow:hidden
+          closeMenu();
           if(!target.hasAttribute('tabindex')) target.setAttribute('tabindex','-1');
           target.focus({preventScroll:true});
-          target.scrollIntoView({behavior:'smooth', block:'start'});
-          history.replaceState(null,'','#'+targetId);
+          requestAnimationFrame(()=>{
+            target.scrollIntoView({behavior:'smooth', block:'start'});
+            history.replaceState(null,'','#'+targetId);
+          });
         },{passive:false});
       });
     })();
@@ -504,4 +508,4 @@ function verify({hash, ts, sig}, secret){
   })();
   </script>
 </body>
-                                                                                    </html>
+</html>
