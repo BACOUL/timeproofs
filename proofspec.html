@@ -274,7 +274,7 @@ upgrade-insecure-requests">
       </div>
     </section>
 
-    <section class="card" id="proofformat" tabindex="-1">
+    <section class="card" id="profformat" tabindex="-1">
       <h2>Proof format</h2>
 <pre><code>{
   "hash":"&lt;64-hex&gt;",
@@ -455,21 +455,24 @@ function verify({hash, ts, sig}, secret){
       document.querySelectorAll('main section.card[id]').forEach(s=>{ if(!s.hasAttribute('tabindex')) s.setAttribute('tabindex','-1'); });
     })();
 
-    // Sommaire fiable desktop/mobile : scroll + focus + hash + fermeture menu
+    // Sommaire fiable desktop/mobile : fermeture, délai, scrollTo offset, focus, hash
     (function(){
       const toc = document.querySelector('nav.toc');
       if(!toc) return;
+      const OFFSET = 84; // même valeur que scroll-padding-top
       toc.addEventListener('click', function(e){
-        const a = e.target.closest('a[href^="#"]');
-        if(!a) return;
+        const a = e.target.closest('a[href^="#"]'); if(!a) return;
         const sel = a.getAttribute('href');
-        const target = document.querySelector(sel);
-        if(!target) return;
+        const target = document.querySelector(sel); if(!target) return;
         e.preventDefault();
-        if(nav.getAttribute('data-state')==='open') burger?.click(); // ferme l’overlay mobile
-        target.scrollIntoView({ behavior:'smooth', block:'start' });
-        target.focus({ preventScroll:true });                         // fiabilise iOS
-        history.pushState(null, '', sel);                             // met à jour le hash
+        const doScroll = () => {
+          const top = target.getBoundingClientRect().top + window.pageYOffset - OFFSET;
+          window.scrollTo({ top, behavior:'smooth' });
+          target.focus({ preventScroll:true });
+          history.pushState(null, '', sel);
+        };
+        if(nav.getAttribute('data-state')==='open'){ closeMenu(); setTimeout(doScroll, 60); }
+        else { doScroll(); }
       }, { passive:false });
     })();
 
