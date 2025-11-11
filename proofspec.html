@@ -48,8 +48,8 @@
   <meta name="twitter:description" content="Open, privacy-first spec for proof of existence."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
-  <!-- Security meta -->
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation="()">
+  <!-- Security meta (fix) -->
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 
   <!-- CSP v0.1 -->
   <meta http-equiv="Content-Security-Policy" content="
@@ -77,7 +77,7 @@ upgrade-insecure-requests">
     }
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); scroll-behavior:smooth }
-    html{ scroll-padding-top:84px } /* offset fixe pour ancres */
+    html{ scroll-padding-top:84px }
     body{
       margin:0; color:var(--text);
       font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
@@ -444,6 +444,32 @@ function verify({hash, ts, sig}, secret){
       });
     })();
 
+    // Ensure sections are focusable targets for reliable anchor navigation
+    (function(){
+      document.querySelectorAll('main section.card[id]').forEach(s=>{ if(!s.hasAttribute('tabindex')) s.setAttribute('tabindex','-1'); });
+    })();
+
+    // Robust TOC navigation (mobile-friendly)
+    (function(){
+      const toc = document.querySelector('nav.toc');
+      if(!toc) return;
+      toc.addEventListener('click', function(e){
+        const a = e.target.closest('a[href^="#"]');
+        if(!a) return;
+        const id = a.getAttribute('href');
+        const target = document.querySelector(id);
+        if(!target) return;
+        e.preventDefault();
+        // Close mobile menu if open
+        if(nav.getAttribute('data-state')==='open') closeMenu();
+        // Scroll and focus
+        target.scrollIntoView({ behavior:'smooth', block:'start' });
+        target.focus({ preventScroll:true });
+        // Update hash without full jump
+        history.pushState(null, '', id);
+      }, { passive:false });
+    })();
+
     // Release manifest fill
     (async()=>{
       try{
@@ -470,4 +496,4 @@ function verify({hash, ts, sig}, secret){
   })();
   </script>
 </body>
-</html>
+  </html>
