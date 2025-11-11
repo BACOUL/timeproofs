@@ -224,23 +224,23 @@ upgrade-insecure-requests">
 
     <!-- TOC -->
     <nav class="toc" aria-label="Contents" id="toc">
-      <a href="#overview">Overview</a>
-      <a href="#canonicalization">Canonicalization</a>
-      <a href="#datamodel">Data model</a>
-      <a href="#proofformat">Proof format</a>
-      <a href="#signing">Signing</a>
-      <a href="#validation">Validation</a>
-      <a href="#schema">JSON schema</a>
-      <a href="#vectors">Test vectors</a>
-      <a href="#verification">Verification</a>
-      <a href="#verifyurl">Verify URL</a>
-      <a href="#bundle">Proof bundle</a>
-      <a href="#reserved">Reserved fields</a>
-      <a href="#errors">Errors</a>
-      <a href="#policy">Operational policy</a>
-      <a href="#checklist">Checklist</a>
-      <a href="#versioning">Versioning</a>
-      <a href="#page-proof-sec">Page proof</a>
+      <a href="#overview" data-target="overview">Overview</a>
+      <a href="#canonicalization" data-target="canonicalization">Canonicalization</a>
+      <a href="#datamodel" data-target="datamodel">Data model</a>
+      <a href="#proofformat" data-target="proofformat">Proof format</a>
+      <a href="#signing" data-target="signing">Signing</a>
+      <a href="#validation" data-target="validation">Validation</a>
+      <a href="#schema" data-target="schema">JSON schema</a>
+      <a href="#vectors" data-target="vectors">Test vectors</a>
+      <a href="#verification" data-target="verification">Verification</a>
+      <a href="#verifyurl" data-target="verifyurl">Verify URL</a>
+      <a href="#bundle" data-target="bundle">Proof bundle</a>
+      <a href="#reserved" data-target="reserved">Reserved fields</a>
+      <a href="#errors" data-target="errors">Errors</a>
+      <a href="#policy" data-target="policy">Operational policy</a>
+      <a href="#checklist" data-target="checklist">Checklist</a>
+      <a href="#versioning" data-target="versioning">Versioning</a>
+      <a href="#page-proof-sec" data-target="page-proof-sec">Page proof</a>
     </nav>
 
     <!-- Content sections -->
@@ -450,24 +450,21 @@ function verify({hash, ts, sig}, secret){
       });
     })();
 
-    // Sommaire: scroll fiable sur mobile
+    // Sommaire: scroll fiable sur mobile (data-target)
     (function(){
       const toc=document.getElementById('toc');
       if(!toc) return;
       toc.querySelectorAll('a[href^="#"]').forEach(a=>{
-        a.addEventListener('click', (ev)=>{
-          const hash=a.getAttribute('href');
-          if(!hash || hash.length<2) return;
-          const id=hash.slice(1);
-          const target=document.getElementById(id);
+        a.addEventListener('click',(ev)=>{
+          const targetId = a.dataset.target || (a.hash ? a.hash.slice(1) : '');
+          const target = targetId ? document.getElementById(targetId) : null;
           if(!target) return;
           ev.preventDefault();
-          // focus pour accessibilité puis scroll
           if(!target.hasAttribute('tabindex')) target.setAttribute('tabindex','-1');
           target.focus({preventScroll:true});
           target.scrollIntoView({behavior:'smooth', block:'start'});
-          history.replaceState(null, '', '#'+id);
-        }, { passive:false });
+          history.replaceState(null,'','#'+targetId);
+        },{passive:false});
       });
     })();
 
@@ -497,4 +494,4 @@ function verify({hash, ts, sig}, secret){
   })();
   </script>
 </body>
-      </html>
+</html>
