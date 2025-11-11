@@ -69,7 +69,7 @@ upgrade-insecure-requests">
   <!-- Analytics -->
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
-  <!-- Styles (alignés sur index.html) -->
+  <!-- Styles -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
@@ -90,12 +90,12 @@ upgrade-insecure-requests">
     a:hover{ text-decoration:underline }
     .tp-nav a, footer .links a { text-underline-offset:3px }
     .tp-nav a:hover, footer .links a:hover { text-decoration:underline }
-    [id]{ scroll-margin-top:84px } /* ancres TOC visibles sous header */
+    [id]{ scroll-margin-top:84px }
 
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
     .skip:focus{ position:fixed; left:12px; top:12px; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
 
-    /* Header identique */
+    /* Header */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
@@ -139,7 +139,7 @@ upgrade-insecure-requests">
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* HERO compact */
+    /* HERO */
     .hero{
       padding-top:96px; padding-bottom:18px; text-align:center; position:relative; border-bottom:1px solid var(--line)
     }
@@ -151,9 +151,17 @@ upgrade-insecure-requests">
     .hero .lead{ color:var(--muted); max-width:900px; margin:0 auto 12px; line-height:1.7 }
     .badge{ display:inline-block; margin-top:6px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem }
 
-    /* TOC */
-    nav.toc{ display:flex; flex-wrap:wrap; gap:12px; margin:14px auto 0; padding:12px; max-width:1100px; background:#0c1424; border:1px solid var(--line); border-radius:12px }
-    nav.toc a{ background:transparent; border:1px solid #1f2a44; padding:8px 12px; border-radius:999px; color:#cfe7ff }
+    /* TOC = même rendu “pills” que la capture */
+    nav.toc{
+      display:flex; flex-wrap:wrap; gap:8px; justify-content:center;
+      padding:14px 20px; border-bottom:1px solid var(--line)
+    }
+    nav.toc a{
+      display:inline-block; padding:6px 10px;
+      border:1px solid #214a57; background:#0d2330; color:#bff1ff;
+      border-radius:999px; font-size:.9rem; text-decoration:none
+    }
+    nav.toc a:hover{ text-decoration:underline }
 
     /* Content */
     main{ padding:0 0 40px }
@@ -184,7 +192,7 @@ upgrade-insecure-requests">
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
-  <!-- Header identique à index -->
+  <!-- Header -->
   <header class="tp-header" id="hdr" role="banner">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
@@ -421,12 +429,10 @@ function verify({hash, ts, sig}, secret){
   <!-- Scripts -->
   <script defer nonce="TP-2025">
   (function(){
-    // Header shade
     const hdr=document.getElementById('hdr');
     function onScroll(){ if(window.scrollY>6) hdr.classList.add('scrolled'); else hdr.classList.remove('scrolled'); }
     onScroll(); window.addEventListener('scroll', onScroll, { passive:true });
 
-    // Burger identique
     const burger=document.getElementById('tp-burger'); const nav=document.getElementById('tp-nav');
     function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
     function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
@@ -436,7 +442,7 @@ function verify({hash, ts, sig}, secret){
     document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
     window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
 
-    // Auto aria-current
+    // aria-current
     (function(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
       document.querySelectorAll('header nav a, footer .links a').forEach(a=>{
