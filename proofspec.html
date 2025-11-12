@@ -74,12 +74,15 @@ upgrade-insecure-requests">
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --e:cubic-bezier(.22,.61,.36,1);
-      --offset-desktop:96px; --offset-mobile:112px
+      --anchor-offset:96px
     }
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); scroll-behavior:smooth }
-    html{ scroll-padding-top:var(--offset-desktop) }
-    @media (max-width:899px){ html{ scroll-padding-top:var(--offset-mobile) } }
+    html{ scroll-padding-top:96px }
+    @media (max-width:899px){
+      :root{ --anchor-offset:112px }
+      html{ scroll-padding-top:112px }
+    }
     body{
       margin:0; color:var(--text);
       font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
@@ -94,20 +97,13 @@ upgrade-insecure-requests">
     .tp-nav a, footer .links a { text-underline-offset:3px }
     .tp-nav a:hover, footer .links a:hover { text-decoration:underline }
 
-    /* Offset natif pour TOUS les ancres */
-    [id]{ scroll-margin-top:var(--offset-desktop) }
-    @media (max-width:899px){ [id]{ scroll-margin-top:var(--offset-mobile) } }
-
-    /* Fallback Safari/anciens moteurs: compenser le header via pseudo-élément */
-    :target::before{
+    /* Offset universel pour cibles d’ancres */
+    :where(h2,h3)[id]::before{
       content:"";
       display:block;
-      height:var(--offset-desktop);
-      margin-top:calc(-1 * var(--offset-desktop));
-      pointer-events:none;
-    }
-    @media (max-width:899px){
-      :target::before{ height:var(--offset-mobile); margin-top:calc(-1 * var(--offset-mobile)) }
+      height:var(--anchor-offset);
+      margin-top:calc(-1 * var(--anchor-offset));
+      visibility:hidden;
     }
 
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
@@ -157,7 +153,7 @@ upgrade-insecure-requests">
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* HERO */
+    /* HERO compact */
     .hero{
       padding-top:96px; padding-bottom:18px; text-align:center; position:relative; border-bottom:1px solid var(--line)
     }
@@ -203,7 +199,7 @@ upgrade-insecure-requests">
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
-  <!-- Header -->
+  <!-- Header identique à index -->
   <header class="tp-header" id="hdr" role="banner">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
@@ -255,12 +251,12 @@ upgrade-insecure-requests">
     </nav>
 
     <!-- Content sections -->
-    <section class="card" id="overview" tabindex="-1"><h2>Overview</h2><p>Hash locally → get a signed timestamped proof → anyone can verify later without your data.</p></section>
+    <section class="card" id="overview"><h2 id="overview">Overview</h2><p>Hash locally → get a signed timestamped proof → anyone can verify later without your data.</p></section>
 
     <!-- Canonicalization (+ alias) -->
     <span id="cannolization" aria-hidden="true"></span>
-    <section class="card" id="canonicalization" tabindex="-1">
-      <h2>Canonicalization</h2>
+    <section class="card" id="canonicalization">
+      <h2 id="canonicalization">Canonicalization</h2>
       <ul>
         <li>Bytes-in, bytes-out. Hash exact bytes.</li>
         <li>Text: UTF-8, normalize line endings to LF.</li>
@@ -268,8 +264,8 @@ upgrade-insecure-requests">
       </ul>
     </section>
 
-    <section class="card" id="datamodel" tabindex="-1">
-      <h2>Data model</h2>
+    <section class="card" id="datamodel">
+      <h2 id="datamodel">Data model</h2>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
@@ -287,8 +283,8 @@ upgrade-insecure-requests">
       </div>
     </section>
 
-    <section class="card" id="proofformat" tabindex="-1">
-      <h2>Proof format</h2>
+    <section class="card" id="proofformat">
+      <h2 id="proofformat">Proof format</h2>
 <pre><code>{
   "hash":"&lt;64-hex&gt;",
   "ts":"2025-01-01T00:00:00.000Z",
@@ -300,8 +296,8 @@ upgrade-insecure-requests">
 }</code></pre>
     </section>
 
-    <section class="card" id="signing" tabindex="-1">
-      <h2>Signing</h2>
+    <section class="card" id="signing">
+      <h2 id="signing">Signing</h2>
 <pre><code>// Node.js HMAC verify
 import crypto from "node:crypto";
 function verify({hash, ts, sig}, secret){
@@ -311,8 +307,8 @@ function verify({hash, ts, sig}, secret){
 }</code></pre>
     </section>
 
-    <section class="card" id="validation" tabindex="-1">
-      <h2>Validation</h2>
+    <section class="card" id="validation">
+      <h2 id="validation">Validation</h2>
       <ul>
         <li>Hash is 64 hex.</li>
         <li><code>ts</code> is ISO-8601 UTC and not in the future beyond tolerance.</li>
@@ -323,8 +319,8 @@ function verify({hash, ts, sig}, secret){
     <!-- JSON schema (+ alias) -->
     <span id="json-shema" aria-hidden="true"></span>
     <span id="jsonschema" aria-hidden="true"></span>
-    <section class="card" id="schema" tabindex="-1">
-      <h2>JSON schema</h2>
+    <section class="card" id="schema">
+      <h2 id="schema">JSON schema</h2>
 <pre><code>{
   "$schema":"https://json-schema.org/draft/2020-12/schema",
   "type":"object",
@@ -342,64 +338,64 @@ function verify({hash, ts, sig}, secret){
 }</code></pre>
     </section>
 
-    <section class="card" id="vectors" tabindex="-1">
-      <h2>Test vectors</h2>
+    <section class="card" id="vectors">
+      <h2 id="vectors">Test vectors</h2>
 <pre><code>// sha256("TimeProofs")
 7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2</code></pre>
     </section>
 
-    <section class="card" id="verification" tabindex="-1">
-      <h2>Verification</h2>
+    <section class="card" id="verification">
+      <h2 id="verification">Verification</h2>
 <pre><code>GET /api/verify?hash=&lt;64-hex&gt;
 → {"ok":true,"valid":true,"timestamp":"..."}</code></pre>
     </section>
 
     <!-- Verify URL (+ alias) -->
     <span id="verify-url" aria-hidden="true"></span>
-    <section class="card" id="verifyurl" tabindex="-1">
-      <h2>Verify URL</h2>
+    <section class="card" id="verifyurl">
+      <h2 id="verifyurl">Verify URL</h2>
       <p>Stable endpoint that returns JSON status for the given hash. Link included in the proof JSON.</p>
     </section>
 
-    <section class="card" id="bundle" tabindex="-1">
-      <h2>Proof bundle</h2>
+    <section class="card" id="bundle">
+      <h2 id="bundle">Proof bundle</h2>
       <p>Ship artifacts with their <code>.tproof.json</code> or embed only the verify link.</p>
     </section>
 
     <!-- Reserved fields (+ alias) -->
     <span id="reserved-field" aria-hidden="true"></span>
     <span id="reseverd-field" aria-hidden="true"></span>
-    <section class="card" id="reserved" tabindex="-1">
-      <h2>Reserved fields</h2>
+    <section class="card" id="reserved">
+      <h2 id="reserved">Reserved fields</h2>
       <p>Names starting with <code>_tp_</code> are reserved for the spec.</p>
     </section>
 
-    <section class="card" id="errors" tabindex="-1">
-      <h2>Errors</h2>
+    <section class="card" id="errors">
+      <h2 id="errors">Errors</h2>
 <pre><code>{"ok":false,"error":"invalid_hash"}</code></pre>
     </section>
 
-    <section class="card" id="policy" tabindex="-1">
-      <h2>Operational policy</h2>
+    <section class="card" id="policy">
+      <h2 id="policy">Operational policy</h2>
       <ul><li>Minimal logs</li><li>Rate limits</li><li>Key rotation with <code>kid</code></li></ul>
     </section>
 
     <!-- Checklist (+ alias) -->
     <span id="check-list" aria-hidden="true"></span>
-    <section class="card" id="checklist" tabindex="-1">
-      <h2>Checklist</h2>
+    <section class="card" id="checklist">
+      <h2 id="checklist">Checklist</h2>
       <ul><li>Hash locally</li><li>Keep proof JSON</li><li>Verify URL present</li></ul>
     </section>
 
-    <section class="card" id="versioning" tabindex="-1">
-      <h2>Versioning</h2>
+    <section class="card" id="versioning">
+      <h2 id="versioning">Versioning</h2>
       <p>Spec v0.1. Additive changes when possible. Breaking changes bump major.</p>
     </section>
 
     <!-- Page proof (+ alias) -->
     <span id="page-proof" aria-hidden="true"></span>
     <span id="pageproof" aria-hidden="true"></span>
-    <section class="card" id="page-proof-sec" aria-labelledby="pp-title" tabindex="-1">
+    <section class="card" id="page-proof-sec" aria-labelledby="pp-title">
       <h2 id="pp-title">This page is verified by TimeProofs</h2>
       <p>Release: <code id="page-proof-release"></code> · Hash: <code id="page-proof-hash-dup"></code> ·
         <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener">Verify</a></p>
@@ -456,7 +452,7 @@ function verify({hash, ts, sig}, secret){
     function onScroll(){ if(window.scrollY>6) hdr.classList.add('scrolled'); else hdr.classList.remove('scrolled'); }
     onScroll(); window.addEventListener('scroll', onScroll, { passive:true });
 
-    // Burger
+    // Burger identique
     const burger=document.getElementById('tp-burger'); const nav=document.getElementById('tp-nav');
     function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
     function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
@@ -474,6 +470,8 @@ function verify({hash, ts, sig}, secret){
         if(path===here) a.setAttribute('aria-current','page');
       });
     })();
+
+    // NOTE: plus d’interception JS pour le sommaire. On laisse le comportement natif.
 
     // Release manifest fill
     (async()=>{
@@ -501,4 +499,4 @@ function verify({hash, ts, sig}, secret){
   })();
   </script>
 </body>
-      </html>
+</html>
