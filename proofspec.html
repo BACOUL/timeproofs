@@ -73,16 +73,12 @@ upgrade-insecure-requests">
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
-      --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --e:cubic-bezier(.22,.61,.36,1);
-      --anchor-offset:96px
+      --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --e:cubic-bezier(.22,.61,.36,1)
     }
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); scroll-behavior:smooth }
     html{ scroll-padding-top:96px }
-    @media (max-width:899px){
-      :root{ --anchor-offset:112px }
-      html{ scroll-padding-top:112px }
-    }
+    @media (max-width:899px){ html{ scroll-padding-top:112px } }
     body{
       margin:0; color:var(--text);
       font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
@@ -96,15 +92,8 @@ upgrade-insecure-requests">
     a:hover{ text-decoration:underline }
     .tp-nav a, footer .links a { text-underline-offset:3px }
     .tp-nav a:hover, footer .links a:hover { text-decoration:underline }
-
-    /* Offset universel pour cibles d’ancres */
-    :where(h2,h3)[id]::before{
-      content:"";
-      display:block;
-      height:var(--anchor-offset);
-      margin-top:calc(-1 * var(--anchor-offset));
-      visibility:hidden;
-    }
+    [id]{ scroll-margin-top:112px }
+    @media (min-width:900px){ [id]{ scroll-margin-top:96px } }
 
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
     .skip:focus{ position:fixed; left:12px; top:12px; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
@@ -231,32 +220,41 @@ upgrade-insecure-requests">
 
     <!-- TOC -->
     <nav class="toc" aria-label="Contents" id="toc">
-      <a href="#overview">Overview</a>
-      <a href="#canonicalization">Canonicalization</a>
-      <a href="#datamodel">Data model</a>
-      <a href="#proofformat">Proof format</a>
-      <a href="#signing">Signing</a>
-      <a href="#validation">Validation</a>
-      <a href="#schema">JSON schema</a>
-      <a href="#vectors">Test vectors</a>
-      <a href="#verification">Verification</a>
-      <a href="#verifyurl">Verify URL</a>
-      <a href="#bundle">Proof bundle</a>
-      <a href="#reserved">Reserved fields</a>
-      <a href="#errors">Errors</a>
-      <a href="#policy">Operational policy</a>
-      <a href="#checklist">Checklist</a>
-      <a href="#versioning">Versioning</a>
-      <a href="#page-proof-sec">Page proof</a>
+      <a href="#overview" data-target="overview">Overview</a>
+      <a href="#canonicalization" data-target="canonicalization">Canonicalization</a>
+      <a href="#datamodel" data-target="datamodel">Data model</a>
+      <a href="#proofformat" data-target="proofformat">Proof format</a>
+      <a href="#signing" data-target="signing">Signing</a>
+      <a href="#validation" data-target="validation">Validation</a>
+      <a href="#schema" data-target="schema">JSON schema</a>
+      <a href="#vectors" data-target="vectors">Test vectors</a>
+      <a href="#verification" data-target="verification">Verification</a>
+      <a href="#verifyurl" data-target="verifyurl">Verify URL</a>
+      <a href="#bundle" data-target="bundle">Proof bundle</a>
+      <a href="#reserved" data-target="reserved">Reserved fields</a>
+      <a href="#errors" data-target="errors">Errors</a>
+      <a href="#policy" data-target="policy">Operational policy</a>
+      <a href="#checklist" data-target="checklist">Checklist</a>
+      <a href="#versioning" data-target="versioning">Versioning</a>
+      <a href="#page-proof-sec" data-target="page-proof-sec">Page proof</a>
     </nav>
 
-    <!-- Content sections -->
-    <section class="card" id="overview"><h2 id="overview">Overview</h2><p>Hash locally → get a signed timestamped proof → anyone can verify later without your data.</p></section>
-
-    <!-- Canonicalization (+ alias) -->
+    <!-- Aliases couvrant toutes les variantes de liens -->
     <span id="cannolization" aria-hidden="true"></span>
+    <span id="json-shema" aria-hidden="true"></span>
+    <span id="jsonschema" aria-hidden="true"></span>
+    <span id="verify-url" aria-hidden="true"></span>
+    <span id="reseverd-field" aria-hidden="true"></span>
+    <span id="reserved-field" aria-hidden="true"></span>
+    <span id="check-list" aria-hidden="true"></span>
+    <span id="page-proof" aria-hidden="true"></span>
+    <span id="pageproof" aria-hidden="true"></span>
+
+    <!-- Content sections -->
+    <section class="card" id="overview"><h2>Overview</h2><p>Hash locally → get a signed timestamped proof → anyone can verify later without your data.</p></section>
+
     <section class="card" id="canonicalization">
-      <h2 id="canonicalization">Canonicalization</h2>
+      <h2>Canonicalization</h2>
       <ul>
         <li>Bytes-in, bytes-out. Hash exact bytes.</li>
         <li>Text: UTF-8, normalize line endings to LF.</li>
@@ -265,7 +263,7 @@ upgrade-insecure-requests">
     </section>
 
     <section class="card" id="datamodel">
-      <h2 id="datamodel">Data model</h2>
+      <h2>Data model</h2>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
@@ -284,7 +282,7 @@ upgrade-insecure-requests">
     </section>
 
     <section class="card" id="proofformat">
-      <h2 id="proofformat">Proof format</h2>
+      <h2>Proof format</h2>
 <pre><code>{
   "hash":"&lt;64-hex&gt;",
   "ts":"2025-01-01T00:00:00.000Z",
@@ -297,7 +295,7 @@ upgrade-insecure-requests">
     </section>
 
     <section class="card" id="signing">
-      <h2 id="signing">Signing</h2>
+      <h2>Signing</h2>
 <pre><code>// Node.js HMAC verify
 import crypto from "node:crypto";
 function verify({hash, ts, sig}, secret){
@@ -308,7 +306,7 @@ function verify({hash, ts, sig}, secret){
     </section>
 
     <section class="card" id="validation">
-      <h2 id="validation">Validation</h2>
+      <h2>Validation</h2>
       <ul>
         <li>Hash is 64 hex.</li>
         <li><code>ts</code> is ISO-8601 UTC and not in the future beyond tolerance.</li>
@@ -316,11 +314,8 @@ function verify({hash, ts, sig}, secret){
       </ul>
     </section>
 
-    <!-- JSON schema (+ alias) -->
-    <span id="json-shema" aria-hidden="true"></span>
-    <span id="jsonschema" aria-hidden="true"></span>
     <section class="card" id="schema">
-      <h2 id="schema">JSON schema</h2>
+      <h2>JSON schema</h2>
 <pre><code>{
   "$schema":"https://json-schema.org/draft/2020-12/schema",
   "type":"object",
@@ -339,62 +334,52 @@ function verify({hash, ts, sig}, secret){
     </section>
 
     <section class="card" id="vectors">
-      <h2 id="vectors">Test vectors</h2>
+      <h2>Test vectors</h2>
 <pre><code>// sha256("TimeProofs")
 7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2</code></pre>
     </section>
 
     <section class="card" id="verification">
-      <h2 id="verification">Verification</h2>
+      <h2>Verification</h2>
 <pre><code>GET /api/verify?hash=&lt;64-hex&gt;
 → {"ok":true,"valid":true,"timestamp":"..."}</code></pre>
     </section>
 
-    <!-- Verify URL (+ alias) -->
-    <span id="verify-url" aria-hidden="true"></span>
     <section class="card" id="verifyurl">
-      <h2 id="verifyurl">Verify URL</h2>
+      <h2>Verify URL</h2>
       <p>Stable endpoint that returns JSON status for the given hash. Link included in the proof JSON.</p>
     </section>
 
     <section class="card" id="bundle">
-      <h2 id="bundle">Proof bundle</h2>
+      <h2>Proof bundle</h2>
       <p>Ship artifacts with their <code>.tproof.json</code> or embed only the verify link.</p>
     </section>
 
-    <!-- Reserved fields (+ alias) -->
-    <span id="reserved-field" aria-hidden="true"></span>
-    <span id="reseverd-field" aria-hidden="true"></span>
     <section class="card" id="reserved">
-      <h2 id="reserved">Reserved fields</h2>
+      <h2>Reserved fields</h2>
       <p>Names starting with <code>_tp_</code> are reserved for the spec.</p>
     </section>
 
     <section class="card" id="errors">
-      <h2 id="errors">Errors</h2>
+      <h2>Errors</h2>
 <pre><code>{"ok":false,"error":"invalid_hash"}</code></pre>
     </section>
 
     <section class="card" id="policy">
-      <h2 id="policy">Operational policy</h2>
+      <h2>Operational policy</h2>
       <ul><li>Minimal logs</li><li>Rate limits</li><li>Key rotation with <code>kid</code></li></ul>
     </section>
 
-    <!-- Checklist (+ alias) -->
-    <span id="check-list" aria-hidden="true"></span>
     <section class="card" id="checklist">
-      <h2 id="checklist">Checklist</h2>
+      <h2>Checklist</h2>
       <ul><li>Hash locally</li><li>Keep proof JSON</li><li>Verify URL present</li></ul>
     </section>
 
     <section class="card" id="versioning">
-      <h2 id="versioning">Versioning</h2>
+      <h2>Versioning</h2>
       <p>Spec v0.1. Additive changes when possible. Breaking changes bump major.</p>
     </section>
 
-    <!-- Page proof (+ alias) -->
-    <span id="page-proof" aria-hidden="true"></span>
-    <span id="pageproof" aria-hidden="true"></span>
     <section class="card" id="page-proof-sec" aria-labelledby="pp-title">
       <h2 id="pp-title">This page is verified by TimeProofs</h2>
       <p>Release: <code id="page-proof-release"></code> · Hash: <code id="page-proof-hash-dup"></code> ·
@@ -471,7 +456,23 @@ function verify({hash, ts, sig}, secret){
       });
     })();
 
-    // NOTE: plus d’interception JS pour le sommaire. On laisse le comportement natif.
+    // Sommaire: scroll fiable sur mobile (data-target)
+    (function(){
+      const toc=document.getElementById('toc');
+      if(!toc) return;
+      toc.querySelectorAll('a[href^="#"]').forEach(a=>{
+        a.addEventListener('click',(ev)=>{
+          const targetId = a.dataset.target || (a.hash ? a.hash.slice(1) : '');
+          const target = targetId ? document.getElementById(targetId) : null;
+          if(!target) return;
+          ev.preventDefault();
+          if(!target.hasAttribute('tabindex')) target.setAttribute('tabindex','-1');
+          target.focus({preventScroll:true});
+          target.scrollIntoView({behavior:'smooth', block:'start'});
+          history.replaceState(null,'','#'+targetId);
+        },{passive:false});
+      });
+    })();
 
     // Release manifest fill
     (async()=>{
@@ -499,4 +500,4 @@ function verify({hash, ts, sig}, secret){
   })();
   </script>
 </body>
-                                     </html>
+  </html>
