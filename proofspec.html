@@ -97,8 +97,8 @@ upgrade-insecure-requests">
     .tp-nav a, footer .links a { text-underline-offset:3px }
     .tp-nav a:hover, footer .links a:hover { text-decoration:underline }
 
-    /* Offset universel pour toutes cibles d’ancres, y compris <section> et <span> alias */
-    :where([id])::before{
+    /* Offset universel pour cibles d’ancres */
+    :where(h2,h3)[id]::before{
       content:"";
       display:block;
       height:var(--anchor-offset);
@@ -251,12 +251,12 @@ upgrade-insecure-requests">
     </nav>
 
     <!-- Content sections -->
-    <section class="card" id="overview"><h2>Overview</h2><p>Hash locally → get a signed timestamped proof → anyone can verify later without your data.</p></section>
+    <section class="card" id="overview"><h2 id="overview">Overview</h2><p>Hash locally → get a signed timestamped proof → anyone can verify later without your data.</p></section>
 
     <!-- Canonicalization (+ alias) -->
     <span id="cannolization" aria-hidden="true"></span>
     <section class="card" id="canonicalization">
-      <h2>Canonicalization</h2>
+      <h2 id="canonicalization">Canonicalization</h2>
       <ul>
         <li>Bytes-in, bytes-out. Hash exact bytes.</li>
         <li>Text: UTF-8, normalize line endings to LF.</li>
@@ -265,7 +265,7 @@ upgrade-insecure-requests">
     </section>
 
     <section class="card" id="datamodel">
-      <h2>Data model</h2>
+      <h2 id="datamodel">Data model</h2>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
@@ -283,9 +283,8 @@ upgrade-insecure-requests">
       </div>
     </section>
 
-    <section class="card" id="profformat-alias" aria-hidden="true"></section>
     <section class="card" id="proofformat">
-      <h2>Proof format</h2>
+      <h2 id="proofformat">Proof format</h2>
 <pre><code>{
   "hash":"&lt;64-hex&gt;",
   "ts":"2025-01-01T00:00:00.000Z",
@@ -298,7 +297,7 @@ upgrade-insecure-requests">
     </section>
 
     <section class="card" id="signing">
-      <h2>Signing</h2>
+      <h2 id="signing">Signing</h2>
 <pre><code>// Node.js HMAC verify
 import crypto from "node:crypto";
 function verify({hash, ts, sig}, secret){
@@ -309,7 +308,7 @@ function verify({hash, ts, sig}, secret){
     </section>
 
     <section class="card" id="validation">
-      <h2>Validation</h2>
+      <h2 id="validation">Validation</h2>
       <ul>
         <li>Hash is 64 hex.</li>
         <li><code>ts</code> is ISO-8601 UTC and not in the future beyond tolerance.</li>
@@ -321,7 +320,7 @@ function verify({hash, ts, sig}, secret){
     <span id="json-shema" aria-hidden="true"></span>
     <span id="jsonschema" aria-hidden="true"></span>
     <section class="card" id="schema">
-      <h2>JSON schema</h2>
+      <h2 id="schema">JSON schema</h2>
 <pre><code>{
   "$schema":"https://json-schema.org/draft/2020-12/schema",
   "type":"object",
@@ -340,13 +339,13 @@ function verify({hash, ts, sig}, secret){
     </section>
 
     <section class="card" id="vectors">
-      <h2>Test vectors</h2>
+      <h2 id="vectors">Test vectors</h2>
 <pre><code>// sha256("TimeProofs")
 7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2</code></pre>
     </section>
 
     <section class="card" id="verification">
-      <h2>Verification</h2>
+      <h2 id="verification">Verification</h2>
 <pre><code>GET /api/verify?hash=&lt;64-hex&gt;
 → {"ok":true,"valid":true,"timestamp":"..."}</code></pre>
     </section>
@@ -354,12 +353,12 @@ function verify({hash, ts, sig}, secret){
     <!-- Verify URL (+ alias) -->
     <span id="verify-url" aria-hidden="true"></span>
     <section class="card" id="verifyurl">
-      <h2>Verify URL</h2>
+      <h2 id="verifyurl">Verify URL</h2>
       <p>Stable endpoint that returns JSON status for the given hash. Link included in the proof JSON.</p>
     </section>
 
     <section class="card" id="bundle">
-      <h2>Proof bundle</h2>
+      <h2 id="bundle">Proof bundle</h2>
       <p>Ship artifacts with their <code>.tproof.json</code> or embed only the verify link.</p>
     </section>
 
@@ -367,29 +366,29 @@ function verify({hash, ts, sig}, secret){
     <span id="reserved-field" aria-hidden="true"></span>
     <span id="reseverd-field" aria-hidden="true"></span>
     <section class="card" id="reserved">
-      <h2>Reserved fields</h2>
+      <h2 id="reserved">Reserved fields</h2>
       <p>Names starting with <code>_tp_</code> are reserved for the spec.</p>
     </section>
 
     <section class="card" id="errors">
-      <h2>Errors</h2>
+      <h2 id="errors">Errors</h2>
 <pre><code>{"ok":false,"error":"invalid_hash"}</code></pre>
     </section>
 
     <section class="card" id="policy">
-      <h2>Operational policy</h2>
+      <h2 id="policy">Operational policy</h2>
       <ul><li>Minimal logs</li><li>Rate limits</li><li>Key rotation with <code>kid</code></li></ul>
     </section>
 
     <!-- Checklist (+ alias) -->
     <span id="check-list" aria-hidden="true"></span>
     <section class="card" id="checklist">
-      <h2>Checklist</h2>
+      <h2 id="checklist">Checklist</h2>
       <ul><li>Hash locally</li><li>Keep proof JSON</li><li>Verify URL present</li></ul>
     </section>
 
     <section class="card" id="versioning">
-      <h2>Versioning</h2>
+      <h2 id="versioning">Versioning</h2>
       <p>Spec v0.1. Additive changes when possible. Breaking changes bump major.</p>
     </section>
 
@@ -472,7 +471,7 @@ function verify({hash, ts, sig}, secret){
       });
     })();
 
-    // Aucun JS de scroll pour le sommaire, comportement natif uniquement.
+    // NOTE: plus d’interception JS pour le sommaire. On laisse le comportement natif.
 
     // Release manifest fill
     (async()=>{
@@ -500,4 +499,4 @@ function verify({hash, ts, sig}, secret){
   })();
   </script>
 </body>
-</html>
+                                     </html>
