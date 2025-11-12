@@ -69,7 +69,7 @@ upgrade-insecure-requests">
   <!-- Analytics -->
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
-  <!-- Styles (alignés sur index.html) -->
+  <!-- Styles -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
@@ -95,13 +95,12 @@ upgrade-insecure-requests">
     [id]{ scroll-margin-top:112px }
     @media (min-width:900px){ [id]{ scroll-margin-top:96px } }
 
-    /* alias: block pour fiabilité mobile */
+    /* alias pour ancres mal orthographiées */
     .toc-alias{ display:block; height:0; line-height:0; }
 
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
     .skip:focus{ position:fixed; left:12px; top:12px; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
 
-    /* Header identique */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
@@ -114,8 +113,7 @@ upgrade-insecure-requests">
     .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block }
     .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
 
-    .cta-header{
-      display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
+    .cta-header{ display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
       border-radius:10px; background:var(--accent); color:#06202a; font-weight:800; box-shadow:0 6px 24px rgba(34,211,238,.25)
     }
 
@@ -144,7 +142,6 @@ upgrade-insecure-requests">
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* HERO compact */
     .hero{
       padding-top:96px; padding-bottom:18px; text-align:center; position:relative; border-bottom:1px solid var(--line)
     }
@@ -156,18 +153,15 @@ upgrade-insecure-requests">
     .hero .lead{ color:var(--muted); max-width:900px; margin:0 auto 12px; line-height:1.7 }
     .badge{ display:inline-block; margin-top:6px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem }
 
-    /* TOC pills */
     nav.toc{ display:flex; flex-wrap:wrap; gap:12px; margin:14px auto 0; padding:12px 0 14px; max-width:1100px; border-bottom:1px solid var(--line) }
     nav.toc a{ display:inline-block; background:#0d2330; border:1px solid #214a57; padding:8px 12px; border-radius:999px; color:#bff1ff; text-decoration:none; font-size:.9rem }
     nav.toc a:hover{ text-decoration:underline }
 
-    /* Content */
     main{ padding:0 0 40px }
     .card{ background:#0c1424; border:1px solid var(--line); border-radius:12px; padding:18px; margin:14px auto; max-width:1100px }
     h2{ color:#b9e7f5; font-size:1.25rem; margin:1.2em 0 .6em }
     h3{ color:#aee9f7; font-size:1.05rem; margin:1em 0 .3em }
 
-    /* Tables + pre */
     .table-wrap{ overflow:auto; border:1px solid var(--line); border-radius:12px }
     table{ border-collapse:collapse; min-width:720px; width:100% }
     th,td{ border-bottom:1px solid #203047; padding:10px 12px; text-align:left; text-wrap:nowrap }
@@ -175,7 +169,6 @@ upgrade-insecure-requests">
     pre, code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
     pre{ max-width:100%; overflow:auto; padding:12px; border-radius:12px; background:#0b1426; border:1px solid #1f2a44; font-size:.95rem }
 
-    /* Footer */
     footer{ border-top:1px solid var(--line); margin-top:28px; padding:18px; color:#7c8aa5; text-align:center }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
@@ -189,7 +182,7 @@ upgrade-insecure-requests">
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
-  <!-- Header identique à index -->
+  <!-- Header -->
   <header class="tp-header" id="hdr" role="banner">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
@@ -221,23 +214,23 @@ upgrade-insecure-requests">
 
     <!-- TOC -->
     <nav class="toc" aria-label="Contents" id="toc">
-      <a href="#overview"        data-target="overview">Overview</a>
-      <a href="#canonicalization" data-target="canonicalization">Canonicalization</a>
-      <a href="#datamodel"       data-target="datamodel">Data model</a>
-      <a href="#proofformat"     data-target="proofformat">Proof format</a>
-      <a href="#signing"         data-target="signing">Signing</a>
-      <a href="#validation"      data-target="validation">Validation</a>
-      <a href="#schema"          data-target="schema">JSON schema</a>
-      <a href="#vectors"         data-target="vectors">Test vectors</a>
-      <a href="#verification"    data-target="verification">Verification</a>
-      <a href="#verifyurl"       data-target="verifyurl">Verify URL</a>
-      <a href="#bundle"          data-target="bundle">Proof bundle</a>
-      <a href="#reserved"        data-target="reserved">Reserved fields</a>
-      <a href="#errors"          data-target="errors">Errors</a>
-      <a href="#policy"          data-target="policy">Operational policy</a>
-      <a href="#checklist"       data-target="checklist">Checklist</a>
-      <a href="#versioning"      data-target="versioning">Versioning</a>
-      <a href="#page-proof-sec"  data-target="page-proof-sec">Page proof</a>
+      <a href="#overview">Overview</a>
+      <a href="#canonicalization">Canonicalization</a>
+      <a href="#datamodel">Data model</a>
+      <a href="#proofformat">Proof format</a>
+      <a href="#signing">Signing</a>
+      <a href="#validation">Validation</a>
+      <a href="#schema">JSON schema</a>
+      <a href="#vectors">Test vectors</a>
+      <a href="#verification">Verification</a>
+      <a href="#verifyurl">Verify URL</a>
+      <a href="#bundle">Proof bundle</a>
+      <a href="#reserved">Reserved fields</a>
+      <a href="#errors">Errors</a>
+      <a href="#policy">Operational policy</a>
+      <a href="#checklist">Checklist</a>
+      <a href="#versioning">Versioning</a>
+      <a href="#page-proof-sec">Page proof</a>
     </nav>
 
     <!-- Content sections -->
@@ -399,7 +392,6 @@ function verify({hash, ts, sig}, secret){
     </section>
   </main>
 
-  <!-- Footer -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <a class="badge" href="/proofspec.html" aria-current="page">🔍 Open Spec v0.1</a>
@@ -434,9 +426,6 @@ function verify({hash, ts, sig}, secret){
     function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
     function toggleMenu(){ (nav.getAttribute('data-state')==='open')?closeMenu():openMenu(); }
     burger&&burger.addEventListener('click', toggleMenu, { passive:true });
-    document.addEventListener('click', (e)=>{ if(window.matchMedia('(min-width: 900px)').matches) return; if(!e.target.closest('.tp-header')&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'&&nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
-    window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
 
     // Auto aria-current
     (function(){
@@ -447,82 +436,8 @@ function verify({hash, ts, sig}, secret){
       });
     })();
 
-    // TOC: scroll déterministe avec offset
-    (function(){
-      const toc=document.getElementById('toc');
-      if(!toc) return;
-
-      function scrollToId(id){
-        const t=document.getElementById(id);
-        if(!t) return;
-
-        // hauteur header selon breakpoint
-        const offset = window.matchMedia('(min-width: 900px)').matches ? 96 : 112;
-        const rect = t.getBoundingClientRect();
-        const y = rect.top + window.pageYOffset - offset;
-
-        // mise à jour du hash sans doubler le scroll natif
-        history.replaceState(null,'','#'+id);
-
-        // scroll lissé mais fiable sur Android via window.scrollTo
-        window.scrollTo({ top:y, behavior:'smooth' });
-      }
-
-      toc.querySelectorAll('a').forEach(a=>{
-        a.addEventListener('click',(ev)=>{
-          const href = a.getAttribute('href') || '';
-          if(!href.startsWith('#')) return;
-          ev.preventDefault();
-          const id = (a.dataset.target || href.slice(1)).trim();
-
-          // fermer le menu s'il est ouvert puis scroller après reflow
-          if(nav.getAttribute('data-state')==='open'){
-            closeMenu();
-            requestAnimationFrame(()=>{ requestAnimationFrame(()=> scrollToId(id)); });
-          }else{
-            scrollToId(id);
-          }
-        }, {passive:false});
-      });
-
-      // Arrivée avec un hash
-      window.addEventListener('load', ()=>{
-        if(!location.hash) return;
-        const id = decodeURIComponent(location.hash.slice(1));
-        const t  = document.getElementById(id);
-        if(!t) return;
-        requestAnimationFrame(()=>{ requestAnimationFrame(()=> {
-          const offset = window.matchMedia('(min-width: 900px)').matches ? 96 : 112;
-          const y = t.getBoundingClientRect().top + window.pageYOffset - offset;
-          window.scrollTo(0, y);
-        });});
-      }, {once:true});
-    })();
-
-    // Release manifest fill
-    (async()=>{
-      try{
-        const r=await fetch('/releases/v0.1.json',{cache:'no-store'}); if(!r.ok) return;
-        const map=await r.json(); const id=document.documentElement.dataset.page||'proofspec.html';
-        const e=map[id] || map['/'] || map;
-        const elH1=document.getElementById('page-proof-hash');
-        const elL1=document.getElementById('page-proof-link');
-        const elH2=document.getElementById('page-proof-hash-dup');
-        const elL2=document.getElementById('page-proof-link-dup');
-        const elR =document.getElementById('page-proof-release');
-        if(elR && e.release) elR.textContent=e.release;
-        if(e.hash){ elH1 && (elH1.textContent=e.hash); elH2 && (elH2.textContent=e.hash); }
-        const url=e.verify || (e.hash ? ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(e.hash)) : '#');
-        if(elL1 && url) elL1.href=url;
-        if(elL2 && url) elL2.href=url;
-      }catch{}
-    })();
-
-    // SW
-    if('serviceWorker' in navigator){
-      navigator.serviceWorker.register('/sw.js', { type:'module', scope:'/' }).catch(()=>{});
-    }
+    // NOTE: pas de JS pour les ancres. Navigation native uniquement.
   })();
   </script>
 </body>
-</html>
+        </html>
