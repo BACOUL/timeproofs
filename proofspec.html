@@ -76,7 +76,7 @@ upgrade-insecure-requests">
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --e:cubic-bezier(.22,.61,.36,1)
     }
     *{ box-sizing:border-box }
-    html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); scroll-behavior:smooth }
+    html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg) }
     html{ scroll-padding-top:96px }
     @media (max-width:899px){ html{ scroll-padding-top:112px } }
     body{
@@ -220,30 +220,29 @@ upgrade-insecure-requests">
 
     <!-- TOC -->
     <nav class="toc" aria-label="Contents" id="toc">
-      <a href="#overview" data-target="overview">Overview</a>
-      <a href="#canonicalization" data-target="canonicalization">Canonicalization</a>
-      <a href="#datamodel" data-target="datamodel">Data model</a>
-      <a href="#proofformat" data-target="proofformat">Proof format</a>
-      <a href="#signing" data-target="signing">Signing</a>
-      <a href="#validation" data-target="validation">Validation</a>
-      <a href="#schema" data-target="schema">JSON schema</a>
-      <a href="#vectors" data-target="vectors">Test vectors</a>
-      <a href="#verification" data-target="verification">Verification</a>
-      <a href="#verifyurl" data-target="verifyurl">Verify URL</a>
-      <a href="#bundle" data-target="bundle">Proof bundle</a>
-      <a href="#reserved" data-target="reserved">Reserved fields</a>
-      <a href="#errors" data-target="errors">Errors</a>
-      <a href="#policy" data-target="policy">Operational policy</a>
-      <a href="#checklist" data-target="checklist">Checklist</a>
-      <a href="#versioning" data-target="versioning">Versioning</a>
-      <a href="#page-proof-sec" data-target="page-proof-sec">Page proof</a>
+      <a href="#overview">Overview</a>
+      <a href="#canonicalization">Canonicalization</a>
+      <a href="#datamodel">Data model</a>
+      <a href="#proofformat">Proof format</a>
+      <a href="#signing">Signing</a>
+      <a href="#validation">Validation</a>
+      <a href="#schema">JSON schema</a>
+      <a href="#vectors">Test vectors</a>
+      <a href="#verification">Verification</a>
+      <a href="#verifyurl">Verify URL</a>
+      <a href="#bundle">Proof bundle</a>
+      <a href="#reserved">Reserved fields</a>
+      <a href="#errors">Errors</a>
+      <a href="#policy">Operational policy</a>
+      <a href="#checklist">Checklist</a>
+      <a href="#versioning">Versioning</a>
+      <a href="#page-proof-sec">Page proof</a>
     </nav>
 
     <!-- Content sections -->
     <section class="card" id="overview"><h2>Overview</h2><p>Hash locally → get a signed timestamped proof → anyone can verify later without your data.</p></section>
 
-    <!-- Canonicalization (+ alias) -->
-    <span id="cannolization" aria-hidden="true"></span>
+    <!-- Canonicalization -->
     <section class="card" id="canonicalization">
       <h2>Canonicalization</h2>
       <ul>
@@ -305,9 +304,7 @@ function verify({hash, ts, sig}, secret){
       </ul>
     </section>
 
-    <!-- JSON schema (+ alias) -->
-    <span id="json-shema" aria-hidden="true"></span>
-    <span id="jsonschema" aria-hidden="true"></span>
+    <!-- JSON schema -->
     <section class="card" id="schema">
       <h2>JSON schema</h2>
 <pre><code>{
@@ -339,8 +336,7 @@ function verify({hash, ts, sig}, secret){
 → {"ok":true,"valid":true,"timestamp":"..."}</code></pre>
     </section>
 
-    <!-- Verify URL (+ alias) -->
-    <span id="verify-url" aria-hidden="true"></span>
+    <!-- Verify URL -->
     <section class="card" id="verifyurl">
       <h2>Verify URL</h2>
       <p>Stable endpoint that returns JSON status for the given hash. Link included in the proof JSON.</p>
@@ -351,9 +347,7 @@ function verify({hash, ts, sig}, secret){
       <p>Ship artifacts with their <code>.tproof.json</code> or embed only the verify link.</p>
     </section>
 
-    <!-- Reserved fields (+ alias) -->
-    <span id="reserved-field" aria-hidden="true"></span>
-    <span id="reseverd-field" aria-hidden="true"></span>
+    <!-- Reserved fields -->
     <section class="card" id="reserved">
       <h2>Reserved fields</h2>
       <p>Names starting with <code>_tp_</code> are reserved for the spec.</p>
@@ -369,8 +363,7 @@ function verify({hash, ts, sig}, secret){
       <ul><li>Minimal logs</li><li>Rate limits</li><li>Key rotation with <code>kid</code></li></ul>
     </section>
 
-    <!-- Checklist (+ alias) -->
-    <span id="check-list" aria-hidden="true"></span>
+    <!-- Checklist -->
     <section class="card" id="checklist">
       <h2>Checklist</h2>
       <ul><li>Hash locally</li><li>Keep proof JSON</li><li>Verify URL present</li></ul>
@@ -381,9 +374,7 @@ function verify({hash, ts, sig}, secret){
       <p>Spec v0.1. Additive changes when possible. Breaking changes bump major.</p>
     </section>
 
-    <!-- Page proof (+ alias) -->
-    <span id="page-proof" aria-hidden="true"></span>
-    <span id="pageproof" aria-hidden="true"></span>
+    <!-- Page proof -->
     <section class="card" id="page-proof-sec" aria-labelledby="pp-title">
       <h2 id="pp-title">This page is verified by TimeProofs</h2>
       <p>Release: <code id="page-proof-release"></code> · Hash: <code id="page-proof-hash-dup"></code> ·
@@ -460,25 +451,26 @@ function verify({hash, ts, sig}, secret){
       });
     })();
 
-    // Sommaire: scroll avec offset fixe (nouvelle logique)
+    // Sommaire: modèle simple basé sur href + offset
     (function(){
-      const toc=document.getElementById('toc');
+      const toc = document.getElementById('toc');
       if(!toc) return;
 
       function getOffset(){
         return window.matchMedia('(max-width: 899px)').matches ? 110 : 90;
       }
 
-      toc.querySelectorAll('a[href^="#"]').forEach(a=>{
-        a.addEventListener('click', (ev)=>{
-          const targetId = a.dataset.target || (a.hash ? a.hash.slice(1) : '');
-          const target = targetId ? document.getElementById(targetId) : null;
+      toc.querySelectorAll('a[href^="#"]').forEach(link=>{
+        link.addEventListener('click', function(e){
+          const href = this.getAttribute('href');
+          const id = href.slice(1);
+          const target = document.getElementById(id);
           if(!target) return;
-          ev.preventDefault();
+          e.preventDefault();
           const rect = target.getBoundingClientRect();
           const y = rect.top + window.scrollY - getOffset();
           window.scrollTo({ top:y, behavior:'smooth' });
-          history.replaceState(null,'','#'+targetId);
+          history.replaceState(null,'','#'+id);
         }, { passive:false });
       });
     })();
