@@ -77,10 +77,8 @@ upgrade-insecure-requests">
     }
     *{ box-sizing:border-box }
     html,body{
-      height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); scroll-behavior:smooth;
+      height:100%; max-width:100%; overflow-x:hidden; background:var(--bg);
     }
-    html{ scroll-padding-top:120px }
-    @media (min-width:900px){ html{ scroll-padding-top:104px } }
     body{
       margin:0; color:var(--text);
       font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
@@ -92,6 +90,7 @@ upgrade-insecure-requests">
     }
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
+
     [id]{ scroll-margin-top:120px }
     @media (min-width:900px){ [id]{ scroll-margin-top:104px } }
 
@@ -559,6 +558,26 @@ function verify({hash, ts, sig}, secret){
       document.querySelectorAll('header nav a, footer .links a').forEach(a=>{
         const path=new URL(a.getAttribute('href'), location.origin).pathname;
         if(path===here) a.setAttribute('aria-current','page');
+      });
+    })();
+
+    // TOC manual scroll with header offset
+    (function(){
+      const header=document.getElementById('hdr');
+      const links=document.querySelectorAll('nav.toc a[href^="#"]');
+      links.forEach(link=>{
+        link.addEventListener('click',function(ev){
+          ev.preventDefault();
+          const id=this.getAttribute('href').slice(1);
+          if(!id) return;
+          const target=document.getElementById(id) || document.querySelector('[id="'+id+'"]');
+          if(!target) return;
+          const headerOffset=header ? header.offsetHeight + 8 : 80;
+          const rect=target.getBoundingClientRect();
+          const y=rect.top + window.scrollY - headerOffset;
+          window.scrollTo({top:y, behavior:'smooth'});
+          history.replaceState(null,'','#'+id);
+        },{ passive:false });
       });
     })();
 
