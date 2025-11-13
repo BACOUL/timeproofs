@@ -49,7 +49,7 @@
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- Security meta -->
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 
   <!-- CSP v0.1 -->
   <meta http-equiv="Content-Security-Policy" content="
@@ -77,6 +77,8 @@ upgrade-insecure-requests">
     }
     *{ box-sizing:border-box }
     html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); scroll-behavior:smooth }
+    html{ scroll-padding-top:96px }
+    @media (max-width:899px){ html{ scroll-padding-top:112px } }
     body{
       margin:0; color:var(--text);
       font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
@@ -90,10 +92,8 @@ upgrade-insecure-requests">
     a:hover{ text-decoration:underline }
     .tp-nav a, footer .links a { text-underline-offset:3px }
     .tp-nav a:hover, footer .links a:hover { text-decoration:underline }
-
-    /* Offsets ancres: header fixe + marge */
-    [id]{ scroll-margin-top:120px }
-    @media (min-width:900px){ [id]{ scroll-margin-top:110px } }
+    [id]{ scroll-margin-top:112px }
+    @media (min-width:900px){ [id]{ scroll-margin-top:96px } }
 
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
     .skip:focus{ position:fixed; left:12px; top:12px; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
@@ -142,7 +142,7 @@ upgrade-insecure-requests">
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* HERO */
+    /* HERO compact */
     .hero{
       padding-top:96px; padding-bottom:18px; text-align:center; position:relative; border-bottom:1px solid var(--line)
     }
@@ -154,63 +154,25 @@ upgrade-insecure-requests">
     .hero .lead{ color:var(--muted); max-width:900px; margin:0 auto 12px; line-height:1.7 }
     .badge{ display:inline-block; margin-top:6px; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem }
 
-    /* TOC block (style docs modernes) */
-    .toc-wrap{
-      position:sticky;
-      top:64px;
-      z-index:500;
-      background:linear-gradient(to bottom, rgba(11,16,32,1), rgba(11,16,32,.94), rgba(11,16,32,.9));
-      backdrop-filter:blur(14px);
-      border-bottom:1px solid var(--line);
-    }
-    .toc-inner{
-      max-width:1200px;
-      margin:0 auto;
-      padding:10px 16px 10px;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-    .toc-title{
-      font-size:.85rem;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      color:var(--muted);
-    }
+    /* TOC pills (design un peu plus poussé mais simple) */
     nav.toc{
-      display:flex;
-      flex-wrap:nowrap;
-      gap:10px;
-      overflow-x:auto;
-      padding-bottom:4px;
-      scrollbar-width:thin;
+      display:flex; flex-wrap:wrap; gap:10px; margin:14px auto 0;
+      padding:12px 0 14px; max-width:1100px; border-bottom:1px solid var(--line)
     }
-    nav.toc::-webkit-scrollbar{ height:4px }
-    nav.toc::-webkit-scrollbar-thumb{ background:#1f2a3a; border-radius:999px }
-
     nav.toc a{
-      flex:0 0 auto;
-      white-space:nowrap;
-      padding:6px 11px;
-      border-radius:999px;
-      border:1px solid #1f2a3a;
-      background:#0c1728;
-      color:#cee7ff;
-      font-size:.9rem;
-      text-decoration:none;
-      opacity:.92;
+      display:inline-flex; align-items:center; gap:6px;
+      background:radial-gradient(circle at 0 0, rgba(148,163,184,.3), rgba(15,23,42,1));
+      border:1px solid #214a57;
+      padding:7px 12px; border-radius:999px;
+      color:#e2f3ff; text-decoration:none; font-size:.9rem; font-weight:500;
+      box-shadow:0 0 0 1px rgba(15,23,42,.9), 0 10px 24px rgba(15,23,42,.7);
     }
-    nav.toc a:hover{
-      border-color:#22d3ee;
-      color:#e6fbff;
-      text-decoration:none;
+    nav.toc a span.num{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:18px; height:18px; border-radius:999px;
+      background:rgba(15,23,42,.9); color:#9beefb; font-size:.75rem; font-weight:700;
     }
-    nav.toc a.is-active{
-      border-color:#22d3ee;
-      background:linear-gradient(135deg,#0f172a,#022c3a);
-      color:#e6fbff;
-      box-shadow:0 0 0 1px rgba(34,211,238,.4);
-    }
+    nav.toc a:hover{ text-decoration:none; border-color:#38e0ff; box-shadow:0 0 0 1px #22d3ee, 0 12px 30px rgba(34,211,238,.25) }
 
     /* Content */
     main{ padding:0 0 40px }
@@ -271,34 +233,32 @@ upgrade-insecure-requests">
       <p class="badge">🔏 Proof of Release · <code id="page-proof-hash">…</code> · <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a></p>
     </section>
 
-    <!-- TOC STICKY -->
-    <div class="toc-wrap" aria-hidden="false">
-      <div class="toc-inner">
-        <div class="toc-title">On this page</div>
-        <nav class="toc" aria-label="Contents" id="toc">
-          <a href="#overview">Overview</a>
-          <a href="#canonicalization">Canonicalization</a>
-          <a href="#datamodel">Data model</a>
-          <a href="#proofformat">Proof format</a>
-          <a href="#signing">Signing</a>
-          <a href="#validation">Validation</a>
-          <a href="#schema">JSON schema</a>
-          <a href="#vectors">Test vectors</a>
-          <a href="#verification">Verification</a>
-          <a href="#verifyurl">Verify URL</a>
-          <a href="#bundle">Proof bundle</a>
-          <a href="#reserved">Reserved fields</a>
-          <a href="#errors">Errors</a>
-          <a href="#policy">Operational policy</a>
-          <a href="#checklist">Checklist</a>
-          <a href="#versioning">Versioning</a>
-          <a href="#page-proof-sec">Page proof</a>
-        </nav>
-      </div>
-    </div>
+    <!-- TOC (anchors natifs, aucun JS) -->
+    <nav class="toc" aria-label="Contents" id="toc">
+      <a href="#overview"><span class="num">1</span><span>Overview</span></a>
+      <a href="#canonicalization"><span class="num">2</span><span>Canonicalization</span></a>
+      <a href="#datamodel"><span class="num">3</span><span>Data model</span></a>
+      <a href="#proofformat"><span class="num">4</span><span>Proof format</span></a>
+      <a href="#signing"><span class="num">5</span><span>Signing</span></a>
+      <a href="#validation"><span class="num">6</span><span>Validation</span></a>
+      <a href="#schema"><span class="num">7</span><span>JSON schema</span></a>
+      <a href="#vectors"><span class="num">8</span><span>Test vectors</span></a>
+      <a href="#verification"><span class="num">9</span><span>Verification</span></a>
+      <a href="#verifyurl"><span class="num">10</span><span>Verify URL</span></a>
+      <a href="#bundle"><span class="num">11</span><span>Proof bundle</span></a>
+      <a href="#reserved"><span class="num">12</span><span>Reserved fields</span></a>
+      <a href="#errors"><span class="num">13</span><span>Errors</span></a>
+      <a href="#policy"><span class="num">14</span><span>Operational policy</span></a>
+      <a href="#checklist"><span class="num">15</span><span>Checklist</span></a>
+      <a href="#versioning"><span class="num">16</span><span>Versioning</span></a>
+      <a href="#page-proof-sec"><span class="num">17</span><span>Page proof</span></a>
+    </nav>
 
     <!-- Content sections -->
-    <section class="card" id="overview"><h2>Overview</h2><p>Hash locally → get a signed timestamped proof → anyone can verify later without your data.</p></section>
+    <section class="card" id="overview">
+      <h2>Overview</h2>
+      <p>Hash locally → get a signed timestamped proof → anyone can verify later without your data.</p>
+    </section>
 
     <section class="card" id="canonicalization">
       <h2>Canonicalization</h2>
@@ -427,7 +387,6 @@ function verify({hash, ts, sig}, secret){
       <p>Spec v0.1. Additive changes when possible. Breaking changes bump major.</p>
     </section>
 
-    <!-- Page proof -->
     <section class="card" id="page-proof-sec" aria-labelledby="pp-title">
       <h2 id="pp-title">This page is verified by TimeProofs</h2>
       <p>Release: <code id="page-proof-release"></code> · Hash: <code id="page-proof-hash-dup"></code> ·
@@ -502,52 +461,6 @@ function verify({hash, ts, sig}, secret){
         const path=new URL(a.getAttribute('href'), location.origin).pathname;
         if(path===here) a.setAttribute('aria-current','page');
       });
-    })();
-
-    // TOC click: scrollIntoView + active pill
-    (function(){
-      const toc=document.getElementById('toc');
-      if(!toc) return;
-      const links=[...toc.querySelectorAll('a[href^="#"]')];
-      links.forEach(link=>{
-        link.addEventListener('click', (ev)=>{
-          const hash=link.getAttribute('href');
-          const id=hash.slice(1);
-          const target=document.getElementById(id);
-          if(!target) return;
-          ev.preventDefault();
-          target.scrollIntoView({behavior:'smooth', block:'start'});
-          history.replaceState(null, '', '#'+id);
-        }, {passive:false});
-      });
-
-      // Observe sections pour marquer le lien actif (comme Stripe/Linear)
-      const sectionIds=links.map(l=>l.getAttribute('href').slice(1));
-      const sections=sectionIds
-        .map(id=>document.getElementById(id))
-        .filter(Boolean);
-
-      if('IntersectionObserver' in window){
-        const observer=new IntersectionObserver((entries)=>{
-          let best=null;
-          entries.forEach(entry=>{
-            if(!entry.isIntersecting) return;
-            if(!best || entry.intersectionRatio>best.intersectionRatio){
-              best=entry;
-            }
-          });
-          if(!best) return;
-          const id=best.target.id;
-          links.forEach(l=>{
-            l.classList.toggle('is-active', l.getAttribute('href')==='#'+id);
-          });
-        },{
-          root:null,
-          rootMargin:"-55% 0px -40% 0px",
-          threshold:[0.15,0.4,0.6]
-        });
-        sections.forEach(sec=>observer.observe(sec));
-      }
     })();
 
     // Release manifest fill
