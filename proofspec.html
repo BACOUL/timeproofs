@@ -460,29 +460,26 @@ function verify({hash, ts, sig}, secret){
       });
     })();
 
-    // Sommaire: scroll avec offset fixe sous le header
+    // Sommaire: scroll avec offset fixe (nouvelle logique)
     (function(){
-      const toc = document.getElementById('toc');
-      if (!toc) return;
-      const HEADER_OFFSET = 96; // hauteur du header + petit espace
+      const toc=document.getElementById('toc');
+      if(!toc) return;
 
-      toc.querySelectorAll('a[href^="#"]').forEach(a => {
-        a.addEventListener('click', (ev) => {
+      function getOffset(){
+        return window.matchMedia('(max-width: 899px)').matches ? 110 : 90;
+      }
+
+      toc.querySelectorAll('a[href^="#"]').forEach(a=>{
+        a.addEventListener('click', (ev)=>{
           const targetId = a.dataset.target || (a.hash ? a.hash.slice(1) : '');
           const target = targetId ? document.getElementById(targetId) : null;
-          if (!target) return;
+          if(!target) return;
           ev.preventDefault();
-
           const rect = target.getBoundingClientRect();
-          const offset = rect.top + window.scrollY - HEADER_OFFSET;
-
-          window.scrollTo({ top: offset, behavior: 'smooth' });
-
-          if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
-          target.focus({ preventScroll: true });
-
-          history.replaceState(null, '', '#' + targetId);
-        }, { passive: false });
+          const y = rect.top + window.scrollY - getOffset();
+          window.scrollTo({ top:y, behavior:'smooth' });
+          history.replaceState(null,'','#'+targetId);
+        }, { passive:false });
       });
     })();
 
