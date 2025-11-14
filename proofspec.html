@@ -76,8 +76,10 @@ upgrade-insecure-requests">
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --e:cubic-bezier(.22,.61,.36,1)
     }
     *{ box-sizing:border-box }
-    html,body{
+
+    html{
       height:100%; max-width:100%; overflow-x:hidden; background:var(--bg);
+      scroll-behavior:smooth;
     }
     body{
       margin:0; color:var(--text);
@@ -91,6 +93,7 @@ upgrade-insecure-requests">
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
 
+    /* offset pour header fixe */
     [id]{ scroll-margin-top:120px }
     @media (min-width:900px){ [id]{ scroll-margin-top:104px } }
 
@@ -561,26 +564,6 @@ function verify({hash, ts, sig}, secret){
       });
     })();
 
-    // TOC manual scroll with header offset
-    (function(){
-      const header=document.getElementById('hdr');
-      const links=document.querySelectorAll('nav.toc a[href^="#"]');
-      links.forEach(link=>{
-        link.addEventListener('click',function(ev){
-          ev.preventDefault();
-          const id=this.getAttribute('href').slice(1);
-          if(!id) return;
-          const target=document.getElementById(id) || document.querySelector('[id="'+id+'"]');
-          if(!target) return;
-          const headerOffset=header ? header.offsetHeight + 8 : 80;
-          const rect=target.getBoundingClientRect();
-          const y=rect.top + window.scrollY - headerOffset;
-          window.scrollTo({top:y, behavior:'smooth'});
-          history.replaceState(null,'','#'+id);
-        },{ passive:false });
-      });
-    })();
-
     // Release manifest fill
     (async()=>{
       try{
@@ -612,4 +595,4 @@ function verify({hash, ts, sig}, secret){
   })();
   </script>
 </body>
-  </html>
+</html>
