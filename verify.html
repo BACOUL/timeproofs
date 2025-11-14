@@ -64,7 +64,7 @@
   {"@context":"https://schema.org","@type":"Organization","name":"TimeProofs","url":"https://timeproofs.io/","logo":"https://timeproofs.io/assets/logo.png","sameAs":["https://x.com/timeproofs","https://github.com/BACOUL/timeproofs/tree/timeproofsv01","https://www.linkedin.com/company/timeproofs","https://youtube.com/@timeproofs","https://timeproofs.io/rss.xml"]}
   </script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebPage","name":"Create & Verify","url":"https://timeproofs.io/verify.html","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"},"datePublished":"2025-10-22","dateModified":"2025-11-06","description":"Create or verify cryptographic proofs of existence. Local hashing, signed timestamp, public verification."}
+  {"@context":"https://schema.org","@type":"WebPage","name":"Create & Verify","url":"https://timeproofs.io/verify.html","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"},"datePublished":"2025-10-22","dateModified":"2025-11-14","description":"Create or verify cryptographic proofs of existence. Local hashing, signed timestamp, public verification."}
   </script>
 
   <style>
@@ -89,6 +89,7 @@
     }
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
+    pre, code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
 
     .skip{
       position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden
@@ -109,7 +110,6 @@
     .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
 
-    /* Nav canonique */
     .tp-nav a{
       color:var(--text); font-weight:700; margin-left:18px;
       padding:10px 0; display:inline-block; text-decoration:none; text-underline-offset:3px
@@ -117,14 +117,12 @@
     .tp-nav a[aria-current="page"]{ color:#9beefb }
     .tp-nav a:hover{ color:var(--accent) }
 
-    /* Header CTA */
     .cta-header{
       display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
       border-radius:10px; background:var(--accent); color:#06202a; font-weight:800; box-shadow:0 6px 24px rgba(34,211,238,.25)
     }
     .cta-header:hover{ filter:brightness(1.05) }
 
-    /* Burger + mobile menu */
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
       border:1px solid var(--line); border-radius:12px; background:#0c1a2e; color:#fff; cursor:pointer
@@ -151,7 +149,7 @@
 
     .wrap{ max-width:1120px; margin:0 auto; padding:0 16px }
 
-    /* HERO standard (centré comme About/Protocol) */
+    /* HERO */
     .hero{
       padding:96px 20px 18px; max-width:1100px; margin:0 auto;
       text-align:center; border-bottom:1px solid var(--line)
@@ -185,7 +183,7 @@
     .tabs{ display:flex; gap:8px; margin:16px 0 18px; flex-wrap:wrap }
     .tab{
       padding:10px 14px; background:#0b1220; border:1px solid #1f2937;
-      border-radius:10px; cursor:pointer; color:#cbd5e1
+      border-radius:10px; cursor:pointer; color:#cbd5e1; font-weight:600
     }
     .tab[aria-selected="true"]{ background:var(--panel); color:var(--text); border-color:#263244 }
     .card{
@@ -212,20 +210,22 @@
     .ok{ background:#0f3b22; color:#b7f7ce; border:1px solid #1c6b3d }
     .bad{ background:#3b0f12; color:#ffc1c6; border:1px solid #6b1c22 }
 
-    pre, code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
     pre{
       width:100%; background:#0b1220; color:#a7f3d0; border:1px solid #1f2937;
       border-radius:10px; padding:12px;
       font-size:13px; max-height:40vh; overflow:auto; position:relative;
+      min-height:52px;
     }
     .copy-btn{
       position:absolute; top:8px; right:8px;
       display:inline-flex; align-items:center; gap:6px;
       padding:6px 10px; border-radius:10px;
       border:1px solid #22455a; background:#0c1a2e; color:#cfefff;
-      font-weight:700; cursor:pointer
+      font-weight:700; cursor:pointer; font-size:12px;
     }
-    .copy-btn:hover{ filter:brightness(1.1) }
+    .copy-btn .ok{ display:none; border:none; background:none; padding:0; margin:0 }
+    .copy-btn.copied .txt{ display:none }
+    .copy-btn.copied .ok{ display:inline }
 
     .drop{
       margin-top:10px; padding:14px; border:1px dashed #2b3b55;
@@ -255,7 +255,7 @@
 
     h1, h2, h3, section, [id]{ scroll-margin-top:84px }
 
-    /* Footer canonique */
+    /* Footer */
     footer{ border-top:1px solid var(--line); margin-top:28px; padding:18px; color:#7c8aa5; text-align:center }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{
@@ -304,7 +304,6 @@
       <a href="/privacy.html">Privacy</a>
       <a href="/legal.html">Legal</a>
       <a href="/about.html">About</a>
-      <!-- Mobile CTA en fin -->
       <a class="nav-cta" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
     </nav>
     <a class="cta-header" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
@@ -314,49 +313,47 @@
   <div class="progress" id="progress" aria-hidden="true"></div>
 
   <main class="wrap" id="main" role="main">
-    <!-- HERO standard centré -->
+    <!-- HERO -->
     <section class="hero card" role="region" aria-labelledby="page-title">
       <div class="icon" aria-hidden="true">🔐</div>
       <p class="status"><strong>Status:</strong> Public Beta v0.1 · Tool · Privacy-first · No blockchain</p>
       <h1 id="page-title">Create & Verify a Proof</h1>
       <p class="lead">
-        Hash locally → timestamp & sign via API → verify publicly. Your content never leaves your device.
-        <strong>Max file size: 50&nbsp;MB.</strong>
+        Step 1: hash on your device · Step 2: create a signed timestamp · Step 3: verify publicly.
+        Your content never leaves your browser. <strong>Max file size: 50&nbsp;MB.</strong>
       </p>
-      <!-- Proof of Release strip — IDs standard -->
       <div class="proof-strip">
         <strong>Proof of Release</strong>
         <span>Release: <code id="page-proof-release"></code></span>
         <span>· Hash: <code id="page-proof-hash"></code></span>
         <a id="page-proof-link" href="#" class="btn" target="_blank" rel="noopener">Verify</a>
       </div>
-      <!-- Actions to jump to tabs -->
       <div style="margin-top:10px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-        <a href="#tool" class="btn" id="focus-create">Create</a>
-        <a href="#tool" class="btn" style="background:#111d33;color:#e2f6ff;border:1px solid var(--line)" id="focus-verify">Verify</a>
+        <a href="#tool" class="btn" id="focus-create">Create a proof</a>
+        <a href="#tool" class="btn" style="background:#111d33;color:#e2f6ff;border:1px solid var(--line)" id="focus-verify">Verify a proof</a>
       </div>
     </section>
 
     <!-- Tabs -->
     <div class="tabs" role="tablist" aria-label="Create or Verify" id="tool" style="scroll-margin-top:90px">
-      <button id="tab-create" class="tab" role="tab" aria-selected="true" aria-controls="panel-create">Create</button>
-      <button id="tab-verify" class="tab" role="tab" aria-selected="false" aria-controls="panel-verify">Verify</button>
-      <button id="tab-url" class="tab" role="tab" aria-selected="false" aria-controls="panel-url">URL</button>
+      <button id="tab-create" class="tab" role="tab" aria-selected="true" aria-controls="panel-create">① Create</button>
+      <button id="tab-verify" class="tab" role="tab" aria-selected="false" aria-controls="panel-verify">② Verify</button>
+      <button id="tab-url" class="tab" role="tab" aria-selected="false" aria-controls="panel-url">API URL</button>
       <button id="tab-json" class="tab" role="tab" aria-selected="false" aria-controls="panel-json">JSON</button>
       <button id="tab-bundle" class="tab" role="tab" aria-selected="false" aria-controls="panel-bundle">Bundle</button>
       <button id="tab-faq" class="tab" role="tab" aria-selected="false" aria-controls="panel-faq">Quick FAQ</button>
     </div>
 
-    <!-- TOOL FIRST -->
+    <!-- CREATE -->
     <section class="card" id="panel-create" role="tabpanel" aria-labelledby="tab-create" aria-busy="false">
-      <h2 style="margin:.2em 0 .6em">Create a proof</h2>
-      <p class="hint">Three input modes. SHA-256 hashing runs <strong>locally</strong>.</p>
+      <h2 style="margin:.2em 0 .3em">① Create a proof</h2>
+      <p class="hint">Choose what you protect, see the local SHA-256 hash, then create a signed timestamp.</p>
 
-      <label>Choose a mode</label>
+      <label>Step 1 · Choose a mode</label>
       <div class="row" role="group" aria-label="Input mode">
-        <button class="tab" id="choose-text" type="button" style="cursor:pointer">Text</button>
-        <button class="tab" id="choose-file" type="button" style="cursor:pointer">File</button>
-        <button class="tab" id="choose-hash" type="button" style="cursor:pointer">Hash</button>
+        <button class="tab" id="choose-text" type="button">Text</button>
+        <button class="tab" id="choose-file" type="button">File</button>
+        <button class="tab" id="choose-hash" type="button">Existing hash</button>
       </div>
 
       <div id="input-text" style="margin-top:14px;">
@@ -369,7 +366,7 @@
         <label for="file">File to hash (processed locally)</label>
         <input type="file" id="file" aria-describedby="file-hint"/>
         <p id="file-hint" class="hint">We only compute a hash in your browser. <strong>No upload</strong>. <strong>Max 50 MB.</strong></p>
-        <div id="drop" class="drop">…or drag & drop a file here</div>
+        <div id="drop" class="drop">…or drag &amp; drop a file here</div>
         <div id="file-info" class="hint" aria-live="polite"></div>
         <div id="hash-preview-file" class="hint" aria-live="polite"></div>
       </div>
@@ -377,24 +374,26 @@
       <div id="input-hash" style="display:none; margin-top:14px;">
         <label for="raw-hash">Existing SHA-256 hash (hex)</label>
         <input type="text" id="raw-hash" placeholder="e3b0c44298fc1c149a..." inputmode="latin" autocapitalize="off" autocomplete="off" spellcheck="false" pattern="[A-Fa-f0-9]{64}" enterkeyhint="done"/>
-        <p class="hint">64 hexadecimal chars, case-insensitive.</p>
+        <p class="hint">64 hexadecimal characters, case-insensitive.</p>
         <div id="hash-preview-raw" class="hint" aria-live="polite"></div>
       </div>
 
       <div class="row" style="margin-top:16px;">
         <div>
-          <label for="type">Type (optional)</label>
+          <label for="type">Step 2 · Tag (optional)</label>
           <input type="text" id="type" placeholder="prompt | gen | file | webhook | other" autocomplete="off" maxlength="32"/>
+          <p class="hint">Short label to describe what this proof represents.</p>
         </div>
         <div>
-          <label for="meta">Meta (optional JSON)</label>
+          <label for="meta">Meta JSON (optional)</label>
           <input type="text" id="meta" placeholder='{"model":"gpt-4o","mime":"text/plain"}' autocomplete="off" spellcheck="false" maxlength="1024"/>
+          <p class="hint">Advanced: any JSON metadata you need to keep with the proof.</p>
         </div>
       </div>
 
       <div class="row" style="margin-top:16px;">
-        <button class="tab" id="btn-create" type="button" aria-controls="create-output create-status create-summary" style="cursor:pointer">Timestamp</button>
-        <span class="hint">Output: hash, signature, verify URL</span>
+        <button class="tab" id="btn-create" type="button" aria-controls="create-output create-status create-summary">Step 3 · Create proof</button>
+        <span class="hint">Returns: hash, signed timestamp, signature, verify link.</span>
       </div>
 
       <div id="create-status" style="margin-top:12px;" aria-live="polite"></div>
@@ -404,31 +403,32 @@
         <div class="item"><span class="k">Hash</span><code id="create-s-hash">—</code></div>
         <div class="item"><span class="k">Signature</span><code id="create-s-sign">—</code></div>
         <div class="item" id="create-s-ts-wrap" style="display:none"><span class="k">Timestamp (Paris)</span><span id="create-s-ts">—</span></div>
-        <div class="item" id="create-s-link-wrap" style="display:none"><span class="k">Verify here</span><button id="open-verify-here" class="tab" type="button" style="cursor:pointer">Open</button></div>
+        <div class="item" id="create-s-link-wrap" style="display:none"><span class="k">Verify here</span><button id="open-verify-here" class="tab" type="button">Open verify tab</button></div>
       </div>
 
       <pre id="create-output" style="margin-top:12px;" aria-live="polite"><button type="button" class="copy-btn" data-target="create-output"><span class="txt">Copy</span><span class="ok">✓ Copied</span></button></pre>
 
       <div class="row" id="create-actions" style="display:none; gap:8px; margin-top:10px;">
-        <button class="tab" id="copy-create-json" type="button" disabled style="cursor:pointer">Copy JSON</button>
-        <button class="tab" id="copy-create-curl" type="button" disabled style="cursor:pointer">Copy cURL</button>
-        <a class="tab" id="share-verify-link" href="#" target="_blank" rel="noopener noreferrer" style="display:none; text-align:center">Share public verify link</a>
-        <button class="tab" id="download-bundle" type="button" disabled style="cursor:pointer">Download .tproof.json</button>
+        <button class="tab" id="copy-create-json" type="button" disabled>Copy JSON</button>
+        <button class="tab" id="copy-create-curl" type="button" disabled>Copy cURL</button>
+        <a class="tab" id="share-verify-link" href="#" target="_blank" rel="noopener noreferrer" style="display:none; text-align:center">Open public verify link</a>
+        <button class="tab" id="download-bundle" type="button" disabled>Download .tproof.json</button>
       </div>
     </section>
 
+    <!-- VERIFY -->
     <section class="card" id="panel-verify" role="tabpanel" aria-labelledby="tab-verify" aria-busy="false" style="display:none;">
-      <h2 style="margin:.2em 0 .6em">Verify a proof</h2>
-      <p class="hint">Paste a SHA-256 hash <strong>or</strong> drop a <code>.tproof.json</code>.</p>
+      <h2 style="margin:.2em 0 .3em">② Verify a proof</h2>
+      <p class="hint">Paste a SHA-256 hash or drop a <code>.tproof.json</code>. We check existence and server signature.</p>
 
       <label for="verify-hash">Hash to verify (SHA-256, hex)</label>
       <input type="text" id="verify-hash" placeholder="Paste a 64-hex hash" inputmode="latin" autocapitalize="off" autocomplete="off" spellcheck="false" pattern="[A-Fa-f0-9]{64}" enterkeyhint="go"/>
 
-      <div class="drop" id="drop-bundle" aria-label="Drop a .tproof.json">…or drag & drop a <strong>.tproof.json</strong> here</div>
+      <div class="drop" id="drop-bundle" aria-label="Drop a .tproof.json">…or drag &amp; drop a <strong>.tproof.json</strong> here</div>
 
       <div class="row" style="margin-top:12px;">
-        <button class="tab" id="btn-verify" type="button" aria-controls="verify-output verify-status verify-summary" style="cursor:pointer">Verify</button>
-        <span class="hint">Checks existence and server signature.</span>
+        <button class="tab" id="btn-verify" type="button" aria-controls="verify-output verify-status verify-summary">Verify proof</button>
+        <span class="hint">Checks that the hash exists, is signed, and has not changed.</span>
       </div>
 
       <div id="verify-status" style="margin-top:12px;" aria-live="polite"></div>
@@ -443,13 +443,13 @@
       <pre id="verify-output" style="margin-top:12px;" aria-live="polite"><button type="button" class="copy-btn" data-target="verify-output"><span class="txt">Copy</span><span class="ok">✓ Copied</span></button></pre>
 
       <div class="row" id="verify-actions" style="display:none; gap:8px; margin-top:10px;">
-        <button class="tab" id="copy-verify-json" type="button" disabled style="cursor:pointer">Copy JSON</button>
-        <button class="tab" id="copy-verify-curl" type="button" disabled style="cursor:pointer">Copy cURL</button>
-        <button class="tab" id="share-verify-link-2" type="button" disabled style="cursor:pointer">Copy share link</button>
+        <button class="tab" id="copy-verify-json" type="button" disabled>Copy JSON</button>
+        <button class="tab" id="copy-verify-curl" type="button" disabled>Copy cURL</button>
+        <button class="tab" id="share-verify-link-2" type="button" disabled>Copy share link</button>
       </div>
     </section>
 
-    <!-- EXPLANATIONS AFTER THE TOOL -->
+    <!-- EXPLANATIONS -->
     <section class="card" id="panel-url" role="tabpanel" aria-labelledby="tab-url" style="display:none">
       <h2 style="margin:.2em 0 .6em">URL calls (GET)</h2>
       <p class="hint">Simple verification via query string. JSON responses.</p>
@@ -536,10 +536,10 @@ POST /api/verify
       <p><strong>Is my content stored?</strong><br/>No. Only the hash circulates. The content never leaves your device.</p>
       <p><strong>Why no blockchain?</strong><br/>For &lt;100 ms latency, predictable costs, and simple public verification.</p>
       <p><strong>Offline verify?</strong><br/>v0.1: via API. v0.2: offline/bundle mode planned.</p>
-      <p><strong>GDPR / AI Act?</strong><br/>Privacy-by-design, hash-only. See <a href="/regulations.html">Regulations & Compliance</a>.</p>
+      <p><strong>GDPR / AI Act?</strong><br/>Privacy-by-design, hash-only. See <a href="/regulations.html">Regulations &amp; Compliance</a>.</p>
     </section>
 
-    <!-- Page proof (duplicata) -->
+    <!-- Page proof duplicata -->
     <section class="card" aria-labelledby="doc-proof" style="margin-top:12px">
       <h2 id="doc-proof">This page is verified by TimeProofs</h2>
       <p>
@@ -551,7 +551,7 @@ POST /api/verify
     </section>
   </main>
 
-  <!-- Footer canonique (identique About) -->
+  <!-- Footer -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <a class="badge" href="/proofspec.html">🔍 Open Spec v0.1</a>
@@ -613,13 +613,16 @@ POST /api/verify
     const MAX_FILE_BYTES = 50 * 1024 * 1024;
     const REQ_TIMEOUT_MS = 15000;
 
-    const hdr=document.getElementById('hdr'); const bar=document.getElementById('progress');
+    const hdr=document.getElementById('hdr');
+    const bar=document.getElementById('progress');
     function onScroll(){
       if(window.scrollY>6) hdr.classList.add('scrolled'); else hdr.classList.remove('scrolled');
-      const h=document.documentElement; const p=(h.scrollTop)/((h.scrollHeight-h.clientHeight)||1);
+      const h=document.documentElement;
+      const p=(h.scrollTop)/((h.scrollHeight-h.clientHeight)||1);
       bar.style.transform=`scaleX(${Math.max(0,Math.min(1,p))})`;
     }
-    onScroll(); window.addEventListener('scroll', onScroll, { passive:true });
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive:true });
 
     const burger = document.getElementById('tp-burger');
     const nav = document.getElementById('tp-nav');
@@ -721,9 +724,15 @@ POST /api/verify
     const inputText  = document.getElementById('input-text');
     const inputFile  = document.getElementById('input-file');
     const inputHash  = document.getElementById('input-hash');
-    chooseText.onclick = ()=>{ inputText.style.display='block'; inputFile.style.display='none'; inputHash.style.display='none'; };
-    chooseFile.onclick = ()=>{ inputText.style.display='none'; inputFile.style.display='block'; inputHash.style.display='none'; };
-    chooseHash.onclick = ()=>{ inputText.style.display='none'; inputFile.style.display='none'; inputHash.style.display='block'; };
+    function setMode(mode){
+      inputText.style.display = mode==='text' ? 'block':'none';
+      inputFile.style.display = mode==='file' ? 'block':'none';
+      inputHash.style.display = mode==='hash' ? 'block':'none';
+    }
+    chooseText.onclick = ()=>setMode('text');
+    chooseFile.onclick = ()=>setMode('file');
+    chooseHash.onclick = ()=>setMode('hash');
+    setMode('text');
 
     // Live previews
     const textArea = document.getElementById('text');
@@ -785,7 +794,7 @@ POST /api/verify
     const statusCreate = document.getElementById('create-status');
     const createActions = document.getElementById('create-actions');
     const copyCreateJSON = document.getElementById('copy-create-json');
-    const theCopyCurl = document.getElementById('copy-create-curl');
+    const copyCreateCurl = document.getElementById('copy-create-curl');
     const downloadBundle = document.getElementById('download-bundle');
     const shareVerifyLink = document.getElementById('share-verify-link');
     const openVerifyHere = document.getElementById('open-verify-here');
@@ -802,13 +811,20 @@ POST /api/verify
 
     function enableCreateActions(data, req){
       createActions.style.display='flex';
-      copyCreateJSON.disabled=false; theCopyCurl.disabled=false; downloadBundle.disabled=false;
+      copyCreateJSON.disabled=false;
+      copyCreateCurl.disabled=false;
+      downloadBundle.disabled=false;
 
       const vurl = data?.verify_url || (data?.hash ? `/verify.html?hash=${encodeURIComponent(data.hash)}` : '');
-      if (vurl){ shareVerifyLink.style.display='inline-block'; shareVerifyLink.href=vurl; } else { shareVerifyLink.style.display='none'; }
+      if (vurl){
+        shareVerifyLink.style.display='inline-block';
+        shareVerifyLink.href=vurl;
+      } else {
+        shareVerifyLink.style.display='none';
+      }
 
       copyCreateJSON.onclick = () => copyToClipboard(outCreate.textContent);
-      theCopyCurl.onclick = () => {
+      copyCreateCurl.onclick = () => {
         const curlBody = JSON.stringify(req).replace(/'/g, "'\\''");
         copyToClipboard(`curl -sS -X POST 'https://api.timeproofs.io/api/timestamp' -H 'Content-Type: application/json' -d '${curlBody}'`);
       };
@@ -840,18 +856,26 @@ POST /api/verify
 
     btnCreate.onclick = async ()=>{
       if (btnCreate.disabled) return;
-      btnCreate.disabled=true; setBusy(document.getElementById('panel-create'),true);
-      outCreate.textContent=''; statusCreate.innerHTML=''; createActions.style.display='none';
-      copyCreateJSON.disabled=true; theCopyCurl.disabled=true; downloadBundle.disabled=true;
-      createSummary.style.display='none'; lastCreated=null; csLinkWrap.style.display='none';
+      btnCreate.disabled=true;
+      setBusy(document.getElementById('panel-create'),true);
+      outCreate.textContent='';
+      statusCreate.innerHTML='';
+      createActions.style.display='none';
+      copyCreateJSON.disabled=true;
+      copyCreateCurl.disabled=true;
+      downloadBundle.disabled=true;
+      createSummary.style.display='none';
+      lastCreated=null;
+      csLinkWrap.style.display='none';
+      csTSWrap.style.display='none';
 
       try{
         let hash='';
-        if (document.getElementById('input-text').style.display!=='none'){
+        if (inputText.style.display!=='none'){
           const text = textArea.value || '';
           if (!text) fail('Provide text to hash.');
           hash = await sha256HexFromText(text);
-        } else if (document.getElementById('input-file').style.display!=='none'){
+        } else if (inputFile.style.display!=='none'){
           const file = fileInput.files?.[0];
           if (!file) fail('Select a file.');
           if (file.size > MAX_FILE_BYTES) fail('File too large (max 50 MB).');
@@ -891,7 +915,10 @@ POST /api/verify
         csStatus.textContent = 'Created';
         csHash.textContent = short(normalized.hash);
         csSign.textContent = short(normalized.signature);
-        if (normalized.timestamp){ csTSWrap.style.display='flex'; csTS.textContent = fmtLocal(normalized.timestamp); }
+        if (normalized.timestamp){
+          csTSWrap.style.display='flex';
+          csTS.textContent = fmtLocal(normalized.timestamp);
+        }
         csLinkWrap.style.display='flex';
         createSummary.style.display = 'grid';
 
@@ -901,7 +928,8 @@ POST /api/verify
       }catch(e){
         statusCreate.innerHTML = `<span class="pill bad" role="alert">❌ ${String(e.message || e)}</span>`;
       }finally{
-        btnCreate.disabled=false; setBusy(document.getElementById('panel-create'),false);
+        btnCreate.disabled=false;
+        setBusy(document.getElementById('panel-create'),false);
       }
     };
 
@@ -921,16 +949,14 @@ POST /api/verify
     const vsTSWrap = document.getElementById('verify-s-ts-wrap');
     const vsTS = document.getElementById('verify-s-ts');
 
-    // Support ?hash=... auto-verify
     const params = new URLSearchParams(location.search);
     const preHash = params.get('hash');
     if (preHash && /^[a-f0-9]{64}$/i.test(preHash)) {
-      document.getElementById('verify-hash').value = preHash;
+      document.getElementById('verify-hash').value = preHash.toLowerCase();
       showTab('verify');
       setTimeout(()=>btnVerify.click(), 60);
     }
 
-    // Drag & drop tproof.json
     const dropBundle = document.getElementById('drop-bundle');
     dropBundle.addEventListener('dragenter', e=>{ e.preventDefault(); dropBundle.classList.add('drag'); });
     dropBundle.addEventListener('dragover',  e=>{ e.preventDefault(); dropBundle.classList.add('drag'); });
@@ -952,16 +978,21 @@ POST /api/verify
 
     btnVerify.onclick = async ()=>{
       if (btnVerify.disabled) return;
-      btnVerify.disabled=true; setBusy(document.getElementById('panel-verify'),true);
-      outVerify.textContent=''; statusVerify.innerHTML=''; verifyActions.style.display='none';
-      copyVerifyJSON.disabled=true; copyVerifyCURL.disabled=true; shareVerifyLink2.disabled=true;
+      btnVerify.disabled=true;
+      setBusy(document.getElementById('panel-verify'),true);
+      outVerify.textContent='';
+      statusVerify.innerHTML='';
+      verifyActions.style.display='none';
+      copyVerifyJSON.disabled=true;
+      copyVerifyCURL.disabled=true;
+      shareVerifyLink2.disabled=true;
       verifySummary.style.display='none';
+      vsTSWrap.style.display='none';
 
       try{
         const hash = (document.getElementById('verify-hash').value || '').trim().toLowerCase();
         if (!/^[a-f0-9]{64}$/i.test(hash)) fail('64-hex hash required.');
 
-        // Try GET first
         let r = await fetchAPI(`/verify?hash=${encodeURIComponent(hash)}`);
         let j = await r.json().catch(()=> ({}));
 
@@ -976,7 +1007,7 @@ POST /api/verify
         const okFlag = (j.ok===true) || (j.valid===true);
         const found = (j.found===true) || okFlag || !!(j.timestamp||j.ts||j.signature||j.sig);
 
-        if (okFlag && found) statusVerify.innerHTML = `<span class="pill ok" role="status">✅ Valid</span>`;
+        if (okFlag && found) statusVerify.innerHTML = `<span class="pill ok" role="status">✅ Valid proof</span>`;
         else if (j.error === 'not_found' || (r && r.status === 404)) statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Not found</span>`;
         else statusVerify.innerHTML = `<span class="pill bad" role="status">❌ Invalid</span>`;
 
@@ -991,13 +1022,18 @@ POST /api/verify
         vsStatus.textContent = okFlag && found ? 'Valid' : (found ? 'Found' : 'Invalid');
         vsHash.textContent = short(normalized.hash);
         vsSign.textContent = short(normalized.signature || '');
-        if (normalized.timestamp){ vsTSWrap.style.display='flex'; vsTS.textContent = fmtLocal(normalized.timestamp); }
+        if (normalized.timestamp){
+          vsTSWrap.style.display='flex';
+          vsTS.textContent = fmtLocal(normalized.timestamp);
+        }
         verifySummary.style.display = 'grid';
 
         outVerify.textContent = JSON.stringify(normalized, null, 2);
 
         verifyActions.style.display='flex';
-        copyVerifyJSON.disabled=false; copyVerifyCURL.disabled=false; shareVerifyLink2.disabled=false;
+        copyVerifyJSON.disabled=false;
+        copyVerifyCURL.disabled=false;
+        shareVerifyLink2.disabled=false;
         copyVerifyCURL.onclick = () => copyToClipboard(`curl -sS 'https://api.timeproofs.io/api/verify?hash=${encodeURIComponent(hash)}'`);
         copyVerifyJSON.onclick = () => copyToClipboard(outVerify.textContent);
         shareVerifyLink2.onclick = () => {
@@ -1008,11 +1044,12 @@ POST /api/verify
       }catch(e){
         statusVerify.innerHTML = `<span class="pill bad" role="alert">❌ ${String(e.message || e)}</span>`;
       }finally{
-        btnVerify.disabled=false; setBusy(document.getElementById('panel-verify'),false);
+        btnVerify.disabled=false;
+        setBusy(document.getElementById('panel-verify'),false);
       }
     };
 
-    // Generic copy buttons inside <pre>
+    // Generic copy buttons
     document.querySelectorAll('.copy-btn').forEach(btn=>{
       const targetId = btn.getAttribute('data-target');
       btn.addEventListener('click', ()=>{
@@ -1033,7 +1070,7 @@ POST /api/verify
       });
     })();
 
-    // Central release manifest /releases/v0.1.json (HERO + duplicata)
+    // Central release manifest
     (async()=>{
       try{
         const res=await fetch('/releases/v0.1.json',{cache:'no-store'});
