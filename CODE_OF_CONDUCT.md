@@ -10,42 +10,48 @@ We commit to act and interact in ways that contribute to an open, welcoming, div
 
 ## Our Standards
 
-Examples of behavior that contributes to a positive environment include:
+### Examples of positive behavior
 
 - Demonstrating empathy and kindness toward others  
 - Using welcoming and inclusive language  
-- Being respectful of differing viewpoints and experiences  
-- Giving and gracefully accepting constructive feedback  
-- Focusing on what is best for the project and community  
+- Being respectful of differing opinions  
+- Giving and accepting constructive feedback gracefully  
+- Focusing on what is best for the project and the broader community  
 
-Examples of unacceptable behavior include:
+### Unacceptable behavior
 
-- Harassment or discrimination of any kind  
-- Publishing others’ private information without consent  
-- Trolling, insults, or personal or political attacks  
-- Sustained disruption of discussions or workspaces  
+- Harassment, discrimination, or derogatory comments  
+- Publishing private information without permission  
+- Personal attacks, trolling, or political/extreme conduct  
+- Sustained disruption of discussions or collaboration  
 
 ---
 
 ## Enforcement Responsibilities
 
-Project maintainers are responsible for clarifying and enforcing our standards.  
-They may remove, edit, or reject contributions that are not aligned with this Code.
+Project maintainers are responsible for clarifying and enforcing this Code of Conduct.  
+They may remove, edit, or reject contributions that violate these standards.
 
 ---
 
 ## Scope
 
-This Code of Conduct applies to all project spaces — including issues, pull requests, discussions, and community channels — and when representing the project in public.
+This Code applies to all project spaces, including:
+
+- GitHub issues  
+- Pull Requests  
+- Discussions  
+- Community channels  
+- Public interactions where someone represents the project  
 
 ---
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the project team at:
+Reports of abusive, harassing, or otherwise unacceptable behavior may be sent to:
 
-**Email:** [contact@timeproofs.io](mailto:contact@timeproofs.io)  
-**Security reports:** [security@timeproofs.io](mailto:security@timeproofs.io)
+**General contact:** contact@timeproofs.io  
+**Security-related issues:** security@timeproofs.io
 
 All complaints will be reviewed and investigated promptly and fairly.
 
@@ -53,7 +59,8 @@ All complaints will be reviewed and investigated promptly and fairly.
 
 ## Attribution
 
-This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org/version/2/1/code_of_conduct/), version 2.1.
+This Code of Conduct is adapted from the Contributor Covenant, version 2.1:  
+https://www.contributor-covenant.org/version/2/1/code_of_conduct/
 
 ---
 
