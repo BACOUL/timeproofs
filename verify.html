@@ -73,10 +73,37 @@ upgrade-insecure-requests">
 
   <!-- JSON-LD -->
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Organization","name":"TimeProofs","url":"https://timeproofs.io/","logo":"https://timeproofs.io/assets/logo.png","sameAs":["https://x.com/timeproofs","https://github.com/BACOUL/timeproofs/tree/timeproofsv01","https://www.linkedin.com/company/timeproofs","https://youtube.com/@timeproofs","https://timeproofs.io/rss.xml"]}
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"TimeProofs",
+    "url":"https://timeproofs.io/",
+    "logo":"https://timeproofs.io/assets/logo.png",
+    "sameAs":[
+      "https://x.com/timeproofs",
+      "https://github.com/BACOUL/timeproofs/tree/timeproofsv01",
+      "https://www.linkedin.com/company/timeproofs",
+      "https://youtube.com/@timeproofs",
+      "https://timeproofs.io/rss.xml"
+    ]
+  }
   </script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebPage","name":"Create & Verify","url":"https://timeproofs.io/verify.html","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"},"datePublished":"2025-10-22","dateModified":"2025-11-14","description":"Create or verify cryptographic proofs of existence. Local hashing, signed timestamp, public verification."}
+  {
+    "@context":"https://schema.org",
+    "@type":"WebPage",
+    "name":"Create & Verify",
+    "url":"https://timeproofs.io/verify.html",
+    "inLanguage":"en",
+    "isPartOf":{
+      "@type":"WebSite",
+      "name":"TimeProofs",
+      "url":"https://timeproofs.io/"
+    },
+    "datePublished":"2025-10-22",
+    "dateModified":"2025-11-15",
+    "description":"Create or verify cryptographic proofs of existence. Local hashing, signed timestamp, public verification."
+  }
   </script>
 
   <!-- Styles -->
@@ -206,7 +233,6 @@ upgrade-insecure-requests">
       font-size:.85rem;
     }
     .proof-strip code{ font-size:.85rem }
-    /* amélioration contraste liens de preuve dans le hero */
     .proof-strip a{
       color:#e5f6ff;
       text-decoration:underline;
@@ -243,7 +269,6 @@ upgrade-insecure-requests">
     .card p.hint{
       margin:0 0 10px; font-size:.9rem; color:#93a1b5;
     }
-    /* amélioration contraste lien "Verify" du bloc de preuve de page */
     #page-proof-sec a{
       color:#e5f6ff;
       text-decoration:underline;
@@ -375,6 +400,13 @@ upgrade-insecure-requests">
       .card{ padding:14px }
       .primary-btn{ margin-top:10px }
     }
+
+    a:focus-visible, .hero-btn:focus-visible, .primary-btn:focus-visible,
+    .tp-burger:focus-visible, .copy-btn:focus-visible {
+      outline:2px solid #22d3ee;
+      outline-offset:3px;
+      border-radius:12px;
+    }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
@@ -390,7 +422,6 @@ upgrade-insecure-requests">
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
-      <a href="/verify.html" aria-current="page">Create/Verify</a>
       <a href="/docs.html">API Docs</a>
       <a href="/regulations.html">Regulations</a>
       <a href="/security.html">Security</a>
@@ -535,7 +566,6 @@ upgrade-insecure-requests">
         <hr style="margin:16px 0; border-color:#1e293b; border-width:0 0 1px"/>
 
         <div class="docs-block">
-          <!-- mini-onglets: on retire role="tablist"/"tabpanel" pour corriger l'erreur ARIA -->
           <div class="mini-tabs" aria-label="API examples">
             <button type="button" id="tab-url" aria-pressed="true">URL</button>
             <button type="button" id="tab-json">JSON</button>
@@ -615,7 +645,7 @@ POST https://api.timeproofs.io/api/verify
       <a href="/">Home</a> •
       <a href="/proofspec.html">Protocol</a> •
       <a href="/use-cases.html">Use Cases</a> •
-      <a href="/verify.html" aria-current="page">Create/Verify</a> •
+      <a href="/verify.html">Create/Verify</a> •
       <a href="/docs.html">API Docs</a> •
       <a href="/regulations.html">Regulations</a> •
       <a href="/.well-known/security.txt">Security.txt</a> •
@@ -1058,7 +1088,7 @@ POST https://api.timeproofs.io/api/verify
         shareVerifyLink2.onclick=()=>{
           const url=`${location.origin}/verify.html?hash=${encodeURIComponent(hash)}`;
           copyToClipboard(url);
-          alert("Link copied:\\n"+url);
+          alert("Link copied:\n"+url);
         };
       }catch(e){
         showVerifyError(String(e.message||e));
@@ -1167,4 +1197,4 @@ POST https://api.timeproofs.io/api/verify
   })();
   </script>
 </body>
-    </html>
+</html>
