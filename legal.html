@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <meta name="color-scheme" content="dark light"/>
   <title>Legal — TimeProofs</title>
+  <meta name="application-name" content="TimeProofs"/>
   <meta name="description" content="TimeProofs Legal: Terms of Service, acceptable use, rate limits, IP, liability, compliance, dispute resolution, and contact."/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="robots" content="index,follow"/>
@@ -20,8 +21,6 @@
   <!-- Perf -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
   <link rel="dns-prefetch" href="//api.timeproofs.io"/>
-  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin/>
-  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev"/>
   <link rel="preconnect" href="https://plausible.io" crossorigin/>
   <link rel="preload" as="image" href="/assets/logo.png" fetchpriority="high"/>
 
@@ -39,6 +38,9 @@ base-uri 'self';
 form-action 'self';
 frame-ancestors 'none';
 upgrade-insecure-requests">
+
+  <!-- Security meta -->
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
 
   <!-- Social -->
   <meta property="og:title" content="Legal — TimeProofs"/>
@@ -64,13 +66,57 @@ upgrade-insecure-requests">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"/>
   <link rel="manifest" href="/site.webmanifest"/>
   <link rel="author" href="/humans.txt"/>
+  <link rel="status" href="https://status.timeproofs.io"/>
 
   <!-- JSON-LD -->
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Organization","name":"TimeProofs","url":"https://timeproofs.io/","logo":"https://timeproofs.io/assets/logo.png","sameAs":["https://x.com/timeproofs","https://github.com/BACOUL/timeproofs/tree/timeproofsv01","https://www.linkedin.com/company/timeproofs","https://youtube.com/@timeproofs","https://timeproofs.io/rss.xml"]}
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"TimeProofs",
+    "alternateName":"TimeProofs Official",
+    "url":"https://timeproofs.io/",
+    "logo":"https://timeproofs.io/assets/logo.png",
+    "sameAs":[
+      "https://x.com/timeproofs",
+      "https://github.com/BACOUL/timeproofs/tree/timeproofsv01",
+      "https://www.linkedin.com/company/timeproofs",
+      "https://youtube.com/@timeproofs",
+      "https://timeproofs.io/rss.xml"
+    ],
+    "knowsAbout":[
+      "digital proof of existence",
+      "timestamp API",
+      "AI data provenance",
+      "cryptographic verification"
+    ]
+  }
   </script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebPage","name":"Legal","url":"https://timeproofs.io/legal.html","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"},"datePublished":"2025-10-22","dateModified":"2025-11-06","description":"Terms of Service, acceptable use, rate limits, IP, liability, compliance, dispute resolution, and contact."}
+  {
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "name":"TimeProofs",
+    "url":"https://timeproofs.io/",
+    "inLanguage":"en"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebPage",
+    "name":"Legal",
+    "url":"https://timeproofs.io/legal.html",
+    "inLanguage":"en",
+    "isPartOf":{
+      "@type":"WebSite",
+      "name":"TimeProofs",
+      "url":"https://timeproofs.io/"
+    },
+    "datePublished":"2025-10-22",
+    "dateModified":"2025-11-06",
+    "description":"Terms of Service, acceptable use, rate limits, IP, liability, compliance, dispute resolution, and contact."
+  }
   </script>
 
   <!-- Styles (alignées avec Privacy/Security) -->
@@ -78,6 +124,7 @@ upgrade-insecure-requests">
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
+      --ok:#34d399; --warn:#f59e0b; --err:#ef4444;
       --e:cubic-bezier(.22,.61,.36,1);
     }
     *{ box-sizing:border-box }
@@ -98,7 +145,6 @@ upgrade-insecure-requests">
 
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
-    .tp-nav a, footer .links a{ text-underline-offset:3px }
 
     /* Anchor offset for fixed header */
     [id]{ scroll-margin-top:120px }
@@ -131,9 +177,10 @@ upgrade-insecure-requests">
 
     .tp-nav a{
       color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block;
+      text-underline-offset:3px;
     }
     .tp-nav a[aria-current="page"]{ color:#9beefb }
-    .tp-nav a:hover{ color:var(--accent); }
+    .tp-nav a:hover{ color:var(--accent); text-decoration:underline }
 
     .cta-header{
       display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
@@ -246,7 +293,7 @@ upgrade-insecure-requests">
       background:#0d1628; font-size:.9rem; color:#cfefff;
     }
     footer .links a{
-      color:#cfefff; font-weight:600;
+      color:#cfefff; font-weight:600; text-underline-offset:3px;
     }
     footer .links a:hover{ color:#9beefb; text-decoration:underline }
     .social{
@@ -289,54 +336,54 @@ upgrade-insecure-requests">
     </button>
   </header>
 
-  <!-- HERO -->
-  <section class="hero" role="region" aria-labelledby="page-title">
-    <div class="icon" aria-hidden="true">⚖️</div>
-    <p class="kicker">Status: Public Beta v0.1 · Legal · Privacy-first · No blockchain</p>
-    <h1 id="page-title">Legal</h1>
-    <p class="lead">
-      Terms governing the use of the TimeProofs website, open protocol draft, and reference API:
-      acceptable use, data handling, IP, disclaimers, liability, and dispute resolution.
-    </p>
-    <p class="badge">
-      🔏 Proof of Release · <code id="page-proof-hash">…</code> ·
-      <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
-    </p>
-    <p class="badge">
-      Legal · Last updated: <strong>2025-11-06</strong>
-    </p>
-  </section>
-
-  <!-- TOC -->
-  <nav class="toc" aria-label="Contents">
-    <a href="#scope">Scope</a>
-    <a href="#defs">Definitions</a>
-    <a href="#eligibility">Eligibility</a>
-    <a href="#au">Acceptable Use</a>
-    <a href="#fairuse">Fair Use</a>
-    <a href="#data">Data</a>
-    <a href="#ip">IP</a>
-    <a href="#beta">Beta</a>
-    <a href="#mod">Modifications</a>
-    <a href="#security">Security</a>
-    <a href="#notices">Notices</a>
-    <a href="#privacyref">Privacy</a>
-    <a href="#warranty">Disclaimers</a>
-    <a href="#liability">Liability</a>
-    <a href="#indemnity">Indemnity</a>
-    <a href="#term">Termination</a>
-    <a href="#govlaw">Governing Law</a>
-    <a href="#dispute">Disputes</a>
-    <a href="#export">Export</a>
-    <a href="#changes">Changes</a>
-    <a href="#misc">Misc</a>
-    <a href="#proof">Document Proof</a>
-    <a href="#contact">Contact</a>
-    <a href="#top" style="padding:4px 10px">↑ Top</a>
-  </nav>
-
   <!-- Main -->
   <main id="main" role="main" aria-describedby="page-title" class="wrap">
+    <!-- HERO -->
+    <section class="hero" role="region" aria-labelledby="page-title">
+      <div class="icon" aria-hidden="true">⚖️</div>
+      <p class="kicker">Status: Public Beta v0.1 · Legal · Privacy-first · No blockchain</p>
+      <h1 id="page-title">Legal</h1>
+      <p class="lead">
+        Terms governing the use of the TimeProofs website, open protocol draft, and reference API:
+        acceptable use, data handling, IP, disclaimers, liability, and dispute resolution.
+      </p>
+      <p class="badge">
+        🔏 Proof of Release · <code id="page-proof-hash">…</code> ·
+        <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
+      </p>
+      <p class="badge">
+        Legal · Last updated: <strong>2025-11-06</strong>
+      </p>
+    </section>
+
+    <!-- TOC -->
+    <nav class="toc" aria-label="Contents">
+      <a href="#scope">Scope</a>
+      <a href="#defs">Definitions</a>
+      <a href="#eligibility">Eligibility</a>
+      <a href="#au">Acceptable Use</a>
+      <a href="#fairuse">Fair Use</a>
+      <a href="#data">Data</a>
+      <a href="#ip">IP</a>
+      <a href="#beta">Beta</a>
+      <a href="#mod">Modifications</a>
+      <a href="#security">Security</a>
+      <a href="#notices">Notices</a>
+      <a href="#privacyref">Privacy</a>
+      <a href="#warranty">Disclaimers</a>
+      <a href="#liability">Liability</a>
+      <a href="#indemnity">Indemnity</a>
+      <a href="#term">Termination</a>
+      <a href="#govlaw">Governing Law</a>
+      <a href="#dispute">Disputes</a>
+      <a href="#export">Export</a>
+      <a href="#changes">Changes</a>
+      <a href="#misc">Misc</a>
+      <a href="#proof">Document Proof</a>
+      <a href="#contact">Contact</a>
+      <a href="#top" style="padding:4px 10px">↑ Top</a>
+    </nav>
+
     <nav aria-label="Breadcrumb" class="crumb">
       <a href="/">Home</a> › <span aria-current="page">Legal</span>
     </nav>
