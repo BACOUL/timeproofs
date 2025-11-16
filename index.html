@@ -346,9 +346,10 @@ upgrade-insecure-requests">
       <div class="label">🔐 Privacy-first • ⚡ Edge-native • 🌍 Open Protocol</div>
       <h1 id="hero-title" class="title">Prove When Data Existed. Privately.</h1>
 
-      <!-- Proof badge just under H1 -->
+      <!-- Proof badge just under H1, aligned with other pages -->
       <p class="label" style="margin-top:0">
-        🔏 Proof of Release · <code id="page-proof-hash">…</code> ·
+        🔏 Proof of Release · <span id="page-proof-release-hero">…</span> ·
+        <code id="page-proof-hash">…</code> ·
         <a id="page-proof-link" href="#" target="_blank" rel="noopener" title="View verification on API">Verify</a>
       </p>
 
@@ -813,6 +814,7 @@ verify: ${verifyURL}`;
         const id = document.documentElement.dataset.page || '/';
         const rel = map[id] || map['index.html'] || map['/'] || map;
 
+        const elRelHero = document.getElementById('page-proof-release-hero');
         const elRel1 = document.getElementById('page-proof-release');
         const elHash1= document.getElementById('page-proof-hash');
         const elLink1= document.getElementById('page-proof-link');
@@ -823,6 +825,7 @@ verify: ${verifyURL}`;
         const banner = document.getElementById('rel-banner');
 
         if (banner && rel.release) banner.textContent = `🔏 ${rel.release} — Verified`;
+        if (elRelHero && rel.release) elRelHero.textContent = rel.release;
         if (elRel1 && rel.release)  elRel1.textContent  = rel.release;
 
         if (elHash1 && rel.hash)    elHash1.textContent = rel.hash;
