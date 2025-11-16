@@ -1,6 +1,14 @@
 User-agent: *
 Allow: /
+
+# Bloquer l'API (évite les erreurs 404 et "explorée non indexée")
+Disallow: https://api.timeproofs.io/
 Disallow: /api/
+
+# Bloquer HTTP non sécurisé (évite la catégorie "page avec redirection")
+Disallow: http://timeproofs.io/
+
+# Bloquer pages internes ou inutiles
 Disallow: /internal/
 Disallow: /drafts/
 Disallow: /admin/
@@ -9,7 +17,12 @@ Disallow: /assets/private/
 Disallow: /tmp/
 Disallow: /*?preview=*
 Disallow: /*?debug=*
+
+# Bloquer pages gelées pour v0.1
 Disallow: /pricing.html
 Disallow: /roadmap.html
-Sitemap: https://timeproofs.io/sitemap.xml
 
+# Optionnel mais propre (évite les canonical)
+Disallow: /index.html
+
+Sitemap: https://timeproofs.io/sitemap.xml
