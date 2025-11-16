@@ -1,424 +1,468 @@
-# ⏱️ TimeProofs  
+<p align="center">
+  <img src="https://timeproofs.io/assets/logo.svg" width="86" height="86" alt="TimeProofs logo"/>
+</p>
 
-**Proof of Existence. For Everything.**  
-The universal proof layer for AI, developers, and the internet.  
-Timestamp, verify, and preserve truth — at the speed of light.
-
-**Website:** https://timeproofs.io  
-**Status:** Public Beta v0.1  
-**Release Proof:** https://github.com/BACOUL/timeproofs/releases/tag/v0.1-final  
-**Stable Branch:** `timeproofsv01`  
-
-[TimeProofs.io](https://timeproofs.io) is the reference implementation of the upcoming open protocol **ProofSpec**, aiming to become the global standard for digital proof of existence.
-
-## 🌍 Overview  
-
-TimeProofs is an edge-native proof service that timestamps and verifies digital existence — a minimal, scalable alternative to blockchain notarization.
-
-Every request produces a signed timestamp:
-
-- You hash locally  
-- You send only the SHA-256 hash  
-- TimeProofs signs it with HMAC-SHA256 and stores the proof  
-- Anyone can verify existence and integrity later  
+<h1 align="center">⏱️ TimeProofs</h1>
+<p align="center"><strong>Proof of Existence. For Everything.</strong></p>
 
-No blockchain, no tokens, no uploads. Just cryptographic proof.
-
-## ⚡ Key Features  
-
-- Proof of Existence for any SHA-256 hash  
-- HMAC-SHA256 integrity over `hash + timestamp`  
-- Edge-native Cloudflare Workers + KV  
-- Hash-only, privacy-first design  
-- Public verify endpoint + human Verify UI  
-- Predictable cost, no gas, no tokens  
-- AI-ready for agents, models, datasets, and pipelines  
-
-## 🧩 Architecture  
-
-Client / SDK  
-- Computes SHA-256 of your content locally  
-- Original data never leaves your device  
-
-API Worker  
-- Receives the hash  
-- Attaches an ISO 8601 timestamp  
-- Signs `hash + timestamp` with HMAC-SHA256  
-- Stores `{ hash, timestamp, signature, type?, meta? }` in KV  
-
-Storage (Cloudflare KV)  
-- Key-value entries for proofs  
-- Low latency, globally replicated  
-
-Frontend  
-- Static site on Vercel / CDN  
-- Verify UI, ProofSpec, Docs, Regulations, Security, Privacy, Legal  
-
-Security  
-- TLS 1.3 transport  
-- HMAC-SHA256 signatures  
-- Hash-only design, minimal logs, no cookies for proofs  
-
-## 🧭 API Reference  
-
-Base URL (Public Beta)  
-`https://api.timeproofs.io/api`  
-
-Only SHA-256 hashes are sent to the API. Your raw content is never transmitted.
-
-### POST /timestamp — Create a Proof  
-
-Create a verifiable timestamp for any SHA-256 hash.
-
-Endpoint  
-`POST https://api.timeproofs.io/api/timestamp`  
-
-Request body  
-`{  
-  "hash": "64-hex",  
-  "type": "event",  
-  "meta": { "model": "gpt-4o", "mime": "text/plain" }  
-}`  
-
-Fields  
-- `hash` (string, required) — SHA-256 hash (64 hex chars)  
-- `type` (string, optional) — classification for the proof (`event`, `prompt`, `output`, etc.)  
-- `meta` (object, optional) — small JSON metadata (model, MIME type, source, environment, etc.)  
-
-Example request  
-`{  
-  "hash": "5b09abaf6ceec6830fffbdec5443fa2d0883a36574dac4b5dec555acdf0c0903",  
-  "type": "event",  
-  "meta": {  
-    "model": "gpt-4o",  
-    "mime": "text/plain",  
-    "source": "readme-example"  
-  }  
-}`  
-
-Example response  
-`{  
-  "ok": true,  
-  "hash": "5b09abaf6ceec6830fffbdec5443fa2d0883a36574dac4b5dec555acdf0c0903",  
-  "timestamp": "2025-02-15T12:34:56.789Z",  
-  "signature": "hmac_sha256(hash|timestamp)",  
-  "verify_url": "https://api.timeproofs.io/api/verify?hash=5b09abaf6ceec6830fffbdec5443fa2d0883a36574dac4b5dec555acdf0c0903",  
-  "type": "event",  
-  "meta": {  
-    "model": "gpt-4o",  
-    "mime": "text/plain",  
-    "source": "readme-example"  
-  }  
-}`  
-
-The `signature` is an HMAC-SHA256 over `hash + timestamp`, with a private server secret. This allows future verification that the timestamp came from a trusted TimeProofs signer.
-
-### GET /verify?hash=… — Verify a Proof  
-
-Check whether a proof exists for a given hash and confirm its authenticity.
-
-Endpoint  
-`GET https://api.timeproofs.io/api/verify?hash=<sha256-hex>`  
-
-Example response  
-`{  
-  "ok": true,  
-  "found": true,  
-  "hash": "5b09abaf6ceec6830fffbdec5443fa2d0883a36574dac4b5dec555acdf0c0903",  
-  "timestamp": "2025-02-15T12:34:56.789Z",  
-  "signature": "hmac_sha256(hash|timestamp)",  
-  "first_seen": "2025-02-15T12:34:56.789Z",  
-  "type": "event",  
-  "meta": {  
-    "model": "gpt-4o",  
-    "mime": "text/plain",  
-    "source": "readme-example"  
-  }  
-}`  
-
-Outcomes  
-- `ok = true, found = true` → Valid proof with timestamp & signature  
-- `found = false` → No proof recorded for this hash  
-- `ok = false` → Invalid hash or request format  
-
-## 📦 Proof Bundles (.tproof.json)  
-
-TimeProofs can represent proofs as portable JSON bundles for archiving, sharing, or offline verification (planned for v0.2+).
-
-Example `.tproof.json` bundle  
-`{  
-  "version": "v0.1",  
-  "hash": "5b09abaf6ceec6830fffbdec5443fa2d0883a36574dac4b5dec555acdf0c0903",  
-  "algorithm": "SHA-256",  
-  "timestamp": "2025-11-04T10:22:33.123Z",  
-  "signature": "hmac_sha256(hash|timestamp)",  
-  "signer": "TimeProofs",  
-  "meta": {  
-    "source": "web:verify",  
-    "env": "prod"  
-  }  
-}`  
-
-The Verify UI will be able to import and verify these bundles client-side in v0.2.
-
-## 🔍 Verify UI  
-
-A human-friendly verification interface is available at:  
-https://timeproofs.io/verify.html  
-
-Capabilities  
-- Paste a SHA-256 hash and verify its existence  
-- Drag-and-drop `.tproof.json` bundles (v0.2+)  
-- Inspect hash, timestamp, signature, and meta  
-- Copy JSON responses and example API calls  
-- Share public verification URLs with non-technical users  
-
-## 🧮 Example Integration  
-
-A JavaScript SDK is planned for v0.2, but integration is already straightforward.
-
-Conceptual example (future SDK)  
-
-`import { timeproof } from "@timeproofs/sdk"  
-
-const proof = await timeproof("your_sha256_hash_here")  
-console.log(proof.timestamp, proof.signature)`  
-
-Expected SDK methods (v0.2)  
-- `createFromText(text)`  
-- `createFromFile(file)`  
-- `createFromHash(hash)`  
-- `verify(hashOrBundle)`  
-
-Each method will return a normalized object similar to:  
-
-`{  
-  "hash": "…",  
-  "timestamp": "…",  
-  "signature": "…",  
-  "verify_url": "https://api.timeproofs.io/api/verify?hash=…",  
-  "type": "event",  
-  "meta": { "source": "sdk" }  
-}`  
-
-## 🧠 Why It Matters  
-
-In a world where information is infinite, proof is rare.  
-AI systems, creators, and organizations all need trust anchors — immutable evidence that something existed before it changed.
-
-TimeProofs provides that missing layer: a universal cryptographic clock for the digital world.
-
-Use cases include  
-- AI output authenticity & provenance  
-- Creator and IP timestamping  
-- Legal or contractual digital evidence  
-- Compliance and audit-proof event logs  
-- Secure verifiable pipelines and releases  
+<p align="center">
+  The open, privacy-first protocol that timestamps, signs, and verifies digital existence.<br>
+  Hash locally. Timestamp instantly. Verify publicly — for AI, developers, creators, legal, and compliance.
+</p>
 
-## 📚 Documentation  
-
-Official site  
-- https://timeproofs.io  
-
-Key pages  
-- Protocol / ProofSpec — https://timeproofs.io/proofspec.html  
-- Use Cases — https://timeproofs.io/use-cases.html  
-- Create / Verify — https://timeproofs.io/verify.html  
-- API Docs — https://timeproofs.io/docs.html  
-- Regulations & Compliance — https://timeproofs.io/regulations.html  
-- Security — https://timeproofs.io/security.html  
-- Privacy — https://timeproofs.io/privacy.html  
-- Legal — https://timeproofs.io/legal.html  
-
-Release manifest (site proofs)  
-- https://timeproofs.io/releases/v0.1.json  
+<p align="center">
+  <a href="https://timeproofs.io">Website</a> •
+  <a href="#-quickstart">Quickstart</a> •
+  <a href="#-api">API</a> •
+  <a href="#-architecture">Architecture</a> •
+  <a href="#-lifecycle">Lifecycle</a> •
+  <a href="#-best-practices">Best Practices</a> •
+  <a href="#-error-codes">Errors</a> •
+  <a href="#-security--privacy">Security</a> •
+  <a href="#-roadmap">Roadmap</a>
+</p>
 
-## 🧭 Roadmap  
+<p align="center">
+  <img src="https://img.shields.io/badge/status-Public%20Beta%20v0.1-blue?style=flat-square"/>
+  <img src="https://img.shields.io/badge/architecture-edge--native-orange?style=flat-square"/>
+  <img src="https://img.shields.io/badge/privacy-hash--only-green?style=flat-square"/>
+  <img src="https://img.shields.io/badge/verified-HMAC256-8A2BE2?style=flat-square"/>
+  <img src="https://img.shields.io/badge/license-MIT-yellow?style=flat-square"/>
+</p>
 
-### v0.1 — Public Beta (Live)  
+---
 
-- Timestamp + Verify endpoints (Cloudflare Workers + KV)  
-- Public Verify UI (web tool)  
-- Protocol page (ProofSpec v0.1)  
-- Documentation, Privacy & Legal pages  
-- Security page and basic threat model  
-- Static site with cryptographic release proof  
+## 🌍 Overview
 
-### v0.2 — Developer Experience (Planned)  
+**TimeProofs** is a deterministic, edge-native protocol that proves *when* digital data first existed — without ever sending the data itself.
 
-- JavaScript SDK (Node + Browser)  
-- PDF proof bundle generation  
-- Enhanced Verify UI (copy buttons, FAQ, examples)  
-- Offline verification modes using `.tproof.json`  
-- Multi-backend anti-lock-in (Workers KV, Redis, others)  
+Only the **SHA-256 hash** is transmitted.  
+Every proof is:
 
-### v1.0 — Productization (Planned)  
+- ⏱ Instant (Cloudflare Edge)  
+- 🔐 Signed (HMAC-SHA256: `hash + timestamp`)  
+- 🌍 Publicly verifiable  
+- 🕊 Privacy-first, GDPR-aligned  
+- 🔏 Portable (`.tproof.json`)  
+- ⚡ Stateless & globally replicated  
 
-- Dashboard (usage metrics, CSV export)  
-- API keys and usage quotas (Free / Pro / Team)  
-- Stripe billing and invoicing  
-- Status endpoint and basic SLA parameters  
+TimeProofs implements the open protocol **ProofSpec v0.1**, the future global standard for timestamping AI outputs, creative work, datasets, code releases, legal evidence, and compliance events.
 
-### v2.0 — Validation Layer (Planned)  
+---
 
-- ProofChain: distributed validation layer  
-- Merkle root publication / transparency logs  
-- SDKs for Python and Go (and more over time)  
-- Offline proof bundles and advanced audit features  
+# 🚀 Quickstart
 
-## 🕓 Changelog (Highlights)  
+### 1. Compute a SHA-256 hash (locally, no upload)
 
-### v0.1 — Public Beta (Feb 2025)  
+```bash
+sha256sum myfile.png | cut -d " " -f1
+```
 
-- Core timestamp + verify API (Cloudflare Workers + KV)  
-- Hash-only storage, HMAC-SHA256 signatures  
-- Public Verify UI + docs  
-- Security, Privacy, and Legal pages  
-- Open GitHub repository and initial license  
-- Release sealing with cryptographic proofs  
+### 2. Create a timestamped proof
 
-### v0.2 — Developer Experience (Planned)  
+```bash
+curl -X POST https://api.timeproofs.io/api/timestamp \
+  -H "Content-Type: application/json" \
+  -d '{"hash":"<your_sha256_here>"}'
+```
 
-- JavaScript SDK for browser and Node  
-- PDF proof bundle generation  
-- Verify UI enhancements (copy cURL / JSON, richer FAQ)  
-- Offline verification mode based on `.tproof.json` bundles  
+### 3. Verify the proof
 
-### v1.0 — Productization (Planned)  
+```bash
+curl "https://api.timeproofs.io/api/verify?hash=<your_sha256_here>"
+```
 
-- Full dashboard with usage, history, and exports  
-- API keys, quotas, and plans (Free / Pro / Enterprise)  
-- Stripe-based billing and receipts  
-- Hardened operations and status reporting  
+### 4. Or verify visually  
+https://timeproofs.io/verify.html
 
-### v2.0 — Validation Layer (Planned)  
+---
 
-- ProofChain for distributed validation  
-- Public transparency logs and Merkle roots  
-- Official SDKs for Python and Go  
-- Advanced compliance and audit tooling  
+# 🔗 End-to-End Example (Full Proof Flow)
 
-## 💡 Vision  
+### 1. Hash local content
 
-By 2030, AI-generated data will surpass all human content.  
-Every model, agent, and creator will need a way to anchor their outputs in time.
+```
+hello world
+```
 
-TimeProofs aims to become the global timestamping backbone of the AI era —  
-a neutral, open, privacy-first protocol that any system can rely on to prove that  
-“this exact data existed, at this exact moment, and has not been altered since.”
+→ SHA-256:
 
-Truth moves fast. TimeProofs makes it verifiable.
+```
+b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9
+```
 
-## 🤝 Contribute  
+### 2. Timestamp it
 
-We welcome developers, researchers, and open-source contributors.
+```bash
+curl -X POST https://api.timeproofs.io/api/timestamp \
+  -H "Content-Type: application/json" \
+  -d '{"hash":"b94d27b9..."}'
+```
+
+Response:
+
+```json
+{
+  "ok": true,
+  "hash": "b94d27b9...",
+  "timestamp": "2025-02-15T12:34:56.789Z",
+  "signature": "hmac_sha256(hash|timestamp)",
+  "verify_url": "https://api.timeproofs.io/api/verify?hash=b94d27b9..."
+}
+```
+
+### 3. Optional: Bundle the proof (portable)
+
+```json
+{
+  "version":"v0.1",
+  "hash":"b94d27b9...",
+  "timestamp":"2025-02-15T12:34:56.789Z",
+  "signature":"...",
+  "algorithm":"SHA-256",
+  "signer":"TimeProofs"
+}
+```
+
+### 4. Verify publicly
+
+```
+GET https://api.timeproofs.io/api/verify?hash=b94d27b9...
+```
+
+---
+
+# 🧭 API
+
+## Base URL
+
+```
+https://api.timeproofs.io/api
+```
+
+---
+
+## POST `/timestamp` — Create a Proof
+
+Request:
+
+```json
+{
+  "hash": "64-hex",
+  "type": "event",
+  "meta": { "model": "gpt-4o" }
+}
+```
+
+Response:
+
+```json
+{
+  "ok": true,
+  "hash": "...",
+  "timestamp": "...",
+  "signature": "hmac_sha256(hash|timestamp)",
+  "verify_url": "https://api.timeproofs.io/api/verify?hash=..."
+}
+```
+
+---
+
+## GET `/verify?hash=...` — Verify a Proof
+
+```json
+{
+  "ok": true,
+  "found": true,
+  "hash": "...",
+  "timestamp": "...",
+  "signature": "...",
+  "first_seen": "..."
+}
+```
+
+---
+
+# 🧩 Architecture
+
+```
+                   ┌────────────────────────────┐
+                   │         Your Client         │
+                   │ (AI agent, backend, CLI)   │
+                   │ computes SHA-256 locally   │
+                   └──────────────┬─────────────┘
+                                  │ hash only
+                                  ▼
+             ┌─────────────────────────────────────────┐
+             │         TimeProofs API (Edge)           │
+             │ Cloudflare Worker                       │
+             │ • timestamps (ISO)                      │
+             │ • signs HMAC-SHA256(hash|timestamp)     │
+             │ • stores proof                          │
+             └─────────────────┬───────────────────────┘
+                               │
+                               ▼
+             ┌─────────────────────────────────────────┐
+             │          Cloudflare KV Storage           │
+             │ { hash, timestamp, signature, meta }     │
+             └─────────────────────────────────────────┘
+                               │
+                               ▼
+             ┌─────────────────────────────────────────┐
+             │       Public Verify UI (Vercel)          │
+             │ • Paste hash                             │
+             │ • Drop .tproof.json                      │
+             │ • Copy JSON / cURL                       │
+             └─────────────────────────────────────────┘
+```
+
+---
+
+# 🔄 Lifecycle of a Proof
+
+```
+[1] Local hashing
+       ↓
+[2] Send hash to API
+       ↓
+[3] Worker timestamps it (ISO-8601)
+       ↓
+[4] Worker signs (HMAC-SHA256)
+       ↓
+[5] Worker stores proof in KV
+       ↓
+[6] Public verification (API / UI)
+       ↓
+[7] Portable .tproof.json bundles (v0.2)
+```
+
+---
+
+# 🧱 Best Practices
+
+### ✔ Always hash locally  
+Your content never leaves your device.
+
+### ✔ Always store the verify URL  
+Useful for legal or audit-trail workflows.
+
+### ✔ Use bundles for offline verification  
+`.tproof.json` = portable + archive-ready.
+
+### ✔ Hash JSON inputs using canonical encoding  
+Avoid inconsistencies between systems.
+
+### ✔ Use SHA-256 consistently  
+No mixed-hash pipelines.
+
+---
+
+# ❗ Error Codes
+
+| Code | Meaning | Fix |
+|------|---------|------|
+| `ERR_INVALID_HASH` | Hash not 64-hex | Recompute hash |
+| `ERR_NOT_FOUND` | No proof exists | Create a new proof |
+| `ERR_RATE_LIMIT` | Too many requests | Slow down / retry |
+| `ERR_BAD_REQUEST` | Wrong payload | Check body format |
+| `ERR_SERVER` | Internal error | Retry later |
+
+---
+
+# ⚙ Implementation Notes
+
+### KV Schema
+
+```
+key = sha256
+value = {
+  hash,
+  timestamp,
+  signature,
+  type?,
+  meta?
+}
+```
+
+### Signing Rule
+
+```
+signature = HMAC_SHA256(SECRET, hash + timestamp)
+```
+
+### Limits
+
+- Body size: 2 KB  
+- Timeout: Worker default  
+- Rate limits: soft per-IP  
+- Hash: 64-hex SHA-256 only  
+
+---
+
+# 📊 Performance & SLA (v1.0 planned)
+
+- Global latency < 100ms  
+- Zero cold starts  
+- Deterministic responses  
+- Multi-region KV replication  
+- 99.9% uptime target (v1.0)  
+Status page: https://status.timeproofs.io  
+
+---
+
+# 🛡 Security & Privacy
+
+- Hash-only workflow  
+- TLS 1.3 enforced  
+- No cookies, no trackers  
+- HMAC-SHA256 signing  
+- Stateless execution  
+- Public verification endpoint  
+- GDPR-aligned  
+
+Full docs:  
+https://timeproofs.io/security.html  
+https://timeproofs.io/privacy.html  
+
+---
+
+# ⚖ Compliance & Regulations
+
+TimeProofs aligns with:
+
+- **EU AI Act** — traceability & provenance  
+- **GDPR** — minimal data (hash-only)  
+- **DSA / DMA** — transparency & auditability  
+- **Digital Evidence norms** — timestamp + signature  
+
+Full page:  
+https://timeproofs.io/regulations.html
 
-How to contribute  
-1. Fork this repository  
-2. Create a feature branch  
-3. Submit a Pull Request  
+---
+
+# 🧭 Roadmap
 
-Useful areas  
-- SDKs and integrations  
-- ProofSpec discussion and improvements  
-- Security review and threat modeling  
-- Documentation, examples, and tutorials  
+### v0.1 — Public Beta (Live)
+- Timestamp + verify API  
+- KV storage  
+- ProofSpec v0.1  
+- Static site  
+- Release sealing  
 
-Security contact  
-- security@timeproofs.io  
+### v0.2 — Developer Experience
+- JavaScript SDK  
+- PDF proofs  
+- Offline verification  
+- Enhanced Verify UI  
+- Multi-backend anti lock-in  
 
-Issues  
-- https://github.com/BACOUL/timeproofs/issues  
+### v1.0 — Productization
+- Dashboard  
+- API keys  
+- Stripe billing  
+- SLA & status checks  
 
-## 🧪 Testing Checklist (Required Before PR)  
+### v2.0 — Validation Layer
+- ProofChain  
+- Merkle transparency logs  
+- SDKs: Python, Go  
+- Audit tooling  
 
-Make sure you have environment variables configured for:  
+---
 
-- `TP_SECRET_KEY` (HMAC key)  
-- `KV_NAMESPACE` (Cloudflare KV binding)  
+# 🙋 FAQ
 
-Every contribution must pass the following:
+### “Is this a blockchain?”
+No. Deterministic, stateless, no gas, no mining.
 
-### Functional  
+### “Is it legally admissible?”
+Yes. Cryptographic timestamping + signature qualifies as digital evidence (jurisdiction-specific).
 
-- `/api/timestamp` returns a valid timestamp + signature  
-- `/api/verify` returns correct verification states  
-- Verify UI works with text, file, and `.tproof.json`  
+### “Can I self-host?”
+Yes (v0.2 BYOI guide).
 
-### Frontend  
+### “Can AI models use it?”
+Yes — agents can timestamp outputs automatically.
 
-- Header + footer identical to site  
-- No overflow on mobile  
-- TOC links functional  
-- Lighthouse score ≥ 95 (mobile + desktop)  
+### “Can I verify offline?”
+Via `.tproof.json` bundles (v0.2).
 
-### Security  
+---
 
-- No console errors  
-- No personal data logged  
-- CSP respected  
-- HTTPS enforced  
+# 👥 Who Uses TimeProofs
 
-### Release Integrity  
+- AI agents & LLM apps  
+- Developers  
+- Legal & compliance teams  
+- Researchers & auditors  
+- Creators & designers  
+- Enterprises needing audit trails  
 
-- No change to release manifest without justification  
-- Hashes match `releases/v0.1.json` unless protocol changes  
-- Release proof verified via TimeProofs before tagging  
+---
 
-### Documentation  
+# 📂 Repository Structure
 
-- README updated when API or flows change  
-- Examples tested against the live API  
-- Links to docs pages verified  
+```
+/api          → worker.js (HMAC signer + KV)
+/site         → static website (Vercel)
+/releases     → release hashes
+/docs         → ProofSpec + documentation
+```
 
-### Self-Hosting  
+---
 
-- `worker.js` runs locally with Wrangler or Miniflare  
-- KV namespace binding works in local and prod  
-- No hard-coded environment assumptions  
+# 🏛 Governance & Maintainers
 
-### UX  
+**Maintainer**  
+Jeason Bacoul — TimeProofs Creator
 
-- Forms usable with keyboard only  
-- Focus states visible for all interactive elements  
-- No layout shift on first load on mobile  
+**Future Governance (v2.0–v3.0)**  
+- TimeProofs Foundation  
+- Open ProofSpec Working Group  
+- Transparency & audit committee  
 
-### Regulatory & Privacy  
+---
 
-- No personal data required or logged by default  
-- Hash-only design preserved  
-- Public verification remains stateless and open  
+# 🙏 Acknowledgements
 
-## 🧾 License  
+Powered by:
 
-MIT License — free for personal and commercial use.  
+- Cloudflare Workers  
+- Cloudflare KV  
+- Vercel  
+- Web Crypto APIs  
+- Open-source ecosystem  
+
+---
+
+# 🤝 Contribute
+
+1. Fork the repo  
+2. Create your branch  
+3. Submit a PR  
+
+Issues: https://github.com/BACOUL/timeproofs/issues  
+Security: security@timeproofs.io
+
+---
+
+# 🧾 License
+
+**MIT License**  
 © 2025 TimeProofs — Proof of Existence. For Everything.
 
-## 🧾 Proof of Worker — v0.1-final (Public Beta)  
+---
 
-File  
-- `worker.js`  
+# 🔏 Proof of Worker — v0.1-final
 
-Version  
-- `v0.1-final`  
-
-Date  
-- `2025-10-24`  
-
-SHA-256  
-- `5b09abaf6ceec6830fffbdec5443fa2d0883a36574dac4b5dec555acdf0c0903`  
-
-Timestamp  
-- `2025-10-24T06:26:52.206Z`  
-
-Signature (HMAC)  
-- `8dd65eb7b9e225a8df5469d89558f2c46216d4db69a892d3ae9d15392ec8af9`  
-
-Verify URL  
-- https://timeproofs.io/verify.html?hash=5b09abaf6ceec6830fffbdec5443fa2d0883a36574dac4b5dec555acdf0c0903  
-
-Integrity  
-- ✅ Cryptographically sealed by TimeProofs.io  
-
-Meta  
-- `{ "src": "release", "env": "prod" }`
+```
+File: worker.js
+Version: v0.1-final
+Date: 2025-10-24
+SHA-256: 5b09abaf6ceec6830fffbdec5443fa2d0883a36574dac4b5dec555acdf0c0903
+Timestamp: 2025-10-24T06:26:52.206Z
+Signature: 8dd65eb7b9e225a8df5469d89558f2c46216d4db69a892d3ae9d15392ec8af9
+Verify: https://timeproofs.io/verify.html?hash=5b09abaf6ceec6830fffbdec5443fa2d0883a36574dac4b5dec555acdf0c0903
+Integrity: Cryptographically sealed by TimeProofs.io
+Meta: { "src": "release", "env": "prod" }
+```
