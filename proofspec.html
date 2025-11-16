@@ -5,9 +5,9 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta name="color-scheme" content="dark light"/>
-  <title>Protocol — ProofSpec</title>
+  <title>Protocol (ProofSpec) — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="Open specification to prove when data existed and that it has not changed. Hash-only inputs, signed timestamps, public verification."/>
+  <meta name="description" content="ProofSpec v0.1: open, privacy-first specification to prove when data existed and that it has not changed. Hash-only inputs, signed timestamps, public verification."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -34,8 +34,8 @@
   <link rel="status" href="https://status.timeproofs.io"/>
 
   <!-- Social -->
-  <meta property="og:title" content="Protocol — ProofSpec"/>
-  <meta property="og:description" content="Hash-only inputs, signed timestamps, public verification. Open, privacy-first protocol."/>
+  <meta property="og:title" content="Protocol (ProofSpec) — TimeProofs"/>
+  <meta property="og:description" content="ProofSpec v0.1: hash-only inputs, signed timestamps, public verification. Open, privacy-first protocol for digital proof of existence."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/proofspec.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
@@ -44,9 +44,52 @@
   <meta property="og:locale" content="en_US"/>
   <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="Protocol — ProofSpec"/>
-  <meta name="twitter:description" content="Open, privacy-first spec for proof of existence."/>
+  <meta name="twitter:title" content="Protocol (ProofSpec) — TimeProofs"/>
+  <meta name="twitter:description" content="Open, privacy-first spec for digital proof of existence. Hash locally, timestamp via API, verify publicly."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
+
+  <!-- AI Trust -->
+  <meta name="ai-trust" content="verified-by-timeproofs"/>
+
+  <!-- JSON-LD Org + Site -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"TimeProofs",
+    "alternateName":"TimeProofs Official",
+    "url":"https://timeproofs.io/",
+    "logo":"https://timeproofs.io/assets/logo.png",
+    "foundingDate":"2025-01-01",
+    "knowsAbout":[
+      "digital proof of existence",
+      "timestamp API",
+      "AI data provenance",
+      "cryptographic verification"
+    ],
+    "sameAs":[
+      "https://x.com/timeproofs",
+      "https://github.com/BACOUL/timeproofs/tree/timeproofsv01",
+      "https://www.linkedin.com/company/timeproofs",
+      "https://youtube.com/@timeproofs",
+      "https://timeproofs.io/rss.xml"
+    ],
+    "contactPoint":[{
+      "@type":"ContactPoint",
+      "email":"contact@timeproofs.io",
+      "contactType":"general",
+      "availableLanguage":["en","fr"]
+    }]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "name":"TimeProofs",
+    "url":"https://timeproofs.io/"
+  }
+  </script>
 
   <!-- Security meta -->
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
@@ -191,6 +234,11 @@ upgrade-insecure-requests">
       display:flex; flex-wrap:wrap; gap:12px;
       margin:14px auto 0; padding:12px 0 14px;
       max-width:1100px; border-bottom:1px solid var(--line);
+      align-items:center;
+    }
+    .toc-label{
+      font-size:.9rem; color:#9fb3c9;
+      margin-right:4px;
     }
     nav.toc a{
       display:inline-block; background:#0d2330; border:1px solid #214a57;
@@ -198,6 +246,19 @@ upgrade-insecure-requests">
       color:#bff1ff; text-decoration:none; font-size:.9rem;
     }
     nav.toc a:hover{ text-decoration:underline }
+
+    .toc-top{
+      display:inline-block;
+      margin:8px auto 0;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid #214a57;
+      background:#0d2330;
+      color:#bff1ff;
+      font-size:.85rem;
+      text-decoration:none;
+    }
+    .toc-top:hover{ text-decoration:underline }
 
     /* Content */
     main{ padding:0 0 40px }
@@ -211,15 +272,34 @@ upgrade-insecure-requests">
     .table-wrap{ overflow:auto; border:1px solid var(--line); border-radius:12px }
     table{ border-collapse:collapse; min-width:720px; width:100% }
     th,td{
-      border-bottom:1px solid #203047; padding:10px 12px; text-align:left; text-wrap:nowrap;
+      border-bottom:1px solid #203047; padding:10px 12px; text-align:left;
+      white-space:nowrap;
     }
-    th{ color:#cfefff; font-weight:700 }
+    /* Allow notes column to wrap on narrow screens */
+    .table-wrap th:nth-child(3),
+    .table-wrap td:nth-child(3){
+      white-space:normal;
+    }
 
     pre,code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
     pre{
       max-width:100%; overflow:auto; padding:12px;
       border-radius:12px; background:#0b1426; border:1px solid #1f2a44; font-size:.95rem;
+      position:relative;
     }
+
+    /* Copy button for code blocks */
+    .copy-btn{
+      position:absolute; top:8px; right:8px;
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px; border-radius:10px;
+      border:1px solid #22455a; background:#0c1a2e; color:#cfefff;
+      font-weight:700; cursor:pointer; font-size:.8rem;
+    }
+    .copy-btn:hover{ filter:brightness(1.1) }
+    .copy-btn .ok{ display:none }
+    .copy-btn.copied .ok{ display:inline }
+    .copy-btn.copied .txt{ display:none }
 
     /* Footer */
     footer{
@@ -249,20 +329,24 @@ upgrade-insecure-requests">
       transition:transform .18s var(--e);
     }
     .social a:hover{ transform:translateY(-2px) }
+
+    @media (max-width:899px){
+      table{ min-width:100%; }
+    }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
-  <!-- Header -->
+  <!-- Header (aligné sur la home, sans aria-current en dur) -->
   <header class="tp-header" id="hdr" role="banner">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
       <span>TimeProofs</span>
     </a>
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
-      <a href="/proofspec.html" aria-current="page">Protocol (ProofSpec)</a>
+      <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
       <a href="/docs.html">API Docs</a>
       <a href="/regulations.html">Regulations</a>
@@ -282,15 +366,18 @@ upgrade-insecure-requests">
     <!-- HERO -->
     <section class="hero" role="region" aria-labelledby="title">
       <div class="icon" aria-hidden="true">📘</div>
-      <p class="badge">Status: Public Beta v0.1 · API · Privacy-first · No blockchain</p>
+      <p class="badge">Status: Public Beta v0.1 · ProofSpec v0.1 · Privacy-first · No blockchain</p>
       <h1 id="title">Protocol — ProofSpec</h1>
-      <p class="lead">Open specification to prove when data existed and that it has not changed. Hash-only inputs, signed timestamps, public verification.</p>
+      <p class="lead">Open, normative specification to prove when data existed and that it has not changed. Hash-only inputs, signed timestamps, public verification.</p>
       <p class="badge">🔏 Proof of Release · <code id="page-proof-hash">…</code> · <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a></p>
     </section>
 
     <!-- TOC -->
     <nav class="toc" aria-label="Contents">
+      <span class="toc-label">On this page</span>
       <a href="#overview">Overview</a>
+      <a href="#normative">Normative language</a>
+      <a href="#conformance">Conformance</a>
       <a href="#canonicalization">Canonicalization</a>
       <a href="#datamodel">Data model</a>
       <a href="#proofformat">Proof format</a>
@@ -308,11 +395,51 @@ upgrade-insecure-requests">
       <a href="#versioning">Versioning</a>
       <a href="#page-proof-sec">Page proof</a>
     </nav>
+    <div style="text-align:center">
+      <a class="toc-top" href="#top">↑ Top</a>
+    </div>
 
     <!-- Content sections -->
     <section class="card" id="overview">
       <h2>Overview</h2>
-      <p>Hash locally → get a signed timestamped proof → anyone can verify later without your data.</p>
+      <p>ProofSpec defines how to create, sign, publish, and verify digital proofs of existence.</p>
+      <p>Model: hash locally → get a signed, timestamped proof → anyone can verify later without access to your original data.</p>
+      <p>This document is normative for issuers and verifiers that claim to be <strong>ProofSpec v0.1 compliant</strong>.</p>
+    </section>
+
+    <section class="card" id="normative">
+      <h2>Normative language & scope</h2>
+      <p>The key words <strong>MUST</strong>, <strong>MUST NOT</strong>, <strong>SHOULD</strong>, <strong>SHOULD NOT</strong>, and <strong>MAY</strong> in this document are to be interpreted as described in RFC 2119 and RFC 8174.</p>
+      <ul>
+        <li>This specification applies to the structure of proof objects, signing rules, verification behaviour, and error reporting.</li>
+        <li>Implementation details (storage engine, infrastructure, billing, UI) are non-normative unless explicitly stated.</li>
+        <li>Where this document uses “example”, the content is informative and does not create additional normative requirements.</li>
+      </ul>
+    </section>
+
+    <section class="card" id="conformance">
+      <h2>Conformance</h2>
+      <p>The following roles are defined:</p>
+      <ul>
+        <li><strong>Issuer</strong>: a system that accepts a hash and returns a signed proof.</li>
+        <li><strong>Verifier</strong>: a system that checks a proof and returns a validation result.</li>
+        <li><strong>Client</strong>: any caller (app, backend, CLI, agent) that interacts with an issuer or verifier.</li>
+      </ul>
+      <p>A <strong>ProofSpec-compliant Issuer</strong>:</p>
+      <ul>
+        <li>MUST only accept canonical hashes (see Canonicalization) and MUST NOT require original content.</li>
+        <li>MUST produce proof objects that satisfy the <a href="#schema">JSON schema</a> and <a href="#datamodel">data model</a>.</li>
+        <li>MUST sign over at least <code>hash|ts</code> using the declared <code>alg</code> and <code>kid</code>.</li>
+        <li>MUST expose a stable <a href="#verifyurl">verify URL</a> for each proof or hash.</li>
+      </ul>
+      <p>A <strong>ProofSpec-compliant Verifier</strong>:</p>
+      <ul>
+        <li>MUST validate the structure of the proof, including required fields and formats.</li>
+        <li>MUST recompute the expected signature for the given <code>alg</code> and <code>kid</code> and compare using a timing-safe method.</li>
+        <li>MUST reject proofs whose <code>ts</code> is not a valid UTC timestamp or is unreasonably far in the future.</li>
+        <li>SHOULD provide clear error codes as defined in the <a href="#errors">Errors</a> section.</li>
+      </ul>
+      <p>Clients that claim ProofSpec compliance SHOULD keep the full proof JSON and SHOULD NOT rely only on a verify URL.</p>
     </section>
 
     <!-- Canonicalization (+ alias) -->
@@ -320,9 +447,9 @@ upgrade-insecure-requests">
     <section class="card" id="canonicalization">
       <h2>Canonicalization</h2>
       <ul>
-        <li>Bytes-in, bytes-out. Hash exact bytes.</li>
-        <li>Text: UTF-8, normalize line endings to LF.</li>
-        <li>JSON meta: stable key order if pre-hashed.</li>
+        <li>Issuers and clients MUST hash the exact bytes they intend to prove (“bytes-in, bytes-out”).</li>
+        <li>Text inputs SHOULD be encoded as UTF-8 and SHOULD normalize line endings to LF (<code>\n</code>) before hashing.</li>
+        <li>JSON metadata MAY be pre-hashed using a stable key ordering if needed; if so, the same process MUST be documented.</li>
       </ul>
     </section>
 
@@ -334,14 +461,14 @@ upgrade-insecure-requests">
             <tr><th>Field</th><th>Type</th><th>Notes</th></tr>
           </thead>
           <tbody>
-            <tr><td>hash</td><td>string(64 hex)</td><td>SHA-256 of input</td></tr>
-            <tr><td>ts</td><td>ISO 8601</td><td>UTC timestamp</td></tr>
-            <tr><td>sig</td><td>hex</td><td>Signature over <code>hash|ts</code></td></tr>
-            <tr><td>alg</td><td>enum</td><td><code>HMAC-SHA256</code> now; Ed25519 planned</td></tr>
-            <tr><td>kid</td><td>string</td><td>Key id / version</td></tr>
-            <tr><td>issuer</td><td>string</td><td>Authority</td></tr>
-            <tr><td>verify_url</td><td>URL</td><td>Public verify endpoint</td></tr>
-            <tr><td>meta</td><td>object</td><td>Small, no PII</td></tr>
+            <tr><td>hash</td><td>string(64 hex)</td><td>SHA-256 of input. REQUIRED.</td></tr>
+            <tr><td>ts</td><td>ISO 8601</td><td>UTC timestamp of issuance. REQUIRED.</td></tr>
+            <tr><td>sig</td><td>hex</td><td>Signature over <code>hash|ts</code>. REQUIRED.</td></tr>
+            <tr><td>alg</td><td>enum</td><td><code>HMAC-SHA256</code> now; Ed25519 planned. REQUIRED.</td></tr>
+            <tr><td>kid</td><td>string</td><td>Key id / version used to produce <code>sig</code>. SHOULD be present.</td></tr>
+            <tr><td>issuer</td><td>string</td><td>Authority issuing the proof (e.g. <code>timeproofs.io</code>).</td></tr>
+            <tr><td>verify_url</td><td>URL</td><td>Public verify endpoint for this hash/proof. RECOMMENDED.</td></tr>
+            <tr><td>meta</td><td>object</td><td>Small, no PII. Optional implementation-specific metadata.</td></tr>
           </tbody>
         </table>
       </div>
@@ -356,27 +483,40 @@ upgrade-insecure-requests">
   "alg":"HMAC-SHA256",
   "kid":"v1",
   "issuer":"timeproofs.io",
-  "verify_url":"https://api.timeproofs.io/api/verify?hash=..."
+  "verify_url":"https://api.timeproofs.io/api/verify?hash=...",
+  "meta":{
+    "type":"event",
+    "source":"web"
+  }
 }</code></pre>
     </section>
 
     <section class="card" id="signing">
       <h2>Signing</h2>
-<pre><code>// Node.js HMAC verify
+<pre><code>// Node.js HMAC verify (example)
 import crypto from "node:crypto";
-function verify({hash, ts, sig}, secret){
+
+function verify({ hash, ts, sig }, secret) {
   const msg = `${hash}|${ts}`;
-  const expect = crypto.createHmac("sha256", secret).update(msg).digest("hex");
-  return crypto.timingSafeEqual(Buffer.from(expect,'hex'), Buffer.from(sig,'hex'));
+  const expect = crypto
+    .createHmac("sha256", secret)
+    .update(msg)
+    .digest("hex");
+
+  return crypto.timingSafeEqual(
+    Buffer.from(expect, "hex"),
+    Buffer.from(sig, "hex")
+  );
 }</code></pre>
     </section>
 
     <section class="card" id="validation">
       <h2>Validation</h2>
       <ul>
-        <li>Hash is 64 hex.</li>
-        <li><code>ts</code> is ISO-8601 UTC and not in the future beyond tolerance.</li>
-        <li>Recompute expected signature for the given <code>alg</code> and <code>kid</code>.</li>
+        <li><code>hash</code> MUST be a 64-character lowercase hex string.</li>
+        <li><code>ts</code> MUST be a valid ISO 8601 UTC timestamp and SHOULD NOT be in the future beyond a reasonable tolerance.</li>
+        <li>The verifier MUST recompute the expected signature according to <code>alg</code> and <code>kid</code> and compare using a timing-safe method.</li>
+        <li>If any required field is missing or invalid, the verifier MUST return a failure with an appropriate error code.</li>
       </ul>
     </section>
 
@@ -411,39 +551,45 @@ function verify({hash, ts, sig}, secret){
     <section class="card" id="verification">
       <h2>Verification</h2>
 <pre><code>GET /api/verify?hash=&lt;64-hex&gt;
-→ {"ok":true,"valid":true,"timestamp":"..."}</code></pre>
+→ {"ok":true,"valid":true,"timestamp":"2025-01-01T00:00:00.000Z","hash":"..."}</code></pre>
     </section>
 
     <!-- Verify URL (+ alias) -->
     <span id="verify-url" aria-hidden="true"></span>
     <section class="card" id="verifyurl">
       <h2>Verify URL</h2>
-      <p>Stable endpoint that returns JSON status for the given hash. Link included in the proof JSON.</p>
+      <p>The verify URL is a stable endpoint that returns JSON status for the given hash or proof. It SHOULD be included in the proof JSON as <code>verify_url</code>.</p>
+      <p>Clients MAY choose to rely on the verify URL alone, but keeping the full proof JSON is RECOMMENDED for long-term verification.</p>
     </section>
 
     <section class="card" id="bundle">
       <h2>Proof bundle</h2>
-      <p>Ship artifacts with their <code>.tproof.json</code> or embed only the verify link.</p>
+      <p>Artifacts (files, datasets, binaries) SHOULD be shipped with their <code>.tproof.json</code> proof alongside them, or at least with a stable verify link.</p>
+      <p>Bundles SHOULD be small, self-contained, and not contain personal data.</p>
     </section>
 
     <!-- Reserved fields (+ alias) -->
     <span id="reseverd-field" aria-hidden="true"></span>
     <section class="card" id="reserved">
       <h2>Reserved fields</h2>
-      <p>Names starting with <code>_tp_</code> are reserved for the spec.</p>
+      <p>Names starting with <code>_tp_</code> are reserved for the ProofSpec and MUST NOT be used for custom metadata.</p>
     </section>
 
     <section class="card" id="errors">
       <h2>Errors</h2>
-<pre><code>{"ok":false,"error":"invalid_hash"}</code></pre>
+<pre><code>{"ok":false,"error":"invalid_hash"}
+// Other examples:
+// {"ok":false,"error":"invalid_signature"}
+// {"ok":false,"error":"not_found"}
+// {"ok":false,"error":"rate_limited"}</code></pre>
     </section>
 
     <section class="card" id="policy">
       <h2>Operational policy</h2>
       <ul>
-        <li>Minimal logs.</li>
-        <li>Rate limits.</li>
-        <li>Key rotation with <code>kid</code>.</li>
+        <li>Issuers SHOULD keep minimal logs and avoid storing original content.</li>
+        <li>Issuers SHOULD apply rate limits and abuse protection on timestamp and verify endpoints.</li>
+        <li>Key rotation SHOULD be implemented using <code>kid</code> and a clear key lifecycle policy.</li>
       </ul>
     </section>
 
@@ -452,15 +598,17 @@ function verify({hash, ts, sig}, secret){
     <section class="card" id="checklist">
       <h2>Checklist</h2>
       <ul>
-        <li>Hash locally.</li>
-        <li>Keep proof JSON.</li>
-        <li>Verify URL present.</li>
+        <li>Hash locally (no original content leaves the device).</li>
+        <li>Keep the proof JSON (<code>.tproof.json</code>).</li>
+        <li>Ensure a stable verify URL is present or derivable.</li>
+        <li>Validate against the JSON schema and data model.</li>
       </ul>
     </section>
 
     <section class="card" id="versioning">
       <h2>Versioning</h2>
-      <p>Spec v0.1. Additive changes when possible. Breaking changes bump major.</p>
+      <p>This document describes <strong>ProofSpec v0.1</strong>. Additive changes SHOULD prefer minor/patch bumps; breaking changes MUST bump the major version.</p>
+      <p>Issuers and verifiers SHOULD clearly expose which ProofSpec version(s) they support.</p>
     </section>
 
     <!-- Page proof (+ alias) -->
@@ -468,22 +616,25 @@ function verify({hash, ts, sig}, secret){
     <span id="pageproof" aria-hidden="true"></span>
     <section class="card" id="page-proof-sec" aria-labelledby="pp-title">
       <h2 id="pp-title">This page is verified by TimeProofs</h2>
-      <p>Release: <code id="page-proof-release"></code> · Hash: <code id="page-proof-hash-dup"></code> ·
+      <p>Release: <code id="page-proof-release">…</code> · Hash: <code id="page-proof-hash-dup">…</code> ·
         <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener">Verify</a></p>
+      <p style="margin-top:10px">
+        The hash above identifies a specific build of this ProofSpec v0.1 document. The verify link returns the signed record used to prove its existence and integrity.
+      </p>
     </section>
   </main>
 
-  <!-- Footer -->
+  <!-- Footer (identique à la home, sans aria-current en dur) -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
-      <a class="badge" href="/proofspec.html" aria-current="page">🔍 Open Spec v0.1</a>
+      <a class="badge" href="/proofspec.html">🔍 Open Spec v0.1</a>
       <span class="badge">⚡ Edge Native</span>
       <span class="badge">🛡 Privacy First</span>
     </div>
     © 2025 TimeProofs — Reference implementation of the ProofSpec protocol.
     <div class="links" style="margin-top:6px">
       <a href="/">Home</a> •
-      <a href="/proofspec.html" aria-current="page">Protocol</a> •
+      <a href="/proofspec.html">Protocol</a> •
       <a href="/use-cases.html">Use Cases</a> •
       <a href="/verify.html">Create/Verify</a> •
       <a href="/docs.html">API Docs</a> •
@@ -515,6 +666,40 @@ function verify({hash, ts, sig}, secret){
     </div>
   </footer>
 
+  <!-- FAQPage JSON-LD spécifique à ProofSpec -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity":[
+      {
+        "@type":"Question",
+        "name":"What is ProofSpec?",
+        "acceptedAnswer":{
+          "@type":"Answer",
+          "text":"ProofSpec is the open, privacy-first specification for digital proof of existence used by TimeProofs and compatible implementations."
+        }
+      },
+      {
+        "@type":"Question",
+        "name":"Can I self-host a ProofSpec-compliant issuer?",
+        "acceptedAnswer":{
+          "@type":"Answer",
+          "text":"Yes. You can implement the issuer and verifier roles yourself, as long as your proofs follow the ProofSpec data model, signing rules, and JSON schema."
+        }
+      },
+      {
+        "@type":"Question",
+        "name":"Does ProofSpec require a blockchain?",
+        "acceptedAnswer":{
+          "@type":"Answer",
+          "text":"No. ProofSpec uses cryptographic hashes and signed timestamps with public verification, without storing original content or requiring a blockchain."
+        }
+      }
+    ]
+  }
+  </script>
+
   <!-- Scripts -->
   <script defer nonce="TP-2025">
   (function(){
@@ -543,7 +728,7 @@ function verify({hash, ts, sig}, secret){
     function toggleMenu(){
       (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu();
     }
-    burger && burger.addEventListener('click', toggleMenu, { passive:true });
+    burger && burger.addEventListener('click', toggleMenu);
     document.addEventListener('click',(e)=>{
       if(window.matchMedia('(min-width: 900px)').matches) return;
       if(!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu();
@@ -571,7 +756,7 @@ function verify({hash, ts, sig}, secret){
         if(!r.ok) return;
         const map=await r.json();
         const id=document.documentElement.dataset.page || 'proofspec.html';
-        const e=map[id] || map['/'] || map;
+        const e=map[id] || map['proofspec.html'] || map['/'] || map;
         const elH1=document.getElementById('page-proof-hash');
         const elL1=document.getElementById('page-proof-link');
         const elH2=document.getElementById('page-proof-hash-dup');
@@ -588,6 +773,34 @@ function verify({hash, ts, sig}, secret){
       }catch{}
     })();
 
+    // Copy buttons on all code blocks
+    (function installCopyButtons(){
+      document.querySelectorAll('pre').forEach((pre)=>{
+        if(pre.querySelector('.copy-btn')) return;
+        const btn=document.createElement('button');
+        btn.type='button';
+        btn.className='copy-btn';
+        btn.setAttribute('aria-label','Copy code block');
+        btn.innerHTML='<span class="txt">Copy</span><span class="ok">✓ Copied</span>';
+        btn.addEventListener('click', async ()=>{
+          const code = pre.querySelector('code')?.innerText ?? pre.innerText;
+          try{
+            await navigator.clipboard.writeText(code);
+            btn.classList.add('copied');
+            setTimeout(()=>btn.classList.remove('copied'), 1200);
+          }catch{
+            const ta=document.createElement('textarea');
+            ta.value=code; ta.style.position='fixed'; ta.style.left='-9999px';
+            document.body.appendChild(ta); ta.select();
+            document.execCommand('copy'); document.body.removeChild(ta);
+            btn.classList.add('copied');
+            setTimeout(()=>btn.classList.remove('copied'), 1200);
+          }
+        });
+        pre.appendChild(btn);
+      });
+    })();
+
     // Service Worker
     if('serviceWorker' in navigator){
       navigator.serviceWorker.register('/sw.js',{type:'module',scope:'/'}).catch(()=>{});
@@ -595,4 +808,4 @@ function verify({hash, ts, sig}, secret){
   })();
   </script>
 </body>
-</html>
+                                                              </html>
