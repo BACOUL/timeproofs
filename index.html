@@ -197,21 +197,47 @@ upgrade-insecure-requests">
     .label{
       display:inline-flex; gap:8px; align-items:center; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem; margin-bottom:12px; box-shadow:var(--ring)
     }
-    .proof-box{
-      display:inline-flex;
-      flex-direction:column;
+
+    /* NEW Proof of Release layout */
+    .proof-banner{
+      display:flex;
+      justify-content:center;
+      gap:6px;
       align-items:center;
-      gap:4px;
-      padding:8px 14px;
-      border-radius:12px;
+      padding:6px 14px;
+      border-radius:999px;
       border:1px solid #214a57;
       background:#0d2330;
       color:#bff1ff;
       font-size:.85rem;
-      margin:6px auto 10px;
+      margin:10px auto 10px;
+      width:max-content;
       box-shadow:var(--ring);
     }
-    .proof-box code{ font-size:.82rem; }
+    .proof-card{
+      max-width:600px;
+      margin:0 auto 24px;
+      text-align:center;
+    }
+    .proof-card .muted{
+      color:var(--muted);
+      margin-bottom:6px;
+      font-size:.9rem;
+    }
+    .proof-card .hash{
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      word-break:break-all;
+      font-size:.9rem;
+      margin-bottom:14px;
+    }
+    .proof-card .verify{
+      color:var(--accent);
+      text-decoration:none;
+      font-weight:600;
+    }
+    .proof-card .verify:hover{
+      text-decoration:underline;
+    }
 
     .title{
       font-size:clamp(2.2rem, 6.2vw, 3.4rem); line-height:1.06; margin:.2em auto .3em; font-weight:900; max-width:1000px;
@@ -362,12 +388,15 @@ upgrade-insecure-requests">
       <div class="label">🔐 Privacy-first • ⚡ Edge-native • 🌍 Open Protocol</div>
       <h1 id="hero-title" class="title">Prove When Data Existed. Privately.</h1>
 
-      <!-- Proof badge just under H1, aligned with internal pages (Use Cases) -->
-      <p class="proof-box" aria-label="Proof of release for this site">
-        🔏 Proof of Release · <span id="page-proof-release-hero">…</span><br/>
-        Hash: <code id="page-proof-hash">…</code> ·
-        <a id="page-proof-link" href="#" target="_blank" rel="noopener" title="View verification on API">Verify</a>
-      </p>
+      <!-- NEW Proof of Release layout under H1 -->
+      <div class="proof-banner" aria-label="Proof of release for this site">
+        🔏 Proof of Release · <span id="page-proof-release-hero">…</span>
+      </div>
+      <article class="card proof-card" aria-label="Proof hash for this site">
+        <p class="muted">Hash:</p>
+        <p id="page-proof-hash" class="hash">…</p>
+        <a id="page-proof-link" class="verify" href="#" target="_blank" rel="noopener" title="View verification on API">Verify →</a>
+      </article>
 
       <p class="subtitle">Hash anything on your device. Receive an instant, signed timestamp. Anyone can verify later that it existed and is unchanged — without seeing your data.</p>
       <p class="positioning">One self-describing JSON proof readable by any ProofSpec-compliant tool.</p>
@@ -550,13 +579,14 @@ const check = await res.json();</code></pre></article>
     </section>
 
     <section class="section bg-alt reveal" aria-labelledby="site-proof-title" id="site-proof">
-      <p class="label" style="margin-bottom:8px">🔏 Proof of Release</p>
-      <h2 id="site-proof-title">Verified by TimeProofs</h2>
-      <p>We publish a public proof of this website build. Anyone can check it.</p>
-      <p>Release: <code id="page-proof-release">…</code> · Hash:
-        <code id="page-proof-hash-dup">…</code>
-        · <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener" title="View verification on API">Verify</a>
-      </p>
+      <div class="proof-banner">
+        🔏 Proof of Release · <span id="page-proof-release">…</span>
+      </div>
+      <article class="card proof-card">
+        <p class="muted">Hash:</p>
+        <p id="page-proof-hash-dup" class="hash">…</p>
+        <a id="page-proof-link-dup" class="verify" href="#" target="_blank" rel="noopener" title="View verification on API">Verify →</a>
+      </article>
       <p style="text-align:center; margin-top:6px; color:#9fb3c9">
         Each build is timestamped and linked here. “Verify” opens a public endpoint that returns the signed record used to prove existence and integrity.
       </p>
