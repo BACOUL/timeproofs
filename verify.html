@@ -410,6 +410,24 @@ upgrade-insecure-requests">
       outline-offset:3px;
       border-radius:12px;
     }
+
+    /* Nav/Footer unifiés (v0.1 maître) */
+    #tp-nav a,
+    footer .links a{
+      color:#a7b7cc;
+      font-weight:600;
+      text-decoration:none;
+    }
+    #tp-nav a:hover,
+    footer .links a:hover{
+      color:var(--accent);
+      text-decoration:underline;
+    }
+    #tp-nav a[aria-current="page"],
+    footer .links a[aria-current="page"]{
+      color:var(--accent);
+      text-decoration:underline;
+    }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
@@ -425,6 +443,7 @@ upgrade-insecure-requests">
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
+      <a href="/verify.html">Create/Verify</a>
       <a href="/docs.html">API Docs</a>
       <a href="/regulations.html">Regulations</a>
       <a href="/security.html">Security</a>
@@ -629,10 +648,11 @@ POST https://api.timeproofs.io/api/verify
     </section>
 
     <!-- Page proof bloc -->
-    <section class="card" id="page-proof-sec" style="max-width:1100px; margin:16px auto 0;">
-      <h2>This page is verified by TimeProofs</h2>
+    <section class="card" id="page-proof-sec" role="region" aria-labelledby="page-proof-title" style="max-width:1100px; margin:16px auto 0;">
+      <h2 id="page-proof-title">This page is verified by TimeProofs</h2>
       <p>Release: <code id="page-proof-release-dup">…</code> · Hash: <code id="page-proof-hash-dup">…</code> ·
         <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener">Verify</a></p>
+      <p class="hint">Timestamp created via TimeProofs API (public, privacy-first, no blockchain).</p>
     </section>
   </main>
 
