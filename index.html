@@ -122,7 +122,16 @@ upgrade-insecure-requests">
       --e:cubic-bezier(.22,.61,.36,1)
     }
     *{ box-sizing:border-box }
-    html,body{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); scroll-behavior:smooth }
+
+    html{
+      height:100%; max-width:100%; overflow-x:hidden; background:var(--bg);
+      scroll-behavior:smooth;
+      scroll-padding-top:120px;
+    }
+    @media (min-width:900px){
+      html{ scroll-padding-top:104px }
+    }
+
     body{
       margin:0; color:var(--text);
       font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
@@ -134,8 +143,9 @@ upgrade-insecure-requests">
     }
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
-    .tp-nav a, footer .links a { text-underline-offset:3px; }
-    .tp-nav a:hover, footer .links a:hover { text-decoration:underline; }
+
+    [id]{ scroll-margin-top:120px }
+    @media (min-width:900px){ [id]{ scroll-margin-top:104px } }
 
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
     .skip:focus{ position:fixed; left:12px; top:12px; width:auto; height:auto; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
@@ -150,8 +160,10 @@ upgrade-insecure-requests">
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
 
     /* Header nav */
-    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none }
-    .tp-nav a[aria-current="page"]{ color:#9beefb } .tp-nav a:hover{ color:var(--accent) }
+    .tp-nav a{
+      color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none;
+      text-underline-offset:3px;
+    }
 
     /* Header CTA */
     .cta-header{
@@ -287,8 +299,7 @@ upgrade-insecure-requests">
     footer{ border-top:1px solid var(--line); margin-top:44px; padding:18px; color:#7c8aa5; text-align:center }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
-    footer .links a{ color:#cfefff; font-weight:600 }
-    footer .links a:hover{ color:#9beefb }
+    footer .links a{ font-weight:600; text-underline-offset:3px; }
     .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
     .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; transition:transform .18s var(--e); color:#cfefff }
     .social a:hover{ transform:translateY(-2px) }
@@ -322,6 +333,24 @@ upgrade-insecure-requests">
     .copy-btn .ok{ display:none }
     .copy-btn.copied .ok{ display:inline }
     .copy-btn.copied .txt{ display:none }
+
+    /* Nav/Footer alignment (same as other pages) */
+    #tp-nav a,
+    footer .links a{
+      color:#a7b7cc;
+      font-weight:600;
+      text-underline-offset:3px;
+    }
+    #tp-nav a:hover,
+    footer .links a:hover{
+      color:var(--accent);
+      text-decoration:underline;
+    }
+    #tp-nav a[aria-current="page"],
+    footer .links a[aria-current="page"]{
+      color:var(--accent);
+      text-decoration:underline;
+    }
   </style>
   <noscript><style>.reveal{opacity:1 !important; transform:none !important}</style></noscript>
 </head>
@@ -329,7 +358,7 @@ upgrade-insecure-requests">
   <a href="#main" class="skip">Skip to main content</a>
 
   <header class="tp-header" id="hdr" role="banner">
-    <a class="tp-brand" href="/" aria-label="TimeProofs Home" aria-current="page">
+    <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
       <span>TimeProofs</span>
     </a>
@@ -357,7 +386,7 @@ upgrade-insecure-requests">
       <div class="label">🔐 Privacy-first • ⚡ Edge-native • 🌍 Open Protocol</div>
       <h1 id="hero-title" class="title">Prove When Data Existed. Privately.</h1>
 
-      <!-- Proof of Release — même encadré que sur ProofSpec -->
+      <!-- Proof of Release — encadré standard -->
       <p class="badge" aria-label="Proof of release for this site">
         🔏 Proof of Release · Hash:
         <code id="page-proof-hash">…</code> ·
@@ -585,7 +614,7 @@ const check = await res.json();</code></pre></article>
     </div>
     © 2025 TimeProofs — Reference implementation of the ProofSpec protocol.
     <div class="links" style="margin-top:6px">
-      <a href="/" aria-current="page">Home</a> •
+      <a href="/">Home</a> •
       <a href="/proofspec.html">Protocol</a> •
       <a href="/use-cases.html">Use Cases</a> •
       <a href="/verify.html">Create/Verify</a> •
@@ -821,7 +850,6 @@ verify: ${verifyURL}`;
         if(!r.ok) return;
         const map = await r.json();
 
-        // Map resolution: explicit id > '/' > legacy flat
         const id = document.documentElement.dataset.page || '/';
         const rel = map[id] || map['index.html'] || map['/'] || map;
 
