@@ -136,7 +136,7 @@ upgrade-insecure-requests">
   }
   </script>
 
-  <!-- Styles (même squelette que use-cases/proofspec) -->
+  <!-- Styles (squelette aligné use-cases/proofspec) -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
@@ -262,6 +262,11 @@ upgrade-insecure-requests">
       display:flex; flex-wrap:wrap; gap:12px;
       margin:14px auto 0; padding:12px 0 14px;
       max-width:1100px; border-bottom:1px solid var(--line);
+      align-items:center;
+    }
+    .toc-label{
+      font-size:.9rem; color:#9fb3c9;
+      margin-right:4px;
     }
     nav.toc a{
       display:inline-block; background:#0d2330; border:1px solid #214a57;
@@ -269,6 +274,18 @@ upgrade-insecure-requests">
       color:#bff1ff; text-decoration:none; font-size:.9rem;
     }
     nav.toc a:hover{ text-decoration:underline }
+    .toc-top{
+      display:inline-block;
+      margin:8px auto 0;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid #214a57;
+      background:#0d2330;
+      color:#bff1ff;
+      font-size:.85rem;
+      text-decoration:none;
+    }
+    .toc-top:hover{ text-decoration:underline }
 
     /* Content */
     main{ padding:0 0 40px }
@@ -285,9 +302,15 @@ upgrade-insecure-requests">
     .table-wrap{ overflow:auto; border:1px solid var(--line); border-radius:12px }
     table{ border-collapse:collapse; min-width:720px; width:100% }
     th,td{
-      border-bottom:1px solid #203047; padding:10px 12px; text-align:left; text-wrap:nowrap;
+      border-bottom:1px solid #203047; padding:10px 12px; text-align:left;
+      white-space:nowrap;
     }
     th{ color:#cfefff; font-weight:700 }
+    /* Wrap description column (4th) on narrow screens */
+    .table-wrap th:nth-child(4),
+    .table-wrap td:nth-child(4){
+      white-space:normal;
+    }
 
     pre,code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
     pre{
@@ -296,11 +319,18 @@ upgrade-insecure-requests">
       position:relative;
     }
 
+    /* Copy button (aligné ProofSpec) */
     .copy-btn{
       position:absolute; top:8px; right:8px;
-      padding:6px 10px; border:1px solid #22455a; border-radius:10px;
-      background:#0c1a2e; color:#cfefff; font-weight:700; cursor:pointer;
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px; border-radius:10px;
+      border:1px solid #22455a; background:#0c1a2e; color:#cfefff;
+      font-weight:700; cursor:pointer; font-size:.8rem;
     }
+    .copy-btn:hover{ filter:brightness(1.1) }
+    .copy-btn .ok{ display:none }
+    .copy-btn.copied .ok{ display:inline }
+    .copy-btn.copied .txt{ display:none }
 
     .muted{ color:var(--muted); font-size:.9rem }
 
@@ -332,13 +362,17 @@ upgrade-insecure-requests">
       transition:transform .18s var(--e);
     }
     .social a:hover{ transform:translateY(-2px) }
+
+    @media (max-width:899px){
+      table{ min-width:100% }
+    }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
-  <!-- Header (canonique) -->
+  <!-- Header (canonique, sans aria-current en dur) -->
   <header class="tp-header" id="hdr" role="banner">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
@@ -347,7 +381,7 @@ upgrade-insecure-requests">
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
-      <a href="/docs.html" aria-current="page">API Docs</a>
+      <a href="/docs.html">API Docs</a>
       <a href="/regulations.html">Regulations</a>
       <a href="/security.html">Security</a>
       <a href="/privacy.html">Privacy</a>
@@ -362,7 +396,7 @@ upgrade-insecure-requests">
   </header>
 
   <main id="main" class="wrap" role="main" aria-describedby="page-title">
-    <!-- HERO (structure identique, icône 📚) -->
+    <!-- HERO -->
     <section class="hero" role="region" aria-labelledby="page-title">
       <div class="icon" aria-hidden="true">📚</div>
       <p class="badge">Status: Public Beta v0.1 · API · Privacy-first · No blockchain</p>
@@ -371,8 +405,9 @@ upgrade-insecure-requests">
       <p class="badge">🔏 Proof of Release · <code id="page-proof-hash">…</code> · <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a></p>
     </section>
 
-    <!-- TOC (même style que use-cases/proofspec) -->
+    <!-- TOC -->
     <nav class="toc" aria-label="Contents">
+      <span class="toc-label">On this page</span>
       <a href="#base-url">Base URL</a>
       <a href="#auth">Auth</a>
       <a href="#timestamp">POST /api/timestamp</a>
@@ -382,6 +417,9 @@ upgrade-insecure-requests">
       <a href="#sdk">Client helpers</a>
       <a href="#page-proof-sec">Page proof</a>
     </nav>
+    <div style="text-align:center">
+      <a class="toc-top" href="#top">↑ Top</a>
+    </div>
 
     <!-- Meta -->
     <p class="meta">
@@ -546,15 +584,15 @@ const sha256Hex = (buf) =>
     <section class="card" id="page-proof-sec" aria-labelledby="proof-title">
       <h2 id="proof-title">This page is verified by TimeProofs</h2>
       <p>
-        Release: <code id="page-proof-release"></code> ·
-        Hash: <code id="page-proof-hash-dup"></code> ·
+        Release: <code id="page-proof-release">…</code> ·
+        Hash: <code id="page-proof-hash-dup">…</code> ·
         <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener">Verify</a>
       </p>
       <p class="muted">Loaded from the central release manifest.</p>
     </section>
   </main>
 
-  <!-- Footer (canonique) -->
+  <!-- Footer (canonique, sans aria-current en dur) -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <a class="badge" href="/proofspec.html">🔍 Open Spec v0.1</a>
@@ -567,7 +605,7 @@ const sha256Hex = (buf) =>
       <a href="/proofspec.html">Protocol</a> •
       <a href="/use-cases.html">Use Cases</a> •
       <a href="/verify.html">Create/Verify</a> •
-      <a href="/docs.html" aria-current="page">API Docs</a> •
+      <a href="/docs.html">API Docs</a> •
       <a href="/regulations.html">Regulations</a> •
       <a href="/.well-known/security.txt">Security.txt</a> •
       <a href="/privacy.html">Privacy</a> •
@@ -596,7 +634,7 @@ const sha256Hex = (buf) =>
     </div>
   </footer>
 
-  <!-- Scripts (identiques à use-cases/proofspec) -->
+  <!-- Scripts (alignés use-cases/proofspec) -->
   <script defer nonce="TP-2025">
   (function(){
     // Header shade
@@ -624,7 +662,7 @@ const sha256Hex = (buf) =>
     function toggleMenu(){
       (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu();
     }
-    burger && burger.addEventListener('click', toggleMenu, { passive:true });
+    burger && burger.addEventListener('click', toggleMenu);
     document.addEventListener('click',(e)=>{
       if(window.matchMedia('(min-width: 900px)').matches) return;
       if(!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu();
@@ -645,23 +683,30 @@ const sha256Hex = (buf) =>
       });
     })();
 
-    // Copy buttons
-    (function(){
+    // Copy buttons on all code blocks (aligné ProofSpec)
+    (function installCopyButtons(){
       document.querySelectorAll('pre').forEach((pre)=>{
         if(pre.querySelector('.copy-btn')) return;
         const btn=document.createElement('button');
-        btn.className='copy-btn'; btn.type='button'; btn.textContent='Copy';
+        btn.type='button';
+        btn.className='copy-btn';
+        btn.setAttribute('aria-label','Copy code block');
+        btn.innerHTML='<span class="txt">Copy</span><span class="ok">✓ Copied</span>';
         btn.addEventListener('click', async ()=>{
           const code = pre.querySelector('code')?.innerText ?? pre.innerText;
           try{
             await navigator.clipboard.writeText(code);
-            btn.textContent='Copied';
-            setTimeout(()=>btn.textContent='Copy',1200);
+            btn.classList.add('copied');
+            setTimeout(()=>btn.classList.remove('copied'), 1200);
           }catch{
-            btn.textContent='Error';
-            setTimeout(()=>btn.textContent='Copy',1200);
+            const ta=document.createElement('textarea');
+            ta.value=code; ta.style.position='fixed'; ta.style.left='-9999px';
+            document.body.appendChild(ta); ta.select();
+            document.execCommand('copy'); document.body.removeChild(ta);
+            btn.classList.add('copied');
+            setTimeout(()=>btn.classList.remove('copied'), 1200);
           }
-        },{ passive:true });
+        });
         pre.appendChild(btn);
       });
     })();
@@ -673,7 +718,7 @@ const sha256Hex = (buf) =>
         if(!r.ok) return;
         const map=await r.json();
         const id=document.documentElement.dataset.page || 'docs.html';
-        const e=map[id] || map['/'] || map;
+        const e=map[id] || map['docs.html'] || map['/'] || map;
 
         const elH1=document.getElementById('page-proof-hash');
         const elL1=document.getElementById('page-proof-link');
