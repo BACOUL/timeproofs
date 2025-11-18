@@ -41,7 +41,7 @@
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/legal.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
-  <meta property="og:image:alt" content="TimeProofs legal"/>
+  <meta property="og:image:alt" content="TimeProofs — Legal"/>
   <meta property="og:site_name" content="TimeProofs"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:locale:alternate" content="fr_FR"/>
@@ -77,7 +77,6 @@ upgrade-insecure-requests">
     "@context":"https://schema.org",
     "@type":"Organization",
     "name":"TimeProofs",
-    "alternateName":"TimeProofs Official",
     "url":"https://timeproofs.io/",
     "logo":"https://timeproofs.io/assets/logo.png",
     "sameAs":[
@@ -86,7 +85,13 @@ upgrade-insecure-requests">
       "https://www.linkedin.com/company/timeproofs",
       "https://youtube.com/@timeproofs",
       "https://timeproofs.io/rss.xml"
-    ]
+    ],
+    "contactPoint":[{
+      "@type":"ContactPoint",
+      "email":"contact@timeproofs.io",
+      "contactType":"general",
+      "availableLanguage":["en","fr"]
+    }]
   }
   </script>
   <!-- JSON-LD: WebSite -->
@@ -99,22 +104,18 @@ upgrade-insecure-requests">
     "inLanguage":"en"
   }
   </script>
-  <!-- JSON-LD: WebPage -->
+  <!-- JSON-LD: TechArticle (Legal) -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
-    "@type":"WebPage",
-    "name":"Legal",
-    "url":"https://timeproofs.io/legal.html",
-    "inLanguage":"en",
-    "isPartOf":{
-      "@type":"WebSite",
-      "name":"TimeProofs",
-      "url":"https://timeproofs.io/"
-    },
+    "@type":"TechArticle",
+    "headline":"Legal — TimeProofs",
+    "about":"Terms of Service, acceptable use, rate limits, IP, liability, compliance, dispute resolution, and contact.",
     "datePublished":"2025-10-22",
     "dateModified":"2025-11-06",
-    "description":"Terms of Service, acceptable use, rate limits, IP, liability, compliance, dispute resolution, and contact."
+    "inLanguage":"en",
+    "maintainer":{"@type":"Organization","name":"TimeProofs"},
+    "mainEntityOfPage":{"@type":"WebPage","@id":"https://timeproofs.io/legal.html"}
   }
   </script>
   <!-- JSON-LD: BreadcrumbList -->
@@ -129,7 +130,7 @@ upgrade-insecure-requests">
   }
   </script>
 
-  <!-- Styles (alignées sur Use Cases / Security) -->
+  <!-- Styles (squelette use-cases) -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
@@ -158,11 +159,9 @@ upgrade-insecure-requests">
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
 
-    /* Offset anchors for fixed header */
+    /* offset pour header fixe */
     [id]{ scroll-margin-top:120px }
-    @media (min-width:900px){
-      [id]{ scroll-margin-top:104px }
-    }
+    @media (min-width:900px){ [id]{ scroll-margin-top:104px } }
 
     .skip{
       position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
@@ -233,7 +232,7 @@ upgrade-insecure-requests">
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* HERO (modèle Security, icône ⚖️) */
+    /* HERO (même structure que Use Cases) */
     .hero{
       padding-top:96px; padding-bottom:18px; text-align:center;
       position:relative; border-bottom:1px solid var(--line);
@@ -252,20 +251,8 @@ upgrade-insecure-requests">
       border:1px solid #214a57; background:#0d2330; color:#bff1ff;
       border-radius:999px; font-size:.85rem;
     }
-    .proof-strip{
-      display:inline-flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center;
-      margin-top:8px; padding:6px 12px;
-      border-radius:999px; border:1px solid #214a57; background:#0d2330; color:#bff1ff;
-      font-size:.85rem;
-    }
-    .proof-strip code{ font-size:.85rem }
-    .proof-strip a{
-      color:#e5f6ff;
-      text-decoration:underline;
-      font-weight:600;
-    }
 
-    /* TOC chips */
+    /* TOC */
     nav.toc{
       display:flex; flex-wrap:wrap; gap:12px;
       margin:14px auto 0; padding:12px 0 14px;
@@ -278,13 +265,15 @@ upgrade-insecure-requests">
     }
     nav.toc a:hover{ text-decoration:underline }
 
+    /* Content */
     main{ padding:0 0 40px }
+
     .crumb{
       color:#9fb3c9; margin:10px 0 8px;
       font-size:.92rem;
     }
     .meta{
-      color:#94a3b8; margin:0 0 1.1em;
+      color:var(--muted); margin:18px auto 6px; max-width:1100px;
     }
 
     .card{
@@ -293,15 +282,23 @@ upgrade-insecure-requests">
     }
     h2{ color:#b9e7f5; font-size:1.25rem; margin:1.2em 0 .6em }
     h3{ color:#aee9f7; font-size:1.05rem; margin:1em 0 .3em }
-    .muted{ color:var(--muted); font-size:.9rem }
 
-    code{
-      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-      font-size:.92rem;
-      word-break:break-all;
+    pre,code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
+    pre{
+      max-width:100%; overflow:auto; padding:12px;
+      border-radius:12px; background:#0b1426; border:1px solid #1f2a44; font-size:.95rem;
+      position:relative;
     }
 
-    /* Footer (modèle Use Cases / Security) */
+    .copy-btn{
+      position:absolute; top:8px; right:8px;
+      padding:6px 10px; border:1px solid #22455a; border-radius:10px;
+      background:#0c1a2e; color:#cfefff; font-weight:700; cursor:pointer;
+    }
+
+    .muted{ color:var(--muted); font-size:.9rem }
+
+    /* Footer */
     footer{
       border-top:1px solid var(--line); margin-top:28px;
       padding:18px; color:#7c8aa5; text-align:center;
@@ -359,7 +356,7 @@ upgrade-insecure-requests">
   </header>
 
   <main id="main" class="wrap" role="main" aria-describedby="page-title">
-    <!-- HERO -->
+    <!-- HERO (même encadré Release que Use Cases) -->
     <section class="hero" role="region" aria-labelledby="page-title">
       <div class="icon" aria-hidden="true">⚖️</div>
       <p class="badge">Status: Public Beta v0.1 · Legal · Privacy-first · No blockchain</p>
@@ -368,14 +365,11 @@ upgrade-insecure-requests">
         Terms governing the use of the TimeProofs website, open protocol draft, and reference API:
         acceptable use, data handling, IP, disclaimers, liability, and dispute resolution.
       </p>
-      <div class="proof-strip">
-        <strong>Proof of Release</strong>
-        <span>Release: <code id="page-proof-release">…</code></span>
-        <span>· Hash: <code id="page-proof-hash">…</code></span>
-        <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
-      </div>
+      <!-- Proof of Release – identique au modèle Use Cases -->
       <p class="badge">
-        Legal · Last updated: <strong>2025-11-06</strong>
+        🔏 Proof of Release ·
+        <code id="page-proof-hash">…</code> ·
+        <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
       </p>
     </section>
 
@@ -402,17 +396,20 @@ upgrade-insecure-requests">
       <a href="#export">Export</a>
       <a href="#changes">Changes</a>
       <a href="#misc">Misc</a>
-      <a href="#proof">Document Proof</a>
+      <a href="#page-proof-sec">Page proof</a>
       <a href="#contact">Contact</a>
     </nav>
 
+    <!-- Meta line -->
     <nav aria-label="Breadcrumb" class="crumb">
       <a href="/">Home</a> › <span aria-current="page">Legal</span>
     </nav>
     <p class="meta">
-      Version: <strong>v0.1</strong> · Effective: <strong>2025-10-22</strong> · Last updated: <strong>2025-11-06</strong>
+      Version: <strong>v0.1</strong> · Effective: <strong>2025-10-22</strong> · Last updated: <strong>2025-11-06</strong> ·
+      See also: <a href="/privacy.html">Privacy Policy</a> · <a href="/.well-known/security.txt">security.txt</a>
     </p>
 
+    <!-- Sections (contenu Legal existant) -->
     <section class="card" id="scope">
       <h2>1. Scope and Agreement</h2>
       <p>
@@ -598,14 +595,15 @@ upgrade-insecure-requests">
       </ul>
     </section>
 
-    <section class="card" id="proof" role="region" aria-labelledby="proof-title">
-      <h2 id="proof-title">22. Document Proof</h2>
+    <!-- Page proof – même bloc que Use Cases -->
+    <section class="card" id="page-proof-sec" aria-labelledby="proof-title">
+      <h2 id="proof-title">This page is verified by TimeProofs</h2>
       <p>
         Release: <code id="page-proof-release-dup">…</code> ·
         Hash: <code id="page-proof-hash-dup">…</code> ·
-        <a id="page-proof-link-dup" href="#" rel="noopener" target="_blank">Verify</a>
+        <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener">Verify</a>
       </p>
-      <p class="muted">Loaded from the central release manifest via TimeProofs.</p>
+      <p class="muted">Loaded from the central release manifest.</p>
     </section>
 
     <section class="card" id="contact">
@@ -618,7 +616,7 @@ upgrade-insecure-requests">
     </section>
   </main>
 
-  <!-- Footer -->
+  <!-- Footer (identique squelette) -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <a class="badge" href="/proofspec.html">🔍 Open Spec v0.1</a>
@@ -666,9 +664,10 @@ upgrade-insecure-requests">
     </div>
   </footer>
 
-  <!-- Scripts -->
+  <!-- Scripts (identiques squelette Use Cases, juste fallback legal.html) -->
   <script defer nonce="TP-2025">
   (function(){
+    // Header shade
     const hdr=document.getElementById('hdr');
     function onScroll(){
       if(window.scrollY>6) hdr.classList.add('scrolled');
@@ -677,6 +676,7 @@ upgrade-insecure-requests">
     onScroll();
     window.addEventListener('scroll', onScroll, { passive:true });
 
+    // Burger
     const burger=document.getElementById('tp-burger');
     const nav=document.getElementById('tp-nav');
     function openMenu(){
@@ -713,7 +713,28 @@ upgrade-insecure-requests">
       });
     })();
 
-    // Release manifest fill (HERO + proof section)
+    // Copy buttons (for any pre blocks, same as Use Cases)
+    (function(){
+      document.querySelectorAll('pre').forEach((pre)=>{
+        if(pre.querySelector('.copy-btn')) return;
+        const btn=document.createElement('button');
+        btn.className='copy-btn'; btn.type='button'; btn.textContent='Copy';
+        btn.addEventListener('click', async ()=>{
+          const code = pre.querySelector('code')?.innerText ?? pre.innerText;
+          try{
+            await navigator.clipboard.writeText(code);
+            btn.textContent='Copied';
+            setTimeout(()=>btn.textContent='Copy',1200);
+          }catch{
+            btn.textContent='Error';
+            setTimeout(()=>btn.textContent='Copy',1200);
+          }
+        },{ passive:true });
+        pre.appendChild(btn);
+      });
+    })();
+
+    // Release manifest fill (HERO + page proof)
     (async()=>{
       try{
         const r=await fetch('/releases/v0.1.json',{cache:'no-store'});
@@ -722,14 +743,14 @@ upgrade-insecure-requests">
         const id=document.documentElement.dataset.page || 'legal.html';
         const e=map[id] || map['/'] || map;
 
-        const elRel=document.getElementById('page-proof-release');
         const elH1=document.getElementById('page-proof-hash');
         const elL1=document.getElementById('page-proof-link');
+        const elR =document.getElementById('page-proof-release');
         const elH2=document.getElementById('page-proof-hash-dup');
         const elR2=document.getElementById('page-proof-release-dup');
         const elL2=document.getElementById('page-proof-link-dup');
 
-        if(elRel && e.release) elRel.textContent=e.release;
+        if(elR && e.release) elR.textContent=e.release;
         if(elR2 && e.release) elR2.textContent=e.release;
         if(e.hash){
           elH1 && (elH1.textContent=e.hash);
@@ -748,4 +769,4 @@ upgrade-insecure-requests">
   })();
   </script>
 </body>
-</html>
+        </html>
