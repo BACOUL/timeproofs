@@ -84,7 +84,7 @@ upgrade-insecure-requests">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://timeproofs.io/"},{"@type":"ListItem","position":2,"name":"Security","item":"https://timeproofs.io/security.html"}]}
   </script>
 
-  <!-- Styles (aligné sur regulations/docs) -->
+  <!-- Styles (aligné) -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
@@ -97,6 +97,10 @@ upgrade-insecure-requests">
     html{
       height:100%; max-width:100%; overflow-x:hidden; background:var(--bg);
       scroll-behavior:smooth;
+      scroll-padding-top:120px;
+    }
+    @media (min-width:900px){
+      html{ scroll-padding-top:104px }
     }
     body{
       margin:0; color:var(--text);
@@ -191,9 +195,6 @@ upgrade-insecure-requests">
       position:relative; border-bottom:1px solid var(--line);
     }
     .hero .icon{ font-size:2rem; line-height:1; margin-bottom:6px }
-    .hero .kicker{
-      color:#a8c5d6; letter-spacing:.3px; font-size:.95rem; margin:0 0 10px;
-    }
     .hero h1{
       font-size:clamp(1.9rem,4.6vw,2.35rem); margin:.2em 0 .4em; font-weight:900;
       background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff);
@@ -206,6 +207,18 @@ upgrade-insecure-requests">
       display:inline-block; margin-top:6px; padding:6px 12px;
       border:1px solid #214a57; background:#0d2330; color:#bff1ff;
       border-radius:999px; font-size:.85rem;
+    }
+    .proof-strip{
+      display:inline-flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center;
+      margin-top:8px; padding:6px 12px;
+      border-radius:999px; border:1px solid #214a57; background:#0d2330; color:#bff1ff;
+      font-size:.85rem;
+    }
+    .proof-strip code{ font-size:.85rem }
+    .proof-strip a{
+      color:#e5f6ff;
+      text-decoration:underline;
+      font-weight:600;
     }
 
     /* TOC */
@@ -301,7 +314,7 @@ upgrade-insecure-requests">
       <a href="/use-cases.html">Use Cases</a>
       <a href="/docs.html">API Docs</a>
       <a href="/regulations.html">Regulations</a>
-      <a href="/security.html" aria-current="page">Security</a>
+      <a href="/security.html">Security</a>
       <a href="/privacy.html">Privacy</a>
       <a href="/legal.html">Legal</a>
       <a href="/about.html">About</a>
@@ -317,15 +330,17 @@ upgrade-insecure-requests">
     <!-- HERO -->
     <section class="hero" role="region" aria-labelledby="page-title">
       <div class="icon" aria-hidden="true">🔒</div>
-      <p class="kicker">Status: Public Beta v0.1 · Security · Privacy-first · No blockchain</p>
+      <p class="badge">Status: Public Beta v0.1 · Security · Privacy-first · No blockchain</p>
       <h1 id="page-title">Security</h1>
       <p class="lead">
         Threat model, headers, rate limits, logging, and operational security for a hash-only, public-verify protocol.
       </p>
-      <p class="badge">
-        🔏 Proof of Release · <code id="page-proof-hash">…</code> ·
+      <div class="proof-strip">
+        <strong>Proof of Release</strong>
+        <span>Release: <code id="page-proof-release">…</code></span>
+        <span>· Hash: <code id="page-proof-hash">…</code></span>
         <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
-      </p>
+      </div>
       <p class="badge">
         Security · Last updated: <strong>2025-11-08</strong>
       </p>
@@ -333,22 +348,22 @@ upgrade-insecure-requests">
 
     <!-- TOC -->
     <nav class="toc" aria-label="Contents">
-      <a href="#verification">Security & performance</a>
+      <a href="#verification">Security &amp; performance</a>
       <a href="#threat-model">Threat model</a>
-      <a href="#headers-csp">Headers & CSP</a>
+      <a href="#headers-csp">Headers &amp; CSP</a>
       <a href="#rate-limits">Rate limits</a>
       <a href="#keys">Key policy</a>
       <a href="#logging">Logging</a>
       <a href="#vuln">Disclosure</a>
-      <a href="#sbom">Dependencies & SBOM</a>
-      <a href="#status-errors">Status & errors</a>
-      <a href="#audits">Audits & validation</a>
+      <a href="#sbom">Dependencies &amp; SBOM</a>
+      <a href="#status-errors">Status &amp; errors</a>
+      <a href="#audits">Audits &amp; validation</a>
       <a href="#page-proof-sec">Page proof</a>
     </nav>
 
     <!-- Sections -->
     <section class="card" id="verification">
-      <h2>Security & performance verification</h2>
+      <h2>Security &amp; performance verification</h2>
       <ul>
         <li>SecurityHeaders: <strong>A+</strong> — <a href="https://securityheaders.com/?q=https://timeproofs.io" target="_blank" rel="noopener">view report</a></li>
         <li>PageSpeed (mobile): <strong>Perf 100 · A11y 100 · BP 96 · SEO 100</strong> — <a href="https://pagespeed.web.dev/report?url=https://timeproofs.io" target="_blank" rel="noopener">view report</a></li>
@@ -373,7 +388,7 @@ upgrade-insecure-requests">
     </section>
 
     <section class="card" id="headers-csp" aria-labelledby="csp-title">
-      <h2 id="csp-title">Headers & CSP</h2>
+      <h2 id="csp-title">Headers &amp; CSP</h2>
 <pre><code>Content-Security-Policy:
   default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
   worker-src 'self' blob:;
@@ -415,7 +430,7 @@ function verify({hash, ts, sig}, secret){
     </section>
 
     <section class="card" id="logging" aria-labelledby="log-title">
-      <h2 id="log-title">Logging & retention</h2>
+      <h2 id="log-title">Logging &amp; retention</h2>
       <ul>
         <li>No original content stored. Only hashes and minimal proof fields.</li>
         <li>Access logs minimized. Retention controlled. Backups tested.</li>
@@ -429,7 +444,7 @@ function verify({hash, ts, sig}, secret){
     </section>
 
     <section class="card" id="sbom" aria-labelledby="sbom-title">
-      <h2 id="sbom-title">Dependencies & SBOM</h2>
+      <h2 id="sbom-title">Dependencies &amp; SBOM</h2>
       <ul>
         <li>Automated dependency audit (Dependabot or equivalent).</li>
         <li>SBOM available per release. Review before tag.</li>
@@ -438,7 +453,7 @@ function verify({hash, ts, sig}, secret){
     </section>
 
     <section class="card" id="status-errors" aria-labelledby="status-title">
-      <h2 id="status-title">Status & errors</h2>
+      <h2 id="status-title">Status &amp; errors</h2>
       <ul>
         <li><code>/api/ping</code> → HTTP 200 when healthy.</li>
         <li>Errors: <code>{"ok":false,"error":"…"}</code> with 4xx/5xx.</li>
@@ -446,7 +461,7 @@ function verify({hash, ts, sig}, secret){
     </section>
 
     <section class="card" id="audits" aria-labelledby="audits-title">
-      <h2 id="audits-title">Audits & validation</h2>
+      <h2 id="audits-title">Audits &amp; validation</h2>
       <div class="table-wrap" role="region" aria-label="External audits">
         <table>
           <thead><tr><th>Audit</th><th>Scope</th><th>Result</th><th>Link</th></tr></thead>
@@ -484,8 +499,8 @@ function verify({hash, ts, sig}, secret){
     <section class="card" id="page-proof-sec" role="region" aria-labelledby="page-proof-title" style="margin-top:6px">
       <h2 id="page-proof-title">This page is verified by TimeProofs</h2>
       <p>
-        Release: <code id="page-proof-release"></code> ·
-        Hash: <code id="page-proof-hash-dup"></code> ·
+        Release: <code id="page-proof-release-dup">…</code> ·
+        Hash: <code id="page-proof-hash-dup">…</code> ·
         <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener nofollow">Verify</a>
       </p>
       <p class="muted">Timestamp created via TimeProofs API (public, privacy-first, no blockchain).</p>
@@ -621,9 +636,11 @@ function verify({hash, ts, sig}, secret){
         const elL1=document.getElementById('page-proof-link');
         const elR =document.getElementById('page-proof-release');
         const elH2=document.getElementById('page-proof-hash-dup');
+        const elR2=document.getElementById('page-proof-release-dup');
         const elL2=document.getElementById('page-proof-link-dup');
 
         if(elR && e.release) elR.textContent=e.release;
+        if(elR2 && e.release) elR2.textContent=e.release;
         if(e.hash){
           elH1 && (elH1.textContent=e.hash);
           elH2 && (elH2.textContent=e.hash);
