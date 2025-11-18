@@ -159,7 +159,7 @@ upgrade-insecure-requests">
   }
   </script>
 
-  <!-- Styles (alignés sur Use Cases) -->
+  <!-- Styles (alignés sur Use Cases / Legal) -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
@@ -260,7 +260,7 @@ upgrade-insecure-requests">
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* HERO */
+    /* HERO (même modèle que Use Cases / Legal) */
     .hero{
       padding-top:96px; padding-bottom:18px; text-align:center;
       position:relative; border-bottom:1px solid var(--line);
@@ -279,18 +279,6 @@ upgrade-insecure-requests">
       border:1px solid #214a57; background:#0d2330; color:#bff1ff;
       border-radius:999px; font-size:.85rem;
     }
-    .proof-strip{
-      display:inline-flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center;
-      margin-top:8px; padding:6px 12px;
-      border-radius:999px; border:1px solid #214a57; background:#0d2330; color:#bff1ff;
-      font-size:.85rem;
-    }
-    .proof-strip code{ font-size:.85rem }
-    .proof-strip a{
-      color:#e5f6ff;
-      text-decoration:underline;
-      font-weight:600;
-    }
 
     /* TOC */
     nav.toc{
@@ -306,6 +294,12 @@ upgrade-insecure-requests">
     nav.toc a:hover{ text-decoration:underline }
 
     main{ padding:0 0 40px }
+
+    .crumb{
+      color:#9fb3c9; margin:10px 0 8px;
+      font-size:.92rem;
+    }
+
     .card{
       background:#0c1424; border:1px solid var(--line); border-radius:12px;
       padding:18px; margin:14px auto; max-width:1100px;
@@ -394,7 +388,7 @@ upgrade-insecure-requests">
   </header>
 
   <main id="main" class="wrap" role="main" aria-describedby="page-title">
-    <!-- HERO -->
+    <!-- HERO (même modèle que Use Cases / Legal) -->
     <section class="hero" role="region" aria-labelledby="page-title">
       <div class="icon" aria-hidden="true">ℹ️</div>
       <p class="badge">Status: Public Beta v0.1 · About · Privacy-first · No blockchain</p>
@@ -402,13 +396,12 @@ upgrade-insecure-requests">
       <p class="lead">
         Why TimeProofs exists, who is behind it, and how the protocol is designed to stay open, privacy-first, and independent over the long term.
       </p>
-      <div class="proof-strip">
-        <strong>Proof of Release</strong>
-        <span>Release: <code id="page-proof-release">…</code></span>
-        <span>· Hash: <code id="page-proof-hash">…</code></span>
+      <!-- Proof of Release – identique au modèle Use Cases / Legal -->
+      <p class="badge">
+        🔏 Proof of Release ·
+        <code id="page-proof-hash">…</code> ·
         <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
-      </div>
-      <p class="badge">About · Last updated: <strong>2025-11-17</strong></p>
+      </p>
     </section>
 
     <!-- TOC -->
@@ -423,7 +416,10 @@ upgrade-insecure-requests">
       <a href="#page-proof-sec">Page proof</a>
     </nav>
 
-    <!-- Meta line -->
+    <!-- Breadcrumb + meta (comme Legal) -->
+    <nav aria-label="Breadcrumb" class="crumb">
+      <a href="/">Home</a> › <span aria-current="page">About</span>
+    </nav>
     <p class="meta">
       About · Last updated: <strong>2025-11-17</strong> · See also:
       <a href="/proofspec.html">Protocol (ProofSpec)</a> ·
@@ -517,8 +513,8 @@ upgrade-insecure-requests">
     <section class="card" id="page-proof-sec" aria-labelledby="proof-title">
       <h2 id="proof-title">This page is verified by TimeProofs</h2>
       <p>
-        Release: <code id="page-proof-release-dup"></code> ·
-        Hash: <code id="page-proof-hash-dup"></code> ·
+        Release: <code id="page-proof-release-dup">…</code> ·
+        Hash: <code id="page-proof-hash-dup">…</code> ·
         <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener">Verify</a>
       </p>
       <p class="muted">Loaded from the central release manifest.</p>
@@ -603,7 +599,7 @@ upgrade-insecure-requests">
     function toggleMenu(){
       (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu();
     }
-    burger && burger.addEventListener('click', toggleMenu);
+    burger && burger.addEventListener('click', toggleMenu, { passive:true });
     document.addEventListener('click',(e)=>{
       if(window.matchMedia('(min-width: 900px)').matches) return;
       if(!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu();
@@ -640,7 +636,7 @@ upgrade-insecure-requests">
             btn.textContent='Error';
             setTimeout(()=>btn.textContent='Copy',1200);
           }
-        });
+        },{ passive:true });
         pre.appendChild(btn);
       });
     })();
