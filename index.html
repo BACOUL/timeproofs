@@ -101,7 +101,7 @@ worker-src 'self' blob:;
 img-src 'self' data: https:;
 style-src 'self' 'unsafe-inline';
 script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
-connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io;
+connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io https://static.cloudflareinsights.com;
 font-src 'self' https: data:;
 object-src 'none';
 base-uri 'self';
@@ -219,6 +219,21 @@ upgrade-insecure-requests">
       border-radius:999px;
       font-size:.85rem;
     }
+    .proof-box{
+      display:inline-flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      margin:8px auto 4px;
+      padding:6px 14px;
+      border-radius:999px;
+      border:1px solid #214a57;
+      background:#0d2330;
+      color:#bff1ff;
+      font-size:.85rem;
+      box-shadow:var(--ring);
+    }
 
     .title{
       font-size:clamp(2.2rem, 6.2vw, 3.4rem); line-height:1.06; margin:.2em auto .3em; font-weight:900; max-width:1000px;
@@ -334,10 +349,10 @@ upgrade-insecure-requests">
     .copy-btn.copied .ok{ display:inline }
     .copy-btn.copied .txt{ display:none }
 
-    /* Nav/Footer alignment (same as other pages) */
+    /* Nav/Footer alignment (aligned with other pages) */
     #tp-nav a,
     footer .links a{
-      color:#a7b7cc;
+      color:#cfefff;
       font-weight:600;
       text-underline-offset:3px;
     }
@@ -386,14 +401,15 @@ upgrade-insecure-requests">
       <div class="label">🔐 Privacy-first • ⚡ Edge-native • 🌍 Open Protocol</div>
       <h1 id="hero-title" class="title">Prove When Data Existed. Privately.</h1>
 
-      <!-- Proof of Release — encadré standard -->
-      <p class="badge" aria-label="Proof of release for this site">
-        🔏 Proof of Release · Hash:
+      <p class="subtitle">Hash anything on your device. Receive an instant, signed timestamp. Anyone can verify later that it existed and is unchanged — without seeing your data.</p>
+
+      <p class="proof-box" aria-label="Proof of release for this site">
+        🔏 Proof of Release ·
+        <span id="page-proof-release">…</span> ·
         <code id="page-proof-hash">…</code> ·
         <a id="page-proof-link" href="#" target="_blank" rel="noopener" title="View verification on API">Verify</a>
       </p>
 
-      <p class="subtitle">Hash anything on your device. Receive an instant, signed timestamp. Anyone can verify later that it existed and is unchanged — without seeing your data.</p>
       <p class="positioning">One self-describing JSON proof readable by any ProofSpec-compliant tool.</p>
       <p style="margin:6px 0 0; color:#9fb3c9">
         <a href="/regulations.html" style="color:#9beefb">Regulations &amp; Compliance →</a>
@@ -577,9 +593,12 @@ const check = await res.json();</code></pre></article>
       <p class="label" style="margin-bottom:8px">🔏 Proof of Release</p>
       <h2 id="site-proof-title">Verified by TimeProofs</h2>
       <p>We publish a public proof of this website build. Anyone can check it.</p>
-      <p>Release: <code id="page-proof-release">…</code> · Hash:
-        <code id="page-proof-hash-dup">…</code>
-        · <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener" title="View verification on API">Verify</a>
+      <p>
+        Release:
+        <span id="page-proof-release-dup">…</span> ·
+        Hash:
+        <code id="page-proof-hash-dup">…</code> ·
+        <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener" title="View verification on API">Verify</a>
       </p>
       <p style="text-align:center; margin-top:6px; color:#9fb3c9">
         Each build is timestamped and linked here. “Verify” opens a public endpoint that returns the signed record used to prove existence and integrity.
@@ -853,26 +872,26 @@ verify: ${verifyURL}`;
         const id = document.documentElement.dataset.page || '/';
         const rel = map[id] || map['index.html'] || map['/'] || map;
 
-        const elRelHero = document.getElementById('page-proof-release-hero');
-        const elRel1 = document.getElementById('page-proof-release');
-        const elHash1= document.getElementById('page-proof-hash');
-        const elLink1= document.getElementById('page-proof-link');
+        const relHero   = document.getElementById('page-proof-release');
+        const hashHero  = document.getElementById('page-proof-hash');
+        const linkHero  = document.getElementById('page-proof-link');
 
-        const elHash2= document.getElementById('page-proof-hash-dup');
-        const elLink2= document.getElementById('page-proof-link-dup');
+        const relDup    = document.getElementById('page-proof-release-dup');
+        const hashDup   = document.getElementById('page-proof-hash-dup');
+        const linkDup   = document.getElementById('page-proof-link-dup');
 
-        const banner = document.getElementById('rel-banner');
+        const banner    = document.getElementById('rel-banner');
 
         if (banner && rel.release) banner.textContent = `🔏 ${rel.release} — Verified`;
-        if (elRelHero && rel.release) elRelHero.textContent = rel.release;
-        if (elRel1 && rel.release)  elRel1.textContent  = rel.release;
+        if (relHero && rel.release) relHero.textContent = rel.release;
+        if (relDup && rel.release)  relDup.textContent  = rel.release;
 
-        if (elHash1 && rel.hash)    elHash1.textContent = rel.hash;
-        if (elHash2 && rel.hash)    elHash2.textContent = rel.hash;
+        if (hashHero && rel.hash) hashHero.textContent = rel.hash;
+        if (hashDup && rel.hash)  hashDup.textContent  = rel.hash;
 
         const url = rel.verify || (rel.hash ? ('https://api.timeproofs.io/api/verify?hash=' + encodeURIComponent(rel.hash)) : null);
-        if (elLink1 && url) elLink1.href = url;
-        if (elLink2 && url) elLink2.href = url;
+        if (linkHero && url) linkHero.href = url;
+        if (linkDup  && url) linkDup.href  = url;
 
         if (rel.hash && window.__autoFillDemoWithHash) {
           window.__autoFillDemoWithHash(rel.hash);
