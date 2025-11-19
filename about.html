@@ -260,7 +260,7 @@ upgrade-insecure-requests">
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* HERO (même modèle que Use Cases / Legal) */
+    /* HERO (même modèle que Use Cases / Legal, SANS Proof of Release) */
     .hero{
       padding-top:96px; padding-bottom:18px; text-align:center;
       position:relative; border-bottom:1px solid var(--line);
@@ -358,6 +358,24 @@ upgrade-insecure-requests">
       transition:transform .18s var(--e);
     }
     .social a:hover{ transform:translateY(-2px) }
+
+    /* Nav/Footer unifiés (v0.1 maître) */
+    #tp-nav a,
+    footer .links a{
+      color:#a7b7cc;
+      font-weight:600;
+      text-decoration:none;
+    }
+    #tp-nav a:hover,
+    footer .links a:hover{
+      color:var(--accent);
+      text-decoration:underline;
+    }
+    #tp-nav a[aria-current="page"],
+    footer .links a[aria-current="page"]{
+      color:var(--accent);
+      text-decoration:underline;
+    }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
@@ -388,19 +406,13 @@ upgrade-insecure-requests">
   </header>
 
   <main id="main" class="wrap" role="main" aria-describedby="page-title">
-    <!-- HERO (même modèle que Use Cases / Legal) -->
+    <!-- HERO (sans Proof of Release) -->
     <section class="hero" role="region" aria-labelledby="page-title">
       <div class="icon" aria-hidden="true">ℹ️</div>
       <p class="badge">Status: Public Beta v0.1 · About · Privacy-first · No blockchain</p>
       <h1 id="page-title">About TimeProofs</h1>
       <p class="lead">
         Why TimeProofs exists, who is behind it, and how the protocol is designed to stay open, privacy-first, and independent over the long term.
-      </p>
-      <!-- Proof of Release – identique au modèle Use Cases / Legal -->
-      <p class="badge">
-        🔏 Proof of Release ·
-        <code id="page-proof-hash">…</code> ·
-        <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
       </p>
     </section>
 
@@ -509,13 +521,13 @@ upgrade-insecure-requests">
       <p class="muted">As the protocol matures, more formal community channels and governance structures will be documented here.</p>
     </section>
 
-    <!-- Page proof -->
+    <!-- Page proof (unique bloc, hors HERO) -->
     <section class="card" id="page-proof-sec" aria-labelledby="proof-title">
       <h2 id="proof-title">This page is verified by TimeProofs</h2>
       <p>
-        Release: <code id="page-proof-release-dup">…</code> ·
-        Hash: <code id="page-proof-hash-dup">…</code> ·
-        <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener">Verify</a>
+        Release: <code id="page-proof-release">…</code> ·
+        Hash: <code id="page-proof-hash">…</code> ·
+        <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
       </p>
       <p class="muted">Loaded from the central release manifest.</p>
     </section>
@@ -641,7 +653,7 @@ upgrade-insecure-requests">
       });
     })();
 
-    // Release manifest fill (HERO + page proof)
+    // Release manifest fill (Page proof uniquement)
     (async()=>{
       try{
         const r=await fetch('/releases/v0.1.json',{cache:'no-store'});
@@ -650,22 +662,15 @@ upgrade-insecure-requests">
         const id=document.documentElement.dataset.page || 'about.html';
         const e=map[id] || map['/'] || map;
 
-        const elH1=document.getElementById('page-proof-hash');
-        const elL1=document.getElementById('page-proof-link');
-        const elR =document.getElementById('page-proof-release');
-        const elH2=document.getElementById('page-proof-hash-dup');
-        const elR2=document.getElementById('page-proof-release-dup');
-        const elL2=document.getElementById('page-proof-link-dup');
+        const elH=document.getElementById('page-proof-hash');
+        const elL=document.getElementById('page-proof-link');
+        const elR=document.getElementById('page-proof-release');
 
         if(elR && e.release) elR.textContent=e.release;
-        if(elR2 && e.release) elR2.textContent=e.release;
-        if(e.hash){
-          elH1 && (elH1.textContent=e.hash);
-          elH2 && (elH2.textContent=e.hash);
-        }
+        if(e.hash && elH) elH.textContent=e.hash;
+
         const url=e.verify || (e.hash ? ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(e.hash)) : '#');
-        if(elL1 && url) elL1.href=url;
-        if(elL2 && url) elL2.href=url;
+        if(elL && url) elL.href=url;
       }catch{}
     })();
 
@@ -676,4 +681,4 @@ upgrade-insecure-requests">
   })();
   </script>
 </body>
-</html>
+        </html>
