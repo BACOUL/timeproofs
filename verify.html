@@ -361,8 +361,7 @@ upgrade-insecure-requests">
     pre,code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
     pre{
       margin-top:10px; max-height:260px; overflow:auto;
-      padding:12px; border-radius:12px;
-      background:#0b1426; border:1px solid #1f2a44; font-size:.9rem;
+      padding:12px; border-radius:12px; background:#0b1426; border:1px solid #1f2a44; font-size:.9rem;
     }
     .copy-btn{
       position:absolute; top:10px; right:10px;
@@ -452,7 +451,7 @@ upgrade-insecure-requests">
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
-  <!-- Header (aligné sur about.html) -->
+  <!-- Header (aligné sur about.html / use-cases.html) -->
   <header class="tp-header" id="hdr" role="banner">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
@@ -476,7 +475,7 @@ upgrade-insecure-requests">
   </header>
 
   <main id="main" class="wrap" role="main" aria-describedby="page-title">
-    <!-- HERO -->
+    <!-- HERO (aligné sur use-cases: badge Proof of Release dans le HERO) -->
     <section class="hero" role="region" aria-labelledby="page-title">
       <div class="icon" aria-hidden="true">🔐</div>
       <p class="badge">Status: Public Beta v0.1 · Tool · Privacy-first · No blockchain</p>
@@ -485,12 +484,11 @@ upgrade-insecure-requests">
         One place to create and verify TimeProofs. Hash is computed locally in your browser,
         then timestamped and signed via the API. Your content never leaves your device.
       </p>
-      <div class="proof-strip">
-        <strong>Proof of Release</strong>
-        <span>Release: <code id="page-proof-release">…</code></span>
-        <span>· Hash: <code id="page-proof-hash">…</code></span>
+      <p class="badge">
+        🔏 Proof of Release ·
+        <code id="page-proof-hash">…</code> ·
         <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
-      </div>
+      </p>
       <div class="hero-actions">
         <a href="#create-card" class="hero-btn primary" id="hero-create">Create a proof</a>
         <a href="#verify-card" class="hero-btn" id="hero-verify">Verify a hash</a>
@@ -664,12 +662,15 @@ POST https://api.timeproofs.io/api/verify
       </article>
     </section>
 
-    <!-- Page proof bloc -->
-    <section class="card" id="page-proof-sec" role="region" aria-labelledby="page-proof-title" style="max-width:1100px; margin:16px auto 0;">
-      <h2 id="page-proof-title">This page is verified by TimeProofs</h2>
-      <p>Release: <code id="page-proof-release-dup">…</code> · Hash: <code id="page-proof-hash-dup">…</code> ·
-        <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener">Verify</a></p>
-      <p class="hint">Timestamp created via TimeProofs API (public, privacy-first, no blockchain).</p>
+    <!-- Page proof bloc (aligné sur use-cases) -->
+    <section class="card" id="page-proof-sec" role="region" aria-labelledby="proof-title" style="max-width:1100px; margin:16px auto 0;">
+      <h2 id="proof-title">This page is verified by TimeProofs</h2>
+      <p>
+        Release: <code id="page-proof-release">…</code> ·
+        Hash: <code id="page-proof-hash-dup">…</code> ·
+        <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener">Verify</a>
+      </p>
+      <p class="hint">The hash above is loaded from the central release manifest.</p>
     </section>
   </main>
 
@@ -1203,7 +1204,7 @@ POST https://api.timeproofs.io/api/verify
       });
     })();
 
-    // Release manifest
+    // Release manifest (même logique que use-cases / proofspec)
     (async()=>{
       try{
         const r=await fetch('/releases/v0.1.json',{cache:'no-store'});
@@ -1211,22 +1212,21 @@ POST https://api.timeproofs.io/api/verify
         const map=await r.json();
         const id=document.documentElement.dataset.page || 'verify.html';
         const e=map[id] || map['verify.html'] || map['/'] || map;
-        if(!e) return;
-        const h1=document.getElementById('page-proof-hash');
-        const l1=document.getElementById('page-proof-link');
-        const rel=document.getElementById('page-proof-release');
-        const h2=document.getElementById('page-proof-hash-dup');
-        const rel2=document.getElementById('page-proof-release-dup');
-        const l2=document.getElementById('page-proof-link-dup');
-        if(rel && e.release) rel.textContent=e.release;
-        if(rel2 && e.release) rel2.textContent=e.release;
+
+        const elH1=document.getElementById('page-proof-hash');
+        const elL1=document.getElementById('page-proof-link');
+        const elR =document.getElementById('page-proof-release');
+        const elH2=document.getElementById('page-proof-hash-dup');
+        const elL2=document.getElementById('page-proof-link-dup');
+
+        if(elR && e.release) elR.textContent=e.release;
         if(e.hash){
-          h1 && (h1.textContent=e.hash);
-          h2 && (h2.textContent=e.hash);
+          elH1 && (elH1.textContent=e.hash);
+          elH2 && (elH2.textContent=e.hash);
         }
         const url=e.verify || (e.hash ? ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(e.hash)) : '#');
-        if(l1 && url) l1.href=url;
-        if(l2 && url) l2.href=url;
+        if(elL1 && url) elL1.href=url;
+        if(elL2 && url) elL2.href=url;
       }catch{}
     })();
 
@@ -1237,4 +1237,4 @@ POST https://api.timeproofs.io/api/verify
   })();
   </script>
 </body>
-</html>
+  </html>
