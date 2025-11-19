@@ -167,7 +167,7 @@ upgrade-insecure-requests">
   }
   </script>
 
-  <!-- Styles (squelette aligné sur Legal) -->
+  <!-- Styles (squelette aligné Legal) -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
@@ -398,19 +398,19 @@ upgrade-insecure-requests">
       table{ min-width:100% }
     }
 
-    /* Nav/Footer unifiés */
-    #tp-nav a,
+    /* Nav/Footer unifiés (ne touche pas la nav-cta) */
+    #tp-nav a:not(.nav-cta),
     footer .links a{
       color:#a7b7cc;
       font-weight:600;
       text-decoration:none;
     }
-    #tp-nav a:hover,
+    #tp-nav a:not(.nav-cta):hover,
     footer .links a:hover{
       color:var(--accent);
       text-decoration:underline;
     }
-    #tp-nav a[aria-current="page"],
+    #tp-nav a:not(.nav-cta)[aria-current="page"],
     footer .links a[aria-current="page"]{
       color:var(--accent);
       text-decoration:underline;
@@ -471,7 +471,7 @@ upgrade-insecure-requests">
       <a class="toc-top" href="#top">↑ Top</a>
     </div>
 
-    <!-- Meta (structure alignée) -->
+    <!-- Meta -->
     <p class="meta">
       About · Last updated: <strong>2025-11-17</strong> · See also:
       <a href="/proofspec.html">Protocol (ProofSpec)</a> ·
@@ -479,7 +479,7 @@ upgrade-insecure-requests">
       <a href="/privacy.html">Privacy</a>
     </p>
 
-    <!-- Sections (contenu conservé) -->
+    <!-- Sections -->
     <section class="card" id="mission">
       <h2>Mission &amp; vision</h2>
       <p><strong>Mission.</strong> Give everyone — developers, AI teams, researchers, creators, and legal teams — a simple way to prove when data existed and that it has not changed, without revealing the data itself.</p>
@@ -561,7 +561,7 @@ upgrade-insecure-requests">
       <p class="muted">As the protocol matures, more formal community channels and governance structures will be documented here.</p>
     </section>
 
-    <!-- Page proof (squelette aligné Legal, hors HERO) -->
+    <!-- Page proof -->
     <section class="card" id="page-proof-sec" role="region" aria-labelledby="page-proof-title" style="margin-top:6px">
       <h2 id="page-proof-title">This page is verified by TimeProofs</h2>
       <p>
@@ -623,7 +623,7 @@ upgrade-insecure-requests">
     </div>
   </footer>
 
-  <!-- Scripts (identiques Legal, fallback page=about.html) -->
+  <!-- Scripts -->
   <script defer nonce="TP-2025">
   (function(){
     // Header shade
@@ -672,7 +672,7 @@ upgrade-insecure-requests">
       });
     })();
 
-    // Copy buttons (aligné Legal)
+    // Copy buttons
     (function(){
       document.querySelectorAll('pre').forEach((pre)=>{
         if(pre.querySelector('.copy-btn')) return;
@@ -700,7 +700,7 @@ upgrade-insecure-requests">
       });
     })();
 
-    // Release manifest fill (HERO + page proof, même logique Legal)
+    // Release manifest fill
     (async()=>{
       try{
         const r=await fetch('/releases/v0.1.json',{cache:'no-store'});
@@ -733,4 +733,4 @@ upgrade-insecure-requests">
   })();
   </script>
 </body>
-  </html>
+</html>
