@@ -1,92 +1,186 @@
-// TimeProofs JavaScript SDK v0.2 (work in progress)
-// This file is NOT used in v0.1 production. Only for the upcoming v0.2.
+/* sdk/timeproofs.js
+ * TimeProofs SDK — v0.2-draft
+ * Minimal, dependency-free. Browser + Node 18+.
+ *
+ * Usage (browser):
+ *   const tp = TimeProofs.createClient({ apiKey: 'tp_test_xxx' });
+ *   const hash = await tp.hashText('hello');
+ *   const proof = await tp.createProof({ hash, label: 'demo' });
+ *
+ * Usage (Node):
+ *   const { createClient } = require('./sdk/timeproofs');
+ *   const tp = createClient({ apiKey: process.env.TIMEPROOFS_KEY });
+ */
 
-(function (global) {
+(function (root, factory) {
+  if (typeof module === "object" && typeof module.exports === "object") {
+    module.exports = factory();
+  } else if (typeof define === "function" && define.amd) {
+    define([], factory);
+  } else {
+    root.TimeProofs = factory();
+  }
+})(typeof self !== "undefined" ? self : this, function () {
   "use strict";
 
-  const DEFAULT_API_BASE = "https://api.timeproofs.io/api";
+  const DEFAULT_BASE = "https://timeproofs-api.jeason-bacoul.workers.dev/api";
 
-  function normalizeString(input) {
-    if (typeof input !== "string") {
-      throw new TypeError("TimeProofs: expected a string");
-    }
-    // Normalize line endings to avoid different hashes across platforms
-    return input.replace(/\r\n/g, "\n");
+  const isBrowser =
+    typeof window !== "undefined" &&
+    typeof window.document !== "undefined";
+
+  const textEncoder =
+    typeof TextEncoder !== "undefined" ? new TextEncoder() : null;
+
+  function toHex(uint8) {
+    return Array.from(uint8)
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
   }
 
-  async function sha256Hex(input) {
-    const text = normalizeString(input);
-    const encoder = new TextEncoder();
-    const data = encoder.encode(text);
-    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+  // ---------- Hashing ----------
+
+  async function sha256HexBrowser(buffer) {
+    if (!crypto || !crypto.subtle) {
+      throw new Error("Web Crypto API not available in this environment");
+    }
+    const digest = await crypto.subtle.digest("SHA-256", buffer);
+    return toHex(new Uint8Array(digest));
   }
 
-  async function createTimestamp(hash, options = {}) {
-    const baseUrl = options.baseUrl || DEFAULT_API_BASE;
-
-    if (!hash || typeof hash !== "string") {
-      throw new TypeError("TimeProofs.timestamp: expected a hex hash string");
+  async function sha256HexNode(buffer) {
+    if (typeof require === "undefined") {
+      throw new Error("Node-style require() not available");
     }
+    const crypto = require("crypto");
+    return crypto.createHash("sha256").update(buffer).digest("hex");
+  }
 
-    const res = await fetch(`${baseUrl}/timestamp`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
+  async function hashText(text) {
+    if (!textEncoder) {
+      throw new Error("TextEncoder not available");
+    }
+    const bytes = textEncoder.encode(text);
+    if (isBrowser) {
+      return sha256HexBrowser(bytes);
+    }
+    return sha256HexNode(Buffer.from(bytes));
+  }
+
+  async function hashBytes(uint8) {
+    if (!(uint8 instanceof Uint8Array)) {
+      throw new Error("hashBytes expects a Uint8Array");
+    }
+    if (isBrowser) {
+      return sha256HexBrowser(uint8);
+    }
+    return sha256HexNode(Buffer.from(uint8));
+  }
+
+  async function hashFile(file) {
+    if (!isBrowser) {
+      throw new Error("hashFile is only available in browsers");
+    }
+    if (!(file instanceof Blob)) {
+      throw new Error("hashFile expects a File/Blob");
+    }
+    const buffer = await file.arrayBuffer();
+    return sha256HexBrowser(buffer);
+  }
+
+  // ---------- HTTP helper ----------
+
+  async function doRequest(baseUrl, apiKey, path, options = {}) {
+    const url = baseUrl.replace(/\/+$/, "") + path;
+
+    const headers = Object.assign(
+      {
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ hash })
-    });
+      options.headers || {}
+    );
+
+    if (apiKey) {
+      headers["Authorization"] = "Bearer " + apiKey;
+    }
+
+    const res = await fetch(url, Object.assign({}, options, { headers }));
+
+    const text = await res.text();
+    let json;
+    try {
+      json = text ? JSON.parse(text) : null;
+    } catch {
+      json = null;
+    }
 
     if (!res.ok) {
-      const text = await res.text().catch(() => "");
-      throw new Error(`TimeProofs.timestamp: API error ${res.status}: ${text}`);
+      const message =
+        (json && (json.error || json.message)) ||
+        `TimeProofs API error (${res.status})`;
+      const err = new Error(message);
+      err.status = res.status;
+      err.body = json || text;
+      throw err;
     }
 
-    const proof = await res.json();
-    return proof;
+    return json;
   }
 
-  function buildProofBundle({ hash, proof }) {
-    if (!hash || !proof) {
-      throw new TypeError("TimeProofs.bundle: hash and proof are required");
-    }
+  // ---------- Client factory ----------
+
+  function createClient(config = {}) {
+    const baseUrl = config.baseUrl || DEFAULT_BASE;
+    const apiKey = config.apiKey || null;
 
     return {
-      version: "v0.2",
-      hash,
-      algorithm: "SHA-256",
-      proof,
-      created_at: new Date().toISOString(),
-      created_at_human: new Date().toUTCString(),
-      source: "TimeProofs API v0.2 (work in progress)"
+      // hashing
+      hashText,
+      hashBytes,
+      hashFile,
+
+      // create a new proof
+      async createProof(payload) {
+        if (!payload || !payload.hash) {
+          throw new Error("createProof requires a { hash } field");
+        }
+        const body = {
+          hash: payload.hash,
+          label: payload.label || undefined,
+          description: payload.description || undefined,
+          externalId: payload.externalId || undefined,
+          metadata: payload.metadata || undefined,
+        };
+        return doRequest(baseUrl, apiKey, "/proofs", {
+          method: "POST",
+          body: JSON.stringify(body),
+        });
+      },
+
+      // verify a hash or proof id
+      async verify(params) {
+        if (!params || (!params.hash && !params.id)) {
+          throw new Error("verify requires { hash } or { id }");
+        }
+
+        const q = new URLSearchParams();
+        if (params.hash) q.set("hash", params.hash);
+        if (params.id) q.set("id", params.id);
+
+        return doRequest(baseUrl, apiKey, "/verify?" + q.toString(), {
+          method: "GET",
+        });
+      },
     };
   }
 
-  const TimeProofs = {
-    /**
-     * Hash an arbitrary string using SHA-256 and return the hex string.
-     */
-    hashString: sha256Hex,
+  // ---------- Public API ----------
 
-    /**
-     * Call the TimeProofs API to create a timestamp for a given hash.
-     */
-    timestamp: createTimestamp,
-
-    /**
-     * Create a local proof bundle (.tproof.json structure) from a hash + API proof.
-     */
-    bundle: buildProofBundle
+  return {
+    createClient,
+    // expose hashing helpers if needed
+    hashText,
+    hashBytes,
+    hashFile,
   };
-
-  // Attach to window in browsers
-  if (typeof global !== "undefined") {
-    global.TimeProofs = TimeProofs;
-  }
-
-  // Also export for Node / bundlers
-  if (typeof module !== "undefined" && module.exports) {
-    module.exports = TimeProofs;
-  }
-})(typeof window !== "undefined" ? window : globalThis);
+});
