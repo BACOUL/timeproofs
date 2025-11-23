@@ -1,4 +1,4 @@
-/* sdk/timeproofs.js
+/* sdk/timeproof.js
  * TimeProofs SDK — v0.2-draft
  * Minimal, dependency-free. Browser + Node 18+.
  *
@@ -8,7 +8,7 @@
  *   const proof = await tp.createProof({ hash, label: 'demo' });
  *
  * Usage (Node):
- *   const { createClient } = require('./sdk/timeproofs');
+ *   const { createClient } = require('./sdk/timeproof');
  *   const tp = createClient({ apiKey: process.env.TIMEPROOFS_KEY });
  */
 
@@ -23,7 +23,8 @@
 })(typeof self !== "undefined" ? self : this, function () {
   "use strict";
 
-  const DEFAULT_BASE = "https://timeproofs-api.jeason-bacoul.workers.dev/api";
+  // API v0.2 base endpoint (public, stable)
+  const DEFAULT_BASE = "https://api.timeproofs.io/api";
 
   const isBrowser =
     typeof window !== "undefined" &&
