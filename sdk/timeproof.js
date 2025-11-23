@@ -1,136 +1,92 @@
-/* sdk/timeproof.js
-   TimeProofs SDK — v0.1
-   Minimal, dependency-free. Works in browser and Node 18+.
-*/
+// TimeProofs JavaScript SDK v0.2 (work in progress)
+// This file is NOT used in v0.1 production. Only for the upcoming v0.2.
 
-(function (root, factory) {
-  if (typeof module === "object" && typeof module.exports === "object") {
-    module.exports = factory();
-  } else if (typeof define === "function" && define.amd) {
-    define([], factory);
-  } else {
-    root.TimeProofs = factory();
-  }
-})(typeof self !== "undefined" ? self : this, function () {
-  const DEFAULT_BASE = "https://timeproofs-api.jeason-bacoul.workers.dev/api";
+(function (global) {
+  "use strict";
 
-  // ————— Utilities —————
+  const DEFAULT_API_BASE = "https://api.timeproofs.io/api";
 
-  const textEncoder = typeof TextEncoder !== "undefined" ? new TextEncoder() : null;
-
-  function toHex(uint8) {
-    return Array.from(uint8).map(b => b.toString(16).padStart(2, "0")).join("");
+  function normalizeString(input) {
+    if (typeof input !== "string") {
+      throw new TypeError("TimeProofs: expected a string");
+    }
+    // Normalize line endings to avoid different hashes across platforms
+    return input.replace(/\r\n/g, "\n");
   }
 
-  async function sha256HexBrowser(data) {
-    const buf = await crypto.subtle.digest("SHA-256", data);
-    return toHex(new Uint8Array(buf));
+  async function sha256Hex(input) {
+    const text = normalizeString(input);
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
   }
 
-  async function sha256HexNode(buffer) {
-    // Node >=18 has global crypto; fallback to require('crypto') if needed
-    const nodeCrypto = globalThis.crypto?.subtle ? null : await import('node:crypto');
-    if (nodeCrypto?.createHash) {
-      return nodeCrypto.createHash("sha256").update(buffer).digest("hex");
+  async function createTimestamp(hash, options = {}) {
+    const baseUrl = options.baseUrl || DEFAULT_API_BASE;
+
+    if (!hash || typeof hash !== "string") {
+      throw new TypeError("TimeProofs.timestamp: expected a hex hash string");
     }
-    // If subtle exists in Node (webcrypto)
-    const buf = await globalThis.crypto.subtle.digest("SHA-256", buffer);
-    return toHex(new Uint8Array(buf));
+
+    const res = await fetch(`${baseUrl}/timestamp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ hash })
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      throw new Error(`TimeProofs.timestamp: API error ${res.status}: ${text}`);
+    }
+
+    const proof = await res.json();
+    return proof;
   }
 
-  async function sha256HexFromText(text) {
-    const bytes = textEncoder ? textEncoder.encode(text || "") : Buffer.from(String(text || ""), "utf8");
-    if (typeof window !== "undefined" && window.crypto?.subtle) {
-      return sha256HexBrowser(bytes);
+  function buildProofBundle({ hash, proof }) {
+    if (!hash || !proof) {
+      throw new TypeError("TimeProofs.bundle: hash and proof are required");
     }
-    return sha256HexNode(bytes);
+
+    return {
+      version: "v0.2",
+      hash,
+      algorithm: "SHA-256",
+      proof,
+      created_at: new Date().toISOString(),
+      created_at_human: new Date().toUTCString(),
+      source: "TimeProofs API v0.2 (work in progress)"
+    };
   }
 
-  async function sha256HexFromBuffer(buf) {
-    // buf can be ArrayBuffer, Uint8Array, Buffer
-    let arrBuf;
-    if (buf instanceof ArrayBuffer) arrBuf = buf;
-    else if (ArrayBuffer.isView(buf)) arrBuf = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
-    else if (typeof Buffer !== "undefined" && Buffer.isBuffer(buf)) arrBuf = buf;
-    else throw new Error("Unsupported buffer type");
+  const TimeProofs = {
+    /**
+     * Hash an arbitrary string using SHA-256 and return the hex string.
+     */
+    hashString: sha256Hex,
 
-    if (typeof window !== "undefined" && window.crypto?.subtle) {
-      return sha256HexBrowser(arrBuf);
-    }
-    return sha256HexNode(arrBuf);
+    /**
+     * Call the TimeProofs API to create a timestamp for a given hash.
+     */
+    timestamp: createTimestamp,
+
+    /**
+     * Create a local proof bundle (.tproof.json structure) from a hash + API proof.
+     */
+    bundle: buildProofBundle
+  };
+
+  // Attach to window in browsers
+  if (typeof global !== "undefined") {
+    global.TimeProofs = TimeProofs;
   }
 
-  function assertHexSha256(str) {
-    if (!/^[a-f0-9]{64}$/i.test(str || "")) {
-      throw new Error("Invalid SHA-256 hex hash");
-    }
+  // Also export for Node / bundlers
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = TimeProofs;
   }
-
-  // ————— Core SDK —————
-
-  class Client {
-    constructor(opts = {}) {
-      this.baseUrl = (opts.baseUrl || DEFAULT_BASE).replace(/\/+$/, "");
-      this.fetch = opts.fetch || (typeof fetch !== "undefined" ? fetch.bind(globalThis) : null);
-      if (!this.fetch) throw new Error("fetch() is not available in this environment");
-    }
-
-    // Public helpers
-    static async sha256HexFromText(text) { return sha256HexFromText(text); }
-    static async sha256HexFromBuffer(buf) { return sha256HexFromBuffer(buf); }
-
-    // Create proof from raw text (hash computed locally)
-    async createFromText(text, options = {}) {
-      const hash = await sha256HexFromText(text || "");
-      return this.createFromHash(hash, options);
-    }
-
-    // Create proof from a browser File (hash computed locally)
-    async createFromFile(file, options = {}) {
-      if (typeof window === "undefined" || !file?.arrayBuffer) {
-        throw new Error("createFromFile is only available in browsers with File API");
-      }
-      const buf = await file.arrayBuffer();
-      const hash = await sha256HexFromBuffer(buf);
-      return this.createFromHash(hash, options);
-    }
-
-    // Create proof from an existing SHA-256 hash
-    async createFromHash(hash, { type = "event", meta = {} } = {}) {
-      assertHexSha256(hash);
-      // keep meta tiny
-      const metaStr = JSON.stringify(meta || {});
-      if (metaStr.length > 256) throw new Error("Meta too large (≤ 256 chars total)");
-
-      const res = await this.fetch(`${this.baseUrl}/timestamp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ hash, type, meta }),
-      });
-      const json = await res.json();
-      if (!res.ok || json.error) {
-        throw new Error(json.error || `Request failed (${res.status})`);
-      }
-      return json; // { id, hash, ts, sig, verify_url }
-    }
-
-    // Verify a previously created proof
-    async verify(hash) {
-      assertHexSha256(hash);
-      const res = await this.fetch(`${this.baseUrl}/verify?hash=${encodeURIComponent(hash)}`);
-      const json = await res.json();
-      return json; // { ok, found, hash, ts, type, meta, sig } or { ok:false, found:false }
-    }
-
-    // Convenience helper to build the public verification URL
-    getVerifyUrl(hash) {
-      assertHexSha256(hash);
-      return `${this.baseUrl}/verify?hash=${encodeURIComponent(hash)}`;
-    }
-  }
-
-  // UMD export shape:
-  //   const tp = new TimeProofs({ baseUrl: "..." })
-  //   await tp.createFromText("hello")
-  return Client;
-});
+})(typeof window !== "undefined" ? window : globalThis);
