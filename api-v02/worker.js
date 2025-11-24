@@ -1,19 +1,16 @@
 // api-v02/worker.js
-// TimeProofs API v0.2 - draft worker
-// Separate from v0.1. Do not modify the v0.1 production worker.
+// TimeProofs API v0.2 - Worker with KV persistence (separate from v0.1)
 
 addEventListener("fetch", (event) => {
-  event.respondWith(handle(event.request));
+  event.respondWith(handle(event.request, event));
 });
 
-async function handle(req) {
+async function handle(req, event) {
   const url = new URL(req.url);
   const path = url.pathname;
 
   // CORS preflight
-  if (req.method === "OPTIONS") {
-    return preflight();
-  }
+  if (req.method === "OPTIONS") return preflight();
 
   // Healthcheck
   if (req.method === "GET" && path === "/api/health") {
@@ -26,72 +23,44 @@ async function handle(req) {
 
   // Create proof (v0.2 bundle)
   if (req.method === "POST" && path === "/api/timestamp") {
-    return handleTimestamp(req);
+    return handleTimestamp(req, event);
   }
 
-  // Verify (stub)
+  // Verify proof
   if (req.method === "GET" && path === "/api/verify") {
-    return handleVerify(req);
+    return handleVerify(req, event);
   }
 
-  return j(
-    {
-      ok: false,
-      error: "not_found",
-      path,
-    },
-    404
-  );
+  return j({ ok: false, error: "not_found", path }, 404);
 }
 
-// -------- /api/timestamp (v0.2 bundle) --------
+// -------- /api/timestamp (store bundle in KV) --------
 
-async function handleTimestamp(req) {
+async function handleTimestamp(req, event) {
   let body;
   try {
     body = await req.json();
   } catch {
-    return j(
-      {
-        ok: false,
-        error: "invalid_json",
-        code: 2101,
-      },
-      400
-    );
+    return j({ ok: false, error: "invalid_json", code: 2101 }, 400);
   }
 
-  const hash = (body && body.hash ? String(body.hash) : "")
-    .toLowerCase()
-    .trim();
-
+  const hash = (body?.hash || "").toLowerCase().trim();
   if (!/^[a-f0-9]{64}$/.test(hash)) {
-    return j(
-      {
-        ok: false,
-        error: "invalid_hash",
-        code: 2102,
-      },
-      400
-    );
+    return j({ ok: false, error: "invalid_hash", code: 2102 }, 400);
   }
 
   const nowSec = Math.floor(Date.now() / 1000);
   const iso = new Date(nowSec * 1000).toISOString();
 
-  // HMAC signature (same spirit as v0.1, but on hash|datetime)
+  // HMAC signature (same spirit as v0.1)
   let sigHmac = null;
   try {
-    if (typeof HMAC_SECRET === "string" && HMAC_SECRET) {
+    if (HMAC_SECRET) {
       sigHmac = await hmac(HMAC_SECRET, `${hash}|${iso}`);
     }
-  } catch (e) {
-    // If HMAC fails, we still return a bundle with null sig_hmac.
-    // v0.2 will later tighten this once infra is ready.
-  }
+  } catch (_) {}
 
   const bundle = {
-    // Draft v0.2 bundle shape. This will become the .tproof.json reference.
     version: "tp-0.2",
     hash,
     alg: "SHA-256",
@@ -99,47 +68,57 @@ async function handleTimestamp(req) {
     datetime: iso,
     issuer: "https://timeproofs.io",
     sig_hmac: sigHmac,
-    sig_ed25519: null, // reserved for future Ed25519 signing
+    sig_ed25519: null, // reserved for future Ed25519
     kid: "tp-v0-2-main",
-    meta: body && body.metadata ? body.metadata : null,
+    meta: body?.metadata || null,
   };
+
+  // Store bundle under key: v02:hash:<sha256>
+  const key = `v02:hash:${hash}`;
+
+  event.waitUntil(
+    TIMEPROOFS_V02_KV.put(key, JSON.stringify(bundle))
+  );
 
   return j(bundle, 200);
 }
 
-// -------- /api/verify (stub v0.2) --------
+// -------- /api/verify (read bundle from KV) --------
 
-async function handleVerify(req) {
+async function handleVerify(req, event) {
   const url = new URL(req.url);
-  const hash = url.searchParams.get("hash");
-  const id = url.searchParams.get("id");
+  const hash = (url.searchParams.get("hash") || "").toLowerCase().trim();
 
-  if (!hash && !id) {
+  if (!/^[a-f0-9]{64}$/.test(hash)) {
+    return j({ ok: false, error: "invalid_hash", code: 2202 }, 400);
+  }
+
+  const key = `v02:hash:${hash}`;
+  const stored = await TIMEPROOFS_V02_KV.get(key);
+
+  if (!stored) {
     return j(
       {
         ok: false,
-        error: "missing_query",
-        message: 'Expected "hash" or "id" query parameter',
-        code: 2201,
+        found: false,
+        hash,
+        version: "tp-0.2",
       },
-      400
+      404
     );
   }
 
-  // v0.2: later we will look up stored bundles and perform real checks.
-  return j(
-    {
-      ok: false,
-      status: "not-found",
-      hash: hash || null,
-      id: id || null,
-      version: "tp-0.2",
-    },
-    200
-  );
+  const bundle = JSON.parse(stored);
+
+  return j({
+    ok: true,
+    found: true,
+    bundle,
+    version: "tp-0.2",
+  });
 }
 
-// -------- Helpers (alignés sur v0.1) --------
+// -------- Helpers (same as v0.1 style) --------
 
 function j(obj, status = 200) {
   return new Response(JSON.stringify(obj), {
@@ -166,18 +145,19 @@ function preflight() {
   });
 }
 
-// HMAC helper (copied from v0.1 style)
+// HMAC helper
 async function hmac(secret, msg) {
   const enc = new TextEncoder();
   const key = await crypto.subtle.importKey(
     "raw",
     enc.encode(secret),
-    { name: "HMAC", hash: "SHA-256" },
+    { name: "HMAC", hash: { name: "SHA-256" } },
     false,
     ["sign"]
   );
   const sig = await crypto.subtle.sign("HMAC", key, enc.encode(msg));
+
   return [...new Uint8Array(sig)]
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
-}
+    }
