@@ -24,7 +24,7 @@ async function handle(req) {
     });
   }
 
-  // Create proof (v0.2 bundle stub)
+  // Create proof (v0.2 bundle)
   if (req.method === "POST" && path === "/api/timestamp") {
     return handleTimestamp(req);
   }
@@ -44,7 +44,7 @@ async function handle(req) {
   );
 }
 
-// -------- /api/timestamp (stub v0.2) --------
+// -------- /api/timestamp (v0.2 bundle) --------
 
 async function handleTimestamp(req) {
   let body;
@@ -79,6 +79,17 @@ async function handleTimestamp(req) {
   const nowSec = Math.floor(Date.now() / 1000);
   const iso = new Date(nowSec * 1000).toISOString();
 
+  // HMAC signature (same spirit as v0.1, but on hash|datetime)
+  let sigHmac = null;
+  try {
+    if (typeof HMAC_SECRET === "string" && HMAC_SECRET) {
+      sigHmac = await hmac(HMAC_SECRET, `${hash}|${iso}`);
+    }
+  } catch (e) {
+    // If HMAC fails, we still return a bundle with null sig_hmac.
+    // v0.2 will later tighten this once infra is ready.
+  }
+
   const bundle = {
     // Draft v0.2 bundle shape. This will become the .tproof.json reference.
     version: "tp-0.2",
@@ -87,8 +98,8 @@ async function handleTimestamp(req) {
     timestamp: nowSec,
     datetime: iso,
     issuer: "https://timeproofs.io",
-    sig_hmac: null,      // to be filled later in v0.2
-    sig_ed25519: null,   // to be filled later in v0.2
+    sig_hmac: sigHmac,
+    sig_ed25519: null, // reserved for future Ed25519 signing
     kid: "tp-v0-2-main",
     meta: body && body.metadata ? body.metadata : null,
   };
@@ -153,4 +164,20 @@ function preflight() {
       "access-control-max-age": "86400",
     },
   });
+}
+
+// HMAC helper (copied from v0.1 style)
+async function hmac(secret, msg) {
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    "raw",
+    enc.encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+  const sig = await crypto.subtle.sign("HMAC", key, enc.encode(msg));
+  return [...new Uint8Array(sig)]
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }
