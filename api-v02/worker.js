@@ -93,4 +93,4 @@ function jsonError(message, status = 400) {
     status,
     headers: { 'Content-Type': 'application/json' },
   });
-}
+    }
