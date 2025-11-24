@@ -24,7 +24,8 @@
   "use strict";
 
   // API v0.2 base endpoint (public, stable)
-  const DEFAULT_BASE = "https://api.timeproofs.io/api";
+  // Aligné sur l'API actuelle : base = https://api.timeproofs.io
+  const DEFAULT_BASE = "https://api.timeproofs.io";
 
   const isBrowser =
     typeof window !== "undefined" &&
@@ -140,7 +141,7 @@
       hashBytes,
       hashFile,
 
-      // create a new proof
+      // create a new proof (v0.1/v0.2: POST /api/timestamp)
       async createProof(payload) {
         if (!payload || !payload.hash) {
           throw new Error("createProof requires a { hash } field");
@@ -152,13 +153,13 @@
           externalId: payload.externalId || undefined,
           metadata: payload.metadata || undefined,
         };
-        return doRequest(baseUrl, apiKey, "/proofs", {
+        return doRequest(baseUrl, apiKey, "/api/timestamp", {
           method: "POST",
           body: JSON.stringify(body),
         });
       },
 
-      // verify a hash or proof id
+      // verify a hash or proof id (v0.1/v0.2: GET /api/verify)
       async verify(params) {
         if (!params || (!params.hash && !params.id)) {
           throw new Error("verify requires { hash } or { id }");
@@ -168,7 +169,7 @@
         if (params.hash) q.set("hash", params.hash);
         if (params.id) q.set("id", params.id);
 
-        return doRequest(baseUrl, apiKey, "/verify?" + q.toString(), {
+        return doRequest(baseUrl, apiKey, "/api/verify?" + q.toString(), {
           method: "GET",
         });
       },
