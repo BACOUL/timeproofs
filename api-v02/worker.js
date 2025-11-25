@@ -52,6 +52,9 @@ async function handleTimestamp(req, event) {
   const nowSec = Math.floor(Date.now() / 1000);
   const iso = new Date(nowSec * 1000).toISOString();
 
+  // Simple proof id for v0.2 (random hex)
+  const proofId = randomId();
+
   // HMAC signature (same spirit as v0.1)
   let sigHmac = null;
   try {
@@ -62,6 +65,7 @@ async function handleTimestamp(req, event) {
 
   const bundle = {
     version: "tp-0.2",
+    id: proofId,
     hash,
     alg: "SHA-256",
     timestamp: nowSec,
@@ -73,11 +77,14 @@ async function handleTimestamp(req, event) {
     meta: body?.metadata || null,
   };
 
-  // Store bundle under key: v02:hash:<sha256>
-  const key = `v02:hash:${hash}`;
+  const keyByHash = `v02:hash:${hash}`;
+  const keyById = `v02:id:${proofId}`;
 
   event.waitUntil(
-    TIMEPROOFS_V02_KV.put(key, JSON.stringify(bundle))
+    Promise.all([
+      TIMEPROOFS_V02_KV.put(keyByHash, JSON.stringify(bundle)),
+      TIMEPROOFS_V02_KV.put(keyById, JSON.stringify(bundle)),
+    ])
   );
 
   return j(bundle, 200);
@@ -87,28 +94,68 @@ async function handleTimestamp(req, event) {
 
 async function handleVerify(req, event) {
   const url = new URL(req.url);
-  const hash = (url.searchParams.get("hash") || "").toLowerCase().trim();
+  const rawHash = (url.searchParams.get("hash") || "").toLowerCase().trim();
+  const rawId = (url.searchParams.get("id") || "").trim();
 
-  if (!/^[a-f0-9]{64}$/.test(hash)) {
+  if (!rawHash && !rawId) {
+    return j(
+      {
+        ok: false,
+        error: "missing_query",
+        message: 'Expected "hash" or "id" query parameter',
+        code: 2201,
+      },
+      400
+    );
+  }
+
+  // If id is provided, it takes priority
+  if (rawId) {
+    const keyById = `v02:id:${rawId}`;
+    const storedById = await TIMEPROOFS_V02_KV.get(keyById);
+
+    if (!storedById) {
+      return j(
+        {
+          ok: false,
+          found: false,
+          id: rawId,
+          version: "tp-0.2",
+        },
+        404
+      );
+    }
+
+    const bundle = JSON.parse(storedById);
+    return j({
+      ok: true,
+      found: true,
+      bundle,
+      version: "tp-0.2",
+    });
+  }
+
+  // Otherwise, fallback to hash
+  if (!/^[a-f0-9]{64}$/.test(rawHash)) {
     return j({ ok: false, error: "invalid_hash", code: 2202 }, 400);
   }
 
-  const key = `v02:hash:${hash}`;
-  const stored = await TIMEPROOFS_V02_KV.get(key);
+  const keyByHash = `v02:hash:${rawHash}`;
+  const storedByHash = await TIMEPROOFS_V02_KV.get(keyByHash);
 
-  if (!stored) {
+  if (!storedByHash) {
     return j(
       {
         ok: false,
         found: false,
-        hash,
+        hash: rawHash,
         version: "tp-0.2",
       },
       404
     );
   }
 
-  const bundle = JSON.parse(stored);
+  const bundle = JSON.parse(storedByHash);
 
   return j({
     ok: true,
@@ -143,6 +190,13 @@ function preflight() {
       "access-control-max-age": "86400",
     },
   });
+}
+
+// Random id helper (simple hex string)
+function randomId() {
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+  return [...bytes].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 // HMAC helper
