@@ -11,7 +11,12 @@
  *   const tp = TimeProofsV02.createClient({ apiKey: 'tp_test_xxx' });
  *   const hash = await tp.hashText('hello');
  *   const ts   = await tp.timestamp(hash);
- *   const bundle = tp.createBundle({ hash: ts.hash, timestamp: ts.timestamp, proof: ts.proof, meta: { type: 'document' } });
+ *   const bundle = tp.createBundle({
+ *     hash: ts.hash,
+ *     timestamp: ts.timestamp,
+ *     proof: ts.proof,
+ *     meta: { type: 'document' }
+ *   });
  */
 
 (function (root, factory) {
@@ -193,20 +198,6 @@
    * - proof:     { algo: "HMAC-SHA256+Ed25519", hmac, signature, publicKey, keyId }
    * - meta?:     local-only metadata (never sent to the server)
    * - userSign?: optional local signature structure (not validated here)
-   *
-   * Usage:
-   *   const ts = await tp.timestamp(hash);
-   *   const bundle = tp.createBundle({
-   *     hash: ts.hash,
-   *     timestamp: ts.timestamp,
-   *     proof: ts.proof,
-   *     meta: { type: "document", domain: "legal" }
-   *   });
-   *
-   * This function does NOT:
-   * - validate JSON Schema (left to external validators),
-   * - perform Ed25519 verification,
-   * - send anything to the server.
    */
   function createBundle(input) {
     if (!input || typeof input !== "object") {
@@ -245,7 +236,6 @@
     if (typeof timestampObj.issuer !== "string") {
       throw new Error("createBundle requires timestamp.issuer (string)");
     }
-    // nonce is optional, no strict validation needed for now
 
     // Basic shape checks for proof
     if (!proof || typeof proof !== "object") {
@@ -323,14 +313,143 @@
   }
 
   /**
-   * verifyBundle – placeholder for v0.2.
-   * Will validate a .tproof.json bundle offline against schema + signature.
-   * For now, this is left unimplemented.
+   * verifyBundle(bundle, options?) – v0.2 minimal offline verification.
+   *
+   * options:
+   *   - expectedIssuer?: string
+   *   - file?: Uint8Array | Blob (browser) — optional, to recompute hash
+   *
+   * Result:
+   *   {
+   *     valid: boolean,
+   *     schemaValid: boolean,
+   *     proofValid: boolean | null,
+   *     hashMatches: boolean | null,
+   *     userSignValid: boolean | null,
+   *     errors: string[]
+   *   }
+   *
+   * For now:
+   *   - schemaValid: validations de structure de base
+   *   - proofValid: null (Ed25519 non implémenté)
+   *   - hashMatches: true/false/null selon la présence du fichier
+   *   - userSignValid: null (non vérifié)
    */
-  async function verifyBundle() {
-    throw new Error(
-      "TimeProofs v0.2 SDK: verifyBundle() not implemented yet. Use the CLI for offline verification."
-    );
+  async function verifyBundle(bundle, options) {
+    const opts = options || {};
+    const errors = [];
+
+    if (!bundle || typeof bundle !== "object") {
+      return {
+        valid: false,
+        schemaValid: false,
+        proofValid: null,
+        hashMatches: null,
+        userSignValid: null,
+        errors: ["bundle must be an object"],
+      };
+    }
+
+    // --- Basic schema checks ---
+
+    if (bundle.version !== "timeproofs-0.2") {
+      errors.push('version must be "timeproofs-0.2"');
+    }
+
+    const hash = bundle.hash;
+    if (!hash || typeof hash !== "object") {
+      errors.push("hash object is required");
+    } else {
+      if (hash.algorithm !== "SHA-256") {
+        errors.push('hash.algorithm must be "SHA-256"');
+      }
+      const v = (hash.value || "").toString().trim();
+      if (!/^[0-9a-f]{64}$/i.test(v)) {
+        errors.push("hash.value must be 64-char hex");
+      }
+    }
+
+    const timestampObj = bundle.timestamp;
+    if (!timestampObj || typeof timestampObj !== "object") {
+      errors.push("timestamp object is required");
+    } else {
+      if (typeof timestampObj.issuedAt !== "string") {
+        errors.push("timestamp.issuedAt must be a string");
+      }
+      if (typeof timestampObj.issuer !== "string") {
+        errors.push("timestamp.issuer must be a string");
+      }
+      if (opts.expectedIssuer && timestampObj.issuer !== opts.expectedIssuer) {
+        errors.push(
+          "timestamp.issuer does not match expectedIssuer (" +
+            opts.expectedIssuer +
+            ")"
+        );
+      }
+    }
+
+    const proof = bundle.proof;
+    if (!proof || typeof proof !== "object") {
+      errors.push("proof object is required");
+    } else {
+      if (proof.algo !== "HMAC-SHA256+Ed25519") {
+        errors.push('proof.algo must be "HMAC-SHA256+Ed25519"');
+      }
+      if (typeof proof.keyId !== "string") {
+        errors.push("proof.keyId must be a string");
+      }
+    }
+
+    const schemaValid = errors.length === 0;
+
+    // --- Hash verification if file is provided ---
+
+    let hashMatches = null;
+    if (opts.file && bundle.hash && bundle.hash.value) {
+      const targetHex = bundle.hash.value.toLowerCase().trim();
+      try {
+        let computed = null;
+
+        if (opts.file instanceof Uint8Array) {
+          computed = await hashBytes(opts.file);
+        } else if (isBrowser && opts.file instanceof Blob) {
+          computed = await hashFile(opts.file);
+        } else {
+          errors.push(
+            "file must be Uint8Array or Blob (in browser) when provided"
+          );
+        }
+
+        if (computed) {
+          hashMatches = computed.toLowerCase() === targetHex;
+          if (!hashMatches) {
+            errors.push("file hash does not match bundle.hash.value");
+          }
+        }
+      } catch (e) {
+        errors.push(
+          "error while computing hash for provided file: " +
+            (e && e.message ? e.message : String(e))
+        );
+      }
+    }
+
+    // --- Proof and userSign (not implemented yet) ---
+
+    const proofValid = null; // Ed25519 verification to be implemented later
+    const userSignValid = null; // local signature not verified yet
+
+    const valid =
+      schemaValid && (hashMatches !== false) && (proofValid !== false);
+
+    return {
+      valid,
+      schemaValid,
+      proofValid,
+      hashMatches,
+      userSignValid,
+      errors,
+    };
   }
 
   // ---------- Client factory ----------
@@ -342,7 +461,11 @@
    *   const tp = TimeProofsV02.createClient({ apiKey: "tp_test_xxx" });
    *   const hash = await tp.hashText("hello");
    *   const ts   = await tp.timestamp(hash);
-   *   const bundle = tp.createBundle({ hash: ts.hash, timestamp: ts.timestamp, proof: ts.proof });
+   *   const bundle = tp.createBundle({
+   *     hash: ts.hash,
+   *     timestamp: ts.timestamp,
+   *     proof: ts.proof
+   *   });
    */
   function createClient(config) {
     const cfg = config || {};
