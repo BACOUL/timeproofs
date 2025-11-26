@@ -18,6 +18,7 @@ async function handle(req) {
       ok: true,
       now: new Date().toISOString(),
       version: "timeproofs-0.2",
+      mode: "stateless",
     });
   }
 
@@ -61,7 +62,7 @@ async function handleTimestamp(req) {
 
   const nowMs = Date.now();
   const issuedAt = new Date(nowMs).toISOString();
-  const issuer = "https://api.timeproofs.io"; // à ajuster si besoin
+  const issuer = "https://api.timeproofs.io"; // aligné avec v0.1
   const nonce = randomId(); // dérive temporelle + anti-rejeu simple
 
   // Canonical payload (simplifié v0.2 WIP) pour HMAC
@@ -73,19 +74,20 @@ async function handleTimestamp(req) {
       hmacHex = await hmac(HMAC_SECRET, canonical);
     }
   } catch (_) {
-    // on reste stateless, on n'échoue pas si HMAC indisponible
+    // On reste stateless, on n'échoue pas si HMAC indisponible
   }
 
   // TODO v0.2+: Ed25519 signature + keyId depuis JWKS
   const proof = {
     algo: "HMAC-SHA256+Ed25519",
-    hmac: hmacHex,      // peut être null si secret non configuré
-    signature: null,    // à compléter quand Ed25519 sera branché
-    publicKey: null,    // à compléter (/.well-known/jwks.json)
+    hmac: hmacHex,        // peut être null si secret non configuré
+    signature: null,      // à compléter quand Ed25519 sera branché
+    publicKey: null,      // à compléter (/.well-known/jwks.json)
     keyId: "tp-v0-2-main" // identifiant logique de clé
   };
 
   const response = {
+    version: "timeproofs-0.2",
     hash: {
       algorithm: "SHA-256",
       value: hash,
@@ -152,4 +154,4 @@ async function hmac(secret, msg) {
   return Array.from(new Uint8Array(sig))
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
-      }
+}
