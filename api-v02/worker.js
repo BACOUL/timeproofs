@@ -1,11 +1,11 @@
 // api-v02/worker.js
-// TimeProofs API v0.2 - Worker with KV persistence (separate from v0.1)
+// TimeProofs API v0.2 — stateless timestamp API (aucun stockage, aucun bundle côté serveur)
 
 addEventListener("fetch", (event) => {
-  event.respondWith(handle(event.request, event));
+  event.respondWith(handle(event.request));
 });
 
-async function handle(req, event) {
+async function handle(req) {
   const url = new URL(req.url);
   const path = url.pathname;
 
@@ -17,26 +17,35 @@ async function handle(req, event) {
     return j({
       ok: true,
       now: new Date().toISOString(),
-      version: "tp-0.2",
+      version: "timeproofs-0.2",
     });
   }
 
-  // Create proof (v0.2 bundle)
+  // v0.2 timestamp endpoint (stateless)
   if (req.method === "POST" && path === "/api/timestamp") {
-    return handleTimestamp(req, event);
+    return handleTimestamp(req);
   }
 
-  // Verify proof
+  // v0.2 verify: protocole = vérification offline → ici on ne stocke rien
   if (req.method === "GET" && path === "/api/verify") {
-    return handleVerify(req, event);
+    return j(
+      {
+        ok: false,
+        error: "not_implemented_v02",
+        message:
+          "TimeProofs v0.2 is stateless. Use the SDK/CLI to verify .tproof.json bundles offline.",
+        version: "timeproofs-0.2",
+      },
+      501
+    );
   }
 
   return j({ ok: false, error: "not_found", path }, 404);
 }
 
-// -------- /api/timestamp (store bundle in KV) --------
+// -------- /api/timestamp (stateless v0.2) --------
 
-async function handleTimestamp(req, event) {
+async function handleTimestamp(req) {
   let body;
   try {
     body = await req.json();
@@ -44,128 +53,56 @@ async function handleTimestamp(req, event) {
     return j({ ok: false, error: "invalid_json", code: 2101 }, 400);
   }
 
-  const hash = (body?.hash || "").toLowerCase().trim();
+  const hash = (body && body.hash ? String(body.hash) : "").toLowerCase().trim();
+
   if (!/^[a-f0-9]{64}$/.test(hash)) {
     return j({ ok: false, error: "invalid_hash", code: 2102 }, 400);
   }
 
-  const nowSec = Math.floor(Date.now() / 1000);
-  const iso = new Date(nowSec * 1000).toISOString();
+  const nowMs = Date.now();
+  const issuedAt = new Date(nowMs).toISOString();
+  const issuer = "https://api.timeproofs.io"; // à ajuster si besoin
+  const nonce = randomId(); // dérive temporelle + anti-rejeu simple
 
-  // Simple proof id for v0.2 (random hex)
-  const proofId = randomId();
+  // Canonical payload (simplifié v0.2 WIP) pour HMAC
+  const canonical = `${hash}|${issuedAt}|${issuer}|${nonce}`;
 
-  // HMAC signature (same spirit as v0.1)
-  let sigHmac = null;
+  let hmacHex = null;
   try {
-    if (HMAC_SECRET) {
-      sigHmac = await hmac(HMAC_SECRET, `${hash}|${iso}`);
+    if (typeof HMAC_SECRET === "string" && HMAC_SECRET.length > 0) {
+      hmacHex = await hmac(HMAC_SECRET, canonical);
     }
-  } catch (_) {}
+  } catch (_) {
+    // on reste stateless, on n'échoue pas si HMAC indisponible
+  }
 
-  const bundle = {
-    version: "tp-0.2",
-    id: proofId,
-    hash,
-    alg: "SHA-256",
-    timestamp: nowSec,
-    datetime: iso,
-    issuer: "https://timeproofs.io",
-    sig_hmac: sigHmac,
-    sig_ed25519: null, // reserved for future Ed25519
-    kid: "tp-v0-2-main",
-    meta: body?.metadata || null,
+  // TODO v0.2+: Ed25519 signature + keyId depuis JWKS
+  const proof = {
+    algo: "HMAC-SHA256+Ed25519",
+    hmac: hmacHex,      // peut être null si secret non configuré
+    signature: null,    // à compléter quand Ed25519 sera branché
+    publicKey: null,    // à compléter (/.well-known/jwks.json)
+    keyId: "tp-v0-2-main" // identifiant logique de clé
   };
 
-  const keyByHash = `v02:hash:${hash}`;
-  const keyById = `v02:id:${proofId}`;
+  const response = {
+    hash: {
+      algorithm: "SHA-256",
+      value: hash,
+    },
+    timestamp: {
+      issuedAt,
+      issuer,
+      nonce,
+    },
+    proof,
+  };
 
-  event.waitUntil(
-    Promise.all([
-      TIMEPROOFS_V02_KV.put(keyByHash, JSON.stringify(bundle)),
-      TIMEPROOFS_V02_KV.put(keyById, JSON.stringify(bundle)),
-    ])
-  );
-
-  return j(bundle, 200);
+  // IMPORTANT : on ne stocke rien, on renvoie juste timestamp + proof
+  return j(response, 200);
 }
 
-// -------- /api/verify (read bundle from KV) --------
-
-async function handleVerify(req, event) {
-  const url = new URL(req.url);
-  const rawHash = (url.searchParams.get("hash") || "").toLowerCase().trim();
-  const rawId = (url.searchParams.get("id") || "").trim();
-
-  if (!rawHash && !rawId) {
-    return j(
-      {
-        ok: false,
-        error: "missing_query",
-        message: 'Expected "hash" or "id" query parameter',
-        code: 2201,
-      },
-      400
-    );
-  }
-
-  // If id is provided, it takes priority
-  if (rawId) {
-    const keyById = `v02:id:${rawId}`;
-    const storedById = await TIMEPROOFS_V02_KV.get(keyById);
-
-    if (!storedById) {
-      return j(
-        {
-          ok: false,
-          found: false,
-          id: rawId,
-          version: "tp-0.2",
-        },
-        404
-      );
-    }
-
-    const bundle = JSON.parse(storedById);
-    return j({
-      ok: true,
-      found: true,
-      bundle,
-      version: "tp-0.2",
-    });
-  }
-
-  // Otherwise, fallback to hash
-  if (!/^[a-f0-9]{64}$/.test(rawHash)) {
-    return j({ ok: false, error: "invalid_hash", code: 2202 }, 400);
-  }
-
-  const keyByHash = `v02:hash:${rawHash}`;
-  const storedByHash = await TIMEPROOFS_V02_KV.get(keyByHash);
-
-  if (!storedByHash) {
-    return j(
-      {
-        ok: false,
-        found: false,
-        hash: rawHash,
-        version: "tp-0.2",
-      },
-      404
-    );
-  }
-
-  const bundle = JSON.parse(storedByHash);
-
-  return j({
-    ok: true,
-    found: true,
-    bundle,
-    version: "tp-0.2",
-  });
-}
-
-// -------- Helpers (same as v0.1 style) --------
+// -------- Helpers --------
 
 function j(obj, status = 200) {
   return new Response(JSON.stringify(obj), {
@@ -192,14 +129,16 @@ function preflight() {
   });
 }
 
-// Random id helper (simple hex string)
+// Random id helper (simple hex string, 128 bits)
 function randomId() {
   const bytes = new Uint8Array(16);
   crypto.getRandomValues(bytes);
-  return [...bytes].map((b) => b.toString(16).padStart(2, "0")).join("");
+  return Array.from(bytes)
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
-// HMAC helper
+// HMAC-SHA256 helper → hex
 async function hmac(secret, msg) {
   const enc = new TextEncoder();
   const key = await crypto.subtle.importKey(
@@ -210,8 +149,7 @@ async function hmac(secret, msg) {
     ["sign"]
   );
   const sig = await crypto.subtle.sign("HMAC", key, enc.encode(msg));
-
-  return [...new Uint8Array(sig)]
+  return Array.from(new Uint8Array(sig))
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
-    }
+      }
