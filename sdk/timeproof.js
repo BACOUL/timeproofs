@@ -1,11 +1,17 @@
 /* sdk/timeproof.js
  * TimeProofs SDK — v0.2
- * Minimal, dependency-free. Browser + Node 18+ (fetch global).
+ * Minimal, dependency-free. Browser + Node 18+ (global fetch).
  *
- * v0.2 principles:
+ * Principles (v0.2):
  * - Never send raw data, only hashes.
  * - Server is stateless: /api/timestamp returns a TimestampResponse.
- * - Bundles (.tproof.json) are built and verified client-side (next steps).
+ * - Bundles (.tproof.json) are built and verified client-side.
+ *
+ * Typical usage:
+ *   const tp = TimeProofsV02.createClient({ apiKey: 'tp_test_xxx' });
+ *   const hash = await tp.hashText('hello');
+ *   const ts   = await tp.timestamp(hash);
+ *   const bundle = tp.createBundle({ hash: ts.hash, timestamp: ts.timestamp, proof: ts.proof, meta: { type: 'document' } });
  */
 
 (function (root, factory) {
@@ -178,21 +184,142 @@
     });
   }
 
-  // ---------- Bundle helpers (stubs v0.2) ----------
+  // ---------- Bundle helpers (v0.2) ----------
 
   /**
-   * createBundle – placeholder for v0.2.
-   * Will build a Proof Bundle (.tproof.json) from:
-   * - TimestampResponse (hash + timestamp + proof)
-   * - meta (local-only metadata)
-   * - optional userSign (local Ed25519 signature)
+   * Build a TimeProofs v0.2 Proof Bundle (.tproof.json) from:
+   * - hash:      { algorithm: "SHA-256", value: "<hex>" }
+   * - timestamp: { issuedAt: "<ISO-UTC>", issuer: "<url>", nonce?: "<id>" }
+   * - proof:     { algo: "HMAC-SHA256+Ed25519", hmac, signature, publicKey, keyId }
+   * - meta?:     local-only metadata (never sent to the server)
+   * - userSign?: optional local signature structure (not validated here)
    *
-   * For now, this is left unimplemented; use the CLI or manual JSON.
+   * Usage:
+   *   const ts = await tp.timestamp(hash);
+   *   const bundle = tp.createBundle({
+   *     hash: ts.hash,
+   *     timestamp: ts.timestamp,
+   *     proof: ts.proof,
+   *     meta: { type: "document", domain: "legal" }
+   *   });
+   *
+   * This function does NOT:
+   * - validate JSON Schema (left to external validators),
+   * - perform Ed25519 verification,
+   * - send anything to the server.
    */
-  function createBundle() {
-    throw new Error(
-      "TimeProofs v0.2 SDK: createBundle() not implemented yet. Use the CLI or manual JSON bundle construction."
-    );
+  function createBundle(input) {
+    if (!input || typeof input !== "object") {
+      throw new Error("createBundle expects an object argument");
+    }
+
+    const hash = input.hash;
+    const timestampObj = input.timestamp;
+    const proof = input.proof;
+    const meta = input.meta;
+    const userSign = input.userSign;
+
+    // Basic shape checks for hash
+    if (!hash || typeof hash !== "object") {
+      throw new Error("createBundle requires a 'hash' object");
+    }
+    if (hash.algorithm !== "SHA-256") {
+      throw new Error("createBundle requires hash.algorithm === 'SHA-256'");
+    }
+    if (
+      typeof hash.value !== "string" ||
+      !/^[0-9a-f]{64}$/i.test(hash.value.trim())
+    ) {
+      throw new Error(
+        "createBundle requires hash.value to be a 64-char hex string"
+      );
+    }
+
+    // Basic shape checks for timestamp
+    if (!timestampObj || typeof timestampObj !== "object") {
+      throw new Error("createBundle requires a 'timestamp' object");
+    }
+    if (typeof timestampObj.issuedAt !== "string") {
+      throw new Error("createBundle requires timestamp.issuedAt (string)");
+    }
+    if (typeof timestampObj.issuer !== "string") {
+      throw new Error("createBundle requires timestamp.issuer (string)");
+    }
+    // nonce is optional, no strict validation needed for now
+
+    // Basic shape checks for proof
+    if (!proof || typeof proof !== "object") {
+      throw new Error("createBundle requires a 'proof' object");
+    }
+    if (proof.algo !== "HMAC-SHA256+Ed25519") {
+      throw new Error(
+        "createBundle requires proof.algo === 'HMAC-SHA256+Ed25519'"
+      );
+    }
+    if (typeof proof.keyId !== "string") {
+      throw new Error("createBundle requires proof.keyId (string)");
+    }
+
+    // meta is optional, but if provided must be an object
+    let metaClean;
+    if (typeof meta === "undefined" || meta === null) {
+      metaClean = undefined;
+    } else if (typeof meta === "object") {
+      metaClean = meta;
+    } else {
+      throw new Error("createBundle expects meta to be an object if provided");
+    }
+
+    // userSign is optional, pass-through (validation can be added later)
+    let userSignClean;
+    if (typeof userSign === "undefined" || userSign === null) {
+      userSignClean = undefined;
+    } else if (typeof userSign === "object") {
+      userSignClean = userSign;
+    } else {
+      throw new Error(
+        "createBundle expects userSign to be an object if provided"
+      );
+    }
+
+    const bundle = {
+      version: "timeproofs-0.2",
+      hash: {
+        algorithm: "SHA-256",
+        value: hash.value.toLowerCase().trim(),
+      },
+      timestamp: {
+        issuedAt: timestampObj.issuedAt,
+        issuer: timestampObj.issuer,
+      },
+      proof: {
+        algo: proof.algo,
+        hmac: proof.hmac || null,
+        signature:
+          typeof proof.signature === "string" || proof.signature === null
+            ? proof.signature
+            : null,
+        publicKey:
+          typeof proof.publicKey === "string" || proof.publicKey === null
+            ? proof.publicKey
+            : null,
+        keyId: proof.keyId,
+      },
+    };
+
+    if (typeof timestampObj.nonce === "string") {
+      bundle.timestamp.nonce = timestampObj.nonce;
+    }
+
+    if (typeof metaClean !== "undefined") {
+      bundle.meta = metaClean;
+    }
+
+    if (typeof userSignClean !== "undefined") {
+      bundle.userSign = userSignClean;
+    }
+
+    return bundle;
   }
 
   /**
@@ -211,9 +338,11 @@
   /**
    * createClient({ baseUrl?, apiKey? })
    *
-   * const tp = TimeProofsV02.createClient({ apiKey: "tp_test_xxx" });
-   * const hash = await tp.hashText("hello");
-   * const ts   = await tp.timestamp(hash);
+   * Example:
+   *   const tp = TimeProofsV02.createClient({ apiKey: "tp_test_xxx" });
+   *   const hash = await tp.hashText("hello");
+   *   const ts   = await tp.timestamp(hash);
+   *   const bundle = tp.createBundle({ hash: ts.hash, timestamp: ts.timestamp, proof: ts.proof });
    */
   function createClient(config) {
     const cfg = config || {};
