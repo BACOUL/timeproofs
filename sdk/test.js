@@ -8,7 +8,6 @@ async function main() {
     // Client v0.2 (Worker de test)
     const client = tpv2.createClient({
       baseUrl: "https://timeproofs-api-v02.jeason-bacoul.workers.dev"
-      // apiKey: "tp_test_xxx" // optionnel
     });
 
     // 1) Hash du message
@@ -37,6 +36,7 @@ async function main() {
     console.log("\n----- TIMEPROOFS PROOF -----\n");
     console.log(pretty);
     console.log("\n----------------------------\n");
+
   } catch (err) {
     console.error("ERROR:", err);
   }
