@@ -110,7 +110,7 @@
 
   async function doRequest(baseUrl, apiKey, path, options) {
     const base = (baseUrl || DEFAULT_BASE).replace(/\/+$/, "");
-    const url = base + path;
+       const url = base + path;
 
     const headers = Object.assign(
       {
@@ -162,7 +162,13 @@
    * {
    *   hash:      { algorithm: "SHA-256", value: "<hex>" },
    *   timestamp: { issuedAt: "<ISO-UTC>", issuer: "<url>", nonce: "<id>" },
-   *   proof:     { algo: "HMAC-SHA256+Ed25519", hmac: "<hex|null>", signature: null, publicKey: null, keyId: "tp-v0-2-main" }
+   *   proof:     {
+   *     algo: "HMAC-SHA256+Ed25519",
+   *     hmac: "<hex|null>",
+   *     signature: null,
+   *     publicKey: null,
+   *     keyId: "tp-v0-2-main"
+   *   }
    * }
    *
    * @param {string} hash - 64-char lowercase hex SHA-256 digest
@@ -440,7 +446,7 @@
     const userSignValid = null; // local signature not verified yet
 
     const valid =
-      schemaValid && (hashMatches !== false) && (proofValid !== false);
+      schemaValid && hashMatches !== false && proofValid !== false;
 
     return {
       valid,
@@ -450,6 +456,88 @@
       userSignValid,
       errors,
     };
+  }
+
+  /**
+   * formatBundle(bundle, verifyResult?) – human-readable v0.2 proof.
+   *
+   * - bundle: résultat de createBundle() ou .tproof.json parsé
+   * - verifyResult (optionnel): résultat de verifyBundle(bundle)
+   *
+   * Retourne une string prête à afficher (CLI, UI, logs).
+   */
+  function formatBundle(bundle, verifyResult) {
+    if (!bundle || typeof bundle !== "object") {
+      throw new Error("formatBundle expects a bundle object");
+    }
+
+    const b = bundle;
+    const vr = verifyResult || {};
+    const h = b.hash || {};
+    const t = b.timestamp || {};
+    const p = b.proof || {};
+    const m = b.meta && typeof b.meta === "object" ? b.meta : {};
+
+    const lines = [];
+
+    lines.push("TimeProofs — Proof of Existence");
+    lines.push("Version: " + (b.version || "unknown"));
+    lines.push("");
+
+    lines.push("Hash");
+    lines.push("  Algorithm: " + (h.algorithm || "unknown"));
+    lines.push("  Value:     " + (h.value || ""));
+    lines.push("");
+
+    lines.push("Timestamp");
+    lines.push("  Issued at: " + (t.issuedAt || ""));
+    lines.push("  Issuer:    " + (t.issuer || ""));
+    if (typeof t.nonce === "string") {
+      lines.push("  Nonce:     " + t.nonce);
+    }
+    lines.push("");
+
+    lines.push("Proof");
+    lines.push("  Algo:      " + (p.algo || ""));
+    lines.push("  HMAC:      " + (p.hmac || ""));
+    lines.push("  Key ID:    " + (p.keyId || ""));
+    lines.push("");
+
+    const metaKeys = Object.keys(m);
+    if (metaKeys.length > 0) {
+      lines.push("Meta");
+      if (m.type) {
+        lines.push("  Type:      " + m.type);
+      }
+      metaKeys.forEach((k) => {
+        if (k === "type") return;
+        lines.push("  " + k + ": " + String(m[k]));
+      });
+      lines.push("");
+    }
+
+    lines.push("Verification");
+    if (Object.keys(vr).length === 0) {
+      lines.push("  Status:    not-checked (offline only)");
+    } else {
+      lines.push("  Valid:         " + (vr.valid === true ? "true" : "false"));
+      lines.push(
+        "  Schema valid: " + (vr.schemaValid === true ? "true" : "false")
+      );
+      if (vr.hashMatches !== undefined && vr.hashMatches !== null) {
+        lines.push(
+          "  Hash matches: " + (vr.hashMatches === true ? "true" : "false")
+        );
+      }
+      if (Array.isArray(vr.errors) && vr.errors.length > 0) {
+        lines.push("  Errors:");
+        vr.errors.forEach((e) => {
+          lines.push("    - " + String(e));
+        });
+      }
+    }
+
+    return lines.join("\n");
   }
 
   // ---------- Client factory ----------
@@ -484,6 +572,7 @@
       },
       createBundle,
       verifyBundle,
+      formatBundle,
     };
   }
 
@@ -497,5 +586,6 @@
     timestamp,
     createBundle,
     verifyBundle,
+    formatBundle,
   };
 });
