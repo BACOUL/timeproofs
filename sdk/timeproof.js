@@ -110,7 +110,7 @@
 
   async function doRequest(baseUrl, apiKey, path, options) {
     const base = (baseUrl || DEFAULT_BASE).replace(/\/+$/, "");
-       const url = base + path;
+    const url = base + path;
 
     const headers = Object.assign(
       {
@@ -343,7 +343,7 @@
    */
   async function verifyBundle(bundle, options) {
     const opts = options || {};
-    const errors = [];
+       const errors = [];
 
     if (!bundle || typeof bundle !== "object") {
       return {
