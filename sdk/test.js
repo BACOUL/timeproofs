@@ -1,46 +1,42 @@
 // sdk/test.js
-// Full v0.2 test: hash → timestamp → bundle → verify → formatted proof
+// TimeProofs v0.2 — demo simple : hash → timestamp → bundle → preuve lisible
 
 const tpv2 = require("./timeproof");
 
 async function main() {
   try {
+    // Client v0.2 (Worker de test)
     const client = tpv2.createClient({
       baseUrl: "https://timeproofs-api-v02.jeason-bacoul.workers.dev"
       // apiKey: "tp_test_xxx" // optionnel
     });
 
-    // 1) Hash
+    // 1) Hash du message
     const hash = await client.hashText("hello");
-    console.log("HASH:", hash);
 
-    // 2) Timestamp v0.2
+    // 2) Appel /api/timestamp v0.2
     const ev = await client.timestamp(hash);
-    console.log("EVENT v0.2:", ev);
 
-    // 3) Build bundle
+    // 3) Construction du bundle v0.2
     const bundle = client.createBundle({
       hash: ev.hash,
       timestamp: ev.timestamp,
       proof: ev.proof,
       meta: {
-        type: "test",
-        note: "SDK demo"
+        type: "text",
+        label: "Demo hello"
       }
     });
-    console.log("BUNDLE:", bundle);
 
-    // 4) Local verify
+    // 4) Vérification locale (offline)
     const verifyResult = await client.verifyBundle(bundle);
-    console.log("VERIFY RESULT:", verifyResult);
 
-    // 5) Human-readable formatting (3 seconds)
+    // 5) Affichage humain lisible
     const pretty = client.formatBundle(bundle, verifyResult);
 
     console.log("\n----- TIMEPROOFS PROOF -----\n");
     console.log(pretty);
     console.log("\n----------------------------\n");
-
   } catch (err) {
     console.error("ERROR:", err);
   }
