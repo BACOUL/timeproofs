@@ -1,171 +1,158 @@
-# 🧩 TimeProofs — Proof of Existence for Everything
+# 🧩 TimeProofs v0.2 — Stateless Proof of Existence
 
-**TimeProofs** is a free, open, privacy-first timestamp API.  
-Hash locally, get a signed timestamp, verify publicly — with **zero personal data**, **no blockchain**, and **full transparency**.
+TimeProofs is an open, privacy-first timestamp API and proof protocol.  
+Version 0.2 introduces a major evolution: full stateless operation and client-side proof bundles.
 
-Website → https://timeproofs.io  
-API → https://api.timeproofs.io  
-Status → Public Beta v0.1
+Website: https://timeproofs.io  
+API: https://api.timeproofs.io  
+Status: Public Beta v0.2 (development branch)
 
----
+# ✨ What’s New in v0.2
 
-## ✨ Features (v0.1)
+• Fully stateless timestamp API  
+• No KV storage, no server-side persistence  
+• Timestamp responses include issuer, nonce and HMAC proof  
+• Clients generate local `.tproof.json` bundles  
+• Offline verification (no server request required)  
+• New SDK v0.2 with hashing, timestamping, bundling and verifying  
+• Maintains continuity with v0.1 philosophy (hash-only, privacy-first, no blockchain)
 
-- Hash-only inputs (no upload)
-- Signed timestamp events
-- Public verification endpoint
-- Stateless & privacy-first (no logs of content)
-- Edge-native (Cloudflare Workers)
-- Proof bundle format: `.tproof.json`
-- Full site integrity: each page loads its hash from `/releases/v0.1.json`
+v0.1 remains stable and online with the legacy verify endpoint.  
+v0.2 is the next-generation protocol.
 
----
+# 🚀 Quick Usage (v0.2)
 
-## 🚀 Try in 30 Seconds
+1. Compute a SHA-256 hash locally  
+2. POST it to /api/timestamp  
+3. Receive a stateless timestamp response  
+4. Build a `.tproof.json` bundle client-side  
+5. Verify the bundle offline (SDK or CLI)
 
-### 1. Hash any file
-```sh
-sha256sum myfile.png
-```
-
-### 2. Request a timestamp
-```sh
-curl -X POST https://api.timeproofs.io/api/timestamp \
-  -H "Content-Type: application/json" \
-  -d '{"hash":"<SHA256>"}'
-```
-
-### 3. Verify
-```sh
-curl "https://api.timeproofs.io/api/verify?hash=<SHA256>"
-```
-
-You will get:
-```json
+Example timestamp response:
 {
-  "ok": true,
-  "hash": "<SHA256>",
-  "ts": 123456789,
-  "timestamp_iso": "2025-11-16T16:54:05Z",
-  "version": "v0.1",
-  "type": "event",
-  "verify_url": "https://api.timeproofs.io/api/verify?hash=<SHA256>"
+  "version": "timeproofs-0.2",
+  "hash": { "algorithm": "SHA-256", "value": "<hex>" },
+  "timestamp": {
+    "issuedAt": "2025-11-26T20:00:00.000Z",
+    "issuer": "https://api.timeproofs.io",
+    "nonce": "<random-id>"
+  },
+  "proof": {
+    "algo": "HMAC-SHA256+Ed25519",
+    "hmac": "<hex-or-null>",
+    "signature": null,
+    "publicKey": null,
+    "keyId": "tp-v0-2-main"
+  }
 }
-```
 
----
+# 🔌 API Reference (v0.2)
 
-## 🔌 API Reference (v0.1)
+POST /api/timestamp  
+Body: { "hash": "<sha256-hex>" }  
+Returns a timestamp response with issuer, nonce and proof.
 
-### `POST /api/timestamp`
-Body:
-```json
-{ "hash": "..." }
-```
+GET /api/verify  
+Not implemented for v0.2 (verification is offline only).
 
-Returns:
-```json
-{
-  "ok": true,
-  "hash": "...",
-  "ts": 123456789,
-  "timestamp_iso": "...",
-  "version": "v0.1",
-  "type": "event",
-  "verify_url": "https://api.timeproofs.io/api/verify?hash=..."
-}
-```
+# 📦 Proof Bundles (`.tproof.json`)
 
----
+Bundles are created on the client and contain:
+• version  
+• hash  
+• timestamp  
+• proof  
+• optional metadata (type, purpose, domain)  
+• optional local user signature (userSign)
 
-### `GET /api/verify?hash=...`
-Checks if a hash has been timestamped.
+Files are never sent to the server.  
+Hashes are the only input.
 
-Returns:
-```json
-{
-  "ok": true,
-  "verified": true,
-  "hash": "...",
-  "timestamp_iso": "...",
-  "version": "v0.1"
-}
-```
+# 🧰 SDK (v0.2)
 
----
+Includes:
+• hashText  
+• hashBytes  
+• hashFile  
+• timestamp  
+• createBundle  
+• verifyBundle (offline)
 
-## 📦 Release Integrity (v0.1)
+The SDK supports Browser + Node 18+ (global fetch).
 
-**Official site hash:**  
-```
-41746697c470098393486fb62de886a997875ebfca1b372b574ecf0bbd95b264
-```
+Location in repo: `/sdk/timeproofs-v02.js`
 
-**Verify with TimeProofs:**  
-https://api.timeproofs.io/api/verify?hash=41746697c470098393486fb62de886a997875ebfca1b372b574ecf0bbd95b264
+# 🔐 Privacy & Principles
 
-**Release proof bundle:**  
-`/release-v0.1.tproof.json` (included in this repository)
+• No files  
+• No personal data  
+• No logs of content  
+• Stateless API  
+• No blockchain  
+• Open verification  
+• Predictable cost  
+• Local-only metadata
 
-This repository and the deployed site are fully **self-verifiable**.
+This preserves the v0.1 guarantees while enabling advanced proof workflows.
 
----
+# 🌱 Supported Root Protocols
 
-## 🔐 Privacy
+TimeProofs v0.2 can verify or reference standard root metadata files:
 
-TimeProofs never stores or receives:
-- files  
-- personal data  
-- content  
-- metadata about users  
+• robots.txt  
+• security.txt  
+• humans.txt  
+• integrity.txt  
+• authenticity.txt  
+• rights.txt  
+• explainable-ia.txt
 
-The only input is a **SHA-256 hash**.
+These protocols remain fully independent from TimeProofs.
 
----
+# 🔄 Migration from v0.1 → v0.2
 
-## 📚 Documentation
+v0.1:
+• Server stores timestamps  
+• Public verify endpoint  
+• Simple proof format
 
-Protocol (ProofSpec):  
-https://timeproofs.io/proofspec.html
+v0.2:
+• Fully stateless  
+• No server persistence  
+• New proof format with issuer + nonce  
+• Verification is offline with bundles  
+• SDK handles everything locally
 
-API Docs:  
-https://timeproofs.io/docs.html
+Both versions remain compatible at the hashing layer.
 
-Use Cases:  
-https://timeproofs.io/use-cases.html
+# 🧱 Project Structure (v0.2 branch)
 
-Security & CSP:  
-https://timeproofs.io/security.html
+api-v02/worker.js  
+sdk/timeproofs-v02.js  
+index.html (static site)  
+proofspec.html  
+docs.html  
+security.html  
+privacy.html  
+legal.html  
+use-cases.html  
+about.html  
+assets/*
 
----
+# 🔮 Roadmap
 
-## 🗂 Project Structure (v0.1)
+v0.2.1 — Ed25519 signatures + JWKS  
+v0.2.2 — CLI for offline verification  
+v0.3 — ProofSpec v1  
+v1.0 — Dashboard + keys + limits  
+v2.0 — Distributed ProofChain  
+v3.0 — TimeProofs Foundation + standardisation
 
-```
-/index.html
-/verify.html
-/proofspec.html
-/use-cases.html
-/docs.html
-/security.html
-/privacy.html
-/legal.html
-/about.html
-/releases/v0.1.json
-/release-v0.1.tproof.json
-/sw.js
-/assets/*
-```
+# 🧾 License
 
----
+MPL-2.0 License.
 
-## 🧾 License
-
-This project is licensed under the **MPL-2.0 License**.
-
----
-
-## 🛠 Maintainer
+# 🛠 Maintainer
 
 TimeProofs is developed and maintained by Jeason Bacoul.  
-Follow updates on: https://github.com/BACOUL/timeproofs
+GitHub: https://github.com/BACOUL/timeproofs
