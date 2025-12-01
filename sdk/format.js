@@ -34,9 +34,7 @@ async function main() {
   }
 
   const verifyResult = await tp.verifyBundle(bundle);
-
   const formatted = tp.formatBundle(bundle, verifyResult);
-
   console.log(formatted);
 }
 
