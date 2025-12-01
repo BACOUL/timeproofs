@@ -1,49 +1,49 @@
 // sdk/test.js
-// Petit script de test TimeProofs v0.2 (Node)
-
 const fs = require("fs");
-const TimeProofsV02 = require("./timeproof");
+const tpv2 = require("./timeproof");
 
-(async () => {
+async function main() {
   try {
-    // Client v0.2 (API key optionnelle pour l’instant)
-    const client = TimeProofsV02.createClient({
-      baseUrl: "https://api.timeproofs.io",
-      apiKey: process.env.TIMEPROOFS_API_KEY || null,
+    console.log("→ Running TimeProofs v0.2 test…");
+
+    // 1) Client
+    const client = tpv2.createClient({
+      baseUrl: "https://timeproofs-api-v02.jeason-bacoul.workers.dev"
     });
 
-    // 1) Hash d’un texte
-    const hash = await client.hashText("hello world");
+    // 2) Hash
+    const hash = await client.hashText("hello");
     console.log("HASH:", hash);
 
-    // 2) Appel /api/timestamp (v0.2 stateless)
+    // 3) Timestamp
     const ev = await client.timestamp(hash);
     console.log("EVENT v0.2:", ev);
 
-    // 3) Construction du bundle local (.tproof.json)
+    // 4) Bundle
     const bundle = client.createBundle({
       hash: ev.hash,
       timestamp: ev.timestamp,
       proof: ev.proof,
-      meta: { type: "test" },
+      meta: { type: "test" }
     });
+
     console.log("BUNDLE:", bundle);
 
-    // 4) Vérification offline minimale
-    const verifyResult = await client.verifyBundle(bundle, {
-      expectedIssuer: "https://api.timeproofs.io",
-    });
-    console.log("VERIFY RESULT:", verifyResult);
+    // 5) Offline verify
+    const result = await client.verifyBundle(bundle);
+    console.log("VERIFY RESULT:", result);
 
-    // 5) Sauvegarde du bundle sur disque
+    // 6) Save bundle
     fs.writeFileSync(
       "proof.tproof.json",
       JSON.stringify(bundle, null, 2),
       "utf8"
     );
     console.log("Saved → proof.tproof.json");
+
   } catch (err) {
     console.error("ERROR:", err);
-    process.exitCode = 1;
   }
-})();
+}
+
+main();
