@@ -6,18 +6,14 @@ name = "timeproofs-api-v02"
 main = "worker.js"
 compatibility_date = "2025-01-01"
 
-# Cloudflare account ID (valid)
+# Cloudflare account ID
 account_id = "99b6f748770d2257d27409b27b9e1bea"
 
-# For now we only use workers.dev for testing.
-# Later, you can add routes to bind this worker to a custom domain/path.
+# v0.2 runs ONLY on workers.dev (safe, isolated from v0.1)
 workers_dev = true
 
 [vars]
-# v0.2 will reuse the same HMAC secret as v0.1, configured as a secret in Cloudflare.
-# Do NOT put the secret value here in plain text.
-# Set it with: wrangler secret put HMAC_SECRET
-
-[[kv_namespaces]]
-binding = "TIMEPROOFS_V02_KV"
-id = "d9b60d8b971b4ae4b28e33f0be7ed65a"
+# TimeProofs v0.2 reuses the same server HMAC secret as v0.1.
+# DO NOT write the secret here.
+# Set it using:
+#   wrangler secret put HMAC_SECRET
