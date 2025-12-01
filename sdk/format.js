@@ -1,50 +1,46 @@
 // sdk/format.js
-// TimeProofs v0.2 — CLI de formatage et vérification d'un bundle (.tproof.json)
+// Usage:
+//   node format.js proof.tproof.json
+//
+// Prints a readable TimeProofs v0.2 proof.
 
 const fs = require("fs");
 const path = require("path");
-const TimeProofsV02 = require("./timeproof");
+const tp = require("./timeproof");
 
 async function main() {
   const file = process.argv[2];
-
   if (!file) {
     console.error("Usage: node format.js <bundle.tproof.json>");
     process.exit(1);
   }
 
-  const fullPath = path.resolve(file);
+  const full = path.resolve(file);
 
   let raw;
   try {
-    raw = fs.readFileSync(fullPath, "utf8");
+    raw = fs.readFileSync(full, "utf8");
   } catch (e) {
-    console.error("Cannot read file:", fullPath);
-    console.error(e.message);
+    console.error("Cannot read file:", full);
     process.exit(1);
   }
 
   let bundle;
   try {
     bundle = JSON.parse(raw);
-  } catch (e) {
-    console.error("File is not valid JSON");
-    console.error(e.message);
+  } catch (err) {
+    console.error("Invalid JSON in:", full);
     process.exit(1);
   }
 
-  try {
-    const verifyResult = await TimeProofsV02.verifyBundle(bundle, {
-      expectedIssuer: "https://api.timeproofs.io",
-    });
+  const verifyResult = await tp.verifyBundle(bundle);
 
-    const formatted = TimeProofsV02.formatBundle(bundle, verifyResult);
-    console.log(formatted);
-  } catch (e) {
-    console.error("Error while verifying/formatting bundle:");
-    console.error(e.message);
-    process.exit(1);
-  }
+  const formatted = tp.formatBundle(bundle, verifyResult);
+
+  console.log(formatted);
 }
 
-main();
+main().catch((err) => {
+  console.error("ERROR:", err);
+  process.exit(1);
+});
