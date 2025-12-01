@@ -1,63 +1,51 @@
 // sdk/test.js
-// TimeProofs v0.2 — end-to-end example
-// Hash "hello" -> timestamp v0.2 -> bundle -> verify -> write proof.tproof.json
+// Petit script de test pour TimeProofs v0.2 (Node.js)
 
 const fs = require("fs");
-const path = require("path");
-const tpv2 = require("./timeproof");
+const TimeProofsV02 = require("./timeproof.js");
 
-async function main() {
-  const client = tpv2.createClient({
-    baseUrl: "https://timeproofs-api-v02.jeason-bacoul.workers.dev",
-    // apiKey: "tp_test_xxx" // si un jour tu ajoutes une clé
-  });
-
+(async () => {
   try {
-    console.log("=== TimeProofs v0.2 SDK test ===");
-
-    // 1) Hash du texte
-    const text = "hello";
-    console.log("TEXT:", JSON.stringify(text));
-
-    const hash = await client.hashText(text);
-    console.log("HASH:", hash);
-
-    // 2) Timestamp v0.2
-    const ev = await client.timestamp(hash);
-    console.log("EVENT v0.2:", ev);
-
-    // 3) Construire bundle v0.2
-    const bundle = client.createBundle({
-      hash: ev.hash,
-      timestamp: ev.timestamp,
-      proof: ev.proof,
-      meta: {
-        type: "test",
-        source: "sdk/test.js",
-        note: "Example TimeProofs v0.2 bundle",
-      },
+    // 1) Client v0.2
+    const apiKey = process.env.TIMEPROOFS_API_KEY || null;
+    const tp = TimeProofsV02.createClient({
+      baseUrl: "https://api.timeproofs.io",
+      apiKey: apiKey || undefined,
     });
 
-    console.log("BUNDLE OBJECT:", bundle);
+    // 2) Hash d’un texte de test
+    const hash = await tp.hashText("hello from timeproofs v0.2");
+    console.log("HASH:", hash);
 
-    // 4) Vérification locale (sans fichier)
-    const verifyResult = await client.verifyBundle(bundle);
+    // 3) Appel stateless /api/timestamp (v0.2)
+    const event = await tp.timestamp(hash);
+    console.log("EVENT v0.2:", event);
+
+    // 4) Construction du bundle v0.2 (.tproof.json)
+    const bundle = tp.createBundle({
+      hash: event.hash,
+      timestamp: event.timestamp,
+      proof: event.proof,
+      meta: { type: "test" },
+    });
+    console.log("BUNDLE:", bundle);
+
+    // 5) Vérification offline du bundle
+    const verifyResult = await tp.verifyBundle(bundle);
     console.log("VERIFY RESULT:", verifyResult);
 
-    // 5) Écrire le bundle dans un fichier .tproof.json
-    const outPath = path.join(__dirname, "proof.tproof.json");
-    fs.writeFileSync(outPath, JSON.stringify(bundle, null, 2), "utf8");
-    console.log("WROTE FILE:", outPath);
+    // 6) Écriture du bundle brut (.tproof.json)
+    const bundlePath = "proof.tproof.json";
+    fs.writeFileSync(bundlePath, JSON.stringify(bundle, null, 2));
+    console.log("Written bundle file:", bundlePath);
 
-    // 6) Afficher la preuve lisible
-    const printable = client.formatBundle(bundle, verifyResult);
-    console.log("\n=== HUMAN-READABLE PROOF ===\n");
-    console.log(printable);
-    console.log("\n=== END PROOF ===");
+    // 7) Écriture d’une version lisible (formatBundle)
+    const formatted = tp.formatBundle(bundle, verifyResult);
+    const formattedPath = "proof.txt";
+    fs.writeFileSync(formattedPath, formatted + "\n");
+    console.log("Written human-readable proof:", formattedPath);
   } catch (err) {
-    console.error("ERROR:", err);
+    console.error("ERROR in test.js:", err);
     process.exitCode = 1;
   }
-}
-
-main();
+})();
