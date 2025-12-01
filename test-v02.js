@@ -1,68 +1,93 @@
-// test-v02.js
-// Test complet v0.2 : hash → timestamp (worker v0.2) → bundle → verifyBundle
+// TimeProofs v0.2 — Test complet API + SDK
+// Ce script :
+// 1) calcule un hash SHA-256 en local
+// 2) appelle l’API v0.2 /api/timestamp
+// 3) construit un bundle .tproof.json local
+// 4) écrit sample-v02.tproof.json sur le disque
 
 const fs = require("fs");
-const path = require("path");
+const crypto = require("crypto");
 
-// Adapter le chemin si besoin, mais dans ton repo actuel : ./sdk/timeproofs-v02.js
-const TimeProofsV02 = require("./sdk/timeproofs-v02.js");
+// ⚠️ IMPORTANT : remplace si besoin par l’URL exacte de ton worker v0.2
+const BASE = "https://timeproofs-api-v02.jeason-bacoul.workers.dev";
 
-// ⚠️ Remplace cette URL par l'URL exacte de ton worker v0.2 sur Cloudflare Workers
-// Exemple typique : "https://timeproofs-api-v02.jeason-bacoul.workers.dev"
-const BASE_URL_V02 = "https://timeproofs-api-v02.<TON-SOUS-DOMAINE>.workers.dev";
-
-async function main() {
-  try {
-    const client = TimeProofsV02.createClient({
-      baseUrl: BASE_URL_V02,
-      // apiKey: "tp_test_xxx" // si un jour tu ajoutes des clés, pour l'instant null
-    });
-
-    // 1) Hash local (texte pour le test, plus simple que fichier)
-    const message = "timeproofs v0.2 end-to-end test";
-    const hash = await client.hashText(message);
-    console.log("✔ Hash (SHA-256):", hash);
-
-    // 2) Appel du worker v0.2 /api/timestamp
-    const ts = await client.timestamp(hash);
-    console.log("\n✔ Timestamp response (v0.2):");
-    console.log(JSON.stringify(ts, null, 2));
-
-    // 3) Construction du bundle local .tproof.json
-    const bundle = client.createBundle({
-      hash: ts.hash,
-      timestamp: ts.timestamp,
-      proof: ts.proof,
-      meta: {
-        type: "document",
-        purpose: "v0.2-manual-test",
-        tool: "node-test",
-        notes: "First end-to-end test on Termux"
-      }
-      // userSign: ... (optionnel plus tard)
-    });
-
-    // 4) Vérification offline minimale
-    const verifyResult = await client.verifyBundle(bundle, {
-      expectedIssuer: ts.timestamp.issuer
-      // file: ... // on testera avec un vrai fichier plus tard
-    });
-
-    console.log("\n✔ Bundle (timeproofs-0.2):");
-    console.log(JSON.stringify(bundle, null, 2));
-
-    console.log("\n✔ verifyBundle result:");
-    console.log(JSON.stringify(verifyResult, null, 2));
-
-    // 5) Sauvegarde du bundle pour inspection
-    const outPath = path.join(process.cwd(), "test-v02.tproof.json");
-    fs.writeFileSync(outPath, JSON.stringify(bundle, null, 2), "utf8");
-    console.log("\n✔ Bundle sauvegardé dans:", outPath);
-  } catch (err) {
-    console.error("\n✖ Erreur pendant le test v0.2:");
-    console.error(err);
-    process.exit(1);
-  }
+// ---------------------------------------------------------
+// Utilitaires
+// ---------------------------------------------------------
+async function sha256HexNode(buffer) {
+  return crypto.createHash("sha256").update(buffer).digest("hex");
 }
 
-main();
+// ---------------------------------------------------------
+// Test principal
+// ---------------------------------------------------------
+async function main() {
+  console.log("=== TimeProofs v0.2 — Test complet ===\n");
+
+  // [1] HASH LOCAL
+  console.log("[1] HASH LOCAL");
+  const data = Buffer.from("Hello from TimeProofs v0.2");
+  const hash = await sha256HexNode(data);
+  console.log("SHA-256 =", hash, "\n");
+
+  // [2] APPEL /api/timestamp …
+  console.log("[2] APPEL /api/timestamp …");
+  const res = await fetch(BASE + "/api/timestamp", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ hash }),
+  });
+
+  const event = await res.json();
+  console.log("Réponse API v0.2:");
+  console.dir(event, { depth: null });
+  console.log("");
+
+  if (!res.ok) {
+    console.error("Erreur API v0.2:", event);
+    process.exit(1);
+  }
+
+  // [3] CONSTRUCTION DU .tproof.json …
+  console.log("[3] CONSTRUCTION DU .tproof.json …");
+
+  const bundle = {
+    version: "timeproofs-0.2",
+    hash: {
+      algorithm: "SHA-256",
+      value: hash,
+    },
+    timestamp: {
+      issuedAt: event.timestamp.issuedAt,
+      issuer: event.timestamp.issuer,
+      nonce: event.timestamp.nonce,
+    },
+    proof: {
+      algo: event.proof.algo,
+      hmac: event.proof.hmac || null,
+      signature: event.proof.signature || null,
+      publicKey: event.proof.publicKey || null,
+      keyId: event.proof.keyId,
+    },
+    meta: {
+      type: "test",
+      purpose: "v0.2 demo",
+    },
+  };
+
+  console.log("Bundle généré :");
+  console.dir(bundle, { depth: null });
+  console.log("");
+
+  // [4] ÉCRITURE FICHIER
+  const outPath = "sample-v02.tproof.json";
+  fs.writeFileSync(outPath, JSON.stringify(bundle, null, 2), "utf8");
+  console.log("[4] FICHIER BUNDLE ÉCRIT :", outPath, "\n");
+
+  console.log("=== TEST TERMINÉ ===");
+}
+
+main().catch((err) => {
+  console.error("Erreur dans le test v0.2:", err);
+  process.exit(1);
+});

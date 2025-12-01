@@ -1,0 +1,166 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TimeProofs Proof Bundle v0.2",
+  "description": "JSON schema for TimeProofs proof bundles (.tproof.json) — version timeproofs-0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "hash", "timestamp", "proof"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "timeproofs-0.2",
+      "description": "Proof bundle version identifier"
+    },
+    "hash": {
+      "type": "object",
+      "required": ["algorithm", "value"],
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": {
+          "type": "string",
+          "enum": ["SHA-256"],
+          "description": "Hash algorithm used for the data"
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$",
+          "description": "Hex-encoded SHA-256 digest of the data"
+        }
+      }
+    },
+    "timestamp": {
+      "type": "object",
+      "required": ["issuedAt", "issuer"],
+      "additionalProperties": false,
+      "properties": {
+        "issuedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "RFC3339 timestamp when the proof was issued"
+        },
+        "issuer": {
+          "type": "string",
+          "format": "uri",
+          "description": "Base URL of the TimeProofs API that issued the timestamp"
+        },
+        "nonce": {
+          "type": "string",
+          "description": "Optional random nonce used in the timestamp"
+        }
+      }
+    },
+    "proof": {
+      "type": "object",
+      "required": ["algo", "keyId"],
+      "additionalProperties": false,
+      "properties": {
+        "algo": {
+          "type": "string",
+          "enum": ["HMAC-SHA256+Ed25519"],
+          "description": "Signature scheme used by TimeProofs v0.2"
+        },
+        "hmac": {
+          "type": ["string", "null"],
+          "description": "Hex-encoded HMAC-SHA256 value (may be null if server has no HMAC secret)"
+        },
+        "signature": {
+          "type": ["string", "null"],
+          "description": "Base64-encoded Ed25519 signature (null in v0.2 until implemented)"
+        },
+        "publicKey": {
+          "type": ["string", "null"],
+          "description": "Base64-encoded Ed25519 public key (null in v0.2)"
+        },
+        "keyId": {
+          "type": "string",
+          "description": "Identifier used to reference the public key (JWKS future use)"
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "description": "Optional local-only metadata attached by the user or application",
+      "additionalProperties": true,
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Normalized category of the data",
+          "enum": [
+            "document",
+            "image",
+            "video",
+            "code",
+            "dataset",
+            "model",
+            "log",
+            "contract",
+            "release",
+            "config",
+            "archive",
+            "financial-statement",
+            "medical-record",
+            "supply-record",
+            "product-info",
+            "ai-output",
+            "ai-training-set",
+            "ai-prompt",
+            "audit-proof",
+            "evidence"
+          ]
+        },
+        "mime": {
+          "type": "string",
+          "description": "MIME type of the associated file (optional)"
+        },
+        "domain": {
+          "type": "string",
+          "description": "Business domain, process or system category"
+        },
+        "purpose": {
+          "type": "string",
+          "description": "Purpose of the proof"
+        },
+        "createdBy": {
+          "type": "string",
+          "description": "User, system or agent that created the bundle"
+        },
+        "tool": {
+          "type": "string",
+          "description": "Software/tool name used to generate the bundle"
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Custom tags or labels"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Human-readable notes or context"
+        }
+      }
+    },
+    "userSign": {
+      "type": "object",
+      "description": "Optional local signature verifying the metadata (not sent to server)",
+      "additionalProperties": false,
+      "required": ["publicKey", "algorithm", "signature"],
+      "properties": {
+        "publicKey": {
+          "type": "string",
+          "description": "Base64-encoded Ed25519 public key for user signature"
+        },
+        "algorithm": {
+          "type": "string",
+          "enum": ["Ed25519"],
+          "description": "Algorithm used for the user's local signature"
+        },
+        "signature": {
+          "type": "string",
+          "description": "Base64-encoded signature over canonicalized metadata"
+        }
+      }
+    }
+  }
+}
