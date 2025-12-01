@@ -343,7 +343,7 @@
    */
   async function verifyBundle(bundle, options) {
     const opts = options || {};
-       const errors = [];
+    const errors = [];
 
     if (!bundle || typeof bundle !== "object") {
       return {
@@ -445,8 +445,7 @@
     const proofValid = null; // Ed25519 verification to be implemented later
     const userSignValid = null; // local signature not verified yet
 
-    const valid =
-      schemaValid && hashMatches !== false && proofValid !== false;
+    const valid = schemaValid && hashMatches !== false && proofValid !== false;
 
     return {
       valid,
