@@ -124,7 +124,7 @@ upgrade-insecure-requests">
       "API documentation"
     ],
     "datePublished":"2025-10-22",
-    "dateModified":"2025-11-08",
+    "dateModified":"2025-12-02",
     "inLanguage":"en",
     "maintainer":{"@type":"Organization","name":"TimeProofs"},
     "publisher":{
@@ -163,7 +163,7 @@ upgrade-insecure-requests">
         "name":"How do I verify a proof?",
         "acceptedAnswer":{
           "@type":"Answer",
-          "text":"Call /api/verify with the SHA-256 hash or use any ProofSpec-compliant client."
+          "text":"With v0.1, call /api/verify with the SHA-256 hash or use any ProofSpec-compliant client. With v0.2, verification is done offline using .tproof.json bundles and the SDK/CLI."
         }
       },
       {
@@ -171,7 +171,7 @@ upgrade-insecure-requests">
         "name":"What algorithm is used for signatures?",
         "acceptedAnswer":{
           "@type":"Answer",
-          "text":"HMAC-SHA256 over the ASCII string 'hash|ts' with Base64URL-encoded signature."
+          "text":"HMAC-SHA256 over the ASCII string 'hash|ts' with Base64URL-encoded signature for v0.1. v0.2 introduces an HMAC-SHA256 + Ed25519 proof model, with verification done offline on bundles."
         }
       }
     ]
@@ -204,7 +204,6 @@ upgrade-insecure-requests">
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
 
-    /* Offset anchors for fixed header */
     [id]{ scroll-margin-top:120px }
     @media (min-width:900px){
       [id]{ scroll-margin-top:104px }
@@ -218,7 +217,6 @@ upgrade-insecure-requests">
       background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000;
     }
 
-    /* Header */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.55); backdrop-filter:blur(10px);
@@ -279,7 +277,6 @@ upgrade-insecure-requests">
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* HERO */
     .hero{
       padding-top:96px; padding-bottom:18px; text-align:center;
       position:relative; border-bottom:1px solid var(--line);
@@ -299,7 +296,6 @@ upgrade-insecure-requests">
       border-radius:999px; font-size:.85rem;
     }
 
-    /* TOC */
     nav.toc{
       display:flex; flex-wrap:wrap; gap:12px;
       margin:14px auto 0; padding:12px 0 14px;
@@ -329,7 +325,6 @@ upgrade-insecure-requests">
     }
     .toc-top:hover{ text-decoration:underline }
 
-    /* Content */
     main{ padding:0 0 40px }
     .meta{
       color:var(--muted); margin:18px auto 6px; max-width:1100px;
@@ -348,7 +343,6 @@ upgrade-insecure-requests">
       white-space:nowrap;
     }
     th{ color:#cfefff; font-weight:700 }
-    /* Wrap description column (4th) on narrow screens */
     .table-wrap th:nth-child(4),
     .table-wrap td:nth-child(4){
       white-space:normal;
@@ -361,7 +355,6 @@ upgrade-insecure-requests">
       position:relative;
     }
 
-    /* Copy button (aligné ProofSpec) */
     .copy-btn{
       position:absolute; top:8px; right:8px;
       display:inline-flex; align-items:center; gap:6px;
@@ -376,7 +369,6 @@ upgrade-insecure-requests">
 
     .muted{ color:var(--muted); font-size:.9rem }
 
-    /* Footer */
     footer{
       border-top:1px solid var(--line); margin-top:28px;
       padding:18px; color:#7c8aa5; text-align:center;
@@ -414,7 +406,6 @@ upgrade-insecure-requests">
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
-  <!-- Header (canonique) -->
   <header class="tp-header" id="hdr" role="banner">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
@@ -438,42 +429,56 @@ upgrade-insecure-requests">
   </header>
 
   <main id="main" class="wrap" role="main" aria-describedby="page-title">
-    <!-- HERO -->
     <section class="hero" role="region" aria-labelledby="page-title">
       <div class="icon" aria-hidden="true">📚</div>
       <p class="badge">Status: Public Beta v0.1 · API · Privacy-first · No blockchain</p>
       <h1 id="page-title">API Docs</h1>
       <p class="lead">
-        Minimal, fast, verifiable. Hash client-side, timestamp via the API, verify publicly. Privacy-first, no blockchain.
+        Hash client-side, timestamp via the edge API, verify publicly. v0.1 provides online verify, v0.2 introduces a stateless model with offline bundles.
       </p>
     </section>
 
-    <!-- TOC -->
     <nav class="toc" aria-label="Contents">
       <span class="toc-label">On this page</span>
-      <a href="#base-url">Base URL</a>
+      <a href="#overview">Overview & versions</a>
+      <a href="#base-url">Base URLs</a>
       <a href="#auth">Auth</a>
       <a href="#timestamp">POST /api/timestamp</a>
       <a href="#verify">GET/POST /api/verify</a>
-      <a href="#models">Models</a>
+      <a href="#models">Models & bundles</a>
       <a href="#errors">Errors</a>
-      <a href="#sdk">Client helpers</a>
+      <a href="#sdk">Client helpers & SDK</a>
+      <a href="#root-files">Root files & related protocols</a>
       <a href="#page-proof-sec">Page proof</a>
     </nav>
     <div style="text-align:center">
       <a class="toc-top" href="#top">↑ Top</a>
     </div>
 
-    <!-- Meta -->
     <p class="meta">
-      API: <strong>v0.1</strong> · Last updated: <strong>2025-11-08</strong> ·
+      API: <strong>v0.1 (stable)</strong> + <strong>v0.2 (dev preview)</strong> ·
+      Last updated: <strong>2025-12-02</strong> ·
       Spec: <a href="/proofspec.html">ProofSpec v0.1</a> ·
       <a href="/security.html">Security</a>
     </p>
 
-    <!-- Sections -->
+    <section class="card" id="overview">
+      <h2>1. Overview &amp; versions</h2>
+      <p>
+        TimeProofs exposes a small, stable HTTP API. Today there are two compatible versions:
+      </p>
+      <ul>
+        <li><strong>v0.1 (production, online verify)</strong> — hash-only inputs, events stored server-side, <code>/api/verify</code> available for public lookups.</li>
+        <li><strong>v0.2 (dev preview, stateless)</strong> — the server never stores proofs, returns a signed timestamp response, and verification happens offline using <code>.tproof.json</code> bundles.</li>
+      </ul>
+      <p class="muted">
+        v0.1 stays the recommended path for most integrations today. v0.2 is the next-generation model and focuses on
+        offline verification and client-side proof bundles.
+      </p>
+    </section>
+
     <section class="card" id="base-url">
-      <h2>1. Base URL</h2>
+      <h2>2. Base URLs</h2>
       <div class="table-wrap" role="region" aria-label="Base URLs">
         <table>
           <thead>
@@ -481,14 +486,19 @@ upgrade-insecure-requests">
           </thead>
           <tbody>
             <tr>
-              <td>Primary</td>
+              <td>Primary (v0.1)</td>
               <td><code>https://api.timeproofs.io/api</code></td>
-              <td>Global edge</td>
+              <td>Global edge · production · online verify</td>
             </tr>
             <tr>
-              <td>Fallback</td>
+              <td>Fallback (v0.1)</td>
               <td><code>https://timeproofs-api.jeason-bacoul.workers.dev/api</code></td>
-              <td>Same contract</td>
+              <td>Same contract as primary</td>
+            </tr>
+            <tr>
+              <td>Dev preview (v0.2)</td>
+              <td><code>https://timeproofs-api-v02.jeason-bacoul.workers.dev/api</code></td>
+              <td>Stateless timestamp · no stored proofs · verify is offline only</td>
             </tr>
           </tbody>
         </table>
@@ -496,15 +506,17 @@ upgrade-insecure-requests">
     </section>
 
     <section class="card" id="auth">
-      <h2>2. Auth</h2>
-      <p>HTTP bearer token. Omit for public <code>GET /api/verify</code>.</p>
+      <h2>3. Auth</h2>
+      <p>HTTP bearer token. Omit for public <code>GET /api/verify</code> in v0.1.</p>
 <pre><code>Authorization: Bearer &lt;API_TOKEN&gt;</code></pre>
-      <p class="muted">No PII in payloads. Hash-only.</p>
+      <p class="muted">
+        v0.2 uses the same header when an API key is required. In all cases, payloads remain hash-only, no raw files.
+      </p>
     </section>
 
     <section class="card" id="timestamp">
-      <h2>3. POST /api/timestamp</h2>
-      <p>Create a timestamped proof for a SHA-256 hash.</p>
+      <h2>4. POST /api/timestamp</h2>
+      <p>Create a timestamped proof for a SHA-256 hash (v0.1 semantics).</p>
 <pre><code>POST /api/timestamp
 Content-Type: application/json
 Authorization: Bearer &lt;TOKEN&gt;
@@ -513,12 +525,12 @@ Authorization: Bearer &lt;TOKEN&gt;
   "hash": "7c040f...d76c2",
   "meta": { "type": "file", "hint": "optional-small-note" }
 }</code></pre>
-<pre><code># cURL
+<pre><code># cURL (v0.1)
 curl -s -X POST https://api.timeproofs.io/api/timestamp \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"hash":"&lt;SHA256_HEX&gt;","meta":{"type":"file"}}'</code></pre>
-<pre><code>// JS (browser) — string → sha256
+<pre><code>// JS (browser, v0.1-style) — string → sha256
 async function sha256Hex(str){
   const buf=new TextEncoder().encode(str);
   const digest=await crypto.subtle.digest('SHA-256', buf);
@@ -550,31 +562,40 @@ const proof=await fetch(`${API}/timestamp`,{
           </tbody>
         </table>
       </div>
+
+      <p class="muted">
+        In v0.2, <code>POST /api/timestamp</code> returns a structured timestamp object (hash, issuedAt, issuer, nonce, proof)
+        but never stores it server-side. See “Models &amp; bundles” below for the v0.2 response and bundle shape.
+      </p>
     </section>
 
     <section class="card" id="verify">
-      <h2>4. GET/POST /api/verify</h2>
-      <p>Check an existing proof by hash.</p>
+      <h2>5. GET/POST /api/verify</h2>
+      <p>Check an existing proof by hash (v0.1 online verification).</p>
 <pre><code>GET /api/verify?hash=&lt;SHA256_HEX&gt;</code></pre>
-<pre><code># cURL
+<pre><code># cURL (v0.1)
 curl -s "https://api.timeproofs.io/api/verify?hash=&lt;SHA256_HEX&gt;"</code></pre>
-<pre><code>// JS
+<pre><code>// JS (v0.1)
 const API="https://api.timeproofs.io/api";
 const res=await fetch(`${API}/verify?hash=${encodeURIComponent(hash)}`);
 const data=await res.json();</code></pre>
-      <p class="muted">Public read. No token required.</p>
+      <p class="muted">
+        v0.1 exposes public read-only verification. In v0.2, <code>/api/verify</code> deliberately returns <code>501</code>:
+        verification is done offline by validating <code>.tproof.json</code> bundles with the SDK/CLI.
+      </p>
     </section>
 
     <section class="card" id="models">
-      <h2>5. Models (ProofSpec v0.1)</h2>
-<pre><code>// Timestamp response
+      <h2>6. Models &amp; bundles</h2>
+      <h3>6.1 v0.1 timestamp &amp; verify models</h3>
+<pre><code>// v0.1 — timestamp response (conceptual)
 {
   "hash": "^[a-f0-9]{64}$",
   "ts":   1730793600000,           // Unix epoch ms
   "sig":  "base64url(HMAC_SHA256('hash|ts', key))",
   "meta": { ... }                  // optional, small, non-personal
 }</code></pre>
-<pre><code>// Verify response
+<pre><code>// v0.1 — verify response (conceptual)
 {
   "exists": true,
   "valid":  true,
@@ -583,11 +604,77 @@ const data=await res.json();</code></pre>
   "sig":    "…",
   "meta":   { ... }
 }</code></pre>
-      <p class="muted">Signature policy: HMAC-SHA256 over ASCII <code>hash|ts</code>, Base64URL without padding.</p>
+      <p class="muted">
+        v0.1 uses HMAC-SHA256 over ASCII <code>hash|ts</code>, Base64URL without padding, and stores the event server-side.
+      </p>
+
+      <h3>6.2 v0.2 stateless timestamp response</h3>
+<pre><code>// v0.2 — response from POST /api/timestamp
+{
+  "version": "timeproofs-0.2",
+  "hash": {
+    "algorithm": "SHA-256",
+    "value": "bbbbee25f8ebb60fa512ad3e02460bd4cc7ec4a41850c5cc8636e67d99f0b3b2"
+  },
+  "timestamp": {
+    "issuedAt": "2025-12-01T21:50:43.538Z",
+    "issuer":   "https://api.timeproofs.io",
+    "nonce":    "8a64f51d5aa9eb6b14a213b3c26ef351"
+  },
+  "proof": {
+    "algo":      "HMAC-SHA256+Ed25519",
+    "hmac":      "43667bef3c30849223ef838ff6dd6878c0b4491555aee8266299fefe24700d84",
+    "signature": null,
+    "publicKey": null,
+    "keyId":     "tp-v0-2-main"
+  }
+}</code></pre>
+      <p class="muted">
+        The server never stores this object. Clients are expected to embed it into a local bundle and verify offline.
+      </p>
+
+      <h3>6.3 v0.2 proof bundles (.tproof.json)</h3>
+<pre><code>// v0.2 — bundle structure (.tproof.json, simplified)
+{
+  "version": "timeproofs-0.2",
+  "hash": {
+    "algorithm": "SHA-256",
+    "value": "&lt;sha256-hex&gt;"
+  },
+  "timestamp": {
+    "issuedAt": "&lt;RFC3339&gt;",
+    "issuer":   "https://api.timeproofs.io",
+    "nonce":    "&lt;optional-random-id&gt;"
+  },
+  "proof": {
+    "algo":      "HMAC-SHA256+Ed25519",
+    "hmac":      "&lt;hex-or-null&gt;",
+    "signature": "&lt;base64-ed25519-or-null&gt;",
+    "publicKey": "&lt;base64-public-or-null&gt;",
+    "keyId":     "tp-v0-2-main"
+  },
+  "meta": {
+    "type":    "document | image | video | code | dataset | model | ...",
+    "domain":  "finance | healthcare | supply-chain | ...",
+    "purpose": "release | audit-proof | evidence | ...",
+    "labels":  ["tag-1", "tag-2"],
+    "notes":   "human-readable context"
+  },
+  "userSign": {
+    "publicKey": "&lt;base64-ed25519&gt;",
+    "algorithm": "Ed25519",
+    "signature": "&lt;base64-signature-over-metadata&gt;"
+  }
+}</code></pre>
+      <p class="muted">
+        The canonical JSON Schema for v0.2 bundles is published at
+        <code>/spec/proof-bundle-v0.2.schema.json</code>. Files are never uploaded: only hashes and locally generated
+        metadata are included.
+      </p>
     </section>
 
     <section class="card" id="errors">
-      <h2>6. Errors</h2>
+      <h2>7. Errors</h2>
       <div class="table-wrap" role="region" aria-label="Error codes">
         <table>
           <thead>
@@ -595,10 +682,12 @@ const data=await res.json();</code></pre>
           </thead>
           <tbody>
             <tr><td>200</td><td>ok</td><td>Success</td></tr>
-            <tr><td>400</td><td>INVALID_HASH</td><td>Missing/invalid SHA-256</td></tr>
+            <tr><td>400</td><td>INVALID_HASH / invalid_hash</td><td>Missing/invalid SHA-256</td></tr>
+            <tr><td>400</td><td>invalid_json</td><td>Malformed JSON body (v0.2)</td></tr>
             <tr><td>401</td><td>UNAUTHORIZED</td><td>Invalid token</td></tr>
-            <tr><td>404</td><td>NOT_FOUND</td><td>No proof for this hash</td></tr>
+            <tr><td>404</td><td>NOT_FOUND</td><td>No proof for this hash (v0.1)</td></tr>
             <tr><td>429</td><td>RATE_LIMIT</td><td>Too many requests</td></tr>
+            <tr><td>501</td><td>not_implemented_v02</td><td><code>/api/verify</code> is offline-only in v0.2</td></tr>
             <tr><td>5xx</td><td>SERVER_ERROR</td><td>Temporary issue</td></tr>
           </tbody>
         </table>
@@ -606,7 +695,7 @@ const data=await res.json();</code></pre>
     </section>
 
     <section class="card" id="sdk">
-      <h2>7. Client helpers</h2>
+      <h2>8. Client helpers &amp; SDK</h2>
 <pre><code>// File → sha256 (browser)
 async function sha256FileHex(file){
   const buf=await file.arrayBuffer();
@@ -620,10 +709,57 @@ import { createHash } from "crypto";
 
 const sha256Hex = (buf) =>
   createHash("sha256").update(buf).digest("hex");</code></pre>
-      <p class="muted">Full SDKs ship with v0.2.</p>
+      <p class="muted">
+        v0.2 ships a minimal JS SDK (browser + Node 18+) that wraps hashing, timestamp calls, bundle creation and offline
+        verification:
+      </p>
+<pre><code>// JS SDK v0.2 (path inside repo)
+/sdk/timeproofs-v02.js
+
+// Example usage (conceptual)
+const client = TimeProofsV02.createClient({
+  baseUrl: "https://timeproofs-api-v02.jeason-bacoul.workers.dev"
+});
+
+const hash   = await client.hashText("hello");
+const tsResp = await client.timestamp(hash);
+const bundle = client.createBundle({
+  hash:      tsResp.hash,
+  timestamp: tsResp.timestamp,
+  proof:     tsResp.proof,
+  meta:      { type:"document", purpose:"release" }
+});
+
+const verifyResult = await client.verifyBundle(bundle, { file: null });
+// verifyResult.valid tells you if the bundle is structurally sound and, if a file is provided, if the hash matches.</code></pre>
+      <p class="muted">
+        The SDK never uploads files. It only works with hashes and locally available metadata.
+      </p>
     </section>
 
-    <!-- Page proof -->
+    <section class="card" id="root-files">
+      <h2>9. Root files &amp; related protocols</h2>
+      <p>
+        TimeProofs can read and reference a set of independent “root” metadata files exposed by your site or service.
+        These files are not owned by TimeProofs; they are standalone protocols that can be used with or without
+        TimeProofs.
+      </p>
+      <ul>
+        <li><code>/robots.txt</code> — crawling and indexing policy.</li>
+        <li><code>/.well-known/security.txt</code> — security contact and disclosure rules.</li>
+        <li><code>/humans.txt</code> — team, credits and ethical commitments.</li>
+        <li><code>/integrity.txt</code> — independent integrity protocol (tracking, cookies, data-use/logs, third-parties, accessibility).</li>
+        <li><code>/authenticity.txt</code> — independent authenticity protocol (origin, AI involvement, human review, AI visibility, authenticity updates).</li>
+        <li><code>/rights.txt</code> — independent rights protocol (rights-model, allowed/forbidden uses, licence, rights-update policy).</li>
+        <li><code>/explainable-ia.txt</code> — independent explainability protocol (ai-systems, ai-uses, io-handling, explanations, limitations).</li>
+      </ul>
+      <p class="muted">
+        TimeProofs may include references to these root files in <code>.tproof.json</code> bundles (for example via the
+        <code>meta</code> section) but never replaces or embeds them. They remain fully independent standards that any
+        site, API or AI system can adopt.
+      </p>
+    </section>
+
     <section class="card" id="page-proof-sec" aria-labelledby="proof-title">
       <h2 id="proof-title">This page is verified by TimeProofs</h2>
       <p>
@@ -635,7 +771,6 @@ const sha256Hex = (buf) =>
     </section>
   </main>
 
-  <!-- Footer (canonique, GitHub → /tree/timeproofs) -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <a class="badge" href="/proofspec.html">🔍 Open Spec v0.1</a>
@@ -681,10 +816,8 @@ const sha256Hex = (buf) =>
     </div>
   </footer>
 
-  <!-- Scripts (alignés use-cases/proofspec) -->
   <script defer nonce="TP-2025">
   (function(){
-    // Header shade
     const hdr=document.getElementById('hdr');
     function onScroll(){
       if(window.scrollY>6) hdr.classList.add('scrolled');
@@ -693,7 +826,6 @@ const sha256Hex = (buf) =>
     onScroll();
     window.addEventListener('scroll', onScroll, { passive:true });
 
-    // Burger
     const burger=document.getElementById('tp-burger');
     const nav=document.getElementById('tp-nav');
     function openMenu(){
@@ -721,7 +853,6 @@ const sha256Hex = (buf) =>
       if(window.matchMedia('(min-width: 900px)').matches) closeMenu();
     },{ passive:true });
 
-    // Auto aria-current
     (function(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
       document.querySelectorAll('header nav a, footer .links a').forEach(a=>{
@@ -730,7 +861,6 @@ const sha256Hex = (buf) =>
       });
     })();
 
-    // Copy buttons on all code blocks (aligné ProofSpec)
     (function installCopyButtons(){
       document.querySelectorAll('pre').forEach((pre)=>{
         if(pre.querySelector('.copy-btn')) return;
@@ -758,7 +888,6 @@ const sha256Hex = (buf) =>
       });
     })();
 
-    // Release manifest fill (HERO + page proof)
     (async()=>{
       try{
         const r=await fetch('/releases/v0.1.json',{cache:'no-store'});
@@ -784,11 +913,10 @@ const sha256Hex = (buf) =>
       }catch{}
     })();
 
-    // Service Worker
     if('serviceWorker' in navigator){
       navigator.serviceWorker.register('/sw.js',{type:'module',scope:'/'}).catch(()=>{});
     }
   })();
   </script>
 </body>
-    </html>
+  </html>
