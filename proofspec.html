@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="dark light"/>
   <title>Protocol (ProofSpec) — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="ProofSpec v0.1: open, privacy-first specification to prove when data existed and that it has not changed. Hash-only inputs, signed timestamps, public verification."/>
+  <meta name="description" content="ProofSpec v0.1: open, privacy-first specification to prove when data existed and that it has not changed. Hash-only inputs, signed timestamps, public verification. Now with stateless API v0.2 and portable .tproof.json receipts."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -35,7 +35,7 @@
 
   <!-- Social -->
   <meta property="og:title" content="Protocol (ProofSpec) — TimeProofs"/>
-  <meta property="og:description" content="ProofSpec v0.1: hash-only inputs, signed timestamps, public verification. Open, privacy-first protocol for digital proof of existence."/>
+  <meta property="og:description" content="ProofSpec v0.1: hash-only inputs, signed timestamps, public verification. Open, privacy-first protocol for digital proof of existence. Stateless API v0.2 with portable .tproof.json receipts."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/proofspec.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
@@ -45,7 +45,7 @@
   <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Protocol (ProofSpec) — TimeProofs"/>
-  <meta name="twitter:description" content="Open, privacy-first spec for digital proof of existence. Hash locally, timestamp via API, verify publicly."/>
+  <meta name="twitter:description" content="Open, privacy-first spec for digital proof of existence. Hash locally, timestamp via API, verify publicly. Stateless API v0.2 and .tproof.json proof receipts."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- AI Trust -->
@@ -97,13 +97,15 @@
     "@type":"TechArticle",
     "headline":"ProofSpec v0.1 — Open protocol for digital proof of existence",
     "name":"Protocol (ProofSpec) — TimeProofs",
-    "description":"ProofSpec v0.1: open, privacy-first specification to prove when data existed and that it has not changed. Hash-only inputs, signed timestamps, public verification.",
+    "description":"ProofSpec v0.1: open, privacy-first specification to prove when data existed and that it has not changed. Hash-only inputs, signed timestamps, public verification. Stateless API v0.2 and .tproof.json proof receipts.",
     "inLanguage":"en",
     "about":[
       "digital proof of existence",
       "cryptographic hashes",
       "timestamp APIs",
-      "data integrity verification"
+      "data integrity verification",
+      "stateless verification APIs",
+      ".tproof.json proof receipts"
     ],
     "author":{
       "@type":"Organization",
@@ -399,9 +401,11 @@ upgrade-insecure-requests">
     <!-- HERO -->
     <section class="hero" role="region" aria-labelledby="title">
       <div class="icon" aria-hidden="true">📘</div>
-      <p class="badge">Status: Public Beta v0.1 · ProofSpec v0.1 · Privacy-first · No blockchain</p>
+      <p class="badge">Status: Public Beta · API v0.2 · ProofSpec v0.1 · Privacy-first · No blockchain</p>
       <h1 id="title">Protocol — ProofSpec</h1>
-      <p class="lead">Open, normative specification to prove when data existed and that it has not changed. Hash-only inputs, signed timestamps, public verification.</p>
+      <p class="lead">
+        Open, normative specification to prove when data existed and that it has not changed. Hash-only inputs, signed timestamps, public verification, and a stateless API with portable <code>.tproof.json</code> receipts.
+      </p>
     </section>
 
     <!-- TOC -->
@@ -410,9 +414,11 @@ upgrade-insecure-requests">
       <a href="#overview">Overview</a>
       <a href="#normative">Normative language</a>
       <a href="#conformance">Conformance</a>
+      <a href="#stateless">Stateless layer (API v0.2)</a>
       <a href="#canonicalization">Canonicalization</a>
       <a href="#datamodel">Data model</a>
       <a href="#proofformat">Proof format</a>
+      <a href="#tproof">.tproof.json format</a>
       <a href="#signing">Signing</a>
       <a href="#validation">Validation</a>
       <a href="#schema">JSON schema</a>
@@ -424,7 +430,8 @@ upgrade-insecure-requests">
       <a href="#errors">Errors</a>
       <a href="#policy">Operational policy</a>
       <a href="#checklist">Checklist</a>
-      <a href="#versioning">Versioning</a>
+      <a href="#protocols">Complementary protocols</a>
+      <a href="#versioning">Versioning & compatibility</a>
       <a href="#page-proof-sec">Page proof</a>
     </nav>
     <div style="text-align:center">
@@ -474,6 +481,17 @@ upgrade-insecure-requests">
       <p>Clients that claim ProofSpec compliance SHOULD keep the full proof JSON and SHOULD NOT rely only on a verify URL.</p>
     </section>
 
+    <section class="card" id="stateless">
+      <h2>Stateless layer (API v0.2)</h2>
+      <p>ProofSpec describes the logical protocol. TimeProofs v0.2 introduces a <strong>stateless implementation model</strong> for issuers:</p>
+      <ul>
+        <li>The issuer MAY treat each request as independent and MAY avoid keeping long-term server-side state for proofs.</li>
+        <li>The <strong>proof JSON</strong> and optional <code>.tproof.json</code> file act as the main record of existence, which the client keeps.</li>
+        <li>The verify endpoint MAY be implemented as a pure function of the submitted proof, issuer keys, and configuration.</li>
+      </ul>
+      <p>This makes it possible to deploy ProofSpec issuers on edge infrastructure, in serverless environments, or in “bring your own infra” scenarios without strict database requirements.</p>
+    </section>
+
     <!-- Canonicalization (+ alias) -->
     <span id="cannolization" aria-hidden="true"></span>
     <section class="card" id="canonicalization">
@@ -521,6 +539,23 @@ upgrade-insecure-requests">
     "source":"web"
   }
 }</code></pre>
+    </section>
+
+    <section class="card" id="tproof">
+      <h2>.tproof.json format</h2>
+      <p>A <code>.tproof.json</code> file is a portable “proof receipt” that packages the ProofSpec proof together with minimal context so that it can travel with the artifact it protects.</p>
+      <p>A typical <code>example.tproof.json</code> file contains:</p>
+      <ul>
+        <li>A top-level object that includes the canonical ProofSpec proof under a stable key (for example <code>proof</code>).</li>
+        <li>Optional metadata about the artifact (for example <code>artifact_name</code>, <code>artifact_type</code>, <code>created_at</code>), with no original content embedded.</li>
+        <li>No personal data and no large blobs; the file SHOULD remain small and text-based.</li>
+      </ul>
+      <p>The exact layout of <code>.tproof.json</code> MAY evolve, but:</p>
+      <ul>
+        <li>The nested proof object MUST remain a valid ProofSpec v0.1 proof.</li>
+        <li>Implementations SHOULD treat the <code>.tproof.json</code> file as an envelope, not as a new protocol.</li>
+        <li>Verifiers MAY accept either a raw proof object or a full <code>.tproof.json</code> envelope that contains it.</li>
+      </ul>
     </section>
 
     <section class="card" id="signing">
@@ -591,12 +626,17 @@ function verify({ hash, ts, sig }, secret) {
     <section class="card" id="verifyurl">
       <h2>Verify URL</h2>
       <p>The verify URL is a stable endpoint that returns JSON status for the given hash or proof. It SHOULD be included in the proof JSON as <code>verify_url</code>.</p>
-      <p>Clients MAY choose to rely on the verify URL alone, but keeping the full proof JSON is RECOMMENDED for long-term verification.</p>
+      <p>Clients MAY choose to rely on the verify URL alone, but keeping the full proof JSON (or a <code>.tproof.json</code> envelope) is RECOMMENDED for long-term verification and for offline verifiers.</p>
     </section>
 
     <section class="card" id="bundle">
       <h2>Proof bundle</h2>
-      <p>Artifacts (files, datasets, binaries) SHOULD be shipped with their <code>.tproof.json</code> proof alongside them, or at least with a stable verify link.</p>
+      <p>Artifacts (files, datasets, binaries) SHOULD be shipped with a nearby proof:</p>
+      <ul>
+        <li>either a standalone ProofSpec JSON proof,</li>
+        <li>or a <code>.tproof.json</code> file that wraps the proof and minimal metadata,</li>
+        <li>and optionally a stable verify URL.</li>
+      </ul>
       <p>Bundles SHOULD be small, self-contained, and not contain personal data.</p>
     </section>
 
@@ -631,16 +671,41 @@ function verify({ hash, ts, sig }, secret) {
       <h2>Checklist</h2>
       <ul>
         <li>Hash locally (no original content leaves the device).</li>
-        <li>Keep the proof JSON (<code>.tproof.json</code>).</li>
+        <li>Keep the proof JSON or a <code>.tproof.json</code> envelope.</li>
         <li>Ensure a stable verify URL is present or derivable.</li>
         <li>Validate against the JSON schema and data model.</li>
       </ul>
     </section>
 
+    <section class="card" id="protocols">
+      <h2>Complementary protocols</h2>
+      <p>ProofSpec defines the cryptographic proof of existence. TimeProofs also experiments with four small, text-based companion protocols:</p>
+      <ul>
+        <li><strong>integrity.txt</strong> — how a site or service handles tracking, cookies, data use/logs, third-parties, and accessibility.</li>
+        <li><strong>authenticity.txt</strong> — how AI and humans are involved in content creation, and how AI involvement is disclosed.</li>
+        <li><strong>rights.txt</strong> — which rights apply to the content (allowed, forbidden, licence, and rights-update policy).</li>
+        <li><strong>explainable-ia.txt</strong> — which AI systems are in use, how inputs/outputs are treated, explanations, and limitations.</li>
+      </ul>
+      <p>All four follow the same pattern:</p>
+      <ul>
+        <li>A key:value file at the root of a project or site, encoded as UTF-8.</li>
+        <li>A self-integrity field like <code>hash:&lt;sha256&gt;</code> so the file can prove its own integrity.</li>
+        <li>Rules 2–6 specific to each protocol’s scope, without overlapping with the others.</li>
+      </ul>
+      <p>These protocols do not replace ProofSpec; they document the human and policy layer that surrounds the technical proof of existence.</p>
+    </section>
+
     <section class="card" id="versioning">
-      <h2>Versioning</h2>
+      <h2>Versioning &amp; compatibility</h2>
       <p>This document describes <strong>ProofSpec v0.1</strong>. Additive changes SHOULD prefer minor/patch bumps; breaking changes MUST bump the major version.</p>
       <p>Issuers and verifiers SHOULD clearly expose which ProofSpec version(s) they support.</p>
+      <p>TimeProofs v0.2 introduces a stateless implementation and <code>.tproof.json</code> receipts, but:</p>
+      <ul>
+        <li>The underlying proof object remains a <strong>ProofSpec v0.1</strong> proof.</li>
+        <li>Existing proofs created before v0.2 remain valid and verifiable.</li>
+        <li>Future versions of the specification are expected to formalize the stateless model and the <code>.tproof.json</code> envelope without breaking existing proofs.</li>
+      </ul>
+      <p>In other words, ProofSpec v0.1 is the current normative core, and TimeProofs v0.2 is a reference implementation that experiments with the next layer (stateless deployment and portable receipts) while preserving compatibility.</p>
     </section>
 
     <!-- Page proof (+ alias) -->
@@ -648,8 +713,11 @@ function verify({ hash, ts, sig }, secret) {
     <span id="pageproof" aria-hidden="true"></span>
     <section class="card" id="page-proof-sec" aria-labelledby="pp-title">
       <h2 id="pp-title">This page is verified by TimeProofs</h2>
-      <p>Release: <code id="page-proof-release">…</code> · Hash: <code id="page-proof-hash-dup">…</code> ·
-        <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener">Verify</a></p>
+      <p>
+        Release: <code id="page-proof-release">…</code> ·
+        Hash: <code id="page-proof-hash">…</code> ·
+        <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
+      </p>
       <p style="margin-top:10px">
         The hash above identifies a specific build of this ProofSpec v0.1 document. The verify link returns the signed record used to prove its existence and integrity.
       </p>
@@ -781,7 +849,7 @@ function verify({ hash, ts, sig }, secret) {
       });
     })();
 
-    // Release manifest fill
+    // Release manifest fill (Page proof)
     (async()=>{
       try{
         const r=await fetch('/releases/v0.1.json',{cache:'no-store'});
@@ -789,19 +857,16 @@ function verify({ hash, ts, sig }, secret) {
         const map=await r.json();
         const id=document.documentElement.dataset.page || 'proofspec.html';
         const e=map[id] || map['proofspec.html'] || map['/'] || map;
-        const elH1=document.getElementById('page-proof-hash');
-        const elL1=document.getElementById('page-proof-link');
-        const elH2=document.getElementById('page-proof-hash-dup');
-        const elL2=document.getElementById('page-proof-link-dup');
-        const elR =document.getElementById('page-proof-release');
+
+        const elH=document.getElementById('page-proof-hash');
+        const elL=document.getElementById('page-proof-link');
+        const elR=document.getElementById('page-proof-release');
+
         if(elR && e.release) elR.textContent=e.release;
-        if(e.hash){
-          elH1 && (elH1.textContent=e.hash);
-          elH2 && (elH2.textContent=e.hash);
-        }
+        if(e.hash && elH) elH.textContent=e.hash;
+
         const url=e.verify || (e.hash ? ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(e.hash)) : '#');
-        if(elL1 && url) elL1.href=url;
-        if(elL2 && url) elL2.href=url;
+        if(elL && url) elL.href=url;
       }catch{}
     })();
 
