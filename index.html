@@ -420,25 +420,33 @@ upgrade-insecure-requests">
     <section class="hero reveal" aria-labelledby="hero-title">
       <a class="rel-banner" id="rel-banner" href="#site-proof" aria-label="View site release proof">🔏 Release — Verified</a>
 
-      <div class="label">🔐 Privacy-first • ⚡ Edge-native • 🌍 Open Protocol</div>
+      <div class="label">Status: Public Beta v0.2 · Protocol + API · Privacy-first · No blockchain</div>
       <h1 id="hero-title" class="title">Prove When Data Existed. Privately.</h1>
 
-      <p class="subtitle">Hash anything on your device. Receive an instant, signed timestamp. Anyone can verify later that it existed and is unchanged — without seeing your data.</p>
+      <p class="subtitle">
+        Hash anything on your device. Receive an instant, signed proof bundle. Anyone can verify later that it existed and is unchanged — without ever seeing your data.
+      </p>
 
-      <p class="positioning">One self-describing JSON proof readable by any ProofSpec-compliant tool.</p>
+      <p class="positioning">
+        One self-describing <code>.tproof.json</code> bundle, signed (HMAC + Ed25519), readable by any ProofSpec-compliant tool — including offline verification.
+      </p>
       <p style="margin:6px 0 0; color:#9fb3c9">
         <a href="/regulations.html" style="color:#9beefb">Regulations &amp; Compliance →</a>
       </p>
-      <p class="subnote">No account · No content stored · Hash locally · Signed timestamp · Public verification · No blockchain</p>
+      <p class="subnote">
+        No account · No content stored · Hash locally · Signed timestamp · Public &amp; offline verification · No blockchain
+      </p>
 
       <div class="cta-wrap" role="group" aria-label="Primary actions">
         <a class="cta" href="/verify.html" aria-label="Create or verify a proof">Create / Verify a Proof</a>
+        <a class="cta secondary" href="/docs.html" aria-label="Open API Docs v0.2">Open API Docs v0.2</a>
       </div>
 
       <div class="micro" aria-label="Key performance and privacy claims">
         <span class="chip">⏱ &lt;100 ms edge</span>
         <span class="chip">🛡 Hash-only, no PII</span>
-        <span class="chip">🌍 Public verification</span>
+        <span class="chip">📦 .tproof.json bundles</span>
+        <span class="chip">📴 Offline verification</span>
       </div>
 
       <!-- DEMO one-bar -->
@@ -448,7 +456,7 @@ upgrade-insecure-requests">
             <span class="pill" style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid #214a57;background:#0d2330;color:#9beefb;border-radius:999px;font-size:.8rem">DEMO</span>
             <strong>Quick Check</strong>
           </div>
-          <span class="mini">Local hash → API verify</span>
+          <span class="mini">Local hash → API verify (v0.1 + v0.2 compatible)</span>
         </div>
 
         <div class="row" style="margin-top:6px">
@@ -465,7 +473,7 @@ upgrade-insecure-requests">
 
         <p id="demo-help" class="mini">
           Demo only. Your text is <strong>hashed locally</strong>, then verified via the API.
-          For <strong>signed proofs</strong> and options, use the full tool.
+          For <strong>signed .tproof.json bundles</strong>, offline checks, and options, use the full Create/Verify tool.
         </p>
 
         <div class="btn-row" role="group" aria-label="Demo examples">
@@ -480,19 +488,52 @@ upgrade-insecure-requests">
       </div>
     </section>
 
-    <!-- Order: Mission → Built for → How → Protocol vs API → Why → Regulatory → Verified → Featured → CTA -->
+    <!-- NEW: What's new in v0.2 -->
+    <section class="section bg-alt reveal" id="v02" aria-labelledby="v02-title">
+      <h2 id="v02-title">What’s new in v0.2</h2>
+      <p style="text-align:center; color:#9fb3c9; max-width:780px; margin:0 auto 12px;">
+        v0.2 turns TimeProofs into a <strong>stateless proof layer</strong> with signed bundles, offline verification, and anti lock-in backends — without breaking v0.1.
+      </p>
+      <div class="grid two" style="margin-top:12px">
+        <article class="card">
+          <h3>Stateless proof layer</h3>
+          <p>The API no longer needs to keep state: proofs are self-contained <code>.tproof.json</code> bundles with everything needed for independent verification.</p>
+          <p><span class="tag">Hash-only</span> <span class="tag">Stateless API</span></p>
+        </article>
+        <article class="card">
+          <h3>Signed .tproof.json bundles</h3>
+          <p>Each proof bundle carries the hash, algorithm, signed timestamp, meta, and verify URL — signed with HMAC-SHA256 and Ed25519.</p>
+          <p><span class="tag">Dual signatures</span> <span class="tag">Public JWKS</span></p>
+        </article>
+        <article class="card">
+          <h3>Offline & self-host</h3>
+          <p>The Create/Verify tool can check <code>.tproof.json</code> files offline. You can also self-host the API using the reference worker and container.</p>
+          <p><span class="tag">Offline verify</span> <span class="tag">BYOI</span></p>
+        </article>
+        <article class="card">
+          <h3>Multi-backend & anti lock-in</h3>
+          <p>Abstracted <code>KV_DRIVER</code> for <code>cloudflare-kv</code>, <code>redis</code>, <code>fs</code>, and <code>d1</code> so you can switch infrastructure without changing the proof format.</p>
+          <p><span class="tag">Multi-backend</span> <span class="tag">Anti lock-in</span></p>
+        </article>
+      </div>
+      <p style="text-align:center; margin-top:10px; color:#9fb3c9">
+        Learn more in <a href="/docs.html">API Docs v0.2</a> and <a href="/proofspec.html">ProofSpec</a>.
+      </p>
+    </section>
+
+    <!-- Order: Mission → Built for → How → Protocol vs API → Why → Regulatory → Root Protocols → Verified → Featured → CTA -->
 
     <section class="section bg-alt reveal" id="built" aria-labelledby="built-title">
       <h2 id="built-title">Mission</h2>
       <div class="grid two" style="margin-top:12px">
         <article class="card">
           <h3>What we’ve built</h3>
-          <p>TimeProofs is an open, neutral standard for digital proof of existence. One JSON proof any compliant tool can read.</p>
+          <p>TimeProofs is an open, neutral standard for digital proof of existence. One JSON proof bundle any compliant tool can read.</p>
           <p style="margin-top:.4em"><a href="/verify.html">Create/Verify →</a></p>
         </article>
         <article class="card">
           <h3>Why it matters</h3>
-          <p>Generated content and critical data need provenance. A verifiable fingerprint solves “did this exist then, and is it unchanged?”</p>
+          <p>Generated content and critical data need provenance. A verifiable fingerprint answers “did this exist then, and is it unchanged?”.</p>
           <p style="margin-top:.4em"><a href="/use-cases.html">See use cases →</a></p>
         </article>
         <article class="card">
@@ -508,7 +549,7 @@ upgrade-insecure-requests">
       </div>
     </section>
 
-    <!-- NEW: Built for -->
+    <!-- Built for -->
     <section class="section bg-alt reveal" id="built-for" aria-labelledby="built-for-title">
       <h2 id="built-for-title">Built for teams that need proof</h2>
       <p style="text-align:center; color:#9fb3c9; max-width:720px; margin:0 auto;">
@@ -518,26 +559,50 @@ upgrade-insecure-requests">
 
     <section class="section bg-solid reveal" aria-labelledby="how">
       <h2 id="how">How It Works</h2>
-      <p style="text-align:center; color:#9fb3c9; margin:-6px 0 12px">Model: <strong>Hash locally → Signed timestamp → Public verification</strong></p>
+      <p style="text-align:center; color:#9fb3c9; margin:-6px 0 12px">
+        Model v0.2: <strong>Hash locally → Signed .tproof.json bundle → Verify online or offline</strong>
+      </p>
       <div class="grid two">
-        <article class="card"><h3>1) Hash locally</h3><pre><code>const buf = new TextEncoder().encode(text);
+        <article class="card">
+          <h3>1) Hash locally</h3>
+<pre><code>const buf = new TextEncoder().encode(text);
 const digest = await crypto.subtle.digest('SHA-256', buf);
 const hash = [...new Uint8Array(digest)]
-  .map(b => b.toString(16).padStart(2,'0')).join('');</code></pre></article>
-        <article class="card"><h3>2) Timestamp</h3><pre><code>const r = await fetch("https://api.timeproofs.io/api/timestamp", {
-  method:"POST",
-  headers:{ "Content-Type":"application/json", "Accept":"application/json" },
-  body: JSON.stringify({ hash, type:"event", meta:{ source:"web" } })
+  .map(b => b.toString(16).padStart(2,'0')).join('');</code></pre>
+        </article>
+        <article class="card">
+          <h3>2) Request a signed bundle</h3>
+<pre><code>const r = await fetch("https://api.timeproofs.io/api/timestamp", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+  },
+  body: JSON.stringify({
+    hash,
+    type: "event",
+    meta: { source: "web" }
+  })
 });
-const proof = await r.json();</code></pre></article>
-        <article class="card"><h3>3) Verify anywhere</h3><pre><code>const res = await fetch(
-  "https://api.timeproofs.io/api/verify?hash="+hash,
-  { headers:{ "Accept":"application/json" } }
+
+// v0.2: self-contained .tproof.json bundle
+const proofBundle = await r.json();</code></pre>
+        </article>
+        <article class="card">
+          <h3>3) Verify anywhere (online or offline)</h3>
+<pre><code>// Offline: verify the .tproof.json bundle locally
+// (using the TimeProofs SDK or your own verifier)
+
+// Online: call the public verify endpoint
+const res = await fetch(
+  "https://api.timeproofs.io/api/verify?hash=" + hash,
+  { headers: { "Accept": "application/json" } }
 );
-const check = await res.json();</code></pre></article>
+const check = await res.json();</code></pre>
+        </article>
       </div>
       <p class="positioning" style="text-align:center; margin-top:10px">
-        Output: a self-describing <code>.tproof.json</code> with <em>hash</em>, <em>algorithm</em>, <em>signed timestamp</em>, and a <em>public verify URL</em>.
+        Output: a self-describing <code>.tproof.json</code> with <em>hash</em>, <em>algorithm</em>, <em>signed timestamp</em>, <em>signatures</em>, and a <em>public verify URL</em>.
       </p>
     </section>
 
@@ -551,7 +616,7 @@ const check = await res.json();</code></pre></article>
         </article>
         <article class="card">
           <h3>API — Reference implementation</h3>
-          <p>Edge-native reference with predictable latency and auditable logs. Drop-in examples to ship fast.</p>
+          <p>Edge-native reference with predictable latency and auditable logs. v0.2 adds stateless bundles and offline verification support.</p>
           <p><a href="/docs.html">Open the API Docs</a></p>
         </article>
       </div>
@@ -562,7 +627,7 @@ const check = await res.json();</code></pre></article>
       <div class="grid three">
         <article class="card"><h3>Instant Proof</h3><p>Milliseconds at the edge. No accounts. Predictable costs.</p></article>
         <article class="card"><h3>Privacy-First</h3><p>Only the hash leaves the device. Originals never upload.</p></article>
-        <article class="card"><h3>Interoperable</h3><p>Proofs read by any client that follows ProofSpec.</p></article>
+        <article class="card"><h3>Interoperable</h3><p>Proof bundles read by any client that follows ProofSpec.</p></article>
       </div>
       <div class="grid three" style="margin-top:16px">
         <article class="card"><h3>AI-Ready</h3><p>Provenance for prompts, outputs, datasets, and chains.</p></article>
@@ -580,7 +645,7 @@ const check = await res.json();</code></pre></article>
       <div class="grid two">
         <article class="card">
           <h3>EU AI Act</h3>
-          <p>Traceability for model inputs/outputs with signed, auditable events.</p>
+          <p>Traceability for model inputs/outputs with signed, auditable events and proof bundles.</p>
           <p><span class="tag">Signed timestamp</span> · <span class="tag">Public verify</span></p>
         </article>
         <article class="card">
@@ -601,6 +666,38 @@ const check = await res.json();</code></pre></article>
       </div>
       <p style="text-align:center; margin-top:10px">
         <a href="/regulations.html" style="color:#9beefb">Read full Regulations &amp; Compliance →</a>
+      </p>
+    </section>
+
+    <!-- Supported Root Protocols (v0.2) -->
+    <section class="section bg-solid reveal" aria-labelledby="root-protocols" id="root-protocols">
+      <h2 id="root-protocols">Supported Root Protocols</h2>
+      <p style="text-align:center; color:#9fb3c9; max-width:780px; margin:0 auto 12px;">
+        TimeProofs can verify proofs for open, root-level text protocols that live at the origin of your site or service — without owning them.
+      </p>
+      <div class="grid two">
+        <article class="card">
+          <h3>Transparency &amp; safety</h3>
+          <p>Standard files at the root of a domain describe how you handle users, data, and AI.</p>
+          <p>
+            <span class="tag">robots.txt</span>
+            <span class="tag">security.txt</span>
+            <span class="tag">humans.txt</span>
+          </p>
+        </article>
+        <article class="card">
+          <h3>Integrity &amp; AI origin</h3>
+          <p>New protocols describe tracking, rights, and AI behaviour in a simple, verifiable way.</p>
+          <p>
+            <span class="tag">integrity.txt</span>
+            <span class="tag">authenticity.txt</span>
+            <span class="tag">rights.txt</span>
+            <span class="tag">explainable-ia.txt</span>
+          </p>
+        </article>
+      </div>
+      <p style="text-align:center; margin-top:10px; color:#9fb3c9;">
+        TimeProofs focuses on <strong>proof of existence</strong>. These protocols stay independent — but their hashes can be timestamped and verified as part of your trust stack.
       </p>
     </section>
 
@@ -636,7 +733,9 @@ const check = await res.json();</code></pre></article>
         <a class="cta" href="/verify.html">Create / Verify a Proof</a>
         <a class="cta secondary" href="/proofspec.html">Learn the Spec</a>
       </div>
-      <p style="text-align:center; color:#9fb3c9; margin-top:10px">Looking for mission and transparency? See <a href="/about.html">About →</a></p>
+      <p style="text-align:center; color:#9fb3c9; margin-top:10px">
+        Looking for mission and transparency? See <a href="/about.html">About →</a>
+      </p>
     </section>
   </main>
 
@@ -691,7 +790,7 @@ const check = await res.json();</code></pre></article>
       {"@type":"Question","name":"Is there a blockchain involved?","acceptedAnswer":{"@type":"Answer","text":"No. We use signed, cryptographic timestamps with public verification."}},
       {"@type":"Question","name":"How do I verify a proof?","acceptedAnswer":{"@type":"Answer","text":"Open the verify endpoint or use any ProofSpec-compliant client. The proof is self-describing."}},
       {"@type":"Question","name":"Can I self-host the API?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use the OpenAPI spec and the reference container to run your own instance and interoperate."}},
-      {"@type":"Question","name":"What does the proof contain?","acceptedAnswer":{"@type":"Answer","text":"Hash, algorithm, signed timestamp, and a public verify URL — enough for independent verification."}}
+      {"@type":"Question","name":"What does the proof contain?","acceptedAnswer":{"@type":"Answer","text":"Hash, algorithm, signed timestamp, signatures, and a public verify URL — enough for independent verification."}}
     ]
   }
   </script>
@@ -750,7 +849,7 @@ const check = await res.json();</code></pre></article>
         return new Intl.DateTimeFormat('fr-FR',{ timeZone:'Europe/Paris', year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit' }).format(new Date(iso));
       }catch{ return iso; }
     }
-    function escapeHTML(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+    function escapeHTML(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[m])); }
     function showStatus(el, ok, text){
       el.hidden=false;
       el.className='status '+(ok?'ok':'err');
@@ -877,12 +976,21 @@ verify: ${verifyURL}`;
       });
     })();
 
-    // Release info + demo autofill
+    // Release info + demo autofill (v0.2 with v0.1 fallback)
     (async function loadRelease(){
       try{
-        const r = await fetch('/releases/v0.1.json',{cache:'no-store'});
-        if(!r.ok) return;
-        const map = await r.json();
+        const candidates = ['/releases/v0.2.json','/releases/v0.1.json'];
+        let map = null;
+        for(const url of candidates){
+          try{
+            const r = await fetch(url,{cache:'no-store'});
+            if(r.ok){
+              map = await r.json();
+              break;
+            }
+          }catch(e){}
+        }
+        if(!map) return;
 
         const id = document.documentElement.dataset.page || '/';
         const rel = map[id] || map['index.html'] || map['/'] || map;
