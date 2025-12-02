@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="dark light"/>
   <title>Security — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="Threat model, CSP, key policy, rate limits, logging, disclosure, SBOM. Hash-only, public verify."/>
+  <meta name="description" content="Security model for TimeProofs v0.1 and v0.2 — threat model, CSP, key policy, rate limits, logging, root files, and independent protocol standards. Hash-only, stateless timestamp, offline verification."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -36,7 +36,7 @@
 
   <!-- Social -->
   <meta property="og:title" content="Security — TimeProofs"/>
-  <meta property="og:description" content="Hash-only, public verify. Clear threat model, strict CSP, minimal logs, coordinated disclosure."/>
+  <meta property="og:description" content="Security model for TimeProofs v0.1 and v0.2 — threat model, CSP, key policy, rate limits, logging, and root protocol files. Hash-only, stateless timestamp, offline verification."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/security.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
@@ -46,7 +46,7 @@
   <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Security — TimeProofs"/>
-  <meta name="twitter:description" content="Edge-native security controls with zero content upload."/>
+  <meta name="twitter:description" content="Edge-native security for TimeProofs v0.1 (stateful verify) and v0.2 (stateless timestamp). Hash-only, offline verification, independent protocol standards at the root."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- Security meta -->
@@ -115,7 +115,7 @@ upgrade-insecure-requests">
     "@type":"TechArticle",
     "headline":"Security — TimeProofs",
     "name":"Security — TimeProofs",
-    "description":"Threat model, CSP, key policy, rate limits, logging, disclosure, SBOM. Hash-only, public verify.",
+    "description":"Security model for TimeProofs v0.1 and v0.2 — threat model, CSP, key policy, rate limits, logging, and root protocol files. Hash-only, stateless timestamp, offline verification.",
     "about":[
       "web security",
       "content security policy",
@@ -123,7 +123,7 @@ upgrade-insecure-requests">
       "digital proof of existence"
     ],
     "datePublished":"2025-10-22",
-    "dateModified":"2025-11-08",
+    "dateModified":"2025-12-02",
     "inLanguage":"en",
     "publisher":{
       "@type":"Organization",
@@ -408,10 +408,10 @@ upgrade-insecure-requests">
     <!-- HERO -->
     <section class="hero" role="region" aria-labelledby="page-title">
       <div class="icon" aria-hidden="true">🔒</div>
-      <p class="badge">Status: Public Beta v0.1 · Security · Privacy-first · No blockchain</p>
+      <p class="badge">Status: Public Beta v0.2 · Security · Hash-only · Stateless timestamp</p>
       <h1 id="page-title">Security</h1>
       <p class="lead">
-        Threat model, headers, rate limits, logging, and operational security for a hash-only, public-verify protocol.
+        Threat model, headers, rate limits, logging, keys, and root standards for TimeProofs — from v0.1 (stateful verify) to v0.2 (stateless timestamp and offline proof bundles).
       </p>
     </section>
 
@@ -420,10 +420,12 @@ upgrade-insecure-requests">
       <span class="toc-label">On this page</span>
       <a href="#verification">Security &amp; performance</a>
       <a href="#threat-model">Threat model</a>
+      <a href="#stateless-v02">Stateless model (v0.2)</a>
       <a href="#headers-csp">Headers &amp; CSP</a>
       <a href="#rate-limits">Rate limits</a>
       <a href="#keys">Key policy</a>
       <a href="#logging">Logging</a>
+      <a href="#root-files">Root files &amp; protocol standards</a>
       <a href="#vuln">Disclosure</a>
       <a href="#sbom">Dependencies &amp; SBOM</a>
       <a href="#status-errors">Status &amp; errors</a>
@@ -436,7 +438,7 @@ upgrade-insecure-requests">
 
     <!-- Meta line -->
     <p class="meta">
-      Security · Last updated: <strong>2025-11-08</strong> ·
+      Security · Last updated: <strong>2025-12-02</strong> ·
       See also: <a href="/proofspec.html">Protocol (ProofSpec)</a> ·
       <a href="/privacy.html">Privacy</a>
     </p>
@@ -458,13 +460,50 @@ upgrade-insecure-requests">
           <thead><tr><th>Threat</th><th>Vector</th><th>Mitigation</th></tr></thead>
           <tbody>
             <tr><td>Content exfiltration</td><td>Uploads</td><td>No file uploads. Hash-only API.</td></tr>
-            <tr><td>API abuse</td><td>Bots, floods</td><td>Per-IP and per-token limits. Idempotency on same hash.</td></tr>
+            <tr><td>API abuse</td><td>Bots, floods</td><td>Per-IP and per-token limits. Idempotent timestamp creation for the same hash.</td></tr>
             <tr><td>Key compromise</td><td>Secrets leak</td><td>Scoped tokens, rotation, <code>kid</code> versioning, least privilege.</td></tr>
-            <tr><td>Clock drift</td><td>NTP skew</td><td>UTC timestamps. Tolerance in verify. Multi-source time.</td></tr>
-            <tr><td>Integrity</td><td>Tampering</td><td>HMAC-SHA256/Ed25519 signatures. Public verification URL.</td></tr>
+            <tr><td>Clock drift</td><td>NTP skew</td><td>UTC timestamps. Tolerance in verification. Multi-source time.</td></tr>
+            <tr><td>Integrity</td><td>Tampering</td><td>HMAC-SHA256/Ed25519 signatures. Public verification of hashes and bundles.</td></tr>
           </tbody>
         </table>
       </div>
+    </section>
+
+    <section class="card" id="stateless-v02" aria-labelledby="stateless-title">
+      <h2 id="stateless-title">Stateless model (v0.2)</h2>
+      <p>
+        TimeProofs v0.2 introduces a <strong>stateless timestamp model</strong>. The server validates the hash, derives a canonical payload, signs it, and returns a timestamp response — without storing your proof.
+      </p>
+      <ul>
+        <li><strong>Input:</strong> SHA-256 hash only (64 hex chars), no files, no personal data.</li>
+        <li><strong>Response:</strong> <code>version</code>, <code>hash</code>, <code>timestamp</code> (issuedAt, issuer, nonce), <code>proof</code> (HMAC-SHA256+Ed25519).</li>
+        <li><strong>No storage:</strong> the v0.2 worker does not persist proofs (stateless by design).</li>
+        <li><strong>Client-side bundles:</strong> clients assemble a local <code>.tproof.json</code> bundle using the JSON schema.</li>
+        <li><strong>Offline verify:</strong> verification is done locally, by recomputing the hash and checking the proof and signatures.</li>
+      </ul>
+<pre><code>// Shape of a v0.2 timestamp response (simplified)
+{
+  "version": "timeproofs-0.2",
+  "hash": {
+    "algorithm": "SHA-256",
+    "value": "&lt;64-hex-sha256&gt;"
+  },
+  "timestamp": {
+    "issuedAt": "2025-12-01T21:50:43.538Z",
+    "issuer": "https://api.timeproofs.io",
+    "nonce": "random-nonce"
+  },
+  "proof": {
+    "algo": "HMAC-SHA256+Ed25519",
+    "hmac": "… or null if no HMAC secret",
+    "signature": null,
+    "publicKey": null,
+    "keyId": "tp-v0-2-main"
+  }
+}</code></pre>
+      <p class="muted">
+        v0.1 keeps a <strong>stateful verify</strong> endpoint for legacy use. v0.2 is designed for <strong>local proof bundles</strong> and offline verification.
+      </p>
     </section>
 
     <section class="card" id="headers-csp" aria-labelledby="csp-title">
@@ -481,67 +520,161 @@ upgrade-insecure-requests">
   upgrade-insecure-requests</code></pre>
       <ul>
         <li>Strict referrer: <code>strict-origin-when-cross-origin</code>.</li>
-        <li>HSTS via platform. DNSSEC recommended.</li>
+        <li>HSTS via platform. DNSSEC recommended on the main domain.</li>
       </ul>
     </section>
 
     <section class="card" id="rate-limits" aria-labelledby="rl-title">
       <h2 id="rl-title">Rate limits</h2>
+      <h3>v0.1 — stateful API</h3>
       <ul>
-        <li><code>GET /api/verify</code>: 60 rpm/IP.</li>
-        <li><code>POST /api/verify</code>: 60 rpm/IP.</li>
-        <li><code>POST /api/timestamp</code>: 30 rpm/token. Idempotent for same hash.</li>
+        <li><code>GET /api/verify</code>: ~60 rpm/IP (public read).</li>
+        <li><code>POST /api/verify</code> (if enabled): ~60 rpm/IP.</li>
+        <li><code>POST /api/timestamp</code>: ~30 rpm/token. Idempotent for the same hash.</li>
       </ul>
+      <h3>v0.2 — stateless API</h3>
+      <ul>
+        <li><code>POST /api/timestamp</code> (stateless worker): per-IP and per-key limits, tuned to prevent abuse.</li>
+        <li><code>GET /api/health</code>: lightweight health check, aggressively rate-limited for bots.</li>
+        <li><code>GET /api/verify</code> (v0.2): returns <code>501</code> (not implemented) to indicate that verification is offline-only.</li>
+      </ul>
+      <p class="muted">
+        Limits may evolve as usage grows. Enterprise plans can negotiate custom quotas and dedicated keys.
+      </p>
     </section>
 
     <section class="card" id="keys" aria-labelledby="keys-title">
       <h2 id="keys-title">Key policy</h2>
       <ul>
-        <li>Signing algorithms: <code>HMAC-SHA256</code> now, <code>Ed25519</code> planned with public JWKS.</li>
-        <li>Key rotation with <code>kid</code>. Short-lived server tokens. Separate env keys.</li>
+        <li>Signing algorithms:
+          <ul>
+            <li>v0.1: <code>HMAC-SHA256</code> over <code>hash|ts</code> (Base64URL or hex).</li>
+            <li>v0.2: <code>HMAC-SHA256+Ed25519</code> design, with HMAC active and Ed25519 planned.</li>
+          </ul>
+        </li>
+        <li><code>keyId</code> (<code>kid</code>) used to identify keys (e.g. <code>tp-v0-2-main</code>).</li>
+        <li>Secrets stored in the platform’s secret store, never in code or in the repo.</li>
+        <li>Separate keys per environment (dev, preview, prod) and rotation policy per release.</li>
       </ul>
-<pre><code>// Node.js verify (HMAC)
+<pre><code>// Node.js verify (HMAC, v0.1-style)
 import crypto from "node:crypto";
-function verify({hash, ts, sig}, secret){
+
+function verify({ hash, ts, sig }, secret) {
   const msg = `${hash}|${ts}`;
-  const expect = crypto.createHmac("sha256", secret).update(msg).digest("hex");
-  return crypto.timingSafeEqual(Buffer.from(expect,'hex'), Buffer.from(sig,'hex'));
+  const expect = crypto
+    .createHmac("sha256", secret)
+    .update(msg)
+    .digest("hex");
+  return crypto.timingSafeEqual(
+    Buffer.from(expect, "hex"),
+    Buffer.from(sig, "hex")
+  );
 }</code></pre>
+      <p class="muted">
+        Ed25519 public keys (JWKS) will be published once the full signature stack is enabled.
+      </p>
     </section>
 
     <section class="card" id="logging" aria-labelledby="log-title">
       <h2 id="log-title">Logging &amp; retention</h2>
+      <h3>Principles</h3>
       <ul>
-        <li>No original content stored. Only hashes and minimal proof fields.</li>
-        <li>Access logs minimized. Retention controlled. Backups tested.</li>
-        <li><code>security.txt</code> and coordinated disclosure policy available.</li>
+        <li>No original content stored — only hashes and minimal technical metadata.</li>
+        <li>Access logs are minimized and retained for a limited time for abuse detection and reliability.</li>
+        <li>No profiling, no marketing cookies on the core API.</li>
       </ul>
+      <h3>v0.1 vs v0.2</h3>
+      <ul>
+        <li><strong>v0.1</strong>: proofs can be stored server-side for <code>/api/verify</code> (keyed by hash).</li>
+        <li><strong>v0.2</strong>: the worker is <strong>stateless</strong> — it returns timestamp responses but does not persist proofs.</li>
+        <li>Only short-lived technical logs (status, latency, error codes) are kept for operations and security.</li>
+      </ul>
+      <p class="muted">
+        For regulated environments, an optional “Audit Vault” add-on will provide a controlled hash-only retention window.
+      </p>
+    </section>
+
+    <section class="card" id="root-files" aria-labelledby="root-title">
+      <h2 id="root-title">Root files &amp; protocol standards</h2>
+      <p>
+        TimeProofs exposes a small set of <strong>root files</strong> to help automated tools, crawlers, and security scanners discover policies and protocols.
+      </p>
+      <div class="table-wrap" role="region" aria-label="Root files and protocols">
+        <table>
+          <thead><tr><th>Path</th><th>Type</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><code>/robots.txt</code></td>
+              <td>Crawler policy</td>
+              <td>Guides search engines and bots.</td>
+            </tr>
+            <tr>
+              <td><code>/.well-known/security.txt</code></td>
+              <td>Security contact</td>
+              <td>Defines how to report vulnerabilities (email, PGP, policy).</td>
+            </tr>
+            <tr>
+              <td><code>/integrity.txt</code></td>
+              <td>Protocol file (independent)</td>
+              <td>Documents integrity, tracking, cookies, and data-use policies.</td>
+            </tr>
+            <tr>
+              <td><code>/authenticity.txt</code></td>
+              <td>Protocol file (independent)</td>
+              <td>Describes origin, human/AI involvement, and authenticity updates.</td>
+            </tr>
+            <tr>
+              <td><code>/rights.txt</code></td>
+              <td>Protocol file (independent)</td>
+              <td>Details rights model, allowed/forbidden uses, and licence terms.</td>
+            </tr>
+            <tr>
+              <td><code>/explainable-ia.txt</code></td>
+              <td>Protocol file (independent)</td>
+              <td>Lists AI systems, uses, I/O handling, explanations, and known limitations.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted">
+        These four protocol files are <strong>independent standards</strong>, not tied to TimeProofs only. TimeProofs simply exposes them at the root so that AI agents, auditors, and crawlers can read them alongside <code>robots.txt</code> and <code>security.txt</code>.
+      </p>
     </section>
 
     <section class="card" id="vuln" aria-labelledby="vuln-title">
       <h2 id="vuln-title">Vulnerability disclosure</h2>
-      <p>Report via <a href="/.well-known/security.txt">/.well-known/security.txt</a>. Provide steps and impact. We follow responsible timelines.</p>
+      <p>
+        Security issues can be reported via <a href="/.well-known/security.txt">/.well-known/security.txt</a>.
+        Please include steps to reproduce, potential impact, and any public references. We follow responsible
+        disclosure practices and coordinate before publishing fixes.
+      </p>
     </section>
 
     <section class="card" id="sbom" aria-labelledby="sbom-title">
       <h2 id="sbom-title">Dependencies &amp; SBOM</h2>
       <ul>
-        <li>Automated dependency audit (Dependabot or equivalent).</li>
-        <li>SBOM available per release. Review before tag.</li>
+        <li>Automated dependency audit (Dependabot or equivalent) on the main repositories.</li>
+        <li>SBOM available per release and reviewed before tag.</li>
       </ul>
       <p class="muted">
         Source:
         <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs" target="_blank" rel="noopener">
-          GitHub v0.1
+          GitHub (reference implementation)
         </a>
       </p>
     </section>
 
     <section class="card" id="status-errors" aria-labelledby="status-title">
       <h2 id="status-title">Status &amp; errors</h2>
+      <h3>Health endpoints</h3>
       <ul>
-        <li><code>/api/ping</code> → HTTP 200 when healthy.</li>
-        <li>Errors: <code>{"ok":false,"error":"…"}</code> with 4xx/5xx.</li>
+        <li><code>GET /api/ping</code> (v0.1) → HTTP 200 when the legacy API is healthy.</li>
+        <li><code>GET /api/health</code> (v0.2) → HTTP 200 with <code>{ ok, now, version, mode }</code>.</li>
+      </ul>
+      <h3>Error model</h3>
+      <ul>
+        <li>4xx/5xx codes with a small JSON body: <code>{"ok":false,"error":"…","code":&lt;optional&gt;}</code>.</li>
+        <li><code>GET /api/verify</code> (v0.2) returns <code>501</code> to indicate that verification is offline-only with bundles.</li>
       </ul>
     </section>
 
@@ -576,7 +709,7 @@ function verify({hash, ts, sig}, secret){
       </div>
       <ul>
         <li>Release manifest: <a href="/releases/v0.1.json">/releases/v0.1.json</a></li>
-        <li>GitHub v0.1: <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs" target="_blank" rel="noopener">timeproofs</a></li>
+        <li>GitHub reference: <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs" target="_blank" rel="noopener">timeproofs</a></li>
       </ul>
     </section>
 
