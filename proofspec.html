@@ -474,7 +474,7 @@ upgrade-insecure-requests">
       <p>A <strong>ProofSpec-compliant Verifier</strong>:</p>
       <ul>
         <li>MUST validate the structure of the proof, including required fields and formats.</li>
-        <li>MUST recompute the expected signature for the given <code>alg</code> and <code>kid</code> and compare using a timing-safe method.</li>
+        <li>MUST recompute the expected signature(s) according to <code>alg</code> and <code>kid</code> (HMAC-SHA256, and optionally Ed25519) and compare using a timing-safe method.</li>
         <li>MUST reject proofs whose <code>ts</code> is not a valid UTC timestamp or is unreasonably far in the future.</li>
         <li>SHOULD provide clear error codes as defined in the <a href="#errors">Errors</a> section.</li>
       </ul>
@@ -513,9 +513,10 @@ upgrade-insecure-requests">
           <tbody>
             <tr><td>hash</td><td>string(64 hex)</td><td>SHA-256 of input. REQUIRED.</td></tr>
             <tr><td>ts</td><td>ISO 8601</td><td>UTC timestamp of issuance. REQUIRED.</td></tr>
-            <tr><td>sig</td><td>hex</td><td>Signature over <code>hash|ts</code>. REQUIRED.</td></tr>
-            <tr><td>alg</td><td>enum</td><td><code>HMAC-SHA256</code> now; Ed25519 planned. REQUIRED.</td></tr>
-            <tr><td>kid</td><td>string</td><td>Key id / version used to produce <code>sig</code>. SHOULD be present.</td></tr>
+            <tr><td>sig</td><td>hex</td><td>HMAC-SHA256 signature over <code>hash|ts</code>. REQUIRED for ProofSpec v0.1.</td></tr>
+            <tr><td>sig_ed25519</td><td>base64</td><td>Optional Ed25519 signature over <code>hash|ts</code>; public key advertised via <code>/.well-known/jwks.json</code>.</td></tr>
+            <tr><td>alg</td><td>enum</td><td><code>HMAC-SHA256</code> for the normative core; implementations MAY add Ed25519 as a secondary public signature in v0.2.</td></tr>
+            <tr><td>kid</td><td>string</td><td>Key id / version used to produce signatures. SHOULD be present.</td></tr>
             <tr><td>issuer</td><td>string</td><td>Authority issuing the proof (e.g. <code>timeproofs.io</code>).</td></tr>
             <tr><td>verify_url</td><td>URL</td><td>Public verify endpoint for this hash/proof. RECOMMENDED.</td></tr>
             <tr><td>meta</td><td>object</td><td>Small, no PII. Optional implementation-specific metadata.</td></tr>
@@ -529,7 +530,7 @@ upgrade-insecure-requests">
 <pre><code>{
   "hash":"&lt;64-hex&gt;",
   "ts":"2025-01-01T00:00:00.000Z",
-  "sig":"&lt;hex&gt;",
+  "sig":"&lt;hex HMAC-SHA256&gt;",
   "alg":"HMAC-SHA256",
   "kid":"v1",
   "issuer":"timeproofs.io",
@@ -538,6 +539,8 @@ upgrade-insecure-requests">
     "type":"event",
     "source":"web"
   }
+  // Implementations MAY also include:
+  // "sig_ed25519":"&lt;base64 Ed25519 signature over hash|ts&gt;"
 }</code></pre>
     </section>
 
@@ -560,7 +563,8 @@ upgrade-insecure-requests">
 
     <section class="card" id="signing">
       <h2>Signing</h2>
-<pre><code>// Node.js HMAC verify (example)
+      <p>ProofSpec v0.1 defines an HMAC-SHA256 signature as the normative core. TimeProofs v0.2 additionally signs the same <code>hash|ts</code> string with Ed25519 and publishes the corresponding public keys through a JWKS document at <code>/.well-known/jwks.json</code>. Verifiers MAY validate either or both signatures; to claim full ProofSpec v0.1 compliance they MUST validate at least the HMAC-SHA256 signature.</p>
+<pre><code>// Node.js HMAC verify (example, normative for ProofSpec v0.1)
 import crypto from "node:crypto";
 
 function verify({ hash, ts, sig }, secret) {
@@ -582,7 +586,7 @@ function verify({ hash, ts, sig }, secret) {
       <ul>
         <li><code>hash</code> MUST be a 64-character lowercase hex string.</li>
         <li><code>ts</code> MUST be a valid ISO 8601 UTC timestamp and SHOULD NOT be in the future beyond a reasonable tolerance.</li>
-        <li>The verifier MUST recompute the expected signature according to <code>alg</code> and <code>kid</code> and compare using a timing-safe method.</li>
+        <li>The verifier MUST recompute the expected signature(s) according to <code>alg</code> and <code>kid</code> (HMAC-SHA256, and optionally Ed25519) and compare using a timing-safe method.</li>
         <li>If any required field is missing or invalid, the verifier MUST return a failure with an appropriate error code.</li>
       </ul>
     </section>
@@ -600,6 +604,7 @@ function verify({ hash, ts, sig }, secret) {
     "hash":{"type":"string","pattern":"^[a-f0-9]{64}$"},
     "ts":{"type":"string","format":"date-time"},
     "sig":{"type":"string"},
+    "sig_ed25519":{"type":"string"},
     "alg":{"type":"string"},
     "kid":{"type":"string"},
     "issuer":{"type":"string"},
@@ -703,6 +708,7 @@ function verify({ hash, ts, sig }, secret) {
       <ul>
         <li>The underlying proof object remains a <strong>ProofSpec v0.1</strong> proof.</li>
         <li>Existing proofs created before v0.2 remain valid and verifiable.</li>
+        <li>TimeProofs v0.2 signs proofs with both an HMAC-SHA256 secret key and an Ed25519 key whose public part is advertised via <code>/.well-known/jwks.json</code>; the HMAC-SHA256 signature remains the normative core.</li>
         <li>Future versions of the specification are expected to formalize the stateless model and the <code>.tproof.json</code> envelope without breaking existing proofs.</li>
       </ul>
       <p>In other words, ProofSpec v0.1 is the current normative core, and TimeProofs v0.2 is a reference implementation that experiments with the next layer (stateless deployment and portable receipts) while preserving compatibility.</p>
