@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="dark light"/>
   <title>About — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="Mission, values, governance, and transparency behind TimeProofs — the open, privacy-first standard for digital proof of existence."/>
+  <meta name="description" content="Mission, values, governance, and transparency behind TimeProofs — the open, privacy-first standard for digital proof of existence, with a stateless API v0.2 and machine-readable .tproof.json proof files."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -37,7 +37,7 @@
 
   <!-- Social -->
   <meta property="og:title" content="About — TimeProofs"/>
-  <meta property="og:description" content="Learn who is behind TimeProofs, why it exists, and how it stays independent, privacy-first, and open."/>
+  <meta property="og:description" content="Learn who is behind TimeProofs, why it exists, and how it stays independent, privacy-first, and open — with a stateless API v0.2 and .tproof.json proof files."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/about.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
@@ -47,7 +47,7 @@
   <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="About — TimeProofs"/>
-  <meta name="twitter:description" content="Mission, values, and governance of TimeProofs — reference implementation of the ProofSpec protocol."/>
+  <meta name="twitter:description" content="Mission, values, and governance of TimeProofs — reference implementation of the ProofSpec protocol, now with a stateless API v0.2 and .tproof.json proof files."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- Security meta -->
@@ -110,9 +110,9 @@ upgrade-insecure-requests">
     "@context":"https://schema.org",
     "@type":"TechArticle",
     "headline":"About — TimeProofs",
-    "about":"Mission, values, governance, and transparency of the TimeProofs protocol and reference implementation",
+    "about":"Mission, values, governance, and transparency of the TimeProofs protocol and reference implementation, including the stateless API v0.2 and machine-readable .tproof.json proof files.",
     "datePublished":"2025-10-22",
-    "dateModified":"2025-11-17",
+    "dateModified":"2025-12-02",
     "inLanguage":"en",
     "maintainer":{"@type":"Organization","name":"TimeProofs"},
     "mainEntityOfPage":{"@type":"WebPage","@id":"https://timeproofs.io/about.html"}
@@ -399,10 +399,10 @@ upgrade-insecure-requests">
     <!-- HERO (sans Proof of Release) -->
     <section class="hero" role="region" aria-labelledby="page-title">
       <div class="icon" aria-hidden="true">ℹ️</div>
-      <p class="badge">Status: Public Beta v0.1 · About · Privacy-first · No blockchain</p>
+      <p class="badge">Status: Public Beta v0.2 · About · Stateless proofs · No blockchain</p>
       <h1 id="page-title">About TimeProofs</h1>
       <p class="lead">
-        Why TimeProofs exists, who is behind it, and how the protocol is designed to stay open, privacy-first, and independent over the long term.
+        Why TimeProofs exists, who is behind it, and how the protocol is evolving — from the first public beta to a stateless API v0.2 with machine-readable <code>.tproof.json</code> receipts — while staying open, privacy-first, and independent over the long term.
       </p>
     </section>
 
@@ -423,8 +423,9 @@ upgrade-insecure-requests">
       <a href="/">Home</a> › <span aria-current="page">About</span>
     </nav>
     <p class="meta">
-      About · Last updated: <strong>2025-11-17</strong> · See also:
+      About · Last updated: <strong>2025-12-02</strong> · See also:
       <a href="/proofspec.html">Protocol (ProofSpec)</a> ·
+      <a href="/docs.html">API Docs</a> ·
       <a href="/security.html">Security</a> ·
       <a href="/privacy.html">Privacy</a>
     </p>
@@ -434,6 +435,7 @@ upgrade-insecure-requests">
       <h2>Mission &amp; vision</h2>
       <p><strong>Mission.</strong> Give everyone — developers, AI teams, researchers, creators, and legal teams — a simple way to prove when data existed and that it has not changed, without revealing the data itself.</p>
       <p><strong>Vision.</strong> TimeProofs is built as a reference implementation of a future open protocol called <strong>ProofSpec</strong>. The long-term goal is for ProofSpec to become a neutral standard for digital proof of existence, much like PDF or JPEG became standards for documents and images.</p>
+      <p><strong>Where we are now.</strong> v0.1 shipped the core hash-only protocol and public API. v0.2 adds stateless proofs and a portable <code>.tproof.json</code> format that can travel across logs, pipelines, and audits without exposing original content.</p>
       <p class="muted">Hash locally · Timestamp via API · Verify publicly · No blockchain · No tokens.</p>
     </section>
 
@@ -467,6 +469,7 @@ upgrade-insecure-requests">
       <h2>Governance &amp; roadmap</h2>
       <p><strong>Reference implementation.</strong> The current TimeProofs deployment is a reference implementation of the ProofSpec protocol. It is used to validate the design, security model, and developer experience.</p>
       <p><strong>From product to standard.</strong> The roadmap moves in stages: first a stable public API, then formal ProofSpec documentation, then community input and, later, a foundation or standards body involvement (W3C, ISO-style discussions).</p>
+      <p><strong>Versioned evolution.</strong> Each version (v0.1, v0.2, …) is treated as an incremental step: capabilities like stateless proofs and <code>.tproof.json</code> receipts are introduced without breaking existing proofs or changing what has already been committed.</p>
       <p><strong>Open-source posture.</strong> The goal is for the client libraries, the specification, and the verification tools to be openly auditable, with a clear licence and contribution model.</p>
       <p class="muted">Over time, governance should shift from a single maintainer to a broader group of stakeholders that care about open, privacy-preserving proofs.</p>
     </section>
@@ -474,7 +477,7 @@ upgrade-insecure-requests">
     <section class="card" id="trust-transparency">
       <h2>Trust &amp; transparency</h2>
       <h3>Release proofs</h3>
-      <p>Each version of the site and API is intended to be sealed with a release proof. The hash of the built artifacts is published, together with a verify link, so anyone can confirm that what is served matches what was released.</p>
+      <p>Each version of the site and API is intended to be sealed with a release proof. The hash of the built artifacts is published (for example via a manifest such as <code>/releases/v0.1.json</code>), together with a verify link or a bundled <code>.tproof.json</code> file, so anyone can confirm that what is served matches what was released.</p>
 
       <h3>Security posture</h3>
       <p>The security page details the threat model, CSP, key policy, and disclosure process. The aim is not to claim perfect security, but to make the assumptions and controls explicit.</p>
@@ -493,7 +496,8 @@ upgrade-insecure-requests">
         If you sit in any of these categories and want to experiment with TimeProofs, start with:
         <a href="/verify.html">Create / Verify</a> ·
         <a href="/docs.html">API Docs</a> ·
-        <a href="/use-cases.html">Use Cases</a>
+        <a href="/use-cases.html">Use Cases</a>.
+        In v0.2, you can also test machine-readable <code>.tproof.json</code> receipts inside your own logs, CI pipelines, or audit systems.
       </p>
     </section>
 
@@ -671,4 +675,4 @@ upgrade-insecure-requests">
   })();
   </script>
 </body>
-</html>
+  </html>
