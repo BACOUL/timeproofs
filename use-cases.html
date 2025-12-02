@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="dark light"/>
   <title>Use Cases — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="Six proven ways to use TimeProofs: AI provenance, audit trails, secure releases, creator certificates, dataset integrity, and supply chain transparency."/>
+  <meta name="description" content="Six proven ways to use TimeProofs: AI provenance, audit trails, secure releases, creator certificates, dataset integrity, and supply chain transparency — with stateless API v0.2 and portable .tproof.json proof bundles."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -37,7 +37,7 @@
 
   <!-- Social -->
   <meta property="og:title" content="Use Cases — TimeProofs"/>
-  <meta property="og:description" content="Where proof of existence adds value: AI provenance, audit trails, secure releases, creator certificates, datasets, supply chain."/>
+  <meta property="og:description" content="Where proof of existence adds value: AI provenance, audit trails, secure releases, creator certificates, datasets, supply chain — with stateless API v0.2 and .tproof.json proof bundles."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/use-cases.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
@@ -47,7 +47,7 @@
   <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Use Cases — TimeProofs"/>
-  <meta name="twitter:description" content="Six practical scenarios to prove when data existed and that it hasn't changed."/>
+  <meta name="twitter:description" content="Six practical scenarios to prove when data existed and that it hasn't changed, using stateless API v0.2 and .tproof.json receipts."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- AI Trust -->
@@ -121,15 +121,17 @@ upgrade-insecure-requests">
     "@type":"TechArticle",
     "headline":"Use Cases — TimeProofs",
     "name":"Use Cases — TimeProofs",
-    "description":"Six proven ways to use TimeProofs: AI provenance, audit trails, secure releases, creator certificates, dataset integrity, and supply chain transparency.",
+    "description":"Six proven ways to use TimeProofs: AI provenance, audit trails, secure releases, creator certificates, dataset integrity, and supply chain transparency — with stateless API v0.2 and .tproof.json proof bundles.",
     "about":[
       "digital proof of existence",
       "AI provenance",
       "data integrity",
-      "audit trails"
+      "audit trails",
+      "stateless verification APIs",
+      ".tproof.json proof receipts"
     ],
     "datePublished":"2025-10-22",
-    "dateModified":"2025-11-07",
+    "dateModified":"2025-12-02",
     "inLanguage":"en",
     "maintainer":{"@type":"Organization","name":"TimeProofs"},
     "publisher":{
@@ -159,7 +161,7 @@ upgrade-insecure-requests">
         "name":"Can anyone verify a proof?",
         "acceptedAnswer":{
           "@type":"Answer",
-          "text":"Yes. Use the public verify endpoint or any ProofSpec-compliant client."
+          "text":"Yes. Use the public verify endpoint or any ProofSpec-compliant client, including offline tools that validate the proof JSON or .tproof.json receipt."
         }
       },
       {
@@ -444,10 +446,10 @@ upgrade-insecure-requests">
     <!-- HERO (même structure que ProofSpec, icône 🧩, sans Proof of Release) -->
     <section class="hero" role="region" aria-labelledby="page-title">
       <div class="icon" aria-hidden="true">🧩</div>
-      <p class="badge">Status: Public Beta v0.1 · Use Cases · Privacy-first · No blockchain</p>
+      <p class="badge">Status: Public Beta · API v0.2 · Use Cases · Privacy-first · No blockchain</p>
       <h1 id="page-title">Use Cases</h1>
       <p class="lead">
-        Where proof of existence adds value: AI provenance, audit trails, secure releases, creators, datasets, and supply chain integrity.
+        Where proof of existence adds value: AI provenance, audit trails, secure releases, creators, datasets, and supply chain integrity — powered by a stateless API and portable <code>.tproof.json</code> receipts.
       </p>
     </section>
 
@@ -460,6 +462,7 @@ upgrade-insecure-requests">
       <a href="#creators">Creators</a>
       <a href="#dataset-integrity">Dataset integrity</a>
       <a href="#supply-chain">Supply chain</a>
+      <a href="#root-protocols">Supported root protocols</a>
       <a href="#compare-options">Compare options</a>
       <a href="#quick-faq">Quick FAQ</a>
       <a href="#page-proof-sec">Page proof</a>
@@ -470,7 +473,7 @@ upgrade-insecure-requests">
 
     <!-- Meta line -->
     <p class="meta">
-      Use Cases · Last updated: <strong>2025-11-07</strong> · See also:
+      Use Cases · Last updated: <strong>2025-12-02</strong> · See also:
       <a href="/docs.html">API Docs</a> · <a href="/proofspec.html">Protocol (ProofSpec)</a>
     </p>
 
@@ -478,16 +481,18 @@ upgrade-insecure-requests">
     <section class="card" id="ai-provenance">
       <h2>1) AI provenance (prompts, outputs)</h2>
       <p><strong>What it solves.</strong> Prove origin and integrity for prompts, model outputs, and intermediate artifacts. Share a public verify URL without exposing content.</p>
-      <p><strong>Why TimeProofs.</strong> Local hashing, signed edge timestamp, and open verification make AI activity auditable without leaking data.</p>
-<pre><code>// How it works
+      <p><strong>Why TimeProofs.</strong> Local hashing, signed edge timestamp, and open verification make AI activity auditable without leaking data. With v0.2, you also get a portable <code>.tproof.json</code> receipt that can travel with each run.</p>
+<pre><code>// How it works (API v0.2, stateless)
 1) Client hashes prompt or output bytes (SHA-256).
 2) POST /api/timestamp { hash, type:"ai", meta:{ model:"gpt-4o", run:"2025-11-07" } }
-3) Store the proof JSON or verify URL with the run metadata.</code></pre>
+3) Store the proof JSON or a .tproof.json receipt with the run metadata.
+4) Later, verify via the public endpoint or any offline ProofSpec verifier.</code></pre>
 <pre><code># Shell snippet
 HASH=$(printf "%s" "$OUTPUT" | sha256sum | awk '{print $1}')
 curl -s https://api.timeproofs.io/api/timestamp \
   -H "Content-Type: application/json" \
-  -d "{\"hash\":\"$HASH\",\"type\":\"ai\",\"meta\":{\"model\":\"my-model\"}}"
+  -d "{\"hash\":\"$HASH\",\"type\":\"ai\",\"meta\":{\"model\":\"my-model\"}}" \
+  -o run.tproof.json
 </code></pre>
       <p class="muted">Compliance: EU AI Act (traceability &amp; logging). GDPR: hash-only, no model inputs or outputs stored.</p>
     </section>
@@ -495,24 +500,25 @@ curl -s https://api.timeproofs.io/api/timestamp \
     <section class="card" id="audit-trails">
       <h2>2) Legal &amp; compliance audit trails</h2>
       <p><strong>What it solves.</strong> Immutable proofs for filings, evidence chains, policies, NDAs, and disclosures, without uploading the documents.</p>
-      <p><strong>Why TimeProofs.</strong> Time anchoring with public verification, zero content retention, and a standard JSON proof format.</p>
+      <p><strong>Why TimeProofs.</strong> Time anchoring with public verification, zero content retention, and a standard JSON proof format that can live in your own archives.</p>
 <pre><code>// Process
 - Hash each PDF, contract, or policy file.
-- Timestamp the hash via TimeProofs.
-- Archive the proof JSON with the case or policy dossier.
-- Share the verify URL with courts, auditors, or regulators.</code></pre>
+- Timestamp the hash via TimeProofs (get proof JSON or .tproof.json).
+- Archive the proof alongside the case or policy dossier.
+- Share the verify URL or the .tproof.json file with courts, auditors, or regulators.</code></pre>
       <p class="muted">Regulatory posture: helps demonstrate integrity and prior existence under GDPR, eIDAS-style evidence, and sector rules.</p>
     </section>
 
     <section class="card" id="secure-releases">
       <h2>3) DevOps &amp; secure releases</h2>
       <p><strong>What it solves.</strong> Build and artifact integrity across CI/CD pipelines. Prove what was deployed, when, and from which artifact hash.</p>
-      <p><strong>Why TimeProofs.</strong> Edge timestamps under 100 ms and a public verify API that can be embedded in your release notes.</p>
+      <p><strong>Why TimeProofs.</strong> Edge timestamps under 100 ms, a stateless verify API, and proof bundles you can attach to release notes or SBOMs.</p>
 <pre><code># CI sample (bash)
 HASH=$(sha256sum dist/app.min.js | awk '{print $1}')
 curl -s https://api.timeproofs.io/api/timestamp \
   -H "Content-Type: application/json" \
-  -d "{\"hash\":\"$HASH\",\"type\":\"release\",\"meta\":{\"source\":\"ci\",\"env\":\"production\"}}"
+  -d "{\"hash\":\"$HASH\",\"type\":\"release\",\"meta\":{\"source\":\"ci\",\"env\":\"production\"}}" \
+  -o release.tproof.json
 </code></pre>
       <p class="muted">Compliance: supports NIS2, SBOM attestations, and supply-chain security programs.</p>
     </section>
@@ -520,19 +526,24 @@ curl -s https://api.timeproofs.io/api/timestamp \
     <section class="card" id="creators">
       <h2>4) Creators &amp; media certificates</h2>
       <p><strong>What it solves.</strong> Portable “proof bundles” for images, audio, video, and documents. You can prove you created or published something at a given time.</p>
-      <p><strong>Why TimeProofs.</strong> Hash-only provenance and a simple <code>.tproof.json</code> bundle you can distribute with your work.</p>
-<pre><code>// Example bundle
+      <p><strong>Why TimeProofs.</strong> Hash-only provenance and a simple <code>.tproof.json</code> bundle you can distribute with your work or store in your own vault.</p>
+<pre><code>// Example example-photo.tproof.json (envelope + ProofSpec proof)
 {
-  "version":"v0.1",
-  "hash":"&lt;64-hex&gt;",
-  "ts":"2025-01-01T00:00:00.000Z",
-  "sig":"&lt;hex&gt;",
-  "alg":"HMAC-SHA256",
-  "type":"media",
-  "issuer":"timeproofs.io",
-  "meta":{"creator":"@handle","work_id":"my-photo-01"}
+  "artifact_name":"my-photo-01.jpg",
+  "artifact_type":"image",
+  "created_at":"2025-01-01T00:00:00.000Z",
+  "creator_handle":"@handle",
+  "proof":{
+    "hash":"&lt;64-hex&gt;",
+    "ts":"2025-01-01T00:00:00.000Z",
+    "sig":"&lt;hex&gt;",
+    "alg":"HMAC-SHA256",
+    "kid":"v1",
+    "issuer":"timeproofs.io",
+    "verify_url":"https://api.timeproofs.io/api/verify?hash=..."
+  }
 }</code></pre>
-      <p class="muted">You keep the files. The world only sees hashes and verify URLs.</p>
+      <p class="muted">You keep the files. The world only sees hashes, proof bundles, and verify URLs.</p>
     </section>
 
     <section class="card" id="dataset-integrity">
@@ -542,9 +553,10 @@ curl -s https://api.timeproofs.io/api/timestamp \
 HASH=$(sha256sum data.csv | awk '{print $1}')
 curl -s https://api.timeproofs.io/api/timestamp \
   -H "Content-Type: application/json" \
-  -d "{\"hash\":\"$HASH\",\"type\":\"dataset\",\"meta\":{\"version\":\"v1\",\"project\":\"study-42\"}}"
+  -d "{\"hash\":\"$HASH\",\"type\":\"dataset\",\"meta\":{\"version\":\"v1\",\"project\":\"study-42\"}}" \
+  -o dataset.tproof.json
 </code></pre>
-      <p class="muted">Compliance: aligns with Data Act expectations for data provenance and sharing.</p>
+      <p class="muted">Compliance: aligns with Data Act expectations for data provenance and sharing. Any ProofSpec-compliant verifier can check the proof later, even offline.</p>
     </section>
 
     <section class="card" id="supply-chain">
@@ -552,14 +564,37 @@ curl -s https://api.timeproofs.io/api/timestamp \
       <p><strong>What it solves.</strong> Publish proofs for SBOMs, licenses, vendor deliverables, and configuration baselines.</p>
 <pre><code>// How it works
 - Hash SBOM JSON, license packs, or configuration exports.
-- Timestamp each hash.
-- Include verify URLs in procurement docs and SLAs.</code></pre>
-      <p class="muted">Helps demonstrate integrity across vendors and internal teams.</p>
+- Timestamp each hash (get proof JSON or .tproof.json).
+- Include verify URLs and/or tproof files in procurement docs and SLAs.</code></pre>
+      <p class="muted">Helps demonstrate integrity across vendors and internal teams, without forcing you onto a specific infrastructure.</p>
+    </section>
+
+    <section class="card" id="root-protocols">
+      <h2>Supported root protocols</h2>
+      <p>
+        TimeProofs can timestamp and verify the integrity of several root-level transparency files that live at the
+        top of a domain. These protocols are independent standards; TimeProofs does not own them, but can provide
+        ProofSpec-based proofs for their contents.
+      </p>
+      <ul>
+        <li><strong>robots.txt</strong> — crawler and indexing rules.</li>
+        <li><strong>security.txt</strong> — security contact and disclosure policy.</li>
+        <li><strong>integrity.txt</strong> — tracking, cookies, logs, third-parties, and security posture.</li>
+        <li><strong>authenticity.txt</strong> — how humans and AI collaborate on content creation.</li>
+        <li><strong>rights.txt</strong> — usage rights, licences, and allowed/forbidden scenarios.</li>
+        <li><strong>explainable-ia.txt</strong> — AI systems in use, input/output handling, explanations, limitations.</li>
+        <li><strong>humans.txt</strong> — human credits and ethical commitments.</li>
+      </ul>
+      <p class="muted">
+        A typical pattern: hash the file (for example <code>integrity.txt</code>), obtain a ProofSpec proof or
+        <code>.tproof.json</code> receipt, and publish the verify URL next to the file. Any verifier can then
+        check that the root protocol file itself has not been tampered with.
+      </p>
     </section>
 
     <section class="card" id="compare-options">
       <h2>Compare options</h2>
-      <p><strong>TimeProofs.</strong> Hash-only, signed timestamp, public verify, no blockchain, privacy-first.</p>
+      <p><strong>TimeProofs.</strong> Hash-only, signed timestamp, stateless verify, public API, no blockchain, privacy-first.</p>
       <p><strong>Traditional notarization.</strong> Manual, costly, sometimes requires content exposure.</p>
       <p><strong>Blockchains.</strong> Heavy, fees, latency, and potential PII or metadata leakage.</p>
     </section>
@@ -567,7 +602,7 @@ curl -s https://api.timeproofs.io/api/timestamp \
     <section class="card" id="quick-faq">
       <h2>Quick FAQ</h2>
       <p><strong>Do you store my files?</strong> No. Only hashes. Original content never leaves your device.</p>
-      <p><strong>Can anyone verify a proof?</strong> Yes. Use the public verify endpoint or any ProofSpec-compliant client.</p>
+      <p><strong>Can anyone verify a proof?</strong> Yes. Use the public verify endpoint or any ProofSpec-compliant client, online or offline.</p>
       <p><strong>How fast are timestamps?</strong> Typical edge latency under 100 ms.</p>
       <p><strong>What about key rotation?</strong> Signatures support key IDs; verification remains stable across rotations.</p>
       <p class="muted">
@@ -578,15 +613,19 @@ curl -s https://api.timeproofs.io/api/timestamp \
       </p>
     </section>
 
-    <!-- Page proof (même pattern que ProofSpec) -->
+    <!-- Page proof (même pattern que ProofSpec, avec IDs principaux + duplicata) -->
     <section class="card" id="page-proof-sec" aria-labelledby="proof-title">
       <h2 id="proof-title">This page is verified by TimeProofs</h2>
       <p>
         Release: <code id="page-proof-release">…</code> ·
-        Hash: <code id="page-proof-hash-dup">…</code> ·
+        Hash: <code id="page-proof-hash">…</code> ·
+        <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
+      </p>
+      <p class="muted">
+        Duplicate: Hash <code id="page-proof-hash-dup">…</code> ·
         <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener">Verify</a>
       </p>
-      <p class="muted">The hash above is loaded from the central release manifest.</p>
+      <p class="muted">The hash values above are loaded from the central release manifest.</p>
     </section>
   </main>
 
@@ -748,4 +787,4 @@ curl -s https://api.timeproofs.io/api/timestamp \
   })();
   </script>
 </body>
-      </html>
+</html>
