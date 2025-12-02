@@ -1,4 +1,5 @@
 openapi: 3.1.0
+
 info:
   title: TimeProofs API
   version: v0.2
@@ -9,12 +10,12 @@ info:
     - The server never stores proofs.
     - You send only SHA-256 hashes.
     - The API returns a signed timestamp response.
-    - Clients build .tproof.json bundles locally and verify offline.
+    - Clients build `.tproof.json` bundles locally and verify offline.
 
-    v0.1 remains stable and online with the legacy verify endpoint and response format.
-    This OpenAPI file describes the v0.2 stateless API.
+    v0.1 remains stable and online with the legacy verify endpoint.
+    This OpenAPI file describes the v0.2 stateless API only.
 
-    **Principles**
+    Principles:
     - Hash locally (SHA-256)
     - Timestamp via API
     - Verify publicly (offline bundles)
@@ -24,6 +25,7 @@ info:
     name: TimeProofs
     url: https://timeproofs.io
     email: contact@timeproofs.io
+
   license:
     name: MPL-2.0
     url: https://www.mozilla.org/en-US/MPL/2.0/
@@ -31,7 +33,7 @@ info:
 servers:
   - url: https://api.timeproofs.io
     description: Production (v0.1 stable — legacy format)
-  - url: https://timeproofs-api-v02.YOUR-WORKER-NAME.workers.dev
+  - url: https://timeproofs-api-v02.jeason-bacoul.workers.dev
     description: v0.2 Dev Preview (stateless)
 
 tags:
@@ -44,7 +46,7 @@ paths:
   /api/health:
     get:
       summary: Health check (v0.2)
-      description: Returns a simple status to confirm API availability and mode.
+      description: Returns version, mode, and timestamp.
       operationId: healthV02
       tags: [Utility]
       responses:
@@ -61,7 +63,6 @@ paths:
                   now:
                     type: string
                     format: date-time
-                    example: "2025-12-01T21:50:43.538Z"
                   version:
                     type: string
                     example: "timeproofs-0.2"
@@ -77,15 +78,16 @@ paths:
 
         The server:
         - checks the hash format
-        - derives a canonical payload (hash + issuedAt + issuer + nonce)
-        - computes an HMAC-SHA256 (if HMAC_SECRET is configured)
-        - optionally signs with Ed25519 (future versions)
-        - returns the timestamp + proof
+        - derives a canonical payload (hash | issuedAt | issuer | nonce)
+        - computes an HMAC-SHA256 (if configured)
+        - optionally signs with Ed25519 (future releases)
+        - returns timestamp + proof
 
-        The server does **not** store the proof. Clients are expected to build
-        their own `.tproof.json` bundles using this response.
+        The server stores nothing.  
+        Clients must build `.tproof.json` bundles locally.
       operationId: createTimestampV02
       tags: [Core]
+
       requestBody:
         required: true
         content:
@@ -97,8 +99,9 @@ paths:
               properties:
                 hash:
                   type: string
-                  description: SHA-256 hex string of your file or data (64 hex chars).
+                  description: SHA-256 hex string (64 lowercase hex).
                   example: "bbbbee25f8ebb60fa512ad3e02460bd4cc7ec4a41850c5cc8636e67d99f0b3b2"
+
       responses:
         "200":
           description: Stateless timestamp response (v0.2)
@@ -106,8 +109,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/TimestampResponseV02"
+
         "400":
-          description: Invalid hash or payload
+          description: Invalid request body or hash format
           content:
             application/json:
               schema:
@@ -122,8 +126,10 @@ paths:
                   code:
                     type: integer
                     example: 2102
+
         "429":
           description: Rate limit exceeded
+
         "500":
           description: Internal error
 
@@ -131,20 +137,14 @@ paths:
     get:
       summary: Verify (not implemented in v0.2)
       description: |
-        In v0.2, verification is done **offline** using `.tproof.json` bundles
-        and the SDK/CLI.
+        v0.2 performs **offline verification only** using `.tproof.json` bundles.
 
-        This endpoint returns a 501 error to signal that online verification is
-        not available for v0.2. The legacy online verification remains in v0.1.
+        This endpoint always returns a 501 error.
+
+        The legacy v0.1 verify endpoint remains active on production.
       operationId: verifyV02
       tags: [Core]
-      parameters:
-        - name: hash
-          in: query
-          required: false
-          schema:
-            type: string
-          description: Ignored in v0.2. Verification is offline only.
+
       responses:
         "501":
           description: Not implemented in v0.2
@@ -168,6 +168,7 @@ paths:
 
 components:
   schemas:
+
     HashObject:
       type: object
       required:
@@ -179,7 +180,6 @@ components:
           example: "SHA-256"
         value:
           type: string
-          description: Hex-encoded SHA-256 digest
           example: "bbbbee25f8ebb60fa512ad3e02460bd4cc7ec4a41850c5cc8636e67d99f0b3b2"
 
     TimestampObject:
@@ -192,13 +192,11 @@ components:
         issuedAt:
           type: string
           format: date-time
-          example: "2025-12-01T21:50:43.538Z"
         issuer:
           type: string
           example: "https://api.timeproofs.io"
         nonce:
           type: string
-          example: "8a64f51d5aa9eb6b14a213b3c26ef351"
 
     ProofObject:
       type: object
@@ -212,23 +210,18 @@ components:
         hmac:
           type: string
           nullable: true
-          description: Hex-encoded HMAC-SHA256 (may be null if HMAC_SECRET is not configured).
-          example: "43667bef3c30849223ef838ff6dd6878c0b4491555aee8266299fefe24700d84"
         signature:
           type: string
           nullable: true
-          description: Base64-encoded Ed25519 signature (future versions).
         publicKey:
           type: string
           nullable: true
-          description: Base64-encoded Ed25519 public key (future versions).
         keyId:
           type: string
           example: "tp-v0-2-main"
 
     TimestampResponseV02:
       type: object
-      description: Timestamp response returned directly by the v0.2 API.
       required:
         - version
         - hash
@@ -244,46 +237,8 @@ components:
           $ref: "#/components/schemas/TimestampObject"
         proof:
           $ref: "#/components/schemas/ProofObject"
-
-    TimeproofBundleV02:
-      type: object
-      description: |
-        Full v0.2 bundle structure (`.tproof.json`) created client-side, using
-        the timestamp response plus optional local metadata.
-
-        The canonical JSON Schema is available at:
-        `/spec/proof-bundle-v0.2.schema.json`
-      required:
-        - version
-        - hash
-        - timestamp
-        - proof
-      properties:
-        version:
-          type: string
-          example: "timeproofs-0.2"
-        hash:
-          $ref: "#/components/schemas/HashObject"
-        timestamp:
-          $ref: "#/components/schemas/TimestampObject"
-        proof:
-          $ref: "#/components/schemas/ProofObject"
-        meta:
-          type: object
-          nullable: true
-          description: Optional local-only metadata attached by the user or application.
-        userSign:
-          type: object
-          nullable: true
-          description: Optional local signature verifying the metadata (not sent to the server).
-
-  securitySchemes:
-    none:
-      type: http
-      scheme: none
 
 security: []
-
 externalDocs:
   description: Full documentation and examples
   url: https://timeproofs.io/docs.html
