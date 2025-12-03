@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="dark light"/>
   <title>Create &amp; Verify — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="Create or verify cryptographic proofs of existence. Hash locally, timestamp via API, verify publicly — private, instant, edge-native."/>
+  <meta name="description" content="Create or verify cryptographic proofs of existence. Hash locally, timestamp via API, download a .tproof.json bundle, and verify or inspect it later — including offline inspection."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -38,7 +38,7 @@
 
   <!-- Social -->
   <meta property="og:title" content="Create &amp; Verify — TimeProofs"/>
-  <meta property="og:description" content="Hash locally. Instant timestamp. Public verification. No blockchain."/>
+  <meta property="og:description" content="Hash locally. Instant timestamp. Download .tproof.json bundles. Public verification and offline inspection."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/verify.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
@@ -48,7 +48,7 @@
   <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Create &amp; Verify — TimeProofs"/>
-  <meta name="twitter:description" content="Instant proof of existence for AI, data, and every digital artifact."/>
+  <meta name="twitter:description" content="Create proofs, download .tproof.json bundles, and verify or inspect them later — including offline inspection."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- Security meta -->
@@ -126,8 +126,8 @@ upgrade-insecure-requests">
       "url":"https://timeproofs.io/"
     },
     "datePublished":"2025-10-22",
-    "dateModified":"2025-11-17",
-    "description":"Create or verify cryptographic proofs of existence. Local hashing, signed timestamp, public verification."
+    "dateModified":"2025-12-03",
+    "description":"Create or verify cryptographic proofs of existence. Local hashing, signed timestamp, downloadable .tproof.json bundles, and offline inspection."
   }
   </script>
 
@@ -470,18 +470,18 @@ upgrade-insecure-requests">
   </header>
 
   <main id="main" class="wrap" role="main" aria-describedby="page-title">
-    <!-- HERO (sans Proof of Release) -->
+    <!-- HERO (sans Proof of Release, v0.2 badge + bundle/offline) -->
     <section class="hero" role="region" aria-labelledby="page-title">
       <div class="icon" aria-hidden="true">🔐</div>
-      <p class="badge">Status: Public Beta v0.1 · Tool · Privacy-first · No blockchain</p>
+      <p class="badge">Status: Public Beta v0.2 · Tool · Privacy-first · No blockchain</p>
       <h1 id="page-title">Create &amp; Verify a Proof</h1>
       <p class="lead">
-        One place to create and verify TimeProofs. Hash is computed locally in your browser,
-        then timestamped and signed via the API. Your content never leaves your device.
+        One place to create and verify TimeProofs. Your browser computes the hash locally, the API returns a signed
+        <code>.tproof.json</code> bundle you can download, share, or inspect offline. Your content never leaves your device.
       </p>
       <div class="hero-actions">
         <a href="#create-card" class="hero-btn primary" id="hero-create">Create a proof</a>
-        <a href="#verify-card" class="hero-btn" id="hero-verify">Verify a hash</a>
+        <a href="#verify-card" class="hero-btn" id="hero-verify">Verify a hash or bundle</a>
       </div>
     </section>
 
@@ -562,7 +562,7 @@ upgrade-insecure-requests">
       <article class="card" id="verify-card" aria-labelledby="verify-title">
         <div class="step-label">Step 2 · Verify or inspect</div>
         <h2 id="verify-title">Verify a proof</h2>
-        <p class="hint">Paste a SHA-256 hash or drop a <code>.tproof.json</code> bundle. We check existence and server signature.</p>
+        <p class="hint">Paste a SHA-256 hash or drop a <code>.tproof.json</code> bundle. We let you inspect the bundle and check existence and server signature via the API.</p>
 
         <label for="verify-hash">Hash to verify</label>
         <input type="text" id="verify-hash" placeholder="Paste a 64-hex SHA-256 hash" inputmode="latin" autocapitalize="off" autocomplete="off" spellcheck="false" pattern="[A-Fa-f0-9]{64}"/>
@@ -628,24 +628,25 @@ POST https://api.timeproofs.io/api/verify
           </div>
 
           <div id="panel-bundle" style="display:none;">
-            <h3><code>.tproof.json</code> bundle</h3>
+            <h3><code>.tproof.json</code> bundle (v0.2)</h3>
 <pre><code>{
-  "version": "v0.1",
+  "version": "v0.2",
   "hash": "sha256-hex",
-  "algorithm": "SHA-256",
-  "timestamp": "2025-11-04T10:22:33.123Z",
-  "signature": "base64/hex",
-  "signer": "TimeProofs",
+  "algo": "SHA-256",
+  "ts": "2025-11-04T10:22:33.123Z",
+  "sig_hmac": "hex",
+  "sig_ed25519": "base64url-or-hex",
+  "issuer": "timeproofs.io",
   "meta": { "source": "web:verify" }
 }</code></pre>
-            <p class="hint">The "Download .tproof.json" button on the left generates this bundle client-side.</p>
+            <p class="hint">The "Download .tproof.json" button on the left generates this bundle client-side in the v0.2 format.</p>
           </div>
 
           <div id="panel-faq" style="display:none;">
             <h3>Quick FAQ</h3>
             <p><strong>Is my content stored?</strong><br/>No. Only the hash circulates. The original content never leaves your device.</p>
             <p><strong>Why no blockchain?</strong><br/>To keep latency low (&lt;100&nbsp;ms), costs predictable, and verification simple.</p>
-            <p><strong>Offline verify?</strong><br/>v0.1: via API. v0.2: offline/bundle mode is planned.</p>
+            <p><strong>Offline verify?</strong><br/>You can download a <code>.tproof.json</code> bundle and inspect it offline (hash, timestamp, signatures) and re-check it at any time via the public API.</p>
             <p><strong>Compliance?</strong><br/>Privacy-first, hash-only. See <a href="/regulations.html">Regulations &amp; Compliance</a>.</p>
           </div>
         </div>
@@ -741,7 +742,7 @@ POST https://api.timeproofs.io/api/verify
     function toggleMenu(){
       (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu();
     }
-    burger && burger.addEventListener('click', toggleMenu, { passive:true });
+    burger && burger.addEventListener('click', toggleMenu);
     document.addEventListener('click',(e)=>{
       if(window.matchMedia('(min-width: 900px)').matches) return;
       if(!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu();
@@ -938,12 +939,13 @@ POST https://api.timeproofs.io/api/verify
       downloadBundle.onclick=()=>{
         if(!lastCreated) return;
         const bundle={
-          version:"v0.1",
+          version:"v0.2",
           hash:lastCreated.hash,
-          algorithm:"SHA-256",
-          timestamp:lastCreated.timestamp,
-          signature:lastCreated.signature,
-          signer:"TimeProofs",
+          algo:"SHA-256",
+          ts:lastCreated.timestamp,
+          sig_hmac:lastCreated.sig_hmac || "",
+          sig_ed25519:lastCreated.sig_ed25519 || "",
+          issuer:"timeproofs.io",
           meta:lastCreated.meta || {}
         };
         const blob=new Blob([JSON.stringify(bundle,null,2)],{type:"application/json"});
@@ -1014,7 +1016,8 @@ POST https://api.timeproofs.io/api/verify
           ok:j.ok===true || j.valid===true,
           hash:j.hash || hash,
           timestamp:j.timestamp || j.ts || null,
-          signature:j.signature || j.sig || "",
+          sig_hmac:j.sig_hmac || j.signature || j.sig || "",
+          sig_ed25519:j.sig_ed25519 || j.sig2 || "",
           verify_url:j.verify_url || (hash ? `/verify.html?hash=${encodeURIComponent(hash)}` : undefined),
           type:j.type || type,
           meta:j.meta || meta
@@ -1023,7 +1026,7 @@ POST https://api.timeproofs.io/api/verify
         showCreateOk();
         csStatus.textContent="Created";
         csHash.textContent=short(normalized.hash);
-        csSign.textContent=short(normalized.signature);
+        csSign.textContent=short(normalized.sig_hmac || normalized.sig_ed25519 || "");
         if(normalized.timestamp){
           csTSWrap.style.display="flex";
           csTS.textContent=fmtLocal(normalized.timestamp);
@@ -1075,7 +1078,7 @@ POST https://api.timeproofs.io/api/verify
         let r=await fetchAPI(`/verify?hash=${encodeURIComponent(hash)}`);
         let j=await r.json().catch(()=> ({}));
 
-        const decisive=resp => resp.ok===true || resp.valid===true || resp.found===true || !!(resp.timestamp||resp.ts||resp.signature||resp.sig);
+        const decisive=resp => resp.ok===true || resp.valid===true || resp.found===true || !!(resp.timestamp||resp.ts||resp.signature||resp.sig||resp.sig_hmac||resp.sig_ed25519);
         if(!decisive(j)){
           try{
             r=await fetchAPI(`/verify`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({hash})});
@@ -1084,7 +1087,7 @@ POST https://api.timeproofs.io/api/verify
         }
 
         const okFlag=j.ok===true || j.valid===true;
-        const found=j.found===true || okFlag || !!(j.timestamp||j.ts||j.signature||j.sig);
+        const found=j.found===true || okFlag || !!(j.timestamp||j.ts||j.signature||j.sig||j.sig_hmac||j.sig_ed25519);
 
         if(okFlag && found){
           verifyStatus.innerHTML=`<span class="pill ok">✅ Valid</span>`;
@@ -1098,14 +1101,15 @@ POST https://api.timeproofs.io/api/verify
           ok:!!okFlag, found:!!found,
           hash:j.hash || hash,
           timestamp:j.timestamp || j.ts || null,
-          signature:j.signature || j.sig || null,
+          sig_hmac:j.sig_hmac || j.signature || j.sig || null,
+          sig_ed25519:j.sig_ed25519 || j.sig2 || null,
           type:j.type || null,
           meta:j.meta || null
         };
 
         vsStatus.textContent=okFlag && found ? "Valid" : (found ? "Found" : "Invalid");
         vsHash.textContent=short(normalized.hash);
-        vsSign.textContent=short(normalized.signature||"");
+        vsSign.textContent=short(normalized.sig_hmac || normalized.sig_ed25519 || "");
         if(normalized.timestamp){
           vsTSWrap.style.display="flex";
           vsTS.textContent=fmtLocal(normalized.timestamp);
@@ -1137,7 +1141,7 @@ POST https://api.timeproofs.io/api/verify
       setTimeout(()=>btnVerify.click(),80);
     }
 
-    // drag & drop tproof.json in verify
+    // drag & drop tproof.json in verify (v0.2 bundle + offline inspection)
     const dropBundle=document.getElementById("drop-bundle");
     dropBundle.addEventListener("dragenter",e=>{e.preventDefault(); dropBundle.classList.add("drag");});
     dropBundle.addEventListener("dragover",e=>{e.preventDefault(); dropBundle.classList.add("drag");});
@@ -1150,9 +1154,25 @@ POST https://api.timeproofs.io/api/verify
       try{
         const txt=await f.text();
         const b=JSON.parse(txt);
-        const h=(b && (b.hash||b.data)) ? String(b.hash||b.data) : "";
-        if(!/^[a-f0-9]{64}$/i.test(h)){ alert("Bundle without a valid SHA-256 hash."); return; }
-        document.getElementById("verify-hash").value=h.toLowerCase();
+
+        // Affichage immédiat du bundle (inspection offline)
+        outVerify.textContent=JSON.stringify(b,null,2);
+
+        const rawHash = typeof b.hash==="string" ? b.hash : "";
+        if(!/^[a-f0-9]{64}$/i.test(rawHash)){ alert("Bundle without a valid SHA-256 hash."); return; }
+        const h=rawHash.toLowerCase();
+        document.getElementById("verify-hash").value=h;
+
+        const sigBundle = b.sig_hmac || b.signature || b.sig || "";
+        vsStatus.textContent="Bundle loaded (not yet checked)";
+        vsHash.textContent=short(h);
+        vsSign.textContent=short(sigBundle);
+        if(b.ts || b.timestamp){
+          vsTSWrap.style.display="flex";
+          vsTS.textContent=fmtLocal(b.ts || b.timestamp);
+        }
+        verifySummary.style.display="grid";
+
         document.getElementById("verify-card").scrollIntoView({behavior:"smooth",block:"start"});
         setTimeout(()=>btnVerify.click(),80);
       }catch{ alert("Invalid bundle."); }
@@ -1184,6 +1204,34 @@ POST https://api.timeproofs.io/api/verify
     tabs.bundle.onclick=()=>showMini("bundle");
     tabs.faq.onclick=()=>showMini("faq");
     showMini("url");
+
+    // Copy buttons sur tous les <pre>
+    (function installCopyButtons(){
+      document.querySelectorAll('pre').forEach((pre)=>{
+        if(pre.querySelector('.copy-btn')) return;
+        const btn=document.createElement('button');
+        btn.type='button';
+        btn.className='copy-btn';
+        btn.setAttribute('aria-label','Copy code block');
+        btn.innerHTML='<span class="txt">Copy</span><span class="ok">✓ Copied</span>';
+        btn.addEventListener('click', async ()=>{
+          const code = pre.querySelector('code')?.innerText ?? pre.innerText;
+          try{
+            await navigator.clipboard.writeText(code);
+            btn.classList.add('copied');
+            setTimeout(()=>btn.classList.remove('copied'), 1200);
+          }catch{
+            const ta=document.createElement('textarea');
+            ta.value=code; ta.style.position='fixed'; ta.style.left='-9999px';
+            document.body.appendChild(ta); ta.select();
+            document.execCommand('copy'); document.body.removeChild(ta);
+            btn.classList.add('copied');
+            setTimeout(()=>btn.classList.remove('copied'), 1200);
+          }
+        });
+        pre.appendChild(btn);
+      });
+    })();
 
     // Auto aria-current
     (function(){
@@ -1222,4 +1270,4 @@ POST https://api.timeproofs.io/api/verify
   })();
   </script>
 </body>
-                                             </html>
+  </html>
