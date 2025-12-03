@@ -162,7 +162,13 @@
    * {
    *   hash:      { algorithm: "SHA-256", value: "<hex>" },
    *   timestamp: { issuedAt: "<ISO-UTC>", issuer: "<url>", nonce: "<id>" },
-   *   proof:     { algo: "HMAC-SHA256+Ed25519", hmac: "<hex|null>", signature: null, publicKey: null, keyId: "tp-v0-2-main" }
+   *   proof:     {
+   *     algo: "HMAC-SHA256+Ed25519",
+   *     hmac: "<hex|null>",
+   *     signature: null,
+   *     publicKey: null,
+   *     keyId: "tp-v0-2-main"
+   *   }
    * }
    *
    * @param {string} hash - 64-char lowercase hex SHA-256 digest
@@ -284,7 +290,7 @@
       },
       proof: {
         algo: proof.algo,
-        hmac: proof.hmac || null,
+        hmac: typeof proof.hmac === "string" ? proof.hmac : null,
         signature:
           typeof proof.signature === "string" || proof.signature === null
             ? proof.signature
@@ -440,7 +446,7 @@
     const userSignValid = null; // local signature not verified yet
 
     const valid =
-      schemaValid && (hashMatches !== false) && (proofValid !== false);
+      schemaValid && hashMatches !== false && proofValid !== false;
 
     return {
       valid,
