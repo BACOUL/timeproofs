@@ -266,6 +266,27 @@ upgrade-insecure-requests">
       border-radius:999px; font-size:.85rem;
     }
 
+    /* New in v0.2 */
+    .tp-new-v02{
+      background:#07101f;
+      border:1px solid #1b3a4f;
+      border-radius:14px;
+      padding:16px 18px;
+      margin:18px auto 8px;
+      max-width:1100px;
+    }
+    .tp-new-v02 h2{
+      margin:0 0 8px;
+      font-size:1.05rem;
+      color:#b9e7f5;
+    }
+    .tp-new-v02 ul{
+      margin:0;
+      padding-left:20px;
+      color:var(--muted);
+      font-size:.95rem;
+    }
+
     /* TOC */
     nav.toc{
       display:flex; flex-wrap:wrap; gap:12px;
@@ -390,6 +411,7 @@ upgrade-insecure-requests">
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
+      <a href="/verify.html">Create/Verify</a>
       <a href="/docs.html">API Docs</a>
       <a href="/regulations.html">Regulations</a>
       <a href="/security.html">Security</a>
@@ -408,11 +430,22 @@ upgrade-insecure-requests">
     <!-- HERO -->
     <section class="hero" role="region" aria-labelledby="page-title">
       <div class="icon" aria-hidden="true">🛡️</div>
-      <p class="badge">Status: Public Beta v0.2 · Regulations · Stateless proofs · No blockchain</p>
+      <p class="badge">Status: Public Beta v0.2 · Regulations · Privacy-first · No blockchain</p>
       <h1 id="page-title">Regulations & Compliance</h1>
       <p class="lead">
         Hash-only, stateless, open verification. This page maps how TimeProofs aligns with the EU AI Act, GDPR, Data Act, and other frameworks.
       </p>
+    </section>
+
+    <!-- New in v0.2 -->
+    <section class="tp-new-v02" aria-label="New in v0.2">
+      <h2>New in v0.2</h2>
+      <ul>
+        <li>Stateless architecture for the API — no stored originals, no content logs.</li>
+        <li><code>.tproof.json</code> bundle format for portable, verifiable proofs under your control.</li>
+        <li>Offline verification paths (browser and CLI) built on the same proof format.</li>
+        <li>Updated regulatory mapping for the EU AI Act, GDPR, Data Act, and international frameworks.</li>
+      </ul>
     </section>
 
     <!-- TOC -->
@@ -707,28 +740,23 @@ upgrade-insecure-requests">
       });
     })();
 
-    // Release manifest fill (HERO + page proof)
+    // Release manifest fill (page proof)
     (async()=>{
       try{
-        const r=await fetch('/releases/v0.1.json',{cache:'no-store'});
+        const r=await fetch('/releases/v0.2.json',{cache:'no-store'});
         if(!r.ok) return;
         const map=await r.json();
         const id=document.documentElement.dataset.page || 'regulations.html';
         const e=map[id] || map['regulations.html'] || map['/'] || map;
 
-        const elH1=document.getElementById('page-proof-hash');
-        const elL1=document.getElementById('page-proof-link');
         const elR =document.getElementById('page-proof-release');
         const elH2=document.getElementById('page-proof-hash-dup');
         const elL2=document.getElementById('page-proof-link-dup');
 
         if(elR && e.release) elR.textContent=e.release;
-        if(e.hash){
-          elH1 && (elH1.textContent=e.hash);
-          elH2 && (elH2.textContent=e.hash);
-        }
-        const url=e.verify || (e.hash ? ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(e.hash)) : '#');
-        if(elL1 && url) elL1.href=url;
+        if(e.hash && elH2) elH2.textContent=e.hash;
+
+        const url=e.verify || (e.hash ? ('https://timeproofs.io/verify.html?hash='+encodeURIComponent(e.hash)) : '#');
         if(elL2 && url) elL2.href=url;
       }catch{}
     })();
@@ -740,4 +768,4 @@ upgrade-insecure-requests">
   })();
   </script>
 </body>
-</html>
+  </html>
