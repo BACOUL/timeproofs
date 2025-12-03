@@ -7,8 +7,8 @@
   <meta name="color-scheme" content="dark light"/>
   <title>TimeProofs — Prove When Data Existed. Privately.</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="Hash locally, get a signed timestamp, verify publicly. TimeProofs is the open, privacy-first standard to prove when data existed and that it hasn’t changed — for AI outputs, files, and datasets."/>
-  <meta name="keywords" content="proof of existence,timestamp API,content authenticity,AI provenance,hashing,SHA-256,TimeProofs,verification,privacy-first,edge-native"/>
+  <meta name="description" content="Hash locally, get a signed .tproof.json bundle, verify publicly or offline. TimeProofs is the open, privacy-first standard to prove when data existed and that it hasn’t changed — for AI outputs, files, and datasets."/>
+  <meta name="keywords" content="proof of existence,timestamp API,content authenticity,AI provenance,hashing,SHA-256,TimeProofs,verification,privacy-first,edge-native,.tproof.json,stateless API"/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -38,7 +38,7 @@
 
   <!-- Social -->
   <meta property="og:title" content="TimeProofs — Prove When Data Existed. Privately."/>
-  <meta property="og:description" content="Open protocol + simple API to prove when something existed and that it hasn’t changed — without exposing data."/>
+  <meta property="og:description" content="Open protocol + simple API to prove when something existed and that it hasn’t changed — with signed .tproof.json bundles and offline verification, without exposing data."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
@@ -50,7 +50,7 @@
   <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="TimeProofs — Prove When Data Existed. Privately."/>
-  <meta name="twitter:description" content="Hash locally. Signed timestamps. Public verification. No blockchain. No data exposure."/>
+  <meta name="twitter:description" content="Hash locally. Signed .tproof.json bundles. Public and offline verification. No blockchain. No data exposure."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- AI Trust -->
@@ -74,7 +74,7 @@
     ],
     "sameAs":[
       "https://x.com/timeproofs",
-      "https://github.com/BACOUL/timeproofs/tree/timeproofs",
+      "https://github.com/BACOUL/timeproofs/tree/timeproofsv2",
       "https://www.linkedin.com/company/timeproofs",
       "https://youtube.com/@timeproofs",
       "https://timeproofs.io/rss.xml"
@@ -88,7 +88,13 @@
   }
   </script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"}
+  {
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "name":"TimeProofs",
+    "url":"https://timeproofs.io/",
+    "dateModified":"2025-12-03"
+  }
   </script>
 
   <!-- Security meta -->
@@ -402,6 +408,7 @@ upgrade-insecure-requests">
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
+      <a href="/verify.html">Create/Verify</a>
       <a href="/docs.html">API Docs</a>
       <a href="/regulations.html">Regulations</a>
       <a href="/security.html">Security</a>
@@ -418,13 +425,14 @@ upgrade-insecure-requests">
 
   <main id="main" class="wrap" role="main">
     <section class="hero reveal" aria-labelledby="hero-title">
+      <p aria-hidden="true" style="font-size:1.9rem;margin:0 0 6px;">🏠</p>
       <a class="rel-banner" id="rel-banner" href="#site-proof" aria-label="View site release proof">🔏 Release — Verified</a>
 
       <div class="label">Status: Public Beta v0.2 · Protocol + API · Privacy-first · No blockchain</div>
       <h1 id="hero-title" class="title">Prove When Data Existed. Privately.</h1>
 
       <p class="subtitle">
-        Hash anything on your device. Receive an instant, signed proof bundle. Anyone can verify later that it existed and is unchanged — without ever seeing your data.
+        Hash anything on your device. Receive an instant, signed <code>.tproof.json</code> bundle. Anyone can verify later that it existed and is unchanged — without ever seeing your data.
       </p>
 
       <p class="positioning">
@@ -506,12 +514,12 @@ upgrade-insecure-requests">
           <p><span class="tag">Dual signatures</span> <span class="tag">Public JWKS</span></p>
         </article>
         <article class="card">
-          <h3>Offline & self-host</h3>
+          <h3>Offline &amp; self-host</h3>
           <p>The Create/Verify tool can check <code>.tproof.json</code> files offline. You can also self-host the API using the reference worker and container.</p>
           <p><span class="tag">Offline verify</span> <span class="tag">BYOI</span></p>
         </article>
         <article class="card">
-          <h3>Multi-backend & anti lock-in</h3>
+          <h3>Multi-backend &amp; anti lock-in</h3>
           <p>Abstracted <code>KV_DRIVER</code> for <code>cloudflare-kv</code>, <code>redis</code>, <code>fs</code>, and <code>d1</code> so you can switch infrastructure without changing the proof format.</p>
           <p><span class="tag">Multi-backend</span> <span class="tag">Anti lock-in</span></p>
         </article>
@@ -713,7 +721,7 @@ const check = await res.json();</code></pre>
         <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener" title="View verification on API">Verify</a>
       </p>
       <p style="text-align:center; margin-top:6px; color:#9fb3c9">
-        Each build is timestamped and linked here. “Verify” opens a public endpoint that returns the signed record used to prove existence and integrity.
+        Each build is timestamped and linked here. Values are loaded from the v0.2 release manifest (<code>/releases/v0.2.json</code>) with v0.1 kept as an archive.
       </p>
       <p style="text-align:center; margin-top:6px; color:#9fb3c9">
         Learn more on <a href="/regulations.html">Regulations &amp; Compliance</a> and transparency on <a href="/about.html">About</a>.
@@ -763,7 +771,7 @@ const check = await res.json();</code></pre>
       <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
       </a>
-      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
+      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
       </a>
       <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn">
@@ -1037,4 +1045,4 @@ verify: ${verifyURL}`;
   <!-- Toast container -->
   <div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
-  </html>
+</html>
