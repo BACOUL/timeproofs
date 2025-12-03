@@ -737,6 +737,67 @@ POST https://api.timeproofs.io/api/verify
       TimeProofsV02 &&
       typeof TimeProofsV02.createBundle === "function";
 
+    // Helpers v0.2 (hash + timestamp + signature)
+    function getHashValue(hash){
+      if(!hash) return "";
+      if(typeof hash === "string") return hash;
+      if(typeof hash === "object" && typeof hash.value === "string") return hash.value;
+      return "";
+    }
+    function normalizeHash(jHash, hashHex){
+      const v = getHashValue(jHash) || (hashHex || "").toLowerCase();
+      return {
+        algorithm: (jHash && jHash.algorithm) || "SHA-256",
+        value: v
+      };
+    }
+    function normalizeTimestampFromResp(resp){
+      const r = resp || {};
+      let issuedAtMs = null;
+      let issuer = "https://api.timeproofs.io";
+
+      if(r.timestamp && typeof r.timestamp === "object"){
+        const t = r.timestamp;
+        if(typeof t.issuedAt === "number"){
+          issuedAtMs = t.issuedAt;
+        }else if(typeof t.issuedAt === "string"){
+          const d = new Date(t.issuedAt);
+          if(!isNaN(d.getTime())) issuedAtMs = d.getTime();
+        }else if(typeof t.iso === "string"){
+          const d = new Date(t.iso);
+          if(!isNaN(d.getTime())) issuedAtMs = d.getTime();
+        }
+        if(typeof t.issuer === "string") issuer = t.issuer;
+      }else if(typeof r.ts === "string" || typeof r.timestamp === "string"){
+        const iso = r.ts || r.timestamp;
+        const d = new Date(iso);
+        if(!isNaN(d.getTime())) issuedAtMs = d.getTime();
+      }
+
+      if(!issuedAtMs) issuedAtMs = Date.now();
+
+      return { issuedAt: issuedAtMs, issuer };
+    }
+    function getTimestampIso(tsObj){
+      if(!tsObj || typeof tsObj !== "object") return null;
+      if(typeof tsObj.issuedAt === "number"){
+        try{ return new Date(tsObj.issuedAt).toISOString(); }catch{ return null; }
+      }
+      if(typeof tsObj.issuedAt === "string"){
+        const d = new Date(tsObj.issuedAt);
+        if(!isNaN(d.getTime())) return d.toISOString();
+      }
+      if(typeof tsObj.iso === "string"){
+        const d = new Date(tsObj.iso);
+        if(!isNaN(d.getTime())) return d.toISOString();
+      }
+      return null;
+    }
+    function getSignatureLikeFromProof(proof){
+      if(!proof || typeof proof !== "object") return "";
+      return proof.hmac || proof.signature || proof.sig || "";
+    }
+
     // Header shade
     const hdr=document.getElementById('hdr');
     function onScroll(){
@@ -784,7 +845,7 @@ POST https://api.timeproofs.io/api/verify
       document.getElementById('verify-card').scrollIntoView({behavior:'smooth',block:'start'});
     });
 
-    // Helpers
+    // Helpers généraux
     function withTimeout(options={}){
       const ctrl=new AbortController();
       const t=setTimeout(()=>ctrl.abort(), REQ_TIMEOUT_MS);
@@ -951,37 +1012,25 @@ POST https://api.timeproofs.io/api/verify
     }
 
     function buildBundleFromResponse(j, hashHex, type, metaInput){
-      const hashObj =
-        j && j.hash && typeof j.hash === "object" && typeof j.hash.value === "string"
-          ? j.hash
-          : {
-              algorithm: "SHA-256",
-              value: (j && typeof j.hash === "string" ? j.hash : hashHex).toLowerCase()
-            };
+      const hashObj = normalizeHash(j && j.hash, hashHex);
+      const tsObj = normalizeTimestampFromResp(j);
 
-      const issuedAt =
-        j && j.timestamp && typeof j.timestamp === "object" && typeof j.timestamp.issuedAt === "string"
-          ? j.timestamp.issuedAt
-          : (j && (j.ts || j.timestamp)) || null;
-
-      const tsObj =
-        j && j.timestamp && typeof j.timestamp === "object"
-          ? { ...j.timestamp, issuedAt }
-          : {
-              issuedAt,
-              issuer: (j && (j.issuer || j.issuerUrl || "https://api.timeproofs.io")),
-            };
-
-      const proofObj =
-        j && j.proof && typeof j.proof === "object"
-          ? j.proof
-          : {
-              algo: (j && (j.algo || "HMAC-SHA256+Ed25519")),
-              hmac: (j && (j.sig_hmac || j.signature || j.sig)) || null,
-              signature: (j && (j.sig_ed25519 || j.sig2)) || null,
-              publicKey: (j && j.publicKey) || null,
-              keyId: (j && (j.keyId || j.kid || "tp-v0-2-main"))
-            };
+      const pIn = j && j.proof;
+      const proofObj = (pIn && typeof pIn === "object")
+        ? {
+            algo: pIn.algo || "HMAC-SHA256+Ed25519",
+            hmac: pIn.hmac || null,
+            signature: pIn.signature || null,
+            publicKey: pIn.publicKey || null,
+            keyId: pIn.keyId || "tp-v0-2-main"
+          }
+        : {
+            algo: (j && (j.algo || "HMAC-SHA256+Ed25519")),
+            hmac: (j && (j.sig_hmac || j.signature || j.sig)) || null,
+            signature: (j && (j.sig_ed25519 || j.sig2)) || null,
+            publicKey: (j && j.publicKey) || null,
+            keyId: (j && (j.keyId || j.kid || "tp-v0-2-main"))
+          };
 
       const metaFromServer = j && j.meta && typeof j.meta === "object" ? j.meta : {};
       const metaLocal = metaInput && typeof metaInput === "object" ? metaInput : {};
@@ -1081,12 +1130,8 @@ POST https://api.timeproofs.io/api/verify
         if(!r.ok || j.error) fail(j.error || `Failed (${r.status})`);
 
         const bundle = buildBundleFromResponse(j, hashHex, type, meta);
-        const tsIso =
-          bundle.timestamp && typeof bundle.timestamp.issuedAt === "string"
-            ? bundle.timestamp.issuedAt
-            : null;
-        const proof = bundle.proof || {};
-        const sigShort = proof.hmac || proof.signature || "";
+        const tsIso = getTimestampIso(bundle.timestamp);
+        const sigShort = getSignatureLikeFromProof(bundle.proof);
 
         showCreateOk();
         csStatus.textContent="Created";
@@ -1100,7 +1145,7 @@ POST https://api.timeproofs.io/api/verify
         createSummary.style.display="grid";
 
         outCreate.textContent=JSON.stringify(bundle,null,2);
-        lastCreated={ hash:hashHex, bundle, timestamp:tsIso, proof };
+        lastCreated={ hash:hashHex, bundle, timestamp:tsIso, proof:bundle.proof };
         enableCreateActions(bundle, hashHex, req);
       }catch(e){
         showCreateError(String(e.message||e));
@@ -1165,12 +1210,12 @@ POST https://api.timeproofs.io/api/verify
         }
 
         let tsIso=null;
-        if(j.timestamp && typeof j.timestamp==="object" && typeof j.timestamp.issuedAt==="string"){
-          tsIso=j.timestamp.issuedAt;
-        }else if(typeof j.ts==="string"){
-          tsIso=j.ts;
-        }else if(typeof j.timestamp==="string"){
-          tsIso=j.timestamp;
+        if(j.timestamp && typeof j.timestamp==="object"){
+          tsIso = getTimestampIso(j.timestamp);
+        }else if(typeof j.ts==="string" || typeof j.timestamp==="string"){
+          const isoCandidate = j.ts || j.timestamp;
+          const d = new Date(isoCandidate);
+          if(!isNaN(d.getTime())) tsIso = d.toISOString();
         }
 
         let sigHmac=null, sigEd=null;
@@ -1264,10 +1309,11 @@ POST https://api.timeproofs.io/api/verify
         vsSign.textContent=short(sigBundle);
 
         let tsIso=null;
-        if(b.timestamp && typeof b.timestamp==="object" && typeof b.timestamp.issuedAt==="string"){
-          tsIso=b.timestamp.issuedAt;
+        if(b.timestamp && typeof b.timestamp==="object"){
+          tsIso = getTimestampIso(b.timestamp);
         }else if(b.ts){
-          tsIso=b.ts;
+          const d=new Date(b.ts);
+          if(!isNaN(d.getTime())) tsIso=d.toISOString();
         }
         if(tsIso){
           vsTSWrap.style.display="flex";
