@@ -54,7 +54,7 @@
   <!-- Security meta -->
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
 
-  <!-- CSP v0.1 -->
+  <!-- CSP v0.1 (reused for v0.2) -->
   <meta http-equiv="Content-Security-Policy" content="
 default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
 worker-src 'self' blob:;
@@ -472,7 +472,7 @@ upgrade-insecure-requests">
   </header>
 
   <main id="main" class="wrap" role="main" aria-describedby="page-title">
-    <!-- HERO (sans Proof of Release, v0.2 badge + bundle/offline) -->
+    <!-- HERO (v0.2) -->
     <section class="hero" role="region" aria-labelledby="page-title">
       <div class="icon" aria-hidden="true">🔐</div>
       <p class="badge">Status: Public Beta v0.2 · Tool · Privacy-first · No blockchain</p>
@@ -540,6 +540,7 @@ upgrade-insecure-requests">
 
         <div class="status-line" id="create-status" aria-live="polite"></div>
 
+        <!-- Résumé humain v0.2 -->
         <div class="summary" id="create-summary" aria-live="polite" aria-atomic="true">
           <div class="item"><span class="k">Status</span><span id="create-s-status">—</span></div>
           <div class="item"><span class="k">Hash</span><code id="create-s-hash">—</code></div>
@@ -575,6 +576,7 @@ upgrade-insecure-requests">
 
         <div class="status-line" id="verify-status" aria-live="polite"></div>
 
+        <!-- Résumé humain v0.2 (verify) -->
         <div class="summary" id="verify-summary" aria-live="polite" aria-atomic="true">
           <div class="item"><span class="k">Status</span><span id="verify-s-status">—</span></div>
           <div class="item"><span class="k">Hash</span><code id="verify-s-hash">—</code></div>
@@ -676,7 +678,7 @@ POST https://api.timeproofs.io/api/verify
         Hash: <code id="page-proof-hash-dup">…</code> ·
         <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener">Verify</a>
       </p>
-      <p class="hint">The hash above is loaded from the central release manifest.</p>
+      <p class="hint">The hash above is loaded from the v0.2 release manifest.</p>
     </section>
   </main>
 
@@ -1353,7 +1355,7 @@ POST https://api.timeproofs.io/api/verify
     tabs.faq.onclick=()=>showMini("faq");
     showMini("url");
 
-    // Copy buttons sur tous les <pre>
+    // Copy buttons sur tous les <pre> (sauf ceux qui ont déjà un .copy-btn)
     (function installCopyButtons(){
       document.querySelectorAll('pre').forEach((pre)=>{
         if(pre.querySelector('.copy-btn')) return;
@@ -1390,10 +1392,10 @@ POST https://api.timeproofs.io/api/verify
       });
     })();
 
-    // Release manifest (v0.1 encore utilisé pour cette page)
+    // Release manifest v0.2
     (async()=>{
       try{
-        const r=await fetch('/releases/v0.1.json',{cache:'no-store'});
+        const r=await fetch('/releases/v0.2.json',{cache:'no-store'});
         if(!r.ok) return;
         const map=await r.json();
         const id=document.documentElement.dataset.page || 'verify.html';
@@ -1418,4 +1420,4 @@ POST https://api.timeproofs.io/api/verify
   })();
   </script>
 </body>
-</html>
+  </html>
