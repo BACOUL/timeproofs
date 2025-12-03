@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="dark light"/>
   <title>API Docs — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="TimeProofs API documentation. Hash locally, timestamp via API, verify publicly. Endpoints, request/response, examples, and error codes."/>
+  <meta name="description" content="TimeProofs API documentation for v0.1 and v0.2. Hash locally, get signed .tproof.json bundles, verify online or offline — privacy-first, hash-only, no blockchain."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -35,7 +35,7 @@
 
   <!-- Social -->
   <meta property="og:title" content="API Docs — TimeProofs"/>
-  <meta property="og:description" content="Timestamp anything in seconds. Privacy-first, public verification, no blockchain."/>
+  <meta property="og:description" content="Endpoints, examples, and verification for TimeProofs v0.1 and v0.2 — with signed .tproof.json bundles and offline verification."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/docs.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
@@ -45,7 +45,7 @@
   <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="API Docs — TimeProofs"/>
-  <meta name="twitter:description" content="Endpoints, examples, and verification for TimeProofs."/>
+  <meta name="twitter:description" content="Hash locally. Signed .tproof.json bundles. Public and offline verification. No blockchain. No data exposure."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- AI Trust -->
@@ -61,7 +61,7 @@ worker-src 'self' blob:;
 img-src 'self' data: https:;
 style-src 'self' 'unsafe-inline';
 script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
-connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io;
+connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io https://static.cloudflareinsights.com;
 font-src 'self' https: data:;
 object-src 'none';
 base-uri 'self';
@@ -89,7 +89,7 @@ upgrade-insecure-requests">
     ],
     "sameAs":[
       "https://x.com/timeproofs",
-      "https://github.com/BACOUL/timeproofs/tree/timeproofs",
+      "https://github.com/BACOUL/timeproofs/tree/timeproofsv2",
       "https://www.linkedin.com/company/timeproofs",
       "https://youtube.com/@timeproofs",
       "https://timeproofs.io/rss.xml"
@@ -117,14 +117,14 @@ upgrade-insecure-requests">
     "@type":"TechArticle",
     "headline":"TimeProofs API Docs",
     "name":"TimeProofs API Docs",
-    "description":"TimeProofs API documentation. Hash locally, timestamp via API, verify publicly. Endpoints, request/response, examples, and error codes.",
+    "description":"TimeProofs API documentation. Hash locally, timestamp via API, verify publicly or offline. Endpoints, request/response, examples, and error codes for v0.1 and v0.2.",
     "about":[
       "digital proof of existence",
       "timestamp API",
       "API documentation"
     ],
     "datePublished":"2025-10-22",
-    "dateModified":"2025-12-02",
+    "dateModified":"2025-12-03",
     "inLanguage":"en",
     "maintainer":{"@type":"Organization","name":"TimeProofs"},
     "publisher":{
@@ -178,7 +178,7 @@ upgrade-insecure-requests">
   }
   </script>
 
-  <!-- Styles (squelette aligné use-cases/proofspec) -->
+  <!-- Styles -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
@@ -414,6 +414,7 @@ upgrade-insecure-requests">
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
+      <a href="/verify.html">Create/Verify</a>
       <a href="/docs.html">API Docs</a>
       <a href="/regulations.html">Regulations</a>
       <a href="/security.html">Security</a>
@@ -431,24 +432,26 @@ upgrade-insecure-requests">
   <main id="main" class="wrap" role="main" aria-describedby="page-title">
     <section class="hero" role="region" aria-labelledby="page-title">
       <div class="icon" aria-hidden="true">📚</div>
-      <p class="badge">Status: Public Beta v0.1 · API · Privacy-first · No blockchain</p>
+      <p class="badge">Status: Public Beta v0.2 · API Docs · Privacy-first · No blockchain</p>
       <h1 id="page-title">API Docs</h1>
       <p class="lead">
-        Hash client-side, timestamp via the edge API, verify publicly. v0.1 provides online verify, v0.2 introduces a stateless model with offline bundles.
+        Hash client-side, timestamp via the edge API, get a signed <code>.tproof.json</code> bundle, and verify online or offline.
+        v0.1 exposes online verify, v0.2 introduces a fully stateless bundle model.
       </p>
     </section>
 
     <nav class="toc" aria-label="Contents">
       <span class="toc-label">On this page</span>
-      <a href="#overview">Overview & versions</a>
+      <a href="#overview">Overview &amp; versions</a>
+      <a href="#v02">What’s new in v0.2</a>
       <a href="#base-url">Base URLs</a>
       <a href="#auth">Auth</a>
       <a href="#timestamp">POST /api/timestamp</a>
       <a href="#verify">GET/POST /api/verify</a>
-      <a href="#models">Models & bundles</a>
+      <a href="#models">Models &amp; bundles</a>
       <a href="#errors">Errors</a>
-      <a href="#sdk">Client helpers & SDK</a>
-      <a href="#root-files">Root files & related protocols</a>
+      <a href="#sdk">Client helpers &amp; SDK</a>
+      <a href="#root-files">Root files &amp; related protocols</a>
       <a href="#page-proof-sec">Page proof</a>
     </nav>
     <div style="text-align:center">
@@ -457,7 +460,7 @@ upgrade-insecure-requests">
 
     <p class="meta">
       API: <strong>v0.1 (stable)</strong> + <strong>v0.2 (dev preview)</strong> ·
-      Last updated: <strong>2025-12-02</strong> ·
+      Last updated: <strong>2025-12-03</strong> ·
       Spec: <a href="/proofspec.html">ProofSpec v0.1</a> ·
       <a href="/security.html">Security</a>
     </p>
@@ -469,16 +472,31 @@ upgrade-insecure-requests">
       </p>
       <ul>
         <li><strong>v0.1 (production, online verify)</strong> — hash-only inputs, events stored server-side, <code>/api/verify</code> available for public lookups.</li>
-        <li><strong>v0.2 (dev preview, stateless)</strong> — the server never stores proofs, returns a signed timestamp response, and verification happens offline using <code>.tproof.json</code> bundles.</li>
+        <li><strong>v0.2 (dev preview, stateless)</strong> — the server never stores proofs, returns a signed timestamp object, and verification happens offline using <code>.tproof.json</code> bundles.</li>
       </ul>
       <p class="muted">
         v0.1 stays the recommended path for most integrations today. v0.2 is the next-generation model and focuses on
-        offline verification and client-side proof bundles.
+        offline verification and client-side proof bundles compatible with ProofSpec.
+      </p>
+    </section>
+
+    <section class="card" id="v02">
+      <h2>2. What’s new in v0.2</h2>
+      <ul>
+        <li><strong>Stateless API</strong> — timestamp responses are not stored server-side; you keep the proof.</li>
+        <li><strong>.tproof.json bundles</strong> — self-describing proof bundles containing hash, algorithm, timestamp, signatures, and metadata.</li>
+        <li><strong>Dual signatures (HMAC-SHA256 + Ed25519)</strong> — cryptographic integrity with public verification keys exposed via JWKS.</li>
+        <li><strong>Offline verification</strong> — verify bundles entirely offline using the SDK/CLI or your own verifier.</li>
+        <li><strong>Structured metadata</strong> — normalized <code>meta.type</code>, <code>meta.domain</code>, and <code>meta.purpose</code> fields to support AI Act / Data Act style audits.</li>
+      </ul>
+      <p class="muted">
+        v0.2 does not break v0.1: existing integrations remain valid, while new ones can progressively move to signed
+        bundles and offline verification.
       </p>
     </section>
 
     <section class="card" id="base-url">
-      <h2>2. Base URLs</h2>
+      <h2>3. Base URLs</h2>
       <div class="table-wrap" role="region" aria-label="Base URLs">
         <table>
           <thead>
@@ -506,7 +524,7 @@ upgrade-insecure-requests">
     </section>
 
     <section class="card" id="auth">
-      <h2>3. Auth</h2>
+      <h2>4. Auth</h2>
       <p>HTTP bearer token. Omit for public <code>GET /api/verify</code> in v0.1.</p>
 <pre><code>Authorization: Bearer &lt;API_TOKEN&gt;</code></pre>
       <p class="muted">
@@ -515,7 +533,7 @@ upgrade-insecure-requests">
     </section>
 
     <section class="card" id="timestamp">
-      <h2>4. POST /api/timestamp</h2>
+      <h2>5. POST /api/timestamp</h2>
       <p>Create a timestamped proof for a SHA-256 hash (v0.1 semantics).</p>
 <pre><code>POST /api/timestamp
 Content-Type: application/json
@@ -565,12 +583,12 @@ const proof=await fetch(`${API}/timestamp`,{
 
       <p class="muted">
         In v0.2, <code>POST /api/timestamp</code> returns a structured timestamp object (hash, issuedAt, issuer, nonce, proof)
-        but never stores it server-side. See “Models &amp; bundles” below for the v0.2 response and bundle shape.
+        but never stores it server-side. Clients are expected to embed it into a local bundle and verify offline.
       </p>
     </section>
 
     <section class="card" id="verify">
-      <h2>5. GET/POST /api/verify</h2>
+      <h2>6. GET/POST /api/verify</h2>
       <p>Check an existing proof by hash (v0.1 online verification).</p>
 <pre><code>GET /api/verify?hash=&lt;SHA256_HEX&gt;</code></pre>
 <pre><code># cURL (v0.1)
@@ -586,8 +604,8 @@ const data=await res.json();</code></pre>
     </section>
 
     <section class="card" id="models">
-      <h2>6. Models &amp; bundles</h2>
-      <h3>6.1 v0.1 timestamp &amp; verify models</h3>
+      <h2>7. Models &amp; bundles</h2>
+      <h3>7.1 v0.1 timestamp &amp; verify models</h3>
 <pre><code>// v0.1 — timestamp response (conceptual)
 {
   "hash": "^[a-f0-9]{64}$",
@@ -608,7 +626,7 @@ const data=await res.json();</code></pre>
         v0.1 uses HMAC-SHA256 over ASCII <code>hash|ts</code>, Base64URL without padding, and stores the event server-side.
       </p>
 
-      <h3>6.2 v0.2 stateless timestamp response</h3>
+      <h3>7.2 v0.2 stateless timestamp response</h3>
 <pre><code>// v0.2 — response from POST /api/timestamp
 {
   "version": "timeproofs-0.2",
@@ -633,7 +651,7 @@ const data=await res.json();</code></pre>
         The server never stores this object. Clients are expected to embed it into a local bundle and verify offline.
       </p>
 
-      <h3>6.3 v0.2 proof bundles (.tproof.json)</h3>
+      <h3>7.3 v0.2 proof bundles (.tproof.json)</h3>
 <pre><code>// v0.2 — bundle structure (.tproof.json, simplified)
 {
   "version": "timeproofs-0.2",
@@ -674,7 +692,7 @@ const data=await res.json();</code></pre>
     </section>
 
     <section class="card" id="errors">
-      <h2>7. Errors</h2>
+      <h2>8. Errors</h2>
       <div class="table-wrap" role="region" aria-label="Error codes">
         <table>
           <thead>
@@ -695,7 +713,7 @@ const data=await res.json();</code></pre>
     </section>
 
     <section class="card" id="sdk">
-      <h2>8. Client helpers &amp; SDK</h2>
+      <h2>9. Client helpers &amp; SDK</h2>
 <pre><code>// File → sha256 (browser)
 async function sha256FileHex(file){
   const buf=await file.arrayBuffer();
@@ -738,7 +756,7 @@ const verifyResult = await client.verifyBundle(bundle, { file: null });
     </section>
 
     <section class="card" id="root-files">
-      <h2>9. Root files &amp; related protocols</h2>
+      <h2>10. Root files &amp; related protocols</h2>
       <p>
         TimeProofs can read and reference a set of independent “root” metadata files exposed by your site or service.
         These files are not owned by TimeProofs; they are standalone protocols that can be used with or without
@@ -767,7 +785,9 @@ const verifyResult = await client.verifyBundle(bundle, { file: null });
         Hash: <code id="page-proof-hash-dup">…</code> ·
         <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener">Verify</a>
       </p>
-      <p class="muted">Loaded from the central release manifest.</p>
+      <p class="muted">
+        Values are loaded from the v0.2 release manifest (<code>/releases/v0.2.json</code>) with v0.1 kept as an archive.
+      </p>
     </section>
   </main>
 
@@ -795,7 +815,7 @@ const verifyResult = await client.verifyBundle(bundle, { file: null });
       <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
       </a>
-      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
+      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
           <path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/>
         </svg>
@@ -890,25 +910,28 @@ const verifyResult = await client.verifyBundle(bundle, { file: null });
 
     (async()=>{
       try{
-        const r=await fetch('/releases/v0.1.json',{cache:'no-store'});
-        if(!r.ok) return;
-        const map=await r.json();
+        const candidates=['/releases/v0.2.json','/releases/v0.1.json'];
+        let map=null;
+        for(const url of candidates){
+          try{
+            const r=await fetch(url,{cache:'no-store'});
+            if(r.ok){
+              map=await r.json();
+              break;
+            }
+          }catch(e){}
+        }
+        if(!map) return;
         const id=document.documentElement.dataset.page || 'docs.html';
         const e=map[id] || map['docs.html'] || map['/'] || map;
 
-        const elH1=document.getElementById('page-proof-hash');
-        const elL1=document.getElementById('page-proof-link');
-        const elR =document.getElementById('page-proof-release');
+        const elR=document.getElementById('page-proof-release');
         const elH2=document.getElementById('page-proof-hash-dup');
         const elL2=document.getElementById('page-proof-link-dup');
 
         if(elR && e.release) elR.textContent=e.release;
-        if(e.hash){
-          elH1 && (elH1.textContent=e.hash);
-          elH2 && (elH2.textContent=e.hash);
-        }
+        if(elH2 && e.hash) elH2.textContent=e.hash;
         const url=e.verify || (e.hash ? ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(e.hash)) : '#');
-        if(elL1 && url) elL1.href=url;
         if(elL2 && url) elL2.href=url;
       }catch{}
     })();
