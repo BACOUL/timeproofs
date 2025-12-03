@@ -71,6 +71,8 @@ upgrade-insecure-requests">
 
   <!-- Analytics -->
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
+  <!-- SDK v0.2 (bundle helper) -->
+  <script defer src="/sdk/timeproofs-v02.js" nonce="TP-2025"></script>
 
   <!-- JSON-LD: Organization -->
   <script type="application/ld+json">
@@ -526,7 +528,7 @@ upgrade-insecure-requests">
         <div class="row" style="margin-top:10px;">
           <div>
             <label for="create-type">Type (optional)</label>
-            <input type="text" id="create-type" placeholder="prompt | gen | file | webhook | other" maxlength="32" autocomplete="off"/>
+            <input type="text" id="create-type" placeholder="event | prompt | file | other" maxlength="32" autocomplete="off"/>
           </div>
           <div>
             <label for="create-meta">Meta (optional JSON)</label>
@@ -630,14 +632,27 @@ POST https://api.timeproofs.io/api/verify
           <div id="panel-bundle" style="display:none;">
             <h3><code>.tproof.json</code> bundle (v0.2)</h3>
 <pre><code>{
-  "version": "v0.2",
-  "hash": "sha256-hex",
-  "algo": "SHA-256",
-  "ts": "2025-11-04T10:22:33.123Z",
-  "sig_hmac": "hex",
-  "sig_ed25519": "base64url-or-hex",
-  "issuer": "timeproofs.io",
-  "meta": { "source": "web:verify" }
+  "version": "timeproofs-0.2",
+  "hash": {
+    "algorithm": "SHA-256",
+    "value": "sha256-hex"
+  },
+  "timestamp": {
+    "issuedAt": "2025-11-04T10:22:33.123Z",
+    "issuer": "https://api.timeproofs.io",
+    "nonce": "tp-..."
+  },
+  "proof": {
+    "algo": "HMAC-SHA256+Ed25519",
+    "hmac": "hex-or-null",
+    "signature": null,
+    "publicKey": null,
+    "keyId": "tp-v0-2-main"
+  },
+  "meta": {
+    "type": "document",
+    "source": "web:verify"
+  }
 }</code></pre>
             <p class="hint">The "Download .tproof.json" button on the left generates this bundle client-side in the v0.2 format.</p>
           </div>
@@ -716,6 +731,11 @@ POST https://api.timeproofs.io/api/verify
     ];
     const MAX_FILE_BYTES = 50 * 1024 * 1024;
     const REQ_TIMEOUT_MS = 15000;
+
+    const hasBundleSDK =
+      typeof TimeProofsV02 !== "undefined" &&
+      TimeProofsV02 &&
+      typeof TimeProofsV02.createBundle === "function";
 
     // Header shade
     const hdr=document.getElementById('hdr');
@@ -930,40 +950,88 @@ POST https://api.timeproofs.io/api/verify
       createStatus.innerHTML=`<span class="pill ok">✅ Proof created</span>`;
     }
 
-    function enableCreateActions(data,req){
+    function buildBundleFromResponse(j, hashHex, type, metaInput){
+      const hashObj =
+        j && j.hash && typeof j.hash === "object" && typeof j.hash.value === "string"
+          ? j.hash
+          : {
+              algorithm: "SHA-256",
+              value: (j && typeof j.hash === "string" ? j.hash : hashHex).toLowerCase()
+            };
+
+      const issuedAt =
+        j && j.timestamp && typeof j.timestamp === "object" && typeof j.timestamp.issuedAt === "string"
+          ? j.timestamp.issuedAt
+          : (j && (j.ts || j.timestamp)) || null;
+
+      const tsObj =
+        j && j.timestamp && typeof j.timestamp === "object"
+          ? { ...j.timestamp, issuedAt }
+          : {
+              issuedAt,
+              issuer: (j && (j.issuer || j.issuerUrl || "https://api.timeproofs.io")),
+            };
+
+      const proofObj =
+        j && j.proof && typeof j.proof === "object"
+          ? j.proof
+          : {
+              algo: (j && (j.algo || "HMAC-SHA256+Ed25519")),
+              hmac: (j && (j.sig_hmac || j.signature || j.sig)) || null,
+              signature: (j && (j.sig_ed25519 || j.sig2)) || null,
+              publicKey: (j && j.publicKey) || null,
+              keyId: (j && (j.keyId || j.kid || "tp-v0-2-main"))
+            };
+
+      const metaFromServer = j && j.meta && typeof j.meta === "object" ? j.meta : {};
+      const metaLocal = metaInput && typeof metaInput === "object" ? metaInput : {};
+      const metaMerged = {
+        ...(type ? { type } : {}),
+        ...metaFromServer,
+        ...metaLocal
+      };
+
+      if(hasBundleSDK){
+        return TimeProofsV02.createBundle({
+          hash: hashObj,
+          timestamp: tsObj,
+          proof: proofObj,
+          meta: Object.keys(metaMerged).length ? metaMerged : undefined
+        });
+      }
+
+      const bundle = {
+        version: "timeproofs-0.2",
+        hash: hashObj,
+        timestamp: tsObj,
+        proof: proofObj
+      };
+      if(Object.keys(metaMerged).length){
+        bundle.meta = metaMerged;
+      }
+      return bundle;
+    }
+
+    function enableCreateActions(bundle, hashHex, req){
       createActions.style.display="flex";
       copyCreateCurl.onclick=()=>{
         const body=JSON.stringify(req).replace(/'/g,"'\\''");
         copyToClipboard(`curl -sS -X POST 'https://api.timeproofs.io/api/timestamp' -H 'Content-Type: application/json' -d '${body}'`);
       };
       downloadBundle.onclick=()=>{
-        if(!lastCreated) return;
-        const bundle={
-          version:"v0.2",
-          hash:lastCreated.hash,
-          algo:"SHA-256",
-          ts:lastCreated.timestamp,
-          sig_hmac:lastCreated.sig_hmac || "",
-          sig_ed25519:lastCreated.sig_ed25519 || "",
-          issuer:"timeproofs.io",
-          meta:lastCreated.meta || {}
-        };
+        if(!bundle) return;
         const blob=new Blob([JSON.stringify(bundle,null,2)],{type:"application/json"});
         const a=document.createElement("a");
         a.href=URL.createObjectURL(blob);
-        a.download=(lastCreated.hash||"proof")+".tproof.json";
+        a.download=`${hashHex || "proof"}.tproof.json`;
         document.body.appendChild(a); a.click(); document.body.removeChild(a);
       };
-      const vurl=data?.verify_url || (data?.hash ? `/verify.html?hash=${encodeURIComponent(data.hash)}` : "");
-      if(vurl){
-        shareVerifyLink.style.display="inline-block";
-        shareVerifyLink.href=vurl;
-      }else{
-        shareVerifyLink.style.display="none";
-      }
+      const vurl=`/verify.html?hash=${encodeURIComponent(hashHex)}`;
+      shareVerifyLink.style.display="inline-block";
+      shareVerifyLink.href=vurl;
       openVerifyHere.onclick=()=>{
-        if(!lastCreated?.hash) return;
-        document.getElementById("verify-hash").value=lastCreated.hash;
+        if(!hashHex) return;
+        document.getElementById("verify-hash").value=hashHex;
         document.getElementById("verify-card").scrollIntoView({behavior:"smooth",block:"start"});
         setTimeout(()=>btnVerify.click(),80);
       };
@@ -981,20 +1049,20 @@ POST https://api.timeproofs.io/api/verify
       csLinkWrap.style.display="none";
 
       try{
-        let hash="";
+        let hashHex="";
         if(inputTextBlock.style.display!=="none"){
           const text=textArea.value||"";
           if(!text) fail("Provide text to hash.");
-          hash=await sha256HexFromText(text);
+          hashHex=await sha256HexFromText(text);
         }else if(inputFileBlock.style.display!=="none"){
           const file=fileInput.files?.[0];
           if(!file) fail("Select a file.");
           if(file.size>MAX_FILE_BYTES) fail("File too large (max 50 MB).");
-          hash=await sha256HexFromFile(file);
+          hashHex=await sha256HexFromFile(file);
         }else{
-          hash=(rawHashEl.value||"").trim();
-          if(!/^[a-f0-9]{64}$/i.test(hash)) fail("Invalid SHA-256 hash (64 hex).");
-          hash=hash.toLowerCase();
+          hashHex=(rawHashEl.value||"").trim();
+          if(!/^[a-f0-9]{64}$/i.test(hashHex)) fail("Invalid SHA-256 hash (64 hex).");
+          hashHex=hashHex.toLowerCase();
         }
 
         const type=(document.getElementById("create-type").value||"event").trim();
@@ -1007,36 +1075,33 @@ POST https://api.timeproofs.io/api/verify
           try{ meta=JSON.parse(rawMeta); }catch{ fail("Meta must be valid JSON."); }
         }
 
-        const req={hash,type,meta};
+        const req={hash:hashHex,type,meta};
         const r=await fetchAPI("/timestamp",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(req)});
         const j=await r.json().catch(()=> ({}));
         if(!r.ok || j.error) fail(j.error || `Failed (${r.status})`);
 
-        const normalized={
-          ok:j.ok===true || j.valid===true,
-          hash:j.hash || hash,
-          timestamp:j.timestamp || j.ts || null,
-          sig_hmac:j.sig_hmac || j.signature || j.sig || "",
-          sig_ed25519:j.sig_ed25519 || j.sig2 || "",
-          verify_url:j.verify_url || (hash ? `/verify.html?hash=${encodeURIComponent(hash)}` : undefined),
-          type:j.type || type,
-          meta:j.meta || meta
-        };
+        const bundle = buildBundleFromResponse(j, hashHex, type, meta);
+        const tsIso =
+          bundle.timestamp && typeof bundle.timestamp.issuedAt === "string"
+            ? bundle.timestamp.issuedAt
+            : null;
+        const proof = bundle.proof || {};
+        const sigShort = proof.hmac || proof.signature || "";
 
         showCreateOk();
         csStatus.textContent="Created";
-        csHash.textContent=short(normalized.hash);
-        csSign.textContent=short(normalized.sig_hmac || normalized.sig_ed25519 || "");
-        if(normalized.timestamp){
+        csHash.textContent=short(hashHex);
+        csSign.textContent=short(sigShort || "");
+        if(tsIso){
           csTSWrap.style.display="flex";
-          csTS.textContent=fmtLocal(normalized.timestamp);
+          csTS.textContent=fmtLocal(tsIso);
         }
         csLinkWrap.style.display="flex";
         createSummary.style.display="grid";
 
-        outCreate.textContent=JSON.stringify(normalized,null,2);
-        lastCreated=normalized;
-        enableCreateActions(normalized,req);
+        outCreate.textContent=JSON.stringify(bundle,null,2);
+        lastCreated={ hash:hashHex, bundle, timestamp:tsIso, proof };
+        enableCreateActions(bundle, hashHex, req);
       }catch(e){
         showCreateError(String(e.message||e));
       }finally{
@@ -1072,22 +1137,52 @@ POST https://api.timeproofs.io/api/verify
       outVerify.textContent="{}";
 
       try{
-        const hash=(document.getElementById("verify-hash").value||"").trim().toLowerCase();
-        if(!/^[a-f0-9]{64}$/i.test(hash)) fail("64-hex SHA-256 hash required.");
+        const inputHash=(document.getElementById("verify-hash").value||"").trim().toLowerCase();
+        if(!/^[a-f0-9]{64}$/i.test(inputHash)) fail("64-hex SHA-256 hash required.");
 
-        let r=await fetchAPI(`/verify?hash=${encodeURIComponent(hash)}`);
+        let r=await fetchAPI(`/verify?hash=${encodeURIComponent(inputHash)}`);
         let j=await r.json().catch(()=> ({}));
 
-        const decisive=resp => resp.ok===true || resp.valid===true || resp.found===true || !!(resp.timestamp||resp.ts||resp.signature||resp.sig||resp.sig_hmac||resp.sig_ed25519);
+        const decisive=resp =>
+          resp.ok===true ||
+          resp.valid===true ||
+          resp.found===true ||
+          !!(resp.timestamp||resp.ts||resp.signature||resp.sig||resp.sig_hmac||resp.sig_ed25519 || (resp.proof && (resp.proof.hmac || resp.proof.signature)));
+
         if(!decisive(j)){
           try{
-            r=await fetchAPI(`/verify`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({hash})});
+            r=await fetchAPI(`/verify`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({hash:inputHash})});
             j=await r.json().catch(()=> ({}));
           }catch(_e){}
         }
 
         const okFlag=j.ok===true || j.valid===true;
-        const found=j.found===true || okFlag || !!(j.timestamp||j.ts||j.signature||j.sig||j.sig_hmac||j.sig_ed25519);
+
+        let hashHex=inputHash;
+        if(j.hash){
+          if(typeof j.hash==="string") hashHex=j.hash;
+          else if(typeof j.hash==="object" && typeof j.hash.value==="string") hashHex=j.hash.value;
+        }
+
+        let tsIso=null;
+        if(j.timestamp && typeof j.timestamp==="object" && typeof j.timestamp.issuedAt==="string"){
+          tsIso=j.timestamp.issuedAt;
+        }else if(typeof j.ts==="string"){
+          tsIso=j.ts;
+        }else if(typeof j.timestamp==="string"){
+          tsIso=j.timestamp;
+        }
+
+        let sigHmac=null, sigEd=null;
+        if(j.proof && typeof j.proof==="object"){
+          sigHmac=j.proof.hmac || null;
+          sigEd=j.proof.signature || null;
+        }else{
+          sigHmac=j.sig_hmac || j.signature || j.sig || null;
+          sigEd=j.sig_ed25519 || j.sig2 || null;
+        }
+
+        const found=j.found===true || okFlag || !!(tsIso || sigHmac || sigEd);
 
         if(okFlag && found){
           verifyStatus.innerHTML=`<span class="pill ok">✅ Valid</span>`;
@@ -1097,31 +1192,21 @@ POST https://api.timeproofs.io/api/verify
           verifyStatus.innerHTML=`<span class="pill bad">❌ Invalid</span>`;
         }
 
-        const normalized={
-          ok:!!okFlag, found:!!found,
-          hash:j.hash || hash,
-          timestamp:j.timestamp || j.ts || null,
-          sig_hmac:j.sig_hmac || j.signature || j.sig || null,
-          sig_ed25519:j.sig_ed25519 || j.sig2 || null,
-          type:j.type || null,
-          meta:j.meta || null
-        };
-
         vsStatus.textContent=okFlag && found ? "Valid" : (found ? "Found" : "Invalid");
-        vsHash.textContent=short(normalized.hash);
-        vsSign.textContent=short(normalized.sig_hmac || normalized.sig_ed25519 || "");
-        if(normalized.timestamp){
+        vsHash.textContent=short(hashHex);
+        vsSign.textContent=short(sigHmac || sigEd || "");
+        if(tsIso){
           vsTSWrap.style.display="flex";
-          vsTS.textContent=fmtLocal(normalized.timestamp);
+          vsTS.textContent=fmtLocal(tsIso);
         }
         verifySummary.style.display="grid";
 
-        outVerify.textContent=JSON.stringify(normalized,null,2);
+        outVerify.textContent=JSON.stringify(j,null,2);
 
         verifyActions.style.display="flex";
-        copyVerifyCurl.onclick=()=>copyToClipboard(`curl -sS 'https://api.timeproofs.io/api/verify?hash=${encodeURIComponent(hash)}'`);
+        copyVerifyCurl.onclick=()=>copyToClipboard(`curl -sS 'https://api.timeproofs.io/api/verify?hash=${encodeURIComponent(hashHex)}'`);
         shareVerifyLink2.onclick=()=>{
-          const url=`${location.origin}/verify.html?hash=${encodeURIComponent(hash)}`;
+          const url=`${location.origin}/verify.html?hash=${encodeURIComponent(hashHex)}`;
           copyToClipboard(url);
           alert("Link copied:\n"+url);
         };
@@ -1158,18 +1243,35 @@ POST https://api.timeproofs.io/api/verify
         // Affichage immédiat du bundle (inspection offline)
         outVerify.textContent=JSON.stringify(b,null,2);
 
-        const rawHash = typeof b.hash==="string" ? b.hash : "";
-        if(!/^[a-f0-9]{64}$/i.test(rawHash)){ alert("Bundle without a valid SHA-256 hash."); return; }
-        const h=rawHash.toLowerCase();
-        document.getElementById("verify-hash").value=h;
+        let h="";
+        if(b.hash){
+          if(typeof b.hash==="string") h=b.hash;
+          else if(typeof b.hash==="object" && typeof b.hash.value==="string") h=b.hash.value;
+        }
+        if(!/^[a-f0-9]{64}$/i.test(h)){ alert("Bundle without a valid SHA-256 hash."); return; }
+        const hashHex=h.toLowerCase();
+        document.getElementById("verify-hash").value=hashHex;
 
-        const sigBundle = b.sig_hmac || b.signature || b.sig || "";
+        let sigBundle="";
+        if(b.proof && typeof b.proof==="object"){
+          sigBundle=b.proof.hmac || b.proof.signature || "";
+        }else{
+          sigBundle=b.sig_hmac || b.signature || b.sig || "";
+        }
+
         vsStatus.textContent="Bundle loaded (not yet checked)";
-        vsHash.textContent=short(h);
+        vsHash.textContent=short(hashHex);
         vsSign.textContent=short(sigBundle);
-        if(b.ts || b.timestamp){
+
+        let tsIso=null;
+        if(b.timestamp && typeof b.timestamp==="object" && typeof b.timestamp.issuedAt==="string"){
+          tsIso=b.timestamp.issuedAt;
+        }else if(b.ts){
+          tsIso=b.ts;
+        }
+        if(tsIso){
           vsTSWrap.style.display="flex";
-          vsTS.textContent=fmtLocal(b.ts || b.timestamp);
+          vsTS.textContent=fmtLocal(tsIso);
         }
         verifySummary.style.display="grid";
 
@@ -1242,7 +1344,7 @@ POST https://api.timeproofs.io/api/verify
       });
     })();
 
-    // Release manifest
+    // Release manifest (v0.1 encore utilisé pour cette page)
     (async()=>{
       try{
         const r=await fetch('/releases/v0.1.json',{cache:'no-store'});
@@ -1270,4 +1372,4 @@ POST https://api.timeproofs.io/api/verify
   })();
   </script>
 </body>
-  </html>
+</html>
