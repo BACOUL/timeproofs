@@ -446,6 +446,19 @@ upgrade-insecure-requests">
       color:var(--accent);
       text-decoration:underline;
     }
+
+    /* Spécifique verify : éviter débordement des hashes de preview */
+    html[data-page="verify.html"] #hash-preview-text,
+    html[data-page="verify.html"] #hash-preview-file,
+    html[data-page="verify.html"] #hash-preview-raw{
+      word-break:break-all;
+      overflow-wrap:anywhere;
+    }
+
+    /* Spécifique verify : sommaire / mini-tabs bien en blanc */
+    html[data-page="verify.html"] .mini-tabs button{
+      color:#f8fafc;
+    }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
@@ -774,6 +787,9 @@ POST https://api.timeproofs.io/api/verify
           if(!isNaN(d.getTime())) issuedAtMs = d.getTime();
         }
         if(typeof t.issuer === "string") issuer = t.issuer;
+      }else if(typeof r.ts === "number"){
+        const d = new Date(r.ts);
+        if(!isNaN(d.getTime())) issuedAtMs = d.getTime();
       }else if(typeof r.ts === "string" || typeof r.timestamp === "string"){
         const iso = r.ts || r.timestamp;
         const d = new Date(iso);
@@ -1218,6 +1234,10 @@ POST https://api.timeproofs.io/api/verify
         let tsIso=null;
         if(j.timestamp && typeof j.timestamp==="object"){
           tsIso = getTimestampIso(j.timestamp);
+        }else if(typeof j.ts==="number" || typeof j.timestamp==="number"){
+          const n = typeof j.ts==="number" ? j.ts : j.timestamp;
+          const d = new Date(n);
+          if(!isNaN(d.getTime())) tsIso = d.toISOString();
         }else if(typeof j.ts==="string" || typeof j.timestamp==="string"){
           const isoCandidate = j.ts || j.timestamp;
           const d = new Date(isoCandidate);
@@ -1317,7 +1337,10 @@ POST https://api.timeproofs.io/api/verify
         let tsIso=null;
         if(b.timestamp && typeof b.timestamp==="object"){
           tsIso = getTimestampIso(b.timestamp);
-        }else if(b.ts){
+        }else if(typeof b.ts==="number"){
+          const d=new Date(b.ts);
+          if(!isNaN(d.getTime())) tsIso=d.toISOString();
+        }else if(typeof b.ts==="string"){
           const d=new Date(b.ts);
           if(!isNaN(d.getTime())) tsIso=d.toISOString();
         }
