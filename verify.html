@@ -1383,14 +1383,14 @@ POST https://api.timeproofs.io/api/verify
       });
     })();
 
-    // Auto aria-current
-    (function(){
-      const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
-      document.querySelectorAll('header nav a, footer .links a').forEach(a=>{
-        const path=new URL(a.getAttribute('href'), location.origin).pathname;
-        if(path===here) a.setAttribute('aria-current','page');
-      });
-    })();
+    // Auto aria-current (ne pas marquer le bouton .nav-cta)
+(function(){
+  const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
+  document.querySelectorAll('header nav a:not(.nav-cta), footer .links a').forEach(a=>{
+    const path=new URL(a.getAttribute('href'), location.origin).pathname;
+    if(path===here) a.setAttribute('aria-current','page');
+  });
+})();
 
     // Release manifest v0.2
     (async()=>{
