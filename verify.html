@@ -91,7 +91,7 @@ upgrade-insecure-requests">
     ],
     "sameAs":[
       "https://x.com/timeproofs",
-      "https://github.com/BACOUL/timeproofs/tree/timeproofs",
+      "https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2",
       "https://www.linkedin.com/company/timeproofs",
       "https://youtube.com/@timeproofs",
       "https://timeproofs.io/rss.xml"
@@ -504,6 +504,10 @@ upgrade-insecure-requests">
       </div>
     </section>
 
+    <p class="hint" style="max-width:720px; margin:16px auto 0; text-align:center;">
+      Step 1: create a proof on the left. Step 2: verify it on the right and copy the cURL commands to integrate.
+    </p>
+
     <!-- TOOL AREA -->
     <section class="cards-grid" aria-label="Create and verify tool">
       <!-- CREATE -->
@@ -545,13 +549,15 @@ upgrade-insecure-requests">
         <div class="row" style="margin-top:10px;">
           <div>
             <label for="create-type">Type (optional)</label>
-            <input type="text" id="create-type" placeholder="event | prompt | file | other" maxlength="32" autocomplete="off"/>
+            <input type="text" id="create-type" placeholder="document | ai-output | dataset | log" maxlength="32" autocomplete="off"/>
           </div>
           <div>
             <label for="create-meta">Meta (optional JSON)</label>
-            <input type="text" id="create-meta" placeholder='{"model":"gpt-4o","mime":"text/plain"}' maxlength="1024" autocomplete="off" spellcheck="false"/>
+            <input type="text" id="create-meta" placeholder='{"model":"gpt-4.1","mime":"text/plain"}' maxlength="1024" autocomplete="off" spellcheck="false"/>
           </div>
         </div>
+
+        <p class="hint">You can leave these fields empty if you just want a quick proof.</p>
 
         <button class="primary-btn" id="btn-create" type="button">Create proof now</button>
 
@@ -568,7 +574,7 @@ upgrade-insecure-requests">
         </div>
 
         <div style="position:relative; margin-top:10px;">
-          <pre id="create-output" aria-live="polite">{}</pre>
+          <pre id="create-output" aria-live="polite" data-has-external-copy="true">{}</pre>
           <button type="button" class="copy-btn" data-target="create-output">Copy JSON</button>
         </div>
 
@@ -604,7 +610,7 @@ upgrade-insecure-requests">
         </div>
 
         <div style="position:relative; margin-top:10px;">
-          <pre id="verify-output" aria-live="polite">{}</pre>
+          <pre id="verify-output" aria-live="polite" data-has-external-copy="true">{}</pre>
           <button type="button" class="copy-btn" data-target="verify-output">Copy JSON</button>
         </div>
 
@@ -726,7 +732,7 @@ POST https://api.timeproofs.io/api/verify
       <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
       </a>
-      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
+      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
       </a>
       <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn">
@@ -1171,6 +1177,7 @@ POST https://api.timeproofs.io/api/verify
         showCreateOk();
         csStatus.textContent="Created";
         csHash.textContent=short(hashHex);
+        csHash.title=hashHex;
         csSign.textContent=short(sigShort || "");
 
         if(proofIssuedIso){
@@ -1243,6 +1250,7 @@ POST https://api.timeproofs.io/api/verify
           verifyStatus.innerHTML=`<span class="pill bad">❌ Not found</span>`;
           vsStatus.textContent="Not found";
           vsHash.textContent=short(inputHash);
+          vsHash.title=inputHash;
           vsSign.textContent="—";
           vsTSCheckWrap.style.display="flex";
           vsTSCheck.textContent=fmtLocal(nowIso());
@@ -1304,6 +1312,7 @@ POST https://api.timeproofs.io/api/verify
         verifyStatus.innerHTML=pill;
         vsStatus.textContent=uiLabel;
         vsHash.textContent=short(hashHex);
+        vsHash.title=hashHex;
         vsSign.textContent=short(sigHmac || sigEd || "");
 
         if(tsIso){
@@ -1376,6 +1385,7 @@ POST https://api.timeproofs.io/api/verify
 
         vsStatus.textContent="Bundle loaded (not yet checked)";
         vsHash.textContent=short(hashHex);
+        vsHash.title=hashHex;
         vsSign.textContent=short(sigBundle);
 
         let tsIso=null;
@@ -1429,9 +1439,10 @@ POST https://api.timeproofs.io/api/verify
     tabs.faq.onclick=()=>showMini("faq");
     showMini("url");
 
-    // Copy buttons sur tous les <pre> (sauf ceux qui ont déjà un .copy-btn)
+    // Copy buttons sur tous les <pre> (sauf ceux qui ont déjà un .copy-btn ou JSON principal)
     (function installCopyButtons(){
       document.querySelectorAll('pre').forEach((pre)=>{
+        if (pre.dataset.hasExternalCopy === "true") return;
         if(pre.querySelector('.copy-btn')) return;
         const btn=document.createElement('button');
         btn.type='button';
@@ -1494,4 +1505,4 @@ POST https://api.timeproofs.io/api/verify
   })();
   </script>
 </body>
-</html>
+  </html>
