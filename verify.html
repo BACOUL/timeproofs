@@ -128,7 +128,7 @@ upgrade-insecure-requests">
       "url":"https://timeproofs.io/"
     },
     "datePublished":"2025-10-22",
-    "dateModified":"2025-12-03",
+    "dateModified":"2025-12-04",
     "description":"Create or verify cryptographic proofs of existence. Local hashing, signed timestamp, downloadable .tproof.json bundles, and offline inspection."
   }
   </script>
@@ -352,7 +352,7 @@ upgrade-insecure-requests">
       font-size:.9rem;
     }
     .summary .item{ display:flex; gap:8px; align-items:center }
-    .summary .k{ min-width:110px; color:#9fb3c9 }
+    .summary .k{ min-width:150px; color:#9fb3c9 }
     .summary code{ font-size:.9rem }
 
     pre,code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
@@ -560,9 +560,10 @@ upgrade-insecure-requests">
         <!-- Résumé humain v0.2 -->
         <div class="summary" id="create-summary" aria-live="polite" aria-atomic="true">
           <div class="item"><span class="k">Status</span><span id="create-s-status">—</span></div>
-          <div class="item"><span class="k">Hash</span><code id="create-s-hash">—</code></div>
+          <div class="item"><span class="k">Hash (data fingerprint)</span><code id="create-s-hash">—</code></div>
           <div class="item"><span class="k">Signature</span><code id="create-s-sign">—</code></div>
-          <div class="item" id="create-s-ts-wrap" style="display:none;"><span class="k">Timestamp (local time)</span><span id="create-s-ts">—</span></div>
+          <div class="item" id="create-s-ts-proof-wrap" style="display:none;"><span class="k">Proof issued (server)</span><span id="create-s-ts-proof">—</span></div>
+          <div class="item" id="create-s-ts-check-wrap" style="display:none;"><span class="k">Checked now (local time)</span><span id="create-s-ts-check">—</span></div>
           <div class="item" id="create-s-link-wrap" style="display:none;"><span class="k">Verify here</span><button type="button" id="open-verify-here" class="hero-btn" style="padding:4px 10px; background:#050816; color:#f8fafc;">Open in Verify tab</button></div>
         </div>
 
@@ -596,9 +597,10 @@ upgrade-insecure-requests">
         <!-- Résumé humain v0.2 (verify) -->
         <div class="summary" id="verify-summary" aria-live="polite" aria-atomic="true">
           <div class="item"><span class="k">Status</span><span id="verify-s-status">—</span></div>
-          <div class="item"><span class="k">Hash</span><code id="verify-s-hash">—</code></div>
+          <div class="item"><span class="k">Hash (data fingerprint)</span><code id="verify-s-hash">—</code></div>
           <div class="item"><span class="k">Signature</span><code id="verify-s-sign">—</code></div>
-          <div class="item" id="verify-s-ts-wrap" style="display:none;"><span class="k">Timestamp (local time)</span><span id="verify-s-ts">—</span></div>
+          <div class="item" id="verify-s-ts-proof-wrap" style="display:none;"><span class="k">Proof issued (server)</span><span id="verify-s-ts-proof">—</span></div>
+          <div class="item" id="verify-s-ts-check-wrap" style="display:none;"><span class="k">Checked now (local time)</span><span id="verify-s-ts-check">—</span></div>
         </div>
 
         <div style="position:relative; margin-top:10px;">
@@ -820,6 +822,27 @@ POST https://api.timeproofs.io/api/verify
       return proof.hmac || proof.signature || proof.sig || "";
     }
 
+    // format date locale (utilisé pour "Proof issued" et "Checked now")
+    function fmtLocal(iso){
+      try{
+        if(!iso) return "—";
+        return new Intl.DateTimeFormat("en-GB",{
+          year:"numeric",
+          month:"2-digit",
+          day:"2-digit",
+          hour:"2-digit",
+          minute:"2-digit",
+          second:"2-digit"
+        }).format(new Date(iso));
+      }catch{
+        return iso || "—";
+      }
+    }
+
+    function nowIso(){
+      return new Date().toISOString();
+    }
+
     // Header shade
     const hdr=document.getElementById('hdr');
     function onScroll(){
@@ -906,21 +929,6 @@ POST https://api.timeproofs.io/api/verify
     function short(s,n=16){
       if(!s || typeof s!=="string") return "—";
       return s.length<=n ? s : s.slice(0,8)+"…"+s.slice(-8);
-    }
-    function fmtLocal(iso){
-      try{
-        if(!iso) return "—";
-        return new Intl.DateTimeFormat("en-GB",{
-          year:"numeric",
-          month:"2-digit",
-          day:"2-digit",
-          hour:"2-digit",
-          minute:"2-digit",
-          second:"2-digit"
-        }).format(new Date(iso));
-      }catch{
-        return iso || "—";
-      }
     }
     function fail(msg){ throw new Error(msg); }
 
@@ -1019,8 +1027,10 @@ POST https://api.timeproofs.io/api/verify
     const csStatus=document.getElementById("create-s-status");
     const csHash=document.getElementById("create-s-hash");
     const csSign=document.getElementById("create-s-sign");
-    const csTSWrap=document.getElementById("create-s-ts-wrap");
-    const csTS=document.getElementById("create-s-ts");
+    const csTSProofWrap=document.getElementById("create-s-ts-proof-wrap");
+    const csTSProof=document.getElementById("create-s-ts-proof");
+    const csTSCheckWrap=document.getElementById("create-s-ts-check-wrap");
+    const csTSCheck=document.getElementById("create-s-ts-check");
     const csLinkWrap=document.getElementById("create-s-link-wrap");
     const outCreate=document.getElementById("create-output");
     const createActions=document.getElementById("create-actions");
@@ -1028,8 +1038,6 @@ POST https://api.timeproofs.io/api/verify
     const downloadBundle=document.getElementById("download-bundle");
     const shareVerifyLink=document.getElementById("share-verify-link");
     const openVerifyHere=document.getElementById("open-verify-here");
-
-    let lastCreated=null;
 
     function showCreateError(msg){
       createStatus.innerHTML=`<span class="pill bad">❌ ${msg}</span>`;
@@ -1120,8 +1128,8 @@ POST https://api.timeproofs.io/api/verify
       createSummary.style.display="none";
       createActions.style.display="none";
       outCreate.textContent="{}";
-      lastCreated=null;
-      csTSWrap.style.display="none";
+      csTSProofWrap.style.display="none";
+      csTSCheckWrap.style.display="none";
       csLinkWrap.style.display="none";
 
       try{
@@ -1157,22 +1165,27 @@ POST https://api.timeproofs.io/api/verify
         if(!r.ok || j.error) fail(j.error || `Failed (${r.status})`);
 
         const bundle = buildBundleFromResponse(j, hashHex, type, meta);
-        const tsIso = getTimestampIso(bundle.timestamp);
+        const proofIssuedIso = getTimestampIso(bundle.timestamp);
         const sigShort = getSignatureLikeFromProof(bundle.proof);
 
         showCreateOk();
         csStatus.textContent="Created";
         csHash.textContent=short(hashHex);
         csSign.textContent=short(sigShort || "");
-        if(tsIso){
-          csTSWrap.style.display="flex";
-          csTS.textContent=fmtLocal(tsIso);
+
+        if(proofIssuedIso){
+          csTSProofWrap.style.display="flex";
+          csTSProof.textContent=fmtLocal(proofIssuedIso);
         }
+
+        // Toujours rafraîchi à chaque clic (corrige la sensation de date bloquée)
+        csTSCheckWrap.style.display="flex";
+        csTSCheck.textContent=fmtLocal(nowIso());
+
         csLinkWrap.style.display="flex";
         createSummary.style.display="grid";
 
         outCreate.textContent=JSON.stringify(bundle,null,2);
-        lastCreated={ hash:hashHex, bundle, timestamp:tsIso, proof:bundle.proof };
         enableCreateActions(bundle, hashHex, req);
       }catch(e){
         showCreateError(String(e.message||e));
@@ -1181,15 +1194,17 @@ POST https://api.timeproofs.io/api/verify
       }
     };
 
-    // VERIFY (version simplifiée et plus robuste)
+    // VERIFY
     const btnVerify=document.getElementById("btn-verify");
     const verifyStatus=document.getElementById("verify-status");
     const verifySummary=document.getElementById("verify-summary");
     const vsStatus=document.getElementById("verify-s-status");
     const vsHash=document.getElementById("verify-s-hash");
     const vsSign=document.getElementById("verify-s-sign");
-    const vsTSWrap=document.getElementById("verify-s-ts-wrap");
-    const vsTS=document.getElementById("verify-s-ts");
+    const vsTSProofWrap=document.getElementById("verify-s-ts-proof-wrap");
+    const vsTSProof=document.getElementById("verify-s-ts-proof");
+    const vsTSCheckWrap=document.getElementById("verify-s-ts-check-wrap");
+    const vsTSCheck=document.getElementById("verify-s-ts-check");
     const outVerify=document.getElementById("verify-output");
     const verifyActions=document.getElementById("verify-actions");
     const copyVerifyCurl=document.getElementById("copy-verify-curl");
@@ -1204,7 +1219,8 @@ POST https://api.timeproofs.io/api/verify
       btnVerify.disabled=true;
       verifyStatus.textContent="";
       verifySummary.style.display="none";
-      vsTSWrap.style.display="none";
+      vsTSProofWrap.style.display="none";
+      vsTSCheckWrap.style.display="none";
       verifyActions.style.display="none";
       outVerify.textContent="{}";
 
@@ -1228,6 +1244,8 @@ POST https://api.timeproofs.io/api/verify
           vsStatus.textContent="Not found";
           vsHash.textContent=short(inputHash);
           vsSign.textContent="—";
+          vsTSCheckWrap.style.display="flex";
+          vsTSCheck.textContent=fmtLocal(nowIso());
           verifySummary.style.display="grid";
           outVerify.textContent=JSON.stringify(j,null,2);
           btnVerify.disabled=false;
@@ -1238,7 +1256,7 @@ POST https://api.timeproofs.io/api/verify
         const httpOk = r.ok;
 
         // 4) Indices explicites du serveur
-        const serverSaysValid   = j.valid === true || j.ok === true;
+        const serverSaysValid   = j.valid === true || j.ok === true || j.state === "valid";
         const serverSaysInvalid = j.valid === false || j.ok === false || j.state === "invalid";
 
         // 5) Récup hash / timestamp / signatures (tolérant)
@@ -1289,9 +1307,13 @@ POST https://api.timeproofs.io/api/verify
         vsSign.textContent=short(sigHmac || sigEd || "");
 
         if(tsIso){
-          vsTSWrap.style.display="flex";
-          vsTS.textContent=fmtLocal(tsIso);
+          vsTSProofWrap.style.display="flex";
+          vsTSProof.textContent=fmtLocal(tsIso);
         }
+
+        // Toujours mis à jour à chaque vérification (évite l'impression de date figée)
+        vsTSCheckWrap.style.display="flex";
+        vsTSCheck.textContent=fmtLocal(nowIso());
 
         verifySummary.style.display="grid";
         outVerify.textContent=JSON.stringify(j,null,2);
@@ -1367,9 +1389,12 @@ POST https://api.timeproofs.io/api/verify
           if(!isNaN(d.getTime())) tsIso=d.toISOString();
         }
         if(tsIso){
-          vsTSWrap.style.display="flex";
-          vsTS.textContent=fmtLocal(tsIso);
+          vsTSProofWrap.style.display="flex";
+          vsTSProof.textContent=fmtLocal(tsIso);
         }
+        vsTSCheckWrap.style.display="flex";
+        vsTSCheck.textContent=fmtLocal(nowIso());
+
         verifySummary.style.display="grid";
 
         document.getElementById("verify-card").scrollIntoView({behavior:"smooth",block:"start"});
