@@ -1275,25 +1275,22 @@ POST https://api.timeproofs.io/api/verify
         }
 
         let tsIso=null;
-        if(j.timestamp && typeof j.timestamp==="object"){
+        // Priorité au champ timestamp_iso (v0.1/v0.2)
+        if(typeof j.timestamp_iso==="string"){
+          const d = new Date(j.timestamp_iso);
+          if(!isNaN(d.getTime())) tsIso = d.toISOString();
+        }else if(j.timestamp && typeof j.timestamp==="object"){
           tsIso = getTimestampIso(j.timestamp);
         }else if(typeof j.ts==="number" || typeof j.timestamp==="number"){
-          const n = typeof j.ts==="number" ? j.ts : j.timestamp;
+          let n = typeof j.ts==="number" ? j.ts : j.timestamp;
+          // Si valeur en secondes (comme v0.1), convertir en millisecondes
+          if(n < 1e12) n = n * 1000;
           const d = new Date(n);
           if(!isNaN(d.getTime())) tsIso = d.toISOString();
         }else if(typeof j.ts==="string" || typeof j.timestamp==="string"){
           const isoCandidate = j.ts || j.timestamp;
           const d = new Date(isoCandidate);
           if(!isNaN(d.getTime())) tsIso = d.toISOString();
-        }
-
-        let sigHmac=null, sigEd=null;
-        if(j.proof && typeof j.proof==="object"){
-          sigHmac=j.proof.hmac || null;
-          sigEd=j.proof.signature || null;
-        }else{
-          sigHmac=j.sig_hmac || j.signature || j.sig || null;
-          sigEd=j.sig_ed25519 || j.sig2 || null;
         }
 
         // 6) Décision UI
