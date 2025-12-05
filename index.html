@@ -186,6 +186,9 @@ upgrade-insecure-requests">
     }
     .tp-burger span{ font-size:20px; line-height:1 }
 
+    /* Mobile-only nav CTA */
+    .nav-cta{ display:none; }
+
     @media (min-width:900px){
       .tp-burger{ display:none }
       .tp-nav{ display:flex; align-items:center }
@@ -200,7 +203,16 @@ upgrade-insecure-requests">
       }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
-      .nav-cta{ display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px; background:var(--accent); color:#06202a; font-weight:800 }
+      .nav-cta{
+        display:block;
+        margin-top:6px;
+        padding:12px;
+        text-align:center;
+        border-radius:12px;
+        background:var(--accent);
+        color:#06202a;
+        font-weight:800
+      }
     }
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
@@ -408,6 +420,7 @@ footer .links a[aria-current="page"]{
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
+      <a href="/verify.html">Create/Verify</a>
       <a href="/docs.html">API Docs</a>
       <a href="/regulations.html">Regulations</a>
       <a href="/security.html">Security</a>
@@ -435,10 +448,7 @@ footer .links a[aria-current="page"]{
       </p>
 
       <p class="positioning">
-        One self-describing <code>.tproof.json</code> bundle, signed (HMAC + Ed25519), readable by any ProofSpec-compliant tool — including offline verification.
-      </p>
-      <p class="positioning">
-        TimeProofs is an open, hash-only timestamp API that returns portable <code>.tproof.json</code> proofs you can verify online or offline.
+        One self-describing <code>.tproof.json</code> bundle, signed (HMAC + Ed25519), readable by any ProofSpec-compliant tool — returned by an open, hash-only timestamp API you can verify online or offline, including offline checks.
       </p>
       <p style="margin:6px 0 0; color:#9fb3c9">
         <a href="/regulations.html" style="color:#9beefb">Regulations &amp; Compliance →</a>
@@ -446,6 +456,14 @@ footer .links a[aria-current="page"]{
       <p class="subnote">
         No account · No content stored · Hash locally · Signed timestamp · Public &amp; offline verification · No blockchain
       </p>
+
+      <div class="proof-strip" aria-label="Current site release proof">
+        Release:
+        <span id="page-proof-release">…</span> ·
+        Hash:
+        <code id="page-proof-hash">…</code> ·
+        <a id="page-proof-link" href="#" target="_blank" rel="noopener" title="View verification on API">Verify</a>
+      </div>
 
       <div class="cta-wrap" role="group" aria-label="Primary actions">
         <a class="cta" href="/verify.html" aria-label="Create or verify a proof">Create / Verify a Proof</a>
