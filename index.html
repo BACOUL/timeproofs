@@ -437,6 +437,9 @@ footer .links a[aria-current="page"]{
       <p class="positioning">
         One self-describing <code>.tproof.json</code> bundle, signed (HMAC + Ed25519), readable by any ProofSpec-compliant tool — including offline verification.
       </p>
+      <p class="positioning">
+        TimeProofs is an open, hash-only timestamp API that returns portable <code>.tproof.json</code> proofs you can verify online or offline.
+      </p>
       <p style="margin:6px 0 0; color:#9fb3c9">
         <a href="/regulations.html" style="color:#9beefb">Regulations &amp; Compliance →</a>
       </p>
@@ -528,7 +531,7 @@ footer .links a[aria-current="page"]{
       </p>
     </section>
 
-    <!-- Order: Mission → Built for → How → Protocol vs API → Why → Regulatory → Root Protocols → Verified → Featured → CTA -->
+    <!-- Order: Mission → Built for → AI & Agents → How → Protocol vs API → Why → Regulatory → Root Protocols → Verified → Featured → CTA -->
 
     <section class="section bg-alt reveal" id="built" aria-labelledby="built-title">
       <h2 id="built-title">Mission</h2>
@@ -564,10 +567,46 @@ footer .links a[aria-current="page"]{
       </p>
     </section>
 
+    <!-- NEW: For AI systems & agents -->
+    <section class="section bg-solid reveal" id="ai-agents" aria-labelledby="ai-agents-title">
+      <h2 id="ai-agents-title">For AI systems &amp; autonomous agents</h2>
+      <p style="text-align:center; color:#9fb3c9; max-width:820px; margin:0 auto 12px;">
+        A stable pattern AI agents can follow whenever they generate, transform, or route data.
+      </p>
+      <div class="grid two">
+        <article class="card">
+          <h3>Integration pattern</h3>
+          <p>Use the same 4 steps for prompts, outputs, datasets, and models:</p>
+          <ol style="margin:.25em 0 .4em; padding-left:1.25rem; color:#cbd5f5;">
+            <li>Hash the content locally (file, text, bytes, JSON, model).</li>
+            <li>Call <code>/api/timestamp</code> with the hash.</li>
+            <li>Store the returned <code>.tproof.json</code> bundle next to the artifact.</li>
+            <li>Before reuse, verify the bundle (offline or via the public verify endpoint).</li>
+          </ol>
+          <p style="color:#9fb3c9; font-size:.9rem;">
+            Pattern: <code>hash → timestamp → bundle → verify</code>.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Typical AI use cases</h3>
+          <ul style="margin:.25em 0 .4em; padding-left:1.1rem;">
+            <li>Agent chains that need traceable intermediate steps.</li>
+            <li>Dataset and feature store versioning.</li>
+            <li>Model cards and release notes with attached proofs.</li>
+            <li>Audit logs for high-risk or regulated AI systems.</li>
+          </ul>
+          <p style="color:#9fb3c9; font-size:.9rem;">
+            TimeProofs stays independent: any AI stack or orchestrator can adopt this pattern without changing tools.
+          </p>
+        </article>
+      </div>
+    </section>
+
     <section class="section bg-solid reveal" aria-labelledby="how">
       <h2 id="how">How It Works</h2>
       <p style="text-align:center; color:#9fb3c9; margin:-6px 0 12px">
-        Model v0.2: <strong>Hash locally → Signed .tproof.json bundle → Verify online or offline</strong>
+        Model v0.2: <strong>Hash locally → Signed .tproof.json bundle → Verify online or offline</strong><br/>
+        <span style="font-size:.9rem;">Integration pattern: <code>hash → timestamp → bundle → verify</code></span>
       </p>
       <div class="grid two">
         <article class="card">
