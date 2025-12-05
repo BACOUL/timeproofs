@@ -91,7 +91,7 @@ upgrade-insecure-requests">
     ],
     "sameAs":[
       "https://x.com/timeproofs",
-      "https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2",
+      "https://github.com/BACOUL/timeproofs/tree/timeproofs",
       "https://www.linkedin.com/company/timeproofs",
       "https://youtube.com/@timeproofs",
       "https://timeproofs.io/rss.xml"
@@ -504,10 +504,6 @@ upgrade-insecure-requests">
       </div>
     </section>
 
-    <p class="hint" style="max-width:720px; margin:16px auto 0; text-align:center;">
-      Step 1: create a proof on the left. Step 2: verify it on the right and copy the cURL commands to integrate.
-    </p>
-
     <!-- TOOL AREA -->
     <section class="cards-grid" aria-label="Create and verify tool">
       <!-- CREATE -->
@@ -549,15 +545,13 @@ upgrade-insecure-requests">
         <div class="row" style="margin-top:10px;">
           <div>
             <label for="create-type">Type (optional)</label>
-            <input type="text" id="create-type" placeholder="document | ai-output | dataset | log" maxlength="32" autocomplete="off"/>
+            <input type="text" id="create-type" placeholder="event | prompt | file | other" maxlength="32" autocomplete="off"/>
           </div>
           <div>
             <label for="create-meta">Meta (optional JSON)</label>
-            <input type="text" id="create-meta" placeholder='{"model":"gpt-4.1","mime":"text/plain"}' maxlength="1024" autocomplete="off" spellcheck="false"/>
+            <input type="text" id="create-meta" placeholder='{"model":"gpt-4o","mime":"text/plain"}' maxlength="1024" autocomplete="off" spellcheck="false"/>
           </div>
         </div>
-
-        <p class="hint">You can leave these fields empty if you just want a quick proof.</p>
 
         <button class="primary-btn" id="btn-create" type="button">Create proof now</button>
 
@@ -574,7 +568,7 @@ upgrade-insecure-requests">
         </div>
 
         <div style="position:relative; margin-top:10px;">
-          <pre id="create-output" aria-live="polite" data-has-external-copy="true">{}</pre>
+          <pre id="create-output" aria-live="polite">{}</pre>
           <button type="button" class="copy-btn" data-target="create-output">Copy JSON</button>
         </div>
 
@@ -610,7 +604,7 @@ upgrade-insecure-requests">
         </div>
 
         <div style="position:relative; margin-top:10px;">
-          <pre id="verify-output" aria-live="polite" data-has-external-copy="true">{}</pre>
+          <pre id="verify-output" aria-live="polite">{}</pre>
           <button type="button" class="copy-btn" data-target="verify-output">Copy JSON</button>
         </div>
 
@@ -732,7 +726,7 @@ POST https://api.timeproofs.io/api/verify
       <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
       </a>
-      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
+      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
       </a>
       <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn">
@@ -771,6 +765,7 @@ POST https://api.timeproofs.io/api/verify
       if(typeof hash === "object" && typeof hash.value === "string") return hash.value;
       return "";
     }
+
     function normalizeHash(jHash, hashHex){
       const v = getHashValue(jHash) || (hashHex || "").toLowerCase();
       return {
@@ -778,6 +773,8 @@ POST https://api.timeproofs.io/api/verify
         value: v
       };
     }
+
+    // timestamp normalisation: support seconds or milliseconds, ignore impossible dates
     function normalizeTimestampFromResp(resp){
       const r = resp || {};
       let issuedAtMs = null;
@@ -785,18 +782,24 @@ POST https://api.timeproofs.io/api/verify
 
       if(r.timestamp && typeof r.timestamp === "object"){
         const t = r.timestamp;
-        if(typeof t.issuedAt === "number"){
-          issuedAtMs = t.issuedAt;
-        }else if(typeof t.issuedAt === "string"){
-          const d = new Date(t.issuedAt);
+        let raw = (typeof t.issuedAt !== "undefined" ? t.issuedAt : (typeof t.ts !== "undefined" ? t.ts : null));
+
+        if(typeof raw === "number"){
+          let n = raw;
+          if(n < 1e12) n = n * 1000; // seconds -> ms
+          const d = new Date(n);
           if(!isNaN(d.getTime())) issuedAtMs = d.getTime();
-        }else if(typeof t.iso === "string"){
-          const d = new Date(t.iso);
+        }else if(typeof t.issuedAt === "string" || typeof t.iso === "string"){
+          const iso = t.issuedAt || t.iso;
+          const d = new Date(iso);
           if(!isNaN(d.getTime())) issuedAtMs = d.getTime();
         }
+
         if(typeof t.issuer === "string") issuer = t.issuer;
-      }else if(typeof r.ts === "number"){
-        const d = new Date(r.ts);
+      }else if(typeof r.ts === "number" || typeof r.timestamp === "number"){
+        let n = typeof r.ts === "number" ? r.ts : r.timestamp;
+        if(n < 1e12) n = n * 1000;
+        const d = new Date(n);
         if(!isNaN(d.getTime())) issuedAtMs = d.getTime();
       }else if(typeof r.ts === "string" || typeof r.timestamp === "string"){
         const iso = r.ts || r.timestamp;
@@ -808,21 +811,31 @@ POST https://api.timeproofs.io/api/verify
 
       return { issuedAt: issuedAtMs, issuer };
     }
+
     function getTimestampIso(tsObj){
       if(!tsObj || typeof tsObj !== "object") return null;
+
+      let d = null;
       if(typeof tsObj.issuedAt === "number"){
-        try{ return new Date(tsObj.issuedAt).toISOString(); }catch{ return null; }
+        let n = tsObj.issuedAt;
+        if(n < 1e12) n = n * 1000;
+        d = new Date(n);
+      }else if(typeof tsObj.issuedAt === "string"){
+        d = new Date(tsObj.issuedAt);
+      }else if(typeof tsObj.iso === "string"){
+        d = new Date(tsObj.iso);
       }
-      if(typeof tsObj.issuedAt === "string"){
-        const d = new Date(tsObj.issuedAt);
-        if(!isNaN(d.getTime())) return d.toISOString();
-      }
-      if(typeof tsObj.iso === "string"){
-        const d = new Date(tsObj.iso);
-        if(!isNaN(d.getTime())) return d.toISOString();
-      }
-      return null;
+
+      if(!d || isNaN(d.getTime())) return null;
+
+      const t = d.getTime();
+      const min = new Date("2000-01-01T00:00:00Z").getTime();
+      const max = Date.now() + 365 * 24 * 60 * 60 * 1000; // +1 year
+      if(t < min || t > max) return null;
+
+      return d.toISOString();
     }
+
     function getSignatureLikeFromProof(proof){
       if(!proof || typeof proof !== "object") return "";
       return proof.hmac || proof.signature || proof.sig || "";
@@ -1177,7 +1190,6 @@ POST https://api.timeproofs.io/api/verify
         showCreateOk();
         csStatus.textContent="Created";
         csHash.textContent=short(hashHex);
-        csHash.title=hashHex;
         csSign.textContent=short(sigShort || "");
 
         if(proofIssuedIso){
@@ -1185,7 +1197,7 @@ POST https://api.timeproofs.io/api/verify
           csTSProof.textContent=fmtLocal(proofIssuedIso);
         }
 
-        // Toujours rafraîchi à chaque clic (corrige la sensation de date bloquée)
+        // Toujours rafraîchi à chaque clic
         csTSCheckWrap.style.display="flex";
         csTSCheck.textContent=fmtLocal(nowIso());
 
@@ -1250,7 +1262,6 @@ POST https://api.timeproofs.io/api/verify
           verifyStatus.innerHTML=`<span class="pill bad">❌ Not found</span>`;
           vsStatus.textContent="Not found";
           vsHash.textContent=short(inputHash);
-          vsHash.title=inputHash;
           vsSign.textContent="—";
           vsTSCheckWrap.style.display="flex";
           vsTSCheck.textContent=fmtLocal(nowIso());
@@ -1275,22 +1286,23 @@ POST https://api.timeproofs.io/api/verify
         }
 
         let tsIso=null;
-        // Priorité au champ timestamp_iso (v0.1/v0.2)
-        if(typeof j.timestamp_iso==="string"){
-          const d = new Date(j.timestamp_iso);
-          if(!isNaN(d.getTime())) tsIso = d.toISOString();
-        }else if(j.timestamp && typeof j.timestamp==="object"){
+        if(j.timestamp && typeof j.timestamp==="object"){
           tsIso = getTimestampIso(j.timestamp);
         }else if(typeof j.ts==="number" || typeof j.timestamp==="number"){
-          let n = typeof j.ts==="number" ? j.ts : j.timestamp;
-          // Si valeur en secondes (comme v0.1), convertir en millisecondes
-          if(n < 1e12) n = n * 1000;
-          const d = new Date(n);
-          if(!isNaN(d.getTime())) tsIso = d.toISOString();
+          const n = typeof j.ts==="number" ? j.ts : j.timestamp;
+          tsIso = getTimestampIso({ issuedAt:n });
         }else if(typeof j.ts==="string" || typeof j.timestamp==="string"){
-          const isoCandidate = j.ts || j.timestamp;
-          const d = new Date(isoCandidate);
-          if(!isNaN(d.getTime())) tsIso = d.toISOString();
+          tsIso = getTimestampIso({ issuedAt:(j.ts || j.timestamp) });
+        }
+
+        let sigDisplay = "";
+        if(j.proof && typeof j.proof === "object"){
+          sigDisplay = getSignatureLikeFromProof(j.proof);
+        }else{
+          sigDisplay = getSignatureLikeFromProof({
+            hmac: j.sig_hmac || j.signature || j.sig || null,
+            signature: j.sig_ed25519 || j.sig2 || null
+          });
         }
 
         // 6) Décision UI
@@ -1309,15 +1321,14 @@ POST https://api.timeproofs.io/api/verify
         verifyStatus.innerHTML=pill;
         vsStatus.textContent=uiLabel;
         vsHash.textContent=short(hashHex);
-        vsHash.title=hashHex;
-        vsSign.textContent=short(sigHmac || sigEd || "");
+        vsSign.textContent=short(sigDisplay || "");
 
         if(tsIso){
           vsTSProofWrap.style.display="flex";
           vsTSProof.textContent=fmtLocal(tsIso);
         }
 
-        // Toujours mis à jour à chaque vérification (évite l'impression de date figée)
+        // Toujours mis à jour à chaque vérification
         vsTSCheckWrap.style.display="flex";
         vsTSCheck.textContent=fmtLocal(nowIso());
 
@@ -1373,27 +1384,19 @@ POST https://api.timeproofs.io/api/verify
         const hashHex=h.toLowerCase();
         document.getElementById("verify-hash").value=hashHex;
 
-        let sigBundle="";
-        if(b.proof && typeof b.proof==="object"){
-          sigBundle=b.proof.hmac || b.proof.signature || "";
-        }else{
-          sigBundle=b.sig_hmac || b.signature || b.sig || "";
-        }
+        const sigBundle=getSignatureLikeFromProof(b.proof || b);
 
         vsStatus.textContent="Bundle loaded (not yet checked)";
         vsHash.textContent=short(hashHex);
-        vsHash.title=hashHex;
-        vsSign.textContent=short(sigBundle);
+        vsSign.textContent=short(sigBundle || "");
 
         let tsIso=null;
         if(b.timestamp && typeof b.timestamp==="object"){
           tsIso = getTimestampIso(b.timestamp);
         }else if(typeof b.ts==="number"){
-          const d=new Date(b.ts);
-          if(!isNaN(d.getTime())) tsIso=d.toISOString();
+          tsIso = getTimestampIso({ issuedAt:b.ts });
         }else if(typeof b.ts==="string"){
-          const d=new Date(b.ts);
-          if(!isNaN(d.getTime())) tsIso=d.toISOString();
+          tsIso = getTimestampIso({ issuedAt:b.ts });
         }
         if(tsIso){
           vsTSProofWrap.style.display="flex";
@@ -1436,10 +1439,9 @@ POST https://api.timeproofs.io/api/verify
     tabs.faq.onclick=()=>showMini("faq");
     showMini("url");
 
-    // Copy buttons sur tous les <pre> (sauf ceux qui ont déjà un .copy-btn ou JSON principal)
+    // Copy buttons sur tous les <pre> (sauf ceux qui ont déjà un .copy-btn)
     (function installCopyButtons(){
       document.querySelectorAll('pre').forEach((pre)=>{
-        if (pre.dataset.hasExternalCopy === "true") return;
         if(pre.querySelector('.copy-btn')) return;
         const btn=document.createElement('button');
         btn.type='button';
@@ -1502,4 +1504,4 @@ POST https://api.timeproofs.io/api/verify
   })();
   </script>
 </body>
-  </html>
+</html>
