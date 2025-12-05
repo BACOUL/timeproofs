@@ -437,24 +437,18 @@ footer .links a[aria-current="page"]{
   <main id="main" class="wrap" role="main">
     <section class="hero reveal" aria-labelledby="hero-title">
       <div class="label">Status: Public Beta v0.2 · Protocol + API · Privacy-first · No blockchain</div>
-
       <h1 id="hero-title" class="title">Prove When Data Existed. Privately.</h1>
 
       <p class="subtitle">
         Hash anything on your device and get a signed <code>.tproof.json</code> bundle that proves when it existed and that it hasn’t changed.
       </p>
 
-      <p class="subnote">
+      <p class="positioning">
         No account · No content stored · Hash locally · Signed timestamp · Online &amp; offline verification
       </p>
-
-      <div class="proof-strip" aria-label="Current site release proof">
-        Release:
-        <span id="page-proof-release">…</span> ·
-        Hash:
-        <code id="page-proof-hash">…</code> ·
-        <a id="page-proof-link" href="#" target="_blank" rel="noopener" title="View verification on API">Verify</a>
-      </div>
+      <p style="margin:6px 0 0; color:#9fb3c9">
+        <a href="/regulations.html" style="color:#9beefb">Regulations &amp; Compliance →</a>
+      </p>
 
       <div class="cta-wrap" role="group" aria-label="Primary actions">
         <a class="cta" href="/verify.html" aria-label="Create or verify a proof">Create / Verify a Proof</a>
@@ -466,11 +460,6 @@ footer .links a[aria-current="page"]{
         <span class="chip">🛡 Hash-only, no PII</span>
         <span class="chip">📦 .tproof.json bundles</span>
         <span class="chip">📴 Offline verification</span>
-        <span class="chip">
-          <a href="/regulations.html" style="color:#9beefb;text-decoration:underline;">
-            Regulations &amp; Compliance →
-          </a>
-        </span>
       </div>
 
       <!-- DEMO one-bar -->
@@ -1051,8 +1040,8 @@ verify: ${verifyURL}`;
         }
         if(!map) return;
 
-        const id = document.documentElement.dataset.page || '/';
-        const rel = map[id] || map['index.html'] || map['/'] || map;
+        const pageId = document.documentElement.dataset.page || '/';
+        const rel = map[pageId] || map['index.html'] || map['/'] || map;
 
         const relHero   = document.getElementById('page-proof-release');
         const hashHero  = document.getElementById('page-proof-hash');
@@ -1064,8 +1053,14 @@ verify: ${verifyURL}`;
 
         const banner    = document.getElementById('rel-banner');
 
-        if (banner && rel.release) banner.textContent = `🔏 ${rel.release} — Verified`;
-        if (relHero && rel.release) relHero.textContent = rel.release;
+        // No hero/banner release pill on index; keep only the block at the bottom
+        if (pageId !== 'index.html') {
+          if (banner && rel.release) banner.textContent = `🔏 ${rel.release} — Verified`;
+          if (relHero && rel.release) relHero.textContent = rel.release;
+        } else if (banner) {
+          banner.remove();
+        }
+
         if (relDup && rel.release)  relDup.textContent  = rel.release;
 
         if (hashHero && rel.hash) hashHero.textContent = rel.hash;
