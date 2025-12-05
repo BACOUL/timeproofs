@@ -441,6 +441,7 @@ upgrade-insecure-requests">
 
     <nav class="toc" aria-label="Contents">
       <span class="toc-label">On this page</span>
+      <a href="#quickstart">Quickstart</a>
       <a href="#overview">Overview &amp; versions</a>
       <a href="#v02">What’s new in v0.2</a>
       <a href="#base-url">Base URLs</a>
@@ -464,18 +465,81 @@ upgrade-insecure-requests">
       <a href="/security.html">Security</a>
     </p>
 
+    <section class="card" id="quickstart">
+      <h2>0. Quickstart — TimeProofs in 30 seconds</h2>
+      <p>
+        The core flow is always the same:
+      </p>
+      <ol>
+        <li>Hash your data locally (SHA-256) — file, text, dataset, model, etc.</li>
+        <li>Call <code>POST /api/timestamp</code> with the hash.</li>
+        <li>Store the returned proof or <code>.tproof.json</code> bundle next to the data (same folder, DB record, or object).</li>
+        <li>Verify later: online with v0.1, offline with v0.2 bundles.</li>
+      </ol>
+      <p class="muted">
+        TimeProofs never receives your files or AI outputs — only SHA-256 hashes and small, non-sensitive metadata.
+      </p>
+
+<pre><code># cURL — create a proof (v0.1, online verify)
+curl -s -X POST https://api.timeproofs.io/api/timestamp \
+  -H "Content-Type: application/json" \
+  -d '{"hash":"&lt;SHA256_HEX&gt;"}'</code></pre>
+
+<pre><code>// Browser (conceptual) — text → hash → timestamp
+async function sha256Hex(str){
+  const buf = new TextEncoder().encode(str);
+  const digest = await crypto.subtle.digest("SHA-256", buf);
+  return [...new Uint8Array(digest)]
+    .map(b => b.toString(16).padStart(2,"0"))
+    .join("");
+}
+
+const API  = "https://api.timeproofs.io/api";
+const hash = await sha256Hex("hello");
+
+const proof = await fetch(`${API}/timestamp`, {
+  method: "POST",
+  headers: { "Content-Type":"application/json" },
+  body: JSON.stringify({ hash })
+}).then(r => r.json());</code></pre>
+
+<pre><code>// Node (conceptual) — using the v0.2 SDK
+import { TimeProofsV02 } from "./sdk/timeproofs-v02.js";
+
+const client = TimeProofsV02.createClient({
+  baseUrl: "https://timeproofs-api-v02.jeason-bacoul.workers.dev"
+});
+
+const hash   = await client.hashText("hello");
+const tsResp = await client.timestamp(hash);
+const bundle = client.createBundle({
+  hash:      tsResp.hash,
+  timestamp: tsResp.timestamp,
+  proof:     tsResp.proof,
+  meta:      { type: "document", purpose: "release" }
+});
+
+// Later, offline:
+const result = await client.verifyBundle(bundle, { file: null });
+if (result.valid) {
+  console.log("Bundle is structurally valid and matches the expected hash.");
+}</code></pre>
+    </section>
+
     <section class="card" id="overview">
       <h2>1. Overview &amp; versions</h2>
       <p>
-        TimeProofs exposes a small, stable HTTP API. Today there are two compatible versions:
+        TimeProofs exposes a small, stable HTTP API. You always hash locally, send only the hash, and get back a signed proof.
+        There are two compatible versions:
       </p>
       <ul>
         <li><strong>v0.1 (production, online verify)</strong> — hash-only inputs, events stored server-side, <code>/api/verify</code> available for public lookups.</li>
         <li><strong>v0.2 (dev preview, stateless)</strong> — the server never stores proofs, returns a signed timestamp object, and verification happens offline using <code>.tproof.json</code> bundles.</li>
       </ul>
       <p class="muted">
-        v0.1 stays the recommended path for most integrations today. v0.2 is the next-generation model and focuses on
-        offline verification and client-side proof bundles compatible with ProofSpec.
+        Use <strong>v0.1</strong> if you need a simple online verification API (<code>/api/verify</code>) with server-side storage.
+        Use <strong>v0.2</strong> if you want stateless proofs, portable <code>.tproof.json</code> bundles, and offline verification
+        for AI pipelines, audits, or long-term archives.
       </p>
     </section>
 
@@ -749,8 +813,26 @@ const bundle = client.createBundle({
 
 const verifyResult = await client.verifyBundle(bundle, { file: null });
 // verifyResult.valid tells you if the bundle is structurally sound and, if a file is provided, if the hash matches.</code></pre>
+
+<pre><code>// Offline verify (v0.2) — given a stored .tproof.json bundle
+import { TimeProofsV02 } from "./sdk/timeproofs-v02.js";
+
+// In a Node context; in a browser you would use a File/Blob instead.
+import fs from "node:fs/promises";
+
+const bundleJson = await fs.readFile("proof.tproof.json", "utf8");
+const bundle = JSON.parse(bundleJson);
+
+const result = await TimeProofsV02.verifyBundle(bundle, { file: null });
+
+if (result.valid) {
+  console.log("Proof is valid and the bundle structure matches the TimeProofs v0.2 spec.");
+} else {
+  console.error("Invalid bundle:", result.reason || "unknown reason");
+}</code></pre>
       <p class="muted">
-        The SDK never uploads files. It only works with hashes and locally available metadata.
+        The SDK never uploads files. It only works with hashes and locally available metadata and bundles. Offline
+        verification lets you validate proofs even in air-gapped or high-compliance environments.
       </p>
     </section>
 
@@ -941,4 +1023,4 @@ const verifyResult = await client.verifyBundle(bundle, { file: null });
   })();
   </script>
 </body>
-  </html>
+</html>
