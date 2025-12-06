@@ -911,35 +911,59 @@ const check = await res.json();</code></pre>
 
     // ---- ONE-BAR DEMO ----
     (function(){
-      async function verifyHash(hash){
+      // Create a proof via /api/timestamp (v0.2) with fallback
+      async function createProof(hash){
         async function call(api){
           try{
-            let j = await fetch(`${api}/api/verify?hash=${encodeURIComponent(hash)}`, { headers:{'Accept':'application/json'}, mode:'cors', credentials:'omit', cache:'no-store' }).then(r=>r.json());
-            if(!(j.valid||j.ok===true||j.result==='valid')){
-              j = await fetch(`${api}/api/verify`, {
-                method:'POST',
-                headers:{'Content-Type':'application/json','Accept':'application/json'},
-                body: JSON.stringify({ hash }),
-                mode:'cors', credentials:'omit', cache:'no-store'
-              }).then(r=>r.json());
+            const r = await fetch(`${api}/api/timestamp`, {
+              method:'POST',
+              headers:{
+                'Content-Type':'application/json',
+                'Accept':'application/json'
+              },
+              body: JSON.stringify({
+                hash,
+                type: 'event',
+                meta: { source: 'homepage-demo' }
+              }),
+              mode:'cors',
+              credentials:'omit',
+              cache:'no-store'
+            });
+
+            const ct = r.headers.get('Content-Type') || '';
+            let data;
+            if (ct.includes('application/json')) {
+              data = await r.json();
+            } else {
+              const text = await r.text();
+              data = { ok:r.ok, status:r.status, body:text };
             }
-            return j;
-          }catch{ return null; }
+            data._api    = api;
+            data._status = r.status;
+            return data;
+          }catch{
+            return null;
+          }
         }
+
         return (await call(API1)) || (await call(API2));
       }
 
       function renderSummary(target, hash, res){
-        const ok = !!res?.valid || res?.ok===true || res?.result==='valid';
-        const iso = res?.timestamp_iso || res?.timestamp || null;
-        const verifyURL = res?.verify_url || `${API1}/api/verify?hash=${encodeURIComponent(hash)}`;
+        const iso = res.timestamp_iso || res.timestamp || res.created_at || null;
+        const from = res._api || 'TimeProofs API';
+        const verifyURL =
+          res.verify_url ||
+          `${API1}/api/verify?hash=${encodeURIComponent(hash)}`;
+
         target.textContent =
 `// Demo summary
 input: ${hash}
-result: ${ok ? 'VALID' : 'NOT FOUND'}
+action: timestamp (create proof)
+api: ${from}
 timestamp: ${iso ? iso + ' (Paris: ' + fmtParis(iso) + ')' : '—'}
 verify: ${verifyURL}`;
-        return ok;
       }
 
       async function runDemo(){
@@ -947,27 +971,46 @@ verify: ${verifyURL}`;
         const out   = $('out-one');
         const sum   = $('one-summary');
         const stat  = $('status-one');
-        out.textContent=''; sum.textContent=''; stat.hidden=true;
 
-        if(!input.trim()){ showStatus(stat,false,'Enter text or a 64-hex hash.'); return; }
+        out.textContent=''; 
+        sum.textContent=''; 
+        stat.hidden=true;
 
-        const raw=input.trim();
-        let hash = raw.toLowerCase().replace(/[^a-f0-9]/g,'');
-        if(!/^[a-f0-9]{64}$/.test(hash)){
-          try{ hash = await sha256Hex(raw); }
-          catch{ showStatus(stat,false,'Hashing failed.'); return; }
+        if (!input.trim()){
+          showStatus(stat,false,'Enter text or a 64-hex hash.');
+          return;
         }
 
-        const res = await verifyHash(hash);
-        if(!res){ showStatus(stat,false,'Network or CORS error'); return; }
+        const raw = input.trim();
+        let hash  = raw.toLowerCase().replace(/[^a-f0-9]/g,'');
 
-        const ok = renderSummary(sum, hash, res);
-        out.textContent = `// Raw JSON\n${JSON.stringify(res,null,2)}`;
-        showStatus(stat, ok, ok ? 'Valid proof (demo)' : 'Invalid or not found (demo)');
+        if (!/^[a-f0-9]{64}$/.test(hash)){
+          try{
+            hash = await sha256Hex(raw);
+          }catch{
+            showStatus(stat,false,'Hashing failed.');
+            return;
+          }
+        }
+
+        const res = await createProof(hash);
+        if (!res){
+          showStatus(stat,false,'Network or CORS error');
+          return;
+        }
+
+        renderSummary(sum, hash, res);
+        out.textContent = `// Raw JSON\n${JSON.stringify(res, null, 2)}`;
+        showStatus(stat, true, 'Proof created (demo).');
       }
 
       $('btn-one')?.addEventListener('click', runDemo);
-      $('in-one')?.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); runDemo(); } });
+      $('in-one')?.addEventListener('keydown', (e)=>{
+        if(e.key==='Enter'){
+          e.preventDefault();
+          runDemo();
+        }
+      });
 
       // Examples
       $('ex-text')?.addEventListener('click', ()=>{
@@ -986,10 +1029,12 @@ verify: ${verifyURL}`;
         $('in-one').focus();
       });
 
-      // Hook for release manifest if needed (fills the input only)
+      // Hook optionnel (remplit juste l'input si besoin)
       window.__autoFillDemoWithHash = function(h){
         const input = $('in-one');
-        if(input && /^[a-f0-9]{64}$/.test(h)){ input.value = h; }
+        if (input && /^[a-f0-9]{64}$/.test(h)){
+          input.value = h;
+        }
       };
     })();
 
