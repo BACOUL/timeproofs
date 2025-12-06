@@ -421,6 +421,7 @@ upgrade-insecure-requests">
       <a href="#tproof">.tproof.json format</a>
       <a href="#signing">Signing</a>
       <a href="#validation">Validation</a>
+      <a href="#security">Security &amp; guarantees</a>
       <a href="#schema">JSON schema</a>
       <a href="#vectors">Test vectors</a>
       <a href="#verification">Verification</a>
@@ -553,6 +554,21 @@ upgrade-insecure-requests">
         <li>Optional metadata about the artifact (for example <code>artifact_name</code>, <code>artifact_type</code>, <code>created_at</code>), with no original content embedded.</li>
         <li>No personal data and no large blobs; the file SHOULD remain small and text-based.</li>
       </ul>
+<pre><code>{
+  "proof":{
+    "hash":"7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2",
+    "ts":"2025-01-01T00:00:00.000Z",
+    "sig":"&lt;hex HMAC-SHA256&gt;",
+    "alg":"HMAC-SHA256",
+    "kid":"v1",
+    "issuer":"timeproofs.io",
+    "verify_url":"https://api.timeproofs.io/api/verify?hash=7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2"
+  },
+  "artifact_name":"example.pdf",
+  "artifact_type":"application/pdf",
+  "created_at":"2025-01-01T00:00:00.000Z",
+  "notes":"Example .tproof.json envelope travelling with example.pdf"
+}</code></pre>
       <p>The exact layout of <code>.tproof.json</code> MAY evolve, but:</p>
       <ul>
         <li>The nested proof object MUST remain a valid ProofSpec v0.1 proof.</li>
@@ -588,6 +604,17 @@ function verify({ hash, ts, sig }, secret) {
         <li><code>ts</code> MUST be a valid ISO 8601 UTC timestamp and SHOULD NOT be in the future beyond a reasonable tolerance.</li>
         <li>The verifier MUST recompute the expected signature(s) according to <code>alg</code> and <code>kid</code> (HMAC-SHA256, and optionally Ed25519) and compare using a timing-safe method.</li>
         <li>If any required field is missing or invalid, the verifier MUST return a failure with an appropriate error code.</li>
+      </ul>
+    </section>
+
+    <section class="card" id="security">
+      <h2>Security &amp; guarantees</h2>
+      <ul>
+        <li>ProofSpec guarantees <strong>integrity</strong> (the data has not changed) and a <strong>time-bounded claim</strong> (“this hash existed at or before timestamp <code>ts</code>”).</li>
+        <li>ProofSpec does <strong>not</strong> by itself guarantee who created the original data; authenticity of the author is out of scope unless combined with higher-layer identity systems.</li>
+        <li>Issuers MUST protect their signing keys (HMAC secrets and Ed25519 private keys) using industry-standard key management and rotation; compromise of keys invalidates the trust in new proofs.</li>
+        <li>Verifiers SHOULD treat any proof with an unknown or revoked <code>kid</code> as untrusted and MAY expose a dedicated error such as <code>"key_not_trusted"</code>.</li>
+        <li>Clients SHOULD always recompute the hash of their local data before verification to detect any drift between the artifact and the proof.</li>
       </ul>
     </section>
 
@@ -911,4 +938,4 @@ function verify({ hash, ts, sig }, secret) {
   })();
   </script>
 </body>
-</html>
+    </html>
