@@ -443,6 +443,7 @@ upgrade-insecure-requests">
       <span class="toc-label">On this page</span>
       <a href="#quickstart">Quickstart</a>
       <a href="#overview">Overview &amp; versions</a>
+      <a href="#integration">Choose your integration</a>
       <a href="#v02">What’s new in v0.2</a>
       <a href="#base-url">Base URLs</a>
       <a href="#auth">Auth</a>
@@ -543,8 +544,49 @@ if (result.valid) {
       </p>
     </section>
 
+    <section class="card" id="integration">
+      <h2>2. Choose your integration</h2>
+      <p>
+        Pick the path that matches how your product is built. The API remains the same; only where you hash and store
+        bundles changes.
+      </p>
+      <div class="table-wrap" role="region" aria-label="Integration paths">
+        <table>
+          <thead>
+            <tr><th>You have…</th><th>Use</th><th>Reason</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Static site / front-end only</td>
+              <td><strong>v0.1</strong> with browser hashing</td>
+              <td>Hash in the browser, call <code>/api/timestamp</code>, show the proof or link to users.</td>
+            </tr>
+            <tr>
+              <td>Backend app / monolith</td>
+              <td><strong>v0.1</strong> from your server</td>
+              <td>Hash in your backend, call <code>/api/timestamp</code>, store hash + proof in your database.</td>
+            </tr>
+            <tr>
+              <td>Serverless / edge pipeline</td>
+              <td><strong>v0.2</strong> bundles</td>
+              <td>Call the stateless endpoint, keep the timestamp object, build <code>.tproof.json</code> bundles, verify offline.</td>
+            </tr>
+            <tr>
+              <td>AI / data / model workflows</td>
+              <td><strong>v0.2</strong> + SDK/CLI</td>
+              <td>Attach bundles to datasets, jobs, or model versions and verify later in audits or pipelines.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted">
+        You can mix both: for example, use v0.1 for public web verification and v0.2 bundles for internal AI or compliance
+        pipelines.
+      </p>
+    </section>
+
     <section class="card" id="v02">
-      <h2>2. What’s new in v0.2</h2>
+      <h2>3. What’s new in v0.2</h2>
       <ul>
         <li><strong>Stateless API</strong> — timestamp responses are not stored server-side; you keep the proof.</li>
         <li><strong>.tproof.json bundles</strong> — self-describing proof bundles containing hash, algorithm, timestamp, signatures, and metadata.</li>
@@ -559,7 +601,7 @@ if (result.valid) {
     </section>
 
     <section class="card" id="base-url">
-      <h2>3. Base URLs</h2>
+      <h2>4. Base URLs</h2>
       <div class="table-wrap" role="region" aria-label="Base URLs">
         <table>
           <thead>
@@ -587,7 +629,7 @@ if (result.valid) {
     </section>
 
     <section class="card" id="auth">
-      <h2>4. Auth</h2>
+      <h2>5. Auth</h2>
       <p>HTTP bearer token. Omit for public <code>GET /api/verify</code> in v0.1.</p>
 <pre><code>Authorization: Bearer &lt;API_TOKEN&gt;</code></pre>
       <p class="muted">
@@ -596,7 +638,7 @@ if (result.valid) {
     </section>
 
     <section class="card" id="timestamp">
-      <h2>5. POST /api/timestamp</h2>
+      <h2>6. POST /api/timestamp</h2>
       <p>Create a timestamped proof for a SHA-256 hash (v0.1 semantics).</p>
 <pre><code>POST /api/timestamp
 Content-Type: application/json
@@ -651,7 +693,7 @@ const proof=await fetch(`${API}/timestamp`,{
     </section>
 
     <section class="card" id="verify">
-      <h2>6. GET/POST /api/verify</h2>
+      <h2>7. GET/POST /api/verify</h2>
       <p>Check an existing proof by hash (v0.1 online verification).</p>
 <pre><code>GET /api/verify?hash=&lt;SHA256_HEX&gt;</code></pre>
 <pre><code># cURL (v0.1)
@@ -667,8 +709,8 @@ const data=await res.json();</code></pre>
     </section>
 
     <section class="card" id="models">
-      <h2>7. Models &amp; bundles</h2>
-      <h3>7.1 v0.1 timestamp &amp; verify models</h3>
+      <h2>8. Models &amp; bundles</h2>
+      <h3>8.1 v0.1 timestamp &amp; verify models</h3>
 <pre><code>// v0.1 — timestamp response (conceptual)
 {
   "hash": "^[a-f0-9]{64}$",
@@ -689,7 +731,7 @@ const data=await res.json();</code></pre>
         v0.1 uses HMAC-SHA256 over ASCII <code>hash|ts</code>, Base64URL without padding, and stores the event server-side.
       </p>
 
-      <h3>7.2 v0.2 stateless timestamp response</h3>
+      <h3>8.2 v0.2 stateless timestamp response</h3>
 <pre><code>// v0.2 — response from POST /api/timestamp
 {
   "version": "timeproofs-0.2",
@@ -714,7 +756,7 @@ const data=await res.json();</code></pre>
         The server never stores this object. Clients are expected to embed it into a local bundle and verify offline.
       </p>
 
-      <h3>7.3 v0.2 proof bundles (.tproof.json)</h3>
+      <h3>8.3 v0.2 proof bundles (.tproof.json)</h3>
 <pre><code>// v0.2 — bundle structure (.tproof.json, simplified)
 {
   "version": "timeproofs-0.2",
@@ -755,7 +797,7 @@ const data=await res.json();</code></pre>
     </section>
 
     <section class="card" id="errors">
-      <h2>8. Errors</h2>
+      <h2>9. Errors</h2>
       <div class="table-wrap" role="region" aria-label="Error codes">
         <table>
           <thead>
@@ -776,7 +818,7 @@ const data=await res.json();</code></pre>
     </section>
 
     <section class="card" id="sdk">
-      <h2>9. Client helpers &amp; SDK</h2>
+      <h2>10. Client helpers &amp; SDK</h2>
 <pre><code>// File → sha256 (browser)
 async function sha256FileHex(file){
   const buf=await file.arrayBuffer();
@@ -837,7 +879,7 @@ if (result.valid) {
     </section>
 
     <section class="card" id="root-files">
-      <h2>10. Root files &amp; related protocols</h2>
+      <h2>11. Root files &amp; related protocols</h2>
       <p>
         TimeProofs can read and reference a set of independent “root” metadata files exposed by your site or service.
         These files are not owned by TimeProofs; they are standalone protocols that can be used with or without
@@ -1023,4 +1065,4 @@ if (result.valid) {
   })();
   </script>
 </body>
-</html>
+  </html>
