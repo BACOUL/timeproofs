@@ -73,8 +73,8 @@
       "cryptographic verification"
     ],
     "sameAs":[
-      "https://x.com/timeproofs?t=y42tVwQ20OEu0zph7hkMcw&s=09",
-      "https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2",
+      "https://x.com/timeproofs",
+      "https://github.com/BACOUL/timeproofs/tree/timeproofsv2",
       "https://www.linkedin.com/company/timeproofs",
       "https://youtube.com/@timeproofs",
       "https://timeproofs.io/rss.xml"
@@ -93,7 +93,7 @@
     "@type":"WebSite",
     "name":"TimeProofs",
     "url":"https://timeproofs.io/",
-    "dateModified":"2025-12-06"
+    "dateModified":"2025-12-03"
   }
   </script>
 
@@ -298,26 +298,6 @@ upgrade-insecure-requests">
       margin-top:18px; display:grid; gap:10px; width:min(900px,100%); padding:14px; border-radius:16px;
       background:linear-gradient(180deg,#0b1324,#0a152e); border:1px solid #1f2a44; box-shadow:var(--ring); text-align:left
     }
-    .demo-quick{
-      margin-top:16px;
-      padding:10px 12px;
-      border-radius:12px;
-      background:#071020;
-      border:1px solid #1f2a44;
-      text-align:left;
-      max-width:900px;
-      width:100%;
-      margin-inline:auto;
-    }
-    .demo-quick p{
-      margin:0 0 6px;
-      color:#9fb3c9;
-      font-size:.9rem;
-    }
-    .demo-quick pre{
-      margin:0;
-      font-size:.9rem;
-    }
     .row{ display:grid; grid-template-columns:1fr auto; gap:10px }
     .in{ width:100%; padding:12px 12px; border-radius:12px; background:#0d1628; border:1px solid #22314f; color:#e6f6ff; font:inherit }
     .btn{ padding:12px 16px; min-height:48px; border-radius:12px; border:1px solid #22455a; background:#0c1a2e; color:#cfefff; cursor:pointer; font-weight:800; display:inline-flex; align-items:center; gap:8px }
@@ -392,7 +372,6 @@ upgrade-insecure-requests">
       .row{ grid-template-columns:1fr }
       .btn, .in{ width:100% }
       pre{ font-size:.9rem }
-      .demo-quick pre{ font-size:.85rem; }
     }
     @media (prefers-reduced-motion: reduce){ .reveal{ opacity:1 !important; transform:none !important } }
 
@@ -441,7 +420,6 @@ footer .links a[aria-current="page"]{
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
-      <a href="/verify.html">Create / Verify</a>
       <a href="/docs.html">API Docs</a>
       <a href="/regulations.html">Regulations</a>
       <a href="/security.html">Security</a>
@@ -462,7 +440,7 @@ footer .links a[aria-current="page"]{
       <h1 id="hero-title" class="title">Prove When Data Existed. Privately.</h1>
 
       <p class="subtitle">
-        Hash anything on your device, get a signed <code>.tproof.json</code> bundle that proves when it existed and that it hasn’t changed — without ever sending the file, only its hash.
+        Hash anything on your device and get a signed <code>.tproof.json</code> bundle that proves when it existed and that it hasn’t changed.
       </p>
 
       <p class="positioning">
@@ -482,14 +460,6 @@ footer .links a[aria-current="page"]{
         <span class="chip">🛡 Hash-only, no PII</span>
         <span class="chip">📦 .tproof.json bundles</span>
         <span class="chip">📴 Offline verification</span>
-      </div>
-
-      <!-- QUICK START: Try in 10 seconds -->
-      <div class="demo-quick" aria-label="Quick start using curl">
-        <p><strong>Try it in 10 seconds</strong> — hash locally, send only the hash:</p>
-<pre><code>curl -X POST https://api.timeproofs.io/api/timestamp \
-  -H "Content-Type: application/json" \
-  -d '{"hash":"&lt;your_sha256&gt;"}'</code></pre>
       </div>
 
       <!-- DEMO one-bar -->
@@ -829,7 +799,6 @@ const check = await res.json();</code></pre>
       <a href="/">Home</a> •
       <a href="/proofspec.html">Protocol</a> •
       <a href="/use-cases.html">Use Cases</a> •
-      <a href="/verify.html">Create/Verify</a> •
       <a href="/docs.html">API Docs</a> •
       <a href="/regulations.html">Regulations</a> •
       <a href="/.well-known/security.txt">Security.txt</a> •
@@ -839,10 +808,10 @@ const check = await res.json();</code></pre>
       <a href="/rss.xml">RSS</a>
     </div>
     <div class="social" aria-label="Social links">
-      <a href="https://x.com/timeproofs?t=y42tVwQ20OEu0zph7hkMcw&s=09" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">
+      <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
       </a>
-      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
+      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofsv2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
       </a>
       <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn">
@@ -937,16 +906,47 @@ const check = await res.json();</code></pre>
 
     // ---- ONE-BAR DEMO ----
     (function(){
+      async function timestampHash(hash){
+        async function call(api){
+          try{
+            const r = await fetch(`${api}/api/timestamp`, {
+              method:'POST',
+              headers:{
+                'Content-Type':'application/json',
+                'Accept':'application/json'
+              },
+              body: JSON.stringify({
+                hash,
+                type:'demo',
+                meta:{ source:'home-quick-check' }
+              }),
+              mode:'cors',
+              credentials:'omit',
+              cache:'no-store'
+            });
+            if(!r.ok) return null;
+            return r.json();
+          }catch{ return null; }
+        }
+        return (await call(API1)) || (await call(API2));
+      }
+
       async function verifyHash(hash){
         async function call(api){
           try{
-            let j = await fetch(`${api}/api/verify?hash=${encodeURIComponent(hash)}`, { headers:{'Accept':'application/json'}, mode:'cors', credentials:'omit', cache:'no-store' }).then(r=>r.json());
-            if(!(j.valid||j.ok===true||j.result==='valid')){
+            let j = await fetch(
+              `${api}/api/verify?hash=${encodeURIComponent(hash)}`,
+              { headers:{'Accept':'application/json'}, mode:'cors', credentials:'omit', cache:'no-store' }
+            ).then(r=>r.json());
+
+            if(!(j.valid || j.ok===true || j.result==='valid')){
               j = await fetch(`${api}/api/verify`, {
                 method:'POST',
                 headers:{'Content-Type':'application/json','Accept':'application/json'},
                 body: JSON.stringify({ hash }),
-                mode:'cors', credentials:'omit', cache:'no-store'
+                mode:'cors',
+                credentials:'omit',
+                cache:'no-store'
               }).then(r=>r.json());
             }
             return j;
@@ -975,25 +975,48 @@ verify: ${verifyURL}`;
         const stat  = $('status-one');
         out.textContent=''; sum.textContent=''; stat.hidden=true;
 
-        if(!input.trim()){ showStatus(stat,false,'Enter text or a 64-hex hash.'); return; }
+        if(!input.trim()){
+          showStatus(stat,false,'Enter text or a 64-hex hash.');
+          return;
+        }
 
         const raw=input.trim();
         let hash = raw.toLowerCase().replace(/[^a-f0-9]/g,'');
         if(!/^[a-f0-9]{64}$/.test(hash)){
-          try{ hash = await sha256Hex(raw); }
-          catch{ showStatus(stat,false,'Hashing failed.'); return; }
+          try{
+            hash = await sha256Hex(raw);
+          }catch{
+            showStatus(stat,false,'Hashing failed.');
+            return;
+          }
         }
 
-        const res = await verifyHash(hash);
-        if(!res){ showStatus(stat,false,'Network or CORS error'); return; }
+        // 1) Try verify
+        let res = await verifyHash(hash);
+
+        // 2) If NOT FOUND, create demo proof then re-verify
+        if(!res || !(res.valid || res.ok===true || res.result==='valid')){
+          await timestampHash(hash);
+          res = await verifyHash(hash);
+        }
+
+        if(!res){
+          showStatus(stat,false,'Network or CORS error');
+          return;
+        }
 
         const ok = renderSummary(sum, hash, res);
-        out.textContent = `// Raw JSON\n${escapeHTML(JSON.stringify(res,null,2))}`;
+
+        // Raw JSON (no HTML escaping)
+        out.textContent = `// Raw JSON\n${JSON.stringify(res,null,2)}`;
+
         showStatus(stat, ok, ok ? 'Valid proof (demo)' : 'Invalid or not found (demo)');
       }
 
       $('btn-one')?.addEventListener('click', runDemo);
-      $('in-one')?.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); runDemo(); } });
+      $('in-one')?.addEventListener('keydown', (e)=>{
+        if(e.key==='Enter'){ e.preventDefault(); runDemo(); }
+      });
 
       // Examples
       $('ex-text')?.addEventListener('click', ()=>{
@@ -1001,7 +1024,7 @@ verify: ${verifyURL}`;
         $('btn-one').focus();
       });
       $('ex-hash')?.addEventListener('click', ()=>{
-        $('in-one').value = '7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2';
+        $('in-one').value = '710dc3c9c2b0a5ed3218bf791853bbfbde63e7d2dd6e31d6de5c3f61d2e6b1a';
         $('btn-one').focus();
       });
       $('ex-clear')?.addEventListener('click', ()=>{
@@ -1012,7 +1035,6 @@ verify: ${verifyURL}`;
         $('in-one').focus();
       });
 
-      // Will be auto-filled with release hash once loaded (see below)
       window.__autoFillDemoWithHash = function(h){
         const input = $('in-one');
         if(input && /^[a-f0-9]{64}$/.test(h)){ input.value = h; }
