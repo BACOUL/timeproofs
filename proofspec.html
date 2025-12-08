@@ -69,7 +69,7 @@
     ],
     "sameAs":[
       "https://x.com/timeproofs",
-      "https://github.com/BACOUL/timeproofs/tree/timeproofs",
+      "https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2",
       "https://www.linkedin.com/company/timeproofs",
       "https://youtube.com/@timeproofs",
       "https://timeproofs.io/rss.xml"
@@ -401,10 +401,10 @@ upgrade-insecure-requests">
     <!-- HERO -->
     <section class="hero" role="region" aria-labelledby="title">
       <div class="icon" aria-hidden="true">📘</div>
-      <p class="badge">Status: Public Beta · API v0.2 · ProofSpec v0.1 · Privacy-first · No blockchain</p>
+      <p class="badge">Status: Public Beta v0.2 · Protocol (ProofSpec v0.1) · Privacy-first · No blockchain</p>
       <h1 id="title">Protocol — ProofSpec</h1>
       <p class="lead">
-        Open, normative specification to prove when data existed and that it has not changed. Hash-only inputs, signed timestamps, public verification, and a stateless API with portable <code>.tproof.json</code> receipts.
+        ProofSpec is the open, normative specification to prove when data existed and that it has not changed. TimeProofs v0.2 is the reference implementation providing a stateless API and portable <code>.tproof.json</code> receipts, with hash-only inputs, signed timestamps, and public verification.
       </p>
     </section>
 
@@ -412,16 +412,19 @@ upgrade-insecure-requests">
     <nav class="toc" aria-label="Contents">
       <span class="toc-label">On this page</span>
       <a href="#overview">Overview</a>
+      <a href="#why">Why ProofSpec matters</a>
       <a href="#normative">Normative language</a>
       <a href="#conformance">Conformance</a>
       <a href="#stateless">Stateless layer (API v0.2)</a>
       <a href="#canonicalization">Canonicalization</a>
       <a href="#datamodel">Data model</a>
+      <a href="#modes">Usage modes</a>
       <a href="#proofformat">Proof format</a>
       <a href="#tproof">.tproof.json format</a>
       <a href="#signing">Signing</a>
       <a href="#validation">Validation</a>
       <a href="#security">Security &amp; guarantees</a>
+      <a href="#ai-compliance">For AI &amp; Compliance</a>
       <a href="#schema">JSON schema</a>
       <a href="#vectors">Test vectors</a>
       <a href="#verification">Verification</a>
@@ -432,7 +435,8 @@ upgrade-insecure-requests">
       <a href="#policy">Operational policy</a>
       <a href="#checklist">Checklist</a>
       <a href="#protocols">Complementary protocols</a>
-      <a href="#versioning">Versioning & compatibility</a>
+      <a href="#governance">Governance &amp; neutrality</a>
+      <a href="#versioning">Versioning &amp; compatibility</a>
       <a href="#page-proof-sec">Page proof</a>
     </nav>
     <div style="text-align:center">
@@ -445,6 +449,18 @@ upgrade-insecure-requests">
       <p>ProofSpec defines how to create, sign, publish, and verify digital proofs of existence.</p>
       <p>Model: hash locally → get a signed, timestamped proof → anyone can verify later without access to your original data.</p>
       <p>This document is normative for issuers and verifiers that claim to be <strong>ProofSpec v0.1 compliant</strong>.</p>
+    </section>
+
+    <section class="card" id="why">
+      <h2>Why ProofSpec matters</h2>
+      <p>ProofSpec is designed as a foundation layer for trust across multiple domains:</p>
+      <ul>
+        <li><strong>AI provenance</strong> — record when a given AI output, prompt, or model snapshot existed and detect later tampering.</li>
+        <li><strong>Data integrity</strong> — protect documents, datasets, binaries, and configuration files with verifiable, hash-based receipts.</li>
+        <li><strong>Evidence &amp; audit</strong> — provide a cryptographic anchor that can support legal workflows, audits, and compliance checks.</li>
+        <li><strong>Interoperability</strong> — allow independent issuers and verifiers to cooperate around a simple, open proof format.</li>
+      </ul>
+      <p>The goal is to make “hash locally, verify publicly or offline” a default pattern for any system that cares about integrity and time-bounded claims.</p>
     </section>
 
     <section class="card" id="normative">
@@ -490,7 +506,7 @@ upgrade-insecure-requests">
         <li>The <strong>proof JSON</strong> and optional <code>.tproof.json</code> file act as the main record of existence, which the client keeps.</li>
         <li>The verify endpoint MAY be implemented as a pure function of the submitted proof, issuer keys, and configuration.</li>
       </ul>
-      <p>This makes it possible to deploy ProofSpec issuers on edge infrastructure, in serverless environments, or in “bring your own infra” scenarios without strict database requirements.</p>
+      <p>This model is recommended for edge and serverless deployments, but ProofSpec v0.1 compliance does not depend on whether an implementation is stateful or stateless internally.</p>
     </section>
 
     <!-- Canonicalization (+ alias) -->
@@ -524,6 +540,17 @@ upgrade-insecure-requests">
           </tbody>
         </table>
       </div>
+    </section>
+
+    <section class="card" id="modes">
+      <h2>Usage modes</h2>
+      <p>Implementations commonly use ProofSpec in three complementary modes:</p>
+      <ul>
+        <li><strong>Mode 1 — Timestamp only</strong><br/>Clients send a hash, receive a proof containing <code>hash</code>, <code>ts</code>, <code>sig</code>, and keep it for later verification.</li>
+        <li><strong>Mode 2 — Proof bundle</strong><br/>The proof is stored alongside the artifact in a small <code>.tproof.json</code> envelope, with minimal, non-personal metadata describing the artifact.</li>
+        <li><strong>Mode 3 — Compliance mode</strong><br/>The same <code>.tproof.json</code> envelope is structured to support audits and regulatory checks (for example AI Act / Data Act), still without embedding raw content.</li>
+      </ul>
+      <p>All three modes share the same ProofSpec v0.1 core: a signed claim that a specific hash existed at a given time.</p>
     </section>
 
     <section class="card" id="proofformat">
@@ -616,6 +643,18 @@ function verify({ hash, ts, sig }, secret) {
         <li>Verifiers SHOULD treat any proof with an unknown or revoked <code>kid</code> as untrusted and MAY expose a dedicated error such as <code>"key_not_trusted"</code>.</li>
         <li>Clients SHOULD always recompute the hash of their local data before verification to detect any drift between the artifact and the proof.</li>
       </ul>
+    </section>
+
+    <section class="card" id="ai-compliance">
+      <h2>For AI &amp; Compliance</h2>
+      <p>ProofSpec is designed to support AI and regulatory use cases without storing raw data:</p>
+      <ul>
+        <li><strong>Privacy-first</strong> — only hashes and small metadata are processed; original content stays under the control of the client.</li>
+        <li><strong>Provider-neutral</strong> — any issuer can adopt ProofSpec, and any verifier can independently validate proofs.</li>
+        <li><strong>Regulatory alignment</strong> — proofs can act as cryptographic anchors in AI Act, Data Act, and audit workflows by providing verifiable timestamps and integrity checks.</li>
+        <li><strong>Offline verification</strong> — proofs and <code>.tproof.json</code> envelopes can be checked locally, which is useful for long-term archiving and air-gapped environments.</li>
+      </ul>
+      <p>ProofSpec does not replace legal or regulatory frameworks; it provides a minimal, technical layer that other policies and contracts can build on.</p>
     </section>
 
     <!-- JSON schema (+ alias) -->
@@ -727,9 +766,21 @@ function verify({ hash, ts, sig }, secret) {
       <p>These protocols do not replace ProofSpec; they document the human and policy layer that surrounds the technical proof of existence.</p>
     </section>
 
+    <section class="card" id="governance">
+      <h2>Governance &amp; neutrality</h2>
+      <p>ProofSpec is intentionally small, open, and neutral:</p>
+      <ul>
+        <li>It defines a data model and signing rules, not a business model or infrastructure stack.</li>
+        <li>Any organization can implement a ProofSpec-compliant issuer or verifier, self-hosted or managed.</li>
+        <li>No blockchain or specific ledger is required; implementations are free to choose their own internal anchoring mechanisms if desired.</li>
+        <li>TimeProofs acts as a reference implementation, demonstrating one possible stateless deployment pattern for the protocol.</li>
+      </ul>
+      <p>The intent is to keep ProofSpec stable and interoperable so that different ecosystems can adopt it without lock-in.</p>
+    </section>
+
     <section class="card" id="versioning">
       <h2>Versioning &amp; compatibility</h2>
-      <p>This document describes <strong>ProofSpec v0.1</strong>. Additive changes SHOULD prefer minor/patch bumps; breaking changes MUST bump the major version.</p>
+      <p><strong>ProofSpec v0.1</strong> is the current normative core of the protocol. Additive changes SHOULD prefer minor/patch bumps; breaking changes MUST bump the major version.</p>
       <p>Issuers and verifiers SHOULD clearly expose which ProofSpec version(s) they support.</p>
       <p>TimeProofs v0.2 introduces a stateless implementation and <code>.tproof.json</code> receipts, but:</p>
       <ul>
@@ -782,7 +833,7 @@ function verify({ hash, ts, sig }, secret) {
       <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
       </a>
-      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
+      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
       </a>
       <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn">
@@ -938,4 +989,4 @@ function verify({ hash, ts, sig }, secret) {
   })();
   </script>
 </body>
-    </html>
+</html>
