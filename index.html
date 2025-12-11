@@ -93,7 +93,7 @@
     "@type":"WebSite",
     "name":"TimeProofs",
     "url":"https://timeproofs.io/",
-    "dateModified":"2025-12-07"
+    "dateModified":"2025-12-11"
   }
   </script>
 
@@ -437,7 +437,7 @@ upgrade-insecure-requests">
   <main id="main" class="wrap" role="main">
     <!-- HERO -->
     <section class="hero reveal" aria-labelledby="hero-title">
-      <div class="label">Status: Public Beta v0.2 · Protocol + API · Privacy-first · No blockchain</div>
+      <div class="label">Status: Public Beta v0.2 · ProofSpec v0.1 · Reference API · Privacy-first · No blockchain</div>
       <h1 id="hero-title" class="title">Prove when your data existed — without exposing it.</h1>
 
       <p class="subtitle">
@@ -445,8 +445,12 @@ upgrade-insecure-requests">
       </p>
 
       <p class="positioning">
-        Open standard + reference API · No account · Hash-only, no PII · Signed timestamp · Online &amp; offline verification
+        Open standard + reference API · No account required · Hash-only requests (no content uploaded) · Signed timestamp · Online &amp; offline verification
       </p>
+      <p class="positioning" style="margin-top:-2px; font-size:.9rem;">
+        Offline verification means verifying the <code>.tproof.json</code> bundle locally (no network). Online verification uses the public <code>/api/verify</code> endpoint.
+      </p>
+
       <p style="margin:6px 0 0; color:#9fb3c9">
         <a href="/regulations.html" style="color:#9beefb">Regulations &amp; Compliance →</a>
       </p>
@@ -615,7 +619,7 @@ upgrade-insecure-requests">
     <section class="section bg-solid reveal" aria-labelledby="how">
       <h2 id="how">How It Works</h2>
       <p style="text-align:center; color:#9fb3c9; margin:-6px 0 12px">
-        Model v0.2: <strong>Hash locally → Signed .tproof.json bundle → Verify online or offline</strong><br/>
+        Flow v0.2: <strong>Hash locally → Signed .tproof.json bundle → Verify online or offline</strong><br/>
         <span style="font-size:.9rem;">Integration pattern: <code>hash → timestamp → bundle → verify</code></span>
       </p>
 
@@ -825,6 +829,7 @@ const check = await res.json();</code></pre>
       <a href="/">Home</a> •
       <a href="/proofspec.html">Protocol</a> •
       <a href="/use-cases.html">Use Cases</a> •
+      <a href="/verify.html">Create/Verify</a> •
       <a href="/docs.html">API Docs</a> •
       <a href="/regulations.html">Regulations</a> •
       <a href="/.well-known/security.txt">Security.txt</a> •
@@ -862,7 +867,7 @@ const check = await res.json();</code></pre>
     "mainEntity":[
       {"@type":"Question","name":"Do you store my content?","acceptedAnswer":{"@type":"Answer","text":"No. We only handle hashes. Originals never leave your device."}},
       {"@type":"Question","name":"Is there a blockchain involved?","acceptedAnswer":{"@type":"Answer","text":"No. We use signed, cryptographic timestamps with public verification."}},
-      {"@type":"Question","name":"How do I verify a proof?","acceptedAnswer":{"@type":"Answer","text":"Open the verify endpoint or use any ProofSpec-compliant client. The proof is self-describing."}},
+      {"@type":"Question","name":"How do I verify a proof?","acceptedAnswer":{"@type":"Answer","text":"Verify online via /api/verify, or verify the .tproof.json bundle locally (offline) using a ProofSpec-compliant client."}},
       {"@type":"Question","name":"Can I self-host the API?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use the OpenAPI spec and the reference container to run your own instance and interoperate."}},
       {"@type":"Question","name":"What does the proof contain?","acceptedAnswer":{"@type":"Answer","text":"Hash, algorithm, signed timestamp, signatures, and a public verify URL — enough for independent verification."}}
     ]
@@ -993,8 +998,8 @@ verify: ${verifyURL}`;
         const sum   = $('one-summary');
         const stat  = $('status-one');
 
-        out.textContent=''; 
-        sum.textContent=''; 
+        out.textContent='';
+        sum.textContent='';
         stat.hidden=true;
 
         if (!input.trim()){
@@ -1161,4 +1166,4 @@ verify: ${verifyURL}`;
   <!-- Toast container -->
   <div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
-</html>
+  </html>
