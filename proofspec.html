@@ -90,6 +90,7 @@
     "url":"https://timeproofs.io/"
   }
   </script>
+
   <!-- TechArticle JSON-LD for ProofSpec -->
   <script type="application/ld+json">
   {
@@ -198,17 +199,24 @@ upgrade-insecure-requests">
     }
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
 
+    /* master nav styling */
     .tp-nav a{
       margin-left:18px; padding:10px 0; display:inline-block;
       text-underline-offset:3px;
+      color:var(--text);
+      font-weight:700;
+      text-decoration:none;
     }
+    .tp-nav a:hover{ color:var(--accent); text-decoration:underline }
+    .tp-nav a[aria-current="page"]{ color:#9beefb; text-decoration:none }
 
     .cta-header{
       display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
       border-radius:10px; background:var(--accent); color:#06202a;
       font-weight:800; box-shadow:0 6px 24px rgba(34,211,238,.25);
+      text-decoration:none;
     }
-    .cta-header:hover{ filter:brightness(1.05) }
+    .cta-header:hover{ filter:brightness(1.05); text-decoration:none }
 
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center;
@@ -237,7 +245,9 @@ upgrade-insecure-requests">
       .nav-cta{
         display:block; margin-top:6px; padding:12px; text-align:center;
         border-radius:12px; background:var(--accent); color:#06202a; font-weight:800;
+        text-decoration:none;
       }
+      .nav-cta:hover{ filter:brightness(1.05); text-decoration:none }
     }
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
@@ -261,6 +271,26 @@ upgrade-insecure-requests">
       border:1px solid #214a57; background:#0d2330; color:#bff1ff;
       border-radius:999px; font-size:.85rem;
     }
+    .proof-box{
+      margin:12px auto 0;
+      max-width:980px;
+      padding:12px 14px;
+      border:1px solid #214a57;
+      background:#0d2330;
+      border-radius:14px;
+      color:#bff1ff;
+      text-align:center;
+    }
+    .proof-box .label{
+      display:inline-block;
+      margin-bottom:6px;
+      font-weight:900;
+      letter-spacing:.2px;
+      color:#d7fbff;
+    }
+    .proof-box code{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:inline-block; max-width:100% }
+    .proof-box a{ color:#bff1ff; font-weight:800; text-decoration:underline }
+    .proof-box a:hover{ color:var(--accent) }
 
     /* TOC */
     nav.toc{
@@ -345,7 +375,17 @@ upgrade-insecure-requests">
       display:inline-flex; align-items:center; gap:6px;
       padding:6px 10px; border:1px solid var(--line); border-radius:999px;
       background:#0d1628; font-size:.9rem; color:#cfefff;
+      text-decoration:none;
     }
+    footer .links a{
+      color:#cfefff;
+      font-weight:600;
+      text-decoration:none;
+      text-underline-offset:3px;
+    }
+    footer .links a:hover{ color:var(--accent); text-decoration:underline }
+    footer .links a[aria-current="page"]{ color:var(--accent); text-decoration:underline }
+
     .social{
       display:flex; gap:10px; justify-content:center; margin-top:10px;
     }
@@ -361,14 +401,10 @@ upgrade-insecure-requests">
     @media (max-width:899px){
       table{ min-width:100%; }
     }
-
-    /* Forced nav/footer styling (align master) */
-    #tp-nav a, footer .links a{ color:#a7b7cc; font-weight:600; text-decoration:none }
-    #tp-nav a:hover, footer .links a:hover{ color:var(--accent); text-decoration:underline }
-    #tp-nav a[aria-current="page"], footer .links a[aria-current="page"]{ color:var(--accent); text-decoration:underline }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
+
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
@@ -378,6 +414,7 @@ upgrade-insecure-requests">
       <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
       <span>TimeProofs</span>
     </a>
+
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
       <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
@@ -389,7 +426,9 @@ upgrade-insecure-requests">
       <a href="/about.html">About</a>
       <a class="nav-cta" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
     </nav>
+
     <a class="cta-header" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
+
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu">
       <span aria-hidden="true">☰</span>
     </button>
@@ -405,6 +444,16 @@ upgrade-insecure-requests">
         ProofSpec is the open, normative specification to prove when data existed and that it has not changed.
         TimeProofs v0.2 is a reference implementation providing a stateless API and portable <code>.tproof.json</code> receipts.
       </p>
+
+      <!-- Proof of Release (master: IDs standard + dup IDs) -->
+      <div class="proof-box" role="note" aria-label="Proof of Release">
+        <div class="label">Proof of Release</div>
+        <div>
+          Release: <code id="page-proof-release">…</code> ·
+          Hash: <code id="page-proof-hash">…</code> ·
+          <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
+        </div>
+      </div>
     </section>
 
     <!-- TOC -->
@@ -790,9 +839,9 @@ function verify({ hash, ts, sig }, secret) {
     <section class="card" id="page-proof-sec" aria-labelledby="pp-title">
       <h2 id="pp-title">This page is verified by TimeProofs</h2>
       <p>
-        Release: <code id="page-proof-release">…</code> ·
-        Hash: <code id="page-proof-hash">…</code> ·
-        <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
+        Release: <code id="page-proof-release-dup">…</code> ·
+        Hash: <code id="page-proof-hash-dup">…</code> ·
+        <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener">Verify</a>
       </p>
       <p style="margin-top:10px">
         The hash above identifies a specific build of this ProofSpec v0.1 document. The verify link returns the signed record used to prove its existence and integrity.
@@ -821,6 +870,7 @@ function verify({ hash, ts, sig }, secret) {
       <a href="/humans.txt">humans.txt</a> •
       <a href="/rss.xml">RSS</a>
     </div>
+
     <div class="social" aria-label="Social links">
       <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
@@ -905,13 +955,16 @@ function verify({ hash, ts, sig }, secret) {
       (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu();
     }
     burger && burger.addEventListener('click', toggleMenu);
+
     document.addEventListener('click',(e)=>{
       if(window.matchMedia('(min-width: 900px)').matches) return;
       if(!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu();
     },{ passive:true });
+
     document.addEventListener('keydown',(e)=>{
       if(e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu();
     },{ passive:true });
+
     window.addEventListener('resize',()=>{
       if(window.matchMedia('(min-width: 900px)').matches) closeMenu();
     },{ passive:true });
@@ -925,7 +978,7 @@ function verify({ hash, ts, sig }, secret) {
       });
     })();
 
-    // Release manifest fill (Page proof)
+    // Release manifest fill (Proof of Release + Page proof)
     (async()=>{
       try{
         const r=await fetch('/releases/v0.2.json',{cache:'no-store'});
@@ -934,15 +987,28 @@ function verify({ hash, ts, sig }, secret) {
         const id=document.documentElement.dataset.page || 'proofspec.html';
         const e=map[id] || map['proofspec.html'] || map['/'] || map;
 
+        const elR=document.getElementById('page-proof-release');
         const elH=document.getElementById('page-proof-hash');
         const elL=document.getElementById('page-proof-link');
-        const elR=document.getElementById('page-proof-release');
 
-        if(elR && e.release) elR.textContent=e.release;
-        if(e.hash && elH) elH.textContent=e.hash;
+        const elR2=document.getElementById('page-proof-release-dup');
+        const elH2=document.getElementById('page-proof-hash-dup');
+        const elL2=document.getElementById('page-proof-link-dup');
+
+        if(e.release){
+          if(elR) elR.textContent=e.release;
+          if(elR2) elR2.textContent=e.release;
+        }
+        if(e.hash){
+          if(elH) elH.textContent=e.hash;
+          if(elH2) elH2.textContent=e.hash;
+        }
 
         const url=e.verify || (e.hash ? ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(e.hash)) : '#');
-        if(elL && url) elL.href=url;
+        if(url){
+          if(elL) elL.href=url;
+          if(elL2) elL2.href=url;
+        }
       }catch{}
     })();
 
@@ -981,4 +1047,4 @@ function verify({ hash, ts, sig }, secret) {
   })();
   </script>
 </body>
-  </html>
+    </html>
