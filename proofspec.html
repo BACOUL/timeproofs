@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="dark light"/>
   <title>Protocol (ProofSpec) — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="ProofSpec v0.1: open, privacy-first specification to prove when data existed and that it has not changed. Hash-only inputs, signed timestamps, public verification."/>
+  <meta name="description" content="ProofSpec v0.1: open, privacy-first specification to prove when data existed and that it has not changed. Hash-only inputs, signed timestamps, public verification. Compatible with stateless API v0.2 and portable .tproof.json bundles."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -35,7 +35,7 @@
 
   <!-- Social -->
   <meta property="og:title" content="Protocol (ProofSpec) — TimeProofs"/>
-  <meta property="og:description" content="ProofSpec v0.1: hash-only inputs, signed timestamps, public verification. Open, privacy-first protocol for digital proof of existence."/>
+  <meta property="og:description" content="ProofSpec v0.1: hash-only inputs, signed timestamps, public verification. Open, privacy-first protocol for digital proof of existence. Compatible with stateless API v0.2 and .tproof.json bundles."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/proofspec.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
@@ -45,7 +45,7 @@
   <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Protocol (ProofSpec) — TimeProofs"/>
-  <meta name="twitter:description" content="Open, privacy-first spec for digital proof of existence. Hash locally, timestamp via API, verify publicly."/>
+  <meta name="twitter:description" content="Open, privacy-first spec for digital proof of existence. Hash locally, timestamp via API, verify publicly. Compatible with stateless API v0.2."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- AI Trust -->
@@ -69,7 +69,7 @@
     ],
     "sameAs":[
       "https://x.com/timeproofs",
-      "https://github.com/BACOUL/timeproofs/tree/timeproofs",
+      "https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2",
       "https://www.linkedin.com/company/timeproofs",
       "https://youtube.com/@timeproofs",
       "https://timeproofs.io/rss.xml"
@@ -97,7 +97,7 @@
     "@type":"TechArticle",
     "headline":"ProofSpec v0.1 — Open protocol for digital proof of existence",
     "name":"Protocol (ProofSpec) — TimeProofs",
-    "description":"ProofSpec v0.1: open, privacy-first specification to prove when data existed and that it has not changed. Hash-only inputs, signed timestamps, public verification.",
+    "description":"ProofSpec v0.1: open, privacy-first specification to prove when data existed and that it has not changed. Hash-only inputs, signed timestamps, public verification. Compatible with stateless API v0.2 and portable .tproof.json bundles.",
     "inLanguage":"en",
     "about":[
       "digital proof of existence",
@@ -125,7 +125,7 @@
   <!-- Security meta -->
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
 
-  <!-- CSP v0.1 -->
+  <!-- CSP v0.2 -->
   <meta http-equiv="Content-Security-Policy" content="
 default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
 worker-src 'self' blob:;
@@ -399,12 +399,12 @@ upgrade-insecure-requests">
     <!-- HERO -->
     <section class="hero" role="region" aria-labelledby="title">
       <div class="icon" aria-hidden="true">📘</div>
-      <p class="badge">Status: Public Beta v0.1 · ProofSpec v0.1 · Privacy-first · No blockchain</p>
+      <p class="badge">Status: Public Beta v0.2 · ProofSpec v0.1 · API v0.2 · Privacy-first · No blockchain</p>
       <h1 id="title">Protocol — ProofSpec</h1>
       <p class="lead">Open, normative specification to prove when data existed and that it has not changed. Hash-only inputs, signed timestamps, public verification.</p>
     </section>
 
-    <!-- TOC -->
+    <!-- TOC (GLOBAL v0.2+: MUST remain identical on all pages) -->
     <nav class="toc" aria-label="Contents">
       <span class="toc-label">On this page</span>
       <a href="#overview">Overview</a>
@@ -437,6 +437,7 @@ upgrade-insecure-requests">
       <p>ProofSpec defines how to create, sign, publish, and verify digital proofs of existence.</p>
       <p>Model: hash locally → get a signed, timestamped proof → anyone can verify later without access to your original data.</p>
       <p>This document is normative for issuers and verifiers that claim to be <strong>ProofSpec v0.1 compliant</strong>.</p>
+      <p><strong>v0.2 note:</strong> TimeProofs v0.2 remains stateless (hash-only). Proofs can be packaged as portable <code>.tproof.json</code> bundles and validated publicly or inspected offline.</p>
     </section>
 
     <section class="card" id="normative">
@@ -476,6 +477,7 @@ upgrade-insecure-requests">
 
     <!-- Canonicalization (+ alias) -->
     <span id="cannolization" aria-hidden="true"></span>
+    <span id="canonicalisation" aria-hidden="true"></span>
     <section class="card" id="canonicalization">
       <h2>Canonicalization</h2>
       <ul>
@@ -495,11 +497,15 @@ upgrade-insecure-requests">
           <tbody>
             <tr><td>hash</td><td>string(64 hex)</td><td>SHA-256 of input. REQUIRED.</td></tr>
             <tr><td>ts</td><td>ISO 8601</td><td>UTC timestamp of issuance. REQUIRED.</td></tr>
-            <tr><td>sig</td><td>hex</td><td>Signature over <code>hash|ts</code>. REQUIRED.</td></tr>
-            <tr><td>alg</td><td>enum</td><td><code>HMAC-SHA256</code> now; Ed25519 planned. REQUIRED.</td></tr>
+            <tr><td>sig</td><td>hex</td><td>Primary signature over <code>hash|ts</code>. REQUIRED.</td></tr>
+            <tr><td>alg</td><td>enum</td><td><code>HMAC-SHA256</code> or <code>Ed25519</code>. REQUIRED.</td></tr>
             <tr><td>kid</td><td>string</td><td>Key id / version used to produce <code>sig</code>. SHOULD be present.</td></tr>
+            <tr><td>sig2</td><td>hex</td><td>Secondary signature over <code>hash|ts</code> (optional, v0.2+).</td></tr>
+            <tr><td>alg2</td><td>enum</td><td>Algorithm for <code>sig2</code> (optional, v0.2+).</td></tr>
+            <tr><td>kid2</td><td>string</td><td>Key id for <code>sig2</code> (optional, v0.2+).</td></tr>
             <tr><td>issuer</td><td>string</td><td>Authority issuing the proof (e.g. <code>timeproofs.io</code>).</td></tr>
             <tr><td>verify_url</td><td>URL</td><td>Public verify endpoint for this hash/proof. RECOMMENDED.</td></tr>
+            <tr><td>jwks_url</td><td>URL</td><td>Public keys for Ed25519 verification (optional, v0.2+).</td></tr>
             <tr><td>meta</td><td>object</td><td>Small, no PII. Optional implementation-specific metadata.</td></tr>
           </tbody>
         </table>
@@ -511,11 +517,19 @@ upgrade-insecure-requests">
 <pre><code>{
   "hash":"&lt;64-hex&gt;",
   "ts":"2025-01-01T00:00:00.000Z",
+
   "sig":"&lt;hex&gt;",
   "alg":"HMAC-SHA256",
   "kid":"v1",
+
+  "sig2":"&lt;hex&gt;",
+  "alg2":"Ed25519",
+  "kid2":"ed25519-2025-01",
+  "jwks_url":"https://timeproofs.io/.well-known/jwks.json",
+
   "issuer":"timeproofs.io",
   "verify_url":"https://api.timeproofs.io/api/verify?hash=...",
+
   "meta":{
     "type":"event",
     "source":"web"
@@ -528,7 +542,7 @@ upgrade-insecure-requests">
 <pre><code>// Node.js HMAC verify (example)
 import crypto from "node:crypto";
 
-function verify({ hash, ts, sig }, secret) {
+function verifyHmac({ hash, ts, sig }, secret) {
   const msg = `${hash}|${ts}`;
   const expect = crypto
     .createHmac("sha256", secret)
@@ -540,6 +554,17 @@ function verify({ hash, ts, sig }, secret) {
     Buffer.from(sig, "hex")
   );
 }</code></pre>
+
+<pre><code>// Node.js Ed25519 verify (example, v0.2+)
+// publicKeyPem: PEM encoded Ed25519 public key
+import crypto from "node:crypto";
+
+function verifyEd25519({ hash, ts, sig2 }, publicKeyPem) {
+  const msg = Buffer.from(`${hash}|${ts}`, "utf8");
+  const sig = Buffer.from(sig2, "hex");
+  const key = crypto.createPublicKey(publicKeyPem);
+  return crypto.verify(null, msg, key, sig);
+}</code></pre>
     </section>
 
     <section class="card" id="validation">
@@ -548,6 +573,7 @@ function verify({ hash, ts, sig }, secret) {
         <li><code>hash</code> MUST be a 64-character lowercase hex string.</li>
         <li><code>ts</code> MUST be a valid ISO 8601 UTC timestamp and SHOULD NOT be in the future beyond a reasonable tolerance.</li>
         <li>The verifier MUST recompute the expected signature according to <code>alg</code> and <code>kid</code> and compare using a timing-safe method.</li>
+        <li>If <code>sig2</code>/<code>alg2</code> are present, the verifier SHOULD verify them as an additional integrity signal (v0.2+).</li>
         <li>If any required field is missing or invalid, the verifier MUST return a failure with an appropriate error code.</li>
       </ul>
     </section>
@@ -567,6 +593,12 @@ function verify({ hash, ts, sig }, secret) {
     "sig":{"type":"string"},
     "alg":{"type":"string"},
     "kid":{"type":"string"},
+
+    "sig2":{"type":"string"},
+    "alg2":{"type":"string"},
+    "kid2":{"type":"string"},
+    "jwks_url":{"type":"string","format":"uri"},
+
     "issuer":{"type":"string"},
     "verify_url":{"type":"string","format":"uri"},
     "meta":{"type":"object","additionalProperties":true}
@@ -598,10 +630,12 @@ function verify({ hash, ts, sig }, secret) {
       <h2>Proof bundle</h2>
       <p>Artifacts (files, datasets, binaries) SHOULD be shipped with their <code>.tproof.json</code> proof alongside them, or at least with a stable verify link.</p>
       <p>Bundles SHOULD be small, self-contained, and not contain personal data.</p>
+      <p><strong>v0.2 guidance:</strong> a bundle SHOULD include the proof fields (<code>hash</code>, <code>ts</code>, signatures, <code>issuer</code>, <code>verify_url</code>) and MAY include a minimal <code>meta</code> object. Offline inspection MUST be possible without contacting the issuer; online verification MAY be used to re-fetch status and keys (e.g. <code>jwks_url</code>).</p>
     </section>
 
     <!-- Reserved fields (+ alias) -->
     <span id="reseverd-field" aria-hidden="true"></span>
+    <span id="reserved-fields" aria-hidden="true"></span>
     <section class="card" id="reserved">
       <h2>Reserved fields</h2>
       <p>Names starting with <code>_tp_</code> are reserved for the ProofSpec and MUST NOT be used for custom metadata.</p>
@@ -622,6 +656,7 @@ function verify({ hash, ts, sig }, secret) {
         <li>Issuers SHOULD keep minimal logs and avoid storing original content.</li>
         <li>Issuers SHOULD apply rate limits and abuse protection on timestamp and verify endpoints.</li>
         <li>Key rotation SHOULD be implemented using <code>kid</code> and a clear key lifecycle policy.</li>
+        <li>If Ed25519 is used, issuers SHOULD publish public keys via a stable JWKS endpoint and rotate using key ids (<code>kid</code>).</li>
       </ul>
     </section>
 
@@ -648,8 +683,16 @@ function verify({ hash, ts, sig }, secret) {
     <span id="pageproof" aria-hidden="true"></span>
     <section class="card" id="page-proof-sec" aria-labelledby="pp-title">
       <h2 id="pp-title">This page is verified by TimeProofs</h2>
-      <p>Release: <code id="page-proof-release">…</code> · Hash: <code id="page-proof-hash-dup">…</code> ·
-        <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener">Verify</a></p>
+      <p>
+        Release: <code id="page-proof-release">…</code> ·
+        Hash: <code id="page-proof-hash">…</code> ·
+        <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
+      </p>
+
+      <!-- Backward-compatible duplicates (not displayed) -->
+      <span id="page-proof-hash-dup" style="display:none">…</span>
+      <a id="page-proof-link-dup" href="#" style="display:none" aria-hidden="true" tabindex="-1">Verify</a>
+
       <p style="margin-top:10px">
         The hash above identifies a specific build of this ProofSpec v0.1 document. The verify link returns the signed record used to prove its existence and integrity.
       </p>
@@ -681,7 +724,7 @@ function verify({ hash, ts, sig }, secret) {
       <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
       </a>
-      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
+      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
       </a>
       <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn">
@@ -784,21 +827,25 @@ function verify({ hash, ts, sig }, secret) {
     // Release manifest fill
     (async()=>{
       try{
-        const r=await fetch('/releases/v0.1.json',{cache:'no-store'});
+        const r=await fetch('/releases/v0.2.json',{cache:'no-store'});
         if(!r.ok) return;
         const map=await r.json();
         const id=document.documentElement.dataset.page || 'proofspec.html';
         const e=map[id] || map['proofspec.html'] || map['/'] || map;
+
         const elH1=document.getElementById('page-proof-hash');
         const elL1=document.getElementById('page-proof-link');
         const elH2=document.getElementById('page-proof-hash-dup');
         const elL2=document.getElementById('page-proof-link-dup');
         const elR =document.getElementById('page-proof-release');
+
         if(elR && e.release) elR.textContent=e.release;
+
         if(e.hash){
           elH1 && (elH1.textContent=e.hash);
           elH2 && (elH2.textContent=e.hash);
         }
+
         const url=e.verify || (e.hash ? ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(e.hash)) : '#');
         if(elL1 && url) elL1.href=url;
         if(elL2 && url) elL2.href=url;
