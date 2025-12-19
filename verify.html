@@ -327,7 +327,7 @@ upgrade-insecure-requests">
     .primary-btn{
       margin-top:14px; width:100%; padding:11px 14px;
       border-radius:10px; border:0; cursor:pointer;
-      font-weight:800; background:var(--accent); color:#f8fafc;
+      font-weight:800; background:var(--accent); color:#06202a;
       box-shadow:0 8px 28px rgba(34,211,238,.3);
     }
     .primary-btn[disabled]{ opacity:.6; cursor:default; box-shadow:none }
@@ -420,11 +420,14 @@ upgrade-insecure-requests">
       display:inline-flex; align-items:center; gap:6px;
       padding:6px 10px; border:1px solid var(--line); border-radius:999px;
       background:#0d1628; font-size:.9rem; color:#cfefff;
+      text-decoration:none;
     }
     footer .links a{
-      color:#cfefff; font-weight:600; text-underline-offset:3px;
+      color:#cfefff; font-weight:600; text-underline-offset:3px; text-decoration:none;
     }
-    footer .links a:hover{ color:#9beefb; text-decoration:underline }
+    footer .links a:hover{ color:var(--accent); text-decoration:underline }
+    footer .links a[aria-current="page"]{ color:var(--accent); text-decoration:underline }
+
     .social{
       display:flex; gap:10px; justify-content:center; margin-top:10px;
     }
@@ -449,7 +452,7 @@ upgrade-insecure-requests">
       border-radius:12px;
     }
 
-    /* Nav/Footer unifiés (v0.1 maître) */
+    /* Nav/Footer unifiés (master) */
     #tp-nav a,
     footer .links a{
       color:#a7b7cc;
@@ -578,7 +581,7 @@ upgrade-insecure-requests">
 
         <div class="status-line" id="create-status" aria-live="polite"></div>
 
-        <!-- Résumé humain v0.2 -->
+        <!-- Human summary v0.2 -->
         <div class="summary" id="create-summary" aria-live="polite" aria-atomic="true">
           <div class="item"><span class="k">Status</span><span id="create-s-status">—</span></div>
           <div class="item"><span class="k">Hash (data fingerprint)</span><code id="create-s-hash">—</code></div>
@@ -615,7 +618,7 @@ upgrade-insecure-requests">
 
         <div class="status-line" id="verify-status" aria-live="polite"></div>
 
-        <!-- Résumé humain v0.2 (verify) -->
+        <!-- Human summary v0.2 (verify) -->
         <div class="summary" id="verify-summary" aria-live="polite" aria-atomic="true">
           <div class="item"><span class="k">Status</span><span id="verify-s-status">—</span></div>
           <div class="item"><span class="k">Hash (data fingerprint)</span><code id="verify-s-hash">—</code></div>
@@ -710,13 +713,18 @@ POST https://api.timeproofs.io/api/verify
       </article>
     </section>
 
-    <!-- Bloc Proof of Release standard, identique aux autres pages -->
+    <!-- Proof of Release (IDs primary + dup, aligned with master loader expectations) -->
     <section class="page-proof" role="region" aria-labelledby="proof-title">
       <div class="proof-box" id="page-proof-sec">
         <p class="proof-label" id="proof-title"><strong>This page is verified by TimeProofs</strong></p>
         <p>
           Release: <code id="page-proof-release">…</code> ·
-          Hash: <code id="page-proof-hash-dup">…</code> ·
+          Hash: <code id="page-proof-hash">…</code> ·
+          <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
+        </p>
+        <p style="display:none">
+          <code id="page-proof-release-dup">…</code>
+          <code id="page-proof-hash-dup">…</code>
           <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener">Verify</a>
         </p>
         <p class="hint">The hash above is loaded from the v0.2 release manifest.</p>
@@ -724,7 +732,7 @@ POST https://api.timeproofs.io/api/verify
     </section>
   </main>
 
-  <!-- Footer -->
+  <!-- Footer (aligned with master) -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <a class="badge" href="/proofspec.html">🔍 Open Spec v0.1</a>
@@ -781,6 +789,19 @@ POST https://api.timeproofs.io/api/verify
       TimeProofsV02 &&
       typeof TimeProofsV02.createBundle === "function";
 
+    // --------- Timestamp safety (prevents confusing 1970 outputs) ----------
+    const MIN_REASONABLE_MS = Date.UTC(2000,0,1); // hide anything before 2000
+    function isReasonableMs(ms){
+      return typeof ms === "number" && isFinite(ms) && ms >= MIN_REASONABLE_MS;
+    }
+    function isReasonableIso(iso){
+      if(!iso || typeof iso !== "string") return false;
+      const d = new Date(iso);
+      const ms = d.getTime();
+      return !isNaN(ms) && isReasonableMs(ms);
+    }
+    // ----------------------------------------------------------------------
+
     // Helpers v0.2 (hash + timestamp + signature)
     function getHashValue(hash){
       if(!hash) return "";
@@ -821,22 +842,30 @@ POST https://api.timeproofs.io/api/verify
         if(!isNaN(d.getTime())) issuedAtMs = d.getTime();
       }
 
-      if(!issuedAtMs) issuedAtMs = Date.now();
+      // If server doesn't provide a sane timestamp, do NOT fabricate an epoch-ish time.
+      // We keep issuedAtMs null; UI will hide "Proof issued".
+      if(!isReasonableMs(issuedAtMs)) issuedAtMs = null;
 
       return { issuedAt: issuedAtMs, issuer };
     }
     function getTimestampIso(tsObj){
       if(!tsObj || typeof tsObj !== "object") return null;
+
       if(typeof tsObj.issuedAt === "number"){
+        if(!isReasonableMs(tsObj.issuedAt)) return null;
         try{ return new Date(tsObj.issuedAt).toISOString(); }catch{ return null; }
       }
       if(typeof tsObj.issuedAt === "string"){
         const d = new Date(tsObj.issuedAt);
-        if(!isNaN(d.getTime())) return d.toISOString();
+        if(isNaN(d.getTime())) return null;
+        const iso = d.toISOString();
+        return isReasonableIso(iso) ? iso : null;
       }
       if(typeof tsObj.iso === "string"){
         const d = new Date(tsObj.iso);
-        if(!isNaN(d.getTime())) return d.toISOString();
+        if(isNaN(d.getTime())) return null;
+        const iso = d.toISOString();
+        return isReasonableIso(iso) ? iso : null;
       }
       return null;
     }
@@ -845,10 +874,11 @@ POST https://api.timeproofs.io/api/verify
       return proof.hmac || proof.signature || proof.sig || "";
     }
 
-    // format date locale (utilisé pour "Proof issued" et "Checked now")
+    // format date locale
     function fmtLocal(iso){
       try{
         if(!iso) return "—";
+        if(!isReasonableIso(iso)) return "—";
         return new Intl.DateTimeFormat("en-GB",{
           year:"numeric",
           month:"2-digit",
@@ -858,13 +888,10 @@ POST https://api.timeproofs.io/api/verify
           second:"2-digit"
         }).format(new Date(iso));
       }catch{
-        return iso || "—";
+        return "—";
       }
     }
-
-    function nowIso(){
-      return new Date().toISOString();
-    }
+    function nowIso(){ return new Date().toISOString(); }
 
     // Header shade
     const hdr=document.getElementById('hdr');
@@ -913,7 +940,7 @@ POST https://api.timeproofs.io/api/verify
       document.getElementById('verify-card').scrollIntoView({behavior:'smooth',block:'start'});
     });
 
-    // Helpers généraux
+    // Helpers
     function withTimeout(options={}){
       const ctrl=new AbortController();
       const t=setTimeout(()=>ctrl.abort(), REQ_TIMEOUT_MS);
@@ -949,9 +976,9 @@ POST https://api.timeproofs.io/api/verify
         document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
       });
     }
-    function short(s,n=16){
+    function short(s){
       if(!s || typeof s!=="string") return "—";
-      return s.length<=n ? s : s.slice(0,8)+"…"+s.slice(-8);
+      return s.length<=16 ? s : s.slice(0,8)+"…"+s.slice(-8);
     }
     function fail(msg){ throw new Error(msg); }
 
@@ -1061,6 +1088,7 @@ POST https://api.timeproofs.io/api/verify
     const downloadBundle=document.getElementById("download-bundle");
     const shareVerifyLink=document.getElementById("share-verify-link");
     const openVerifyHere=document.getElementById("open-verify-here");
+    const btnVerify=document.getElementById("btn-verify");
 
     function showCreateError(msg){
       createStatus.innerHTML=`<span class="pill bad">❌ ${msg}</span>`;
@@ -1092,11 +1120,7 @@ POST https://api.timeproofs.io/api/verify
 
       const metaFromServer = j && j.meta && typeof j.meta === "object" ? j.meta : {};
       const metaLocal = metaInput && typeof metaInput === "object" ? metaInput : {};
-      const metaMerged = {
-        ...(type ? { type } : {}),
-        ...metaFromServer,
-        ...metaLocal
-      };
+      const metaMerged = { ...(type ? { type } : {}), ...metaFromServer, ...metaLocal };
 
       if(hasBundleSDK){
         return TimeProofsV02.createBundle({
@@ -1107,15 +1131,8 @@ POST https://api.timeproofs.io/api/verify
         });
       }
 
-      const bundle = {
-        version: "timeproofs-0.2",
-        hash: hashObj,
-        timestamp: tsObj,
-        proof: proofObj
-      };
-      if(Object.keys(metaMerged).length){
-        bundle.meta = metaMerged;
-      }
+      const bundle = { version: "timeproofs-0.2", hash: hashObj, timestamp: tsObj, proof: proofObj };
+      if(Object.keys(metaMerged).length) bundle.meta = metaMerged;
       return bundle;
     }
 
@@ -1136,6 +1153,7 @@ POST https://api.timeproofs.io/api/verify
       const vurl=`/verify.html?hash=${encodeURIComponent(hashHex)}`;
       shareVerifyLink.style.display="inline-block";
       shareVerifyLink.href=vurl;
+
       openVerifyHere.onclick=()=>{
         if(!hashHex) return;
         document.getElementById("verify-hash").value=hashHex;
@@ -1196,12 +1214,12 @@ POST https://api.timeproofs.io/api/verify
         csHash.textContent=short(hashHex);
         csSign.textContent=short(sigShort || "");
 
+        // Show "Proof issued" only if server provided a reasonable timestamp (prevents 1970 confusion)
         if(proofIssuedIso){
           csTSProofWrap.style.display="flex";
           csTSProof.textContent=fmtLocal(proofIssuedIso);
         }
 
-        // Toujours rafraîchi à chaque clic (corrige la sensation de date bloquée)
         csTSCheckWrap.style.display="flex";
         csTSCheck.textContent=fmtLocal(nowIso());
 
@@ -1218,7 +1236,6 @@ POST https://api.timeproofs.io/api/verify
     };
 
     // VERIFY
-    const btnVerify=document.getElementById("btn-verify");
     const verifyStatus=document.getElementById("verify-status");
     const verifySummary=document.getElementById("verify-summary");
     const vsStatus=document.getElementById("verify-s-status");
@@ -1253,15 +1270,11 @@ POST https://api.timeproofs.io/api/verify
 
         let r, j={};
 
-        // 1) Essai GET
-        try{
-          r = await fetchAPI(`/verify?hash=${encodeURIComponent(inputHash)}`);
-          j = await r.json().catch(()=> ({}));
-        }catch(e){
-          fail("Network error while verifying.");
-        }
+        // 1) Try GET
+        r = await fetchAPI(`/verify?hash=${encodeURIComponent(inputHash)}`);
+        j = await r.json().catch(()=> ({}));
 
-        // 2) Si le serveur répond "not_found"
+        // 2) Not found
         if(r.status===404 || j.error==="not_found"){
           verifyStatus.innerHTML=`<span class="pill bad">❌ Not found</span>`;
           vsStatus.textContent="Not found";
@@ -1278,11 +1291,11 @@ POST https://api.timeproofs.io/api/verify
         // 3) Status HTTP
         const httpOk = r.ok;
 
-        // 4) Indices explicites du serveur
+        // 4) Server explicit flags
         const serverSaysValid   = j.valid === true || j.ok === true || j.state === "valid";
         const serverSaysInvalid = j.valid === false || j.ok === false || j.state === "invalid";
 
-        // 5) Récup hash / timestamp / signatures (tolérant)
+        // 5) Extract hash / timestamp / signatures (tolerant)
         let hashHex=inputHash;
         if(j.hash){
           if(typeof j.hash==="string") hashHex=j.hash;
@@ -1294,12 +1307,17 @@ POST https://api.timeproofs.io/api/verify
           tsIso = getTimestampIso(j.timestamp);
         }else if(typeof j.ts==="number" || typeof j.timestamp==="number"){
           const n = typeof j.ts==="number" ? j.ts : j.timestamp;
-          const d = new Date(n);
-          if(!isNaN(d.getTime())) tsIso = d.toISOString();
+          if(isReasonableMs(n)){
+            const d = new Date(n);
+            if(!isNaN(d.getTime())) tsIso = d.toISOString();
+          }
         }else if(typeof j.ts==="string" || typeof j.timestamp==="string"){
           const isoCandidate = j.ts || j.timestamp;
           const d = new Date(isoCandidate);
-          if(!isNaN(d.getTime())) tsIso = d.toISOString();
+          if(!isNaN(d.getTime())){
+            const iso = d.toISOString();
+            if(isReasonableIso(iso)) tsIso = iso;
+          }
         }
 
         let sigHmac=null, sigEd=null;
@@ -1311,7 +1329,7 @@ POST https://api.timeproofs.io/api/verify
           sigEd=j.sig_ed25519 || j.sig2 || null;
         }
 
-        // 6) Décision UI
+        // 6) UI decision
         let uiLabel, pill;
         if(serverSaysInvalid){
           uiLabel="Invalid";
@@ -1329,12 +1347,12 @@ POST https://api.timeproofs.io/api/verify
         vsHash.textContent=short(hashHex);
         vsSign.textContent=short(sigHmac || sigEd || "");
 
+        // Show only if sane (prevents 1970 confusion)
         if(tsIso){
           vsTSProofWrap.style.display="flex";
           vsTSProof.textContent=fmtLocal(tsIso);
         }
 
-        // Toujours mis à jour à chaque vérification (évite l'impression de date figée)
         vsTSCheckWrap.style.display="flex";
         vsTSCheck.textContent=fmtLocal(nowIso());
 
@@ -1346,7 +1364,6 @@ POST https://api.timeproofs.io/api/verify
         shareVerifyLink2.onclick=()=>{
           const url=`${location.origin}/verify.html?hash=${encodeURIComponent(hashHex)}`;
           copyToClipboard(url);
-          alert("Link copied:\n"+url);
         };
       }catch(e){
         showVerifyError(String(e.message||e));
@@ -1378,7 +1395,6 @@ POST https://api.timeproofs.io/api/verify
         const txt=await f.text();
         const b=JSON.parse(txt);
 
-        // Affichage immédiat du bundle (inspection offline)
         outVerify.textContent=JSON.stringify(b,null,2);
 
         let h="";
@@ -1405,19 +1421,24 @@ POST https://api.timeproofs.io/api/verify
         if(b.timestamp && typeof b.timestamp==="object"){
           tsIso = getTimestampIso(b.timestamp);
         }else if(typeof b.ts==="number"){
-          const d=new Date(b.ts);
-          if(!isNaN(d.getTime())) tsIso=d.toISOString();
+          if(isReasonableMs(b.ts)){
+            const d=new Date(b.ts);
+            if(!isNaN(d.getTime())) tsIso=d.toISOString();
+          }
         }else if(typeof b.ts==="string"){
           const d=new Date(b.ts);
-          if(!isNaN(d.getTime())) tsIso=d.toISOString();
+          if(!isNaN(d.getTime())){
+            const iso = d.toISOString();
+            if(isReasonableIso(iso)) tsIso = iso;
+          }
         }
         if(tsIso){
           vsTSProofWrap.style.display="flex";
           vsTSProof.textContent=fmtLocal(tsIso);
         }
+
         vsTSCheckWrap.style.display="flex";
         vsTSCheck.textContent=fmtLocal(nowIso());
-
         verifySummary.style.display="grid";
 
         document.getElementById("verify-card").scrollIntoView({behavior:"smooth",block:"start"});
@@ -1452,7 +1473,7 @@ POST https://api.timeproofs.io/api/verify
     tabs.faq.onclick=()=>showMini("faq");
     showMini("url");
 
-    // Copy buttons sur tous les <pre> (sauf ceux qui ont déjà un .copy-btn)
+    // Copy buttons on all <pre> (except those already having a .copy-btn)
     (function installCopyButtons(){
       document.querySelectorAll('pre').forEach((pre)=>{
         if(pre.querySelector('.copy-btn')) return;
@@ -1480,7 +1501,7 @@ POST https://api.timeproofs.io/api/verify
       });
     })();
 
-    // Auto aria-current (ne pas marquer le bouton .nav-cta)
+    // Auto aria-current (do not mark .nav-cta)
     (function(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
       document.querySelectorAll('header nav a:not(.nav-cta), footer .links a').forEach(a=>{
@@ -1489,7 +1510,7 @@ POST https://api.timeproofs.io/api/verify
       });
     })();
 
-    // Release manifest v0.2
+    // Release manifest v0.2 (fill primary + dup ids)
     (async()=>{
       try{
         const r=await fetch('/releases/v0.2.json',{cache:'no-store'});
@@ -1499,14 +1520,27 @@ POST https://api.timeproofs.io/api/verify
         const e=map[id] || map['verify.html'] || map['/'] || map;
 
         const elR=document.getElementById('page-proof-release');
+        const elH=document.getElementById('page-proof-hash');
+        const elL=document.getElementById('page-proof-link');
+
+        const elR2=document.getElementById('page-proof-release-dup');
         const elH2=document.getElementById('page-proof-hash-dup');
         const elL2=document.getElementById('page-proof-link-dup');
 
-        if(elR && e.release) elR.textContent=e.release;
-        if(e.hash && elH2) elH2.textContent=e.hash;
+        if(e.release){
+          if(elR) elR.textContent=e.release;
+          if(elR2) elR2.textContent=e.release;
+        }
+        if(e.hash){
+          if(elH) elH.textContent=e.hash;
+          if(elH2) elH2.textContent=e.hash;
+        }
 
         const url=e.verify || (e.hash ? ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(e.hash)) : '#');
-        if(elL2 && url) elL2.href=url;
+        if(url){
+          if(elL) elL.href=url;
+          if(elL2) elL2.href=url;
+        }
       }catch{}
     })();
 
