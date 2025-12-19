@@ -34,7 +34,6 @@
   <link rel="manifest" href="/site.webmanifest"/>
   <link rel="alternate" type="application/yaml" href="/openapi.yaml"/>
   <link rel="author" href="/humans.txt"/>
-  <link rel="status" href="https://status.timeproofs.io"/>
 
   <!-- Social -->
   <meta property="og:title" content="TimeProofs — Prove When Data Existed. Privately."/>
@@ -439,6 +438,10 @@ upgrade-insecure-requests">
     <section class="hero reveal" aria-labelledby="hero-title">
       <div class="label">Status: Public Beta v0.2 · ProofSpec v0.1 · Reference API · Privacy-first · No blockchain</div>
       <h1 id="hero-title" class="title">Prove when your data existed — without exposing it.</h1>
+
+      <p class="positioning" style="margin-top:-2px;">
+        If you can hash it, you can prove when it existed — without uploading it.
+      </p>
 
       <p class="subtitle">
         Hash anything on your device and get a signed <code>.tproof.json</code> bundle that proves when it existed and that it hasn’t changed — for AI outputs, files, and datasets.
@@ -916,7 +919,13 @@ const check = await res.json();</code></pre>
     }
 
     // Helpers
-    const toast=(msg)=>{ let t=document.querySelector('.toast'); if(!t){ t=document.createElement('div'); t.className='toast'; document.body.appendChild(t); } t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600); };
+    const toast=(msg)=>{
+      const t=document.querySelector('.toast');
+      if(!t) return;
+      t.textContent=msg;
+      t.classList.add('show');
+      setTimeout(()=>t.classList.remove('show'),1600);
+    };
     const $=(id)=>document.getElementById(id);
     async function sha256Hex(str){
       const buf=new TextEncoder().encode(str);
@@ -1105,53 +1114,52 @@ verify: ${verifyURL}`;
       try{
         const candidates = ['/releases/v0.2.json','/releases/v0.1.json'];
         let map = null;
-        for(const url of candidates){
+
+        for (const url of candidates){
           try{
-            const r = await fetch(url,{cache:'no-store'});
-            if(r.ok){
+            const r = await fetch(url, { cache:'no-store' });
+            if (r.ok){
               map = await r.json();
               break;
             }
-          }catch(e){}
+          }catch{}
         }
         if(!map) return;
 
-        const pageId = document.documentElement.dataset.page || '/';
-        const rel = map[pageId] || map['index.html'] || map['/'] || map;
+        const pageIdRaw = (document.documentElement.dataset.page || 'index.html').trim();
+        const pageId = pageIdRaw.replace(/^\/+/, '');
 
-        const relHero   = document.getElementById('page-proof-release');
-        const hashHero  = document.getElementById('page-proof-hash');
-        const linkHero  = document.getElementById('page-proof-link');
+        const keys = [
+          pageId,
+          '/' + pageId,
+          './' + pageId,
+          pageId.replace(/index\.html$/,''),
+          '/' + pageId.replace(/index\.html$/,''),
+          '/',
+          'index.html',
+          '/index.html'
+        ];
 
-        const relDup    = document.getElementById('page-proof-release-dup');
-        const hashDup   = document.getElementById('page-proof-hash-dup');
-        const linkDup   = document.getElementById('page-proof-link-dup');
-
-        const banner    = document.getElementById('rel-banner');
-
-        // No hero/banner release pill on index; keep only the block at the bottom
-        if (pageId !== 'index.html') {
-          if (banner && rel.release) banner.textContent = `🔏 ${rel.release} — Verified`;
-          if (relHero && rel.release) relHero.textContent = rel.release;
-        } else if (banner) {
-          banner.remove();
+        let rel = null;
+        for (const k of keys){
+          if (map && typeof map === 'object' && map[k]) { rel = map[k]; break; }
         }
+        if(!rel && map && typeof map === 'object') rel = map;
 
-        if (relDup && rel.release)  relDup.textContent  = rel.release;
+        const relDup  = document.getElementById('page-proof-release-dup');
+        const hashDup = document.getElementById('page-proof-hash-dup');
+        const linkDup = document.getElementById('page-proof-link-dup');
 
-        if (hashHero && rel.hash) hashHero.textContent = rel.hash;
-        if (hashDup && rel.hash)  hashDup.textContent  = rel.hash;
+        if (relDup && rel.release) relDup.textContent = rel.release;
+        if (hashDup && rel.hash)  hashDup.textContent = rel.hash;
 
         const url = rel.verify || (rel.hash ? ('https://api.timeproofs.io/api/verify?hash=' + encodeURIComponent(rel.hash)) : null);
-        if (linkHero && url) linkHero.href = url;
-        if (linkDup  && url) linkDup.href  = url;
+        if (linkDup && url) linkDup.href = url;
 
         if (rel.hash && window.__autoFillDemoWithHash) {
           window.__autoFillDemoWithHash(rel.hash);
         }
-      }catch(e){
-        console.warn('Release info not available:', e);
-      }
+      }catch{}
     })();
   })();
   </script>
@@ -1166,4 +1174,4 @@ verify: ${verifyURL}`;
   <!-- Toast container -->
   <div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
-  </html>
+</html>
