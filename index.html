@@ -99,7 +99,7 @@
   <!-- Security meta -->
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 
-  <!-- CSP v0.1 (SW + Analytics + API + fallback) -->
+  <!-- CSP v0.2 (SW + Analytics + API + fallback) -->
   <meta http-equiv="Content-Security-Policy" content="
 default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
 worker-src 'self' blob:;
@@ -431,19 +431,8 @@ upgrade-insecure-requests">
       <div class="label">Status: Public Beta v0.2 · ProofSpec v0.1 · Reference API · Privacy-first · No blockchain</div>
       <h1 id="hero-title" class="title">Prove when your data existed — without exposing it.</h1>
 
-      <p class="positioning" style="margin-top:-2px;">
-        If you can hash it, you can prove when it existed — without uploading it.
-      </p>
-
       <p class="subtitle">
-        Hash anything on your device and get a signed <code>.tproof.json</code> bundle that proves when it existed and that it hasn’t changed — for AI outputs, files, and datasets.
-      </p>
-
-      <p class="positioning">
-        Open standard + reference API · No account required · Hash-only requests (no content uploaded) · Signed timestamp · Online &amp; offline verification
-      </p>
-      <p class="positioning" style="margin-top:-2px; font-size:.9rem;">
-        Offline verification means verifying the <code>.tproof.json</code> bundle locally (no network). Online verification uses the public <code>/api/verify</code> endpoint.
+        Hash on your device, get a signed <code>.tproof.json</code> bundle, and verify it online or offline — for AI outputs, files, and datasets.
       </p>
 
       <p style="margin:6px 0 0; color:#9fb3c9">
@@ -462,19 +451,8 @@ upgrade-insecure-requests">
         <span class="chip">📴 Offline verification</span>
       </div>
 
-      <!-- FIX #1: Standard Proof of Release IDs (in HERO) -->
-      <div class="proof-strip" aria-label="Proof of Release (loaded from release manifest)">
-        <span>🔏 Proof of Release</span>
-        <span>·</span>
-        <span>Release: <span id="page-proof-release">…</span></span>
-        <span>·</span>
-        <span>Hash: <code id="page-proof-hash">…</code></span>
-        <span>·</span>
-        <a id="page-proof-link" href="#" target="_blank" rel="noopener" title="View verification on API">Verify</a>
-      </div>
-
       <!-- 10s pour devs -->
-      <p class="positioning" style="margin-top:8px; font-size:.9rem;">
+      <p class="positioning" style="margin-top:10px; font-size:.9rem;">
         For developers (≈10&nbsp;seconds): hash locally, call <code>POST /api/timestamp</code>, and store the returned <code>.tproof.json</code> bundle next to your file or artifact.
       </p>
 
@@ -789,13 +767,12 @@ const check = await res.json();</code></pre>
       <h2 id="site-proof-title">Verified by TimeProofs</h2>
       <p>We publish a public proof of this website build. Anyone can check it independently.</p>
 
-      <!-- FIX #1: Standard IDs (kept) + dup IDs (backward compatible) -->
       <p>
         Release:
-        <span id="page-proof-release-dup">…</span> ·
+        <span id="page-proof-release">…</span> ·
         Hash:
-        <code id="page-proof-hash-dup">…</code> ·
-        <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener" title="View verification on API">Verify</a>
+        <code id="page-proof-hash">…</code> ·
+        <a id="page-proof-link" href="#" target="_blank" rel="noopener" title="View verification on API">Verify</a>
       </p>
 
       <p style="text-align:center; margin-top:6px; color:#9fb3c9">
@@ -1152,28 +1129,16 @@ verify: ${verifyURL}`;
         }
         if(!rel && map && typeof map === 'object') rel = map;
 
-        // FIX #1: fill BOTH standard IDs and dup IDs
-        const releaseEls = [
-          document.getElementById('page-proof-release'),
-          document.getElementById('page-proof-release-dup')
-        ].filter(Boolean);
-
-        const hashEls = [
-          document.getElementById('page-proof-hash'),
-          document.getElementById('page-proof-hash-dup')
-        ].filter(Boolean);
-
-        const linkEls = [
-          document.getElementById('page-proof-link'),
-          document.getElementById('page-proof-link-dup')
-        ].filter(Boolean);
+        const releaseEl = document.getElementById('page-proof-release');
+        const hashEl    = document.getElementById('page-proof-hash');
+        const linkEl    = document.getElementById('page-proof-link');
 
         if (rel && typeof rel === 'object'){
-          if (rel.release) releaseEls.forEach(el => el.textContent = rel.release);
-          if (rel.hash)    hashEls.forEach(el => el.textContent = rel.hash);
+          if (rel.release && releaseEl) releaseEl.textContent = rel.release;
+          if (rel.hash && hashEl)       hashEl.textContent = rel.hash;
 
           const url = rel.verify || (rel.hash ? ('https://api.timeproofs.io/api/verify?hash=' + encodeURIComponent(rel.hash)) : null);
-          if (url) linkEls.forEach(el => el.href = url);
+          if (url && linkEl) linkEl.href = url;
 
           if (rel.hash && window.__autoFillDemoWithHash) {
             window.__autoFillDemoWithHash(rel.hash);
