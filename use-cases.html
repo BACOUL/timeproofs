@@ -440,6 +440,10 @@ upgrade-insecure-requests">
       <h1 id="page-title">Use Cases</h1>
       <p class="lead">
         Where proof of existence adds value: AI provenance, audit trails, secure releases, creators, datasets, and supply chain integrity — powered by a stateless API and portable <code>.tproof.json</code> receipts.
+        <br/>
+        <span style="color:var(--muted); font-size:.95em">
+          Key idea: a file date is local and editable; TimeProofs proves when an exact content existed using a verifiable timestamp on its SHA-256 hash.
+        </span>
       </p>
     </section>
 
@@ -472,6 +476,9 @@ upgrade-insecure-requests">
       <h2>1) AI provenance (prompts, outputs)</h2>
       <p><strong>What it solves.</strong> Prove origin and integrity for prompts, model outputs, and intermediate artifacts. Share a public verify URL without exposing content.</p>
       <p><strong>Why TimeProofs.</strong> Local hashing, signed edge timestamp, and open verification make AI activity auditable without leaking data. With v0.2, you also get a portable <code>.tproof.json</code> receipt that can travel with each run.</p>
+      <p class="muted">
+        Important: the timestamp applies to the <strong>hash</strong> (a 64-hex digest), not to the raw prompt/output. TimeProofs never receives your original content.
+      </p>
 <pre><code>// How it works (API v0.2, stateless)
 1) Client hashes prompt or output bytes (SHA-256).
 2) POST /api/timestamp { hash, type:"ai", meta:{ model:"gpt-4o", run:"2025-11-07" } }
@@ -484,25 +491,31 @@ curl -s https://api.timeproofs.io/api/timestamp \
   -d "{\"hash\":\"$HASH\",\"type\":\"ai\",\"meta\":{\"model\":\"my-model\"}}" \
   -o run.tproof.json
 </code></pre>
-      <p class="muted">Compliance: EU AI Act (traceability &amp; logging). GDPR: hash-only, no model inputs or outputs stored.</p>
+      <p class="muted">Compliance: supports traceability needs (EU AI Act / audits). GDPR: hash-only, no model inputs or outputs stored by TimeProofs.</p>
     </section>
 
     <section class="card" id="audit-trails">
-      <h2>2) Legal &amp; compliance audit trails</h2>
-      <p><strong>What it solves.</strong> Immutable proofs for filings, evidence chains, policies, NDAs, and disclosures, without uploading the documents.</p>
+      <h2>2) Audit trails (compliance, evidence chains)</h2>
+      <p><strong>What it solves.</strong> Tamper-evident proof records for filings, evidence chains, policies, NDAs, and disclosures, without uploading the documents.</p>
       <p><strong>Why TimeProofs.</strong> Time anchoring with public verification, zero content retention, and a standard JSON proof format that can live in your own archives.</p>
+      <p class="muted">
+        Note: TimeProofs provides cryptographic integrity evidence (hash + signed timestamp). It does not provide legal qualification, identity verification, or “notarization”.
+      </p>
 <pre><code>// Process
-- Hash each PDF, contract, or policy file.
+- Hash each PDF, contract, or policy file locally.
 - Timestamp the hash via TimeProofs (get proof JSON or .tproof.json).
 - Archive the proof alongside the case or policy dossier.
-- Share the verify URL or the .tproof.json file with courts, auditors, or regulators.</code></pre>
-      <p class="muted">Regulatory posture: helps demonstrate integrity and prior existence under GDPR, eIDAS-style evidence, and sector rules.</p>
+- Share the verify URL or the .tproof.json file with auditors or third parties.</code></pre>
+      <p class="muted">Regulatory posture: supports integrity and prior existence within your compliance chain, without forcing content disclosure.</p>
     </section>
 
     <section class="card" id="secure-releases">
       <h2>3) DevOps &amp; secure releases</h2>
       <p><strong>What it solves.</strong> Build and artifact integrity across CI/CD pipelines. Prove what was deployed, when, and from which artifact hash.</p>
       <p><strong>Why TimeProofs.</strong> Edge timestamps under 100 ms, a stateless verify API, and proof bundles you can attach to release notes or SBOMs.</p>
+      <p class="muted">
+        This makes “what was deployed” independently verifiable: if the artifact bytes change, the hash changes, and verification fails.
+      </p>
 <pre><code># CI sample (bash)
 HASH=$(sha256sum dist/app.min.js | awk '{print $1}')
 curl -s https://api.timeproofs.io/api/timestamp \
@@ -510,13 +523,16 @@ curl -s https://api.timeproofs.io/api/timestamp \
   -d "{\"hash\":\"$HASH\",\"type\":\"release\",\"meta\":{\"source\":\"ci\",\"env\":\"production\"}}" \
   -o release.tproof.json
 </code></pre>
-      <p class="muted">Compliance: supports NIS2, SBOM attestations, and supply-chain security programs.</p>
+      <p class="muted">Compliance: supports SBOM attestations and supply-chain security programs.</p>
     </section>
 
     <section class="card" id="creators">
       <h2>4) Creators &amp; media certificates</h2>
       <p><strong>What it solves.</strong> Portable “proof bundles” for images, audio, video, and documents. You can prove you created or published something at a given time.</p>
       <p><strong>Why TimeProofs.</strong> Hash-only provenance and a simple <code>.tproof.json</code> bundle you can distribute with your work or store in your own vault.</p>
+      <p class="muted">
+        A local file date can be edited. A proof is public and verifiable: anyone can check the timestamp record matches the hash of the exact bytes.
+      </p>
 <pre><code>// Example example-photo.tproof.json (envelope + ProofSpec proof)
 {
   "artifact_name":"my-photo-01.jpg",
@@ -539,6 +555,9 @@ curl -s https://api.timeproofs.io/api/timestamp \
     <section class="card" id="dataset-integrity">
       <h2>5) Data &amp; research integrity</h2>
       <p><strong>What it solves.</strong> Snapshot datasets, notebooks, and analysis outputs. Enable peers and reviewers to verify that what they see matches what was certified.</p>
+      <p class="muted">
+        If a dataset changes by a single byte, its hash changes. A proof tied to the old hash won’t validate the new bytes.
+      </p>
 <pre><code># Dataset example
 HASH=$(sha256sum data.csv | awk '{print $1}')
 curl -s https://api.timeproofs.io/api/timestamp \
@@ -546,12 +565,15 @@ curl -s https://api.timeproofs.io/api/timestamp \
   -d "{\"hash\":\"$HASH\",\"type\":\"dataset\",\"meta\":{\"version\":\"v1\",\"project\":\"study-42\"}}" \
   -o dataset.tproof.json
 </code></pre>
-      <p class="muted">Compliance: aligns with Data Act expectations for data provenance and sharing. Any ProofSpec-compliant verifier can check the proof later, even offline.</p>
+      <p class="muted">Any ProofSpec-compliant verifier can check the proof later, even offline.</p>
     </section>
 
     <section class="card" id="supply-chain">
       <h2>6) Supply chain transparency</h2>
       <p><strong>What it solves.</strong> Publish proofs for SBOMs, licenses, vendor deliverables, and configuration baselines.</p>
+      <p class="muted">
+        This creates a verifiable baseline: partners can independently confirm they received the exact same deliverable.
+      </p>
 <pre><code>// How it works
 - Hash SBOM JSON, license packs, or configuration exports.
 - Timestamp each hash (get proof JSON or .tproof.json).
@@ -587,6 +609,7 @@ curl -s https://api.timeproofs.io/api/timestamp \
       <p><strong>TimeProofs.</strong> Hash-only, signed timestamp, stateless verify, public API, no blockchain, privacy-first.</p>
       <p><strong>Traditional notarization.</strong> Manual, costly, sometimes requires content exposure.</p>
       <p><strong>Blockchains.</strong> Heavy, fees, latency, and potential PII or metadata leakage.</p>
+      <p class="muted">If you need identity checks, signatures, delivery guarantees, or legal qualification, those are separate layers outside TimeProofs.</p>
     </section>
 
     <section class="card" id="quick-faq">
@@ -777,4 +800,4 @@ curl -s https://api.timeproofs.io/api/timestamp \
   })();
   </script>
 </body>
-        </html>
+</html>
