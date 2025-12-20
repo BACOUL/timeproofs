@@ -265,9 +265,7 @@ upgrade-insecure-requests">
       color:#bff1ff;
       font-size:.85rem;
     }
-    .proof-strip code{
-      font-size:.85rem;
-    }
+    .proof-strip code{ font-size:.85rem; }
     .proof-strip a{
       color:#e5f6ff;
       text-decoration:underline;
@@ -309,16 +307,9 @@ upgrade-insecure-requests">
     }
     .mini{ color:#9fb3c9; font-size:.9rem; text-align:left }
 
-    .status{
-      margin-top:6px;
-      font-size:.9rem;
-    }
-    .status.ok{
-      color:var(--ok);
-    }
-    .status.err{
-      color:var(--err);
-    }
+    .status{ margin-top:6px; font-size:.9rem; }
+    .status.ok{ color:var(--ok); }
+    .status.err{ color:var(--err); }
 
     .toast{
       position:fixed; right:14px; bottom:14px; background:#0f1b30; color:#cfefff; border:1px solid #1f2a4a; border-radius:10px; padding:8px 12px; box-shadow:var(--ring);
@@ -388,11 +379,12 @@ upgrade-insecure-requests">
     .copy-btn.copied .ok{ display:inline }
     .copy-btn.copied .txt{ display:none }
 
-    /* Nav/Footer alignment (aligned with other pages) */
+    /* Nav/Footer alignment (do not touch header markup; only colors/weights alignment) */
     #tp-nav a,
     footer .links a{
-      color:#f8fafc;
-      font-weight:700;
+      color:#a7b7cc;
+      font-weight:600;
+      text-decoration:none;
       text-underline-offset:3px;
     }
     #tp-nav a:hover,
@@ -470,6 +462,17 @@ upgrade-insecure-requests">
         <span class="chip">📴 Offline verification</span>
       </div>
 
+      <!-- FIX #1: Standard Proof of Release IDs (in HERO) -->
+      <div class="proof-strip" aria-label="Proof of Release (loaded from release manifest)">
+        <span>🔏 Proof of Release</span>
+        <span>·</span>
+        <span>Release: <span id="page-proof-release">…</span></span>
+        <span>·</span>
+        <span>Hash: <code id="page-proof-hash">…</code></span>
+        <span>·</span>
+        <a id="page-proof-link" href="#" target="_blank" rel="noopener" title="View verification on API">Verify</a>
+      </div>
+
       <!-- 10s pour devs -->
       <p class="positioning" style="margin-top:8px; font-size:.9rem;">
         For developers (≈10&nbsp;seconds): hash locally, call <code>POST /api/timestamp</code>, and store the returned <code>.tproof.json</code> bundle next to your file or artifact.
@@ -528,18 +531,18 @@ upgrade-insecure-requests">
         </article>
         <article class="card">
           <h3>Signed .tproof.json bundles</h3>
-          <p>Each bundle carries the hash, algorithm, signed timestamp, metadata, and verify URL — signed with HMAC-SHA256 and Ed25519, with keys exposed via public JWKS.</p>
-          <p><span class="tag">Dual signatures</span> <span class="tag">Public JWKS</span></p>
+          <p>Each bundle carries the hash, algorithm, signed timestamp, metadata, and verify URL — signed and independently verifiable (HMAC-SHA256 today; optional Ed25519/JWKS is planned).</p>
+          <p><span class="tag">Signed bundle</span> <span class="tag">Verify anywhere</span></p>
         </article>
         <article class="card">
           <h3>Offline &amp; self-host</h3>
-          <p>The Create/Verify tool can check <code>.tproof.json</code> files offline. You can also run your own compatible API using the reference worker and container images.</p>
+          <p>The Create/Verify tool can check <code>.tproof.json</code> files offline. You can also run your own compatible API using the reference worker (container images are planned).</p>
           <p><span class="tag">Offline verify</span> <span class="tag">Self-hostable</span></p>
         </article>
         <article class="card">
           <h3>Multi-backend &amp; anti lock-in</h3>
-          <p>An abstracted <code>KV_DRIVER</code> supports <code>cloudflare-kv</code>, <code>redis</code>, <code>fs</code>, and <code>d1</code>, so you can change infrastructure without changing the proof format.</p>
-          <p><span class="tag">Multi-backend</span> <span class="tag">Anti lock-in</span></p>
+          <p>Designed for portability. The proof format stays stable even if you change infrastructure. Multi-backend drivers (KV/D1/Redis/FS) are planned as an implementation detail — without changing ProofSpec.</p>
+          <p><span class="tag">Anti lock-in</span> <span class="tag">Stable format</span></p>
         </article>
       </div>
       <p style="text-align:center; margin-top:10px; color:#9fb3c9;">
@@ -695,7 +698,7 @@ const check = await res.json();</code></pre>
         </article>
         <article class="card">
           <h3>API — Reference implementation</h3>
-          <p>Edge-native reference with predictable latency and auditable logs. v0.2 adds stateless bundles, offline verification, and multi-backend drivers.</p>
+          <p>Edge-native reference with predictable latency and auditable logs. v0.2 adds stateless bundles, offline verification, and a stable proof format designed to outlive any provider.</p>
           <p><a href="/docs.html">Open the API Docs</a></p>
         </article>
       </div>
@@ -785,6 +788,8 @@ const check = await res.json();</code></pre>
       <p class="label" style="margin-bottom:8px">🔏 Proof of Release</p>
       <h2 id="site-proof-title">Verified by TimeProofs</h2>
       <p>We publish a public proof of this website build. Anyone can check it independently.</p>
+
+      <!-- FIX #1: Standard IDs (kept) + dup IDs (backward compatible) -->
       <p>
         Release:
         <span id="page-proof-release-dup">…</span> ·
@@ -792,6 +797,7 @@ const check = await res.json();</code></pre>
         <code id="page-proof-hash-dup">…</code> ·
         <a id="page-proof-link-dup" href="#" target="_blank" rel="noopener" title="View verification on API">Verify</a>
       </p>
+
       <p style="text-align:center; margin-top:6px; color:#9fb3c9">
         Each build is timestamped and linked here. Values are loaded from the v0.2 release manifest (<code>/releases/v0.2.json</code>) with v0.1 kept as an archive.
       </p>
@@ -823,9 +829,9 @@ const check = await res.json();</code></pre>
 
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
-      <a class="badge" href="/proofspec.html">🔍 Open Spec v0.1</a>
       <span class="badge">⚡ Edge Native</span>
       <span class="badge">🛡 Privacy First</span>
+      <a class="badge" href="/proofspec.html">🔍 Open Spec v0.1</a>
     </div>
     © 2025 TimeProofs — Reference implementation of the ProofSpec protocol.
     <div class="links" style="margin-top:6px">
@@ -871,7 +877,7 @@ const check = await res.json();</code></pre>
       {"@type":"Question","name":"Do you store my content?","acceptedAnswer":{"@type":"Answer","text":"No. We only handle hashes. Originals never leave your device."}},
       {"@type":"Question","name":"Is there a blockchain involved?","acceptedAnswer":{"@type":"Answer","text":"No. We use signed, cryptographic timestamps with public verification."}},
       {"@type":"Question","name":"How do I verify a proof?","acceptedAnswer":{"@type":"Answer","text":"Verify online via /api/verify, or verify the .tproof.json bundle locally (offline) using a ProofSpec-compliant client."}},
-      {"@type":"Question","name":"Can I self-host the API?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use the OpenAPI spec and the reference container to run your own instance and interoperate."}},
+      {"@type":"Question","name":"Can I self-host the API?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use the OpenAPI spec and the reference worker to run your own instance and interoperate."}},
       {"@type":"Question","name":"What does the proof contain?","acceptedAnswer":{"@type":"Answer","text":"Hash, algorithm, signed timestamp, signatures, and a public verify URL — enough for independent verification."}}
     ]
   }
@@ -1146,18 +1152,32 @@ verify: ${verifyURL}`;
         }
         if(!rel && map && typeof map === 'object') rel = map;
 
-        const relDup  = document.getElementById('page-proof-release-dup');
-        const hashDup = document.getElementById('page-proof-hash-dup');
-        const linkDup = document.getElementById('page-proof-link-dup');
+        // FIX #1: fill BOTH standard IDs and dup IDs
+        const releaseEls = [
+          document.getElementById('page-proof-release'),
+          document.getElementById('page-proof-release-dup')
+        ].filter(Boolean);
 
-        if (relDup && rel.release) relDup.textContent = rel.release;
-        if (hashDup && rel.hash)  hashDup.textContent = rel.hash;
+        const hashEls = [
+          document.getElementById('page-proof-hash'),
+          document.getElementById('page-proof-hash-dup')
+        ].filter(Boolean);
 
-        const url = rel.verify || (rel.hash ? ('https://api.timeproofs.io/api/verify?hash=' + encodeURIComponent(rel.hash)) : null);
-        if (linkDup && url) linkDup.href = url;
+        const linkEls = [
+          document.getElementById('page-proof-link'),
+          document.getElementById('page-proof-link-dup')
+        ].filter(Boolean);
 
-        if (rel.hash && window.__autoFillDemoWithHash) {
-          window.__autoFillDemoWithHash(rel.hash);
+        if (rel && typeof rel === 'object'){
+          if (rel.release) releaseEls.forEach(el => el.textContent = rel.release);
+          if (rel.hash)    hashEls.forEach(el => el.textContent = rel.hash);
+
+          const url = rel.verify || (rel.hash ? ('https://api.timeproofs.io/api/verify?hash=' + encodeURIComponent(rel.hash)) : null);
+          if (url) linkEls.forEach(el => el.href = url);
+
+          if (rel.hash && window.__autoFillDemoWithHash) {
+            window.__autoFillDemoWithHash(rel.hash);
+          }
         }
       }catch{}
     })();
