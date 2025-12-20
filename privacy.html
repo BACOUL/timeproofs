@@ -356,6 +356,7 @@ upgrade-insecure-requests">
     }
     .social a:hover{ transform:translateY(-2px) }
 
+    .muted{ color:var(--muted) }
     @media (max-width:899px){
       table{ min-width:100%; }
     }
@@ -412,7 +413,7 @@ upgrade-insecure-requests">
       </p>
     </section>
 
-    <!-- TOC -->
+    <!-- TOC (STRICTEMENT IDENTIQUE — inchangé) -->
     <nav class="toc" aria-label="Contents">
       <span class="toc-label">On this page</span>
       <a href="#scope">Scope & tools</a>
@@ -434,6 +435,7 @@ upgrade-insecure-requests">
       <a class="toc-top" href="#top">↑ Top</a>
     </div>
 
+    <!-- Meta line -->
     <p style="color:var(--muted); margin:18px auto 6px; max-width:1100px">
       Version: <strong>v0.2</strong> ·
       Last updated: <strong>2025-12-03</strong> ·
@@ -465,6 +467,9 @@ upgrade-insecure-requests">
         <li><strong>Separation online/offline.</strong> We distinguish clearly between what reaches our servers and what stays fully local.</li>
         <li><strong>Transparency.</strong> Public verification endpoints, open specification, and documentation.</li>
       </ul>
+      <p class="muted" style="font-size:.9rem">
+        Practical summary: you hash locally → you send the hash (not the file) → we return a signed timestamp record → anyone can verify using the hash.
+      </p>
     </section>
 
     <section class="card" id="what-we-process" aria-labelledby="wwp-title">
@@ -490,7 +495,7 @@ upgrade-insecure-requests">
             <tr>
               <td>ts</td>
               <td><code>2025-01-01T00:00:00.000Z</code></td>
-              <td>Timestamp of the proof creation.</td>
+              <td>Timestamp of the proof creation (server-side time).</td>
             </tr>
             <tr>
               <td>sig / alg / kid / issuer</td>
@@ -523,7 +528,7 @@ upgrade-insecure-requests">
           <code>.tproof.json</code> file without calling our API), all operations happen on your devices or servers.
         </li>
         <li>
-          In these offline scenarios, TimeProofs does not receive your data and does not act as a data processor under privacy laws.
+          In these offline scenarios, TimeProofs does not receive your data and does not act as a processor for that offline activity.
         </li>
         <li>
           The <code>.tproof.json</code> proof bundles you generate and store remain under your control. You decide where
@@ -540,10 +545,13 @@ upgrade-insecure-requests">
       <h2 id="nwp-title">What we do not process</h2>
       <ul>
         <li>No original files, documents, images, audio, or text content are uploaded to TimeProofs.</li>
-        <li>No behavioral tracking, cross-site identifiers, or advertising profiles.</li>
+        <li>No behavioral tracking, cross-site identifiers, fingerprinting, or advertising profiles.</li>
         <li>No sale of personal data.</li>
         <li>No direct ingestion of training datasets or model parameters.</li>
       </ul>
+      <p class="muted" style="font-size:.9rem">
+        Note: a hash can still be sensitive in context (e.g., if someone already has the file). Avoid putting personal or sensitive info in <code>meta</code>.
+      </p>
     </section>
 
     <section class="card" id="legal-basis" aria-labelledby="lb-title">
@@ -570,6 +578,9 @@ upgrade-insecure-requests">
         <li><strong>Proof records.</strong> Server-signed proof tuples (<code>hash</code>, <code>ts</code>, <code>sig</code>, …) as needed to support verification.</li>
         <li><strong>Support/legal communications.</strong> Emails to <code>contact@</code>, <code>privacy@</code>, <code>legal@</code>, <code>security@</code> retained reasonably.</li>
       </ul>
+      <p class="muted" style="font-size:.9rem">
+        TimeProofs is designed to minimize stored data. We do not store files or message bodies. Proof records contain hash + timestamp + signature fields.
+      </p>
 <pre><code>{
   "ok": true,
   "hash": "&lt;64-hex&gt;",
@@ -589,12 +600,15 @@ upgrade-insecure-requests">
     <section class="card" id="subprocessors" aria-labelledby="sp-title">
       <h2 id="sp-title">Sub-processors & international transfers</h2>
       <ul>
-        <li><strong>Cloudflare.</strong> Workers/KV/DNS/security; edge routing may involve multiple countries.</li>
+        <li><strong>Cloudflare.</strong> Workers/DNS/security; edge routing may involve multiple countries.</li>
         <li><strong>Plausible Analytics.</strong> Aggregate, cookie-free traffic statistics.</li>
         <li><strong>Email/support tooling.</strong> Standard email providers for communications you send us.</li>
       </ul>
       <p style="color:var(--muted); font-size:.9rem">
         Data types are kept minimal (mostly technical logs and hashes, not raw content). Providers may involve international transfers with safeguards (e.g., SCCs).
+      </p>
+      <p style="color:var(--muted); font-size:.9rem">
+        Stateless note (v0.2): TimeProofs does not run a user database and does not store uploaded content. Proof creation relies on cryptographic signing of hash-based records for verification.
       </p>
     </section>
 
@@ -615,6 +629,9 @@ upgrade-insecure-requests">
         <li>Cryptographic signatures protect proof integrity.</li>
         <li>Disclosure: <a href="/.well-known/security.txt">/.well-known/security.txt</a>.</li>
       </ul>
+      <p class="muted" style="font-size:.9rem">
+        Security details (threat model, disclosure process, and supported algorithms) are documented on the <a href="/security.html">Security</a> page.
+      </p>
     </section>
 
     <section class="card" id="ai" aria-labelledby="ai-title">
@@ -842,4 +859,4 @@ Regards.</code></pre>
   })();
   </script>
 </body>
-        </html>
+</html>
