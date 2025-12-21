@@ -418,28 +418,27 @@ upgrade-insecure-requests">
 
   <main id="main" class="wrap" role="main">
     <section class="hero reveal" aria-labelledby="hero-title">
-      <!-- AJUSTEMENT #1: default label is neutral until /releases/v0.2.json exists -->
-      <a class="rel-banner" id="rel-banner" href="#site-proof" aria-label="View site release proof">🔏 Release — Pending</a>
+      <a class="rel-banner" id="rel-banner" href="#site-proof" aria-label="View site release proof">🔏 Release — Verified</a>
 
       <div class="label">🔐 Privacy-first • ⚡ Edge-native • 🌍 Open Protocol</div>
       <h1 id="hero-title" class="title">Prove When Data Existed. Privately.</h1>
 
-      <p class="subtitle">Hash anything on your device. Receive an instant, signed timestamp. Anyone can verify later that it existed and is unchanged — without seeing your data.</p>
+      <p class="subtitle">Hash locally. Get a signed timestamp. Later, anyone can verify the same hash existed at that time — without ever seeing the data.</p>
 
-      <p class="positioning">One self-describing JSON proof readable by any ProofSpec-compliant tool.</p>
+      <p class="positioning">One portable <code>.tproof.json</code>: hash + algorithm + signed timestamp + verify URL.</p>
       <p style="margin:6px 0 0; color:#9fb3c9">
         <a href="/regulations.html" style="color:#9beefb">Regulations &amp; Compliance →</a>
       </p>
-      <p class="subnote">No account · No content stored · Hash locally · Signed timestamp · Public verification · No blockchain</p>
+      <p class="subnote">No account. No content stored. Hash-only proofs with public verification.</p>
 
       <div class="cta-wrap" role="group" aria-label="Primary actions">
         <a class="cta" href="/verify.html" aria-label="Create or verify a proof">Create / Verify a Proof</a>
       </div>
 
       <div class="micro" aria-label="Key performance and privacy claims">
-        <span class="chip">⏱ &lt;100 ms edge</span>
-        <span class="chip">🛡 Hash-only, no PII</span>
-        <span class="chip">🌍 Public verification</span>
+        <span class="chip">⏱ Typical &lt;100 ms (edge)</span>
+        <span class="chip">🛡 Hash-only (no content)</span>
+        <span class="chip">🔎 Public verify endpoint</span>
       </div>
 
       <!-- DEMO one-bar -->
@@ -465,7 +464,7 @@ upgrade-insecure-requests">
         </div>
 
         <p id="demo-help" class="mini">
-          Demo only. Your text is <strong>hashed locally</strong>, then verified via the API.
+          Demo: hashes locally, then checks if that hash exists in the public verifier. It does not create a signed proof.
           For <strong>signed proofs</strong> and options, use the full tool.
         </p>
 
@@ -488,7 +487,7 @@ upgrade-insecure-requests">
       <div class="grid two" style="margin-top:12px">
         <article class="card">
           <h3>What we’ve built</h3>
-          <p>TimeProofs is an open, neutral standard for digital proof of existence. One JSON proof any compliant tool can read.</p>
+          <p>TimeProofs defines a minimal proof format and verification rules (ProofSpec) plus a reference API to issue signed timestamps.</p>
           <p style="margin-top:.4em"><a href="/verify.html">Create/Verify →</a></p>
         </article>
         <article class="card">
@@ -503,7 +502,7 @@ upgrade-insecure-requests">
         </article>
         <article class="card">
           <h3>Protected and open</h3>
-          <p>Open spec, reference API, and verifiable logs. This site is the canonical ProofSpec implementation.</p>
+          <p>Open spec, public verification, reproducible builds. This site publishes its own proof of release.</p>
           <p style="margin-top:.4em"><a href="/docs.html">Open the API Docs →</a> · <a href="/regulations.html">Regulatory readiness →</a></p>
         </article>
       </div>
@@ -519,7 +518,7 @@ upgrade-insecure-requests">
 
     <section class="section bg-solid reveal" aria-labelledby="how">
       <h2 id="how">How It Works</h2>
-      <p style="text-align:center; color:#9fb3c9; margin:-6px 0 12px">Model: <strong>Hash locally → Signed timestamp → Public verification</strong></p>
+      <p style="text-align:center; color:#9fb3c9; margin:-6px 0 12px">Model: <strong>Hash locally → get a signed timestamp for that hash → later verify the same hash</strong></p>
       <div class="grid two">
         <article class="card"><h3>1) Hash locally</h3><pre><code>const buf = new TextEncoder().encode(text);
 const digest = await crypto.subtle.digest('SHA-256', buf);
@@ -547,12 +546,12 @@ const check = await res.json();</code></pre></article>
       <div class="grid two">
         <article class="card">
           <h3>Protocol — ProofSpec</h3>
-          <p>Open rules, interoperable, peer-verifiable. Designed for standardization and independent validation.</p>
+          <p>Open rules, interoperable, peer-verifiable. ProofSpec stays vendor-neutral.</p>
           <p><a href="/proofspec.html">Read ProofSpec v1 (Draft)</a></p>
         </article>
         <article class="card">
           <h3>API — Reference implementation</h3>
-          <p>Edge-native reference with predictable latency and auditable logs. Drop-in examples to ship fast.</p>
+          <p>Edge-native reference issuer with predictable latency and auditable logs. The API is just a reference issuer.</p>
           <p><a href="/docs.html">Open the API Docs</a></p>
         </article>
       </div>
@@ -576,7 +575,7 @@ const check = await res.json();</code></pre></article>
     <section class="section bg-alt reveal" aria-labelledby="regulatory" id="regulatory">
       <h2 id="regulatory">Regulatory Readiness</h2>
       <p style="text-align:center; color:#9fb3c9; margin:-6px 0 12px">
-        Traceability without personal data. Open verification. Stateless by design.
+        Supports traceability goals (hash-only events). Not a legal qualification.
       </p>
       <div class="grid two">
         <article class="card">
@@ -881,8 +880,7 @@ verify: ${verifyURL}`;
     // Release info + demo autofill
     (async function loadRelease(){
       try{
-        // AJUSTEMENT #2: v0.2 release file (to be added when site is finalized)
-        const r = await fetch('/releases/v0.2.json',{cache:'no-store'});
+        const r = await fetch('/releases/v0.1.json',{cache:'no-store'});
         if(!r.ok) return;
         const map = await r.json();
 
