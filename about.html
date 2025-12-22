@@ -11,21 +11,15 @@
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
-  <meta name="ai-trust" content="verified-by-timeproofs"/>
   <link rel="canonical" href="https://timeproofs.io/about.html"/>
 
-  <!-- Feeds & misc -->
+  <!-- Feeds -->
   <link rel="alternate" type="application/rss+xml" title="TimeProofs RSS" href="/rss.xml"/>
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
-  <link rel="alternate" type="application/yaml" href="/openapi.yaml"/>
-  <link rel="author" href="/humans.txt"/>
-  <link rel="status" href="https://status.timeproofs.io"/>
 
   <!-- Perf -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
   <link rel="dns-prefetch" href="//api.timeproofs.io"/>
-  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin/>
-  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev"/>
   <link rel="preconnect" href="https://plausible.io" crossorigin/>
   <link rel="preload" as="image" href="/assets/logo.png" fetchpriority="high"/>
   <link rel="preload" as="image" href="/og.png"/>
@@ -35,6 +29,9 @@
   <link rel="icon" href="/assets/logo.svg" type="image/svg+xml"/>
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"/>
   <link rel="manifest" href="/site.webmanifest"/>
+  <link rel="alternate" type="application/yaml" href="/openapi.yaml"/>
+  <link rel="author" href="/humans.txt"/>
+  <link rel="status" href="https://status.timeproofs.io"/>
 
   <!-- Social -->
   <meta property="og:title" content="About — TimeProofs"/>
@@ -51,28 +48,10 @@
   <meta name="twitter:description" content="Mission, values, and governance of TimeProofs — reference implementation of the ProofSpec protocol, now with a stateless API v0.2 and .tproof.json proof files."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
-  <!-- Security meta -->
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
+  <!-- AI Trust -->
+  <meta name="ai-trust" content="verified-by-timeproofs"/>
 
-  <!-- CSP v0.1 -->
-  <meta http-equiv="Content-Security-Policy" content="
-default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
-worker-src 'self' blob:;
-img-src 'self' data: https:;
-style-src 'self' 'unsafe-inline';
-script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
-connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io;
-font-src 'self' https: data:;
-object-src 'none';
-base-uri 'self';
-form-action 'self';
-frame-ancestors 'none';
-upgrade-insecure-requests">
-
-  <!-- Analytics -->
-  <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
-
-  <!-- JSON-LD: Organization -->
+  <!-- JSON-LD Org + Site -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -102,8 +81,6 @@ upgrade-insecure-requests">
     }]
   }
   </script>
-
-  <!-- JSON-LD: WebSite -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -114,34 +91,27 @@ upgrade-insecure-requests">
   }
   </script>
 
-  <!-- JSON-LD: TechArticle -->
+  <!-- TechArticle JSON-LD -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
     "@type":"TechArticle",
     "headline":"About — TimeProofs",
-    "about":"Mission, values, governance, and transparency of the TimeProofs protocol and reference implementation, including the stateless API v0.2 and machine-readable .tproof.json proof files.",
-    "datePublished":"2025-10-22",
-    "dateModified":"2025-12-02",
+    "name":"About — TimeProofs",
+    "description":"Mission, values, governance, and transparency behind TimeProofs — the open, privacy-first standard for digital proof of existence, with a stateless API v0.2 and machine-readable .tproof.json proof files.",
     "inLanguage":"en",
-    "maintainer":{"@type":"Organization","name":"TimeProofs"},
-    "mainEntityOfPage":{"@type":"WebPage","@id":"https://timeproofs.io/about.html"}
+    "author":{"@type":"Organization","name":"TimeProofs"},
+    "publisher":{
+      "@type":"Organization",
+      "name":"TimeProofs",
+      "logo":{"@type":"ImageObject","url":"https://timeproofs.io/assets/logo.png"}
+    },
+    "url":"https://timeproofs.io/about.html",
+    "mainEntityOfPage":"https://timeproofs.io/about.html"
   }
   </script>
 
-  <!-- JSON-LD: BreadcrumbList -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"BreadcrumbList",
-    "itemListElement":[
-      {"@type":"ListItem","position":1,"name":"Home","item":"https://timeproofs.io/"},
-      {"@type":"ListItem","position":2,"name":"About","item":"https://timeproofs.io/about.html"}
-    ]
-  }
-  </script>
-
-  <!-- JSON-LD: FAQPage -->
+  <!-- FAQPage JSON-LD -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -171,13 +141,34 @@ upgrade-insecure-requests">
   }
   </script>
 
-  <!-- Styles (alignés Legal) -->
+  <!-- Security meta -->
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
+
+  <!-- CSP v0.2 -->
+  <meta http-equiv="Content-Security-Policy" content="
+default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
+worker-src 'self' blob:;
+img-src 'self' data: https:;
+style-src 'self' 'unsafe-inline';
+script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
+connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io;
+font-src 'self' https: data:;
+object-src 'none';
+base-uri 'self';
+form-action 'self';
+frame-ancestors 'none';
+upgrade-insecure-requests">
+
+  <!-- Analytics -->
+  <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
+
+  <!-- Styles -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
       --ok:#34d399; --warn:#f59e0b; --err:#ef4444;
-      --e:cubic-bezier(.22,.61,.36,1);
+      --e:cubic-bezier(.22,.61,.36,1)
     }
     *{ box-sizing:border-box }
 
@@ -192,16 +183,14 @@ upgrade-insecure-requests">
       background:
         radial-gradient(1200px 600px at 80% -10%, rgba(34,211,238,.06), transparent 60%),
         conic-gradient(from 220deg at 10% -20%, rgba(34,211,238,.04), transparent 30%),
-        var(--bg);
+        linear-gradient(180deg, var(--bg), var(--bg2));
     }
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
 
-    /* Offset anchors for fixed header */
+    /* offset pour header fixe */
     [id]{ scroll-margin-top:120px }
-    @media (min-width:900px){
-      [id]{ scroll-margin-top:104px }
-    }
+    @media (min-width:900px){ [id]{ scroll-margin-top:104px } }
 
     .skip{
       position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
@@ -233,13 +222,6 @@ upgrade-insecure-requests">
     .tp-nav a[aria-current="page"]{ color:#9beefb }
     .tp-nav a:hover{ color:var(--accent); text-decoration:underline }
 
-    .cta-header{
-      display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
-      border-radius:10px; background:var(--accent); color:#06202a;
-      font-weight:800; box-shadow:0 6px 24px rgba(34,211,238,.25);
-    }
-    .cta-header:hover{ filter:brightness(1.05) }
-
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center;
       width:48px; height:48px; border:1px solid var(--line);
@@ -250,7 +232,6 @@ upgrade-insecure-requests">
     @media (min-width:900px){
       .tp-burger{ display:none }
       .tp-nav{ display:flex; align-items:center }
-      .cta-header{ display:inline-flex }
     }
     @media (max-width:899px){
       .tp-brand img{ height:34px; width:34px }
@@ -264,15 +245,11 @@ upgrade-insecure-requests">
       }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
-      .nav-cta{
-        display:block; margin-top:6px; padding:12px; text-align:center;
-        border-radius:12px; background:var(--accent); color:#06202a; font-weight:800;
-      }
     }
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* HERO (sans Proof of Release) */
+    /* HERO */
     .hero{
       padding-top:96px; padding-bottom:18px; text-align:center;
       position:relative; border-bottom:1px solid var(--line);
@@ -299,6 +276,10 @@ upgrade-insecure-requests">
       max-width:1100px; border-bottom:1px solid var(--line);
       align-items:center;
     }
+    .toc-label{
+      font-size:.9rem; color:#9fb3c9;
+      margin-right:4px;
+    }
     nav.toc a{
       display:inline-block; background:#0d2330; border:1px solid #214a57;
       padding:8px 12px; border-radius:999px;
@@ -306,30 +287,28 @@ upgrade-insecure-requests">
     }
     nav.toc a:hover{ text-decoration:underline }
 
+    .toc-top{
+      display:inline-block;
+      margin:8px auto 0;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid #214a57;
+      background:#0d2330;
+      color:#bff1ff;
+      font-size:.85rem;
+      text-decoration:none;
+    }
+    .toc-top:hover{ text-decoration:underline }
+
+    /* Content */
     main{ padding:0 0 40px }
-
-    .crumb{
-      color:#9fb3c9; margin:10px 0 8px;
-      font-size:.92rem;
-    }
-    .meta{
-      color:var(--muted); margin:18px auto 6px; max-width:1100px;
-    }
-
     .card{
       background:#0c1424; border:1px solid var(--line); border-radius:12px;
       padding:18px; margin:14px auto; max-width:1100px;
     }
     h2{ color:#b9e7f5; font-size:1.25rem; margin:1.2em 0 .6em }
     h3{ color:#aee9f7; font-size:1.05rem; margin:1em 0 .3em }
-
-    .table-wrap{ overflow:auto; border:1px solid var(--line); border-radius:12px }
-    table{ border-collapse:collapse; min-width:720px; width:100% }
-    th,td{
-      border-bottom:1px solid #203047; padding:10px 12px; text-align:left;
-      white-space:nowrap;
-    }
-    th{ color:#cfefff; font-weight:700 }
+    .muted{ color:var(--muted) }
 
     pre,code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
     pre{
@@ -338,13 +317,18 @@ upgrade-insecure-requests">
       position:relative;
     }
 
+    /* Copy button for code blocks */
     .copy-btn{
       position:absolute; top:8px; right:8px;
-      padding:6px 10px; border:1px solid #22455a; border-radius:10px;
-      background:#0c1a2e; color:#cfefff; font-weight:700; cursor:pointer;
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px; border-radius:10px;
+      border:1px solid #22455a; background:#0c1a2e; color:#cfefff;
+      font-weight:700; cursor:pointer; font-size:.8rem;
     }
-
-    .muted{ color:var(--muted); font-size:.9rem }
+    .copy-btn:hover{ filter:brightness(1.1) }
+    .copy-btn .ok{ display:none }
+    .copy-btn.copied .ok{ display:inline }
+    .copy-btn.copied .txt{ display:none }
 
     /* Footer */
     footer{
@@ -374,17 +358,13 @@ upgrade-insecure-requests">
       transition:transform .18s var(--e);
     }
     .social a:hover{ transform:translateY(-2px) }
-
-    @media (max-width:899px){
-      table{ min-width:100% }
-    }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
-  <!-- Header -->
+  <!-- Header (aligné sur proofspec) -->
   <header class="tp-header" id="hdr" role="banner">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
@@ -399,159 +379,114 @@ upgrade-insecure-requests">
       <a href="/privacy.html">Privacy</a>
       <a href="/legal.html">Legal</a>
       <a href="/about.html">About</a>
-      <a class="nav-cta" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
     </nav>
-    <a class="cta-header" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu">
       <span aria-hidden="true">☰</span>
     </button>
   </header>
 
-  <main id="main" class="wrap" role="main" aria-describedby="page-title">
-    <!-- HERO (sans Proof of Release) -->
-    <section class="hero" role="region" aria-labelledby="page-title">
+  <main id="main" class="wrap" role="main" aria-describedby="title">
+    <!-- HERO -->
+    <section class="hero" role="region" aria-labelledby="title">
       <div class="icon" aria-hidden="true">ℹ️</div>
-      <p class="badge">Status: Public Beta v0.2 · About · Stateless proofs · No blockchain</p>
-      <h1 id="page-title">About TimeProofs</h1>
+      <p class="badge">Status: Public Beta v0.2 · About · Privacy-first · No blockchain</p>
+      <h1 id="title">About TimeProofs</h1>
       <p class="lead">
-        Why TimeProofs exists, who is behind it, and how the protocol is evolving — from the first public beta to a stateless API v0.2 with machine-readable <code>.tproof.json</code> receipts — while staying open, privacy-first, and independent over the long term.
+        Mission, values, governance, and transparency behind TimeProofs — the open, privacy-first standard for digital proof of existence,
+        compatible with a stateless API v0.2 and portable <code>.tproof.json</code> proof files.
       </p>
     </section>
 
     <!-- TOC -->
     <nav class="toc" aria-label="Contents">
+      <span class="toc-label">On this page</span>
       <a href="#mission">Mission &amp; vision</a>
       <a href="#new-v02">New in v0.2</a>
       <a href="#values">Core values</a>
-      <a href="#how-it-works">What TimeProofs actually does</a>
+      <a href="#how-it-works">What it does</a>
       <a href="#governance">Governance &amp; roadmap</a>
-      <a href="#trust-transparency">Trust &amp; transparency</a>
+      <a href="#trust">Trust &amp; transparency</a>
       <a href="#for-whom">Who it is for</a>
-      <a href="#contact">Contact &amp; channels</a>
-      <a href="#page-proof-sec">Page proof</a>
+      <a href="#contact">Contact</a>
     </nav>
+    <div style="text-align:center">
+      <a class="toc-top" href="#top">↑ Top</a>
+    </div>
 
-    <!-- Breadcrumb + meta -->
-    <nav aria-label="Breadcrumb" class="crumb">
-      <a href="/">Home</a> › <span aria-current="page">About</span>
-    </nav>
-    <p class="meta">
-      About · Last updated: <strong>2025-12-02</strong> · See also:
-      <a href="/proofspec.html">Protocol (ProofSpec)</a> ·
-      <a href="/docs.html">API Docs</a> ·
-      <a href="/security.html">Security</a> ·
-      <a href="/privacy.html">Privacy</a>
-    </p>
-
-    <!-- Sections -->
     <section class="card" id="mission">
       <h2>Mission &amp; vision</h2>
-      <p><strong>Mission.</strong> Give everyone — developers, AI teams, researchers, creators, and legal teams — a simple way to prove when data existed and that it has not changed, without revealing the data itself.</p>
-      <p><strong>Vision.</strong> TimeProofs is built as a reference implementation of a future open protocol called <strong>ProofSpec</strong>. The long-term goal is for ProofSpec to become a neutral standard for digital proof of existence, much like PDF or JPEG became standards for documents and images.</p>
-      <p><strong>Where we are now.</strong> v0.1 shipped the core hash-only protocol and public API. v0.2 adds stateless proofs and a portable <code>.tproof.json</code> format that can travel across logs, pipelines, and audits without exposing original content.</p>
+      <p><strong>Mission.</strong> Provide a simple, verifiable way to prove when specific data existed and that it has not changed, without revealing the original content.</p>
+      <p><strong>Vision.</strong> TimeProofs is built as a reference implementation of an open protocol (<strong>ProofSpec</strong>) intended to become a neutral standard for digital proof of existence.</p>
       <p class="muted">Hash locally · Timestamp via API · Verify publicly · No blockchain · No tokens.</p>
     </section>
 
     <section class="card" id="new-v02">
       <h2>New in v0.2</h2>
-      <p>v0.2 is a clarity and portability upgrade. It keeps the same core promise (hash-only proof of existence) while improving how proofs travel across systems.</p>
+      <p>v0.2 keeps the same core promise (hash-only proofs) while improving portability and integration:</p>
       <ul>
-        <li><strong>Stateless proofs.</strong> The API can issue proofs without requiring accounts or dashboards as a dependency.</li>
-        <li><strong>Portable <code>.tproof.json</code> bundles.</strong> A machine-readable proof file you can store in logs, pipelines, audits, or archives.</li>
-        <li><strong>Offline inspection.</strong> Proof bundles can be inspected later without needing the original content.</li>
+        <li><strong>Stateless API.</strong> Proofs can be issued without requiring accounts or dashboards as a dependency.</li>
+        <li><strong>Portable <code>.tproof.json</code> bundles.</strong> Machine-readable proofs you can store alongside artifacts and logs.</li>
+        <li><strong>Offline inspection.</strong> Proof bundles remain inspectable without needing the original content.</li>
       </ul>
-      <p class="muted">No storage of your original data. No identity layer. No “trust the platform” requirement.</p>
     </section>
 
     <section class="card" id="values">
       <h2>Core values</h2>
-      <h3>1) Privacy-first by design</h3>
-      <p>Only hashes leave your device. The protocol never needs your original files, prompts, datasets, or documents. This keeps personal data and trade secrets out of the proof layer.</p>
-
-      <h3>2) Open and neutral</h3>
-      <p>TimeProofs aims to stay neutral: no lock-in, no proprietary formats, no requirement to use a specific cloud provider. The ProofSpec protocol is designed to be implemented by others.</p>
-
-      <h3>3) Verifiability over marketing</h3>
-      <p>Every release and every important page is meant to be sealed with its own proof. The goal is that trust comes from verifiable artifacts, not from slogans.</p>
-
-      <h3>4) Simplicity for developers</h3>
-      <p>Integrations should be as simple as a <code>curl</code> call, a small SDK function, or a CI step. No complex onboarding, no accounts required to start, and minimal configuration.</p>
+      <h3>Privacy-first</h3>
+      <p>Only hashes are processed. The protocol does not require your original files, prompts, datasets, or documents.</p>
+      <h3>Open and neutral</h3>
+      <p>The protocol is designed to be implementable by others, without lock-in or proprietary formats.</p>
+      <h3>Verifiability over claims</h3>
+      <p>Trust should come from artifacts that can be verified independently, not from marketing.</p>
+      <h3>Developer-first simplicity</h3>
+      <p>Integrations should be lightweight: a <code>curl</code> call, a small SDK function, or a CI step.</p>
     </section>
 
     <section class="card" id="how-it-works">
-      <h2>What TimeProofs actually does</h2>
-      <p>TimeProofs does three things well:</p>
+      <h2>What it does</h2>
       <ol>
-        <li><strong>Canonicalize and hash content on the client side.</strong> Text, files, outputs, or datasets are normalized and hashed locally (for example with SHA-256).</li>
-        <li><strong>Issue a signed timestamp at the edge.</strong> The hash is sent to the TimeProofs API, which signs a timestamped proof using controlled keys at the edge.</li>
-        <li><strong>Expose an open verify path.</strong> Anyone can verify the proof using the public endpoint or a self-hosted verifier, without needing access to the original data.</li>
+        <li><strong>Hash locally.</strong> You hash the exact bytes you want to prove (often SHA-256) on your side.</li>
+        <li><strong>Get a signed timestamp.</strong> You send the hash to an issuer which returns a signed proof with a UTC timestamp.</li>
+        <li><strong>Verify later.</strong> Anyone can validate the proof without seeing the original data.</li>
       </ol>
-      <p class="muted">The reference implementation runs on edge infrastructure, but the protocol is designed to work on any stack that can sign and verify hashes.</p>
+      <p class="muted">TimeProofs is an implementation; ProofSpec is the protocol others can also implement.</p>
     </section>
 
     <section class="card" id="governance">
       <h2>Governance &amp; roadmap</h2>
-      <p><strong>Reference implementation.</strong> The current TimeProofs deployment is a reference implementation of the ProofSpec protocol. It is used to validate the design, security model, and developer experience.</p>
-      <p><strong>From product to standard.</strong> The roadmap moves in stages: first a stable public API, then formal ProofSpec documentation, then community input and, later, a foundation or standards body involvement (W3C, ISO-style discussions).</p>
-      <p><strong>Versioned evolution.</strong> Each version (v0.1, v0.2, …) is treated as an incremental step: capabilities like stateless proofs and <code>.tproof.json</code> receipts are introduced without breaking existing proofs or changing what has already been committed.</p>
-      <p><strong>Open-source posture.</strong> The goal is for the client libraries, the specification, and the verification tools to be openly auditable, with a clear licence and contribution model.</p>
-      <p class="muted">Over time, governance should shift from a single maintainer to a broader group of stakeholders that care about open, privacy-preserving proofs.</p>
+      <p>TimeProofs is maintained as a reference implementation of ProofSpec, with an open-standard roadmap aimed at broader community governance over time.</p>
+      <p>Versions evolve incrementally (v0.1 → v0.2 → …) without breaking already-issued proofs.</p>
     </section>
 
-    <section class="card" id="trust-transparency">
+    <section class="card" id="trust">
       <h2>Trust &amp; transparency</h2>
-      <h3>Release proofs</h3>
-      <p>Each version of the site and API is intended to be sealed with a release proof. The hash of the built artifacts is published (for example via a manifest such as <code>/releases/v0.2.json</code>), together with a verify link or a bundled <code>.tproof.json</code> file, so anyone can confirm that what is served matches what was released.</p>
-
-      <h3>Security posture</h3>
-      <p>The security page details the threat model, CSP, key policy, and disclosure process. The aim is not to claim perfect security, but to make the assumptions and controls explicit.</p>
-
-      <h3>No hidden data flows</h3>
-      <p>TimeProofs avoids capturing original content, personally identifiable information, or proprietary data. Logs are designed to be minimal and focused on operational integrity, not user profiling.</p>
+      <p>TimeProofs is designed to minimize hidden data flows: hash-only proofs, minimal logs, clear security posture, and open verification paths.</p>
+      <p>Security posture, disclosure process, and operational details are documented on the <a href="/security.html">Security</a> page.</p>
     </section>
 
     <section class="card" id="for-whom">
       <h2>Who it is for</h2>
-      <p><strong>AI &amp; ML teams.</strong> To prove when prompts, model versions, and outputs were produced, without leaking training data or business logic.</p>
-      <p><strong>Legal &amp; compliance teams.</strong> To attach time-stamped proofs to policies, evidence, filings, and audit trails.</p>
-      <p><strong>Developers &amp; DevOps.</strong> To seal build artifacts, configuration baselines, SBOMs, and deployment histories.</p>
-      <p><strong>Creators &amp; researchers.</strong> To publish work with attached proof bundles that certify existence at a given point in time.</p>
-      <p class="muted">
-        If you sit in any of these categories and want to experiment with TimeProofs, start with:
-        <a href="/verify.html">Create / Verify</a> ·
-        <a href="/docs.html">API Docs</a> ·
-        <a href="/use-cases.html">Use Cases</a>.
-        In v0.2, you can also test machine-readable <code>.tproof.json</code> receipts inside your own logs, CI pipelines, or audit systems.
-      </p>
+      <p><strong>AI &amp; ML teams.</strong> Seal prompts, outputs, datasets, and audit trails without leaking content.</p>
+      <p><strong>Developers &amp; DevOps.</strong> Seal build artifacts, releases, configs, and deployment histories.</p>
+      <p><strong>Legal &amp; compliance.</strong> Attach verifiable timestamps to documents and evidence trails.</p>
+      <p><strong>Researchers &amp; creators.</strong> Publish work with proof bundles that certify existence at a point in time.</p>
     </section>
 
     <section class="card" id="contact">
-      <h2>Contact &amp; channels</h2>
-      <p><strong>Contact.</strong> You can reach the maintainer at <a href="mailto:contact@timeproofs.io">contact@timeproofs.io</a> for questions, early partnerships, or security reports.</p>
-      <p><strong>Status &amp; uptime.</strong> Operational status and incident history are published at <a href="https://status.timeproofs.io" target="_blank" rel="noopener">status.timeproofs.io</a>.</p>
-      <p><strong>Community &amp; updates.</strong> Public updates and discussions happen on:</p>
-      <ul>
-        <li><a href="https://x.com/timeproofs" target="_blank" rel="noopener">X (Twitter)</a></li>
-        <li><a href="https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2" target="_blank" rel="noopener">GitHub repository</a></li>
-        <li><a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener">LinkedIn page</a></li>
-        <li><a href="/rss.xml" target="_blank" rel="noopener">RSS feed</a> for release notes and technical posts</li>
-      </ul>
-      <p class="muted">As the protocol matures, more formal community channels and governance structures will be documented here.</p>
-    </section>
-
-    <!-- Page proof -->
-    <section class="card" id="page-proof-sec" aria-labelledby="proof-title">
-      <h2 id="proof-title">This page is verified by TimeProofs</h2>
-      <p>
-        Release: <code id="page-proof-release">…</code> ·
-        Hash: <code id="page-proof-hash">…</code> ·
-        <a id="page-proof-link" href="#" target="_blank" rel="noopener">Verify</a>
+      <h2>Contact</h2>
+      <p><strong>Email:</strong> <a href="mailto:contact@timeproofs.io">contact@timeproofs.io</a></p>
+      <p><strong>Status:</strong> <a href="https://status.timeproofs.io" target="_blank" rel="noopener">status.timeproofs.io</a></p>
+      <p class="muted">
+        Channels:
+        <a href="https://x.com/timeproofs" target="_blank" rel="noopener">X</a> ·
+        <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2" target="_blank" rel="noopener">GitHub</a> ·
+        <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="/rss.xml" target="_blank" rel="noopener">RSS</a>
       </p>
-      <p class="muted">Loaded from the central release manifest.</p>
     </section>
   </main>
 
-  <!-- Footer -->
+  <!-- Footer (aligné sur proofspec) -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <a class="badge" href="/proofspec.html">🔍 Open Spec v0.1</a>
@@ -574,19 +509,13 @@ upgrade-insecure-requests">
     </div>
     <div class="social" aria-label="Social links">
       <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/>
-        </svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
       </a>
       <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/>
-        </svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
       </a>
       <a href="https://www.linkedin.com/company/timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on LinkedIn">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/>
-        </svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg>
       </a>
       <a href="https://youtube.com/@timeproofs" target="_blank" rel="noopener" aria-label="TimeProofs on YouTube">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -594,9 +523,7 @@ upgrade-insecure-requests">
         </svg>
       </a>
       <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/>
-        </svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/></svg>
       </a>
     </div>
   </footer>
@@ -650,46 +577,32 @@ upgrade-insecure-requests">
       });
     })();
 
-    // Copy buttons (generic, does nothing if no <pre>)
-    (function(){
+    // Copy buttons on all code blocks
+    (function installCopyButtons(){
       document.querySelectorAll('pre').forEach((pre)=>{
         if(pre.querySelector('.copy-btn')) return;
         const btn=document.createElement('button');
-        btn.className='copy-btn'; btn.type='button'; btn.textContent='Copy';
+        btn.type='button';
+        btn.className='copy-btn';
+        btn.setAttribute('aria-label','Copy code block');
+        btn.innerHTML='<span class="txt">Copy</span><span class="ok">✓ Copied</span>';
         btn.addEventListener('click', async ()=>{
           const code = pre.querySelector('code')?.innerText ?? pre.innerText;
           try{
             await navigator.clipboard.writeText(code);
-            btn.textContent='Copied';
-            setTimeout(()=>btn.textContent='Copy',1200);
+            btn.classList.add('copied');
+            setTimeout(()=>btn.classList.remove('copied'), 1200);
           }catch{
-            btn.textContent='Error';
-            setTimeout(()=>btn.textContent='Copy',1200);
+            const ta=document.createElement('textarea');
+            ta.value=code; ta.style.position='fixed'; ta.style.left='-9999px';
+            document.body.appendChild(ta); ta.select();
+            document.execCommand('copy'); document.body.removeChild(ta);
+            btn.classList.add('copied');
+            setTimeout(()=>btn.classList.remove('copied'), 1200);
           }
         });
         pre.appendChild(btn);
       });
-    })();
-
-    // Release manifest fill (Page proof uniquement)
-    (async()=>{
-      try{
-        const r=await fetch('/releases/v0.2.json',{cache:'no-store'});
-        if(!r.ok) return;
-        const map=await r.json();
-        const id=document.documentElement.dataset.page || 'about.html';
-        const e=map[id] || map['/'] || map;
-
-        const elH=document.getElementById('page-proof-hash');
-        const elL=document.getElementById('page-proof-link');
-        const elR=document.getElementById('page-proof-release');
-
-        if(elR && e.release) elR.textContent=e.release;
-        if(e.hash && elH) elH.textContent=e.hash;
-
-        const url=e.verify || (e.hash ? ('https://api.timeproofs.io/api/verify?hash='+encodeURIComponent(e.hash)) : '#');
-        if(elL && url) elL.href=url;
-      }catch{}
     })();
 
     // Service Worker
