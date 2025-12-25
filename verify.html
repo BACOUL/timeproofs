@@ -7,17 +7,18 @@
   <meta name="color-scheme" content="dark light"/>
   <title>Create &amp; Verify — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="Create or verify cryptographic proofs of existence. Hash locally, timestamp via API v0.2, download a .tproof.json bundle, and verify it later. Offline inspection supported."/>
+  <meta name="description" content="Create or verify cryptographic proofs of existence. Hash locally, timestamp via API, download a .tproof.json bundle, and verify or inspect it later — including offline inspection."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <meta name="ai-trust" content="verified-by-timeproofs"/>
   <link rel="canonical" href="https://timeproofs.io/verify.html"/>
 
-  <!-- Feeds (v0.2: RSS removed) -->
+  <!-- Feeds / Docs (v0.2) -->
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
   <link rel="alternate" type="application/yaml" href="/openapi.yaml"/>
   <link rel="author" href="/humans.txt"/>
+  <link rel="status" href="https://status.timeproofs.io"/>
 
   <!-- Perf -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
@@ -36,7 +37,7 @@
 
   <!-- Social -->
   <meta property="og:title" content="Create &amp; Verify — TimeProofs"/>
-  <meta property="og:description" content="Hash locally. Timestamp via API v0.2. Download .tproof.json bundles. Verify publicly; inspect bundles offline."/>
+  <meta property="og:description" content="Hash locally. Instant timestamp. Download .tproof.json bundles. Public verification and offline inspection."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/verify.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
@@ -46,13 +47,13 @@
   <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Create &amp; Verify — TimeProofs"/>
-  <meta name="twitter:description" content="Create proofs, download .tproof.json bundles, and verify them later — with offline inspection."/>
+  <meta name="twitter:description" content="Create proofs, download .tproof.json bundles, and verify or inspect them later — including offline inspection."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- Security meta -->
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
 
-  <!-- CSP v0.1 (reused for v0.2) -->
+  <!-- CSP v0.2 -->
   <meta http-equiv="Content-Security-Policy" content="
 default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
 worker-src 'self' blob:;
@@ -124,8 +125,8 @@ upgrade-insecure-requests">
       "url":"https://timeproofs.io/"
     },
     "datePublished":"2025-10-22",
-    "dateModified":"2025-12-04",
-    "description":"Create or verify cryptographic proofs of existence. Local hashing, timestamp via API v0.2, downloadable .tproof.json bundles, and offline inspection."
+    "dateModified":"2025-12-25",
+    "description":"Create or verify cryptographic proofs of existence. Local hashing, signed timestamp, downloadable .tproof.json bundles, and offline inspection."
   }
   </script>
 
@@ -443,12 +444,10 @@ upgrade-insecure-requests">
       text-decoration:underline;
     }
 
-    /* FIX: ensure CTA stays dark text on mobile even with unified selector above */
-    #tp-nav a.nav-cta{
-      color:#06202a;
-    }
+    /* keep CTA readable */
+    #tp-nav a.nav-cta{ color:#06202a; }
 
-    /* Spécifique verify : éviter débordement des hashes de preview */
+    /* verify: avoid overflow in hash previews */
     html[data-page="verify.html"] #hash-preview-text,
     html[data-page="verify.html"] #hash-preview-file,
     html[data-page="verify.html"] #hash-preview-raw{
@@ -456,7 +455,6 @@ upgrade-insecure-requests">
       overflow-wrap:anywhere;
     }
 
-    /* Spécifique verify : sommaire / mini-tabs bien en blanc */
     html[data-page="verify.html"] .mini-tabs button{
       color:#f8fafc;
       font-weight:600;
@@ -497,8 +495,8 @@ upgrade-insecure-requests">
       <p class="badge">Status: Public Beta v0.2 · ProofSpec v0.1 · API v0.2 · Privacy-first · No blockchain</p>
       <h1 id="page-title">Create / Verify</h1>
       <p class="lead">
-        Hash anything locally. Create a signed <code>.tproof.json</code> bundle, then verify a hash or inspect a bundle later.
-        Offline inspection shows structure and fingerprints; online verification checks existence and issuer signatures. Your content never leaves your device.
+        Hash anything locally. Create a signed <code>.tproof.json</code> bundle, then verify a hash or inspect a bundle later — including offline.
+        Your content never leaves your device.
       </p>
       <div class="hero-actions">
         <a href="#create-card" class="hero-btn primary" id="hero-create">Create a proof</a>
@@ -585,7 +583,7 @@ upgrade-insecure-requests">
       <article class="card" id="verify-card" aria-labelledby="verify-title">
         <div class="step-label">Step 2 · Verify or inspect</div>
         <h2 id="verify-title">Verify a proof</h2>
-        <p class="hint">Paste a SHA-256 hash or drop a <code>.tproof.json</code> bundle. You can inspect it locally, then check existence and issuer signatures via the public API.</p>
+        <p class="hint">Paste a SHA-256 hash or drop a <code>.tproof.json</code> bundle. Inspect the bundle and check existence and signature via the public API.</p>
 
         <label for="verify-hash">Hash to verify</label>
         <input type="text" id="verify-hash" placeholder="Paste a 64-hex SHA-256 hash" inputmode="latin" autocapitalize="off" autocomplete="off" spellcheck="false" pattern="[A-Fa-f0-9]{64}"/>
@@ -632,7 +630,7 @@ Accept: application/json</code></pre>
             <h3>Example</h3>
 <pre><code>curl -sS "https://api.timeproofs.io/api/verify?hash=7c040f8633b8..." \
   -H "Accept: application/json"</code></pre>
-            <p class="hint">You can also share <code>/verify.html?hash=&lt;hash&gt;</code> as a public verify link.</p>
+            <p class="hint">You can share <code>/verify.html?hash=&lt;hash&gt;</code> as a public verify link.</p>
           </div>
 
           <div id="panel-json" style="display:none;">
@@ -677,14 +675,14 @@ POST https://api.timeproofs.io/api/verify
     "source": "web:verify"
   }
 }</code></pre>
-            <p class="hint">“Download .tproof.json” generates this bundle client-side in the v0.2 format. Offline you can inspect its fields; online you can verify existence and issuer signatures.</p>
+            <p class="hint">The “Download .tproof.json” button generates this bundle client-side in the v0.2 format.</p>
           </div>
 
           <div id="panel-faq" style="display:none;">
             <h3>Quick FAQ</h3>
             <p><strong>Is my content stored?</strong><br/>No. Only the hash circulates. The original content never leaves your device.</p>
-            <p><strong>Why no blockchain?</strong><br/>To keep latency low (&lt;100&nbsp;ms), costs predictable, and verification simple.</p>
-            <p><strong>Offline verify?</strong><br/>Offline inspection lets you read the bundle (hash, timestamp, signatures). Existence checks and issuer signature validation are performed online via the public API.</p>
+            <p><strong>Why no blockchain?</strong><br/>Predictable latency, costs, and independent verification without third-party consensus layers.</p>
+            <p><strong>Offline verify?</strong><br/>You can inspect a <code>.tproof.json</code> bundle offline (hash, timestamp, signatures) and re-check it anytime via the public API.</p>
             <p><strong>Compliance?</strong><br/>Privacy-first, hash-only. See <a href="/regulations.html">Regulations &amp; Compliance</a>.</p>
           </div>
         </div>
@@ -692,7 +690,7 @@ POST https://api.timeproofs.io/api/verify
     </section>
   </main>
 
-  <!-- Footer (aligned with master) -->
+  <!-- Footer (v0.2 rules: no RSS / no YouTube) -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
@@ -740,8 +738,8 @@ POST https://api.timeproofs.io/api/verify
       TimeProofsV02 &&
       typeof TimeProofsV02.createBundle === "function";
 
-    // --------- Timestamp safety (prevents confusing 1970 outputs) ----------
-    const MIN_REASONABLE_MS = Date.UTC(2000,0,1); // hide anything before 2000
+    // --------- Timestamp safety ----------
+    const MIN_REASONABLE_MS = Date.UTC(2000,0,1);
     function isReasonableMs(ms){
       return typeof ms === "number" && isFinite(ms) && ms >= MIN_REASONABLE_MS;
     }
@@ -751,9 +749,7 @@ POST https://api.timeproofs.io/api/verify
       const ms = d.getTime();
       return !isNaN(ms) && isReasonableMs(ms);
     }
-    // ----------------------------------------------------------------------
 
-    // Helpers v0.2 (hash + timestamp + signature)
     function getHashValue(hash){
       if(!hash) return "";
       if(typeof hash === "string") return hash;
@@ -762,10 +758,7 @@ POST https://api.timeproofs.io/api/verify
     }
     function normalizeHash(jHash, hashHex){
       const v = getHashValue(jHash) || (hashHex || "").toLowerCase();
-      return {
-        algorithm: (jHash && jHash.algorithm) || "SHA-256",
-        value: v
-      };
+      return { algorithm: (jHash && jHash.algorithm) || "SHA-256", value: v };
     }
     function normalizeTimestampFromResp(resp){
       const r = resp || {};
@@ -774,32 +767,22 @@ POST https://api.timeproofs.io/api/verify
 
       if(r.timestamp && typeof r.timestamp === "object"){
         const t = r.timestamp;
-        if(typeof t.issuedAt === "number"){
-          issuedAtMs = t.issuedAt;
-        }else if(typeof t.issuedAt === "string"){
-          const d = new Date(t.issuedAt);
-          if(!isNaN(d.getTime())) issuedAtMs = d.getTime();
-        }else if(typeof t.iso === "string"){
-          const d = new Date(t.iso);
-          if(!isNaN(d.getTime())) issuedAtMs = d.getTime();
-        }
+        if(typeof t.issuedAt === "number") issuedAtMs = t.issuedAt;
+        else if(typeof t.issuedAt === "string"){ const d=new Date(t.issuedAt); if(!isNaN(d.getTime())) issuedAtMs=d.getTime(); }
+        else if(typeof t.iso === "string"){ const d=new Date(t.iso); if(!isNaN(d.getTime())) issuedAtMs=d.getTime(); }
         if(typeof t.issuer === "string") issuer = t.issuer;
       }else if(typeof r.ts === "number"){
-        const d = new Date(r.ts);
-        if(!isNaN(d.getTime())) issuedAtMs = d.getTime();
+        const d = new Date(r.ts); if(!isNaN(d.getTime())) issuedAtMs = d.getTime();
       }else if(typeof r.ts === "string" || typeof r.timestamp === "string"){
         const iso = r.ts || r.timestamp;
-        const d = new Date(iso);
-        if(!isNaN(d.getTime())) issuedAtMs = d.getTime();
+        const d = new Date(iso); if(!isNaN(d.getTime())) issuedAtMs = d.getTime();
       }
 
       if(!isReasonableMs(issuedAtMs)) issuedAtMs = null;
-
       return { issuedAt: issuedAtMs, issuer };
     }
     function getTimestampIso(tsObj){
       if(!tsObj || typeof tsObj !== "object") return null;
-
       if(typeof tsObj.issuedAt === "number"){
         if(!isReasonableMs(tsObj.issuedAt)) return null;
         try{ return new Date(tsObj.issuedAt).toISOString(); }catch{ return null; }
@@ -825,19 +808,12 @@ POST https://api.timeproofs.io/api/verify
 
     function fmtLocal(iso){
       try{
-        if(!iso) return "—";
-        if(!isReasonableIso(iso)) return "—";
+        if(!iso || !isReasonableIso(iso)) return "—";
         return new Intl.DateTimeFormat("en-GB",{
-          year:"numeric",
-          month:"2-digit",
-          day:"2-digit",
-          hour:"2-digit",
-          minute:"2-digit",
-          second:"2-digit"
+          year:"numeric", month:"2-digit", day:"2-digit",
+          hour:"2-digit", minute:"2-digit", second:"2-digit"
         }).format(new Date(iso));
-      }catch{
-        return "—";
-      }
+      }catch{ return "—"; }
     }
     function nowIso(){ return new Date().toISOString(); }
 
@@ -888,7 +864,6 @@ POST https://api.timeproofs.io/api/verify
       document.getElementById('verify-card').scrollIntoView({behavior:'smooth',block:'start'});
     });
 
-    // Helpers
     function withTimeout(options={}){
       const ctrl=new AbortController();
       const t=setTimeout(()=>ctrl.abort(), REQ_TIMEOUT_MS);
@@ -997,7 +972,7 @@ POST https://api.timeproofs.io/api/verify
         const f=e.dataTransfer?.files?.[0];
         if(!f) return;
         if(f.size>MAX_FILE_BYTES){ alert("File too large (max 50 MB)."); return; }
-        fileInput.files=e.dataTransfer.files;
+        try{ fileInput.files=e.dataTransfer.files; }catch{}
         setFileInfo(f);
         const h=await sha256HexFromFile(f);
         hashPrevFile.textContent="SHA-256 (preview): "+h;
@@ -1215,10 +1190,8 @@ POST https://api.timeproofs.io/api/verify
         const inputHash=(document.getElementById("verify-hash").value||"").trim().toLowerCase();
         if(!/^[a-f0-9]{64}$/i.test(inputHash)) fail("64-hex SHA-256 hash required.");
 
-        let r, j={};
-
-        r = await fetchAPI(`/verify?hash=${encodeURIComponent(inputHash)}`);
-        j = await r.json().catch(()=> ({}));
+        const r = await fetchAPI(`/verify?hash=${encodeURIComponent(inputHash)}`);
+        const j = await r.json().catch(()=> ({}));
 
         if(r.status===404 || j.error==="not_found"){
           verifyStatus.innerHTML=`<span class="pill bad">❌ Not found</span>`;
@@ -1234,7 +1207,6 @@ POST https://api.timeproofs.io/api/verify
         }
 
         const httpOk = r.ok;
-
         const serverSaysValid   = j.valid === true || j.ok === true || j.state === "valid";
         const serverSaysInvalid = j.valid === false || j.ok === false || j.state === "invalid";
 
@@ -1249,10 +1221,7 @@ POST https://api.timeproofs.io/api/verify
           tsIso = getTimestampIso(j.timestamp);
         }else if(typeof j.ts==="number" || typeof j.timestamp==="number"){
           const n = typeof j.ts==="number" ? j.ts : j.timestamp;
-          if(isReasonableMs(n)){
-            const d = new Date(n);
-            if(!isNaN(d.getTime())) tsIso = d.toISOString();
-          }
+          if(isReasonableMs(n)){ const d = new Date(n); if(!isNaN(d.getTime())) tsIso = d.toISOString(); }
         }else if(typeof j.ts==="string" || typeof j.timestamp==="string"){
           const isoCandidate = j.ts || j.timestamp;
           const d = new Date(isoCandidate);
@@ -1321,7 +1290,7 @@ POST https://api.timeproofs.io/api/verify
       setTimeout(()=>btnVerify.click(),80);
     }
 
-    // drag & drop tproof.json in verify (v0.2 bundle + offline inspection)
+    // drag & drop tproof.json
     const dropBundle=document.getElementById("drop-bundle");
     dropBundle.addEventListener("dragenter",e=>{e.preventDefault(); dropBundle.classList.add("drag");});
     dropBundle.addEventListener("dragover",e=>{e.preventDefault(); dropBundle.classList.add("drag");});
@@ -1361,10 +1330,7 @@ POST https://api.timeproofs.io/api/verify
         if(b.timestamp && typeof b.timestamp==="object"){
           tsIso = getTimestampIso(b.timestamp);
         }else if(typeof b.ts==="number"){
-          if(isReasonableMs(b.ts)){
-            const d=new Date(b.ts);
-            if(!isNaN(d.getTime())) tsIso=d.toISOString();
-          }
+          if(isReasonableMs(b.ts)){ const d=new Date(b.ts); if(!isNaN(d.getTime())) tsIso=d.toISOString(); }
         }else if(typeof b.ts==="string"){
           const d=new Date(b.ts);
           if(!isNaN(d.getTime())){
@@ -1386,7 +1352,7 @@ POST https://api.timeproofs.io/api/verify
       }catch{ alert("Invalid bundle."); }
     });
 
-    // mini-tabs JS
+    // mini-tabs
     const tabs = {
       url: document.getElementById("tab-url"),
       json: document.getElementById("tab-json"),
@@ -1421,20 +1387,15 @@ POST https://api.timeproofs.io/api/verify
         btn.type='button';
         btn.className='copy-btn';
         btn.setAttribute('aria-label','Copy code block');
-        btn.innerHTML='<span class="txt">Copy</span><span class="ok">✓ Copied</span>';
+        btn.textContent='Copy';
         btn.addEventListener('click', async ()=>{
           const code = pre.querySelector('code')?.innerText ?? pre.innerText;
-          try{
-            await navigator.clipboard.writeText(code);
-            btn.classList.add('copied');
-            setTimeout(()=>btn.classList.remove('copied'), 1200);
-          }catch{
+          try{ await navigator.clipboard.writeText(code); }
+          catch{
             const ta=document.createElement('textarea');
             ta.value=code; ta.style.position='fixed'; ta.style.left='-9999px';
             document.body.appendChild(ta); ta.select();
             document.execCommand('copy'); document.body.removeChild(ta);
-            btn.classList.add('copied');
-            setTimeout(()=>btn.classList.remove('copied'), 1200);
           }
         });
         pre.appendChild(btn);
