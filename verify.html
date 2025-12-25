@@ -7,19 +7,17 @@
   <meta name="color-scheme" content="dark light"/>
   <title>Create &amp; Verify — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="Create or verify cryptographic proofs of existence. Hash locally, timestamp via API, download a .tproof.json bundle, and verify or inspect it later — including offline inspection."/>
+  <meta name="description" content="Create or verify cryptographic proofs of existence. Hash locally, timestamp via API v0.2, download a .tproof.json bundle, and verify it later. Offline inspection supported."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <meta name="ai-trust" content="verified-by-timeproofs"/>
   <link rel="canonical" href="https://timeproofs.io/verify.html"/>
 
-  <!-- Feeds -->
-  <link rel="alternate" type="application/rss+xml" title="TimeProofs RSS" href="/rss.xml"/>
+  <!-- Feeds (v0.2: RSS removed) -->
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
   <link rel="alternate" type="application/yaml" href="/openapi.yaml"/>
   <link rel="author" href="/humans.txt"/>
-  <link rel="status" href="https://status.timeproofs.io"/>
 
   <!-- Perf -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
@@ -38,7 +36,7 @@
 
   <!-- Social -->
   <meta property="og:title" content="Create &amp; Verify — TimeProofs"/>
-  <meta property="og:description" content="Hash locally. Instant timestamp. Download .tproof.json bundles. Public verification and offline inspection."/>
+  <meta property="og:description" content="Hash locally. Timestamp via API v0.2. Download .tproof.json bundles. Verify publicly; inspect bundles offline."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/verify.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
@@ -48,7 +46,7 @@
   <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Create &amp; Verify — TimeProofs"/>
-  <meta name="twitter:description" content="Create proofs, download .tproof.json bundles, and verify or inspect them later — including offline inspection."/>
+  <meta name="twitter:description" content="Create proofs, download .tproof.json bundles, and verify them later — with offline inspection."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- Security meta -->
@@ -92,8 +90,7 @@ upgrade-insecure-requests">
     "sameAs":[
       "https://x.com/timeproofs",
       "https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2",
-      "https://www.linkedin.com/in/jeason-bacoul-667938281?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
-      "https://timeproofs.io/rss.xml"
+      "https://www.linkedin.com/in/jeason-bacoul-667938281?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
     ],
     "contactPoint":[{
       "@type":"ContactPoint",
@@ -128,7 +125,7 @@ upgrade-insecure-requests">
     },
     "datePublished":"2025-10-22",
     "dateModified":"2025-12-04",
-    "description":"Create or verify cryptographic proofs of existence. Local hashing, signed timestamp, downloadable .tproof.json bundles, and offline inspection."
+    "description":"Create or verify cryptographic proofs of existence. Local hashing, timestamp via API v0.2, downloadable .tproof.json bundles, and offline inspection."
   }
   </script>
 
@@ -226,7 +223,6 @@ upgrade-insecure-requests">
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
 
-      /* FIX: mobile CTA text should be white (not grey) */
       .nav-cta{
         display:block; margin-top:6px; padding:12px; text-align:center;
         border-radius:12px; background:var(--accent);
@@ -447,7 +443,7 @@ upgrade-insecure-requests">
       text-decoration:underline;
     }
 
-    /* FIX: ensure CTA stays white text on mobile even with unified selector above */
+    /* FIX: ensure CTA stays dark text on mobile even with unified selector above */
     #tp-nav a.nav-cta{
       color:#06202a;
     }
@@ -497,13 +493,12 @@ upgrade-insecure-requests">
   <main id="main" class="wrap" role="main" aria-describedby="page-title">
     <!-- HERO (v0.2) -->
     <section class="hero" role="region" aria-labelledby="page-title">
-      <!-- FIX: icon swapped (use-cases icon) -->
-      <div class="icon" aria-hidden="true">📚</div>
-      <p class="badge">Status: Public Beta v0.2 · ProofSpec v0.1 · Reference API · Privacy-first · No blockchain</p>
+      <div class="icon" aria-hidden="true">🧩</div>
+      <p class="badge">Status: Public Beta v0.2 · ProofSpec v0.1 · API v0.2 · Privacy-first · No blockchain</p>
       <h1 id="page-title">Create / Verify</h1>
       <p class="lead">
-        Hash anything locally. Create a signed <code>.tproof.json</code> bundle, then verify a hash or inspect a bundle later — including offline.
-        Your content never leaves your device.
+        Hash anything locally. Create a signed <code>.tproof.json</code> bundle, then verify a hash or inspect a bundle later.
+        Offline inspection shows structure and fingerprints; online verification checks existence and issuer signatures. Your content never leaves your device.
       </p>
       <div class="hero-actions">
         <a href="#create-card" class="hero-btn primary" id="hero-create">Create a proof</a>
@@ -590,7 +585,7 @@ upgrade-insecure-requests">
       <article class="card" id="verify-card" aria-labelledby="verify-title">
         <div class="step-label">Step 2 · Verify or inspect</div>
         <h2 id="verify-title">Verify a proof</h2>
-        <p class="hint">Paste a SHA-256 hash or drop a <code>.tproof.json</code> bundle. We let you inspect the bundle and check existence and server signature via the API.</p>
+        <p class="hint">Paste a SHA-256 hash or drop a <code>.tproof.json</code> bundle. You can inspect it locally, then check existence and issuer signatures via the public API.</p>
 
         <label for="verify-hash">Hash to verify</label>
         <input type="text" id="verify-hash" placeholder="Paste a 64-hex SHA-256 hash" inputmode="latin" autocapitalize="off" autocomplete="off" spellcheck="false" pattern="[A-Fa-f0-9]{64}"/>
@@ -682,14 +677,14 @@ POST https://api.timeproofs.io/api/verify
     "source": "web:verify"
   }
 }</code></pre>
-            <p class="hint">The "Download .tproof.json" button on the left generates this bundle client-side in the v0.2 format.</p>
+            <p class="hint">“Download .tproof.json” generates this bundle client-side in the v0.2 format. Offline you can inspect its fields; online you can verify existence and issuer signatures.</p>
           </div>
 
           <div id="panel-faq" style="display:none;">
             <h3>Quick FAQ</h3>
             <p><strong>Is my content stored?</strong><br/>No. Only the hash circulates. The original content never leaves your device.</p>
             <p><strong>Why no blockchain?</strong><br/>To keep latency low (&lt;100&nbsp;ms), costs predictable, and verification simple.</p>
-            <p><strong>Offline verify?</strong><br/>You can download a <code>.tproof.json</code> bundle and inspect it offline (hash, timestamp, signatures) and re-check it at any time via the public API.</p>
+            <p><strong>Offline verify?</strong><br/>Offline inspection lets you read the bundle (hash, timestamp, signatures). Existence checks and issuer signature validation are performed online via the public API.</p>
             <p><strong>Compliance?</strong><br/>Privacy-first, hash-only. See <a href="/regulations.html">Regulations &amp; Compliance</a>.</p>
           </div>
         </div>
@@ -715,8 +710,7 @@ POST https://api.timeproofs.io/api/verify
       <a href="/.well-known/security.txt">Security.txt</a> •
       <a href="/privacy.html">Privacy</a> •
       <a href="/legal.html">Legal</a> •
-      <a href="/humans.txt">humans.txt</a> •
-      <a href="/rss.xml">RSS</a>
+      <a href="/humans.txt">humans.txt</a>
     </div>
     <div class="social" aria-label="Social links">
       <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">
@@ -727,9 +721,6 @@ POST https://api.timeproofs.io/api/verify
       </a>
       <a href="https://www.linkedin.com/in/jeason-bacoul-667938281?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noopener" aria-label="Jeason Bacoul on LinkedIn">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg>
-      </a>
-      <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/></svg>
       </a>
     </div>
   </footer>
