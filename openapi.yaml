@@ -12,13 +12,12 @@ info:
     - The API returns a signed timestamp response.
     - Clients build `.tproof.json` bundles locally and verify offline.
 
-    v0.1 remains stable and online with the legacy verify endpoint.
     This OpenAPI file describes the v0.2 stateless API only.
 
     Principles:
     - Hash locally (SHA-256)
     - Timestamp via API
-    - Verify publicly (offline bundles)
+    - Verify offline (portable bundles)
     - No files, no personal data, no blockchain
 
   contact:
@@ -31,8 +30,6 @@ info:
     url: https://www.mozilla.org/en-US/MPL/2.0/
 
 servers:
-  - url: https://api.timeproofs.io
-    description: Production (v0.1 stable — legacy format)
   - url: https://timeproofs-api-v02.jeason-bacoul.workers.dev
     description: v0.2 Dev Preview (stateless)
 
@@ -55,20 +52,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  ok:
-                    type: boolean
-                    example: true
-                  now:
-                    type: string
-                    format: date-time
-                  version:
-                    type: string
-                    example: "timeproofs-0.2"
-                  mode:
-                    type: string
-                    example: "stateless"
+                $ref: "#/components/schemas/HealthResponse"
 
   /api/timestamp:
     post:
@@ -77,13 +61,12 @@ paths:
         Submit a SHA-256 hash to obtain a stateless timestamp response.
 
         The server:
-        - checks the hash format
+        - validates the hash format
         - derives a canonical payload (hash | issuedAt | issuer | nonce)
         - computes an HMAC-SHA256 (if configured)
-        - optionally signs with Ed25519 (future releases)
         - returns timestamp + proof
 
-        The server stores nothing.  
+        The server stores nothing.
         Clients must build `.tproof.json` bundles locally.
       operationId: createTimestampV02
       tags: [Core]
@@ -93,14 +76,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - hash
-              properties:
-                hash:
-                  type: string
-                  description: SHA-256 hex string (64 lowercase hex).
-                  example: "bbbbee25f8ebb60fa512ad3e02460bd4cc7ec4a41850c5cc8636e67d99f0b3b2"
+              $ref: "#/components/schemas/TimestampRequestV02"
 
       responses:
         "200":
@@ -115,79 +91,114 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  ok:
-                    type: boolean
-                    example: false
-                  error:
-                    type: string
-                    example: invalid_hash
-                  code:
-                    type: integer
-                    example: 2102
+                $ref: "#/components/schemas/ErrorResponse"
 
         "429":
           description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
         "500":
           description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
   /api/verify:
     get:
       summary: Verify (not implemented in v0.2)
       description: |
-        v0.2 performs **offline verification only** using `.tproof.json` bundles.
-
+        v0.2 performs offline verification only using `.tproof.json` bundles.
         This endpoint always returns a 501 error.
 
-        The legacy v0.1 verify endpoint remains active on production.
+        The legacy v0.1 verify endpoint remains active on production (not described here).
       operationId: verifyV02
       tags: [Core]
-
       responses:
         "501":
           description: Not implemented in v0.2
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  ok:
-                    type: boolean
-                    example: false
-                  error:
-                    type: string
-                    example: not_implemented_v02
-                  message:
-                    type: string
-                    example: "TimeProofs v0.2 is stateless. Use the SDK/CLI to verify .tproof.json bundles offline."
-                  version:
-                    type: string
-                    example: "timeproofs-0.2"
+                $ref: "#/components/schemas/ErrorResponse"
 
 components:
   schemas:
+    HealthResponse:
+      type: object
+      required: [ok, now, version, mode]
+      properties:
+        ok:
+          type: boolean
+          example: true
+        now:
+          type: string
+          format: date-time
+        version:
+          type: string
+          example: "timeproofs-0.2"
+        mode:
+          type: string
+          example: "stateless"
+
+    ErrorResponse:
+      type: object
+      required: [ok, error]
+      properties:
+        ok:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: invalid_hash
+        message:
+          type: string
+          nullable: true
+          example: "hash must be lowercase hex sha256 (64 chars)"
+        code:
+          type: integer
+          nullable: true
+          example: 2102
+        version:
+          type: string
+          nullable: true
+          example: "timeproofs-0.2"
+
+    TimestampRequestV02:
+      type: object
+      required: [hash]
+      additionalProperties: false
+      properties:
+        hash:
+          type: string
+          description: SHA-256 hex string (64 lowercase hex).
+          minLength: 64
+          maxLength: 64
+          pattern: "^[a-f0-9]{64}$"
+          example: "bbbbee25f8ebb60fa512ad3e02460bd4cc7ec4a41850c5cc8636e67d99f0b3b2"
 
     HashObject:
       type: object
-      required:
-        - algorithm
-        - value
+      required: [algorithm, value]
+      additionalProperties: false
       properties:
         algorithm:
           type: string
           example: "SHA-256"
         value:
           type: string
+          minLength: 64
+          maxLength: 64
+          pattern: "^[a-f0-9]{64}$"
           example: "bbbbee25f8ebb60fa512ad3e02460bd4cc7ec4a41850c5cc8636e67d99f0b3b2"
 
     TimestampObject:
       type: object
-      required:
-        - issuedAt
-        - issuer
-        - nonce
+      required: [issuedAt, issuer, nonce]
+      additionalProperties: false
       properties:
         issuedAt:
           type: string
@@ -197,36 +208,38 @@ components:
           example: "https://api.timeproofs.io"
         nonce:
           type: string
+          description: Server-generated nonce to prevent replay/collision.
+          example: "u4dJ9zQqQm2pXc3m"
 
     ProofObject:
       type: object
-      required:
-        - algo
-        - keyId
+      required: [algo, keyId]
+      additionalProperties: false
       properties:
         algo:
           type: string
-          example: "HMAC-SHA256+Ed25519"
+          example: "HMAC-SHA256"
         hmac:
           type: string
           nullable: true
+          description: Base64-encoded HMAC over canonical payload.
+          example: "mZp8yKcNQk2m9f9l3v2eYwq0cZcZ9rj6uRrKxg0oQp8="
         signature:
           type: string
           nullable: true
+          description: Reserved for future signature schemes (e.g. Ed25519).
         publicKey:
           type: string
           nullable: true
+          description: Reserved for future signature schemes (e.g. Ed25519).
         keyId:
           type: string
           example: "tp-v0-2-main"
 
     TimestampResponseV02:
       type: object
-      required:
-        - version
-        - hash
-        - timestamp
-        - proof
+      required: [version, hash, timestamp, proof]
+      additionalProperties: false
       properties:
         version:
           type: string
