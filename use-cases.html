@@ -14,7 +14,6 @@
   <link rel="canonical" href="https://timeproofs.io/use-cases.html"/>
 
   <!-- Feeds & misc -->
-  <link rel="alternate" type="application/rss+xml" title="TimeProofs RSS" href="/rss.xml"/>
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
   <link rel="alternate" type="application/yaml" href="/openapi.yaml"/>
   <link rel="author" href="/humans.txt"/>
@@ -92,8 +91,7 @@ upgrade-insecure-requests">
     "sameAs":[
       "https://x.com/timeproofs",
       "https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2",
-      "https://www.linkedin.com/in/jeason-bacoul-667938281?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
-      "https://timeproofs.io/rss.xml"
+      "https://www.linkedin.com/in/jeason-bacoul-667938281?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
     ],
     "contactPoint":[{
       "@type":"ContactPoint",
@@ -443,6 +441,7 @@ upgrade-insecure-requests">
       <p><strong>Model:</strong> hash locally → get a signed timestamp (proof) → anyone can verify later.</p>
       <p><strong>Important:</strong> a file date is local, editable, and not independently verifiable. A TimeProofs proof is a signed timestamp for an exact hash that third parties can verify.</p>
       <p class="muted">TimeProofs is hash-only. Your original content stays on your device.</p>
+      <p class="muted">Keep the <code>.tproof.json</code> bundle as the portable proof: you can inspect it offline and re-check online anytime.</p>
     </section>
 
     <!-- 6 core use cases (pattern: What you prove / How / Artifact) -->
@@ -457,6 +456,7 @@ upgrade-insecure-requests">
       <h3>How</h3>
       <ul>
         <li>Hash the bytes of the output (SHA-256).</li>
+        <li>Hash the prompt and the final output separately to preserve the trace.</li>
         <li>Timestamp the hash via the API.</li>
         <li>Store the proof JSON next to your run logs.</li>
       </ul>
@@ -551,12 +551,13 @@ upgrade-insecure-requests">
         <li>Store the <code>.tproof.json</code> next to the artifact.</li>
         <li>Verify later: offline inspection (bundle) + optional online verification (verify URL).</li>
       </ol>
+      <p class="muted">The bundle is the portable artifact you can keep, share, and inspect offline.</p>
     </section>
 
     <section class="card" id="best">
       <h2>Best practices</h2>
       <ul>
-        <li><strong>Canonicalization:</strong> for text, prefer UTF-8 and normalize line endings (LF) before hashing.</li>
+        <li><strong>Canonicalization:</strong> for text, prefer UTF-8 and normalize line endings (LF) before hashing if you need reproducibility across systems.</li>
         <li><strong>No personal data:</strong> keep metadata small and avoid PII.</li>
         <li><strong>Keep bundles:</strong> store proofs with artifacts (not only a URL).</li>
         <li><strong>Stability:</strong> use a consistent hashing workflow so results are reproducible.</li>
@@ -602,8 +603,7 @@ upgrade-insecure-requests">
       <a href="/.well-known/security.txt">Security.txt</a> •
       <a href="/privacy.html">Privacy</a> •
       <a href="/legal.html">Legal</a> •
-      <a href="/humans.txt">humans.txt</a> •
-      <a href="/rss.xml">RSS</a>
+      <a href="/humans.txt">humans.txt</a>
     </div>
     <div class="social" aria-label="Social links">
       <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">
@@ -617,11 +617,6 @@ upgrade-insecure-requests">
       <a href="https://www.linkedin.com/in/jeason-bacoul-667938281?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noopener" aria-label="Jeason Bacoul on LinkedIn">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
           <path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/>
-        </svg>
-      </a>
-      <a href="/rss.xml" target="_blank" rel="noopener" aria-label="TimeProofs RSS">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="currentColor" d="M6 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2-7a13 13 0 0 1 13 13h-3A10 10 0 0 0 4 14v-3Zm0-6a19 19 0 0 1 19 19h-3A16 16 0 0 0 4 5V2Z"/>
         </svg>
       </a>
     </div>
@@ -711,4 +706,4 @@ upgrade-insecure-requests">
   })();
   </script>
 </body>
-        </html>
+</html>
