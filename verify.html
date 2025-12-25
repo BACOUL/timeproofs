@@ -205,6 +205,9 @@ upgrade-insecure-requests">
     }
     .tp-burger span{ font-size:20px; line-height:1 }
 
+    /* Mobile-only nav CTA */
+    .nav-cta{ display:none; }
+
     @media (min-width:900px){
       .tp-burger{ display:none }
       .tp-nav{ display:flex; align-items:center }
@@ -385,6 +388,7 @@ upgrade-insecure-requests">
     footer{
       border-top:1px solid var(--line); margin-top:28px;
       padding:18px; color:#7c8aa5; text-align:center;
+      background:#0b1020;
     }
     footer .badges{
       display:flex; gap:8px; justify-content:center; margin:10px 0;
@@ -396,7 +400,7 @@ upgrade-insecure-requests">
       text-decoration:none;
     }
     footer .links a{
-      color:#cfefff; font-weight:600; text-underline-offset:3px; text-decoration:none;
+      color:#a7b7cc; font-weight:600; text-underline-offset:3px; text-decoration:none;
     }
     footer .links a:hover{ color:var(--accent); text-decoration:underline }
     footer .links a[aria-current="page"]{ color:var(--accent); text-decoration:underline }
@@ -445,26 +449,13 @@ upgrade-insecure-requests">
 
     /* keep CTA readable */
     #tp-nav a.nav-cta{ color:#06202a; }
-
-    /* verify: avoid overflow in hash previews */
-    html[data-page="verify.html"] #hash-preview-text,
-    html[data-page="verify.html"] #hash-preview-file,
-    html[data-page="verify.html"] #hash-preview-raw{
-      word-break:break-all;
-      overflow-wrap:anywhere;
-    }
-
-    html[data-page="verify.html"] .mini-tabs button{
-      color:#f8fafc;
-      font-weight:600;
-    }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
-  <!-- Header (aligned to index: no About) -->
+  <!-- Header -->
   <header class="tp-header" id="hdr" role="banner">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
@@ -478,6 +469,7 @@ upgrade-insecure-requests">
       <a href="/security.html">Security</a>
       <a href="/privacy.html">Privacy</a>
       <a href="/legal.html">Legal</a>
+      <a href="/about.html">About</a>
       <a class="nav-cta" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
     </nav>
     <a class="cta-header" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
@@ -489,7 +481,7 @@ upgrade-insecure-requests">
   <main id="main" class="wrap" role="main" aria-describedby="page-title">
     <!-- HERO (v0.2) -->
     <section class="hero" role="region" aria-labelledby="page-title">
-      <div class="icon" aria-hidden="true">🧩</div>
+      <div class="icon" aria-hidden="true">🔐</div>
       <p class="badge">Status: Public Beta v0.2 · ProofSpec v0.1 · API v0.2 · Privacy-first · No blockchain</p>
       <h1 id="page-title">Create / Verify</h1>
       <p class="lead">
@@ -1449,4 +1441,4 @@ POST https://api.timeproofs.io/api/verify
   })();
   </script>
 </body>
-</html>
+        </html>
