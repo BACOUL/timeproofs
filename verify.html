@@ -347,9 +347,30 @@ upgrade-insecure-requests">
       display:none; grid-template-columns:minmax(0,1fr); gap:6px;
       font-size:.9rem;
     }
-    .summary .item{ display:flex; gap:8px; align-items:center }
-    .summary .k{ min-width:150px; color:#9fb3c9 }
-    .summary code{ font-size:.9rem }
+    .summary .item{ display:flex; gap:8px; align-items:center; min-width:0 }
+    .summary .k{
+      color:#9fb3c9;
+      flex:0 0 140px;
+      min-width:0;
+    }
+    @media (max-width:480px){
+      .summary .k{ flex-basis:110px; }
+    }
+    .summary code{
+      font-size:.9rem;
+      display:inline-block;
+      max-width:100%;
+      overflow-wrap:anywhere;
+      word-break:break-word;
+    }
+
+    /* Prevent long hashes from overflowing on mobile (summary + code blocks) */
+    .summary .item,
+    .summary code,
+    pre, code {
+      overflow-wrap:anywhere;
+      word-break:break-word;
+    }
 
     pre,code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
     pre{
@@ -1434,4 +1455,4 @@ POST https://api.timeproofs.io/api/verify
   })();
   </script>
 </body>
-</html>
+            </html>
