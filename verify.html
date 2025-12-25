@@ -16,7 +16,7 @@
 
   <!-- Feeds / Docs (v0.2) -->
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
-  <link rel="alternate" type="application/yaml" href="/openapi.yaml"/>
+  <link rel="alternate" type="application/yaml" href="/openapi.yaml" title="OpenAPI"/>
   <link rel="author" href="/humans.txt"/>
 
   <!-- Perf -->
@@ -353,6 +353,7 @@ upgrade-insecure-requests">
 
     pre,code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
     pre{
+      position:relative; /* important for in-pre copy buttons */
       margin-top:10px; max-height:260px; overflow:auto;
       padding:12px; border-radius:12px; background:#0b1426; border:1px solid #1f2a44; font-size:.9rem;
     }
@@ -427,24 +428,6 @@ upgrade-insecure-requests">
       outline:2px solid #22d3ee;
       outline-offset:3px;
       border-radius:12px;
-    }
-
-    /* Nav/Footer unifiés (master) */
-    #tp-nav a,
-    footer .links a{
-      color:#a7b7cc;
-      font-weight:600;
-      text-decoration:none;
-    }
-    #tp-nav a:hover,
-    footer .links a:hover{
-      color:var(--accent);
-      text-decoration:underline;
-    }
-    #tp-nav a[aria-current="page"],
-    footer .links a[aria-current="page"]{
-      color:var(--accent);
-      text-decoration:underline;
     }
 
     /* keep CTA readable */
@@ -528,7 +511,7 @@ upgrade-insecure-requests">
 
         <div id="create-input-hash" style="display:none; margin-top:10px;">
           <label for="create-hash">Existing SHA-256 hash (64 hex)</label>
-          <input type="text" id="create-hash" placeholder="e3b0c44298fc1c149a…" inputmode="latin" autocapitalize="off" autocomplete="off" spellcheck="false" pattern="[A-Fa-f0-9]{64}"/>
+          <input type="text" id="create-hash" placeholder="e3b0c44298fc1c149a…" autocapitalize="off" autocomplete="off" spellcheck="false" pattern="[A-Fa-f0-9]{64}"/>
           <p class="hint" id="hash-preview-raw">Paste a 64-character hex hash.</p>
         </div>
 
@@ -539,7 +522,7 @@ upgrade-insecure-requests">
           </div>
           <div>
             <label for="create-meta">Meta (optional JSON)</label>
-            <input type="text" id="create-meta" placeholder='{"model":"gpt-4o","mime":"text/plain"}' maxlength="1024" autocomplete="off" spellcheck="false"/>
+            <input type="text" id="create-meta" placeholder='{"mime":"text/plain","source":"web"}' maxlength="1024" autocomplete="off" spellcheck="false"/>
           </div>
         </div>
 
@@ -576,7 +559,7 @@ upgrade-insecure-requests">
         <p class="hint">Paste a SHA-256 hash or drop a <code>.tproof.json</code> bundle. Inspect the bundle and check existence and signature via the public API.</p>
 
         <label for="verify-hash">Hash to verify</label>
-        <input type="text" id="verify-hash" placeholder="Paste a 64-hex SHA-256 hash" inputmode="latin" autocapitalize="off" autocomplete="off" spellcheck="false" pattern="[A-Fa-f0-9]{64}"/>
+        <input type="text" id="verify-hash" placeholder="Paste a 64-hex SHA-256 hash" autocapitalize="off" autocomplete="off" spellcheck="false" pattern="[A-Fa-f0-9]{64}"/>
 
         <div class="drop" id="drop-bundle">…or drag &amp; drop a <strong>.tproof.json</strong> file here</div>
 
@@ -1016,6 +999,15 @@ POST https://api.timeproofs.io/api/verify
       hashPrevRaw.textContent=v ? "Hash: "+v : "Paste a 64-character hex hash.";
     });
 
+    // COPY JSON buttons (fixed)
+    document.querySelectorAll('.copy-btn[data-target]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const id=btn.getAttribute('data-target');
+        const el=document.getElementById(id);
+        if(el) copyToClipboard(el.innerText || el.textContent || "");
+      });
+    });
+
     // CREATE
     const btnCreate=document.getElementById("btn-create");
     const createStatus=document.getElementById("create-status");
@@ -1402,9 +1394,10 @@ POST https://api.timeproofs.io/api/verify
     tabs.faq.onclick=()=>showMini("faq");
     showMini("url");
 
-    // Copy buttons on all <pre> (except those already having a .copy-btn)
+    // Copy buttons on docs <pre> only (skip JSON outputs)
     (function installCopyButtons(){
       document.querySelectorAll('pre').forEach((pre)=>{
+        if(pre.id === 'create-output' || pre.id === 'verify-output') return;
         if(pre.querySelector('.copy-btn')) return;
         const btn=document.createElement('button');
         btn.type='button';
@@ -1441,4 +1434,4 @@ POST https://api.timeproofs.io/api/verify
   })();
   </script>
 </body>
-        </html>
+</html>
