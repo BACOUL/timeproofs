@@ -18,7 +18,6 @@
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
   <link rel="alternate" type="application/yaml" href="/openapi.yaml"/>
   <link rel="author" href="/humans.txt"/>
-  <link rel="status" href="https://status.timeproofs.io"/>
 
   <!-- Perf -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
@@ -483,7 +482,7 @@ upgrade-insecure-requests">
       <a class="nav-cta" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
     </nav>
     <a class="cta-header" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
-    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu">
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
       <span aria-hidden="true">☰</span>
     </button>
   </header>
@@ -826,30 +825,63 @@ POST https://api.timeproofs.io/api/verify
     onScroll();
     window.addEventListener('scroll', onScroll, { passive:true });
 
-    // Burger
+    // Burger + focus trap (mobile)
     const burger=document.getElementById('tp-burger');
     const nav=document.getElementById('tp-nav');
+    let lastFocus=null;
+
+    function getFocusable(container){
+      return Array.from(container.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )).filter(el => !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length));
+    }
+
     function openMenu(){
+      lastFocus=document.activeElement;
       nav.setAttribute('data-state','open');
       burger.setAttribute('aria-expanded','true');
       document.body.style.overflow='hidden';
+      const focusables=getFocusable(nav);
+      if(focusables[0]) focusables[0].focus({preventScroll:true});
     }
     function closeMenu(){
       nav.setAttribute('data-state','closed');
       burger.setAttribute('aria-expanded','false');
       document.body.style.overflow='';
+      if(lastFocus && typeof lastFocus.focus==="function") lastFocus.focus({preventScroll:true});
+      lastFocus=null;
     }
     function toggleMenu(){
       (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu();
     }
     burger && burger.addEventListener('click', toggleMenu);
+
     document.addEventListener('click',(e)=>{
       if(window.matchMedia('(min-width: 900px)').matches) return;
       if(!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu();
     },{ passive:true });
+
     document.addEventListener('keydown',(e)=>{
-      if(e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu();
-    },{ passive:true });
+      if(window.matchMedia('(min-width: 900px)').matches) return;
+
+      if(e.key==='Escape' && nav.getAttribute('data-state')==='open'){
+        e.preventDefault();
+        closeMenu();
+        return;
+      }
+      if(e.key==='Tab' && nav.getAttribute('data-state')==='open'){
+        const focusables=getFocusable(nav);
+        if(!focusables.length) return;
+        const first=focusables[0];
+        const last=focusables[focusables.length-1];
+        if(e.shiftKey && document.activeElement===first){
+          e.preventDefault(); last.focus();
+        }else if(!e.shiftKey && document.activeElement===last){
+          e.preventDefault(); first.focus();
+        }
+      }
+    });
+
     window.addEventListener('resize',()=>{
       if(window.matchMedia('(min-width: 900px)').matches) closeMenu();
     },{ passive:true });
@@ -1418,4 +1450,4 @@ POST https://api.timeproofs.io/api/verify
   })();
   </script>
 </body>
-  </html>
+</html>
