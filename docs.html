@@ -217,6 +217,11 @@ upgrade-insecure-requests">
       padding-top:92px; padding-bottom:20px;
       text-align:center;
     }
+    .hero .icon{
+      font-size:2rem;
+      line-height:1;
+      margin:0 auto 8px;
+    }
     .label{
       display:inline-flex; gap:8px; align-items:center; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem; margin-bottom:12px; box-shadow:var(--ring)
     }
@@ -335,6 +340,7 @@ upgrade-insecure-requests">
   <main id="main" class="wrap" role="main">
     <!-- HERO -->
     <section class="hero" aria-labelledby="hero-title">
+      <div class="icon" aria-hidden="true">📚</div>
       <div class="label">Status: Public Beta v0.2 · ProofSpec v0.1 · API v0.2 · Privacy-first · No blockchain</div>
       <h1 id="hero-title" class="title">API Docs</h1>
       <p class="subtitle">
@@ -471,14 +477,14 @@ const proof = await r.json();</code></pre>
         <h2 id="bundle-title">Proof bundle format (<code>.tproof.json</code>)</h2>
 
         <p class="muted">
-          Rule (v0.2): API responses use <code>ts</code> as Unix epoch milliseconds.
-          Portable <code>.tproof.json</code> bundles store <code>ts</code> as ISO-8601 UTC (string) for readability.
+          Rule (v0.2): the API response is the portable <code>.tproof.json</code> bundle.
+          The <code>ts</code> field is Unix epoch milliseconds for consistency with the API.
         </p>
 
         <pre><code>{
   "version": "v0.2",
   "hash": "^[a-f0-9]{64}$",
-  "ts": "2025-12-25T00:00:00.000Z",
+  "ts": 1730793600000,
   "alg": "HMAC-SHA256",
   "sig": "base64url(...)",
   "issuer": "timeproofs.io",
@@ -509,7 +515,7 @@ const proof = await r.json();</code></pre>
         </p>
 
         <p class="muted">
-          Use the <a href="/verify.html">Create / Verify</a> tool for offline checks in the browser.
+          Use the <a href="/verify.html" target="_blank" rel="noopener">Create / Verify</a> tool for offline checks in the browser.
         </p>
       </article>
     </section>
