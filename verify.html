@@ -124,7 +124,7 @@ upgrade-insecure-requests">
       "url":"https://timeproofs.io/"
     },
     "datePublished":"2025-10-22",
-    "dateModified":"2025-12-25",
+    "dateModified":"2025-12-26",
     "description":"Create or verify cryptographic proofs of existence. Local hashing, signed timestamp, downloadable .tproof.json bundles, and bundle verification."
   }
   </script>
@@ -340,8 +340,9 @@ upgrade-insecure-requests">
     }
 
     label{ display:block; font-size:.85rem; color:#a7b1c2; margin:8px 0 4px }
-    input[type="text"], textarea{
-      width:100%; background:#0b1220; color:#f8fafc;
+    input[type="text"], textarea, input[type="file"]{
+      width:100%;
+      background:#0b1220; color:#f8fafc;
       border:1px solid #1f2937; border-radius:10px; padding:10px 12px;
       font-size:.95rem;
     }
@@ -649,12 +650,19 @@ upgrade-insecure-requests">
         <h2 id="verify-title">Verify a bundle</h2>
         <p class="hint">TimeProofs v0.2 is stateless: verification requires a <code>.tproof.json</code> bundle (no server lookup).</p>
 
-        <label for="verify-hash">Hash (optional)</label>
-        <input type="text" id="verify-hash" placeholder="Paste a 64-hex SHA-256 hash (optional)" autocapitalize="off" autocomplete="off" spellcheck="false" pattern="[A-Fa-f0-9]{64}"/>
-
+        <label for="bundle-file">Proof bundle (.tproof.json)</label>
+        <input type="file" id="bundle-file" accept=".tproof.json,application/json"/>
         <div class="drop" id="drop-bundle">…or drag &amp; drop a <strong>.tproof.json</strong> file here</div>
+        <p class="hint" id="bundle-info"></p>
 
-        <button class="primary-btn" id="btn-verify" type="button" style="margin-top:12px;">Verify bundle now</button>
+        <label for="orig-file" style="margin-top:10px;">Original file (recommended)</label>
+        <input type="file" id="orig-file"/>
+        <div class="drop" id="drop-orig">…or drag &amp; drop the <strong>original file</strong> here</div>
+        <p class="hint" id="orig-info"></p>
+
+        <button class="primary-btn" id="btn-verify" type="button" style="margin-top:12px;">
+          Verify (bundle + optional file)
+        </button>
 
         <div class="status-line" id="verify-status" aria-live="polite"></div>
 
@@ -701,10 +709,10 @@ upgrade-insecure-requests">
           </div>
 
           <div id="panel-url">
-            <h3>Inspect by URL</h3>
+            <h3>Inspect link (label only)</h3>
 <pre><code>Open https://timeproofs.io/verify.html?hash=&lt;SHA256-hex&gt;
-Note: verification still needs the .tproof.json bundle.</code></pre>
-            <p class="hint">You can share <code>/verify.html?hash=&lt;hash&gt;</code> as a public inspect link.</p>
+Note: this is only a label/anchor. Verification requires the .tproof.json bundle.</code></pre>
+            <p class="hint">Share <code>/verify.html?hash=&lt;hash&gt;</code> as a public reference label. Anyone can still verify only with the bundle.</p>
           </div>
 
           <div id="panel-json" style="display:none;">
@@ -727,7 +735,7 @@ Accept: application/json
 {
   "bundle": { ...the .tproof.json content... }
 }</code></pre>
-            <p class="hint">In v0.2 stateless mode, <code>GET /api/verify?hash=...</code> cannot work by design. Verification is bundle-based.</p>
+            <p class="hint">In v0.2 stateless mode, hash-only verification cannot work by design. Verification is bundle-based.</p>
           </div>
 
           <div id="panel-bundle" style="display:none;">
@@ -762,7 +770,7 @@ Accept: application/json
             <h3>Quick FAQ</h3>
             <p><strong>Is my content stored?</strong><br/>No. Only the hash circulates. The original content never leaves your device.</p>
             <p><strong>Why no blockchain?</strong><br/>Predictable latency, costs, and independent verification without third-party consensus layers.</p>
-            <p><strong>How to verify in v0.2?</strong><br/>Upload a <code>.tproof.json</code> bundle. The API verifies cryptographic integrity without any storage.</p>
+            <p><strong>How to verify in v0.2?</strong><br/>Load a <code>.tproof.json</code> bundle. Optionally load the original file to confirm it matches the bundle hash. The API verifies cryptographic integrity without any storage.</p>
             <p><strong>Compliance?</strong><br/>Privacy-first, hash-only. See <a href="/regulations.html">Regulations &amp; Compliance</a>.</p>
           </div>
         </div>
@@ -1189,8 +1197,7 @@ Accept: application/json
         loadedBundle = bundle;
         const ui = normalizeBundleForUI(bundle);
         if(ui){
-          document.getElementById("verify-hash").value = ui.hashHex;
-          renderVerifyLoaded(ui, "Bundle loaded from Create. Click “Verify bundle now”.");
+          renderVerifyLoaded(ui, "Bundle loaded from Create. Add the original file (recommended), then click Verify.");
           document.getElementById("verify-card").scrollIntoView({behavior:"smooth",block:"start"});
         }
       };
@@ -1277,14 +1284,17 @@ Accept: application/json
     const chkHmac=document.getElementById("chk-hmac");
     const chkEd=document.getElementById("chk-ed");
 
+    const bundleFileInput = document.getElementById("bundle-file");
+    const origFileInput = document.getElementById("orig-file");
+    const bundleInfo = document.getElementById("bundle-info");
+    const origInfo = document.getElementById("orig-info");
+    const dropOrig = document.getElementById("drop-orig");
+
     function showVerifyError(msg){
       verifyStatus.innerHTML=`<span class="pill bad">❌ ${msg}</span>`;
     }
     function showVerifyInfo(msg){
       verifyStatus.innerHTML=`<span class="pill ok">ℹ️ ${msg}</span>`;
-    }
-    function showVerifyWarn(msg){
-      verifyStatus.innerHTML=`<span class="pill bad">⚠️ ${msg}</span>`;
     }
 
     function tagFromCheck(c){
@@ -1330,39 +1340,87 @@ Accept: application/json
       verifySummary.style.display="grid";
     }
 
-    btnVerify.onclick=async ()=>{
+    function setHint(el, txt){ if(el) el.textContent = txt || ""; }
+    function fmtFile(f){
+      if(!f) return "";
+      const mb=(f.size/1024/1024).toFixed(2);
+      return `${f.name} (${mb} MB)`;
+    }
+    async function readJsonFile(f){
+      const txt = await f.text();
+      return JSON.parse(txt);
+    }
+    async function loadBundleObject(b){
+      loadedBundle = b;
+      const ui = normalizeBundleForUI(b);
+      if(!ui){
+        loadedBundle = null;
+        fail("Invalid bundle: missing hash.value (64-hex).");
+      }
+      renderVerifyLoaded(ui, "Bundle loaded.");
+      outVerify.textContent = JSON.stringify(b, null, 2);
+      setHint(bundleInfo, `Loaded: ${ui.hashHex}`);
+    }
+    async function loadBundleFromFile(f){
+      if(!f) return;
+      if(!f.name.endsWith(".tproof.json")) fail("Bundle must end with .tproof.json");
+      const b = await readJsonFile(f);
+      await loadBundleObject(b);
+      setHint(bundleInfo, fmtFile(f));
+    }
+
+    btnVerify.onclick = async ()=>{
       if(btnVerify.disabled) return;
-      btnVerify.disabled=true;
+      btnVerify.disabled = true;
       resetVerifyUI();
 
       try{
-        if(!loadedBundle) fail("Drop a .tproof.json bundle to verify.");
+        if(!loadedBundle) fail("Select or drop a .tproof.json bundle first.");
         const ui = normalizeBundleForUI(loadedBundle);
-        if(!ui) fail("Invalid bundle. It must include hash.value (64-hex) and timestamp fields.");
+        if(!ui) fail("Invalid bundle: missing hash.value (64-hex).");
 
-        const inputHash=(document.getElementById("verify-hash").value||"").trim().toLowerCase();
-        if(inputHash && /^[a-f0-9]{64}$/i.test(inputHash) && inputHash !== ui.hashHex){
-          showVerifyWarn("Hash does not match the loaded bundle. Use the bundle hash or drop the correct bundle.");
-          vsStatus.textContent="Mismatch";
-          vsHash.textContent=short(ui.hashHex);
-          vsTSProof.textContent = ui.tsIso ? fmtLocal(ui.tsIso) : "—";
-          vsSign.textContent=short(ui.sig || "");
-          verifySummary.style.display="grid";
-          outVerify.textContent=JSON.stringify({ ok:false, error:"hash_mismatch", bundleHash: ui.hashHex, inputHash }, null, 2);
-          return;
+        // Optional: verify the original file matches the bundle hash (local)
+        const f = origFileInput?.files?.[0] || null;
+        let fileCheck = { available:false };
+
+        if(f){
+          if(f.size > MAX_FILE_BYTES) fail("Original file too large (max 50 MB).");
+          const fileHash = await sha256HexFromFile(f);
+          const matches = (fileHash === ui.hashHex);
+          fileCheck = { available:true, fileHash, matches };
+
+          if(!matches){
+            verifyStatus.innerHTML = `<span class="pill bad">❌ File does not match bundle hash</span>`;
+            vsStatus.textContent = "Mismatch";
+            vsHash.textContent = short(ui.hashHex);
+            vsTSProof.textContent = ui.tsIso ? fmtLocal(ui.tsIso) : "—";
+            vsSign.textContent = short(ui.sig || "");
+            verifySummary.style.display = "grid";
+            outVerify.textContent = JSON.stringify({
+              ok:false,
+              error:"file_hash_mismatch",
+              bundleHash: ui.hashHex,
+              fileHash,
+              bundle: loadedBundle
+            }, null, 2);
+            return;
+          }else{
+            showVerifyInfo("File matches bundle hash. Checking signature…");
+          }
+        }else{
+          showVerifyInfo("Bundle loaded. Checking signature… (add original file to confirm it’s unchanged)");
         }
 
-        // Call stateless verify endpoint with the bundle
+        // Server stateless verify: signature / proof integrity
         const r = await fetchAPI("/verify", {
-          method: "POST",
-          headers: {"Content-Type":"application/json"},
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
           body: JSON.stringify({ bundle: loadedBundle })
         });
         const j = await r.json().catch(()=> ({}));
         if(!r.ok) fail(j.message || j.error || `Verify failed (${r.status})`);
 
         const valid = (j && j.valid === true);
-        const note = (j && typeof j.note === "string") ? j.note : "";
         verifyStatus.innerHTML = valid
           ? `<span class="pill ok">✅ Valid bundle</span>`
           : `<span class="pill bad">❌ Invalid (or not verifiable)</span>`;
@@ -1371,75 +1429,107 @@ Accept: application/json
         vsHash.textContent = short(ui.hashHex);
         vsTSProof.textContent = ui.tsIso ? fmtLocal(ui.tsIso) : "—";
         vsSign.textContent = short(ui.sig || "");
-        verifySummary.style.display="grid";
+        verifySummary.style.display = "grid";
 
-        // Checks
-        checksBox.style.display="grid";
+        checksBox.style.display = "grid";
         chkOverall.innerHTML = valid ? `<span class="tag ok">valid</span>` : `<span class="tag bad">invalid</span>`;
         chkHmac.innerHTML = tagFromCheck(j && j.checks && j.checks.hmac);
         chkEd.innerHTML = tagFromCheck(j && j.checks && j.checks.ed25519);
 
-        // Output: show verify response + bundle snapshot
-        outVerify.textContent = JSON.stringify({ verify: j, bundle: loadedBundle }, null, 2);
+        outVerify.textContent = JSON.stringify({
+          verify: j,
+          fileCheck,
+          bundle: loadedBundle
+        }, null, 2);
 
-        verifyActions.style.display="flex";
-        copyVerifyCurl.onclick=()=>copyToClipboard(
-          `curl -sS -X POST 'https://api.timeproofs.io/api/verify' -H 'Content-Type: application/json' -d '{"bundle":${JSON.stringify(loadedBundle).replace(/'/g,"'\\''")}}'`
-        );
-        shareVerifyLink2.onclick=()=>{
-          const url=`${location.origin}/verify.html?hash=${encodeURIComponent(ui.hashHex)}`;
+        verifyActions.style.display = "flex";
+        copyVerifyCurl.onclick = ()=>{
+          const body = JSON.stringify({ bundle: loadedBundle });
+          copyToClipboard(
+            "curl -sS -X POST 'https://api.timeproofs.io/api/verify' " +
+            "-H 'Content-Type: application/json' -d " +
+            `'${body.replace(/'/g,"'\\''")}'`
+          );
+        };
+        shareVerifyLink2.onclick = ()=>{
+          const url = `${location.origin}/verify.html?hash=${encodeURIComponent(ui.hashHex)}`;
           copyToClipboard(url);
         };
 
+        const note = (j && typeof j.note === "string") ? j.note : "";
         if(note) showVerifyInfo((valid ? "Valid. " : "Checked. ") + note);
       }catch(e){
-        showVerifyError(String(e.message||e));
+        showVerifyError(String(e.message || e));
       }finally{
-        btnVerify.disabled=false;
+        btnVerify.disabled = false;
       }
     };
-
-    // support ?hash=… auto-fill (no auto-verify)
-    const params=new URLSearchParams(location.search);
-    const preHash=params.get("hash");
-    if(preHash && /^[a-f0-9]{64}$/i.test(preHash)){
-      document.getElementById("verify-hash").value=preHash.toLowerCase();
-      document.getElementById("verify-card").scrollIntoView({behavior:"smooth",block:"start"});
-    }
 
     // drag & drop tproof.json (bundle)
     const dropBundle=document.getElementById("drop-bundle");
     dropBundle.addEventListener("dragenter",e=>{e.preventDefault(); dropBundle.classList.add("drag");});
     dropBundle.addEventListener("dragover",e=>{e.preventDefault(); dropBundle.classList.add("drag");});
     dropBundle.addEventListener("dragleave",e=>{e.preventDefault(); dropBundle.classList.remove("drag");});
-    dropBundle.addEventListener("drop",async e=>{
+    dropBundle.addEventListener("drop", async e=>{
       e.preventDefault(); dropBundle.classList.remove("drag");
       const f=e.dataTransfer?.files?.[0];
       if(!f) return;
-      if(!f.name.endsWith(".tproof.json")){ alert("Drop a .tproof.json file"); return; }
-
       try{
-        const txt=await f.text();
-        const b=JSON.parse(txt);
-
-        loadedBundle = b;
-        const ui = normalizeBundleForUI(b);
-        if(!ui){
-          loadedBundle=null;
-          alert("Invalid bundle: missing hash.value (64-hex) and required timestamp fields.");
-          return;
-        }
-
-        document.getElementById("verify-hash").value=ui.hashHex;
-        renderVerifyLoaded(ui, "Bundle loaded. Click “Verify bundle now”.");
-        outVerify.textContent = JSON.stringify(b, null, 2);
-
+        await loadBundleFromFile(f);
         document.getElementById("verify-card").scrollIntoView({behavior:"smooth",block:"start"});
-      }catch{
+      }catch(err){
         loadedBundle=null;
-        alert("Invalid bundle JSON.");
+        alert(String(err.message||err));
       }
     });
+
+    bundleFileInput?.addEventListener("change", async ()=>{
+      const f = bundleFileInput.files?.[0];
+      if(!f){ setHint(bundleInfo,""); loadedBundle=null; return; }
+      try{
+        await loadBundleFromFile(f);
+      }catch(err){
+        loadedBundle=null;
+        alert(String(err.message||err));
+      }
+    });
+
+    // drag & drop original file (recommended)
+    if(dropOrig){
+      ["dragenter","dragover"].forEach(ev=>{
+        dropOrig.addEventListener(ev,e=>{
+          e.preventDefault(); e.stopPropagation(); dropOrig.classList.add("drag");
+        });
+      });
+      ["dragleave","drop"].forEach(ev=>{
+        dropOrig.addEventListener(ev,e=>{
+          e.preventDefault(); e.stopPropagation(); dropOrig.classList.remove("drag");
+        });
+      });
+      dropOrig.addEventListener("drop", async e=>{
+        const f = e.dataTransfer?.files?.[0];
+        if(!f) return;
+        if(f.size > MAX_FILE_BYTES){ alert("File too large (max 50 MB)."); return; }
+        try{ origFileInput.files = e.dataTransfer.files; }catch{}
+        setHint(origInfo, fmtFile(f));
+        showVerifyInfo("Original file loaded (will be matched against bundle hash).");
+      });
+    }
+
+    origFileInput?.addEventListener("change", ()=>{
+      const f = origFileInput.files?.[0];
+      if(!f){ setHint(origInfo,""); return; }
+      if(f.size > MAX_FILE_BYTES){ origFileInput.value=""; setHint(origInfo,""); alert("File too large (max 50 MB)."); return; }
+      setHint(origInfo, fmtFile(f));
+    });
+
+    // support ?hash=… label only (no auto-verify)
+    const params=new URLSearchParams(location.search);
+    const preHash=(params.get("hash")||"").toLowerCase().trim();
+    if(preHash && /^[a-f0-9]{64}$/i.test(preHash)){
+      setHint(bundleInfo, `Inspect label: ${preHash} (bundle required to verify)`);
+      document.getElementById("verify-card").scrollIntoView({behavior:"smooth",block:"start"});
+    }
 
     // mini-tabs
     const tabs = {
@@ -1508,4 +1598,4 @@ Accept: application/json
   })();
   </script>
 </body>
-  </html>
+</html>
