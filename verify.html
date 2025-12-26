@@ -413,6 +413,20 @@ upgrade-insecure-requests">
       display:inline-flex; align-items:center; gap:4px; cursor:pointer;
     }
 
+    /* Clear file button row */
+    .file-actions{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      justify-content:flex-end;
+      margin-top:8px;
+    }
+    .file-actions .hero-btn{
+      padding:6px 10px;
+      font-size:.85rem;
+      border-radius:10px;
+    }
+
     /* Colonne droite */
     .mini-tabs{
       display:flex; gap:6px; flex-wrap:wrap; margin:0 0 10px;
@@ -594,6 +608,11 @@ upgrade-insecure-requests">
           <label for="create-file">File to hash</label>
           <input type="file" id="create-file" aria-describedby="create-file-hint"/>
           <p class="hint" id="create-file-hint">We only compute a SHA-256 hash in your browser. Max 50 MB. Nothing is uploaded.</p>
+
+          <div class="file-actions">
+            <button type="button" class="hero-btn" id="clear-create-file" aria-label="Remove selected file">Remove file</button>
+          </div>
+
           <div class="drop" id="drop-file">…or drag &amp; drop a file here</div>
           <p class="hint" id="file-info"></p>
           <p class="hint" id="hash-preview-file"></p>
@@ -652,11 +671,21 @@ upgrade-insecure-requests">
 
         <label for="bundle-file">Proof bundle (.tproof.json)</label>
         <input type="file" id="bundle-file" accept=".tproof.json,application/json"/>
+
+        <div class="file-actions">
+          <button type="button" class="hero-btn" id="clear-bundle-file" aria-label="Remove selected bundle">Remove bundle</button>
+        </div>
+
         <div class="drop" id="drop-bundle">…or drag &amp; drop a <strong>.tproof.json</strong> file here</div>
         <p class="hint" id="bundle-info"></p>
 
         <label for="orig-file" style="margin-top:10px;">Original file (recommended)</label>
         <input type="file" id="orig-file"/>
+
+        <div class="file-actions">
+          <button type="button" class="hero-btn" id="clear-orig-file" aria-label="Remove selected original file">Remove file</button>
+        </div>
+
         <div class="drop" id="drop-orig">…or drag &amp; drop the <strong>original file</strong> here</div>
         <p class="hint" id="orig-info"></p>
 
@@ -1085,6 +1114,13 @@ Accept: application/json
       hashPrevRaw.textContent=v ? "Hash: "+v : "Paste a 64-character hex hash.";
     });
 
+    // CLEAR create file
+    const clearCreateFileBtn = document.getElementById("clear-create-file");
+    clearCreateFileBtn?.addEventListener("click", ()=>{
+      fileInput.value = "";
+      setFileInfo(null);
+    });
+
     // COPY JSON buttons
     document.querySelectorAll('.copy-btn[data-target]').forEach(btn=>{
       btn.addEventListener('click', ()=>{
@@ -1368,6 +1404,24 @@ Accept: application/json
       await loadBundleObject(b);
       setHint(bundleInfo, fmtFile(f));
     }
+
+    // CLEAR verify inputs
+    const clearBundleBtn = document.getElementById("clear-bundle-file");
+    const clearOrigBtn = document.getElementById("clear-orig-file");
+
+    clearBundleBtn?.addEventListener("click", ()=>{
+      bundleFileInput.value = "";
+      loadedBundle = null;
+      setHint(bundleInfo, "");
+      resetVerifyUI();
+      showVerifyInfo("Bundle cleared.");
+    });
+
+    clearOrigBtn?.addEventListener("click", ()=>{
+      origFileInput.value = "";
+      setHint(origInfo, "");
+      showVerifyInfo("Original file cleared.");
+    });
 
     btnVerify.onclick = async ()=>{
       if(btnVerify.disabled) return;
