@@ -1,5 +1,12 @@
 // api-v02/worker.js
 // TimeProofs API v0.2 — stateless timestamp + stateless verification (NO STORAGE)
+// Ed25519-only, with KEY FREEZE (verify trusts ONLY server ED25519_PUBLIC)
+
+const VERSION = "timeproofs-0.2";
+const MODE = "stateless";
+const PROOF_MODE = "ed25519-only";
+const ISSUER = "https://api.timeproofs.io";
+const KEY_ID = "tp-v0-2-main";
 
 addEventListener("fetch", (event) => {
   event.respondWith(handle(event.request));
@@ -17,9 +24,11 @@ async function handle(req) {
     return j({
       ok: true,
       now: new Date().toISOString(),
-      version: "timeproofs-0.2",
-      mode: "stateless",
-      proof: (typeof ED25519_SECRET === "string" && ED25519_SECRET.length > 0) ? "ed25519-only" : "none",
+      version: VERSION,
+      mode: MODE,
+      proof: PROOF_MODE,
+      issuer: ISSUER,
+      keyId: KEY_ID,
     });
   }
 
@@ -28,11 +37,10 @@ async function handle(req) {
     return handleTimestamp(req);
   }
 
-  // v0.2 verify (stateless): verifies cryptographic integrity of a bundle (signature/HMAC)
+  // v0.2 verify (stateless): verifies cryptographic integrity of a bundle (signature)
   if (path === "/api/verify") {
     if (req.method === "POST") return handleVerify(req);
 
-    // GET without bundle cannot prove anything in stateless mode (no lookup possible)
     if (req.method === "GET") {
       const hash = (url.searchParams.get("hash") || "").toLowerCase().trim();
       if (/^[a-f0-9]{64}$/.test(hash)) {
@@ -43,10 +51,10 @@ async function handle(req) {
             error: "stateless_requires_bundle",
             message:
               "In v0.2 stateless mode, /api/verify needs the .tproof.json bundle (POST). A hash alone cannot be verified without server-side storage.",
-            version: "timeproofs-0.2",
+            version: VERSION,
             hint: {
               method: "POST",
-              endpoint: "https://api.timeproofs.io/api/verify",
+              endpoint: `${ISSUER}/api/verify`,
               body: "{ bundle: <.tproof.json> } OR send the bundle JSON as-is",
             },
           },
@@ -75,53 +83,53 @@ async function handleTimestamp(req) {
     return j({ ok: false, error: "invalid_hash", code: 2102 }, 400);
   }
 
-  const issuedAt = new Date(Date.now()).toISOString();
-  const issuer = "https://api.timeproofs.io";
+  const issuedAt = new Date().toISOString();
+  const issuer = ISSUER;
   const nonce = randomId();
 
-  // Canonical payload
+  // Canonical payload (MUST be verified as-is)
   const canonical = `${hash}|${issuedAt}|${issuer}|${nonce}`;
 
-  // HMAC-SHA256 (optional, via secret HMAC_SECRET)
-  let hmacHex = null;
+  // Ed25519 (required): ED25519_SECRET=PKCS8 DER base64, ED25519_PUBLIC=SPKI DER base64
+  const privB64 =
+    typeof ED25519_SECRET === "string" && ED25519_SECRET.trim() ? ED25519_SECRET.trim() : null;
+  const pubB64 =
+    typeof ED25519_PUBLIC === "string" && ED25519_PUBLIC.trim() ? ED25519_PUBLIC.trim() : null;
+
+  if (!privB64) return j({ ok: false, error: "missing_ed25519_secret", code: 2103 }, 500);
+  if (!pubB64) return j({ ok: false, error: "missing_ed25519_public", code: 2105 }, 500);
+
+  let signatureHex;
   try {
-    if (typeof HMAC_SECRET === "string" && HMAC_SECRET.length > 0) {
-      hmacHex = await hmac(HMAC_SECRET, canonical);
-    }
+    signatureHex = await ed25519SignPkcs8B64(privB64, canonical);
   } catch (_) {
-    hmacHex = null;
+    return j(
+      {
+        ok: false,
+        error: "ed25519_sign_failed",
+        code: 2104,
+        message: "Failed to sign payload.",
+      },
+      500
+    );
   }
 
-  // Ed25519 (optional, via secrets ED25519_SECRET / ED25519_PUBLIC in base64 DER)
-  let edSignatureHex = null;
-  let edPublicB64 = null;
-  try {
-    if (typeof ED25519_SECRET === "string" && ED25519_SECRET.length > 0) {
-      edSignatureHex = await ed25519SignPkcs8B64(ED25519_SECRET, canonical);
-      if (typeof ED25519_PUBLIC === "string" && ED25519_PUBLIC.length > 0) {
-        edPublicB64 = ED25519_PUBLIC;
-      }
-    }
-  } catch (_) {
-    edSignatureHex = null;
-    edPublicB64 = null;
-  }
-
-  const response = {
-    version: "timeproofs-0.2",
-    hash: { algorithm: "SHA-256", value: hash },
-    timestamp: { issuedAt, issuer, nonce },
-    proof: {
-      algo: "HMAC-SHA256+Ed25519",
-      hmac: hmacHex,
-      signature: edSignatureHex,
-      publicKey: edPublicB64,
-      keyId: "tp-v0-2-main",
+  return j(
+    {
+      version: VERSION,
+      canonical, // verify can use this exact string
+      hash: { algorithm: "SHA-256", value: hash },
+      timestamp: { issuedAt, issuer, nonce },
+      proof: {
+        algo: "Ed25519",
+        signature: signatureHex,
+        publicKey: pubB64, // included for portability; verify ignores it (key freeze)
+        keyId: KEY_ID,
+      },
+      meta: { type: body && body.type ? String(body.type) : "event" },
     },
-    meta: { type: (body && body.type ? String(body.type) : "event") },
-  };
-
-  return j(response, 200);
+    200
+  );
 }
 
 // -------- /api/verify (stateless v0.2) --------
@@ -136,91 +144,85 @@ async function handleVerify(req) {
     return j({ ok: false, error: "invalid_json", code: 2201 }, 400);
   }
 
-  const bundle = body && typeof body === "object" && body.bundle ? body.bundle : body;
+  // allow bundle to arrive as a JSON string (common with curl/shell quoting)
+  let bundle = body?.bundle ?? body;
+
+  if (typeof bundle === "string") {
+    try {
+      bundle = JSON.parse(bundle);
+    } catch {
+      return j({ ok: false, error: "invalid_bundle_json", code: 2200 }, 400);
+    }
+  }
+
   if (!bundle || typeof bundle !== "object") {
     return j({ ok: false, error: "missing_bundle", code: 2202 }, 400);
   }
 
-  const hash =
+  const hashVal =
     (bundle.hash && typeof bundle.hash === "object" ? bundle.hash.value : bundle.hash) || "";
-  const hashHex = String(hash).toLowerCase().trim();
+  const hashHex = String(hashVal).toLowerCase().trim();
   if (!/^[a-f0-9]{64}$/.test(hashHex)) {
     return j({ ok: false, error: "invalid_hash", code: 2203 }, 400);
   }
 
   const ts = bundle.timestamp || {};
   const issuedAt = typeof ts.issuedAt === "string" ? ts.issuedAt : "";
-  const issuer = typeof ts.issuer === "string" ? ts.issuer : "https://api.timeproofs.io";
+  const issuer = typeof ts.issuer === "string" ? ts.issuer : "";
   const nonce = typeof ts.nonce === "string" ? ts.nonce : "";
 
-  if (!issuedAt || !nonce) {
+  if (!issuedAt || !issuer || !nonce) {
     return j(
       {
         ok: false,
         error: "missing_timestamp_fields",
         code: 2204,
-        message: "Bundle must include timestamp.issuedAt (ISO) and timestamp.nonce.",
+        message:
+          "Bundle must include timestamp.issuedAt (ISO), timestamp.issuer and timestamp.nonce.",
       },
       400
     );
   }
 
-  // Canonical must match timestamp() exactly
-  const canonical = `${hashHex}|${issuedAt}|${issuer}|${nonce}`;
+  // Prefer canonical from bundle. Fallback for older bundles.
+  const canonical =
+    typeof bundle.canonical === "string" && bundle.canonical.trim()
+      ? bundle.canonical.trim()
+      : `${hashHex}|${issuedAt}|${issuer}|${nonce}`;
 
   const proof = bundle.proof || {};
-  const providedHmac = typeof proof.hmac === "string" ? proof.hmac.toLowerCase().trim() : null;
-  const providedSig = typeof proof.signature === "string" ? proof.signature.toLowerCase().trim() : null;
+  const providedSig =
+    typeof proof.signature === "string" ? proof.signature.toLowerCase().trim() : null;
 
-  // For Ed25519 verify: prefer bundle.proof.publicKey, else fallback to env ED25519_PUBLIC
-  const pubB64 =
-    (typeof proof.publicKey === "string" && proof.publicKey.trim()) ||
-    (typeof ED25519_PUBLIC === "string" && ED25519_PUBLIC.trim()) ||
-    null;
-
-  // ---- Check HMAC (server can recompute if it has HMAC_SECRET) ----
-  let hmacCheck = { available: false, valid: null };
-  try {
-    if (typeof HMAC_SECRET === "string" && HMAC_SECRET.length > 0 && providedHmac) {
-      const expected = await hmac(HMAC_SECRET, canonical);
-      hmacCheck = { available: true, valid: timingSafeEqHex(expected, providedHmac) };
-    }
-  } catch (_) {
-    hmacCheck = { available: true, valid: false };
+  if (!providedSig) {
+    return j({ ok: false, error: "missing_signature", code: 2206 }, 400);
   }
 
-  // ---- Check Ed25519 signature (server can verify with public key) ----
-  let edCheck = { available: false, valid: null };
+  // ---- KEY FREEZE: ONLY trust server key (ED25519_PUBLIC), ignore bundle publicKey ----
+  const trustedPubB64 =
+    typeof ED25519_PUBLIC === "string" && ED25519_PUBLIC.trim() ? ED25519_PUBLIC.trim() : null;
+
+  if (!trustedPubB64) {
+    return j({ ok: false, error: "missing_ed25519_public", code: 2207 }, 500);
+  }
+
+  let edCheck = { available: true, valid: false };
   try {
-    if (providedSig && pubB64) {
-      const ok = await ed25519VerifySpkiB64(pubB64, canonical, providedSig);
-      edCheck = { available: true, valid: ok };
-    }
-  } catch (_) {
+    const ok = await ed25519VerifySpkiB64(trustedPubB64, canonical, providedSig);
+    edCheck = { available: true, valid: ok };
+  } catch {
     edCheck = { available: true, valid: false };
   }
-
-  // Decide overall validity:
-  // - If at least one check is available, valid = all available checks must be true.
-  // - If none available, cannot validate.
-  const availableChecks = [hmacCheck, edCheck].filter((c) => c.available);
-  const anyAvailable = availableChecks.length > 0;
-  const allPass = anyAvailable ? availableChecks.every((c) => c.valid === true) : false;
 
   return j(
     {
       ok: true,
-      valid: allPass,
-      version: "timeproofs-0.2",
+      valid: edCheck.valid === true,
+      version: VERSION,
       hash: { algorithm: "SHA-256", value: hashHex },
       timestamp: { issuedAt, issuer, nonce },
-      checks: {
-        hmac: hmacCheck,
-        ed25519: edCheck,
-      },
-      note: anyAvailable
-        ? "Stateless cryptographic verification (no storage)."
-        : "No verifiable proof fields available (missing HMAC secret and/or public key/signature).",
+      checks: { ed25519: edCheck },
+      note: "Stateless cryptographic verification (no storage).",
     },
     200
   );
@@ -253,7 +255,6 @@ function preflight() {
   });
 }
 
-// Random id helper (simple hex string, 128 bits)
 function randomId() {
   const bytes = new Uint8Array(16);
   crypto.getRandomValues(bytes);
@@ -274,74 +275,27 @@ function hexToBytes(hex) {
   return out;
 }
 
-function timingSafeEqHex(a, b) {
-  const aa = String(a || "").toLowerCase();
-  const bb = String(b || "").toLowerCase();
-  if (aa.length !== bb.length) return false;
-  let diff = 0;
-  for (let i = 0; i < aa.length; i++) diff |= aa.charCodeAt(i) ^ bb.charCodeAt(i);
-  return diff === 0;
-}
-
-// HMAC-SHA256 helper → hex
-async function hmac(secret, msg) {
-  const enc = new TextEncoder();
-  const key = await crypto.subtle.importKey(
-    "raw",
-    enc.encode(secret),
-    { name: "HMAC", hash: { name: "SHA-256" } },
-    false,
-    ["sign"]
-  );
-  const sig = await crypto.subtle.sign("HMAC", key, enc.encode(msg));
-  return toHex(new Uint8Array(sig));
-}
-
-// Base64 (standard) -> Uint8Array
 function b64ToBytes(b64) {
-  const bin = atob(String(b64 || "").trim());
+  const bin = atob(b64);
   const out = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
   return out;
 }
 
-// --- Ed25519 (DER keys) ---
-// ED25519_SECRET = PKCS8 DER base64
-// ED25519_PUBLIC = SPKI DER base64
-
-async function importEd25519PrivatePkcs8(pkcs8B64) {
-  const keyData = b64ToBytes(pkcs8B64);
-  return crypto.subtle.importKey(
-    "pkcs8",
-    keyData,
-    { name: "Ed25519" },
-    false,
-    ["sign"]
-  );
-}
-
-async function importEd25519PublicSpki(spkiB64) {
-  const keyData = b64ToBytes(spkiB64);
-  return crypto.subtle.importKey(
-    "spki",
-    keyData,
-    { name: "Ed25519" },
-    false,
-    ["verify"]
-  );
-}
-
-async function ed25519SignPkcs8B64(secretPkcs8B64, msg) {
-  const enc = new TextEncoder();
-  const key = await importEd25519PrivatePkcs8(secretPkcs8B64);
-  const sig = await crypto.subtle.sign({ name: "Ed25519" }, key, enc.encode(msg));
+// Ed25519 sign using PKCS8 DER (base64) → hex signature
+async function ed25519SignPkcs8B64(privatePkcs8B64, msg) {
+  const keyData = b64ToBytes(privatePkcs8B64);
+  const key = await crypto.subtle.importKey("pkcs8", keyData, { name: "Ed25519" }, false, ["sign"]);
+  const sig = await crypto.subtle.sign("Ed25519", key, new TextEncoder().encode(msg));
   return toHex(new Uint8Array(sig));
 }
 
+// Ed25519 verify using SPKI DER (base64) + signature(hex)
 async function ed25519VerifySpkiB64(publicSpkiB64, msg, signatureHex) {
-  const enc = new TextEncoder();
+  const pubBytes = b64ToBytes(publicSpkiB64);
   const sigBytes = hexToBytes(signatureHex);
   if (!sigBytes) return false;
-  const key = await importEd25519PublicSpki(publicSpkiB64);
-  return crypto.subtle.verify({ name: "Ed25519" }, key, sigBytes, enc.encode(msg));
-    }
+
+  const key = await crypto.subtle.importKey("spki", pubBytes, { name: "Ed25519" }, false, ["verify"]);
+  return crypto.subtle.verify("Ed25519", key, sigBytes, new TextEncoder().encode(msg));
+}
