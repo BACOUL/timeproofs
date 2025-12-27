@@ -19,6 +19,7 @@ async function handle(req) {
       now: new Date().toISOString(),
       version: "timeproofs-0.2",
       mode: "stateless",
+      proof: (typeof ED25519_SECRET === "string" && ED25519_SECRET.length > 0) ? "ed25519-only" : "none",
     });
   }
 
@@ -91,12 +92,12 @@ async function handleTimestamp(req) {
     hmacHex = null;
   }
 
-  // Ed25519 (optional, via secrets ED25519_SECRET / ED25519_PUBLIC in base64)
+  // Ed25519 (optional, via secrets ED25519_SECRET / ED25519_PUBLIC in base64 DER)
   let edSignatureHex = null;
   let edPublicB64 = null;
   try {
     if (typeof ED25519_SECRET === "string" && ED25519_SECRET.length > 0) {
-      edSignatureHex = await ed25519Sign(ED25519_SECRET, canonical);
+      edSignatureHex = await ed25519SignPkcs8B64(ED25519_SECRET, canonical);
       if (typeof ED25519_PUBLIC === "string" && ED25519_PUBLIC.length > 0) {
         edPublicB64 = ED25519_PUBLIC;
       }
@@ -192,7 +193,7 @@ async function handleVerify(req) {
   let edCheck = { available: false, valid: null };
   try {
     if (providedSig && pubB64) {
-      const ok = await ed25519Verify(pubB64, canonical, providedSig);
+      const ok = await ed25519VerifySpkiB64(pubB64, canonical, providedSig);
       edCheck = { available: true, valid: ok };
     }
   } catch (_) {
@@ -296,30 +297,51 @@ async function hmac(secret, msg) {
   return toHex(new Uint8Array(sig));
 }
 
-// Base64 → Uint8Array (for Ed25519 keys)
+// Base64 (standard) -> Uint8Array
 function b64ToBytes(b64) {
-  const bin = atob(b64);
+  const bin = atob(String(b64 || "").trim());
   const out = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
   return out;
 }
 
-// Ed25519 (Cloudflare Workers: "NODE-ED25519") sign → hex signature
-async function ed25519Sign(secretBase64, msg) {
+// --- Ed25519 (DER keys) ---
+// ED25519_SECRET = PKCS8 DER base64
+// ED25519_PUBLIC = SPKI DER base64
+
+async function importEd25519PrivatePkcs8(pkcs8B64) {
+  const keyData = b64ToBytes(pkcs8B64);
+  return crypto.subtle.importKey(
+    "pkcs8",
+    keyData,
+    { name: "Ed25519" },
+    false,
+    ["sign"]
+  );
+}
+
+async function importEd25519PublicSpki(spkiB64) {
+  const keyData = b64ToBytes(spkiB64);
+  return crypto.subtle.importKey(
+    "spki",
+    keyData,
+    { name: "Ed25519" },
+    false,
+    ["verify"]
+  );
+}
+
+async function ed25519SignPkcs8B64(secretPkcs8B64, msg) {
   const enc = new TextEncoder();
-  const keyData = b64ToBytes(secretBase64);
-  const key = await crypto.subtle.importKey("raw", keyData, "NODE-ED25519", false, ["sign"]);
-  const sig = await crypto.subtle.sign("NODE-ED25519", key, enc.encode(msg));
+  const key = await importEd25519PrivatePkcs8(secretPkcs8B64);
+  const sig = await crypto.subtle.sign({ name: "Ed25519" }, key, enc.encode(msg));
   return toHex(new Uint8Array(sig));
 }
 
-// Ed25519 verify: publicKey(base64) + message + signature(hex) → boolean
-async function ed25519Verify(publicBase64, msg, signatureHex) {
+async function ed25519VerifySpkiB64(publicSpkiB64, msg, signatureHex) {
   const enc = new TextEncoder();
-  const pubBytes = b64ToBytes(publicBase64);
   const sigBytes = hexToBytes(signatureHex);
   if (!sigBytes) return false;
-
-  const key = await crypto.subtle.importKey("raw", pubBytes, "NODE-ED25519", false, ["verify"]);
-  return crypto.subtle.verify("NODE-ED25519", key, sigBytes, enc.encode(msg));
-        }
+  const key = await importEd25519PublicSpki(publicSpkiB64);
+  return crypto.subtle.verify({ name: "Ed25519" }, key, sigBytes, enc.encode(msg));
+    }
