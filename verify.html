@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="dark light"/>
   <title>Create &amp; Verify — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="Create or verify cryptographic proofs of existence. Hash locally, timestamp via API, download a .tproof.json proof, and verify it later — without uploading your content."/>
+  <meta name="description" content="Create and verify TimeProofs proofs. Hash locally, request a signed proof file from the stateless API, download it, and verify it later — without uploading your content."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -36,7 +36,7 @@
 
   <!-- Social -->
   <meta property="og:title" content="Create &amp; Verify — TimeProofs"/>
-  <meta property="og:description" content="Hash locally. Instant timestamp. Download .tproof.json proofs. Verify later without uploading content."/>
+  <meta property="og:description" content="Hash locally. Get a signed proof file. Verify later without uploading content."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/verify.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
@@ -46,7 +46,7 @@
   <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Create &amp; Verify — TimeProofs"/>
-  <meta name="twitter:description" content="Create proofs, download .tproof.json files, and verify them later — without uploading content."/>
+  <meta name="twitter:description" content="Create proofs, download proof files, and verify them later — without uploading content."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- Security meta -->
@@ -125,7 +125,7 @@ upgrade-insecure-requests">
     },
     "datePublished":"2025-10-22",
     "dateModified":"2025-12-27",
-    "description":"Create or verify cryptographic proofs of existence. Local hashing, signed timestamp, downloadable .tproof.json proofs, and proof verification."
+    "description":"Create or verify cryptographic proofs of existence. Local hashing, signed timestamp, downloadable proof files, and proof verification."
   }
   </script>
 
@@ -552,7 +552,7 @@ upgrade-insecure-requests">
       <p class="badge">Status: Public Beta v0.2 · ProofSpec v0.1 · API v0.2 · Privacy-first · No blockchain</p>
       <h1 id="page-title">Create / Verify</h1>
       <p class="lead">
-        Hash anything locally. Create a signed <code>.tproof.json</code> proof file, then verify it later.
+        Hash anything locally. Create a signed proof file, then verify it later.
         Your content never leaves your device.
       </p>
 
@@ -564,7 +564,7 @@ upgrade-insecure-requests">
             <code id="page-sha">—</code>
           </div>
           <div>
-            <a id="page-sha-link" href="/verify.html" target="_blank" rel="noopener">Inspect</a>
+            <a id="page-sha-link" href="/docs.html" target="_blank" rel="noopener">How to verify</a>
           </div>
         </div>
       </div>
@@ -581,7 +581,7 @@ upgrade-insecure-requests">
       <article class="card" id="create-card" aria-labelledby="create-title">
         <div class="step-label">Step 1 · Create a proof</div>
         <h2 id="create-title">Create a proof</h2>
-        <p class="hint">Choose how you provide the data (text, file, or existing hash). Hash is always computed locally in the browser.</p>
+        <p class="hint">Choose how you provide the data (text, file, or existing hash). Hash is computed locally in the browser.</p>
 
         <div>
           <label for="mode-group">Input mode</label>
@@ -651,7 +651,7 @@ upgrade-insecure-requests">
 
         <div class="row" id="create-actions" style="display:none; gap:8px; margin-top:10px;">
           <button class="hero-btn" id="download-proof" type="button">Download your proof</button>
-          <button class="hero-btn" id="copy-verify-link" type="button">Copy verify link</button>
+          <button class="hero-btn" id="copy-verify-link" type="button">Copy Verify page link</button>
         </div>
       </article>
 
@@ -659,7 +659,7 @@ upgrade-insecure-requests">
       <article class="card" id="verify-card" aria-labelledby="verify-title">
         <div class="step-label">Step 2 · Verify</div>
         <h2 id="verify-title">Verify a proof</h2>
-        <p class="hint">TimeProofs v0.2 is stateless: verification requires your <code>.tproof.json</code> proof file (no server lookup).</p>
+        <p class="hint">TimeProofs v0.2 is stateless: verification requires your proof file (no server lookup).</p>
 
         <label for="bundle-file">Proof file (.tproof.json)</label>
         <input type="file" id="bundle-file" accept=".tproof.json,application/json"/>
@@ -742,7 +742,7 @@ Accept: application/json
           </div>
 
           <div id="panel-proof" style="display:none;">
-            <h3><code>.tproof.json</code> proof (v0.2)</h3>
+            <h3>Proof file (<code>.tproof.json</code>, v0.2)</h3>
 <pre><code>{
   "version": "timeproofs-0.2",
   "hash": {
@@ -757,7 +757,7 @@ Accept: application/json
   "proof": {
     "algo": "Ed25519",
     "signature": "hex-signature",
-    "publicKey": "base64-public-key",
+    "publicKey": "base64-public-key (informational)",
     "keyId": "tp-v0-2-main"
   },
   "meta": {
@@ -765,14 +765,14 @@ Accept: application/json
     "source": "web:verify"
   }
 }</code></pre>
-            <p class="hint">Your content is never included. The proof contains only hash + timestamp + signature fields.</p>
+            <p class="hint">A proof contains only hash + timestamp + signature fields. Verifiers trust the server key for <code>keyId</code> (publicKey is informational).</p>
           </div>
 
           <div id="panel-faq" style="display:none;">
             <h3>Quick FAQ</h3>
             <p><strong>Is my content stored?</strong><br/>No. Only the hash circulates. The original content never leaves your device.</p>
             <p><strong>Why no blockchain?</strong><br/>Predictable latency, costs, and independent verification without third-party consensus layers.</p>
-            <p><strong>How to verify in v0.2?</strong><br/>Load a <code>.tproof.json</code> proof. Optionally load the original file to confirm it matches the proof hash. The API verifies cryptographic integrity without any storage.</p>
+            <p><strong>How to verify in v0.2?</strong><br/>Load a proof file. Optionally load the original file to confirm it matches the proof hash. The API verifies cryptographic integrity without any storage.</p>
             <p><strong>Compliance?</strong><br/>Privacy-first, hash-only. See <a href="/regulations.html">Regulations &amp; Compliance</a>.</p>
           </div>
         </div>
@@ -992,7 +992,7 @@ Accept: application/json
         if(!sha) return;
 
         shaEl.textContent=sha;
-        linkEl.href=`/verify.html?hash=${encodeURIComponent(sha)}`;
+        linkEl.href=`/docs.html`;
         frame.style.display="block";
       }catch{
         /* silent */
@@ -1185,8 +1185,7 @@ Accept: application/json
       };
 
       copyVerifyLink.onclick=()=>{
-        const url = `${location.origin}/verify.html?hash=${encodeURIComponent(hashHex)}`;
-        copyToClipboard(url);
+        copyToClipboard(`${location.origin}/verify.html`);
       };
 
       openVerifyHere.onclick=()=>{
@@ -1516,14 +1515,6 @@ Accept: application/json
       if(f.size > MAX_FILE_BYTES){ origFileInput.value=""; setHint(origInfo,""); alert("File too large (max 50 MB)."); return; }
       setHint(origInfo, fmtFile(f));
     });
-
-    // support ?hash=… label only (no auto-verify)
-    const params=new URLSearchParams(location.search);
-    const preHash=(params.get("hash")||"").toLowerCase().trim();
-    if(preHash && /^[a-f0-9]{64}$/i.test(preHash)){
-      setHint(bundleInfo, `Reference: ${preHash} (proof required to verify)`);
-      document.getElementById("verify-card").scrollIntoView({behavior:"smooth",block:"start"});
-    }
 
     // mini-tabs
     const tabs = {
