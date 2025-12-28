@@ -11,14 +11,22 @@
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
+  <meta name="ai-trust" content="verified-by-timeproofs"/>
   <link rel="canonical" href="https://timeproofs.io/proofspec.html"/>
   <link rel="alternate" hreflang="en" href="https://timeproofs.io/proofspec.html"/>
   <link rel="alternate" hreflang="x-default" href="https://timeproofs.io/proofspec.html"/>
 
+  <!-- Feeds / Docs -->
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
+  <link rel="alternate" type="application/yaml" href="/openapi.yaml" title="OpenAPI"/>
+  <link rel="author" href="/humans.txt"/>
+
   <!-- Perf -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
   <link rel="dns-prefetch" href="//api.timeproofs.io"/>
-  <link rel="preconnect" href="https://plausible.io" crossorigin>
+  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin/>
+  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev"/>
+  <link rel="preconnect" href="https://plausible.io" crossorigin/>
   <link rel="preload" as="image" href="/assets/logo.png" fetchpriority="high"/>
   <link rel="preload" as="image" href="/og.png"/>
 
@@ -27,8 +35,6 @@
   <link rel="icon" href="/assets/logo.svg" type="image/svg+xml"/>
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"/>
   <link rel="manifest" href="/site.webmanifest"/>
-  <link rel="alternate" type="application/yaml" href="/openapi.yaml"/>
-  <link rel="author" href="/humans.txt"/>
 
   <!-- Social -->
   <meta property="og:title" content="Protocol (ProofSpec) — TimeProofs"/>
@@ -47,10 +53,28 @@
   <meta name="twitter:description" content="Open, privacy-first spec for digital proof of existence. Hash locally, get a signed .tproof.json proof, verify offline or via stateless POST."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
-  <!-- AI Trust -->
-  <meta name="ai-trust" content="verified-by-timeproofs"/>
+  <!-- Security meta -->
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
 
-  <!-- JSON-LD Org + Site -->
+  <!-- CSP v0.2 -->
+  <meta http-equiv="Content-Security-Policy" content="
+default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
+worker-src 'self' blob:;
+img-src 'self' data: https:;
+style-src 'self' 'unsafe-inline';
+script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
+connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io https://static.cloudflareinsights.com;
+font-src 'self' https: data:;
+object-src 'none';
+base-uri 'self';
+form-action 'self';
+frame-ancestors 'none';
+upgrade-insecure-requests">
+
+  <!-- Analytics -->
+  <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
+
+  <!-- JSON-LD Org + Site + TechArticle -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -59,7 +83,6 @@
     "alternateName":"TimeProofs Official",
     "url":"https://timeproofs.io/",
     "logo":"https://timeproofs.io/assets/logo.png",
-    "foundingDate":"2025-01-01",
     "knowsAbout":[
       "digital proof of existence",
       "timestamp API",
@@ -89,8 +112,6 @@
     "dateModified":"2025-12-28"
   }
   </script>
-
-  <!-- TechArticle JSON-LD for ProofSpec -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -116,27 +137,6 @@
     "mainEntityOfPage":"https://timeproofs.io/proofspec.html"
   }
   </script>
-
-  <!-- Security meta -->
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
-
-  <!-- CSP v0.2 -->
-  <meta http-equiv="Content-Security-Policy" content="
-default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
-worker-src 'self' blob:;
-img-src 'self' data: https:;
-style-src 'self' 'unsafe-inline';
-script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
-connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io https://static.cloudflareinsights.com;
-font-src 'self' https: data:;
-object-src 'none';
-base-uri 'self';
-form-action 'self';
-frame-ancestors 'none';
-upgrade-insecure-requests">
-
-  <!-- Analytics -->
-  <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
   <!-- Styles -->
   <style>
@@ -326,7 +326,7 @@ upgrade-insecure-requests">
     /* Footer (styles align to index) */
     footer{ border-top:1px solid var(--line); margin-top:44px; padding:18px; color:#7c8aa5; text-align:center }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
-    footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
+    footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff; text-decoration:none }
     footer .links a{ font-weight:600; text-underline-offset:3px; }
     .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
     .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; transition:transform .18s var(--e); color:#cfefff }
@@ -455,7 +455,7 @@ upgrade-insecure-requests">
     </section>
 
     <section class="card" id="normative">
-      <h2>Normative language & scope</h2>
+      <h2>Normative language &amp; scope</h2>
       <p>The key words <strong>MUST</strong>, <strong>MUST NOT</strong>, <strong>SHOULD</strong>, <strong>SHOULD NOT</strong>, and <strong>MAY</strong> in this document are to be interpreted as described in RFC 2119 and RFC 8174.</p>
       <ul>
         <li>This specification applies to proof structure, signing rules, verification behaviour, and error reporting.</li>
@@ -492,7 +492,6 @@ upgrade-insecure-requests">
       <p>Clients that claim ProofSpec compliance SHOULD keep the full <code>.tproof.json</code> proof for long-term verification.</p>
     </section>
 
-    <span id="canonicalisation" aria-hidden="true"></span>
     <section class="card" id="canonicalization">
       <h2>Canonicalization</h2>
       <ul>
@@ -600,7 +599,6 @@ async function verifyEd25519({ publicKeySpkiB64, canonical, signatureHex }){
       </ul>
     </section>
 
-    <span id="jsonschema" aria-hidden="true"></span>
     <section class="card" id="schema">
       <h2>JSON schema</h2>
 <pre><code>{
@@ -719,7 +717,6 @@ Content-Type: application/json
       </div>
     </section>
 
-    <span id="reserved-fields" aria-hidden="true"></span>
     <section class="card" id="reserved">
       <h2>Reserved fields</h2>
       <p>Names starting with <code>_tp_</code> are reserved for the specification and MUST NOT be used for custom metadata.</p>
@@ -745,7 +742,6 @@ Content-Type: application/json
       </ul>
     </section>
 
-    <span id="check-list" aria-hidden="true"></span>
     <section class="card" id="checklist">
       <h2>Checklist</h2>
       <ul>
@@ -797,7 +793,7 @@ Content-Type: application/json
     </div>
   </footer>
 
-  <!-- FAQPage JSON-LD spécifique à ProofSpec -->
+  <!-- FAQPage JSON-LD -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -843,38 +839,67 @@ Content-Type: application/json
     onScroll();
     window.addEventListener('scroll', onScroll, { passive:true });
 
-    // Burger
+    // Burger + focus trap (same as verify)
     const burger=document.getElementById('tp-burger');
     const nav=document.getElementById('tp-nav');
+    let lastFocus=null;
+
+    function getFocusable(container){
+      return Array.from(container.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )).filter(el => !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length));
+    }
     function openMenu(){
+      lastFocus=document.activeElement;
       nav.setAttribute('data-state','open');
       burger.setAttribute('aria-expanded','true');
       document.body.style.overflow='hidden';
+      const focusables=getFocusable(nav);
+      if(focusables[0]) focusables[0].focus({preventScroll:true});
     }
     function closeMenu(){
       nav.setAttribute('data-state','closed');
       burger.setAttribute('aria-expanded','false');
       document.body.style.overflow='';
+      if(lastFocus && typeof lastFocus.focus==="function") lastFocus.focus({preventScroll:true});
+      lastFocus=null;
     }
     function toggleMenu(){
       (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu();
     }
-    burger && burger.addEventListener('click', toggleMenu, { passive:true });
+    burger && burger.addEventListener('click', toggleMenu);
+
     document.addEventListener('click',(e)=>{
       if(window.matchMedia('(min-width: 900px)').matches) return;
       if(!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu();
     },{ passive:true });
+
     document.addEventListener('keydown',(e)=>{
-      if(e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu();
-    },{ passive:true });
+      if(window.matchMedia('(min-width: 900px)').matches) return;
+      if(e.key==='Escape' && nav.getAttribute('data-state')==='open'){
+        e.preventDefault(); closeMenu(); return;
+      }
+      if(e.key==='Tab' && nav.getAttribute('data-state')==='open'){
+        const focusables=getFocusable(nav);
+        if(!focusables.length) return;
+        const first=focusables[0];
+        const last=focusables[focusables.length-1];
+        if(e.shiftKey && document.activeElement===first){
+          e.preventDefault(); last.focus();
+        }else if(!e.shiftKey && document.activeElement===last){
+          e.preventDefault(); first.focus();
+        }
+      }
+    });
+
     window.addEventListener('resize',()=>{
       if(window.matchMedia('(min-width: 900px)').matches) closeMenu();
     },{ passive:true });
 
-    // Auto aria-current
+    // Auto aria-current (do not mark .nav-cta)
     (function(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
-      document.querySelectorAll('header nav a, footer .links a').forEach(a=>{
+      document.querySelectorAll('header nav a:not(.nav-cta), footer .links a').forEach(a=>{
         const path=new URL(a.getAttribute('href'), location.origin).pathname;
         if(path===here) a.setAttribute('aria-current','page');
       });
@@ -915,4 +940,4 @@ Content-Type: application/json
   })();
   </script>
 </body>
-</html>
+    </html>
