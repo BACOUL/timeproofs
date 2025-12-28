@@ -759,34 +759,48 @@ const check = await res.json();</code></pre></article>
 
     // ---- ONE-BAR DEMO ----
     (function(){
-      async function verifyHash(hash){
-        async function call(api){
+      // FIX v0.1 demo: backend now expects a full proof bundle.
+      // Keep the same UI: input can be text or 64-hex hash.
+      // Flow: hash locally -> POST /api/timestamp -> POST /api/verify with returned proof.
+      async function demoCheck(hash){
+        async function flow(api){
           try{
-            let j = await fetch(`${api}/api/verify?hash=${encodeURIComponent(hash)}`, { headers:{'Accept':'application/json'}, mode:'cors', credentials:'omit', cache:'no-store' }).then(r=>r.json());
-            if(!(j.valid||j.ok===true||j.result==='valid')){
-              j = await fetch(`${api}/api/verify`, {
-                method:'POST',
-                headers:{'Content-Type':'application/json','Accept':'application/json'},
-                body: JSON.stringify({ hash }),
-                mode:'cors', credentials:'omit', cache:'no-store'
-              }).then(r=>r.json());
-            }
-            return j;
+            const proof = await fetch(`${api}/api/timestamp`, {
+              method:'POST',
+              headers:{ 'Content-Type':'application/json', 'Accept':'application/json' },
+              body: JSON.stringify({ hash, type:'demo', meta:{ source:'home-demo' } }),
+              mode:'cors', credentials:'omit', cache:'no-store'
+            }).then(r=>r.json());
+
+            const check = await fetch(`${api}/api/verify`, {
+              method:'POST',
+              headers:{ 'Content-Type':'application/json', 'Accept':'application/json' },
+              body: JSON.stringify(proof),
+              mode:'cors', credentials:'omit', cache:'no-store'
+            }).then(r=>r.json());
+
+            return { proof, check, api };
           }catch{ return null; }
         }
-        return (await call(API1)) || (await call(API2));
+        return (await flow(API1)) || (await flow(API2));
       }
 
-      function renderSummary(target, hash, res){
-        const ok = !!res?.valid || res?.ok===true || res?.result==='valid';
-        const iso = res?.timestamp_iso || res?.timestamp || null;
-        const verifyURL = res?.verify_url || `${API1}/api/verify?hash=${encodeURIComponent(hash)}`;
+      function renderSummary(target, hash, pack){
+        const ok = !!pack?.check?.valid || pack?.check?.ok===true || pack?.check?.result==='valid';
+        const issuedAt =
+          pack?.proof?.timestamp?.issuedAt ||
+          pack?.proof?.timestamp?.iso ||
+          pack?.proof?.issuedAt ||
+          pack?.check?.timestamp_iso ||
+          pack?.check?.timestamp ||
+          null;
+
         target.textContent =
 `// Demo summary
 input: ${hash}
-result: ${ok ? 'VALID' : 'NOT FOUND'}
-timestamp: ${iso ? iso + ' (Paris: ' + fmtParis(iso) + ')' : '—'}
-verify: ${verifyURL}`;
+result: ${ok ? 'VALID' : 'INVALID'}
+timestamp: ${issuedAt ? issuedAt + ' (Paris: ' + fmtParis(issuedAt) + ')' : '—'}
+verify: POST /api/verify (bundle)`;
         return ok;
       }
 
@@ -806,11 +820,14 @@ verify: ${verifyURL}`;
           catch{ showStatus(stat,false,'Hashing failed.'); return; }
         }
 
-        const res = await verifyHash(hash);
-        if(!res){ showStatus(stat,false,'Network or CORS error'); return; }
+        const pack = await demoCheck(hash);
+        if(!pack){ showStatus(stat,false,'Network or CORS error'); return; }
 
-        const ok = renderSummary(sum, hash, res);
-        out.textContent = `// Raw JSON\n${escapeHTML(JSON.stringify(res,null,2))}`;
+        const ok = renderSummary(sum, hash, pack);
+
+        const payload = { proof: pack.proof, verify: pack.check };
+        out.textContent = `// Raw JSON\n${escapeHTML(JSON.stringify(payload,null,2))}`;
+
         showStatus(stat, ok, ok ? 'Valid proof (demo)' : 'Invalid or not found (demo)');
       }
 
