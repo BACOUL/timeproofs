@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="dark light"/>
   <title>Protocol (ProofSpec) — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="ProofSpec v0.1: open, privacy-first specification for digital proof of existence. Hash-only inputs, signed timestamps, public verification. TimeProofs v0.2 provides a stateless reference implementation and portable .tproof.json bundles."/>
+  <meta name="description" content="ProofSpec v0.2: open, privacy-first specification for digital proof of existence. Hash locally, receive a signed .tproof.json proof (Ed25519), verify offline or via stateless POST verification — no storage, no blockchain."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -32,7 +32,7 @@
 
   <!-- Social -->
   <meta property="og:title" content="Protocol (ProofSpec) — TimeProofs"/>
-  <meta property="og:description" content="ProofSpec v0.1: hash-only inputs, signed timestamps, public verification. Open, privacy-first protocol for digital proof of existence."/>
+  <meta property="og:description" content="ProofSpec v0.2: hash locally, receive a signed .tproof.json proof (Ed25519), verify offline or via stateless POST — no storage, no blockchain."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/proofspec.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
@@ -44,7 +44,7 @@
   <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Protocol (ProofSpec) — TimeProofs"/>
-  <meta name="twitter:description" content="Open, privacy-first spec for digital proof of existence. Hash locally, timestamp via API, verify publicly."/>
+  <meta name="twitter:description" content="Open, privacy-first spec for digital proof of existence. Hash locally, get a signed .tproof.json proof, verify offline or via stateless POST."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- AI Trust -->
@@ -64,7 +64,8 @@
       "digital proof of existence",
       "timestamp API",
       "AI data provenance",
-      "cryptographic verification"
+      "cryptographic verification",
+      "Ed25519 signatures"
     ],
     "sameAs":[
       "https://x.com/timeproofs",
@@ -85,7 +86,7 @@
     "@type":"WebSite",
     "name":"TimeProofs",
     "url":"https://timeproofs.io/",
-    "dateModified":"2025-12-25"
+    "dateModified":"2025-12-28"
   }
   </script>
 
@@ -94,15 +95,16 @@
   {
     "@context":"https://schema.org",
     "@type":"TechArticle",
-    "headline":"ProofSpec v0.1 — Open protocol for digital proof of existence",
+    "headline":"ProofSpec v0.2 — Open protocol for digital proof of existence",
     "name":"Protocol (ProofSpec) — TimeProofs",
-    "description":"ProofSpec v0.1: open, privacy-first specification for digital proof of existence. Hash-only inputs, signed timestamps, public verification. TimeProofs v0.2 provides a stateless reference implementation and portable .tproof.json bundles.",
+    "description":"ProofSpec v0.2: open, privacy-first specification for digital proof of existence. Hash locally, receive a signed .tproof.json proof (Ed25519), verify offline or via stateless POST verification — no storage, no blockchain.",
     "inLanguage":"en",
     "about":[
       "digital proof of existence",
       "cryptographic hashes",
       "timestamp APIs",
-      "data integrity verification"
+      "data integrity verification",
+      "Ed25519 signatures"
     ],
     "author":{"@type":"Organization","name":"TimeProofs"},
     "publisher":{
@@ -389,9 +391,9 @@ upgrade-insecure-requests">
     <!-- HERO -->
     <section class="hero" role="region" aria-labelledby="title">
       <div class="icon" aria-hidden="true">📘</div>
-      <p class="badge">Status: Public Beta v0.2 · ProofSpec v0.1 · API v0.2 · Privacy-first · No blockchain</p>
+      <p class="badge">Status: Public Beta v0.2 · ProofSpec v0.2 · API v0.2 · Privacy-first · No blockchain</p>
       <h1 id="title">Protocol — ProofSpec</h1>
-      <p class="lead">Open, normative specification to prove when data existed and that it has not changed. Hash-only inputs, signed timestamps, public verification.</p>
+      <p class="lead">Open, normative specification to prove when data existed and that it has not changed. Hash locally, receive a signed proof, verify later — without revealing your data.</p>
     </section>
 
     <!-- TOC -->
@@ -408,8 +410,7 @@ upgrade-insecure-requests">
       <a href="#schema">JSON schema</a>
       <a href="#vectors">Test vectors</a>
       <a href="#verification">Verification</a>
-      <a href="#verifyurl">Verify URL</a>
-      <a href="#bundle">TimeProofs v0.2 bundle</a>
+      <a href="#bundle">TimeProofs v0.2 proof (.tproof.json)</a>
       <a href="#mapping">Mapping</a>
       <a href="#reserved">Reserved fields</a>
       <a href="#errors">Errors</a>
@@ -423,14 +424,14 @@ upgrade-insecure-requests">
 
     <section class="card" id="overview">
       <h2>Overview</h2>
-      <p>ProofSpec defines how to create, sign, publish, and verify digital proofs of existence.</p>
-      <p>Model: hash locally → get a signed, timestamped proof → anyone can verify later without access to your original data.</p>
-      <p>This document is normative for issuers and verifiers that claim to be <strong>ProofSpec v0.1 compliant</strong>.</p>
+      <p>ProofSpec defines how to create, sign, and verify digital proofs of existence in a privacy-first way.</p>
+      <p>Model: hash locally → receive a signed <code>.tproof.json</code> proof → verify later (offline or via stateless POST) without access to the original data.</p>
+      <p>This document is normative for issuers and verifiers that claim to be <strong>ProofSpec v0.2 compliant</strong>.</p>
 
-      <h3>ProofSpec v0.1 vs TimeProofs v0.2</h3>
+      <h3>ProofSpec v0.2 vs TimeProofs v0.2</h3>
       <ul>
-        <li><strong>ProofSpec</strong> defines the <em>proof object</em>, signing rules, verification behaviour, and error semantics.</li>
-        <li><strong>TimeProofs v0.2</strong> is a stateless reference implementation: hash-only API, public verification, and portable <code>.tproof.json</code> bundles that can be inspected offline.</li>
+        <li><strong>ProofSpec</strong> defines the proof structure, canonical message rules, verification behaviour, and error semantics.</li>
+        <li><strong>TimeProofs API v0.2</strong> is a stateless reference implementation: timestamp returns a portable proof bundle; verification is cryptographic and requires the bundle (POST). No server-side storage.</li>
       </ul>
 
       <h3>File date ≠ proof</h3>
@@ -442,8 +443,8 @@ upgrade-insecure-requests">
       <h3>What it proves / What it does NOT prove</h3>
       <p><strong>It proves:</strong></p>
       <ul>
-        <li>That specific bytes (identified by <code>hash</code>) existed at or before <code>ts</code>.</li>
-        <li>That the proof was issued by the declared issuer key (<code>alg</code>/<code>kid</code>).</li>
+        <li>That specific bytes (identified by a SHA-256 <code>hash</code>) existed at or before <code>issuedAt</code>.</li>
+        <li>That the proof was issued by a specific issuer key (<code>Ed25519</code> + <code>keyId</code>).</li>
       </ul>
       <p><strong>It does NOT prove:</strong></p>
       <ul>
@@ -457,8 +458,8 @@ upgrade-insecure-requests">
       <h2>Normative language & scope</h2>
       <p>The key words <strong>MUST</strong>, <strong>MUST NOT</strong>, <strong>SHOULD</strong>, <strong>SHOULD NOT</strong>, and <strong>MAY</strong> in this document are to be interpreted as described in RFC 2119 and RFC 8174.</p>
       <ul>
-        <li>This specification applies to the structure of proof objects, signing rules, verification behaviour, and error reporting.</li>
-        <li>Implementation details (storage engine, infrastructure, billing, UI) are non-normative unless explicitly stated.</li>
+        <li>This specification applies to proof structure, signing rules, verification behaviour, and error reporting.</li>
+        <li>Implementation details (infrastructure, billing, UI) are non-normative unless explicitly stated.</li>
         <li>Where this document uses “example”, the content is informative and does not create additional normative requirements.</li>
       </ul>
     </section>
@@ -467,28 +468,28 @@ upgrade-insecure-requests">
       <h2>Conformance</h2>
       <p>The following roles are defined:</p>
       <ul>
-        <li><strong>Issuer</strong>: a system that accepts a hash and returns a signed proof object.</li>
-        <li><strong>Verifier</strong>: a system that checks a proof object and returns a validation result.</li>
+        <li><strong>Issuer</strong>: a system that accepts a hash and returns a signed proof bundle.</li>
+        <li><strong>Verifier</strong>: a system that checks a proof bundle and returns a validation result.</li>
         <li><strong>Client</strong>: any caller (app, backend, CLI, agent) that interacts with an issuer or verifier.</li>
       </ul>
 
       <p>A <strong>ProofSpec-compliant Issuer</strong>:</p>
       <ul>
-        <li>MUST only accept canonical hashes (see Canonicalization) and MUST NOT require original content.</li>
+        <li>MUST only accept canonical hashes and MUST NOT require original content.</li>
         <li>MUST produce proof objects that satisfy the <a href="#schema">JSON schema</a> and <a href="#datamodel">data model</a>.</li>
-        <li>MUST sign over a deterministic message that includes at least <code>hash</code> and <code>ts</code>.</li>
-        <li>SHOULD expose a stable <a href="#verifyurl">verify URL</a> for each hash.</li>
+        <li>MUST sign a deterministic canonical message that binds the hash and the issuance timestamp.</li>
+        <li>MUST include a stable <code>keyId</code> (kid) identifying the signing key.</li>
       </ul>
 
       <p>A <strong>ProofSpec-compliant Verifier</strong>:</p>
       <ul>
-        <li>MUST validate the structure of the proof object, including required fields and formats.</li>
-        <li>MUST recompute the expected signature for the given <code>alg</code> and compare using a timing-safe method.</li>
-        <li>MUST reject proofs whose <code>ts</code> is not a valid UTC timestamp or is unreasonably far in the future.</li>
+        <li>MUST validate required fields and formats.</li>
+        <li>MUST verify the Ed25519 signature over the canonical message.</li>
+        <li>MUST reject proofs whose <code>issuedAt</code> is not a valid UTC timestamp or is unreasonably far in the future.</li>
         <li>SHOULD provide clear error codes as defined in the <a href="#errors">Errors</a> section.</li>
       </ul>
 
-      <p>Clients that claim ProofSpec compliance SHOULD keep the full proof JSON and SHOULD NOT rely only on a verify URL.</p>
+      <p>Clients that claim ProofSpec compliance SHOULD keep the full <code>.tproof.json</code> proof for long-term verification.</p>
     </section>
 
     <span id="canonicalisation" aria-hidden="true"></span>
@@ -497,7 +498,7 @@ upgrade-insecure-requests">
       <ul>
         <li>Issuers and clients MUST hash the exact bytes they intend to prove (“bytes-in, bytes-out”).</li>
         <li>Text inputs SHOULD be encoded as UTF-8 and SHOULD normalize line endings to LF (<code>\n</code>) before hashing.</li>
-        <li>If a client applies any preprocessing (whitespace normalization, JSON stable stringification, etc.), it MUST be documented and MUST be applied consistently for verification.</li>
+        <li>If a client applies preprocessing (whitespace normalization, stable JSON stringification, etc.), it MUST be documented and MUST be applied consistently.</li>
       </ul>
     </section>
 
@@ -509,73 +510,93 @@ upgrade-insecure-requests">
             <tr><th>Field</th><th>Type</th><th>Notes</th></tr>
           </thead>
           <tbody>
-            <tr><td>hash</td><td>string(64 hex)</td><td>SHA-256 of input. REQUIRED.</td></tr>
-            <tr><td>ts</td><td>ISO 8601</td><td>UTC timestamp of issuance. REQUIRED.</td></tr>
-            <tr><td>sig</td><td>string(64 hex)</td><td>Signature over deterministic message (see Signing). REQUIRED.</td></tr>
-            <tr><td>alg</td><td>enum</td><td><code>HMAC-SHA256</code>. REQUIRED.</td></tr>
-            <tr><td>kid</td><td>string</td><td>Key id / version used to produce <code>sig</code>. RECOMMENDED.</td></tr>
-            <tr><td>issuer</td><td>string</td><td>Issuer identifier (informative, e.g. domain). OPTIONAL.</td></tr>
-            <tr><td>verify_url</td><td>URL</td><td>Public verify endpoint for this hash. RECOMMENDED.</td></tr>
+            <tr><td>version</td><td>string</td><td>Protocol / implementation version. REQUIRED.</td></tr>
+            <tr><td>canonical</td><td>string</td><td>Deterministic message string signed by issuer. REQUIRED.</td></tr>
+            <tr><td>hash</td><td>object</td><td><code>{ algorithm:"SHA-256", value:"&lt;64-hex&gt;" }</code>. REQUIRED.</td></tr>
+            <tr><td>timestamp</td><td>object</td><td><code>{ issuedAt, issuer, nonce }</code>. REQUIRED.</td></tr>
+            <tr><td>proof</td><td>object</td><td><code>{ algo:"Ed25519", signature:"&lt;hex&gt;", keyId, publicKey? }</code>. REQUIRED.</td></tr>
             <tr><td>meta</td><td>object</td><td>Optional. MUST NOT contain personal data or secrets.</td></tr>
           </tbody>
         </table>
       </div>
       <p style="color:var(--muted); margin-top:10px">
-        Note: This section defines the ProofSpec v0.1 <strong>proof object</strong>. TimeProofs v0.2 ships a <code>.tproof.json</code> bundle wrapper for portability (see <a href="#bundle">TimeProofs v0.2 bundle</a>).
+        Note: ProofSpec v0.2 is designed for portable proofs (<code>.tproof.json</code>) and stateless verification.
       </p>
     </section>
 
     <section class="card" id="proofobject">
-      <h2>Proof object (ProofSpec v0.1)</h2>
+      <h2>Proof object (ProofSpec v0.2)</h2>
 <pre><code>{
-  "hash":"&lt;64-hex&gt;",
-  "ts":"2025-01-01T00:00:00.000Z",
-  "sig":"&lt;64-hex&gt;",
-  "alg":"HMAC-SHA256",
-  "kid":"v1",
-  "issuer":"example-issuer",
-  "verify_url":"https://example-issuer.example/verify?hash=...",
-  "meta":{
-    "type":"event",
-    "source":"web"
-  }
+  "version":"timeproofs-0.2",
+  "canonical":"&lt;hash&gt;|&lt;issuedAt&gt;|&lt;issuer&gt;|&lt;nonce&gt;",
+  "hash": { "algorithm":"SHA-256", "value":"&lt;64-hex&gt;" },
+  "timestamp": {
+    "issuedAt":"2025-01-01T00:00:00.000Z",
+    "issuer":"https://api.timeproofs.io",
+    "nonce":"&lt;hex&gt;"
+  },
+  "proof": {
+    "algo":"Ed25519",
+    "signature":"&lt;hex&gt;",
+    "publicKey":"&lt;base64 SPKI DER&gt;",
+    "keyId":"tp-v0-2-main"
+  },
+  "meta": { "type":"event" }
 }</code></pre>
       <p style="color:var(--muted); margin:10px 0 0">
-        The canonical signature encoding in ProofSpec v0.1 is lowercase hex (64 chars). Implementations MUST document any deviation.
+        Signature encoding is lowercase hex in the TimeProofs v0.2 reference implementation.
       </p>
     </section>
 
     <section class="card" id="signing">
       <h2>Signing</h2>
-      <p>Issuers MUST sign a deterministic message. The reference message format used here is:</p>
-      <pre><code>&lt;hash&gt;|&lt;ts&gt;</code></pre>
+      <p>Issuers MUST sign a deterministic canonical message. The reference canonical string is:</p>
+      <pre><code>&lt;hash&gt;|&lt;issuedAt&gt;|&lt;issuer&gt;|&lt;nonce&gt;</code></pre>
+      <ul>
+        <li><code>hash</code> MUST be a lowercase 64-hex SHA-256.</li>
+        <li><code>issuedAt</code> MUST be an ISO 8601 UTC timestamp.</li>
+        <li><code>issuer</code> SHOULD be a stable identifier (typically an HTTPS origin).</li>
+        <li><code>nonce</code> MUST be unpredictable to prevent replay/collision across identical timestamps.</li>
+      </ul>
 
-<pre><code>// Node.js HMAC verify (example)
-import crypto from "node:crypto";
+<pre><code>// Browser / Worker Ed25519 verify (example, WebCrypto)
+function b64ToBytes(b64){
+  const bin = atob(b64);
+  const out = new Uint8Array(bin.length);
+  for (let i=0;i&lt;out.length;i++) out[i]=bin.charCodeAt(i);
+  return out;
+}
+function hexToBytes(hex){
+  const h=String(hex||"").toLowerCase().trim();
+  if(!/^[a-f0-9]+$/.test(h) || h.length%2) return null;
+  const out=new Uint8Array(h.length/2);
+  for(let i=0;i&lt;out.length;i++) out[i]=parseInt(h.slice(i*2,i*2+2),16);
+  return out;
+}
 
-function verifyHmac({ hash, ts, sig }, secret) {
-  const msg = `${hash}|${ts}`;
-  const expect = crypto
-    .createHmac("sha256", secret)
-    .update(msg)
-    .digest("hex");
-
-  return crypto.timingSafeEqual(
-    Buffer.from(expect, "hex"),
-    Buffer.from(sig, "hex")
-  );
+async function verifyEd25519({ publicKeySpkiB64, canonical, signatureHex }){
+  const pub = b64ToBytes(publicKeySpkiB64);
+  const sig = hexToBytes(signatureHex);
+  if(!sig) return false;
+  const key = await crypto.subtle.importKey("spki", pub, { name:"Ed25519" }, false, ["verify"]);
+  return crypto.subtle.verify("Ed25519", key, sig, new TextEncoder().encode(canonical));
 }</code></pre>
-      <p>Issuers SHOULD implement key rotation and include <code>kid</code> to identify the signing key version.</p>
+
+      <p>Issuers SHOULD implement key lifecycle via <code>keyId</code> and publish public keys for independent verification.</p>
+      <p style="color:var(--muted); margin:10px 0 0">
+        Some deployments enforce <strong>key freeze</strong>: verifiers trust only a pinned issuer public key and ignore the embedded <code>publicKey</code>.
+      </p>
     </section>
 
     <section class="card" id="validation">
       <h2>Validation</h2>
       <ul>
-        <li><code>hash</code> MUST be a 64-character lowercase hex string.</li>
-        <li><code>ts</code> MUST be a valid ISO 8601 UTC timestamp and SHOULD NOT be in the future beyond a reasonable tolerance.</li>
-        <li><code>sig</code> MUST be lowercase hex (64 chars) when <code>alg</code> is <code>HMAC-SHA256</code>.</li>
-        <li>The verifier MUST recompute the expected signature according to <code>alg</code>/<code>kid</code> and compare using a timing-safe method.</li>
-        <li>If any required field is missing or invalid, the verifier MUST return a failure with an appropriate error code.</li>
+        <li><code>hash.value</code> MUST be a 64-character lowercase hex string.</li>
+        <li><code>timestamp.issuedAt</code> MUST be a valid ISO 8601 UTC timestamp and SHOULD NOT be in the future beyond a reasonable tolerance.</li>
+        <li><code>canonical</code> MUST exactly match the signing rules (or be reconstructed deterministically when absent by strict policy).</li>
+        <li><code>proof.algo</code> MUST be <code>Ed25519</code> for this version.</li>
+        <li><code>proof.signature</code> MUST be lowercase hex in the reference implementation.</li>
+        <li>The verifier MUST verify the Ed25519 signature over <code>canonical</code>.</li>
       </ul>
     </section>
 
@@ -585,15 +606,40 @@ function verifyHmac({ hash, ts, sig }, secret) {
 <pre><code>{
   "$schema":"https://json-schema.org/draft/2020-12/schema",
   "type":"object",
-  "required":["hash","ts","sig","alg"],
+  "required":["version","canonical","hash","timestamp","proof"],
   "properties":{
-    "hash":{"type":"string","pattern":"^[a-f0-9]{64}$"},
-    "ts":{"type":"string","format":"date-time"},
-    "sig":{"type":"string","pattern":"^[a-f0-9]{64}$"},
-    "alg":{"type":"string","enum":["HMAC-SHA256"]},
-    "kid":{"type":"string"},
-    "issuer":{"type":"string"},
-    "verify_url":{"type":"string","format":"uri"},
+    "version":{"type":"string"},
+    "canonical":{"type":"string","minLength":10},
+    "hash":{
+      "type":"object",
+      "required":["algorithm","value"],
+      "properties":{
+        "algorithm":{"type":"string","enum":["SHA-256"]},
+        "value":{"type":"string","pattern":"^[a-f0-9]{64}$"}
+      },
+      "additionalProperties":true
+    },
+    "timestamp":{
+      "type":"object",
+      "required":["issuedAt","issuer","nonce"],
+      "properties":{
+        "issuedAt":{"type":"string","format":"date-time"},
+        "issuer":{"type":"string","minLength":3},
+        "nonce":{"type":"string","minLength":8}
+      },
+      "additionalProperties":true
+    },
+    "proof":{
+      "type":"object",
+      "required":["algo","signature","keyId"],
+      "properties":{
+        "algo":{"type":"string","enum":["Ed25519"]},
+        "signature":{"type":"string","pattern":"^[a-f0-9]+$"},
+        "publicKey":{"type":"string"},
+        "keyId":{"type":"string"}
+      },
+      "additionalProperties":true
+    },
     "meta":{"type":"object","additionalProperties":true}
   },
   "additionalProperties":true
@@ -605,72 +651,69 @@ function verifyHmac({ hash, ts, sig }, secret) {
 <pre><code>// sha256("TimeProofs")
 7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2</code></pre>
       <p style="color:var(--muted); margin:10px 0 0">
-        Signature test vectors depend on issuer secret keys and are therefore issuer-specific.
+        Signature vectors depend on issuer keys. Use the verification API or the issuer public key to validate real proofs.
       </p>
     </section>
 
     <section class="card" id="verification">
       <h2>Verification</h2>
-<pre><code>GET /api/verify?hash=&lt;64-hex&gt;
-→ {"ok":true,"valid":true,"timestamp":"2025-01-01T00:00:00.000Z","hash":"..."}</code></pre>
+      <p>In stateless mode, verification requires the full <code>.tproof.json</code> proof bundle (a hash alone is not sufficient).</p>
+<pre><code>POST /api/verify
+Content-Type: application/json
+
+{ "bundle": &lt;.tproof.json&gt; }
+
+→ {"ok":true,"valid":true,...}</code></pre>
       <p style="color:var(--muted); margin:10px 0 0">
-        Response fields are issuer-defined as long as the verification result is unambiguous.
+        Verifiers SHOULD implement a strict policy: validate structure, recompute/compare canonical, and verify Ed25519 signature.
       </p>
     </section>
 
-    <span id="verify-url" aria-hidden="true"></span>
-    <section class="card" id="verifyurl">
-      <h2>Verify URL</h2>
-      <p>The verify URL is a stable endpoint that returns JSON status for the given hash (or proof). It SHOULD be included in the proof JSON as <code>verify_url</code>.</p>
-      <p>Clients MAY choose to rely on the verify URL alone, but keeping the full proof JSON is RECOMMENDED for long-term verification.</p>
-    </section>
-
     <section class="card" id="bundle">
-      <h2>TimeProofs v0.2 bundle (.tproof.json)</h2>
-      <p>TimeProofs v0.2 uses a portable wrapper bundle designed for offline inspection and long-term storage. The bundle MUST NOT contain original content, secrets, or personal data.</p>
+      <h2>TimeProofs v0.2 proof (.tproof.json)</h2>
+      <p>This portable proof is designed for offline inspection and long-term storage. It MUST NOT contain original content, secrets, or personal data.</p>
 
 <pre><code>{
   "version":"timeproofs-0.2",
-  "proof":{
-    "hash":"&lt;64-hex&gt;",
-    "ts":"2025-01-01T00:00:00.000Z",
-    "sig":"&lt;64-hex&gt;",
-    "alg":"HMAC-SHA256",
-    "kid":"v1",
-    "issuer":"timeproofs.io",
-    "verify_url":"https://api.timeproofs.io/api/verify?hash=..."
+  "canonical":"7c04...76c2|2025-01-01T00:00:00.000Z|https://api.timeproofs.io|a1b2c3...",
+  "hash": { "algorithm":"SHA-256", "value":"7c04...76c2" },
+  "timestamp": {
+    "issuedAt":"2025-01-01T00:00:00.000Z",
+    "issuer":"https://api.timeproofs.io",
+    "nonce":"a1b2c3..."
   },
-  "meta":{
-    "type":"document",
-    "purpose":"release",
-    "tool":"timeproofs-web"
-  }
+  "proof": {
+    "algo":"Ed25519",
+    "signature":"&lt;hex&gt;",
+    "publicKey":"&lt;base64 SPKI DER&gt;",
+    "keyId":"tp-v0-2-main"
+  },
+  "meta": { "type":"document" }
 }</code></pre>
 
       <ul>
-        <li><strong>Offline inspection</strong>: The bundle is readable without contacting the issuer.</li>
-        <li><strong>Online verification</strong>: A verifier MAY call <code>verify_url</code> to re-check status later.</li>
-        <li><strong>Metadata</strong>: <code>meta</code> is optional, local-only, and MUST NOT contain personal data or secrets.</li>
+        <li><strong>Offline inspection</strong>: Anyone can read the proof without contacting the issuer.</li>
+        <li><strong>Online verification</strong>: A verifier can POST the proof to a stateless endpoint for validation.</li>
+        <li><strong>Key policy</strong>: Deployments may enforce <strong>key freeze</strong> (pinned public key) and ignore embedded <code>publicKey</code>.</li>
       </ul>
     </section>
 
     <section class="card" id="mapping">
-      <h2>Mapping (ProofSpec → TimeProofs bundle)</h2>
-      <p>The bundle wraps a ProofSpec v0.1 proof object under <code>proof</code>. Mapping is 1:1:</p>
+      <h2>Mapping</h2>
+      <p>ProofSpec v0.2 uses a self-describing proof format. The main correspondences are:</p>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>ProofSpec field</th><th>TimeProofs v0.2 bundle</th><th>Notes</th></tr>
+            <tr><th>Concept</th><th>Field</th><th>Notes</th></tr>
           </thead>
           <tbody>
-            <tr><td><code>hash</code></td><td><code>proof.hash</code></td><td>Same SHA-256 hex.</td></tr>
-            <tr><td><code>ts</code></td><td><code>proof.ts</code></td><td>Same ISO-8601 UTC timestamp.</td></tr>
-            <tr><td><code>sig</code></td><td><code>proof.sig</code></td><td>Same encoding (hex) for v0.2 reference implementation.</td></tr>
-            <tr><td><code>alg</code></td><td><code>proof.alg</code></td><td><code>HMAC-SHA256</code>.</td></tr>
-            <tr><td><code>kid</code></td><td><code>proof.kid</code></td><td>Key id/version.</td></tr>
-            <tr><td><code>issuer</code></td><td><code>proof.issuer</code></td><td>Optional informational field.</td></tr>
-            <tr><td><code>verify_url</code></td><td><code>proof.verify_url</code></td><td>Recommended for long-term checks.</td></tr>
-            <tr><td><code>meta</code></td><td><code>meta</code></td><td>Bundle-level metadata (local-only).</td></tr>
+            <tr><td>Hash</td><td><code>hash.value</code></td><td>Lowercase SHA-256 64-hex.</td></tr>
+            <tr><td>Issuance time</td><td><code>timestamp.issuedAt</code></td><td>ISO-8601 UTC.</td></tr>
+            <tr><td>Issuer id</td><td><code>timestamp.issuer</code></td><td>Stable issuer identifier (typically HTTPS origin).</td></tr>
+            <tr><td>Anti-replay</td><td><code>timestamp.nonce</code></td><td>Random, unpredictable.</td></tr>
+            <tr><td>Signed message</td><td><code>canonical</code></td><td>Signed by Ed25519.</td></tr>
+            <tr><td>Signature</td><td><code>proof.signature</code></td><td>Hex signature in reference implementation.</td></tr>
+            <tr><td>Key id</td><td><code>proof.keyId</code></td><td>Identifies signing key.</td></tr>
           </tbody>
         </table>
       </div>
@@ -679,24 +722,26 @@ function verifyHmac({ hash, ts, sig }, secret) {
     <span id="reserved-fields" aria-hidden="true"></span>
     <section class="card" id="reserved">
       <h2>Reserved fields</h2>
-      <p>Names starting with <code>_tp_</code> are reserved for the ProofSpec and MUST NOT be used for custom metadata.</p>
+      <p>Names starting with <code>_tp_</code> are reserved for the specification and MUST NOT be used for custom metadata.</p>
     </section>
 
     <section class="card" id="errors">
       <h2>Errors</h2>
 <pre><code>{"ok":false,"error":"invalid_hash"}
 // Other examples:
+// {"ok":false,"error":"missing_bundle"}
+// {"ok":false,"error":"missing_signature"}
 // {"ok":false,"error":"invalid_signature"}
-// {"ok":false,"error":"not_found"}
-// {"ok":false,"error":"rate_limited"}</code></pre>
+// {"ok":false,"error":"bad_request"}
+// {"ok":false,"error":"not_found"}</code></pre>
     </section>
 
     <section class="card" id="policy">
       <h2>Operational policy</h2>
       <ul>
-        <li>Issuers SHOULD keep minimal logs and avoid storing original content.</li>
+        <li>Issuers MUST NOT store original content. Hash-only inputs.</li>
         <li>Issuers SHOULD apply rate limits and abuse protection on timestamp and verify endpoints.</li>
-        <li>Key rotation SHOULD be implemented using <code>kid</code> and a clear key lifecycle policy.</li>
+        <li>Issuers SHOULD publish public keys and clearly document key lifecycle via <code>keyId</code>.</li>
       </ul>
     </section>
 
@@ -705,16 +750,16 @@ function verifyHmac({ hash, ts, sig }, secret) {
       <h2>Checklist</h2>
       <ul>
         <li>Hash locally (no original content leaves the device).</li>
-        <li>Hash the exact bytes you intend to prove (apply the same canonicalization every time).</li>
-        <li>Keep the proof JSON (<code>.tproof.json</code>) for long-term verification.</li>
-        <li>Validate required fields and formats; verify signatures using timing-safe comparison.</li>
-        <li>Prefer a stable <code>verify_url</code> for public re-checks.</li>
+        <li>Hash the exact bytes you intend to prove (use consistent canonicalization).</li>
+        <li>Keep the <code>.tproof.json</code> proof for long-term verification.</li>
+        <li>Verify by uploading the proof (offline or POST verification).</li>
+        <li>Pin issuer keys when operating in “key freeze” mode (ignore embedded keys).</li>
       </ul>
     </section>
 
     <section class="card" id="versioning">
       <h2>Versioning</h2>
-      <p>This document describes <strong>ProofSpec v0.1</strong>. Additive changes SHOULD prefer minor/patch bumps; breaking changes MUST bump the major version.</p>
+      <p>This document describes <strong>ProofSpec v0.2</strong>. Additive changes SHOULD prefer minor/patch bumps; breaking changes MUST bump the major version.</p>
       <p>Issuers and verifiers SHOULD clearly expose which ProofSpec version(s) they support.</p>
     </section>
   </main>
@@ -724,7 +769,7 @@ function verifyHmac({ hash, ts, sig }, secret) {
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
       <span class="badge">🛡 Privacy First</span>
-      <a class="badge" href="/proofspec.html">🔍 Open Spec v0.1</a>
+      <a class="badge" href="/proofspec.html">🔍 Open Spec v0.2</a>
     </div>
     © 2025 TimeProofs — Reference implementation of the ProofSpec protocol.
     <div class="links" style="margin-top:6px">
@@ -768,18 +813,18 @@ function verifyHmac({ hash, ts, sig }, secret) {
       },
       {
         "@type":"Question",
-        "name":"Can I self-host a ProofSpec-compliant issuer?",
+        "name":"Does ProofSpec require a blockchain?",
         "acceptedAnswer":{
           "@type":"Answer",
-          "text":"Yes. You can implement the issuer and verifier roles yourself, as long as your proofs follow the ProofSpec data model, signing rules, and JSON schema."
+          "text":"No. ProofSpec uses cryptographic hashes and Ed25519-signed timestamps. No storage of original content and no blockchain required."
         }
       },
       {
         "@type":"Question",
-        "name":"Does ProofSpec require a blockchain?",
+        "name":"Can I verify with only a hash?",
         "acceptedAnswer":{
           "@type":"Answer",
-          "text":"No. ProofSpec uses cryptographic hashes and signed timestamps with public verification, without storing original content or requiring a blockchain."
+          "text":"In stateless mode, verification requires the full .tproof.json proof bundle. A hash alone cannot be verified without server-side storage."
         }
       }
     ]
@@ -870,4 +915,4 @@ function verifyHmac({ hash, ts, sig }, secret) {
   })();
   </script>
 </body>
-  </html>
+</html>
