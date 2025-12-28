@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="dark light"/>
   <title>Security — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="Threat model, CSP, key policy, rate limits, logging, disclosure, dependencies. Hash-only proofs with public verification — privacy-first and edge-native."/>
+  <meta name="description" content="Threat model, CSP, key policy, rate limits, logging, disclosure, dependencies. Proof-file verification (.tproof.json) with stateless API v0.2 — privacy-first and edge-native."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -34,7 +34,7 @@
 
   <!-- Social -->
   <meta property="og:title" content="Security — TimeProofs"/>
-  <meta property="og:description" content="Hash-only, public verification. Clear threat model, strict CSP, minimal logs, coordinated disclosure."/>
+  <meta property="og:description" content="Proof-file verification (.tproof.json). Clear threat model, strict CSP, minimal logs, coordinated disclosure."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/security.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
@@ -44,7 +44,7 @@
   <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Security — TimeProofs"/>
-  <meta name="twitter:description" content="Edge-native security controls with hash-only proofs and public verification."/>
+  <meta name="twitter:description" content="Edge-native security controls for proof-file verification (.tproof.json) with stateless API v0.2."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- Security meta -->
@@ -111,7 +111,7 @@ upgrade-insecure-requests">
     "@type":"TechArticle",
     "headline":"Security — TimeProofs",
     "name":"Security — TimeProofs",
-    "description":"Threat model, CSP, key policy, rate limits, logging, disclosure, dependencies. Hash-only proofs with public verification.",
+    "description":"Threat model, CSP, key policy, rate limits, logging, disclosure, dependencies. Proof-file verification (.tproof.json) with stateless API v0.2.",
     "about":[
       "web security",
       "content security policy",
@@ -405,10 +405,10 @@ upgrade-insecure-requests">
     <!-- HERO -->
     <section class="hero" role="region" aria-labelledby="page-title">
       <div class="icon" aria-hidden="true">🛡️</div>
-      <p class="badge">Status: Public Beta v0.2 · Security · Privacy-first · No blockchain</p>
+      <p class="badge">Status: Public Beta v0.2 · ProofSpec v0.1 · API v0.2 · Privacy-first · No blockchain</p>
       <h1 id="page-title">Security</h1>
       <p class="lead">
-        Threat model, headers, rate limits, logging, and disclosure policy for a hash-only protocol with public verification.
+        Threat model, headers, rate limits, logging, and disclosure policy for proof-file verification (<code>.tproof.json</code>) — without uploading your content.
       </p>
     </section>
 
@@ -442,7 +442,7 @@ upgrade-insecure-requests">
       <ul>
         <li>Headers policy: enforced via CSP + hardened defaults (no framing, no mixed content, restrictive permissions).</li>
         <li>Static site posture: no server-rendered sessions, no user accounts, no content upload.</li>
-        <li>API posture: hash-only inputs; public verification endpoint; strict input validation.</li>
+        <li>API posture: proof-file flows (<code>.tproof.json</code>) with strict input validation and defensive responses.</li>
       </ul>
       <p class="muted">
         When production is live, you can validate externally using tools like SecurityHeaders, SSL Labs, and PageSpeed — but this page avoids hard-coded scores.
@@ -455,11 +455,11 @@ upgrade-insecure-requests">
         <table>
           <thead><tr><th>Threat</th><th>Vector</th><th>Mitigation</th></tr></thead>
           <tbody>
-            <tr><td>Content exfiltration</td><td>Uploads</td><td>No file uploads. Hash-only API.</td></tr>
+            <tr><td>Content exfiltration</td><td>Uploads</td><td>No file uploads. Proofs are created/verified from a proof file (<code>.tproof.json</code>).</td></tr>
             <tr><td>API abuse</td><td>Bots, floods</td><td>Rate limits + strict validation. Defensive responses.</td></tr>
             <tr><td>Key compromise</td><td>Secrets leak</td><td>Least privilege, rotation, environment separation.</td></tr>
             <tr><td>Clock drift</td><td>Time skew</td><td>UTC timestamps; verification tolerances documented.</td></tr>
-            <tr><td>Integrity tampering</td><td>Forged proofs</td><td>Signed timestamps; public verification; deterministic canonicalization.</td></tr>
+            <tr><td>Integrity tampering</td><td>Forged proofs</td><td>Signed proof file; deterministic canonicalization; verification rejects altered bundles.</td></tr>
           </tbody>
         </table>
       </div>
@@ -487,8 +487,8 @@ upgrade-insecure-requests">
     <section class="card" id="rate-limits" aria-labelledby="rl-title">
       <h2 id="rl-title">Rate limits</h2>
       <ul>
-        <li><code>GET /api/verify</code>: limited per IP (anti-scrape / anti-flood).</li>
-        <li><code>POST /api/timestamp</code>: limited per IP/token; strict hash validation; predictable errors.</li>
+        <li>Proof verification (<code>.tproof.json</code>): limited per IP (anti-abuse / anti-flood).</li>
+        <li>Proof creation: limited per IP/token; strict validation; predictable errors.</li>
       </ul>
       <p class="muted">Exact thresholds are implementation controls and may change; clients should handle 429 with retry/backoff.</p>
     </section>
@@ -496,23 +496,22 @@ upgrade-insecure-requests">
     <section class="card" id="keys" aria-labelledby="keys-title">
       <h2 id="keys-title">Key policy</h2>
       <ul>
-        <li>Signing: <code>HMAC-SHA256</code> (reference implementation).</li>
+        <li>Signing (reference implementation): <code>HMAC-SHA256</code> and/or <code>Ed25519</code> depending on deployment policy.</li>
         <li>Rotation: keys are rotated and separated per environment (dev/staging/prod).</li>
-        <li>Design direction: support for additional verifiers without changing ProofSpec (e.g., public keys via JWKS if introduced).</li>
+        <li>Public verification: when asymmetric signing is enabled, verifiers use published public keys (e.g., JWKS) — no shared secrets on the client side.</li>
       </ul>
-<pre><code>// Node.js verify example (HMAC)
-import crypto from "node:crypto";
-function verify({hash, ts, sig}, secret){
-  const msg = `${hash}|${ts}`;
-  const expect = crypto.createHmac("sha256", secret).update(msg).digest("hex");
-  return crypto.timingSafeEqual(Buffer.from(expect,'hex'), Buffer.from(sig,'hex'));
-}</code></pre>
+<pre><code>// Stateless verification (concept): send the proof file to a verifier endpoint.
+// The verifier validates signature + structure and returns ok/error.
+POST /api/verify
+Content-Type: application/json
+
+{ "proof": { /* .tproof.json contents */ } }</code></pre>
     </section>
 
     <section class="card" id="logging" aria-labelledby="log-title">
       <h2 id="log-title">Logging &amp; retention</h2>
       <ul>
-        <li>No original content stored. Hash-only inputs and minimal proof fields.</li>
+        <li>No original content stored. Proof files are designed to be portable and auditable.</li>
         <li>Operational logs are minimized and purpose-bound (abuse prevention, reliability).</li>
         <li>Privacy details are documented on <a href="/privacy.html">Privacy</a>.</li>
       </ul>
@@ -540,7 +539,7 @@ function verify({hash, ts, sig}, secret){
     <section class="card" id="status-errors" aria-labelledby="status-title">
       <h2 id="status-title">Status &amp; errors</h2>
       <ul>
-        <li><code>/api/ping</code> → HTTP 200 when healthy.</li>
+        <li>Health endpoint returns HTTP 200 when healthy.</li>
         <li>Error format: <code>{"ok":false,"error":"..."}</code> with 4xx/5xx.</li>
         <li>Clients should treat verification as read-only and safe to retry.</li>
       </ul>
@@ -555,7 +554,7 @@ function verify({hash, ts, sig}, secret){
             <tr><td>Headers</td><td>CSP + no framing + no mixed content</td><td>Enforced via meta CSP and platform defaults.</td></tr>
             <tr><td>Abuse</td><td>Rate limiting &amp; input validation</td><td>429 + backoff expected.</td></tr>
             <tr><td>Secrets</td><td>Rotation &amp; env separation</td><td>Keys never committed; least privilege.</td></tr>
-            <tr><td>Privacy</td><td>Hash-only + minimal logs</td><td>No content upload; no user accounts.</td></tr>
+            <tr><td>Privacy</td><td>Proof-file flows + minimal logs</td><td>No content upload; no user accounts.</td></tr>
             <tr><td>Docs</td><td>security.txt present</td><td>Coordinated disclosure route.</td></tr>
           </tbody>
         </table>
