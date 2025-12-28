@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="dark light"/>
   <title>Regulations & Compliance — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="How TimeProofs supports auditability and provenance across EU AI Act, GDPR, Data Act, eIDAS2, and related frameworks — with a hash-only, privacy-first, verifiable proof model."/>
+  <meta name="description" content="How TimeProofs supports auditability and provenance across EU AI Act, GDPR, Data Act, eIDAS2, and related frameworks — with a hash-only, privacy-first proof-file model (.tproof.json) and verifiable signatures."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -34,7 +34,7 @@
 
   <!-- Social -->
   <meta property="og:title" content="Regulations & Compliance — TimeProofs"/>
-  <meta property="og:description" content="Privacy-first. Hash-only. Public verification. A pragmatic map of how TimeProofs supports compliance evidence."/>
+  <meta property="og:description" content="Privacy-first. Hash-only. Proof-file verification (.tproof.json). A pragmatic map of how verifiable evidence supports audits."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/regulations.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
@@ -44,7 +44,7 @@
   <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Regulations & Compliance — TimeProofs"/>
-  <meta name="twitter:description" content="EU AI Act, GDPR, Data Act, eIDAS2 — and how verifiable proofs support auditability."/>
+  <meta name="twitter:description" content="EU AI Act, GDPR, Data Act, eIDAS2 — and how proof files (.tproof.json) support audit evidence."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- AI Trust -->
@@ -114,7 +114,7 @@ upgrade-insecure-requests">
     "@type":"TechArticle",
     "headline":"TimeProofs Regulations & Compliance",
     "name":"TimeProofs Regulations & Compliance",
-    "description":"How TimeProofs supports auditability and provenance across EU AI Act, GDPR, Data Act, eIDAS2, and related frameworks — with a hash-only, privacy-first, verifiable proof model.",
+    "description":"How TimeProofs supports auditability and provenance across EU AI Act, GDPR, Data Act, eIDAS2, and related frameworks — with a hash-only, privacy-first proof-file model (.tproof.json) and verifiable signatures.",
     "about":[
       "EU AI Act",
       "GDPR",
@@ -152,7 +152,7 @@ upgrade-insecure-requests">
         "name":"Is a file timestamp enough to prove when something existed?",
         "acceptedAnswer":{
           "@type":"Answer",
-          "text":"No. File dates are local and can be changed. TimeProofs provides a verifiable proof for a specific hash at a specific time."
+          "text":"No. File dates are local and can be changed. TimeProofs provides a verifiable proof file (.tproof.json) for a specific hash at a specific time."
         }
       },
       {
@@ -417,7 +417,7 @@ upgrade-insecure-requests">
     <!-- HERO -->
     <section class="hero" role="region" aria-labelledby="page-title">
       <div class="icon" aria-hidden="true">⚖️</div>
-      <p class="badge">Status: Public Beta v0.2 · API · Privacy-first · No blockchain</p>
+      <p class="badge">Status: Public Beta v0.2 · ProofSpec v0.1 · API v0.2 · Privacy-first · No blockchain</p>
       <h1 id="page-title">Regulations & Compliance</h1>
       <p class="lead">
         TimeProofs helps produce verifiable evidence about <em>when</em> a specific artifact existed and whether it changed — without storing the artifact.
@@ -458,7 +458,7 @@ upgrade-insecure-requests">
     <section class="card" id="why">
       <h2>2. Why proofs matter</h2>
       <p><strong>A file date is not a proof.</strong> File timestamps are local, editable, and not independently verifiable.</p>
-      <p><strong>A TimeProofs proof is verifiable.</strong> Anyone can re-hash the exact artifact and verify a proof that it existed at a specific time.</p>
+      <p><strong>A TimeProofs proof is verifiable.</strong> Anyone can re-hash the exact artifact and verify a proof file (<code>.tproof.json</code>) that it existed at a specific time.</p>
       <p class="muted">This supports auditability: integrity over time, reproducibility, and evidence trails without sharing the underlying data.</p>
     </section>
 
@@ -467,7 +467,7 @@ upgrade-insecure-requests">
       <ul>
         <li><strong>Minimization:</strong> only hashes are required.</li>
         <li><strong>Purpose limitation:</strong> proofs exist to verify integrity and existence time.</li>
-        <li><strong>Security:</strong> signed proofs and public verification reduce ambiguity without exposing content.</li>
+        <li><strong>Security:</strong> signed proofs and verifiable signatures reduce ambiguity without exposing content.</li>
       </ul>
       <p class="muted">Even if TimeProofs is hash-only, organizations remain responsible for how they link proofs to individuals or records in their own systems.</p>
     </section>
@@ -493,7 +493,7 @@ upgrade-insecure-requests">
             <tr>
               <td>Reproducibility</td>
               <td>Anchor prompts, model versions, releases</td>
-              <td>Proof URLs in audit logs</td>
+              <td>Proof file references in audit logs</td>
             </tr>
           </tbody>
         </table>
@@ -528,8 +528,8 @@ upgrade-insecure-requests">
         <li>Hash the artifact locally (file, dataset, model card, output).</li>
         <li>Create a proof via API (or generate a portable bundle in v0.2 flows).</li>
         <li>Store the proof next to the artifact (<code>.tproof.json</code>).</li>
-        <li>Reference the proof hash/URL in your audit log or ticket.</li>
-        <li>Verify later by re-hashing the artifact and checking public verification.</li>
+        <li>Reference the proof file (or its hash) in your audit log or ticket.</li>
+        <li>Verify later by re-hashing the artifact and checking the proof file signature (offline or via stateless verification).</li>
       </ol>
       <p class="muted">See: <a href="/docs.html">API Docs</a> and <a href="/verify.html">Create/Verify</a>.</p>
     </section>
@@ -543,7 +543,7 @@ upgrade-insecure-requests">
       <p>TimeProofs provides technical, verifiable evidence. It is not legal advice and not a qualified trust service.</p>
 
       <h3>Is a file timestamp enough?</h3>
-      <p>No. File dates are editable and not independently verifiable. Proofs can be verified by third parties.</p>
+      <p>No. File dates are editable and not independently verifiable. Proof files can be verified by third parties.</p>
 
       <h3>Can I use it for AI audits?</h3>
       <p>Yes, as an evidence layer for integrity and timeline (outputs, datasets, configs, releases).</p>
@@ -601,38 +601,67 @@ upgrade-insecure-requests">
     onScroll();
     window.addEventListener('scroll', onScroll, { passive:true });
 
-    // Burger
+    // Burger + focus trap (mobile)
     const burger=document.getElementById('tp-burger');
     const nav=document.getElementById('tp-nav');
+    let lastFocus=null;
+
+    function getFocusable(container){
+      return Array.from(container.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )).filter(el => !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length));
+    }
     function openMenu(){
+      lastFocus=document.activeElement;
       nav.setAttribute('data-state','open');
       burger.setAttribute('aria-expanded','true');
       document.body.style.overflow='hidden';
+      const focusables=getFocusable(nav);
+      if(focusables[0]) focusables[0].focus({preventScroll:true});
     }
     function closeMenu(){
       nav.setAttribute('data-state','closed');
       burger.setAttribute('aria-expanded','false');
       document.body.style.overflow='';
+      if(lastFocus && typeof lastFocus.focus==="function") lastFocus.focus({preventScroll:true});
+      lastFocus=null;
     }
     function toggleMenu(){
       (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu();
     }
     burger && burger.addEventListener('click', toggleMenu);
+
     document.addEventListener('click',(e)=>{
       if(window.matchMedia('(min-width: 900px)').matches) return;
       if(!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu();
     },{ passive:true });
+
     document.addEventListener('keydown',(e)=>{
-      if(e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu();
-    },{ passive:true });
+      if(window.matchMedia('(min-width: 900px)').matches) return;
+      if(e.key==='Escape' && nav.getAttribute('data-state')==='open'){
+        e.preventDefault(); closeMenu(); return;
+      }
+      if(e.key==='Tab' && nav.getAttribute('data-state')==='open'){
+        const focusables=getFocusable(nav);
+        if(!focusables.length) return;
+        const first=focusables[0];
+        const last=focusables[focusables.length-1];
+        if(e.shiftKey && document.activeElement===first){
+          e.preventDefault(); last.focus();
+        }else if(!e.shiftKey && document.activeElement===last){
+          e.preventDefault(); first.focus();
+        }
+      }
+    });
+
     window.addEventListener('resize',()=>{
       if(window.matchMedia('(min-width: 900px)').matches) closeMenu();
     },{ passive:true });
 
-    // Auto aria-current
+    // Auto aria-current (do not mark .nav-cta)
     (function(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
-      document.querySelectorAll('header nav a, footer .links a').forEach(a=>{
+      document.querySelectorAll('header nav a:not(.nav-cta), footer .links a').forEach(a=>{
         const path=new URL(a.getAttribute('href'), location.origin).pathname;
         if(path===here) a.setAttribute('aria-current','page');
       });
