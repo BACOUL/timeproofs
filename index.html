@@ -460,7 +460,7 @@ upgrade-insecure-requests">
             <span class="pill" style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid #214a57;background:#0d2330;color:#9beefb;border-radius:999px;font-size:.8rem">DEMO</span>
             <strong>Quick Check</strong>
           </div>
-          <span class="mini">Local hash → API timestamp → JSON result (v0.1 + v0.2 compatible)</span>
+          <span class="mini">Local hash → API timestamp → Signed .tproof.json bundle</span>
         </div>
 
         <div class="row" style="margin-top:6px">
@@ -470,7 +470,6 @@ upgrade-insecure-requests">
             aria-describedby="demo-help"
             inputmode="latin"
             spellcheck="false" autocapitalize="off" autocomplete="off"
-            pattern="^([a-f0-9]{64})$"
           />
           <button type="button" id="btn-one" class="btn" aria-label="Run demo">Run demo</button>
         </div>
@@ -630,10 +629,11 @@ curl -X POST "https://api.timeproofs.io/api/timestamp" \
 # Store it next to your artifact.
 
 # 3) Verify the bundle (stateless v0.2)
+# Paste the full JSON bundle returned by /api/timestamp into "bundle".
 curl -X POST "https://api.timeproofs.io/api/verify" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
-  -d '{ "bundle": &lt;paste_bundle_json_here&gt; }'</code></pre>
+  -d '{"bundle":{"hash":"&lt;your_sha256&gt;","timestamp":"&lt;paste_full_tproof_json_here&gt;"}}'</code></pre>
         </article>
 
         <article class="card">
@@ -738,8 +738,8 @@ const check = await res.json();</code></pre>
         </article>
         <article class="card">
           <h3>NIS2 / Supply chain</h3>
-          <p>Release integrity for CI/CD: binaries, models, and artifacts carry proof links and verifiable hashes.</p>
-          <p><span class="tag">Proof links</span> · <span class="tag">Edge-native</span></p>
+          <p>Release integrity for CI/CD: binaries, models, and artifacts carry proof bundles and verifiable hashes.</p>
+          <p><span class="tag">Proof bundles</span> · <span class="tag">Edge-native</span></p>
         </article>
       </div>
       <p style="text-align:center; margin-top:10px">
@@ -1156,4 +1156,4 @@ verify: POST /api/verify (bundle) or offline`;
   <!-- Toast container -->
   <div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
-</html>
+  </html>
