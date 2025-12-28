@@ -96,14 +96,14 @@
   <!-- Security meta -->
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
 
-  <!-- CSP v0.2 (SW + Analytics + API + fallback) -->
+  <!-- CSP v0.2 (SW + Analytics + API) -->
   <meta http-equiv="Content-Security-Policy" content="
-default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
+default-src 'self';
 worker-src 'self' blob:;
 img-src 'self' data: https:;
 style-src 'self' 'unsafe-inline';
-script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
-connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io https://static.cloudflareinsights.com;
+script-src 'self' 'nonce-TP-2025' https://plausible.io;
+connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io;
 font-src 'self' https: data:;
 object-src 'none';
 base-uri 'self';
@@ -166,6 +166,8 @@ upgrade-insecure-requests">
       color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none;
       text-underline-offset:3px;
     }
+    .tp-nav a:hover{ color:var(--accent); text-decoration:underline; }
+    .tp-nav a[aria-current="page"]{ color:var(--accent); text-decoration:underline; }
 
     /* Header CTA */
     .cta-header{
@@ -334,25 +336,6 @@ upgrade-insecure-requests">
     .copy-btn .ok{ display:none }
     .copy-btn.copied .ok{ display:inline }
     .copy-btn.copied .txt{ display:none }
-
-    /* Nav/Footer alignment */
-    #tp-nav a,
-    footer .links a{
-      color:var(--text);
-      font-weight:600;
-      text-decoration:none;
-      text-underline-offset:3px;
-    }
-    #tp-nav a:hover,
-    footer .links a:hover{
-      color:var(--accent);
-      text-decoration:underline;
-    }
-    #tp-nav a[aria-current="page"],
-    footer .links a[aria-current="page"]{
-      color:var(--accent);
-      text-decoration:underline;
-    }
   </style>
   <noscript><style>.reveal{opacity:1 !important; transform:none !important}</style></noscript>
 </head>
@@ -402,7 +385,7 @@ upgrade-insecure-requests">
 
       <div class="micro" aria-label="Key performance and privacy claims">
         <span class="chip">⏱ &lt;100 ms edge</span>
-        <span class="chip">🛡 Hash-only, no PII</span>
+        <span class="chip">🛡 Hash-only input, no PII</span>
         <span class="chip">📦 Signed .tproof.json bundles</span>
         <span class="chip">📴 Offline verification</span>
       </div>
@@ -418,7 +401,7 @@ upgrade-insecure-requests">
             <span class="pill" style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid #214a57;background:#0d2330;color:#9beefb;border-radius:999px;font-size:.8rem">DEMO</span>
             <strong>Quick Check</strong>
           </div>
-          <span class="mini">Local hash → API timestamp → Signed .tproof.json bundle</span>
+          <span class="mini">Local hash → API timestamp → Verify bundle</span>
         </div>
 
         <div class="row" style="margin-top:6px">
@@ -433,14 +416,15 @@ upgrade-insecure-requests">
         </div>
 
         <p id="demo-help" class="mini">
-          Demo only. Your input is <strong>hashed locally</strong>, then we call the public API once and show the JSON response.
-          Verification in v0.2 requires uploading the <code>.tproof.json</code> bundle (POST <code>/api/verify</code>) or verifying offline with a ProofSpec-compliant client.
+          Demo only. Your input is <strong>hashed locally</strong>, then we call the public API and verify the returned bundle.
+          v0.2 verification is stateless: it requires the <code>.tproof.json</code> bundle (POST <code>/api/verify</code>) or offline verification with a ProofSpec-compliant client.
         </p>
 
         <div class="btn-row" role="group" aria-label="Demo examples">
           <button type="button" class="btn small" id="ex-text">Example text</button>
           <button type="button" class="btn small" id="ex-hash">Example hash</button>
           <button type="button" class="btn small" id="ex-clear">Clear</button>
+          <button type="button" class="btn small" id="ex-download" title="Download the latest bundle">Download .tproof.json</button>
         </div>
 
         <div id="one-summary" class="kv" role="region" aria-live="polite"></div>
@@ -471,7 +455,7 @@ upgrade-insecure-requests">
         <article class="card">
           <h3>Stateless proof layer</h3>
           <p>The API does not store proof state. Each response is a self-contained <code>.tproof.json</code> bundle with what’s needed for independent verification.</p>
-          <p><span class="tag">Hash-only</span> <span class="tag">Stateless API</span></p>
+          <p><span class="tag">Hash-only input</span> <span class="tag">Stateless API</span></p>
         </article>
         <article class="card">
           <h3>Signed .tproof.json bundles</h3>
@@ -581,18 +565,13 @@ curl -X POST "https://api.timeproofs.io/api/timestamp" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{"hash":"&lt;your_sha256_64hex&gt;","type":"event"}' \
-  &gt; proof.tproof.json
+  -o proof.tproof.json
 
-# 3) Verify (stateless v0.2): upload the bundle (POST /api/verify)
+# 3) Verify (stateless v0.2): POST the bundle JSON
 curl -X POST "https://api.timeproofs.io/api/verify" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
-  --data-binary @proof.tproof.json
-
-# Alternative (same endpoint): wrap it as {"bundle": ...}
-# curl -X POST "https://api.timeproofs.io/api/verify" \
-#   -H "Content-Type: application/json" \
-#   -d '{"bundle":'"$(cat proof.tproof.json)"'}'</code></pre>
+  -d @proof.tproof.json</code></pre>
           <p class="mini" style="margin-top:8px">
             Note: v0.2 verification is stateless. A hash alone cannot be verified without storage — you verify the <code>.tproof.json</code> bundle.
           </p>
@@ -733,7 +712,7 @@ const check = await res.json();</code></pre>
         </article>
       </div>
       <p style="text-align:center; margin-top:10px; color:#9fb3c9;">
-        TimeProofs focuses on <strong>proof of existence</strong>. These protocols stay independent — but their hashes can be timestamped and verified as part of your trust stack.
+        TimeProofs focuses on <strong>proof of existence</strong>. These protocols stay independent — but their hashes can be timestamped and verified as part of your trust stack (when present at the origin).
       </p>
     </section>
 
@@ -875,47 +854,80 @@ const check = await res.json();</code></pre>
       el.className='status '+(ok?'ok':'err');
       el.textContent=(ok?'✓ ':'✗ ')+text;
     }
+    function pickBundle(obj){
+      return (obj && typeof obj==='object' && obj.bundle && typeof obj.bundle==='object') ? obj.bundle : obj;
+    }
+    function downloadJson(filename, obj){
+      const blob = new Blob([JSON.stringify(obj, null, 2)], { type:'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(()=>URL.revokeObjectURL(a.href), 500);
+    }
 
     // ---- ONE-BAR DEMO ----
     (function(){
-      async function createProof(hash){
-        async function call(api){
-          try{
-            const r = await fetch(`${api}/api/timestamp`, {
-              method:'POST',
-              headers:{ 'Content-Type':'application/json', 'Accept':'application/json' },
-              body: JSON.stringify({ hash, type: 'event' }),
-              mode:'cors',
-              credentials:'omit',
-              cache:'no-store'
-            });
+      let lastBundle = null;
 
-            const ct = r.headers.get('Content-Type') || '';
-            let data;
-            if (ct.includes('application/json')) data = await r.json();
-            else data = { ok:r.ok, status:r.status, body: await r.text() };
-
-            data._api    = api;
-            data._status = r.status;
-            return data;
-          }catch{
-            return null;
-          }
-        }
-        return (await call(API1)) || (await call(API2));
+      async function callJson(api, path, payload){
+        const r = await fetch(`${api}${path}`, {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json', 'Accept':'application/json' },
+          body: JSON.stringify(payload),
+          mode:'cors',
+          credentials:'omit',
+          cache:'no-store'
+        });
+        const ct = r.headers.get('Content-Type') || '';
+        let data;
+        if (ct.includes('application/json')) data = await r.json();
+        else data = { ok:r.ok, status:r.status, body: await r.text() };
+        data._api = api;
+        data._status = r.status;
+        return { r, data };
       }
 
-      function renderSummary(target, hash, res){
-        const iso = (res && res.timestamp && res.timestamp.issuedAt) ? res.timestamp.issuedAt : null;
-        const from = res._api || 'TimeProofs API';
+      async function createProof(hash){
+        try{
+          const a = await callJson(API1, '/api/timestamp', { hash, type:'event' });
+          if (a.r.ok) return a.data;
+        }catch{}
+        try{
+          const b = await callJson(API2, '/api/timestamp', { hash, type:'event' });
+          if (b.r.ok) return b.data;
+        }catch{}
+        return null;
+      }
+
+      async function verifyBundle(bundle){
+        // send as {bundle: ...} to match Worker accepted formats
+        try{
+          const a = await callJson(API1, '/api/verify', { bundle });
+          return a.data;
+        }catch{}
+        try{
+          const b = await callJson(API2, '/api/verify', { bundle });
+          return b.data;
+        }catch{}
+        return null;
+      }
+
+      function renderSummary(target, hash, bundle, verifyRes){
+        const iso = (bundle && bundle.timestamp && bundle.timestamp.issuedAt) ? bundle.timestamp.issuedAt : null;
+        const from = (bundle && bundle._api) ? bundle._api : 'TimeProofs API';
+        const valid = (verifyRes && typeof verifyRes.valid === 'boolean') ? verifyRes.valid : null;
 
         target.textContent =
 `// Demo summary
 input: ${hash}
-action: timestamp (create proof)
+step1: timestamp (POST /api/timestamp)
 api: ${from}
 timestamp: ${iso ? iso + ' (Paris: ' + fmtParis(iso) + ')' : '—'}
-verify: upload .tproof.json (POST /api/verify) or offline`;
+step2: verify bundle (POST /api/verify)
+result: ${valid===null ? '—' : (valid ? 'VALID ✓' : 'INVALID ✗')}`;
       }
 
       async function runDemo(){
@@ -927,6 +939,7 @@ verify: upload .tproof.json (POST /api/verify) or offline`;
         out.textContent='';
         sum.textContent='';
         stat.hidden=true;
+        lastBundle = null;
 
         if (!input.trim()){
           showStatus(stat,false,'Enter text or a 64-hex hash.');
@@ -941,12 +954,26 @@ verify: upload .tproof.json (POST /api/verify) or offline`;
           catch{ showStatus(stat,false,'Hashing failed.'); return; }
         }
 
-        const res = await createProof(hash);
-        if (!res){ showStatus(stat,false,'Network or CORS error'); return; }
+        const tsRes = await createProof(hash);
+        if (!tsRes){ showStatus(stat,false,'Timestamp failed (network/CORS).'); return; }
 
-        renderSummary(sum, hash, res);
-        out.textContent = `// Raw JSON (.tproof.json)\n${JSON.stringify(res, null, 2)}`;
-        showStatus(stat, true, 'Proof created (demo).');
+        const bundle = pickBundle(tsRes);
+        lastBundle = bundle;
+
+        const verRes = await verifyBundle(bundle);
+        if (!verRes){ showStatus(stat,false,'Verify failed (network/CORS).'); return; }
+
+        renderSummary(sum, hash, tsRes, verRes);
+
+        out.textContent =
+`// Raw JSON (.tproof.json) from timestamp
+${JSON.stringify(tsRes, null, 2)}
+
+\n// Verify response
+${JSON.stringify(verRes, null, 2)}`;
+
+        if (verRes && verRes.valid === true) showStatus(stat, true, 'Bundle verified (VALID).');
+        else showStatus(stat, false, 'Bundle verification returned INVALID.');
       }
 
       $('btn-one')?.addEventListener('click', runDemo);
@@ -967,7 +994,12 @@ verify: upload .tproof.json (POST /api/verify) or offline`;
         $('one-summary').textContent = '';
         $('out-one').textContent = '';
         $('status-one').hidden = true;
+        lastBundle = null;
         $('in-one').focus();
+      });
+      $('ex-download')?.addEventListener('click', ()=>{
+        if(!lastBundle){ return; }
+        downloadJson('proof.tproof.json', lastBundle);
       });
 
       window.__autoFillDemoWithHash = function(h){
@@ -1071,4 +1103,4 @@ verify: upload .tproof.json (POST /api/verify) or offline`;
   <!-- Toast container -->
   <div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
-                                                                                                                                                                                                 </html>
+    </html>
