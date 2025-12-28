@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="dark light"/>
   <title>About — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="Mission, values, governance, and transparency behind TimeProofs — the open, privacy-first standard for digital proof of existence, with signed .tproof.json bundles and offline verification."/>
+  <meta name="description" content="Mission, values, governance, and transparency behind TimeProofs — the open, privacy-first standard for digital proof of existence and integrity, with signed .tproof.json bundles and offline verification."/>
   <meta name="keywords" content="TimeProofs,about,mission,values,governance,transparency,proof of existence,timestamp API,ProofSpec,.tproof.json,offline verification,privacy-first"/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
@@ -351,7 +351,13 @@ upgrade-insecure-requests">
       <div class="label">Status: Public Beta v0.2 · ProofSpec v0.1 · API v0.2 · Privacy-first · No blockchain</div>
       <h1 id="hero-title" class="title">About TimeProofs</h1>
       <p class="subtitle">
-        TimeProofs answers a simple question: <strong>when did this data exist, and has it changed?</strong> You hash locally, receive a signed <code>.tproof.json</code> proof, and anyone can verify it — without seeing your data.
+        TimeProofs answers a simple question: <strong>when did this data exist, and has it changed?</strong>
+        You hash locally, receive a signed <code>.tproof.json</code> bundle, and anyone can verify it <strong>by uploading the bundle (online) or offline</strong> — without seeing your data.
+      </p>
+
+      <!-- Micro-block: v0.2 verification clarity -->
+      <p style="margin:6px 0 0; color:#9fb3c9; text-align:center; max-width:920px">
+        Verify online: <code>POST /api/verify</code> (<strong>bundle required</strong>) · Verify offline: ProofSpec-compliant verifier · A hash alone cannot be verified in stateless v0.2.
       </p>
 
       <div class="cta-wrap" role="group" aria-label="Primary actions">
@@ -360,9 +366,9 @@ upgrade-insecure-requests">
       </div>
 
       <div class="micro" aria-label="Key principles">
-        <span class="chip">🛡 Hash-only, no PII</span>
+        <span class="chip">🛡 Hash leaves the device</span>
         <span class="chip">🔎 Open specification</span>
-        <span class="chip">📦 Signed .tproof.json</span>
+        <span class="chip">📦 Signed .tproof.json bundle</span>
         <span class="chip">📴 Offline verification</span>
       </div>
     </section>
@@ -391,12 +397,12 @@ upgrade-insecure-requests">
       <div class="grid three">
         <article class="card">
           <h3>Privacy-first</h3>
-          <p>Only the hash is processed. Originals never upload and are not required to verify proofs.</p>
-          <p><span class="tag">Hash-only</span> <span class="tag">No content storage</span></p>
+          <p>Only the hash leaves the device. Originals never upload. Verification is <strong>bundle-first</strong> (online or offline).</p>
+          <p><span class="tag">Hash-only input</span> <span class="tag">No content storage</span></p>
         </article>
         <article class="card">
           <h3>Open verification</h3>
-          <p>Anyone can verify a proof using the public endpoint (proof bundle) or offline verification.</p>
+          <p>Anyone can verify using <strong>POST /api/verify (bundle required)</strong>, or verify offline with a ProofSpec-compliant verifier.</p>
           <p><span class="tag">Public verify</span> <span class="tag">Offline</span></p>
         </article>
         <article class="card">
@@ -413,7 +419,7 @@ upgrade-insecure-requests">
       <div class="grid two" style="margin-top:12px">
         <article class="card">
           <h3>Reference implementation</h3>
-          <p>This website and the public API are a reference implementation of <strong>ProofSpec</strong>.</p>
+          <p>This website documents <strong>ProofSpec</strong>. The public API is the reference implementation (v0.2 stateless).</p>
           <p style="margin-top:.4em"><a href="/proofspec.html">Protocol →</a> · <a href="/docs.html">API Docs →</a></p>
         </article>
         <article class="card">
@@ -442,8 +448,9 @@ upgrade-insecure-requests">
           <h3>It does</h3>
           <ul style="margin:.25em 0 .4em; padding-left:1.1rem;">
             <li>Timestamp a hash and return a signed <code>.tproof.json</code> proof bundle.</li>
-            <li>Enable public verification via <code>POST /api/verify</code> (bundle required).</li>
+            <li>Enable public verification via <code>POST /api/verify</code> (<strong>bundle required</strong>).</li>
             <li>Enable offline verification with a ProofSpec-compliant verifier.</li>
+            <li><strong>Stateless v0.2:</strong> a hash alone cannot be verified without the bundle.</li>
           </ul>
           <p><span class="tag">Signed proof</span> <span class="tag">Verifiable</span></p>
         </article>
@@ -466,6 +473,7 @@ upgrade-insecure-requests">
         <article class="card">
           <h3>General inquiries</h3>
           <p>Email: <a href="mailto:contact@timeproofs.io">contact@timeproofs.io</a></p>
+          <p style="color:#9fb3c9; font-size:.95rem">Email is for human support; the API itself is stateless and does not collect content.</p>
           <p style="color:#9fb3c9; font-size:.95rem">For security issues, use the policy referenced in <code>security.txt</code>.</p>
         </article>
         <article class="card">
@@ -588,4 +596,4 @@ upgrade-insecure-requests">
     }
   </script>
 </body>
-</html>
+  </html>
