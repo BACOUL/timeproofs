@@ -75,7 +75,7 @@ upgrade-insecure-requests">
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
   <!-- JSON-LD Org + Site + TechArticle -->
-  <script type="application/ld+json">
+  <script type="application/ld+json" nonce="TP-2025">
   {
     "@context":"https://schema.org",
     "@type":"Organization",
@@ -93,7 +93,7 @@ upgrade-insecure-requests">
     "sameAs":[
       "https://x.com/timeproofs",
       "https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2",
-      "https://www.linkedin.com/in/jeason-bacoul-667938281?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+      "https://www.linkedin.com/in/jeason-bacoul-667938281/"
     ],
     "contactPoint":[{
       "@type":"ContactPoint",
@@ -103,16 +103,16 @@ upgrade-insecure-requests">
     }]
   }
   </script>
-  <script type="application/ld+json">
+  <script type="application/ld+json" nonce="TP-2025">
   {
     "@context":"https://schema.org",
     "@type":"WebSite",
     "name":"TimeProofs",
     "url":"https://timeproofs.io/",
-    "dateModified":"2025-12-28"
+    "dateModified":"2025-12-29"
   }
   </script>
-  <script type="application/ld+json">
+  <script type="application/ld+json" nonce="TP-2025">
   {
     "@context":"https://schema.org",
     "@type":"TechArticle",
@@ -190,14 +190,14 @@ upgrade-insecure-requests">
     }
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
 
-    /* Nav: standard rules (no #tp-nav targeting) */
     .tp-nav a{
-      color:var(--text);
+      color:#cfefff;
       font-weight:700;
       margin-left:18px;
       padding:10px 0;
       display:inline-block;
       text-underline-offset:3px;
+      text-decoration:none;
     }
     .tp-nav a:hover{ color:var(--accent); text-decoration:underline }
     .tp-nav a[aria-current="page"]{ color:#9beefb }
@@ -263,7 +263,7 @@ upgrade-insecure-requests">
       display:flex; flex-wrap:wrap; gap:12px;
       margin:14px auto 0; padding:12px 0 14px;
       max-width:1100px; border-bottom:1px solid var(--line);
-      align-items:center;
+      align-items:center; justify-content:center;
     }
     .toc-label{ font-size:.9rem; color:#9fb3c9; margin-right:4px; }
     nav.toc a{
@@ -321,7 +321,7 @@ upgrade-insecure-requests">
       text-align:center;
       background:#0b1020;
     }
-    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
+    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0; flex-wrap:wrap }
     footer .badge{
       display:inline-flex; align-items:center; gap:6px;
       padding:6px 10px; border:1px solid var(--line); border-radius:999px;
@@ -336,7 +336,7 @@ upgrade-insecure-requests">
     footer .links a:hover{ color:var(--accent); text-decoration:underline }
     footer .links a[aria-current="page"]{ color:var(--accent); text-decoration:underline }
 
-    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
+    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px; flex-wrap:wrap }
     .social a{
       display:inline-flex; width:40px; height:40px;
       border:1px solid var(--line); border-radius:12px;
@@ -392,7 +392,7 @@ upgrade-insecure-requests">
       <p class="lead">Open, normative specification to prove when data existed and that it has not changed. Hash locally, receive a signed proof, verify later — without revealing your data.</p>
     </section>
 
-    <!-- TOC -->
+    <!-- TOC (keep this block identical across pages you standardize) -->
     <nav class="toc" aria-label="Contents">
       <span class="toc-label">On this page</span>
       <a href="#overview">Overview</a>
@@ -406,7 +406,7 @@ upgrade-insecure-requests">
       <a href="#schema">JSON schema</a>
       <a href="#vectors">Test vectors</a>
       <a href="#verification">Verification</a>
-      <a href="#bundle">TimeProofs v0.2 proof (.tproof.json)</a>
+      <a href="#bundle">.tproof.json bundle</a>
       <a href="#mapping">Mapping</a>
       <a href="#reserved">Reserved fields</a>
       <a href="#errors">Errors</a>
@@ -427,7 +427,7 @@ upgrade-insecure-requests">
       <h3>ProofSpec v0.2 vs TimeProofs v0.2</h3>
       <ul>
         <li><strong>ProofSpec</strong> defines the proof structure, canonical message rules, verification behaviour, and error semantics.</li>
-        <li><strong>TimeProofs API v0.2</strong> is a stateless reference implementation: timestamp returns a portable proof bundle; verification is cryptographic and requires the bundle (POST). No server-side storage.</li>
+        <li><strong>TimeProofs API v0.2</strong> is a stateless reference implementation: timestamp returns a portable proof file; verification is cryptographic and requires the full proof (POST). No server-side storage.</li>
       </ul>
 
       <h3>File date ≠ proof</h3>
@@ -464,8 +464,8 @@ upgrade-insecure-requests">
       <h2>Conformance</h2>
       <p>The following roles are defined:</p>
       <ul>
-        <li><strong>Issuer</strong>: a system that accepts a hash and returns a signed proof bundle.</li>
-        <li><strong>Verifier</strong>: a system that checks a proof bundle and returns a validation result.</li>
+        <li><strong>Issuer</strong>: a system that accepts a hash and returns a signed proof file.</li>
+        <li><strong>Verifier</strong>: a system that checks a proof file and returns a validation result.</li>
         <li><strong>Client</strong>: any caller (app, backend, CLI, agent) that interacts with an issuer or verifier.</li>
       </ul>
 
@@ -474,7 +474,7 @@ upgrade-insecure-requests">
         <li>MUST only accept canonical hashes and MUST NOT require original content.</li>
         <li>MUST produce proof objects that satisfy the <a href="#schema">JSON schema</a> and <a href="#datamodel">data model</a>.</li>
         <li>MUST sign a deterministic canonical message that binds the hash and the issuance timestamp.</li>
-        <li>MUST include a stable <code>keyId</code> (kid) identifying the signing key.</li>
+        <li>MUST include a stable <code>keyId</code> identifying the signing key.</li>
       </ul>
 
       <p>A <strong>ProofSpec-compliant Verifier</strong>:</p>
@@ -588,7 +588,7 @@ async function verifyEd25519({ publicKeySpkiB64, canonical, signatureHex }){
       <ul>
         <li><code>hash.value</code> MUST be a 64-character lowercase hex string.</li>
         <li><code>timestamp.issuedAt</code> MUST be a valid ISO 8601 UTC timestamp and SHOULD NOT be in the future beyond a reasonable tolerance.</li>
-        <li><code>canonical</code> MUST exactly match the signing rules (or be reconstructed deterministically when absent by strict policy).</li>
+        <li><code>canonical</code> MUST exactly match the signing rules.</li>
         <li><code>proof.algo</code> MUST be <code>Ed25519</code> for this version.</li>
         <li><code>proof.signature</code> MUST be lowercase hex in the reference implementation.</li>
         <li>The verifier MUST verify the Ed25519 signature over <code>canonical</code>.</li>
@@ -651,7 +651,7 @@ async function verifyEd25519({ publicKeySpkiB64, canonical, signatureHex }){
 
     <section class="card" id="verification">
       <h2>Verification</h2>
-      <p>In stateless mode, verification requires the full <code>.tproof.json</code> proof bundle (a hash alone is not sufficient).</p>
+      <p>In stateless mode, verification requires the full <code>.tproof.json</code> proof file (a hash alone is not sufficient).</p>
 <pre><code>POST /api/verify
 Content-Type: application/json
 
@@ -664,7 +664,7 @@ Content-Type: application/json
     </section>
 
     <section class="card" id="bundle">
-      <h2>TimeProofs v0.2 proof (.tproof.json)</h2>
+      <h2>.tproof.json bundle</h2>
       <p>This portable proof is designed for offline inspection and long-term storage. It MUST NOT contain original content, secrets, or personal data.</p>
 
 <pre><code>{
@@ -783,14 +783,14 @@ Content-Type: application/json
       <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
       </a>
-      <a href="https://www.linkedin.com/in/jeason-bacoul-667938281?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noopener" aria-label="Jeason Bacoul on LinkedIn">
+      <a href="https://www.linkedin.com/in/jeason-bacoul-667938281/" target="_blank" rel="noopener" aria-label="Jeason Bacoul on LinkedIn">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg>
       </a>
     </div>
   </footer>
 
   <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
+  <script type="application/ld+json" nonce="TP-2025">
   {
     "@context":"https://schema.org",
     "@type":"FAQPage",
@@ -816,7 +816,7 @@ Content-Type: application/json
         "name":"Can I verify with only a hash?",
         "acceptedAnswer":{
           "@type":"Answer",
-          "text":"In stateless mode, verification requires the full .tproof.json proof bundle. A hash alone cannot be verified without server-side storage."
+          "text":"In stateless mode, verification requires the full .tproof.json proof file. A hash alone cannot be verified without server-side storage."
         }
       }
     ]
@@ -934,4 +934,4 @@ Content-Type: application/json
   })();
   </script>
 </body>
-                                                                                             </html>
+</html>
