@@ -1,6 +1,6 @@
 # api-v02/wrangler.toml
-# Cloudflare Worker config for TimeProofs API v0.2
-# This does NOT replace the v0.1 worker currently in production.
+# Cloudflare Worker config for TimeProofs API v0.2 (stateless, Ed25519-only)
+# v0.2 is isolated from v0.1 and runs on workers.dev.
 
 name = "timeproofs-api-v02"
 main = "worker.js"
@@ -13,7 +13,17 @@ account_id = "99b6f748770d2257d27409b27b9e1bea"
 workers_dev = true
 
 [vars]
-# TimeProofs v0.2 reuses the same server HMAC secret as v0.1.
-# DO NOT write the secret here.
-# Set it using:
-#   wrangler secret put HMAC_SECRET
+# Public metadata only (no secrets here)
+TIMEPROOFS_VERSION = "timeproofs-0.2"
+TIMEPROOFS_MODE = "stateless"
+TIMEPROOFS_PROOF = "ed25519-only"
+TIMEPROOFS_ISSUER = "https://api.timeproofs.io"
+TIMEPROOFS_KEY_ID = "tp-v0-2-main"
+
+# Secrets (set via wrangler; never commit them):
+#   wrangler secret put ED25519_SECRET
+#   wrangler secret put ED25519_PUBLIC
+#
+# Notes:
+# - ED25519_SECRET must be PKCS8 DER (base64)
+# - ED25519_PUBLIC must be SPKI DER (base64)
