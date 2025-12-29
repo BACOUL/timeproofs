@@ -5,6 +5,8 @@
 const VERSION = "timeproofs-0.2";
 const MODE = "stateless";
 const PROOF_MODE = "ed25519-only";
+
+// Canonical issuer (authority), independent from hosting domain
 const ISSUER = "https://api.timeproofs.io";
 const KEY_ID = "tp-v0-2-main";
 
@@ -84,7 +86,7 @@ async function handleTimestamp(req) {
   }
 
   const issuedAt = new Date().toISOString();
-  const issuer = ISSUER;
+  const issuer = ISSUER; // frozen issuer authority
   const nonce = randomId();
 
   // Canonical payload (MUST be verified as-is)
@@ -103,12 +105,15 @@ async function handleTimestamp(req) {
   try {
     signatureHex = await ed25519SignPkcs8B64(privB64, canonical);
   } catch (_) {
+    // Most common: invalid key format or import failure
     return j(
       {
         ok: false,
         error: "ed25519_sign_failed",
         code: 2104,
-        message: "Failed to sign payload.",
+        message: "Failed to sign payload (check ED25519_SECRET PKCS8 base64).",
+        version: VERSION,
+        keyId: KEY_ID,
       },
       500
     );
@@ -116,6 +121,7 @@ async function handleTimestamp(req) {
 
   return j(
     {
+      ok: true,
       version: VERSION,
       canonical, // verify can use this exact string
       hash: { algorithm: "SHA-256", value: hash },
@@ -184,18 +190,53 @@ async function handleVerify(req) {
     );
   }
 
-  // Prefer canonical from bundle. Fallback for older bundles.
+  // Enforce frozen issuer authority (prevents multi-issuer confusion)
+  if (issuer !== ISSUER) {
+    return j(
+      {
+        ok: false,
+        valid: false,
+        error: "invalid_issuer",
+        code: 2205,
+        message: `Untrusted issuer. Expected ${ISSUER}.`,
+        version: VERSION,
+        keyId: KEY_ID,
+      },
+      400
+    );
+  }
+
+  // Canonical expected from declared fields
+  const expectedCanonical = `${hashHex}|${issuedAt}|${issuer}|${nonce}`;
+
+  // Prefer canonical from bundle but enforce consistency
   const canonical =
     typeof bundle.canonical === "string" && bundle.canonical.trim()
       ? bundle.canonical.trim()
-      : `${hashHex}|${issuedAt}|${issuer}|${nonce}`;
+      : expectedCanonical;
+
+  if (canonical !== expectedCanonical) {
+    return j(
+      {
+        ok: false,
+        valid: false,
+        error: "canonical_mismatch",
+        code: 2208,
+        message: "Bundle canonical does not match declared fields (hash/issuedAt/issuer/nonce).",
+        version: VERSION,
+        keyId: KEY_ID,
+        expected: expectedCanonical,
+      },
+      400
+    );
+  }
 
   const proof = bundle.proof || {};
   const providedSig =
     typeof proof.signature === "string" ? proof.signature.toLowerCase().trim() : null;
 
   if (!providedSig) {
-    return j({ ok: false, error: "missing_signature", code: 2206 }, 400);
+    return j({ ok: false, valid: false, error: "missing_signature", code: 2206 }, 400);
   }
 
   // ---- KEY FREEZE: ONLY trust server key (ED25519_PUBLIC), ignore bundle publicKey ----
@@ -203,25 +244,43 @@ async function handleVerify(req) {
     typeof ED25519_PUBLIC === "string" && ED25519_PUBLIC.trim() ? ED25519_PUBLIC.trim() : null;
 
   if (!trustedPubB64) {
-    return j({ ok: false, error: "missing_ed25519_public", code: 2207 }, 500);
+    return j({ ok: false, valid: false, error: "missing_ed25519_public", code: 2207 }, 500);
   }
 
-  let edCheck = { available: true, valid: false };
+  let verified = false;
   try {
-    const ok = await ed25519VerifySpkiB64(trustedPubB64, canonical, providedSig);
-    edCheck = { available: true, valid: ok };
+    verified = await ed25519VerifySpkiB64(trustedPubB64, canonical, providedSig);
   } catch {
-    edCheck = { available: true, valid: false };
+    verified = false;
+  }
+
+  if (!verified) {
+    return j(
+      {
+        ok: false,
+        valid: false,
+        error: "invalid_signature",
+        code: 2209,
+        version: VERSION,
+        keyId: KEY_ID,
+        hash: { algorithm: "SHA-256", value: hashHex },
+        timestamp: { issuedAt, issuer, nonce },
+        checks: { ed25519: { available: true, valid: false } },
+        note: "Stateless cryptographic verification (no storage).",
+      },
+      200
+    );
   }
 
   return j(
     {
       ok: true,
-      valid: edCheck.valid === true,
+      valid: true,
       version: VERSION,
+      keyId: KEY_ID,
       hash: { algorithm: "SHA-256", value: hashHex },
       timestamp: { issuedAt, issuer, nonce },
-      checks: { ed25519: edCheck },
+      checks: { ed25519: { available: true, valid: true } },
       note: "Stateless cryptographic verification (no storage).",
     },
     200
@@ -238,7 +297,8 @@ function j(obj, status = 200) {
       "cache-control": "no-store",
       "access-control-allow-origin": "*",
       "access-control-allow-methods": "GET,POST,OPTIONS",
-      "access-control-allow-headers": "content-type,authorization",
+      // v0.2 does not require auth; keep headers minimal
+      "access-control-allow-headers": "content-type",
     },
   });
 }
@@ -249,7 +309,7 @@ function preflight() {
     headers: {
       "access-control-allow-origin": "*",
       "access-control-allow-methods": "GET,POST,OPTIONS",
-      "access-control-allow-headers": "content-type,authorization",
+      "access-control-allow-headers": "content-type",
       "access-control-max-age": "86400",
     },
   });
