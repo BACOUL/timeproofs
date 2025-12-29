@@ -1,22 +1,12 @@
 /* sdk/timeproofs-v02.js
- * TimeProofs SDK — v0.2
- * Minimal, dependency-free. Browser + Node 18+ (global fetch).
+ * TimeProofs SDK — v0.2 (stateless, Ed25519-only)
+ * Minimal, dependency-free. Browser + Node 18+ (global fetch + WebCrypto).
  *
  * Principles (v0.2):
- * - Never send raw data, only hashes.
- * - Server is stateless: /api/timestamp returns a TimestampResponse.
- * - Bundles (.tproof.json) are built and verified client-side.
- *
- * Typical usage:
- *   const tp = TimeProofsV02.createClient({ apiKey: 'tp_test_xxx' });
- *   const hash = await tp.hashText('hello');
- *   const ts   = await tp.timestamp(hash);
- *   const bundle = tp.createBundle({
- *     hash: ts.hash,
- *     timestamp: ts.timestamp,
- *     proof: ts.proof,
- *     meta: { type: 'document' }
- *   });
+ * - Never send raw data, only SHA-256 hashes.
+ * - Server stores nothing.
+ * - /api/timestamp returns a portable .tproof.json bundle structure.
+ * - Verification is offline and cryptographic (Ed25519).
  */
 
 (function (root, factory) {
@@ -25,14 +15,16 @@
   } else if (typeof define === "function" && define.amd) {
     define([], factory);
   } else {
-    // Global for browser usage in v0.2
     root.TimeProofsV02 = factory();
   }
 })(typeof self !== "undefined" ? self : this, function () {
   "use strict";
 
+  // Canonical authority (must match worker enforcement)
+  const CANONICAL_ISSUER = "https://api.timeproofs.io";
+
   // Base URL of the v0.2 stateless API
-  const DEFAULT_BASE = "https://api.timeproofs.io";
+  const DEFAULT_BASE = CANONICAL_ISSUER;
 
   const isBrowser =
     typeof window !== "undefined" && typeof window.document !== "undefined";
@@ -51,12 +43,40 @@
       .join("");
   }
 
+  function hexToBytes(hex) {
+    const h = String(hex || "").toLowerCase().trim();
+    if (!/^[a-f0-9]+$/.test(h) || h.length % 2 !== 0) return null;
+    const out = new Uint8Array(h.length / 2);
+    for (let i = 0; i < out.length; i++) out[i] = parseInt(h.slice(i * 2, i * 2 + 2), 16);
+    return out;
+  }
+
+  // ---------- Base64 helpers ----------
+
+  function b64ToBytes(b64) {
+    const s = String(b64 || "").trim();
+    if (!s) return null;
+
+    // Browser (atob)
+    if (typeof atob === "function") {
+      const bin = atob(s);
+      const out = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+      return out;
+    }
+
+    // Node (Buffer)
+    if (typeof Buffer !== "undefined") {
+      return new Uint8Array(Buffer.from(s, "base64"));
+    }
+
+    return null;
+  }
+
   // ---------- SHA-256 helpers ----------
 
   async function sha256HexBrowser(buffer) {
-    if (!hasSubtle) {
-      throw new Error("Web Crypto API (crypto.subtle) not available");
-    }
+    if (!hasSubtle) throw new Error("Web Crypto API (crypto.subtle) not available");
     const digest = await crypto.subtle.digest("SHA-256", buffer);
     return toHex(new Uint8Array(digest));
   }
@@ -65,69 +85,47 @@
     if (typeof require === "undefined") {
       throw new Error("Node-style require() not available in this environment");
     }
-    const crypto = require("crypto");
-    return crypto.createHash("sha256").update(buffer).digest("hex");
+    const c = require("crypto");
+    return c.createHash("sha256").update(buffer).digest("hex");
   }
 
   // ---------- Public hashing API ----------
 
   async function hashText(text) {
-    if (typeof text !== "string") {
-      throw new Error("hashText expects a string");
-    }
-    if (!textEncoder) {
-      throw new Error("TextEncoder not available");
-    }
+    if (typeof text !== "string") throw new Error("hashText expects a string");
+    if (!textEncoder) throw new Error("TextEncoder not available");
     const bytes = textEncoder.encode(text);
-    if (isBrowser) {
-      return sha256HexBrowser(bytes);
-    }
+    if (isBrowser) return sha256HexBrowser(bytes);
     return sha256HexNode(Buffer.from(bytes));
   }
 
   async function hashBytes(uint8) {
-    if (!(uint8 instanceof Uint8Array)) {
-      throw new Error("hashBytes expects a Uint8Array");
-    }
-    if (isBrowser) {
-      return sha256HexBrowser(uint8);
-    }
+    if (!(uint8 instanceof Uint8Array)) throw new Error("hashBytes expects a Uint8Array");
+    if (isBrowser) return sha256HexBrowser(uint8);
     return sha256HexNode(Buffer.from(uint8));
   }
 
   async function hashFile(file) {
-    if (!isBrowser) {
-      throw new Error("hashFile is only available in browsers");
-    }
-    if (!(file instanceof Blob)) {
-      throw new Error("hashFile expects a File/Blob");
-    }
+    if (!isBrowser) throw new Error("hashFile is only available in browsers");
+    if (!(file instanceof Blob)) throw new Error("hashFile expects a File/Blob");
     const buffer = await file.arrayBuffer();
     return sha256HexBrowser(buffer);
   }
 
-  // ---------- HTTP helper ----------
+  // ---------- HTTP helper (no auth in v0.2 stateless preview) ----------
 
-  async function doRequest(baseUrl, apiKey, path, options) {
+  async function doRequest(baseUrl, path, options) {
     const base = (baseUrl || DEFAULT_BASE).replace(/\/+$/, "");
     const url = base + path;
 
     const headers = Object.assign(
-      {
-        "Content-Type": "application/json",
-      },
+      { "Content-Type": "application/json" },
       (options && options.headers) || {}
     );
 
-    if (apiKey) {
-      headers["Authorization"] = "Bearer " + apiKey;
-    }
-
     const res = await fetch(
       url,
-      Object.assign({}, options || {}, {
-        headers,
-      })
+      Object.assign({}, options || {}, { headers })
     );
 
     const text = await res.text();
@@ -135,7 +133,7 @@
     try {
       json = text ? JSON.parse(text) : null;
     } catch (_) {
-      // keep text in json = null
+      json = null;
     }
 
     if (!res.ok) {
@@ -151,196 +149,140 @@
     return json;
   }
 
-  // ---------- timestamp() helper (v0.2 stateless API) ----------
+  // ---------- timestamp() (v0.2 stateless API) ----------
 
-  /**
-   * Request a timestamp for a given SHA-256 hash (hex).
-   *
-   * This calls POST /api/timestamp on the v0.2 stateless API and returns
-   * the TimestampResponse:
-   *
-   * {
-   *   hash:      { algorithm: "SHA-256", value: "<hex>" },
-   *   timestamp: { issuedAt: "<ISO-UTC>", issuer: "<url>", nonce: "<id>" },
-   *   proof:     {
-   *     algo: "HMAC-SHA256+Ed25519",
-   *     hmac: "<hex|null>",
-   *     signature: null,
-   *     publicKey: null,
-   *     keyId: "tp-v0-2-main"
-   *   }
-   * }
-   *
-   * @param {string} hash - 64-char lowercase hex SHA-256 digest
-   * @param {object} [options]
-   * @param {string} [options.baseUrl] - API base URL (default: https://api.timeproofs.io)
-   * @param {string} [options.apiKey]  - optional API key
-   * @returns {Promise<object>} TimestampResponse
-   */
   async function timestamp(hash, options) {
     const cfg = options || {};
     const baseUrl = cfg.baseUrl || DEFAULT_BASE;
-    const apiKey = cfg.apiKey || null;
 
     const h = (hash || "").toLowerCase().trim();
-    if (!/^[0-9a-f]{64}$/.test(h)) {
-      throw new Error("timestamp requires a 64-character hex SHA-256 hash");
+    if (!/^[a-f0-9]{64}$/.test(h)) {
+      throw new Error("timestamp requires a 64-character lowercase hex SHA-256 hash");
     }
 
-    const body = { hash: h };
-
-    return doRequest(baseUrl, apiKey, "/api/timestamp", {
+    return doRequest(baseUrl, "/api/timestamp", {
       method: "POST",
-      body: JSON.stringify(body),
+      body: JSON.stringify({ hash: h }),
     });
   }
 
-  // ---------- Bundle helpers (v0.2) ----------
+  // ---------- Canonical helpers ----------
 
-  /**
-   * Build a TimeProofs v0.2 Proof Bundle (.tproof.json) from:
-   * - hash:      { algorithm: "SHA-256", value: "<hex>" }
-   * - timestamp: { issuedAt: "<ISO-UTC>", issuer: "<url>", nonce?: "<id>" }
-   * - proof:     { algo: "HMAC-SHA256+Ed25519", hmac, signature, publicKey, keyId }
-   * - meta?:     local-only metadata (never sent to the server)
-   * - userSign?: optional local signature structure (not validated here)
-   */
+  function buildCanonical(hashHex, issuedAt, issuer, nonce) {
+    return `${hashHex}|${issuedAt}|${issuer}|${nonce}`;
+  }
+
+  function normalizeHashObject(h) {
+    if (!h || typeof h !== "object") throw new Error("hash object is required");
+    if (h.algorithm !== "SHA-256") throw new Error('hash.algorithm must be "SHA-256"');
+    const v = String(h.value || "").toLowerCase().trim();
+    if (!/^[a-f0-9]{64}$/.test(v)) throw new Error("hash.value must be 64-char lowercase hex");
+    return { algorithm: "SHA-256", value: v };
+  }
+
+  // ---------- Bundle creation (v0.2) ----------
+
   function createBundle(input) {
     if (!input || typeof input !== "object") {
       throw new Error("createBundle expects an object argument");
     }
 
-    const hash = input.hash;
-    const timestampObj = input.timestamp;
+    const version = input.version || "timeproofs-0.2";
+    if (version !== "timeproofs-0.2") {
+      throw new Error('version must be "timeproofs-0.2"');
+    }
+
+    const hash = normalizeHashObject(input.hash);
+
+    const ts = input.timestamp;
+    if (!ts || typeof ts !== "object") throw new Error("timestamp object is required");
+
+    const issuedAt = typeof ts.issuedAt === "string" ? ts.issuedAt : "";
+    const issuer = typeof ts.issuer === "string" ? ts.issuer : "";
+    const nonce = typeof ts.nonce === "string" ? ts.nonce : "";
+
+    if (!issuedAt) throw new Error("timestamp.issuedAt is required");
+    if (!issuer) throw new Error("timestamp.issuer is required");
+    if (!nonce) throw new Error("timestamp.nonce is required");
+
+    // v0.2 frozen issuer
+    if (issuer !== CANONICAL_ISSUER) {
+      throw new Error("timestamp.issuer must be " + CANONICAL_ISSUER);
+    }
+
+    const expectedCanonical = buildCanonical(hash.value, issuedAt, issuer, nonce);
+    const canonical = typeof input.canonical === "string" && input.canonical.trim()
+      ? input.canonical.trim()
+      : expectedCanonical;
+
+    if (canonical !== expectedCanonical) {
+      throw new Error("canonical mismatch (must match hash|issuedAt|issuer|nonce)");
+    }
+
     const proof = input.proof;
-    const meta = input.meta;
-    const userSign = input.userSign;
+    if (!proof || typeof proof !== "object") throw new Error("proof object is required");
 
-    // Basic shape checks for hash
-    if (!hash || typeof hash !== "object") {
-      throw new Error("createBundle requires a 'hash' object");
-    }
-    if (hash.algorithm !== "SHA-256") {
-      throw new Error("createBundle requires hash.algorithm === 'SHA-256'");
-    }
-    if (
-      typeof hash.value !== "string" ||
-      !/^[0-9a-f]{64}$/i.test(hash.value.trim())
-    ) {
-      throw new Error(
-        "createBundle requires hash.value to be a 64-char hex string"
-      );
+    const algo = String(proof.algo || "").trim();
+    if (algo !== "Ed25519") throw new Error('proof.algo must be "Ed25519"');
+
+    const signature = String(proof.signature || "").toLowerCase().trim();
+    if (!signature || !/^[a-f0-9]+$/.test(signature)) {
+      throw new Error("proof.signature must be hex (Ed25519 signature)");
     }
 
-    // Basic shape checks for timestamp
-    if (!timestampObj || typeof timestampObj !== "object") {
-      throw new Error("createBundle requires a 'timestamp' object");
-    }
-    if (typeof timestampObj.issuedAt !== "string") {
-      throw new Error("createBundle requires timestamp.issuedAt (string)");
-    }
-    if (typeof timestampObj.issuer !== "string") {
-      throw new Error("createBundle requires timestamp.issuer (string)");
-    }
+    const keyId = typeof proof.keyId === "string" ? proof.keyId : "";
+    if (!keyId) throw new Error("proof.keyId is required");
 
-    // Basic shape checks for proof
-    if (!proof || typeof proof !== "object") {
-      throw new Error("createBundle requires a 'proof' object");
-    }
-    if (proof.algo !== "HMAC-SHA256+Ed25519") {
-      throw new Error(
-        "createBundle requires proof.algo === 'HMAC-SHA256+Ed25519'"
-      );
-    }
-    if (typeof proof.keyId !== "string") {
-      throw new Error("createBundle requires proof.keyId (string)");
-    }
-
-    // meta is optional, but if provided must be an object
-    let metaClean;
-    if (typeof meta === "undefined" || meta === null) {
-      metaClean = undefined;
-    } else if (typeof meta === "object") {
-      metaClean = meta;
-    } else {
-      throw new Error("createBundle expects meta to be an object if provided");
-    }
-
-    // userSign is optional, pass-through (validation can be added later)
-    let userSignClean;
-    if (typeof userSign === "undefined" || userSign === null) {
-      userSignClean = undefined;
-    } else if (typeof userSign === "object") {
-      userSignClean = userSign;
-    } else {
-      throw new Error(
-        "createBundle expects userSign to be an object if provided"
-      );
-    }
-
-    const bundle = {
+    const out = {
       version: "timeproofs-0.2",
-      hash: {
-        algorithm: "SHA-256",
-        value: hash.value.toLowerCase().trim(),
-      },
-      timestamp: {
-        issuedAt: timestampObj.issuedAt,
-        issuer: timestampObj.issuer,
-      },
+      canonical,
+      hash,
+      timestamp: { issuedAt, issuer, nonce },
       proof: {
-        algo: proof.algo,
-        hmac: typeof proof.hmac === "string" ? proof.hmac : null,
-        signature:
-          typeof proof.signature === "string" || proof.signature === null
-            ? proof.signature
-            : null,
-        publicKey:
-          typeof proof.publicKey === "string" || proof.publicKey === null
-            ? proof.publicKey
-            : null,
-        keyId: proof.keyId,
+        algo: "Ed25519",
+        signature,
+        keyId,
       },
     };
 
-    if (typeof timestampObj.nonce === "string") {
-      bundle.timestamp.nonce = timestampObj.nonce;
+    // optional informational publicKey
+    if (typeof proof.publicKey === "string" && proof.publicKey.trim()) {
+      out.proof.publicKey = proof.publicKey.trim();
     }
 
-    if (typeof metaClean !== "undefined") {
-      bundle.meta = metaClean;
+    // optional meta (local-only, not trusted by API)
+    if (typeof input.meta === "object" && input.meta !== null) {
+      out.meta = input.meta;
     }
 
-    if (typeof userSignClean !== "undefined") {
-      bundle.userSign = userSignClean;
-    }
-
-    return bundle;
+    return out;
   }
 
-  /**
-   * verifyBundle(bundle, options?) – v0.2 minimal offline verification.
-   *
-   * options:
-   *   - expectedIssuer?: string
-   *   - file?: Uint8Array | Blob (browser) — optional, to recompute hash
-   *
-   * Result:
-   *   {
-   *     valid: boolean,
-   *     schemaValid: boolean,
-   *     proofValid: boolean | null,
-   *     hashMatches: boolean | null,
-   *     userSignValid: boolean | null,
-   *     errors: string[]
-   *   }
-   *
-   * For now:
-   *   - schemaValid: validations de structure de base
-   *   - proofValid: null (Ed25519 non implémenté)
-   *   - hashMatches: true/false/null selon la présence du fichier
-   *   - userSignValid: null (non vérifié)
-   */
+  // ---------- Ed25519 verify (offline) ----------
+
+  async function ed25519VerifySpkiB64(publicSpkiB64, msg, signatureHex) {
+    if (!hasSubtle) throw new Error("Web Crypto API (crypto.subtle) not available");
+
+    const pubBytes = b64ToBytes(publicSpkiB64);
+    if (!pubBytes) throw new Error("Invalid public key (base64 SPKI expected)");
+
+    const sigBytes = hexToBytes(signatureHex);
+    if (!sigBytes) return false;
+
+    const key = await crypto.subtle.importKey(
+      "spki",
+      pubBytes,
+      { name: "Ed25519" },
+      false,
+      ["verify"]
+    );
+
+    const data = new TextEncoder().encode(msg);
+    return crypto.subtle.verify("Ed25519", key, sigBytes, data);
+  }
+
+  // ---------- verifyBundle() (offline v0.2) ----------
+
   async function verifyBundle(bundle, options) {
     const opts = options || {};
     const errors = [];
@@ -349,70 +291,63 @@
       return {
         valid: false,
         schemaValid: false,
-        proofValid: null,
+        canonicalValid: false,
+        proofValid: false,
         hashMatches: null,
-        userSignValid: null,
         errors: ["bundle must be an object"],
       };
     }
 
-    // --- Basic schema checks ---
+    // Schema-ish checks
+    if (bundle.version !== "timeproofs-0.2") errors.push('version must be "timeproofs-0.2"');
 
-    if (bundle.version !== "timeproofs-0.2") {
-      errors.push('version must be "timeproofs-0.2"');
+    let hashObj;
+    try {
+      hashObj = normalizeHashObject(bundle.hash);
+    } catch (e) {
+      errors.push(e && e.message ? e.message : "invalid hash object");
+      hashObj = null;
     }
 
-    const hash = bundle.hash;
-    if (!hash || typeof hash !== "object") {
-      errors.push("hash object is required");
-    } else {
-      if (hash.algorithm !== "SHA-256") {
-        errors.push('hash.algorithm must be "SHA-256"');
-      }
-      const v = (hash.value || "").toString().trim();
-      if (!/^[0-9a-f]{64}$/i.test(v)) {
-        errors.push("hash.value must be 64-char hex");
-      }
+    const ts = bundle.timestamp;
+    const issuedAt = ts && typeof ts.issuedAt === "string" ? ts.issuedAt : "";
+    const issuer = ts && typeof ts.issuer === "string" ? ts.issuer : "";
+    const nonce = ts && typeof ts.nonce === "string" ? ts.nonce : "";
+
+    if (!issuedAt) errors.push("timestamp.issuedAt is required");
+    if (!issuer) errors.push("timestamp.issuer is required");
+    if (!nonce) errors.push("timestamp.nonce is required");
+
+    const expectedIssuer = opts.expectedIssuer || CANONICAL_ISSUER;
+    if (issuer && issuer !== expectedIssuer) {
+      errors.push("timestamp.issuer must be " + expectedIssuer);
     }
 
-    const timestampObj = bundle.timestamp;
-    if (!timestampObj || typeof timestampObj !== "object") {
-      errors.push("timestamp object is required");
-    } else {
-      if (typeof timestampObj.issuedAt !== "string") {
-        errors.push("timestamp.issuedAt must be a string");
-      }
-      if (typeof timestampObj.issuer !== "string") {
-        errors.push("timestamp.issuer must be a string");
-      }
-      if (opts.expectedIssuer && timestampObj.issuer !== opts.expectedIssuer) {
-        errors.push(
-          "timestamp.issuer does not match expectedIssuer (" +
-            opts.expectedIssuer +
-            ")"
-        );
-      }
+    const canonical = typeof bundle.canonical === "string" ? bundle.canonical.trim() : "";
+    if (!canonical) errors.push("canonical is required");
+
+    let canonicalValid = false;
+    if (hashObj && issuedAt && issuer && nonce && canonical) {
+      const expectedCanonical = buildCanonical(hashObj.value, issuedAt, issuer, nonce);
+      canonicalValid = canonical === expectedCanonical;
+      if (!canonicalValid) errors.push("canonical mismatch (must match hash|issuedAt|issuer|nonce)");
     }
 
     const proof = bundle.proof;
-    if (!proof || typeof proof !== "object") {
-      errors.push("proof object is required");
-    } else {
-      if (proof.algo !== "HMAC-SHA256+Ed25519") {
-        errors.push('proof.algo must be "HMAC-SHA256+Ed25519"');
-      }
-      if (typeof proof.keyId !== "string") {
-        errors.push("proof.keyId must be a string");
-      }
-    }
+    const algo = proof && typeof proof.algo === "string" ? proof.algo.trim() : "";
+    const sig = proof && typeof proof.signature === "string" ? proof.signature.toLowerCase().trim() : "";
+    const keyId = proof && typeof proof.keyId === "string" ? proof.keyId : "";
+
+    if (algo !== "Ed25519") errors.push('proof.algo must be "Ed25519"');
+    if (!sig || !/^[a-f0-9]+$/.test(sig)) errors.push("proof.signature must be hex");
+    if (!keyId) errors.push("proof.keyId is required");
 
     const schemaValid = errors.length === 0;
 
-    // --- Hash verification if file is provided ---
-
+    // Optional file hash verification
     let hashMatches = null;
-    if (opts.file && bundle.hash && bundle.hash.value) {
-      const targetHex = bundle.hash.value.toLowerCase().trim();
+    if (opts.file && hashObj && hashObj.value) {
+      const targetHex = hashObj.value.toLowerCase().trim();
       try {
         let computed = null;
 
@@ -421,72 +356,68 @@
         } else if (isBrowser && opts.file instanceof Blob) {
           computed = await hashFile(opts.file);
         } else {
-          errors.push(
-            "file must be Uint8Array or Blob (in browser) when provided"
-          );
+          throw new Error("file must be Uint8Array or Blob (in browser)");
         }
 
-        if (computed) {
-          hashMatches = computed.toLowerCase() === targetHex;
-          if (!hashMatches) {
-            errors.push("file hash does not match bundle.hash.value");
-          }
-        }
+        hashMatches = computed.toLowerCase() === targetHex;
+        if (!hashMatches) errors.push("file hash does not match bundle.hash.value");
       } catch (e) {
-        errors.push(
-          "error while computing hash for provided file: " +
-            (e && e.message ? e.message : String(e))
-        );
+        errors.push("error while computing hash: " + (e && e.message ? e.message : String(e)));
       }
     }
 
-    // --- Proof and userSign (not implemented yet) ---
+    // Ed25519 verification (offline)
+    let proofValid = false;
+    try {
+      const trustedPublicKeyB64 =
+        typeof opts.trustedPublicKey === "string" && opts.trustedPublicKey.trim()
+          ? opts.trustedPublicKey.trim()
+          : (proof && typeof proof.publicKey === "string" ? proof.publicKey.trim() : "");
 
-    const proofValid = null; // Ed25519 verification to be implemented later
-    const userSignValid = null; // local signature not verified yet
+      if (!trustedPublicKeyB64) {
+        throw new Error("trustedPublicKey is required for offline verification");
+      }
+
+      if (!canonicalValid) {
+        proofValid = false;
+      } else {
+        proofValid = await ed25519VerifySpkiB64(trustedPublicKeyB64, canonical, sig);
+      }
+
+      if (!proofValid) errors.push("invalid signature");
+    } catch (e) {
+      errors.push(e && e.message ? e.message : "signature verification error");
+      proofValid = false;
+    }
 
     const valid =
-      schemaValid && hashMatches !== false && proofValid !== false;
+      schemaValid &&
+      canonicalValid &&
+      proofValid === true &&
+      hashMatches !== false;
 
     return {
       valid,
       schemaValid,
+      canonicalValid,
       proofValid,
       hashMatches,
-      userSignValid,
       errors,
     };
   }
 
   // ---------- Client factory ----------
 
-  /**
-   * createClient({ baseUrl?, apiKey? })
-   *
-   * Example:
-   *   const tp = TimeProofsV02.createClient({ apiKey: "tp_test_xxx" });
-   *   const hash = await tp.hashText("hello");
-   *   const ts   = await tp.timestamp(hash);
-   *   const bundle = tp.createBundle({
-   *     hash: ts.hash,
-   *     timestamp: ts.timestamp,
-   *     proof: ts.proof
-   *   });
-   */
   function createClient(config) {
     const cfg = config || {};
     const baseUrl = cfg.baseUrl || DEFAULT_BASE;
-    const apiKey = cfg.apiKey || null;
 
     return {
       hashText,
       hashBytes,
       hashFile,
-      /**
-       * timestamp(hash: string): Promise<TimestampResponse>
-       */
       async timestamp(hash) {
-        return timestamp(hash, { baseUrl, apiKey });
+        return timestamp(hash, { baseUrl });
       },
       createBundle,
       verifyBundle,
