@@ -154,9 +154,7 @@ upgrade-insecure-requests">
       scroll-behavior:smooth;
       scroll-padding-top:120px;
     }
-    @media (min-width:900px){
-      html{ scroll-padding-top:104px }
-    }
+    @media (min-width:900px){ html{ scroll-padding-top:104px } }
 
     body{
       margin:0; color:var(--text);
@@ -174,22 +172,35 @@ upgrade-insecure-requests">
     @media (min-width:900px){ [id]{ scroll-margin-top:104px } }
 
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
-    .skip:focus{ position:fixed; left:12px; top:12px; width:auto; height:auto; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
+    .skip:focus{
+      position:fixed; left:12px; top:12px; width:auto; height:auto; padding:8px 12px;
+      background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000
+    }
 
-    /* Header (styles align to index) */
+    /* Header */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
       display:flex; align-items:center; gap:12px; padding:0 16px; transition:background .25s var(--e)
     }
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
-    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
+    .tp-brand{
+      display:flex; align-items:center; gap:10px; color:var(--text);
+      font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto
+    }
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
 
+    /* Nav: standard rules (no #tp-nav targeting) */
     .tp-nav a{
-      color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none;
+      color:var(--text);
+      font-weight:700;
+      margin-left:18px;
+      padding:10px 0;
+      display:inline-block;
       text-underline-offset:3px;
     }
+    .tp-nav a:hover{ color:var(--accent); text-decoration:underline }
+    .tp-nav a[aria-current="page"]{ color:#9beefb }
 
     .cta-header{
       display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
@@ -221,14 +232,8 @@ upgrade-insecure-requests">
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
       .nav-cta{
-        display:block;
-        margin-top:6px;
-        padding:12px;
-        text-align:center;
-        border-radius:12px;
-        background:var(--accent);
-        color:#06202a;
-        font-weight:800
+        display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px;
+        background:var(--accent); color:#06202a; font-weight:800
       }
     }
 
@@ -260,10 +265,7 @@ upgrade-insecure-requests">
       max-width:1100px; border-bottom:1px solid var(--line);
       align-items:center;
     }
-    .toc-label{
-      font-size:.9rem; color:#9fb3c9;
-      margin-right:4px;
-    }
+    .toc-label{ font-size:.9rem; color:#9fb3c9; margin-right:4px; }
     nav.toc a{
       display:inline-block; background:#0d2330; border:1px solid #214a57;
       padding:8px 12px; border-radius:999px;
@@ -272,15 +274,9 @@ upgrade-insecure-requests">
     nav.toc a:hover{ text-decoration:underline }
 
     .toc-top{
-      display:inline-block;
-      margin:8px auto 0;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid #214a57;
-      background:#0d2330;
-      color:#bff1ff;
-      font-size:.85rem;
-      text-decoration:none;
+      display:inline-block; margin:8px auto 0; padding:6px 10px; border-radius:999px;
+      border:1px solid #214a57; background:#0d2330; color:#bff1ff;
+      font-size:.85rem; text-decoration:none;
     }
     .toc-top:hover{ text-decoration:underline }
 
@@ -295,20 +291,13 @@ upgrade-insecure-requests">
 
     .table-wrap{ overflow:auto; border:1px solid var(--line); border-radius:12px }
     table{ border-collapse:collapse; min-width:720px; width:100% }
-    th,td{
-      border-bottom:1px solid #203047; padding:10px 12px; text-align:left;
-      white-space:nowrap;
-    }
-    .table-wrap th:nth-child(3),
-    .table-wrap td:nth-child(3){
-      white-space:normal;
-    }
+    th,td{ border-bottom:1px solid #203047; padding:10px 12px; text-align:left; white-space:nowrap; }
+    .table-wrap th:nth-child(3), .table-wrap td:nth-child(3){ white-space:normal; }
 
     pre,code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
     pre{
-      max-width:100%; overflow:auto; padding:12px;
-      border-radius:12px; background:#0b1426; border:1px solid #1f2a44; font-size:.95rem;
-      position:relative;
+      max-width:100%; overflow:auto; padding:12px; border-radius:12px;
+      background:#0b1426; border:1px solid #1f2a44; font-size:.95rem; position:relative;
     }
 
     .copy-btn{
@@ -323,36 +312,41 @@ upgrade-insecure-requests">
     .copy-btn.copied .ok{ display:inline }
     .copy-btn.copied .txt{ display:none }
 
-    /* Footer (styles align to index) */
-    footer{ border-top:1px solid var(--line); margin-top:44px; padding:18px; color:#7c8aa5; text-align:center }
+    /* Footer */
+    footer{
+      border-top:1px solid var(--line);
+      margin-top:44px;
+      padding:18px;
+      color:#7c8aa5;
+      text-align:center;
+      background:#0b1020;
+    }
     footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
-    footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff; text-decoration:none }
-    footer .links a{ font-weight:600; text-underline-offset:3px; }
+    footer .badge{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px; border:1px solid var(--line); border-radius:999px;
+      background:#0d1628; font-size:.9rem; color:#cfefff; text-decoration:none
+    }
+    footer .links a{
+      color:#cfefff;
+      font-weight:600;
+      text-underline-offset:3px;
+      text-decoration:none;
+    }
+    footer .links a:hover{ color:var(--accent); text-decoration:underline }
+    footer .links a[aria-current="page"]{ color:var(--accent); text-decoration:underline }
+
     .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
-    .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; transition:transform .18s var(--e); color:#cfefff }
+    .social a{
+      display:inline-flex; width:40px; height:40px;
+      border:1px solid var(--line); border-radius:12px;
+      align-items:center; justify-content:center;
+      background:#0d1628; transition:transform .18s var(--e); color:#cfefff
+    }
     .social a:hover{ transform:translateY(-2px) }
 
     a:focus-visible, .cta-header:focus-visible, .tp-burger:focus-visible, .copy-btn:focus-visible{
       outline:2px solid #22d3ee; outline-offset:3px; border-radius:12px;
-    }
-
-    /* Nav/Footer alignment (same rules as index) */
-    #tp-nav a,
-    footer .links a{
-      color:var(--text);
-      font-weight:600;
-      text-decoration:none;
-      text-underline-offset:3px;
-    }
-    #tp-nav a:hover,
-    footer .links a:hover{
-      color:var(--accent);
-      text-decoration:underline;
-    }
-    #tp-nav a[aria-current="page"],
-    footer .links a[aria-current="page"]{
-      color:var(--accent);
-      text-decoration:underline;
     }
 
     @media (max-width:899px){
@@ -366,7 +360,7 @@ upgrade-insecure-requests">
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
-  <!-- Header (BIT-À-BIT markup = index) -->
+  <!-- Header -->
   <header class="tp-header" id="hdr" role="banner">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
@@ -384,7 +378,9 @@ upgrade-insecure-requests">
       <a class="nav-cta" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
     </nav>
     <a class="cta-header" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
-    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu"><span aria-hidden="true">☰</span></button>
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu">
+      <span aria-hidden="true">☰</span>
+    </button>
   </header>
 
   <main id="main" class="wrap" role="main" aria-describedby="title">
@@ -760,7 +756,7 @@ Content-Type: application/json
     </section>
   </main>
 
-  <!-- Footer (BIT-À-BIT markup = index) -->
+  <!-- Footer -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
@@ -839,7 +835,7 @@ Content-Type: application/json
     onScroll();
     window.addEventListener('scroll', onScroll, { passive:true });
 
-    // Burger + focus trap (same as verify)
+    // Burger + focus trap
     const burger=document.getElementById('tp-burger');
     const nav=document.getElementById('tp-nav');
     let lastFocus=null;
@@ -864,9 +860,7 @@ Content-Type: application/json
       if(lastFocus && typeof lastFocus.focus==="function") lastFocus.focus({preventScroll:true});
       lastFocus=null;
     }
-    function toggleMenu(){
-      (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu();
-    }
+    function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
     burger && burger.addEventListener('click', toggleMenu);
 
     document.addEventListener('click',(e)=>{
@@ -940,4 +934,4 @@ Content-Type: application/json
   })();
   </script>
 </body>
-    </html>
+                                                                                             </html>
