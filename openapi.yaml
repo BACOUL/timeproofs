@@ -4,21 +4,17 @@ info:
   title: TimeProofs API
   version: v0.2
   description: |
-    TimeProofs is a privacy-first, edge-native API for digital proof of existence.
+    TimeProofs v0.2 is a stateless, cryptographic proof-of-existence API.
 
-    v0.2 introduces a stateless timestamp model:
-    - The server never stores proofs.
-    - You send only SHA-256 hashes.
-    - The API returns a signed timestamp response.
-    - Clients build `.tproof.json` bundles locally and verify offline.
+    The server never stores proofs.
+    Clients submit hashes to receive a signed timestamp.
+    Verification is performed offline using a portable `.tproof.json` bundle.
 
-    This OpenAPI file describes the v0.2 stateless API only.
-
-    Principles:
+    Core principles:
     - Hash locally (SHA-256)
     - Timestamp via API
-    - Verify offline (portable bundles)
-    - No files, no personal data, no blockchain
+    - Verify cryptographically (Ed25519)
+    - No storage, no blockchain, no personal data
 
   contact:
     name: TimeProofs
@@ -30,25 +26,22 @@ info:
     url: https://www.mozilla.org/en-US/MPL/2.0/
 
 servers:
-  - url: https://timeproofs-api-v02.jeason-bacoul.workers.dev
-    description: v0.2 Dev Preview (stateless)
+  - url: https://api.timeproofs.io
+    description: Canonical API endpoint (stateless)
 
 tags:
   - name: Core
-    description: Core timestamp endpoint
-  - name: Utility
-    description: Diagnostic and health endpoints
+    description: Core stateless endpoints
 
 paths:
   /api/health:
     get:
-      summary: Health check (v0.2)
-      description: Returns version, mode, and timestamp.
-      operationId: healthV02
-      tags: [Utility]
+      summary: Health check
+      description: Returns API status and metadata.
+      tags: [Core]
       responses:
         "200":
-          description: API is reachable
+          description: Service is available
           content:
             application/json:
               schema:
@@ -56,21 +49,12 @@ paths:
 
   /api/timestamp:
     post:
-      summary: Create a stateless timestamp proof (v0.2)
+      summary: Create a stateless timestamp proof
       description: |
-        Submit a SHA-256 hash to obtain a stateless timestamp response.
+        Accepts a SHA-256 hash and returns a signed timestamp bundle.
+        No data is stored server-side.
 
-        The server:
-        - validates the hash format
-        - derives a canonical payload (hash | issuedAt | issuer | nonce)
-        - computes an HMAC-SHA256 (if configured)
-        - returns timestamp + proof
-
-        The server stores nothing.
-        Clients must build `.tproof.json` bundles locally.
-      operationId: createTimestampV02
       tags: [Core]
-
       requestBody:
         required: true
         content:
@@ -80,125 +64,80 @@ paths:
 
       responses:
         "200":
-          description: Stateless timestamp response (v0.2)
+          description: Timestamp created
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/TimestampResponseV02"
-
         "400":
-          description: Invalid request body or hash format
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-        "429":
-          description: Rate limit exceeded
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-        "500":
-          description: Internal error
+          description: Invalid input
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
   /api/verify:
-    get:
-      summary: Verify (not implemented in v0.2)
+    post:
+      summary: Verify a TimeProof bundle
       description: |
-        v0.2 performs offline verification only using `.tproof.json` bundles.
-        This endpoint always returns a 501 error.
+        Verifies a `.tproof.json` bundle cryptographically.
+        The server does not store or fetch any data.
 
-        The legacy v0.1 verify endpoint remains active on production (not described here).
-      operationId: verifyV02
+        The issuer must match the canonical TimeProofs authority.
       tags: [Core]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/ProofBundle"
+                - type: object
+                  properties:
+                    bundle:
+                      $ref: "#/components/schemas/ProofBundle"
       responses:
-        "501":
-          description: Not implemented in v0.2
+        "200":
+          description: Verification result
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                $ref: "#/components/schemas/VerifyResponse"
 
 components:
   schemas:
     HealthResponse:
       type: object
-      required: [ok, now, version, mode]
+      required: [ok, now, version, mode, issuer]
       properties:
-        ok:
-          type: boolean
-          example: true
-        now:
-          type: string
-          format: date-time
-        version:
-          type: string
-          example: "timeproofs-0.2"
-        mode:
-          type: string
-          example: "stateless"
-
-    ErrorResponse:
-      type: object
-      required: [ok, error]
-      properties:
-        ok:
-          type: boolean
-          example: false
-        error:
-          type: string
-          example: invalid_hash
-        message:
-          type: string
-          nullable: true
-          example: "hash must be lowercase hex sha256 (64 chars)"
-        code:
-          type: integer
-          nullable: true
-          example: 2102
-        version:
-          type: string
-          nullable: true
-          example: "timeproofs-0.2"
+        ok: { type: boolean }
+        now: { type: string, format: date-time }
+        version: { type: string }
+        mode: { type: string }
+        issuer: { type: string }
 
     TimestampRequestV02:
       type: object
       required: [hash]
-      additionalProperties: false
       properties:
         hash:
           type: string
-          description: SHA-256 hex string (64 lowercase hex).
-          minLength: 64
-          maxLength: 64
           pattern: "^[a-f0-9]{64}$"
-          example: "bbbbee25f8ebb60fa512ad3e02460bd4cc7ec4a41850c5cc8636e67d99f0b3b2"
 
     HashObject:
       type: object
       required: [algorithm, value]
-      additionalProperties: false
       properties:
         algorithm:
           type: string
           example: "SHA-256"
         value:
           type: string
-          minLength: 64
-          maxLength: 64
           pattern: "^[a-f0-9]{64}$"
-          example: "bbbbee25f8ebb60fa512ad3e02460bd4cc7ec4a41850c5cc8636e67d99f0b3b2"
 
     TimestampObject:
       type: object
       required: [issuedAt, issuer, nonce]
-      additionalProperties: false
       properties:
         issuedAt:
           type: string
@@ -208,42 +147,25 @@ components:
           example: "https://api.timeproofs.io"
         nonce:
           type: string
-          description: Server-generated nonce to prevent replay/collision.
-          example: "u4dJ9zQqQm2pXc3m"
 
     ProofObject:
       type: object
-      required: [algo, keyId]
-      additionalProperties: false
+      required: [algo, signature, keyId]
       properties:
         algo:
           type: string
-          example: "HMAC-SHA256"
-        hmac:
-          type: string
-          nullable: true
-          description: Base64-encoded HMAC over canonical payload.
-          example: "mZp8yKcNQk2m9f9l3v2eYwq0cZcZ9rj6uRrKxg0oQp8="
+          example: "Ed25519"
         signature:
           type: string
-          nullable: true
-          description: Reserved for future signature schemes (e.g. Ed25519).
-        publicKey:
-          type: string
-          nullable: true
-          description: Reserved for future signature schemes (e.g. Ed25519).
         keyId:
           type: string
-          example: "tp-v0-2-main"
 
-    TimestampResponseV02:
+    ProofBundle:
       type: object
-      required: [version, hash, timestamp, proof]
-      additionalProperties: false
+      required: [canonical, hash, timestamp, proof]
       properties:
-        version:
+        canonical:
           type: string
-          example: "timeproofs-0.2"
         hash:
           $ref: "#/components/schemas/HashObject"
         timestamp:
@@ -251,7 +173,37 @@ components:
         proof:
           $ref: "#/components/schemas/ProofObject"
 
+    VerifyResponse:
+      type: object
+      required: [ok, valid]
+      properties:
+        ok:
+          type: boolean
+        valid:
+          type: boolean
+        version:
+          type: string
+        hash:
+          $ref: "#/components/schemas/HashObject"
+        timestamp:
+          $ref: "#/components/schemas/TimestampObject"
+        note:
+          type: string
+
+    ErrorResponse:
+      type: object
+      required: [ok, error]
+      properties:
+        ok:
+          type: boolean
+        error:
+          type: string
+        code:
+          type: integer
+        message:
+          type: string
+
 security: []
 externalDocs:
-  description: Full documentation and examples
+  description: Full documentation
   url: https://timeproofs.io/docs.html
