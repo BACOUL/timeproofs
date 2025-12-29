@@ -3,12 +3,18 @@
   "title": "TimeProofs Proof Bundle v0.2",
   "type": "object",
   "additionalProperties": false,
-  "required": ["version", "hash", "timestamp", "proof"],
+  "required": ["version", "canonical", "hash", "timestamp", "proof"],
   "properties": {
     "version": {
       "type": "string",
       "const": "timeproofs-0.2"
     },
+
+    "canonical": {
+      "type": "string",
+      "description": "Canonical string used for signature verification: <hash>|<issuedAt>|<issuer>|<nonce>"
+    },
+
     "hash": {
       "type": "object",
       "required": ["algorithm", "value"],
@@ -20,13 +26,14 @@
         },
         "value": {
           "type": "string",
-          "pattern": "^[0-9a-fA-F]{64}$"
+          "pattern": "^[a-f0-9]{64}$"
         }
       }
     },
+
     "timestamp": {
       "type": "object",
-      "required": ["issuedAt", "issuer"],
+      "required": ["issuedAt", "issuer", "nonce"],
       "additionalProperties": false,
       "properties": {
         "issuedAt": {
@@ -35,89 +42,42 @@
         },
         "issuer": {
           "type": "string",
-          "format": "uri"
+          "const": "https://api.timeproofs.io"
         },
         "nonce": {
           "type": "string"
         }
       }
     },
+
     "proof": {
       "type": "object",
-      "required": ["algo", "keyId"],
+      "required": ["algo", "signature", "keyId"],
       "additionalProperties": false,
       "properties": {
         "algo": {
           "type": "string",
-          "enum": ["HMAC-SHA256+Ed25519"]
-        },
-        "hmac": {
-          "type": ["string", "null"]
+          "enum": ["Ed25519"]
         },
         "signature": {
-          "type": ["string", "null"]
-        },
-        "publicKey": {
-          "type": ["string", "null"]
+          "type": "string",
+          "description": "Hex-encoded Ed25519 signature"
         },
         "keyId": {
-          "type": "string"
+          "type": "string",
+          "example": "tp-v0-2-main"
+        },
+        "publicKey": {
+          "type": "string",
+          "description": "Optional informational public key (ignored during verification)"
         }
       }
     },
+
     "meta": {
       "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": [
-            "document",
-            "image",
-            "video",
-            "code",
-            "dataset",
-            "model",
-            "log",
-            "contract",
-            "release",
-            "config",
-            "archive",
-            "financial-statement",
-            "medical-record",
-            "supply-record",
-            "product-info",
-            "ai-output",
-            "ai-training-set",
-            "ai-prompt",
-            "audit-proof",
-            "evidence"
-          ]
-        },
-        "mime": { "type": "string" },
-        "domain": { "type": "string" },
-        "purpose": { "type": "string" },
-        "createdBy": { "type": "string" },
-        "tool": { "type": "string" },
-        "labels": {
-          "type": "array",
-          "items": { "type": "string" }
-        },
-        "notes": { "type": "string" }
-      }
-    },
-    "userSign": {
-      "type": "object",
-      "required": ["publicKey", "algorithm", "signature"],
-      "additionalProperties": false,
-      "properties": {
-        "publicKey": { "type": "string" },
-        "algorithm": {
-          "type": "string",
-          "enum": ["Ed25519"]
-        },
-        "signature": { "type": "string" }
-      }
+      "description": "Optional metadata. Not interpreted or trusted by the API.",
+      "additionalProperties": true
     }
   }
 }
