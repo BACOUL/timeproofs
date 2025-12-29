@@ -7,8 +7,7 @@
   <meta name="color-scheme" content="dark light"/>
   <title>API Docs — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="TimeProofs API Docs (v0.2). Hash locally, request a signed .tproof.json proof file, and verify it later (stateless) — without uploading your content."/>
-  <meta name="keywords" content="timestamp API,proof of existence,ProofSpec,SHA-256,hashing,verification,stateless API,offline verify,AI provenance,TimeProofs,.tproof.json"/>
+  <meta name="description" content="TimeProofs API Docs (v0.2). Hash locally, request a signed .tproof.json proof file, and verify it later — without uploading your original content."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -25,8 +24,6 @@
   <!-- Perf -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
   <link rel="dns-prefetch" href="//api.timeproofs.io"/>
-  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin/>
-  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev"/>
   <link rel="preconnect" href="https://plausible.io" crossorigin/>
   <link rel="preload" as="image" href="/assets/logo.png" fetchpriority="high"/>
   <link rel="preload" as="image" href="/og.png"/>
@@ -39,7 +36,7 @@
 
   <!-- Social -->
   <meta property="og:title" content="API Docs — TimeProofs"/>
-  <meta property="og:description" content="Hash locally. Request a signed proof file. Verify later (stateless) without uploading your content."/>
+  <meta property="og:description" content="Endpoints, examples, proof format, errors, and best practices for TimeProofs API v0.2."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/docs.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
@@ -57,12 +54,12 @@
 
   <!-- CSP v0.2 -->
   <meta http-equiv="Content-Security-Policy" content="
-default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
+default-src 'self';
 worker-src 'self' blob:;
 img-src 'self' data: https:;
 style-src 'self' 'unsafe-inline';
-script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
-connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io;
+script-src 'self' 'nonce-TP-2025' https://plausible.io;
+connect-src 'self' https://api.timeproofs.io https://plausible.io;
 font-src 'self' https: data:;
 object-src 'none';
 base-uri 'self';
@@ -127,8 +124,8 @@ upgrade-insecure-requests">
       "url":"https://timeproofs.io/"
     },
     "datePublished":"2025-10-22",
-    "dateModified":"2025-12-27",
-    "description":"TimeProofs API documentation: timestamp, proof-file format (.tproof.json), stateless verification, and examples."
+    "dateModified":"2025-12-29",
+    "description":"TimeProofs API documentation: timestamp, proof-file format (.tproof.json), verification, and examples."
   }
   </script>
 
@@ -146,9 +143,8 @@ upgrade-insecure-requests">
       scroll-behavior:smooth;
       scroll-padding-top:120px;
     }
-    @media (min-width:900px){
-      html{ scroll-padding-top:104px }
-    }
+    @media (min-width:900px){ html{ scroll-padding-top:104px } }
+
     body{
       margin:0; color:var(--text);
       font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
@@ -208,7 +204,6 @@ upgrade-insecure-requests">
     }
     .tp-burger span{ font-size:20px; line-height:1 }
 
-    /* Mobile-only nav CTA */
     .nav-cta{ display:none; }
 
     @media (min-width:900px){
@@ -264,8 +259,7 @@ upgrade-insecure-requests">
     .hero-btn{
       display:inline-block; padding:8px 14px; border-radius:10px;
       border:1px solid #22455a; background:#0c1a2e; color:#cfefff;
-      font-weight:700; text-decoration:none;
-      cursor:pointer;
+      font-weight:700; text-decoration:none; cursor:pointer;
     }
     .hero-btn.primary{ background:var(--accent); color:#06202a; border-color:transparent }
     .hero-btn:hover{ text-decoration:underline }
@@ -276,19 +270,14 @@ upgrade-insecure-requests">
       display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:16px;
       margin:16px auto 0; max-width:1100px;
     }
-    @media (max-width:900px){
-      .cards-grid{ grid-template-columns:minmax(0,1fr) }
-    }
+    @media (max-width:900px){ .cards-grid{ grid-template-columns:minmax(0,1fr) } }
+
     .card{
       background:#0c1424; border:1px solid var(--line); border-radius:12px;
       padding:18px; position:relative;
     }
-    .card h2{
-      margin:.2em 0 .4em; font-size:1.2rem; color:#b9e7f5;
-    }
-    .card p.hint{
-      margin:0 0 10px; font-size:.9rem; color:#93a1b5;
-    }
+    .card h2{ margin:.2em 0 .4em; font-size:1.2rem; color:#b9e7f5; }
+    .card p.hint{ margin:0 0 10px; font-size:.9rem; color:#93a1b5; }
 
     .step-label{
       display:inline-flex; align-items:center; gap:6px;
@@ -304,8 +293,7 @@ upgrade-insecure-requests">
       display:inline-flex; align-items:center; gap:8px;
       padding:8px 12px; border-radius:999px;
       border:1px solid #22314f; background:#050816; color:#e6fbff;
-      font-weight:700; font-size:.9rem;
-      text-decoration:none;
+      font-weight:700; font-size:.9rem; text-decoration:none;
     }
     .chip:hover{ text-decoration:underline; border-color:#22d3ee }
 
@@ -314,13 +302,22 @@ upgrade-insecure-requests">
       position:relative;
       margin:10px 0 0; overflow:auto;
       padding:12px; border-radius:12px; background:#0b1426; border:1px solid #1f2a44; font-size:.9rem;
-      max-height:320px;
+      max-height:360px;
     }
 
-    .kvs{
-      display:grid; grid-template-columns:minmax(0,1fr);
-      gap:8px; margin-top:10px;
+    .copy-btn{
+      position:absolute; top:8px; right:8px;
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px; border-radius:10px;
+      border:1px solid #22455a; background:#0c1a2e; color:#cfefff;
+      font-weight:700; cursor:pointer; font-size:.8rem;
     }
+    .copy-btn:hover{ filter:brightness(1.1) }
+    .copy-btn .ok{ display:none }
+    .copy-btn.copied .ok{ display:inline }
+    .copy-btn.copied .txt{ display:none }
+
+    .kvs{ display:grid; grid-template-columns:minmax(0,1fr); gap:8px; margin-top:10px; }
     .kv{
       display:flex; gap:10px; align-items:flex-start;
       padding:10px; border-radius:12px; border:1px solid #22314f; background:#0b1220;
@@ -333,15 +330,12 @@ upgrade-insecure-requests">
       .kv .k{ flex-basis:auto }
     }
 
-    /* Footer */
     footer{
       border-top:1px solid var(--line); margin-top:28px;
       padding:18px; color:#7c8aa5; text-align:center;
       background:#0b1020;
     }
-    footer .badges{
-      display:flex; gap:8px; justify-content:center; margin:10px 0;
-    }
+    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0; }
     footer .badge{
       display:inline-flex; align-items:center; gap:6px;
       padding:6px 10px; border:1px solid var(--line); border-radius:999px;
@@ -354,9 +348,7 @@ upgrade-insecure-requests">
     footer .links a:hover{ color:var(--accent); text-decoration:underline }
     footer .links a[aria-current="page"]{ color:var(--accent); text-decoration:underline }
 
-    .social{
-      display:flex; gap:10px; justify-content:center; margin-top:10px;
-    }
+    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px; }
     .social a{
       display:inline-flex; width:40px; height:40px;
       border:1px solid var(--line); border-radius:12px;
@@ -365,10 +357,6 @@ upgrade-insecure-requests">
       transition:transform .18s var(--e);
     }
     .social a:hover{ transform:translateY(-2px) }
-
-    @media (max-width:480px){
-      .card{ padding:14px }
-    }
 
     a:focus-visible, .hero-btn:focus-visible, .tp-burger:focus-visible {
       outline:2px solid #22d3ee;
@@ -383,7 +371,7 @@ upgrade-insecure-requests">
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
-  <!-- Header (copied from your verify.html) -->
+  <!-- Header -->
   <header class="tp-header" id="hdr" role="banner">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
@@ -401,20 +389,18 @@ upgrade-insecure-requests">
       <a class="nav-cta" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
     </nav>
     <a class="cta-header" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
-    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav">
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu">
       <span aria-hidden="true">☰</span>
     </button>
   </header>
 
   <main id="main" class="wrap" role="main" aria-describedby="page-title">
-    <!-- HERO -->
     <section class="hero" role="region" aria-labelledby="page-title">
       <div class="icon" aria-hidden="true">📚</div>
       <p class="badge">Status: Public Beta v0.2 · ProofSpec v0.1 · API v0.2 · Privacy-first · No blockchain</p>
       <h1 id="page-title">API Docs</h1>
       <p class="lead">
-        TimeProofs v0.2 is stateless: you create a signed proof file (<code>.tproof.json</code>) and verify using that file.
-        Your content never leaves your device.
+        Hash locally. Get a signed proof file (<code>.tproof.json</code>). Verify later — without uploading your original file.
       </p>
 
       <div class="hero-actions">
@@ -422,31 +408,29 @@ upgrade-insecure-requests">
         <a class="hero-btn" href="/proofspec.html">Read ProofSpec</a>
       </div>
 
-      <!-- TOC chips -->
       <nav class="toc" aria-label="On this page">
         <a class="chip" href="#quickstart">Quickstart</a>
         <a class="chip" href="#endpoints">Endpoints</a>
         <a class="chip" href="#proof-file">Proof file</a>
         <a class="chip" href="#errors">Errors</a>
-        <a class="chip" href="#offline">Offline verify</a>
+        <a class="chip" href="#offline">Offline</a>
         <a class="chip" href="#faq">FAQ</a>
       </nav>
     </section>
 
     <section class="cards-grid" aria-label="API documentation content">
-      <!-- Left: Main docs -->
       <article class="card" aria-label="API reference">
         <div class="step-label" id="quickstart">Start · Quickstart</div>
         <h2>Quickstart (v0.2)</h2>
         <p class="hint">
-          Flow: (1) compute SHA-256 locally → (2) POST to <code>/api/timestamp</code> → (3) download <code>.tproof.json</code> →
-          (4) verify later with <code>/api/verify</code> (stateless).
+          Flow: (1) compute SHA-256 locally → (2) POST <code>/api/timestamp</code> → (3) save the <code>.tproof.json</code> proof file →
+          (4) verify later with <code>/api/verify</code> using the proof file.
         </p>
 
 <pre><code># 1) Hash locally (example)
 # sha256sum myfile.bin | awk '{print $1}'
 
-# 2) Timestamp (server signs hash)
+# 2) Timestamp: server signs the hash and returns a proof file
 curl -sS https://api.timeproofs.io/api/timestamp \
   -H "Content-Type: application/json" \
   -d '{
@@ -455,23 +439,28 @@ curl -sS https://api.timeproofs.io/api/timestamp \
     "meta":{"source":"cli"}
   }' | tee proof.tproof.json
 
-# 3) Verify later (proof-file based, stateless)
+# 3) Verify later (proof-file based)
+# Option A (recommended): requires jq
+jq -c '{bundle:.}' proof.tproof.json | \
 curl -sS https://api.timeproofs.io/api/verify \
   -H "Content-Type: application/json" \
-  -d '{"bundle":'"$(cat proof.tproof.json)"'}'</code></pre>
+  -d @-
+
+# Option B (no jq): paste the proof JSON into "bundle" manually
+# curl -sS https://api.timeproofs.io/api/verify -H "Content-Type: application/json" -d '{"bundle":{...}}'</code></pre>
 
         <div class="step-label" id="endpoints" style="margin-top:16px;">Reference · Endpoints</div>
         <h2>Endpoints</h2>
-        <p class="hint">Primary base: <code>https://api.timeproofs.io/api</code> (fallback: <code>https://timeproofs-api.jeason-bacoul.workers.dev/api</code>).</p>
+        <p class="hint">Base URL: <code>https://api.timeproofs.io/api</code></p>
 
         <div class="kvs" role="list">
           <div class="kv" role="listitem">
             <div class="k">POST /timestamp</div>
-            <div class="v">Create a signed proof file from a SHA-256 hash (no content upload).</div>
+            <div class="v">Create a signed proof file from a SHA-256 hash (no original upload).</div>
           </div>
           <div class="kv" role="listitem">
             <div class="k">POST /verify</div>
-            <div class="v">Verify a proof file’s cryptographic integrity (stateless; no server lookup).</div>
+            <div class="v">Verify a proof file’s cryptographic integrity (stateless; proof required).</div>
           </div>
           <div class="kv" role="listitem">
             <div class="k">GET /health</div>
@@ -502,7 +491,7 @@ Accept: application/json
         <div class="step-label" id="proof-file" style="margin-top:16px;">Format · Proof file</div>
         <h2>Proof file (.tproof.json)</h2>
         <p class="hint">
-          A proof contains only hash + timestamp + signature (and optional <code>meta</code>). No content is stored.
+          A proof contains only hash + timestamp + signature (and optional <code>meta</code>). Your original content is never stored.
         </p>
 
 <pre><code>{
@@ -519,7 +508,6 @@ Accept: application/json
   "proof": {
     "algo": "Ed25519",
     "signature": "hex-signature",
-    "publicKey": "base64-public-key (informational)",
     "keyId": "tp-v0-2-main"
   },
   "meta": {
@@ -539,11 +527,11 @@ Accept: application/json
           </div>
           <div class="kv" role="listitem">
             <div class="k">invalid_bundle</div>
-            <div class="v">Proof file missing required fields (<code>hash.value</code>, <code>timestamp.issuedAt</code>, <code>proof.signature</code>).</div>
+            <div class="v">Proof file missing required fields (hash, timestamp, signature).</div>
           </div>
           <div class="kv" role="listitem">
             <div class="k">signature_invalid</div>
-            <div class="v">Ed25519 check failed (tampered proof or unknown key).</div>
+            <div class="v">Signature check failed (tampered proof or unknown key).</div>
           </div>
           <div class="kv" role="listitem">
             <div class="k">rate_limited</div>
@@ -551,23 +539,22 @@ Accept: application/json
           </div>
         </div>
 
-        <div class="step-label" id="offline" style="margin-top:16px;">Offline · Verify without uploading</div>
-        <h2>Offline verification</h2>
+        <div class="step-label" id="offline" style="margin-top:16px;">Offline · What “offline” means</div>
+        <h2>Offline</h2>
         <p class="hint">
-          Verification has two parts:
-          (1) match the original file’s hash to the proof hash (local),
-          (2) check the proof signature (via API, stateless).
+          “Offline” means you can keep and inspect the proof file locally anytime, and you can match hashes locally.
+          When you want cryptographic validation, you verify using the proof file (no original upload).
         </p>
         <p class="hint">
-          The simplest offline workflow is to keep your <code>.tproof.json</code> next to the file you proved, then use
-          <a href="/verify.html">Create / Verify</a> to load both.
+          The simplest workflow is to keep <code>.tproof.json</code> next to the file you proved, then use
+          <a href="/verify.html">Create / Verify</a>.
         </p>
 
         <div class="step-label" id="faq" style="margin-top:16px;">Help · FAQ</div>
         <h2>FAQ</h2>
-        <p><strong>Do you store my content?</strong><br/>No. Only the hash circulates. Your original content never leaves your device.</p>
-        <p><strong>Why is v0.2 “stateless”?</strong><br/>No server storage. Verification uses your proof file, not a database lookup.</p>
-        <p><strong>Is a file date enough?</strong><br/>No. File dates are local and editable. TimeProofs signs a cryptographic fingerprint at a precise time, verifiable by others.</p>
+        <p><strong>Do you store my content?</strong><br/>No. Only hashes and proof files circulate. Your original file stays with you.</p>
+        <p><strong>Why is v0.2 “stateless”?</strong><br/>Verification uses the proof file, not a database lookup.</p>
+        <p><strong>Is a file date enough?</strong><br/>No. File dates are local and editable. TimeProofs signs a cryptographic fingerprint at a precise time.</p>
         <p><strong>Is this notarization / legal certification?</strong><br/>No. TimeProofs provides a technical proof of existence and integrity, not a legal qualification.</p>
 
         <div style="margin-top:16px;">
@@ -575,11 +562,10 @@ Accept: application/json
         </div>
       </article>
 
-      <!-- Right: Developer shortcuts -->
       <aside class="card" aria-label="Developer shortcuts">
         <div class="step-label">Shortcuts</div>
         <h2>Developer essentials</h2>
-        <p class="hint">Links and minimal, reproducible snippets.</p>
+        <p class="hint">Links and minimal references.</p>
 
         <div class="kvs" role="list">
           <div class="kv" role="listitem">
@@ -588,7 +574,7 @@ Accept: application/json
           </div>
           <div class="kv" role="listitem">
             <div class="k">Try in browser</div>
-            <div class="v"><a href="/verify.html">Create / Verify tool</a></div>
+            <div class="v"><a href="/verify.html">Create / Verify</a></div>
           </div>
           <div class="kv" role="listitem">
             <div class="k">Protocol</div>
@@ -599,13 +585,6 @@ Accept: application/json
             <div class="v"><a href="/regulations.html">Regulations</a></div>
           </div>
         </div>
-
-        <h3 style="margin:1em 0 .3em; font-size:1.02rem; color:#aee9f7;">Minimal JSON</h3>
-<pre><code>{
-  "hash": "&lt;sha256-hex&gt;",
-  "type": "document",
-  "meta": { "source": "web" }
-}</code></pre>
 
         <h3 style="margin:1em 0 .3em; font-size:1.02rem; color:#aee9f7;">Best practice</h3>
         <p class="hint">
@@ -619,7 +598,6 @@ Accept: application/json
     </section>
   </main>
 
-  <!-- Footer (copied from your verify.html) -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
@@ -652,10 +630,8 @@ Accept: application/json
     </div>
   </footer>
 
-  <!-- Scripts -->
   <script defer nonce="TP-2025">
   (function(){
-    // Header shade
     const hdr=document.getElementById('hdr');
     function onScroll(){
       if(window.scrollY>6) hdr.classList.add('scrolled');
@@ -664,30 +640,18 @@ Accept: application/json
     onScroll();
     window.addEventListener('scroll', onScroll, { passive:true });
 
-    // Burger + focus trap (mobile)
     const burger=document.getElementById('tp-burger');
     const nav=document.getElementById('tp-nav');
-    let lastFocus=null;
 
-    function getFocusable(container){
-      return Array.from(container.querySelectorAll(
-        'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-      )).filter(el => !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length));
-    }
     function openMenu(){
-      lastFocus=document.activeElement;
       nav.setAttribute('data-state','open');
       burger.setAttribute('aria-expanded','true');
       document.body.style.overflow='hidden';
-      const focusables=getFocusable(nav);
-      if(focusables[0]) focusables[0].focus({preventScroll:true});
     }
     function closeMenu(){
       nav.setAttribute('data-state','closed');
       burger.setAttribute('aria-expanded','false');
       document.body.style.overflow='';
-      if(lastFocus && typeof lastFocus.focus==="function") lastFocus.focus({preventScroll:true});
-      lastFocus=null;
     }
     function toggleMenu(){
       (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu();
@@ -700,50 +664,13 @@ Accept: application/json
     },{ passive:true });
 
     document.addEventListener('keydown',(e)=>{
-      if(window.matchMedia('(min-width: 900px)').matches) return;
-      if(e.key==='Escape' && nav.getAttribute('data-state')==='open'){
-        e.preventDefault(); closeMenu(); return;
-      }
-      if(e.key==='Tab' && nav.getAttribute('data-state')==='open'){
-        const focusables=getFocusable(nav);
-        if(!focusables.length) return;
-        const first=focusables[0];
-        const last=focusables[focusables.length-1];
-        if(e.shiftKey && document.activeElement===first){
-          e.preventDefault(); last.focus();
-        }else if(!e.shiftKey && document.activeElement===last){
-          e.preventDefault(); first.focus();
-        }
-      }
-    });
+      if(e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu();
+    },{ passive:true });
+
     window.addEventListener('resize',()=>{
       if(window.matchMedia('(min-width: 900px)').matches) closeMenu();
     },{ passive:true });
 
-    // Copy buttons for code blocks
-    (function installCopyButtons(){
-      document.querySelectorAll('pre').forEach((pre)=>{
-        if(pre.querySelector('.copy-btn')) return;
-        const btn=document.createElement('button');
-        btn.type='button';
-        btn.className='hero-btn';
-        btn.style.marginTop='8px';
-        btn.textContent='Copy';
-        btn.addEventListener('click', async ()=>{
-          const code = pre.querySelector('code')?.innerText ?? pre.innerText;
-          try{ await navigator.clipboard.writeText(code); }
-          catch{
-            const ta=document.createElement('textarea');
-            ta.value=code; ta.style.position='fixed'; ta.style.left='-9999px';
-            document.body.appendChild(ta); ta.select();
-            document.execCommand('copy'); document.body.removeChild(ta);
-          }
-        });
-        pre.after(btn);
-      });
-    })();
-
-    // Auto aria-current (do not mark .nav-cta)
     (function(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
       document.querySelectorAll('header nav a:not(.nav-cta), footer .links a').forEach(a=>{
@@ -752,11 +679,37 @@ Accept: application/json
       });
     })();
 
-    // Service worker
+    (function installCopyButtons(){
+      document.querySelectorAll('pre').forEach((pre)=>{
+        if(pre.querySelector('.copy-btn')) return;
+        const btn=document.createElement('button');
+        btn.type='button';
+        btn.className='copy-btn';
+        btn.setAttribute('aria-label','Copy code block');
+        btn.innerHTML='<span class="txt">Copy</span><span class="ok">✓ Copied</span>';
+        btn.addEventListener('click', async ()=>{
+          const code = pre.querySelector('code')?.innerText ?? pre.innerText;
+          try{
+            await navigator.clipboard.writeText(code);
+            btn.classList.add('copied');
+            setTimeout(()=>btn.classList.remove('copied'), 1200);
+          }catch{
+            const ta=document.createElement('textarea');
+            ta.value=code; ta.style.position='fixed'; ta.style.left='-9999px';
+            document.body.appendChild(ta); ta.select();
+            document.execCommand('copy'); document.body.removeChild(ta);
+            btn.classList.add('copied');
+            setTimeout(()=>btn.classList.remove('copied'), 1200);
+          }
+        });
+        pre.appendChild(btn);
+      });
+    })();
+
     if('serviceWorker' in navigator){
       navigator.serviceWorker.register('/sw.js',{type:'module',scope:'/'}).catch(()=>{});
     }
   })();
   </script>
 </body>
-</html>
+  </html>
