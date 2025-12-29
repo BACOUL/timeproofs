@@ -1,80 +1,168 @@
-# TimeProofs API v0.2 (draft)
+TimeProofs API v0.2 — Stateless Edition
 
-This folder contains the draft worker for the TimeProofs API v0.2.
+This directory contains the Cloudflare Worker implementation for TimeProofs API v0.2.
 
-Status: internal draft — do not use in production.  
-The v0.1 API remains the only active public/production endpoint.
+Status: public preview (stateless).
+The v0.1 API may still exist elsewhere, but v0.2 is designed as a clean, stateless protocol and must be treated as the reference moving forward.
 
-## Files
+────────────────────────────────────────
+OVERVIEW
+────────────────────────────────────────
 
-### worker.js
+TimeProofs v0.2 is a stateless, cryptographic proof-of-existence system.
 
-Cloudflare Worker entrypoint for v0.2.
+Core principles:
+- No storage of proofs on the server
+- No database, no KV, no cache
+- No blockchain
+- No personal data
+- Cryptographic verification only
+- Portable proof bundles (.tproof.json)
 
-Routes:
-- GET /api/health  
-  Returns a small JSON object with fields: ok, now, version.
+The server:
+- Signs a canonical payload using Ed25519
+- Returns a portable proof bundle
+- Never stores or retrieves proofs
 
-- POST /api/timestamp  
-  Creates a v0.2 proof bundle, signs it with HMAC, stores it in the v0.2 KV namespace.
+Verification:
+- Is fully offline and deterministic
+- Uses only the embedded data and the server’s public key
+- Does not depend on any server-side history
 
-- GET /api/verify?hash=...  
-  Reads the stored bundle from the v0.2 KV namespace and returns it if found.
+────────────────────────────────────────
+API OVERVIEW
+────────────────────────────────────────
 
-### wrangler.toml
+Endpoints:
 
-Wrangler configuration for this worker.
+GET /api/health
+Returns basic status and metadata.
 
-Main points:
-- name = "timeproofs-api-v02"
-- main = "worker.js"
-- KV binding: TIMEPROOFS_V02_KV
-- Secret required: HMAC_SECRET (same semantics as v0.1, set as a secret, not in plain text)
+POST /api/timestamp
+Creates a signed timestamp proof from a SHA-256 hash.
 
-## KV layout (v0.2)
+POST /api/verify
+Verifies a proof bundle cryptographically.
+Hash-only verification is intentionally NOT supported.
 
-Namespace: TIMEPROOFS_V02_KV
+GET /api/verify?hash=...
+Intentionally rejected in v0.2.
 
-Key structure:
-- v02:hash:<sha256>
+────────────────────────────────────────
+SECURITY MODEL
+────────────────────────────────────────
 
-Value:
-- JSON-encoded v0.2 bundle.
+- Algorithm: Ed25519
+- Signature authority: server-only (key freeze)
+- Public key is embedded in the server configuration
+- Bundle-provided keys are ignored during verification
+- Canonical string is strictly enforced
 
-Example bundle shape (simplified):
+No HMAC is used.
+No legacy v0.1 behavior remains.
 
-    {
-      "version": "tp-0.2",
-      "hash": "<sha256-hex>",
-      "alg": "SHA-256",
-      "timestamp": 1234567890,
-      "datetime": "2025-01-01T00:00:00.000Z",
-      "issuer": "https://timeproofs.io",
-      "sig_hmac": "<hex>",
-      "sig_ed25519": null,
-      "kid": "tp-v0-2-main",
-      "meta": {
-        "env": "demo",
-        "sdk": "js-v0.2"
-      }
-    }
+────────────────────────────────────────
+PROOF BUNDLE FORMAT (.tproof.json)
+────────────────────────────────────────
 
-## Deployment (later)
+A valid bundle contains:
 
-This worker is intended to be deployed separately from the v0.1 worker.
+{
+  "version": "timeproofs-0.2",
+  "canonical": "<hash>|<issuedAt>|<issuer>|<nonce>",
+  "hash": {
+    "algorithm": "SHA-256",
+    "value": "<64 hex chars>"
+  },
+  "timestamp": {
+    "issuedAt": "<ISO-8601>",
+    "issuer": "https://api.timeproofs.io",
+    "nonce": "<random hex>"
+  },
+  "proof": {
+    "algo": "Ed25519",
+    "signature": "<hex>",
+    "publicKey": "<base64>",
+    "keyId": "tp-v0-2-main"
+  },
+  "meta": {
+    "type": "event"
+  }
+}
 
-High-level steps:
-1. Add the real Cloudflare account_id in api-v02/wrangler.toml.
-2. Create a KV namespace named TIMEPROOFS_V02_KV in Cloudflare and copy its id into api-v02/wrangler.toml.
-3. Add the HMAC_SECRET secret for this worker (via Cloudflare dashboard or wrangler secret command).
-4. Deploy this worker using wrangler with api-v02/wrangler.toml as the config file.
-5. Use the resulting workers.dev URL as the baseUrl for testing the v0.2 SDK (Node and browser examples).
+Validation rules:
+- issuer must match the canonical authority exactly
+- canonical must match hash + issuedAt + issuer + nonce
+- signature must verify using the server’s Ed25519 public key
 
-## Notes
+────────────────────────────────────────
+WORKER BEHAVIOR
+────────────────────────────────────────
 
-- v0.2 is experimental and must not interfere with v0.1 production.
-- The goal of v0.2 is to define and test:
-  - the stable proof bundle shape (.tproof.json),
-  - HMAC signing on the server,
-  - storage and retrieval in a dedicated KV namespace,
-  - future Ed25519 signing and stronger offline verification.
+/api/health
+Returns:
+- ok
+- now
+- version
+- mode
+- issuer
+- keyId
+
+/api/timestamp
+Input:
+{
+  "hash": "<sha256>"
+}
+
+Output:
+A complete signed bundle as shown above.
+
+No state is stored.
+
+/api/verify
+Input:
+- either the bundle itself
+- or { "bundle": <bundle> }
+
+Output:
+{
+  "ok": true|false,
+  "valid": true|false,
+  "version": "...",
+  "hash": {...},
+  "timestamp": {...}
+}
+
+────────────────────────────────────────
+DEPLOYMENT
+────────────────────────────────────────
+
+This worker is designed to run on Cloudflare Workers (workers.dev).
+
+Required secrets:
+- ED25519_SECRET  (PKCS8 DER, base64)
+- ED25519_PUBLIC  (SPKI DER, base64)
+
+Set secrets using:
+wrangler secret put ED25519_SECRET
+wrangler secret put ED25519_PUBLIC
+
+The worker is stateless and safe to redeploy at any time.
+
+────────────────────────────────────────
+NON-GOALS
+────────────────────────────────────────
+
+- No storage or retrieval of proofs
+- No database or KV
+- No blockchain anchoring
+- No legal notarization claims
+- No authentication or identity system
+
+────────────────────────────────────────
+SUMMARY
+────────────────────────────────────────
+
+TimeProofs v0.2 defines a minimal, auditable, cryptographic proof format.
+It focuses on correctness, portability, and independence from infrastructure.
+This worker is the canonical reference implementation for that model.
