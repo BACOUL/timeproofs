@@ -7,8 +7,8 @@ info:
     TimeProofs v0.2 is a stateless, cryptographic proof-of-existence API.
 
     The server never stores proofs.
-    Clients submit hashes to receive a signed timestamp.
-    Verification is performed offline using a portable `.tproof.json` bundle.
+    Clients submit hashes to receive a signed timestamp bundle.
+    Verification is cryptographic and requires the portable `.tproof.json` bundle.
 
     Core principles:
     - Hash locally (SHA-256)
@@ -53,7 +53,6 @@ paths:
       description: |
         Accepts a SHA-256 hash and returns a signed timestamp bundle.
         No data is stored server-side.
-
       tags: [Core]
       requestBody:
         required: true
@@ -61,7 +60,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/TimestampRequestV02"
-
       responses:
         "200":
           description: Timestamp created
@@ -75,6 +73,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
   /api/verify:
     post:
@@ -83,7 +87,10 @@ paths:
         Verifies a `.tproof.json` bundle cryptographically.
         The server does not store or fetch any data.
 
-        The issuer must match the canonical TimeProofs authority.
+        The issuer is frozen and must match the canonical TimeProofs authority:
+        https://api.timeproofs.io
+
+        Note: invalid signatures may return HTTP 200 with ok=false and valid=false.
       tags: [Core]
       requestBody:
         required: true
@@ -93,6 +100,8 @@ paths:
               oneOf:
                 - $ref: "#/components/schemas/ProofBundle"
                 - type: object
+                  additionalProperties: false
+                  required: [bundle]
                   properties:
                     bundle:
                       $ref: "#/components/schemas/ProofBundle"
@@ -103,21 +112,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/VerifyResponse"
+        "400":
+          description: Invalid bundle (missing fields, issuer mismatch, canonical mismatch)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
 components:
   schemas:
     HealthResponse:
       type: object
-      required: [ok, now, version, mode, issuer]
+      additionalProperties: false
+      required: [ok, now, version, mode, proof, issuer, keyId]
       properties:
-        ok: { type: boolean }
+        ok: { type: boolean, example: true }
         now: { type: string, format: date-time }
-        version: { type: string }
-        mode: { type: string }
-        issuer: { type: string }
+        version: { type: string, example: "timeproofs-0.2" }
+        mode: { type: string, example: "stateless" }
+        proof: { type: string, example: "ed25519-only" }
+        issuer: { type: string, const: "https://api.timeproofs.io" }
+        keyId: { type: string, example: "tp-v0-2-main" }
 
     TimestampRequestV02:
       type: object
+      additionalProperties: false
       required: [hash]
       properties:
         hash:
@@ -126,17 +151,19 @@ components:
 
     HashObject:
       type: object
+      additionalProperties: false
       required: [algorithm, value]
       properties:
         algorithm:
           type: string
-          example: "SHA-256"
+          enum: ["SHA-256"]
         value:
           type: string
           pattern: "^[a-f0-9]{64}$"
 
     TimestampObject:
       type: object
+      additionalProperties: false
       required: [issuedAt, issuer, nonce]
       properties:
         issuedAt:
@@ -144,26 +171,59 @@ components:
           format: date-time
         issuer:
           type: string
-          example: "https://api.timeproofs.io"
+          const: "https://api.timeproofs.io"
         nonce:
           type: string
 
     ProofObject:
       type: object
+      additionalProperties: false
       required: [algo, signature, keyId]
       properties:
         algo:
           type: string
-          example: "Ed25519"
+          enum: ["Ed25519"]
         signature:
           type: string
+          description: Hex-encoded Ed25519 signature
+        publicKey:
+          type: string
+          description: Optional informational public key (ignored during verification)
         keyId:
           type: string
+          example: "tp-v0-2-main"
 
     ProofBundle:
       type: object
-      required: [canonical, hash, timestamp, proof]
+      additionalProperties: false
+      required: [version, canonical, hash, timestamp, proof]
       properties:
+        version:
+          type: string
+          const: "timeproofs-0.2"
+        canonical:
+          type: string
+          description: Canonical string used for signature verification: <hash>|<issuedAt>|<issuer>|<nonce>
+        hash:
+          $ref: "#/components/schemas/HashObject"
+        timestamp:
+          $ref: "#/components/schemas/TimestampObject"
+        proof:
+          $ref: "#/components/schemas/ProofObject"
+        meta:
+          type: object
+          additionalProperties: true
+          description: Optional metadata. Not interpreted or trusted by the API.
+
+    TimestampResponseV02:
+      type: object
+      additionalProperties: false
+      required: [ok, version, canonical, hash, timestamp, proof]
+      properties:
+        ok: { type: boolean, example: true }
+        version:
+          type: string
+          const: "timeproofs-0.2"
         canonical:
           type: string
         hash:
@@ -172,35 +232,57 @@ components:
           $ref: "#/components/schemas/TimestampObject"
         proof:
           $ref: "#/components/schemas/ProofObject"
+        meta:
+          type: object
+          additionalProperties: true
 
     VerifyResponse:
       type: object
-      required: [ok, valid]
+      additionalProperties: false
+      required: [ok, valid, version, keyId, hash, timestamp]
       properties:
         ok:
           type: boolean
         valid:
           type: boolean
+        error:
+          type: string
+          description: Present when ok=false (for example invalid_signature)
+        code:
+          type: integer
+        message:
+          type: string
         version:
           type: string
+          example: "timeproofs-0.2"
+        keyId:
+          type: string
+          example: "tp-v0-2-main"
         hash:
           $ref: "#/components/schemas/HashObject"
         timestamp:
           $ref: "#/components/schemas/TimestampObject"
+        checks:
+          type: object
+          additionalProperties: true
         note:
           type: string
 
     ErrorResponse:
       type: object
+      additionalProperties: true
       required: [ok, error]
       properties:
         ok:
           type: boolean
+          example: false
         error:
           type: string
         code:
           type: integer
         message:
+          type: string
+        version:
           type: string
 
 security: []
