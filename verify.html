@@ -514,11 +514,10 @@ upgrade-insecure-requests">
       outline-offset:3px;
       border-radius:12px;
     }
-
-    #tp-nav a.nav-cta{ color:#06202a; }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
+
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
@@ -643,19 +642,15 @@ upgrade-insecure-requests">
           <div class="item"><span class="k">Hash (fingerprint)</span><code id="create-s-hash">—</code></div>
           <div class="item"><span class="k">Issued at (server)</span><span id="create-s-ts-proof">—</span></div>
           <div class="item"><span class="k">Signature</span><code id="create-s-sign">—</code></div>
-          <div class="item" id="create-s-link-wrap" style="display:none;">
-            <span class="k">Next</span>
-            <button type="button" id="open-verify-here" class="hero-btn" style="padding:4px 10px; background:#050816; color:#f8fafc;">Open Verify</button>
-          </div>
         </div>
 
         <div style="position:relative; margin-top:10px;">
           <pre id="create-output" aria-live="polite">{}</pre>
         </div>
 
+        <!-- Single action: download proof -->
         <div class="row" id="create-actions" style="display:none; gap:8px; margin-top:10px;">
           <button class="hero-btn" id="download-proof" type="button">Download your proof (.tproof.json)</button>
-          <button class="hero-btn" id="copy-verify-link" type="button">Copy Verify link</button>
         </div>
         <p class="hint" id="download-hint" style="display:none; margin-top:8px">Keep the <code>.tproof.json</code> proof file. Verification requires it.</p>
       </article>
@@ -840,13 +835,6 @@ Accept: application/json
     function short(s){
       if(!s || typeof s!=="string") return "—";
       return s.length<=16 ? s : s.slice(0,8)+"…"+s.slice(-8);
-    }
-    function copyToClipboard(text){
-      navigator.clipboard?.writeText(text).catch(()=>{
-        const ta=document.createElement("textarea");
-        ta.value=text; ta.style.position="fixed"; ta.style.left="-9999px";
-        document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
-      });
     }
     function fail(msg){ throw new Error(msg); }
 
@@ -1089,12 +1077,9 @@ Accept: application/json
     const csHash=document.getElementById("create-s-hash");
     const csTSProof=document.getElementById("create-s-ts-proof");
     const csSign=document.getElementById("create-s-sign");
-    const csLinkWrap=document.getElementById("create-s-link-wrap");
     const outCreate=document.getElementById("create-output");
     const createActions=document.getElementById("create-actions");
     const downloadProof=document.getElementById("download-proof");
-    const copyVerifyLink=document.getElementById("copy-verify-link");
-    const openVerifyHere=document.getElementById("open-verify-here");
     const downloadHint=document.getElementById("download-hint");
 
     function showCreateError(msg){
@@ -1165,20 +1150,6 @@ Accept: application/json
         a.download=`${hashHex || "proof"}.tproof.json`;
         document.body.appendChild(a); a.click(); document.body.removeChild(a);
       };
-
-      copyVerifyLink.onclick=()=>{
-        copyToClipboard(`${location.origin}/verify.html`);
-      };
-
-      openVerifyHere.onclick=()=>{
-        if(!proofObj) return;
-        loadedProof = proofObj;
-        const ui = normalizeProofForUI(proofObj);
-        if(ui){
-          renderVerifyLoaded(ui, "Proof loaded from Create. Click Verify to check the signature.");
-          document.getElementById("verify-card").scrollIntoView({behavior:"smooth",block:"start"});
-        }
-      };
     }
 
     btnCreate.onclick=async ()=>{
@@ -1189,7 +1160,6 @@ Accept: application/json
       createActions.style.display="none";
       if(downloadHint) downloadHint.style.display="none";
       outCreate.textContent="{}";
-      csLinkWrap.style.display="none";
 
       try{
         let hashHex="";
@@ -1234,7 +1204,6 @@ Accept: application/json
         csTSProof.textContent = tsIso ? fmtLocal(tsIso) : "—";
         csSign.textContent=short(sig || "");
 
-        csLinkWrap.style.display="flex";
         createSummary.style.display="grid";
 
         outCreate.textContent=JSON.stringify(proofObj,null,2);
