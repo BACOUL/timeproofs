@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="dark light"/>
   <title>Use Cases — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="Six practical ways to use TimeProofs v0.2: AI outputs, audit trails, releases, creators, datasets, and supply chains — hash locally, get a signed .tproof.json proof, verify offline or via stateless POST (proof required)."/>
+  <meta name="description" content="Six practical ways to use TimeProofs v0.2: AI outputs, audit trails, releases, creators, datasets, and supply chains — create a verifiable proof file without uploading your content."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -17,13 +17,10 @@
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
   <link rel="alternate" type="application/yaml" href="/openapi.yaml"/>
   <link rel="author" href="/humans.txt"/>
-  <link rel="status" href="https://status.timeproofs.io"/>
 
   <!-- Perf -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
   <link rel="dns-prefetch" href="//api.timeproofs.io"/>
-  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin/>
-  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev"/>
   <link rel="preconnect" href="https://plausible.io" crossorigin/>
   <link rel="preload" as="image" href="/assets/logo.png" fetchpriority="high"/>
   <link rel="preload" as="image" href="/og.png"/>
@@ -36,7 +33,7 @@
 
   <!-- Social -->
   <meta property="og:title" content="Use Cases — TimeProofs"/>
-  <meta property="og:description" content="Six practical scenarios to prove when data existed and that it hasn’t changed — hash locally, get a signed .tproof.json proof, verify offline or via stateless POST (proof required)."/>
+  <meta property="og:description" content="Six practical scenarios to prove when data existed and that it hasn’t changed — using a verifiable proof file, without uploading your content."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/use-cases.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
@@ -46,7 +43,7 @@
   <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Use Cases — TimeProofs"/>
-  <meta name="twitter:description" content="Six practical scenarios to prove when data existed and that it hasn’t changed — verify offline or via stateless POST (proof required)."/>
+  <meta name="twitter:description" content="Six practical scenarios to prove when data existed and that it hasn’t changed — with a verifiable proof file."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- AI Trust -->
@@ -57,12 +54,12 @@
 
   <!-- CSP v0.2 -->
   <meta http-equiv="Content-Security-Policy" content="
-default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
+default-src 'self';
 worker-src 'self' blob:;
 img-src 'self' data: https:;
 style-src 'self' 'unsafe-inline';
-script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
-connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io;
+script-src 'self' 'nonce-TP-2025' https://plausible.io;
+connect-src 'self' https://api.timeproofs.io https://plausible.io;
 font-src 'self' https: data:;
 object-src 'none';
 base-uri 'self';
@@ -119,7 +116,7 @@ upgrade-insecure-requests">
     "@context":"https://schema.org",
     "@type":"WebPage",
     "name":"Use Cases — TimeProofs",
-    "description":"Six practical ways to use TimeProofs v0.2: AI outputs, audit trails, releases, creators, datasets, and supply chains — hash locally, get a signed .tproof.json proof, verify offline or via stateless POST (proof required).",
+    "description":"Six practical ways to use TimeProofs v0.2: AI outputs, audit trails, releases, creators, datasets, and supply chains — create a verifiable proof file without uploading your content.",
     "inLanguage":"en",
     "url":"https://timeproofs.io/use-cases.html",
     "isPartOf":{"@type":"WebSite","url":"https://timeproofs.io/"}
@@ -145,7 +142,7 @@ upgrade-insecure-requests">
         "name":"Is a file modification date enough?",
         "acceptedAnswer":{
           "@type":"Answer",
-          "text":"No. File dates are local and editable. A TimeProofs proof is a signed timestamp for an exact hash that anyone can verify using the proof file."
+          "text":"No. File dates are local and editable. A TimeProofs proof is a verifiable timestamp for an exact fingerprint (hash)."
         }
       },
       {
@@ -153,14 +150,14 @@ upgrade-insecure-requests">
         "name":"Do I need a blockchain?",
         "acceptedAnswer":{
           "@type":"Answer",
-          "text":"No. TimeProofs uses cryptographic hashes and signed timestamps, with offline or stateless verification (proof required)."
+          "text":"No. TimeProofs uses cryptographic hashes and signed timestamps with independent verification."
         }
       }
     ]
   }
   </script>
 
-  <!-- Styles (alignés sur ProofSpec/About) -->
+  <!-- Styles -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
@@ -186,7 +183,6 @@ upgrade-insecure-requests">
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
 
-    /* offset pour header fixe */
     [id]{ scroll-margin-top:120px }
     @media (min-width:900px){ [id]{ scroll-margin-top:104px } }
 
@@ -198,7 +194,6 @@ upgrade-insecure-requests">
       background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000;
     }
 
-    /* Header */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.55); backdrop-filter:blur(10px);
@@ -259,7 +254,6 @@ upgrade-insecure-requests">
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* HERO */
     .hero{
       padding-top:96px; padding-bottom:18px; text-align:center;
       position:relative; border-bottom:1px solid var(--line);
@@ -279,17 +273,13 @@ upgrade-insecure-requests">
       border-radius:999px; font-size:.85rem;
     }
 
-    /* TOC */
     nav.toc{
       display:flex; flex-wrap:wrap; gap:12px;
       margin:14px auto 0; padding:12px 0 14px;
       max-width:1100px; border-bottom:1px solid var(--line);
       align-items:center;
     }
-    .toc-label{
-      font-size:.9rem; color:#9fb3c9;
-      margin-right:4px;
-    }
+    .toc-label{ font-size:.9rem; color:#9fb3c9; margin-right:4px; }
     nav.toc a{
       display:inline-block; background:#0d2330; border:1px solid #214a57;
       padding:8px 12px; border-radius:999px;
@@ -297,19 +287,12 @@ upgrade-insecure-requests">
     }
     nav.toc a:hover{ text-decoration:underline }
     .toc-top{
-      display:inline-block;
-      margin:8px auto 0;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid #214a57;
-      background:#0d2330;
-      color:#bff1ff;
-      font-size:.85rem;
-      text-decoration:none;
+      display:inline-block; margin:8px auto 0; padding:6px 10px;
+      border-radius:999px; border:1px solid #214a57;
+      background:#0d2330; color:#bff1ff; font-size:.85rem; text-decoration:none;
     }
     .toc-top:hover{ text-decoration:underline }
 
-    /* Content */
     main{ padding:0 0 40px }
     .card{
       background:#0c1424; border:1px solid var(--line); border-radius:12px;
@@ -319,8 +302,7 @@ upgrade-insecure-requests">
     h3{ color:#aee9f7; font-size:1.05rem; margin:1em 0 .3em }
 
     .meta{
-      color:var(--muted); margin:18px auto 6px; max-width:1100px;
-      font-size:.9rem;
+      color:var(--muted); margin:18px auto 6px; max-width:1100px; font-size:.9rem;
     }
     .muted{ color:var(--muted); font-size:.9rem }
 
@@ -330,8 +312,6 @@ upgrade-insecure-requests">
       border-radius:12px; background:#0b1426; border:1px solid #1f2a44; font-size:.95rem;
       position:relative;
     }
-
-    /* Copy button */
     .copy-btn{
       position:absolute; top:8px; right:8px;
       display:inline-flex; align-items:center; gap:6px;
@@ -344,26 +324,19 @@ upgrade-insecure-requests">
     .copy-btn.copied .ok{ display:inline }
     .copy-btn.copied .txt{ display:none }
 
-    /* Footer */
     footer{
       border-top:1px solid var(--line); margin-top:28px;
       padding:18px; color:#7c8aa5; text-align:center;
     }
-    footer .badges{
-      display:flex; gap:8px; justify-content:center; margin:10px 0;
-    }
+    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0; }
     footer .badge{
       display:inline-flex; align-items:center; gap:6px;
       padding:6px 10px; border:1px solid var(--line); border-radius:999px;
       background:#0d1628; font-size:.9rem; color:#cfefff;
     }
-    footer .links a{
-      color:#cfefff; font-weight:600; text-underline-offset:3px;
-    }
+    footer .links a{ color:#cfefff; font-weight:600; text-underline-offset:3px; }
     footer .links a:hover{ color:#9beefb; text-decoration:underline }
-    .social{
-      display:flex; gap:10px; justify-content:center; margin-top:10px;
-    }
+    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px; }
     .social a{
       display:inline-flex; width:40px; height:40px;
       border:1px solid var(--line); border-radius:12px;
@@ -379,7 +352,6 @@ upgrade-insecure-requests">
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
-  <!-- Header (identique aux autres pages v0.2) -->
   <header class="tp-header" id="hdr" role="banner">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
@@ -403,17 +375,15 @@ upgrade-insecure-requests">
   </header>
 
   <main id="main" class="wrap" role="main" aria-describedby="page-title">
-    <!-- HERO (v0.2) -->
     <section class="hero" role="region" aria-labelledby="page-title">
       <div class="icon" aria-hidden="true">🧩</div>
-      <p class="badge">Status: Public Beta v0.2 · ProofSpec v0.2 · API v0.2 · Privacy-first · No blockchain</p>
+      <p class="badge">Status: Public Beta v0.2 · ProofSpec v0.1 · API v0.2 · Privacy-first · No blockchain</p>
       <h1 id="page-title">Use Cases</h1>
       <p class="lead">
         Practical scenarios where proof of existence changes everything — without uploading your data.
       </p>
     </section>
 
-    <!-- TOC -->
     <nav class="toc" aria-label="Contents">
       <span class="toc-label">On this page</span>
       <a href="#overview">Overview</a>
@@ -438,13 +408,11 @@ upgrade-insecure-requests">
 
     <section class="card" id="overview">
       <h2>Overview</h2>
-      <p><strong>Model:</strong> hash locally → get a signed timestamp (proof) → anyone can verify later using the proof file (offline or via stateless POST).</p>
-      <p><strong>Important:</strong> a file date is local, editable, and not independently verifiable. A TimeProofs proof is a signed timestamp for an exact hash that third parties can verify.</p>
+      <p><strong>What TimeProofs gives you:</strong> a small proof file you can keep and share. It proves <strong>when</strong> an exact piece of content existed and that it has <strong>not changed</strong>.</p>
+      <p><strong>Why it matters:</strong> a file date is local and editable. A proof is independently verifiable.</p>
       <p class="muted">TimeProofs is hash-only. Your original content stays on your device.</p>
-      <p class="muted">Keep the <code>.tproof.json</code> proof file as the portable proof: you can inspect it offline and re-check online anytime by uploading it.</p>
+      <p class="muted">Keep the <code>.tproof.json</code> proof file with your artifact. Verification later only needs the proof file.</p>
     </section>
-
-    <!-- 6 core use cases (pattern: What you prove / How / Artifact) -->
 
     <section class="card" id="ai">
       <h2>1) AI outputs & agent traces</h2>
@@ -453,14 +421,12 @@ upgrade-insecure-requests">
         <li>When an exact output (or prompt) existed.</li>
         <li>That it hasn’t changed since.</li>
       </ul>
-      <h3>How</h3>
+      <h3>Why teams use it</h3>
       <ul>
-        <li>Hash the bytes of the output (SHA-256).</li>
-        <li>Hash the prompt and the final output separately to preserve the trace.</li>
-        <li>Timestamp the hash via the API.</li>
-        <li>Store the proof JSON next to your run logs.</li>
+        <li>Make AI runs auditable without storing sensitive content in third-party systems.</li>
+        <li>Attach proofs to outputs, evaluations, and intermediate steps.</li>
       </ul>
-      <p><strong>Artifact:</strong> keep the <code>.tproof.json</code> proof file.</p>
+      <p><strong>Artifact:</strong> keep the <code>.tproof.json</code> proof file next to your logs.</p>
     </section>
 
     <section class="card" id="audit">
@@ -468,45 +434,42 @@ upgrade-insecure-requests">
       <h3>What you prove</h3>
       <ul>
         <li>Prior existence of a policy, decision, report, or disclosure.</li>
-        <li>Integrity across reviews and revisions (by versioned hashes).</li>
+        <li>Integrity across revisions (one proof per version).</li>
       </ul>
-      <h3>How</h3>
+      <h3>Why teams use it</h3>
       <ul>
-        <li>Hash each finalized PDF/export.</li>
-        <li>Timestamp each hash.</li>
-        <li>Attach proofs to the audit record.</li>
+        <li>Show that a document existed before an incident, dispute, or deadline.</li>
+        <li>Reduce ambiguity during audits.</li>
       </ul>
-      <p><strong>Artifact:</strong> <code>.tproof.json</code> per document version.</p>
+      <p><strong>Artifact:</strong> <code>.tproof.json</code> per finalized version.</p>
     </section>
 
     <section class="card" id="releases">
       <h2>3) Releases & builds</h2>
       <h3>What you prove</h3>
       <ul>
-        <li>Which artifact was shipped (exact hash).</li>
-        <li>When it was issued (signed timestamp).</li>
+        <li>Which artifact was shipped (exact fingerprint).</li>
+        <li>When it was issued.</li>
       </ul>
-      <h3>How</h3>
+      <h3>Why teams use it</h3>
       <ul>
-        <li>Hash your build output (binary / bundle / SBOM).</li>
-        <li>Timestamp the hash.</li>
-        <li>Attach the <code>.tproof.json</code> proof file to release notes or the shipped artifacts.</li>
+        <li>Build integrity and supply-chain confidence.</li>
+        <li>Attach proofs to release notes and shipped artifacts.</li>
       </ul>
-      <p><strong>Artifact:</strong> release bundle hash + <code>.tproof.json</code> proof file.</p>
+      <p><strong>Artifact:</strong> a proof file for each release artifact.</p>
     </section>
 
     <section class="card" id="creators">
       <h2>4) Creators & deliverables</h2>
       <h3>What you prove</h3>
       <ul>
-        <li>When a specific work (image/audio/doc) existed.</li>
-        <li>That distributed copies match the certified original hash.</li>
+        <li>When a specific work existed (image/audio/doc).</li>
+        <li>That shared copies match the certified version.</li>
       </ul>
-      <h3>How</h3>
+      <h3>Why teams use it</h3>
       <ul>
-        <li>Hash the exported file.</li>
-        <li>Timestamp the hash.</li>
-        <li>Ship the proof alongside the file.</li>
+        <li>Clear evidence for deliverables and handoffs.</li>
+        <li>Simple, portable proof you can attach anywhere.</li>
       </ul>
       <p><strong>Artifact:</strong> <code>work.ext</code> + <code>work.ext.tproof.json</code>.</p>
     </section>
@@ -516,15 +479,14 @@ upgrade-insecure-requests">
       <h3>What you prove</h3>
       <ul>
         <li>When a dataset snapshot existed.</li>
-        <li>That the dataset used for an analysis is the same later.</li>
+        <li>That the dataset used for analysis is the same later.</li>
       </ul>
-      <h3>How</h3>
+      <h3>Why teams use it</h3>
       <ul>
-        <li>Hash the dataset file(s) or an archive/manifest.</li>
-        <li>Timestamp the hash.</li>
-        <li>Reference the proof in papers, model cards, or registry entries.</li>
+        <li>Reproducibility for research and model training.</li>
+        <li>Verifiable snapshots for sharing and publishing.</li>
       </ul>
-      <p><strong>Artifact:</strong> dataset manifest hash + <code>.tproof.json</code> proof file.</p>
+      <p><strong>Artifact:</strong> a proof file for each dataset snapshot.</p>
     </section>
 
     <section class="card" id="supply">
@@ -534,13 +496,12 @@ upgrade-insecure-requests">
         <li>Integrity of delivered packages, SBOMs, and configs.</li>
         <li>Traceable issuance timestamps across vendors.</li>
       </ul>
-      <h3>How</h3>
+      <h3>Why teams use it</h3>
       <ul>
-        <li>Hash each deliverable (SBOM, license pack, config export).</li>
-        <li>Timestamp the hash.</li>
-        <li>Share the <code>.tproof.json</code> proof file with procurement/SLA documentation.</li>
+        <li>Less ambiguity in procurement and incident response.</li>
+        <li>Clear evidence for “what was delivered, when”.</li>
       </ul>
-      <p><strong>Artifact:</strong> vendor deliverable hash + <code>.tproof.json</code> proof file.</p>
+      <p><strong>Artifact:</strong> a proof file attached to each deliverable.</p>
     </section>
 
     <section class="card" id="workflow">
@@ -549,20 +510,20 @@ upgrade-insecure-requests">
         <li>Hash locally (SHA-256) the exact bytes you care about.</li>
         <li>Create a proof via <a href="/verify.html">Create / Verify</a> or the API.</li>
         <li>Store the <code>.tproof.json</code> proof file next to the artifact.</li>
-        <li>Verify later: offline inspection (proof file) + optional online verification (upload the proof to verify).</li>
+        <li>Verify later using the proof file.</li>
       </ol>
-      <p class="muted">The proof file is the portable artifact you can keep, share, and inspect offline.</p>
+      <p class="muted">The proof file is the portable artifact you can keep, share, and inspect.</p>
     </section>
 
     <section class="card" id="best">
       <h2>Best practices</h2>
       <ul>
-        <li><strong>Canonicalization:</strong> for text, prefer UTF-8 and normalize line endings (LF) before hashing if you need reproducibility across systems.</li>
-        <li><strong>Signed proofs:</strong> proofs are signed (Ed25519) and verifiable without revealing your content.</li>
-        <li><strong>No personal data:</strong> keep metadata small and avoid PII.</li>
-        <li><strong>Keep proofs:</strong> store the <code>.tproof.json</code> proof file with artifacts (not only links).</li>
-        <li><strong>Stability:</strong> use a consistent hashing workflow so results are reproducible.</li>
+        <li><strong>Reproducibility:</strong> for text, use UTF-8 and stable line endings if you need consistent hashes across systems.</li>
+        <li><strong>Minimal metadata:</strong> avoid personal data; keep proofs portable and neutral.</li>
+        <li><strong>Versioning:</strong> one proof per version/snapshot/release.</li>
+        <li><strong>Keep proofs:</strong> store the <code>.tproof.json</code> file with artifacts (not only links).</li>
       </ul>
+      <p class="muted">Implementation details and endpoints are in <a href="/docs.html">API Docs</a>.</p>
     </section>
 
     <section class="card" id="try">
@@ -571,14 +532,14 @@ upgrade-insecure-requests">
         Use <a href="/verify.html">Create / Verify</a> to create a proof in seconds, or verify an existing <code>.tproof.json</code>.
       </p>
       <p class="muted">
-        Integration details live in <a href="/docs.html">API Docs</a>.
+        Developer integration lives in <a href="/docs.html">API Docs</a>.
       </p>
     </section>
 
     <section class="card" id="faq">
       <h2>Mini FAQ</h2>
       <p><strong>Do you store my files?</strong> No. TimeProofs is hash-only.</p>
-      <p><strong>Is a file date enough?</strong> No. File dates are editable; proofs are signed and verifiable using the proof file.</p>
+      <p><strong>Is a file date enough?</strong> No. File dates are editable; proofs are verifiable.</p>
       <p><strong>Blockchain required?</strong> No.</p>
       <p class="muted">
         Next: <a href="/docs.html">API Docs</a> · <a href="/proofspec.html">ProofSpec</a> · <a href="/verify.html">Create / Verify</a>
@@ -586,7 +547,6 @@ upgrade-insecure-requests">
     </section>
   </main>
 
-  <!-- Footer (aligné v0.2: no YouTube, LinkedIn profile) -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
@@ -623,10 +583,8 @@ upgrade-insecure-requests">
     </div>
   </footer>
 
-  <!-- Scripts -->
   <script defer nonce="TP-2025">
   (function(){
-    // Header shade
     const hdr=document.getElementById('hdr');
     function onScroll(){
       if(window.scrollY>6) hdr.classList.add('scrolled');
@@ -635,7 +593,6 @@ upgrade-insecure-requests">
     onScroll();
     window.addEventListener('scroll', onScroll, { passive:true });
 
-    // Burger
     const burger=document.getElementById('tp-burger');
     const nav=document.getElementById('tp-nav');
     function openMenu(){
@@ -663,7 +620,6 @@ upgrade-insecure-requests">
       if(window.matchMedia('(min-width: 900px)').matches) closeMenu();
     },{ passive:true });
 
-    // Auto aria-current
     (function(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
       document.querySelectorAll('header nav a, footer .links a').forEach(a=>{
@@ -672,7 +628,6 @@ upgrade-insecure-requests">
       });
     })();
 
-    // Copy buttons on all <pre>
     (function installCopyButtons(){
       document.querySelectorAll('pre').forEach((pre)=>{
         if(pre.querySelector('.copy-btn')) return;
@@ -700,11 +655,10 @@ upgrade-insecure-requests">
       });
     })();
 
-    // Service Worker
     if('serviceWorker' in navigator){
       navigator.serviceWorker.register('/sw.js',{type:'module',scope:'/'}).catch(()=>{});
     }
   })();
   </script>
 </body>
-  </html>
+      </html>
