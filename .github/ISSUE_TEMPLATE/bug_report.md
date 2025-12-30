@@ -1,60 +1,61 @@
----
-name: "🐞 Bug report"
-about: "Report a problem in TimeProofs (API, Worker, UI, Docs)"
-title: "[BUG] "
-labels: bug
-assignees: BACOUL
----
+🐞 Bug Report — TimeProofs
 
-# Bug Report — TimeProofs
+Thank you for reporting an issue with TimeProofs.
+Please complete this form so we can reproduce and fix the problem efficiently.
 
-## 🔍 Description
-A clear and concise description of the issue.
+🔍 Description  
+Provide a clear and concise description of the issue.  
+What is broken? What did you expect to happen?
 
-## 🧪 Steps to Reproduce
+🧪 Steps to Reproduce  
+Describe the minimal steps to reproduce the issue.  
 1.  
 2.  
 3.  
 
-Provide the minimal reproducible steps.
+Include exact inputs if possible (hashes, endpoints, commands).
 
-## ✅ Expected Behavior
-What should have happened?
+✅ Expected Behavior  
+Describe what should have happened.
 
-## ❌ Actual Behavior
-What actually happened?
+❌ Actual Behavior  
+Describe what actually happened.
 
-## 🌐 Environment
-- Device:  
-- OS:  
-- Browser:  
-- Version:  
-- API Endpoint (if relevant):  
+🌐 Environment  
+Product / Component: (API / SDK / Worker / Docs / Other)  
+Version: (e.g. v0.2)  
+Environment: (local / production / staging)  
+OS:  
+Runtime (Node / Browser / Deno / etc):  
+Browser (if applicable):  
 
-## 📤 API Request (if applicable)
-Paste your request payload or cURL here:
+📤 API Request (if applicable)  
+Paste the exact request used:
 
-```
-<api request or payload>
-```
+<request payload or curl>
 
-## 📄 API Response (if applicable)
+📄 API Response (if applicable)
 
-```
-<api response>
-```
+<response payload>
 
-## 📸 Screenshots
-If applicable, add screenshots or screen recordings.
+🧪 Reproducibility  
+[ ] Always reproducible  
+[ ] Sometimes  
+[ ] Hard to reproduce  
 
-## 📝 Additional Context
-Anything else we should know?
+🧩 Protocol Context  
+[ ] Uses canonical string (hash|issuedAt|issuer|nonce)  
+[ ] Uses Ed25519 signature  
+[ ] Stateless (no storage involved)  
+[ ] Uses official endpoint (https://api.timeproofs.io)  
+[ ] Uses .tproof.json bundle  
 
----
+📎 Additional Context  
+Anything else that might help diagnose the issue.
 
-### 🔒 Security Note
-If this issue relates to **security, privacy or integrity**,  
-**do not submit here** — instead email:
+🔐 Security Notice  
+If this issue involves security, cryptography, data exposure, or integrity, do NOT open a public issue.  
 
+Please report responsibly via:  
 security@timeproofs.io  
 https://timeproofs.io/.well-known/security.txt
