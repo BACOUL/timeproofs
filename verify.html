@@ -269,6 +269,7 @@ upgrade-insecure-requests">
     .card{
       background:#0c1424; border:1px solid var(--line); border-radius:12px;
       padding:18px; position:relative;
+      min-width:0;
     }
     .card h2{ margin:.2em 0 .4em; font-size:1.2rem; color:#b9e7f5; }
     .card p.hint{ margin:0 0 10px; font-size:.9rem; color:#93a1b5; }
@@ -301,7 +302,7 @@ upgrade-insecure-requests">
     textarea{ min-height:110px; resize:vertical; overflow:auto; overflow-wrap:anywhere }
 
     .row{ display:flex; flex-wrap:wrap; gap:10px; align-items:flex-start }
-    .row > *{ flex:1 1 220px }
+    .row > *{ flex:1 1 220px; min-width:0 }
 
     .drop{
       margin-top:10px; padding:14px; border:1px dashed #2b3b55;
@@ -331,16 +332,28 @@ upgrade-insecure-requests">
       border-radius:10px; border:1px solid #22314f; background:#0b1220;
       display:none; grid-template-columns:minmax(0,1fr); gap:6px;
       font-size:.9rem;
+      min-width:0;
     }
     .summary .item{ display:flex; gap:8px; align-items:center; min-width:0 }
     .summary .k{ color:#9fb3c9; flex:0 0 140px; min-width:0; }
-    .summary code{ font-size:.9rem; display:inline-block; max-width:100%; overflow-wrap:anywhere; }
+    .summary code{
+      font-size:.9rem; display:inline-block;
+      max-width:100%;
+      min-width:0;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      vertical-align:bottom;
+    }
 
-    pre,code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
+    /* Fix hash overflow everywhere */
+    pre, code{ max-width:100% }
+    pre, code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
     pre{
       position:relative;
       margin-top:10px; max-height:260px; overflow:auto;
       padding:12px; border-radius:12px; background:#0b1426; border:1px solid #1f2a44; font-size:.9rem;
+      min-width:0;
     }
 
     .file-actions{
@@ -357,15 +370,17 @@ upgrade-insecure-requests">
       display:none;
       gap:6px;
       font-size:.9rem;
+      min-width:0;
     }
     .checks .rowc{
       display:flex; gap:8px; align-items:center; justify-content:space-between;
       border-top:1px solid rgba(34,49,79,.65);
       padding-top:8px;
+      min-width:0;
     }
     .checks .rowc:first-child{ border-top:0; padding-top:0 }
     .checks .k{ color:#9fb3c9; font-weight:700 }
-    .checks .v{ color:#e6fbff; font-weight:700 }
+    .checks .v{ color:#e6fbff; font-weight:700; min-width:0 }
     .tag{
       display:inline-flex; align-items:center; gap:6px;
       padding:3px 8px; border-radius:999px; font-size:.82rem;
@@ -387,6 +402,13 @@ upgrade-insecure-requests">
       line-height:1.65;
     }
     .note strong{ color:#e6fbff }
+
+    .note.mini{
+      margin-top:10px;
+      font-size:.92rem;
+      color:#cfefff;
+    }
+    .note .muted{ color:#9fb3c9 }
 
     /* Footer (canonical) */
     footer{
@@ -429,6 +451,7 @@ upgrade-insecure-requests">
       .card{ padding:14px }
       .primary-btn{ margin-top:10px }
       .summary .k{ flex-basis:110px; }
+      .summary code{ max-width:100%; }
     }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
@@ -524,7 +547,9 @@ upgrade-insecure-requests">
         <div id="create-input-hash" style="display:none; margin-top:10px;">
           <label for="create-hash">Existing SHA-256 hash (64 hex)</label>
           <input type="text" id="create-hash" placeholder="e3b0c44298fc1c149a…" autocapitalize="off" autocomplete="off" spellcheck="false" pattern="[A-Fa-f0-9]{64}"/>
-          <p class="hint" id="hash-preview-raw">Advanced: you must already have the SHA-256 of the exact content.</p>
+          <p class="hint" id="hash-preview-raw">
+            Advanced: you must already have the SHA-256 of the exact content. This does not verify anything — it only creates a proof for that fingerprint.
+          </p>
         </div>
 
         <div class="row" style="margin-top:10px;">
@@ -571,6 +596,13 @@ upgrade-insecure-requests">
         <h2 id="verify-title">Verify a proof file</h2>
         <p class="hint">Select your <code>.tproof.json</code> proof file, then verify its signature.</p>
 
+        <!-- LOCKING BLOCKS (why file required + negative path + what is verified) -->
+        <div class="note mini" aria-label="Why a proof file is required">
+          <strong>Why a proof file is required:</strong>
+          the <code>.tproof.json</code> contains the timestamp + issuer + signature. A hash alone cannot prove <em>when</em> it was issued or <em>by whom</em> it was signed.<br/>
+          <span class="muted">If the file is corrupted, unsupported, or invalid, verification is rejected.</span>
+        </div>
+
         <label for="bundle-file">Proof file (.tproof.json)</label>
         <input type="file" id="bundle-file" accept=".tproof.json,application/json"/>
 
@@ -609,7 +641,12 @@ upgrade-insecure-requests">
           <pre id="verify-output" aria-live="polite">{}</pre>
         </div>
 
-        <div class="note" style="margin-top:14px" aria-label="Next steps">
+        <div class="note" style="margin-top:14px" aria-label="What is verified / what is not">
+          <strong>What is verified:</strong> the proof file’s structure and cryptographic signature (issuer, timestamp, and the referenced SHA-256).<br/>
+          <strong>What is not verified:</strong> this does <strong>NOT</strong> verify your original file automatically — it verifies the proof. To check a file, you must re-hash the exact file and compare it to the hash inside the proof.
+        </div>
+
+        <div class="note" style="margin-top:12px" aria-label="Next steps">
           Need integration snippets? Use <a href="/docs.html">API Docs</a>.<br/>
           Need the formal spec? Read <a href="/proofspec.html">ProofSpec</a>.
         </div>
@@ -1216,4 +1253,4 @@ upgrade-insecure-requests">
   })();
   </script>
 </body>
-</html>
+  </html>
