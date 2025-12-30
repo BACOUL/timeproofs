@@ -75,7 +75,7 @@ upgrade-insecure-requests">
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
   <!-- JSON-LD: Organization -->
-  <script type="application/ld+json">
+  <script type="application/ld+json" nonce="TP-2025">
   {
     "@context":"https://schema.org",
     "@type":"Organization",
@@ -104,7 +104,7 @@ upgrade-insecure-requests">
   </script>
 
   <!-- JSON-LD: WebSite -->
-  <script type="application/ld+json">
+  <script type="application/ld+json" nonce="TP-2025">
   {
     "@context":"https://schema.org",
     "@type":"WebSite",
@@ -116,7 +116,7 @@ upgrade-insecure-requests">
   </script>
 
   <!-- JSON-LD: WebPage -->
-  <script type="application/ld+json">
+  <script type="application/ld+json" nonce="TP-2025">
   {
     "@context":"https://schema.org",
     "@type":"WebPage",
@@ -131,6 +131,40 @@ upgrade-insecure-requests">
     "datePublished":"2025-10-22",
     "dateModified":"2025-12-30",
     "description":"Regulatory overview for TimeProofs: stateless proof files (.tproof.json), hash-only evidence, and verifiable signatures."
+  }
+  </script>
+
+  <!-- JSON-LD: FAQPage -->
+  <script type="application/ld+json" nonce="TP-2025">
+  {
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity":[
+      {
+        "@type":"Question",
+        "name":"Does TimeProofs store my files?",
+        "acceptedAnswer":{
+          "@type":"Answer",
+          "text":"No. TimeProofs is hash-only and stateless. You can create and verify proofs without uploading original content."
+        }
+      },
+      {
+        "@type":"Question",
+        "name":"Is a file timestamp enough for audit evidence?",
+        "acceptedAnswer":{
+          "@type":"Answer",
+          "text":"No. File dates are local and editable. A proof file (.tproof.json) is verifiable and can be independently checked later."
+        }
+      },
+      {
+        "@type":"Question",
+        "name":"Is TimeProofs a qualified trust service (eIDAS)?",
+        "acceptedAnswer":{
+          "@type":"Answer",
+          "text":"No. TimeProofs provides technical, verifiable evidence primitives. It is not a qualified trust service and is not legal advice."
+        }
+      }
+    ]
   }
   </script>
 
@@ -187,12 +221,13 @@ upgrade-insecure-requests">
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
 
     .tp-nav a{
-      color:var(--text);
+      color:#cfefff;
       font-weight:700;
       margin-left:18px;
       padding:10px 0;
       display:inline-block;
       text-underline-offset:3px;
+      text-decoration:none;
     }
     .tp-nav a:hover{ color:var(--accent); text-decoration:underline }
     .tp-nav a[aria-current="page"]{ color:#9beefb }
@@ -286,6 +321,16 @@ upgrade-insecure-requests">
 
     .muted{ color:var(--muted) }
 
+    .note{
+      border:1px solid #214a57;
+      background:#0d2330;
+      color:#bff1ff;
+      border-radius:12px;
+      padding:12px;
+      margin-top:10px;
+    }
+    .note strong{ color:#e6fbff }
+
     /* Footer */
     footer{
       border-top:1px solid var(--line);
@@ -295,7 +340,7 @@ upgrade-insecure-requests">
       text-align:center;
       background:#0b1020;
     }
-    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
+    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0; flex-wrap:wrap }
     footer .badge{
       display:inline-flex; align-items:center; gap:6px;
       padding:6px 10px; border:1px solid var(--line); border-radius:999px;
@@ -310,7 +355,7 @@ upgrade-insecure-requests">
     footer .links a:hover{ color:var(--accent); text-decoration:underline }
     footer .links a[aria-current="page"]{ color:var(--accent); text-decoration:underline }
 
-    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
+    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px; flex-wrap:wrap }
     .social a{
       display:inline-flex; width:40px; height:40px;
       border:1px solid var(--line); border-radius:12px;
@@ -365,10 +410,7 @@ upgrade-insecure-requests">
       <nav class="toc" aria-label="On this page">
         <a class="chip" href="#scope">Scope</a>
         <a class="chip" href="#date-vs-proof">File date ≠ proof</a>
-        <a class="chip" href="#gdpr">GDPR</a>
-        <a class="chip" href="#aiact">EU AI Act</a>
-        <a class="chip" href="#dataact">Data Act</a>
-        <a class="chip" href="#eidas">eIDAS2</a>
+        <a class="chip" href="#map">Regulations map</a>
         <a class="chip" href="#workflow">Audit workflow</a>
         <a class="chip" href="#faq">FAQ</a>
       </nav>
@@ -378,8 +420,10 @@ upgrade-insecure-requests">
       <h2>1) Scope & non-claims</h2>
       <p class="hint"><strong>What TimeProofs does:</strong> creates and verifies a signed timestamp for a SHA-256 hash (stateless, hash-only, proof file).</p>
       <p class="hint"><strong>What TimeProofs does not do:</strong> it does not store your content, does not identify people, does not provide legal advice, and is not a qualified trust service.</p>
-      <p class="hint muted">If you add metadata, keep it generic and avoid personal data or secrets.</p>
-      <p class="hint">See: <a href="/privacy.html">Privacy</a> · <a href="/legal.html">Legal</a> · <a href="/proofspec.html">ProofSpec</a> · <a href="/docs.html">API Docs</a></p>
+      <div class="note">
+        <strong>Compliance note:</strong> this page is a practical mapping of where verifiable evidence helps audits. It is not legal advice.
+      </div>
+      <p class="hint" style="margin-top:10px">See: <a href="/privacy.html">Privacy</a> · <a href="/legal.html">Legal</a> · <a href="/proofspec.html">ProofSpec</a> · <a href="/docs.html">API Docs</a></p>
     </section>
 
     <section class="card" id="date-vs-proof">
@@ -389,63 +433,49 @@ upgrade-insecure-requests">
       <p class="hint muted">In v0.2, verification is proof-based (no “verify by hash-only” lookups).</p>
     </section>
 
-    <section class="card" id="gdpr">
-      <h2>3) GDPR</h2>
-      <ul>
-        <li><strong>Minimization:</strong> hashes are enough to create proofs.</li>
-        <li><strong>Security:</strong> signatures provide integrity evidence without exposing content.</li>
-        <li><strong>Accountability:</strong> proofs can be attached to audit logs and records.</li>
-      </ul>
-      <p class="hint muted">Organizations remain responsible for how they link proofs to individuals or records in their own systems.</p>
-    </section>
-
-    <section class="card" id="aiact">
-      <h2>4) EU AI Act</h2>
-      <p class="hint">TimeProofs can support audit evidence for timelines, integrity, and versioning (outputs, datasets, configs, releases).</p>
-      <div class="table-wrap" role="region" aria-label="AI Act mapping">
+    <section class="card" id="map">
+      <h2>3) Regulations map</h2>
+      <p class="hint">Where a verifiable timestamp + integrity proof can support audit evidence.</p>
+      <div class="table-wrap" role="region" aria-label="Regulations mapping table">
         <table>
           <thead>
-            <tr><th>Need</th><th>Where proofs help</th><th>What you keep</th></tr>
+            <tr>
+              <th>Regulation</th>
+              <th>Audit expectation (high-level)</th>
+              <th>How proof files help</th>
+            </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Provenance evidence</td>
-              <td>Prove when an artifact existed</td>
-              <td>.tproof.json next to the artifact</td>
+              <td><strong>EU AI Act</strong></td>
+              <td>Traceability, technical documentation, versioning, evidence of controls and updates</td>
+              <td>Anchor datasets, model cards, prompts, outputs, releases, and change logs with <code>.tproof.json</code> proofs</td>
             </tr>
             <tr>
-              <td>Change detection</td>
-              <td>Detect changes via re-hash mismatch</td>
-              <td>New proof per version</td>
+              <td><strong>GDPR</strong></td>
+              <td>Accountability, integrity/security controls, minimization, auditability</td>
+              <td>Prove integrity/timing of records and policies without storing content in the proof (hash-only)</td>
             </tr>
             <tr>
-              <td>Reproducibility</td>
-              <td>Anchor model cards, prompts, releases</td>
-              <td>Proof references in audit logs</td>
+              <td><strong>Data Act</strong></td>
+              <td>Portability, governance, provenance for shared datasets and exports</td>
+              <td>Attach proofs to exports and dataset versions; portable evidence independent from a single storage backend</td>
+            </tr>
+            <tr>
+              <td><strong>eIDAS2</strong></td>
+              <td>Higher-assurance trust services exist; evidence requirements may be formal</td>
+              <td><span class="muted">Not a qualified trust service.</span> Still usable as technical evidence layer, depending on legal needs</td>
             </tr>
           </tbody>
         </table>
       </div>
-      <p class="hint muted">TimeProofs is infrastructure: it provides verifiable evidence primitives; it does not determine compliance on its own.</p>
-    </section>
-
-    <section class="card" id="dataact">
-      <h2>5) Data Act</h2>
-      <ul>
-        <li><strong>Portability:</strong> proofs are self-describing and can be archived with exports.</li>
-        <li><strong>Governance:</strong> datasets and reports can be versioned with proof files.</li>
-        <li><strong>Neutrality:</strong> proof format is not tied to a single database or storage.</li>
-      </ul>
-    </section>
-
-    <section class="card" id="eidas">
-      <h2>6) eIDAS2</h2>
-      <p class="hint"><strong>Not a qualified trust service.</strong> TimeProofs provides a technical proof model, not a qualified timestamp or a qualified electronic attestation.</p>
-      <p class="hint muted">Organizations can still use TimeProofs as an integrity evidence layer, depending on their legal needs.</p>
+      <p class="hint muted" style="margin-top:10px">
+        TimeProofs is infrastructure: it provides verifiable evidence primitives. Compliance depends on your broader process and controls.
+      </p>
     </section>
 
     <section class="card" id="workflow">
-      <h2>7) Audit workflow</h2>
+      <h2>4) Audit workflow</h2>
       <ol>
         <li>Hash the artifact locally.</li>
         <li>Create a proof and download the proof file (<code>.tproof.json</code>).</li>
@@ -457,10 +487,10 @@ upgrade-insecure-requests">
     </section>
 
     <section class="card" id="faq">
-      <h2>8) FAQ</h2>
+      <h2>5) FAQ</h2>
 
       <h3>Do you store my files?</h3>
-      <p class="hint">No. TimeProofs is hash-only. Your original content does not need to be uploaded.</p>
+      <p class="hint">No. TimeProofs is hash-only and stateless. Your original content does not need to be uploaded.</p>
 
       <h3>Is this legally binding?</h3>
       <p class="hint">TimeProofs provides technical, verifiable evidence. It is not legal advice and not a qualified trust service.</p>
@@ -468,8 +498,8 @@ upgrade-insecure-requests">
       <h3>Is a file timestamp enough?</h3>
       <p class="hint">No. File dates are editable and not independently verifiable. Proof files can be verified by third parties.</p>
 
-      <h3>Can I use it for AI audits?</h3>
-      <p class="hint">Yes, as an evidence layer for integrity and timeline (outputs, datasets, configs, releases).</p>
+      <h3>Can I verify with only a hash?</h3>
+      <p class="hint">No. In v0.2, verification requires the full proof file (<code>.tproof.json</code>).</p>
 
       <div style="margin-top:16px;">
         <a class="chip" href="#top" aria-label="Back to top">↑ Top</a>
@@ -532,6 +562,7 @@ upgrade-insecure-requests">
         'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
       )).filter(el => !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length));
     }
+
     function openMenu(){
       lastFocus=document.activeElement;
       nav.setAttribute('data-state','open');
@@ -540,6 +571,7 @@ upgrade-insecure-requests">
       const focusables=getFocusable(nav);
       if(focusables[0]) focusables[0].focus({preventScroll:true});
     }
+
     function closeMenu(){
       nav.setAttribute('data-state','closed');
       burger.setAttribute('aria-expanded','false');
@@ -547,6 +579,7 @@ upgrade-insecure-requests">
       if(lastFocus && typeof lastFocus.focus==="function") lastFocus.focus({preventScroll:true});
       lastFocus=null;
     }
+
     function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
     burger && burger.addEventListener('click', toggleMenu);
 
