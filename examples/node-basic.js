@@ -1,11 +1,9 @@
 // examples/node-basic.js
-// Minimal Node.js example using the TimeProofs v0.2 SDK (draft)
+// TimeProofs v0.2 — Node.js minimal example
 
 const { createClient } = require("../sdk/timeproof");
 
-// Configure the client
 const tp = createClient({
-  apiKey: process.env.TIMEPROOFS_KEY || "tp_test_xxx",
   baseUrl: "https://api.timeproofs.io"
 });
 
@@ -13,40 +11,37 @@ async function main() {
   try {
     const text = "Hello from TimeProofs v0.2 example";
 
-    // 1) Hash the text locally
+    // 1) Hash locally
     const hash = await tp.hashText(text);
-    console.log("Local SHA-256 hash:", hash);
+    console.log("Hash:", hash);
 
-    // 2) Create a proof via the API
-    const proof = await tp.createProof({
-      hash,
-      label: "node-basic-example",
-      metadata: {
+    // 2) Request timestamp from API (stateless)
+    const ts = await tp.timestamp(hash);
+    console.log("Timestamp response:", ts);
+
+    // 3) Build proof bundle locally
+    const bundle = tp.createBundle({
+      hash: ts.hash,
+      timestamp: ts.timestamp,
+      proof: ts.proof,
+      meta: {
         env: "demo",
-        sdk: "js-v0.2"
+        sdk: "js-v0.2",
+        note: "Node example"
       }
     });
 
-    console.log("Proof response:");
-    console.dir(proof, { depth: null });
+    console.log("Bundle:");
+    console.dir(bundle, { depth: null });
 
-    // 3) Verify via the API
-    const verify = await tp.verify({ hash });
-    console.log("Verify response:");
-    console.dir(verify, { depth: null });
-
-    // 4) (Optional) Offline verification for future .tproof.json bundles
-    // const bundle = require("./demo.tproof.json");
-    // const { verifyOffline } = require("../sdk/timeproof");
-    // const res = await verifyOffline(bundle, {
-    //   expectedIssuer: "https://timeproofs.io"
-    // });
-    // console.log("Offline bundle check:", res);
+    // 4) Offline verification (no API)
+    const result = await tp.verifyBundle(bundle);
+    console.log("Verification result:");
+    console.dir(result, { depth: null });
 
   } catch (err) {
-    console.error("Error in node-basic example:");
-    console.error(err);
-    process.exitCode = 1;
+    console.error("Error:", err);
+    process.exit(1);
   }
 }
 
