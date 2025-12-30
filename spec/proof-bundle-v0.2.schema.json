@@ -30,7 +30,7 @@
     },
     "timestamp": {
       "type": "object",
-      "required": ["issuedAt", "issuer"],
+      "required": ["issuedAt", "issuer", "nonce"],
       "additionalProperties": false,
       "properties": {
         "issuedAt": {
@@ -45,7 +45,7 @@
         },
         "nonce": {
           "type": "string",
-          "description": "Optional random nonce used in the timestamp"
+          "description": "Random nonce used in the timestamp (required in v0.2)"
         }
       }
     },
@@ -108,37 +108,17 @@
             "evidence"
           ]
         },
-        "mime": {
-          "type": "string",
-          "description": "MIME type of the associated file (optional)"
-        },
-        "domain": {
-          "type": "string",
-          "description": "Business domain, process or system category"
-        },
-        "purpose": {
-          "type": "string",
-          "description": "Purpose of the proof"
-        },
-        "createdBy": {
-          "type": "string",
-          "description": "User, system or agent that created the bundle"
-        },
-        "tool": {
-          "type": "string",
-          "description": "Software/tool name used to generate the bundle"
-        },
+        "mime": { "type": "string", "description": "MIME type of the associated file (optional)" },
+        "domain": { "type": "string", "description": "Business domain, process or system category" },
+        "purpose": { "type": "string", "description": "Purpose of the proof" },
+        "createdBy": { "type": "string", "description": "User, system or agent that created the bundle" },
+        "tool": { "type": "string", "description": "Software/tool name used to generate the bundle" },
         "labels": {
           "type": "array",
-          "items": {
-            "type": "string"
-          },
+          "items": { "type": "string" },
           "description": "Custom tags or labels"
         },
-        "notes": {
-          "type": "string",
-          "description": "Human-readable notes or context"
-        }
+        "notes": { "type": "string", "description": "Human-readable notes or context" }
       }
     },
     "userSign": {
@@ -147,19 +127,9 @@
       "additionalProperties": false,
       "required": ["publicKey", "algorithm", "signature"],
       "properties": {
-        "publicKey": {
-          "type": "string",
-          "description": "Base64-encoded Ed25519 public key for user signature"
-        },
-        "algorithm": {
-          "type": "string",
-          "enum": ["Ed25519"],
-          "description": "Algorithm used for the user's local signature"
-        },
-        "signature": {
-          "type": "string",
-          "description": "Base64-encoded signature over canonicalized metadata"
-        }
+        "publicKey": { "type": "string", "description": "Base64-encoded Ed25519 public key for user signature" },
+        "algorithm": { "type": "string", "enum": ["Ed25519"], "description": "Algorithm used for the user's local signature" },
+        "signature": { "type": "string", "description": "Base64-encoded signature over canonicalized metadata" }
       }
     }
   }
