@@ -1,7 +1,7 @@
-# 🧩 TimeProofs v0.2 — Stateless Proof of Existence for All Data
+🧩 TimeProofs v0.2 — Stateless Proof of Existence for All Data
 
-TimeProofs is an open, privacy-first timestamp API and proof protocol.  
-Version 0.2 introduces a major evolution: full stateless operation and client-side proof bundles, designed for **all data domains** (AI, web, datasets, legal, finance, healthcare, supply chain, etc.).
+TimeProofs is an open, privacy-first timestamp API and proof protocol.
+Version 0.2 introduces a major evolution: full stateless operation and client-side proof bundles, designed for all data domains (AI, web, datasets, legal, finance, healthcare, supply chain, etc.).
 
 Website: https://timeproofs.io  
 API: https://api.timeproofs.io  
@@ -10,7 +10,7 @@ Status: Public Beta v0.2 (development branch)
 v0.1 remains stable and online with the legacy verify endpoint.  
 v0.2 is the next-generation protocol, focused on stateless proofs and offline verification.
 
-# ✨ What’s New in v0.2
+WHAT’S NEW IN v0.2
 
 • Fully stateless timestamp API  
 • No KV storage, no server-side persistence  
@@ -19,9 +19,9 @@ v0.2 is the next-generation protocol, focused on stateless proofs and offline ve
 • Offline verification (no server request required)  
 • New SDK v0.2 with hashing, timestamping, bundling and verifying  
 • Maintains continuity with v0.1 philosophy (hash-only, privacy-first, no blockchain)  
-• Designed to cover all data domains, not only AI
+• Designed to cover all data domains, not only AI  
 
-# 🚀 Quick Usage (v0.2)
+QUICK USAGE (v0.2)
 
 1. Compute a SHA-256 hash locally  
 2. POST it to /api/timestamp  
@@ -29,7 +29,7 @@ v0.2 is the next-generation protocol, focused on stateless proofs and offline ve
 4. Build a .tproof.json bundle client-side  
 5. Verify the bundle offline (SDK or CLI)
 
-Example timestamp response (simplified):
+Example timestamp response:
 
 {
   "version": "timeproofs-0.2",
@@ -48,28 +48,28 @@ Example timestamp response (simplified):
   }
 }
 
-# 🔌 API Reference (v0.2)
+API REFERENCE (v0.2)
 
 POST /api/timestamp  
-Body: { "hash": "<sha256-hex>" }  
+Body: { "hash": "<sha256-hex>" }
 
 Rules:
 • hash must be a 64-character lowercase SHA-256 hex string  
 • server never receives files or metadata, only the hash  
 
-Returns a timestamp response with:
+Returns:
 • hash.algorithm and hash.value  
 • timestamp.issuedAt (RFC 3339 UTC)  
 • timestamp.issuer (API base URL)  
-• timestamp.nonce (unique per proof)  
+• timestamp.nonce  
 • proof.algo, proof.hmac, proof.signature (future), proof.publicKey (future), proof.keyId  
 
 GET /api/verify  
 Not implemented for v0.2.  
-Verification is offline only via .tproof.json bundles (SDK or CLI).  
+Verification is offline only via .tproof.json bundles.  
 The v0.1 API keeps the legacy online verify endpoint.
 
-# 📦 Proof Bundles (.tproof.json)
+PROOF BUNDLES (.tproof.json)
 
 Bundles are created on the client and contain:
 
@@ -77,140 +77,106 @@ Bundles are created on the client and contain:
 • hash  
 • timestamp  
 • proof  
-• optional metadata meta (type, purpose, domain, tool, labels, notes, etc.)  
-• optional local user signature userSign (user or organization key)
+• optional metadata (type, purpose, domain, tool, labels, notes)  
+• optional local user signature  
 
 Files are never sent to the server.  
 Hashes are the only input sent to the API.
 
-The metadata meta.type is normalized to cover all data domains:
+Supported metadata types include:
+document, image, video, code, dataset, model, log, contract, release,
+config, archive, financial-statement, medical-record, supply-record,
+product-info, ai-output, ai-training-set, ai-prompt, audit-proof, evidence.
 
-• document  
-• image  
-• video  
-• code  
-• dataset  
-• model  
-• log  
-• contract  
-• release  
-• config  
-• archive  
-• financial-statement  
-• medical-record  
-• supply-record  
-• product-info  
-• ai-output  
-• ai-training-set  
-• ai-prompt  
-• audit-proof  
-• evidence  
-
-A JSON Schema for bundles is provided in:
-
+JSON Schema available at:
 spec/proof-bundle-v0.2.schema.json
 
-This schema can be used with standard JSON Schema validators (AJV, etc.) to validate .tproof.json files.
+SDK (v0.2)
 
-# 🧰 SDK (v0.2)
-
-The SDK provides a minimal, dependency-free JavaScript library for Browser + Node 18+ (global fetch).
-
-Includes:
+JavaScript SDK (Browser + Node 18+):
 
 • hashText  
 • hashBytes  
-• hashFile (browser only)  
+• hashFile  
 • timestamp  
 • createBundle  
-• verifyBundle (offline)
+• verifyBundle  
 
 Typical flow:
+1. Hash data locally  
+2. Call timestamp(hash)  
+3. Build bundle with createBundle  
+4. Store bundle  
+5. Verify later offline  
 
-1. Hash data locally (text, bytes or file).  
-2. Call timestamp(hash) against the v0.2 API.  
-3. Build a .tproof.json bundle with createBundle({ hash, timestamp, proof, meta, userSign }).  
-4. Store the bundle locally or alongside your data.  
-5. Later, verifyBundle(bundle, { file? }) to check structure and hash consistency.
+Location: sdk/timeproofs-v02.js
 
-Location in repo: sdk/timeproofs-v02.js
-
-# 🔐 Privacy & Principles
-
-v0.2 keeps the original TimeProofs guarantees:
+PRIVACY & PRINCIPLES
 
 • No files  
 • No personal data  
 • No content  
 • No metadata about users  
-• Stateless API (no persistence, no KV)  
+• Stateless API  
 • No blockchain  
 • Open verification  
 • Predictable cost  
-• Local-only metadata and optional local signatures
+• Local-only metadata and optional signatures  
 
-The server only sees the hash and protocol parameters needed for the timestamp.  
-All context stays in the .tproof.json bundle controlled by the user or the system.
+The server only sees the hash and protocol parameters.
 
-# 🌱 Supported Root Protocols
+SUPPORTED ROOT PROTOCOLS
 
-TimeProofs v0.2 can timestamp and verify the integrity of root metadata files, without owning their content or semantics:
+TimeProofs can timestamp and verify integrity for:
+robots.txt  
+security.txt  
+humans.txt  
+integrity.txt  
+authenticity.txt  
+rights.txt  
+explainable-ia.txt  
 
-• robots.txt  
-• security.txt  
-• humans.txt  
-• integrity.txt  
-• authenticity.txt  
-• rights.txt  
-• explainable-ia.txt  
+These remain independent standards.
 
-These protocols remain fully independent from TimeProofs.  
-TimeProofs only provides cryptographic proof of existence and integrity over time.
-
-# 🔄 Migration from v0.1 → v0.2
+MIGRATION FROM v0.1 → v0.2
 
 v0.1:
-
 • Server stores timestamps  
-• Public online verify endpoint  
-• Simple proof format tied to the API  
+• Online verification  
+• Simple proof format  
 
 v0.2:
+• Fully stateless  
+• New timestamp format with issuer and nonce  
+• New proof structure (HMAC + future Ed25519)  
+• Offline verification  
+• SDK-managed bundles  
 
-• Fully stateless (no server persistence)  
-• New timestamp response with issuer and nonce  
-• New proof format (HMAC + future Ed25519)  
-• Verification is offline with .tproof.json bundles  
-• SDK handles hashing, timestamping, bundling and verifying locally  
+Both versions remain compatible at the SHA-256 level.
 
-Both versions remain compatible at the hashing layer (SHA-256).  
-Applications can gradually move from v0.1 online verify to v0.2 offline bundles.
+PROJECT STRUCTURE (v0.2)
 
-# 🧱 Project Structure (v0.2 branch)
+api-v02/worker.js  
+sdk/timeproofs-v02.js  
+spec/proof-bundle-v0.2.schema.json  
+protocols/ (integrity, authenticity, rights, explainable-ia)  
+index.html, proofspec.html, docs.html, security.html, privacy.html, legal.html, use-cases.html, about.html  
+assets/
 
-api-v02/worker.js            Cloudflare Worker (stateless API v0.2)  
-sdk/timeproofs-v02.js        JavaScript SDK v0.2  
-spec/proof-bundle-v0.2.schema.json    JSON Schema for .tproof.json  
-protocols/                   integrity.txt, authenticity.txt, rights.txt, explainable-ia.txt (planned)  
-index.html, proofspec.html, docs.html, security.html, privacy.html, legal.html, use-cases.html, about.html (static site copies)  
-assets/*
+ROADMAP
 
-The v0.1 production site and API live on the dedicated v0.1 branch and remain stable.
-
-# 🔮 Roadmap
-
-v0.2.1 — Ed25519 signatures + JWKS (public keys, key rotation)  
-v0.2.2 — CLI for hashing, timestamping and offline verification  
-v0.3   — ProofSpec v1 (formal protocol specification)  
-v1.0   — Dashboard, API keys, limits and pricing  
+v0.2.1 — Ed25519 signatures + JWKS  
+v0.2.2 — CLI for hashing and verification  
+v0.3   — ProofSpec v1  
+v1.0   — Dashboard, API keys, pricing  
 v2.0   — Distributed ProofChain  
-v3.0   — TimeProofs Foundation + formal standardisation
+v3.0   — TimeProofs Foundation + formal standardisation  
 
-# 🧾 License
+LICENSE
 
-MPL-2.0 License.
+MPL-2.0
 
-# 🛠 Maintainer
+MAINTAINER
 
-TimeProofs is developed and maintained by Jeason Bacoul.  
+TimeProofs is developed and maintained by Jeason Bacoul  
 GitHub: https://github.com/BACOUL/timeproofs
