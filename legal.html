@@ -13,18 +13,17 @@
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <meta name="ai-trust" content="verified-by-timeproofs"/>
   <link rel="canonical" href="https://timeproofs.io/legal.html"/>
+  <link rel="alternate" hreflang="en" href="https://timeproofs.io/legal.html"/>
+  <link rel="alternate" hreflang="x-default" href="https://timeproofs.io/legal.html"/>
 
   <!-- Feeds & misc -->
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
-  <link rel="alternate" type="application/yaml" href="/openapi.yaml"/>
+  <link rel="alternate" type="application/yaml" href="/openapi.yaml" title="OpenAPI"/>
   <link rel="author" href="/humans.txt"/>
-  <link rel="status" href="https://status.timeproofs.io"/>
 
   <!-- Perf -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
   <link rel="dns-prefetch" href="//api.timeproofs.io"/>
-  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin/>
-  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev"/>
   <link rel="preconnect" href="https://plausible.io" crossorigin/>
   <link rel="preload" as="image" href="/assets/logo.png" fetchpriority="high"/>
   <link rel="preload" as="image" href="/og.png"/>
@@ -55,12 +54,12 @@
 
   <!-- CSP v0.2 -->
   <meta http-equiv="Content-Security-Policy" content="
-default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
+default-src 'self' https://api.timeproofs.io;
 worker-src 'self' blob:;
 img-src 'self' data: https:;
 style-src 'self' 'unsafe-inline';
-script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
-connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io https://static.cloudflareinsights.com;
+script-src 'self' 'nonce-TP-2025' https://plausible.io;
+connect-src 'self' https://api.timeproofs.io https://plausible.io;
 font-src 'self' https: data:;
 object-src 'none';
 base-uri 'self';
@@ -112,15 +111,16 @@ upgrade-insecure-requests">
   {
     "@context":"https://schema.org",
     "@type":"WebPage",
-    "name":"Legal — TimeProofs",
+    "name":"Legal",
     "url":"https://timeproofs.io/legal.html",
-    "about":"Legal information, disclaimers, acceptable use, intellectual property, and contact.",
-    "dateModified":"2025-12-22",
-    "inLanguage":"en"
+    "isPartOf":{"@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"},
+    "inLanguage":"en",
+    "dateModified":"2025-12-30",
+    "description":"Legal information, disclaimers, acceptable use, intellectual property, and contact for TimeProofs."
   }
   </script>
 
-  <!-- Styles (alignées sur Use-Cases/Docs/Privacy) -->
+  <!-- Styles -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
@@ -133,7 +133,10 @@ upgrade-insecure-requests">
     html{
       height:100%; max-width:100%; overflow-x:hidden; background:var(--bg);
       scroll-behavior:smooth;
+      scroll-padding-top:120px;
     }
+    @media (min-width:900px){ html{ scroll-padding-top:104px } }
+
     body{
       margin:0; color:var(--text);
       font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
@@ -146,11 +149,8 @@ upgrade-insecure-requests">
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
 
-    /* Offset anchors for fixed header */
     [id]{ scroll-margin-top:120px }
-    @media (min-width:900px){
-      [id]{ scroll-margin-top:104px }
-    }
+    @media (min-width:900px){ [id]{ scroll-margin-top:104px } }
 
     .skip{
       position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
@@ -196,6 +196,8 @@ upgrade-insecure-requests">
     }
     .tp-burger span{ font-size:20px; line-height:1 }
 
+    .nav-cta{ display:none; }
+
     @media (min-width:900px){
       .tp-burger{ display:none }
       .tp-nav{ display:flex; align-items:center }
@@ -213,6 +215,7 @@ upgrade-insecure-requests">
       }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
+
       .nav-cta{
         display:block; margin-top:6px; padding:12px; text-align:center;
         border-radius:12px; background:var(--accent); color:#06202a; font-weight:800;
@@ -241,87 +244,65 @@ upgrade-insecure-requests">
       border-radius:999px; font-size:.85rem;
     }
 
-    /* TOC */
-    nav.toc{
-      display:flex; flex-wrap:wrap; gap:12px;
-      margin:14px auto 0; padding:12px 0 14px;
-      max-width:1100px; border-bottom:1px solid var(--line);
-      align-items:center;
+    /* TOC (chips) */
+    .toc{
+      display:flex; flex-wrap:wrap; gap:8px; justify-content:center;
+      margin:10px auto 0; max-width:980px;
     }
-    .toc-label{
-      font-size:.9rem; color:#9fb3c9;
-      margin-right:4px;
-    }
-    nav.toc a{
-      display:inline-block; background:#0d2330; border:1px solid #214a57;
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
       padding:8px 12px; border-radius:999px;
-      color:#bff1ff; text-decoration:none; font-size:.9rem;
+      border:1px solid #22314f; background:#050816; color:#e6fbff;
+      font-weight:700; font-size:.9rem; text-decoration:none;
     }
-    nav.toc a:hover{ text-decoration:underline }
-    .toc-top{
-      display:inline-block;
-      margin:8px auto 0;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid #214a57;
-      background:#0d2330;
-      color:#bff1ff;
-      font-size:.85rem;
-      text-decoration:none;
-    }
-    .toc-top:hover{ text-decoration:underline }
+    .chip:hover{ text-decoration:underline; border-color:#22d3ee }
 
     /* Content */
     main{ padding:0 0 40px }
     .meta{
-      color:var(--muted); margin:18px auto 6px; max-width:1100px;
+      color:var(--muted); margin:18px auto 6px; max-width:1100px; text-align:center;
     }
     .card{
-      background:#0c1424; border:1px solid transparent; border-radius:16px;
+      background:#0c1424; border:1px solid var(--line); border-radius:12px;
       padding:18px; margin:14px auto; max-width:1100px;
-      position:relative;
     }
-    .card::before{
-      content:""; position:absolute; inset:0; border-radius:inherit; padding:1px;
-      background:linear-gradient(135deg, rgba(34,211,238,.28), rgba(34,211,238,.05));
-      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude;
-      pointer-events:none;
-    }
-    h2{ color:#b9e7f5; font-size:1.25rem; margin:1.2em 0 .6em }
-    h3{ color:#aee9f7; font-size:1.05rem; margin:1em 0 .3em }
-    .muted{ color:var(--muted); font-size:.9rem }
+    h2{ color:#b9e7f5; font-size:1.25rem; margin:.2em 0 .6em }
+    .muted{ color:var(--muted); font-size:.95rem }
 
-    /* Footer (must match index) */
-    footer{ border-top:1px solid var(--line); margin-top:44px; padding:18px; color:#7c8aa5; text-align:center }
-    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
-    footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
-    footer .links a{ font-weight:600; text-underline-offset:3px; }
-    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
-    .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; transition:transform .18s var(--e); color:#cfefff }
+    /* Footer (canon) */
+    footer{
+      border-top:1px solid var(--line); margin-top:28px;
+      padding:18px; color:#7c8aa5; text-align:center;
+      background:#0b1020;
+    }
+    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0; }
+    footer .badge{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px; border:1px solid var(--line); border-radius:999px;
+      background:#0d1628; font-size:.9rem; color:#cfefff;
+      text-decoration:none;
+    }
+    footer .links a{
+      color:#cfefff; font-weight:600; text-underline-offset:3px; text-decoration:none;
+    }
+    footer .links a:hover{ color:var(--accent); text-decoration:underline }
+    footer .links a[aria-current="page"]{ color:var(--accent); text-decoration:underline }
+
+    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px; }
+    .social a{
+      display:inline-flex; width:40px; height:40px;
+      border:1px solid var(--line); border-radius:12px;
+      align-items:center; justify-content:center;
+      background:#0d1628; color:#cfefff;
+      transition:transform .18s var(--e);
+    }
     .social a:hover{ transform:translateY(-2px) }
 
-    /* Nav/Footer alignment */
-    #tp-nav a,
-    footer .links a{
-      color:var(--text);
-      font-weight:600;
-      text-decoration:none;
-      text-underline-offset:3px;
-    }
-    #tp-nav a:hover,
-    footer .links a:hover{
-      color:var(--accent);
-      text-decoration:underline;
-    }
-    #tp-nav a[aria-current="page"],
-    footer .links a[aria-current="page"]{
-      color:var(--accent);
-      text-decoration:underline;
-    }
-
-    a:focus-visible, .cta-header:focus-visible, .tp-burger:focus-visible{
+    a:focus-visible, .cta-header:focus-visible, .tp-burger:focus-visible, .chip:focus-visible{
       outline:2px solid #22d3ee; outline-offset:3px; border-radius:12px;
     }
+
+    #tp-nav a.nav-cta{ color:#06202a; }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
@@ -360,32 +341,20 @@ upgrade-insecure-requests">
       <p class="lead">
         Legal information and disclaimers for the TimeProofs website, protocol draft (ProofSpec), and reference API.
       </p>
+
+      <nav class="toc" aria-label="On this page">
+        <a class="chip" href="#notice">Legal notice</a>
+        <a class="chip" href="#scope">Scope</a>
+        <a class="chip" href="#proof">What it proves</a>
+        <a class="chip" href="#notproof">What it does not</a>
+        <a class="chip" href="#use">Acceptable use</a>
+        <a class="chip" href="#liability">Liability</a>
+        <a class="chip" href="#contact">Contact</a>
+      </nav>
     </section>
 
-    <!-- TOC -->
-    <nav class="toc" aria-label="Contents">
-      <span class="toc-label">On this page</span>
-      <a href="#notice">Legal notice</a>
-      <a href="#scope">Scope</a>
-      <a href="#proof">What TimeProofs proves</a>
-      <a href="#notproof">What it does not prove</a>
-      <a href="#noadvice">No legal advice</a>
-      <a href="#ip">Intellectual property</a>
-      <a href="#use">Acceptable use</a>
-      <a href="#privacy">Privacy</a>
-      <a href="#security">Security</a>
-      <a href="#availability">Availability</a>
-      <a href="#liability">Liability</a>
-      <a href="#changes">Changes</a>
-      <a href="#contact">Contact</a>
-    </nav>
-    <div style="text-align:center">
-      <a class="toc-top" href="#top">↑ Top</a>
-    </div>
-
-    <!-- Meta -->
     <p class="meta">
-      Last updated: <strong>2025-12-22</strong> ·
+      Last updated: <strong>2025-12-30</strong> ·
       Contact: <a href="mailto:contact@timeproofs.io">contact@timeproofs.io</a> ·
       See also: <a href="/privacy.html">Privacy</a>, <a href="/security.html">Security</a>
     </p>
@@ -399,9 +368,7 @@ upgrade-insecure-requests">
         <li><strong>Jurisdiction</strong>: France / European Union</li>
         <li><strong>Business entity</strong>: project in public beta</li>
       </ul>
-      <p class="muted">
-        If you need formal identification details (e.g., company registration), request them by email.
-      </p>
+      <p class="muted">If you need formal identification details (e.g., company registration), request them by email.</p>
     </section>
 
     <section class="card" id="scope">
@@ -418,6 +385,7 @@ upgrade-insecure-requests">
         <li>A specific <strong>hash</strong> existed at a specific <strong>timestamp</strong> (issued by the service).</li>
         <li>The proof can be <strong>verified</strong> later against the same hash without revealing the original content.</li>
       </ul>
+      <p class="muted">In stateless v0.2, verification is proof-file based (bundle required) — not a database lookup.</p>
     </section>
 
     <section class="card" id="notproof">
@@ -431,30 +399,11 @@ upgrade-insecure-requests">
       </ul>
     </section>
 
-    <section class="card" id="noadvice">
-      <h2>No legal advice</h2>
-      <p>
-        Nothing on this website constitutes legal advice. You should consult a qualified professional for legal matters.
-      </p>
-    </section>
-
-    <section class="card" id="ip">
-      <h2>Intellectual property</h2>
-      <ul>
-        <li><strong>Name and branding</strong>: “TimeProofs” may be used only to refer to the project/service.</li>
-        <li><strong>Open source</strong>: reference implementation code is published on GitHub and governed by its license.</li>
-        <li><strong>Documentation</strong>: protocol/spec documents are governed by the applicable repository license.</li>
-      </ul>
-      <p class="muted">
-        GitHub: <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2" target="_blank" rel="noopener">github.com/BACOUL/timeproofs</a>
-      </p>
-    </section>
-
     <section class="card" id="use">
       <h2>Acceptable use</h2>
       <ul>
         <li>No unlawful use or infringement of third-party rights.</li>
-        <li>No abuse, attacks, scraping intended to degrade the service, or bypassing safeguards.</li>
+        <li>No abuse, attacks, or scraping intended to degrade the service or bypass safeguards.</li>
         <li><strong>Do not include personal data</strong> in optional metadata fields.</li>
       </ul>
     </section>
@@ -507,7 +456,14 @@ upgrade-insecure-requests">
         Privacy: <a href="mailto:privacy@timeproofs.io">privacy@timeproofs.io</a> ·
         Security: <a href="mailto:security@timeproofs.io">security@timeproofs.io</a>
       </p>
+      <p class="muted">
+        GitHub: <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2" target="_blank" rel="noopener">github.com/BACOUL/timeproofs</a>
+      </p>
     </section>
+
+    <div style="text-align:center; margin-top:16px;">
+      <a class="chip" href="#top" aria-label="Back to top">↑ Top</a>
+    </div>
   </main>
 
   <!-- Footer (canonique) -->
@@ -515,7 +471,7 @@ upgrade-insecure-requests">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
       <span class="badge">🛡 Privacy First</span>
-      <a class="badge" href="/proofspec.html">🔍 Open Spec v0.1</a>
+      <a class="badge" href="/proofspec.html">🔍 Open Spec v0.2</a>
     </div>
     © 2025 TimeProofs — Reference implementation of the ProofSpec protocol.
     <div class="links" style="margin-top:6px">
@@ -532,27 +488,19 @@ upgrade-insecure-requests">
     </div>
     <div class="social" aria-label="Social links">
       <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/>
-        </svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
       </a>
       <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/>
-        </svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
       </a>
       <a href="https://www.linkedin.com/in/jeason-bacoul-667938281?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noopener" aria-label="Jeason Bacoul on LinkedIn">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/>
-        </svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg>
       </a>
     </div>
   </footer>
 
-  <!-- Scripts -->
   <script defer nonce="TP-2025">
   (function(){
-    // Header shade
     const hdr=document.getElementById('hdr');
     function onScroll(){
       if(window.scrollY>6) hdr.classList.add('scrolled');
@@ -561,44 +509,69 @@ upgrade-insecure-requests">
     onScroll();
     window.addEventListener('scroll', onScroll, { passive:true });
 
-    // Burger
     const burger=document.getElementById('tp-burger');
     const nav=document.getElementById('tp-nav');
+    let lastFocus=null;
+
+    function getFocusable(container){
+      return [...container.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])')]
+        .filter(el=>!el.hasAttribute('disabled') && el.getAttribute('aria-hidden')!=='true');
+    }
+
+    function trap(e){
+      if(nav.getAttribute('data-state')!=='open') return;
+      if(e.key!=='Tab') return;
+      const f=getFocusable(nav);
+      if(!f.length) return;
+      const first=f[0], last=f[f.length-1];
+      if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+    }
+
     function openMenu(){
+      lastFocus=document.activeElement;
       nav.setAttribute('data-state','open');
       burger.setAttribute('aria-expanded','true');
       document.body.style.overflow='hidden';
+      const f=getFocusable(nav);
+      (f[0] || nav).focus?.();
+      document.addEventListener('keydown', trap);
     }
     function closeMenu(){
       nav.setAttribute('data-state','closed');
       burger.setAttribute('aria-expanded','false');
       document.body.style.overflow='';
+      document.removeEventListener('keydown', trap);
+      if(lastFocus && typeof lastFocus.focus==='function') lastFocus.focus();
+      lastFocus=null;
     }
     function toggleMenu(){
       (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu();
     }
+
     burger && burger.addEventListener('click', toggleMenu);
+
     document.addEventListener('click',(e)=>{
       if(window.matchMedia('(min-width: 900px)').matches) return;
       if(!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu();
     },{ passive:true });
+
     document.addEventListener('keydown',(e)=>{
       if(e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu();
     },{ passive:true });
+
     window.addEventListener('resize',()=>{
       if(window.matchMedia('(min-width: 900px)').matches) closeMenu();
     },{ passive:true });
 
-    // Auto aria-current
     (function(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
-      document.querySelectorAll('header nav a, footer .links a').forEach(a=>{
+      document.querySelectorAll('header nav a:not(.nav-cta), footer .links a').forEach(a=>{
         const path=new URL(a.getAttribute('href'), location.origin).pathname;
         if(path===here) a.setAttribute('aria-current','page');
       });
     })();
 
-    // SW
     if('serviceWorker' in navigator){
       navigator.serviceWorker.register('/sw.js',{type:'module',scope:'/'}).catch(()=>{});
     }
