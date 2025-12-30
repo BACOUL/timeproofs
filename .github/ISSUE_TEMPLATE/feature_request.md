@@ -1,54 +1,43 @@
----
-name: "💡 Feature Request"
-about: "Propose a new feature, enhancement, or capability for TimeProofs"
-title: "[FEATURE] "
-labels: enhancement
-assignees: BACOUL
----
+💡 Feature Request — TimeProofs
 
-# Feature Request — TimeProofs
+Propose a new feature, enhancement, or capability for TimeProofs.
 
-## ✨ Summary
-Clearly describe the feature you want added.
+✨ Summary  
+Clearly describe the feature you want to propose.
 
-## 🎯 Problem to Solve
-What problem or limitation does this feature address?
+🎯 Problem to Solve  
+Explain the limitation or problem this feature addresses.  
+Describe the context, use case, or workflow where this improvement is needed.
 
-Describe the context, use case, or workflow.
+🧩 Proposed Solution  
+Describe the solution you propose, including API, SDK, UX, or protocol changes.
 
-## 🧩 Proposed Solution
-Describe the solution you propose, including UX, API, UI, or SDK changes.
+If relevant, include an example (JSON, API call, or pseudo-code).
 
-If relevant, show an example:
+📈 Expected Impact  
+Explain how this feature improves TimeProofs:
+- Developer experience  
+- Security or trust guarantees  
+- Performance or scalability  
+- Protocol clarity or adoption  
+- New or improved use cases  
 
-```
-<example code, JSON, or API payload>
-```
+🔄 Alternatives Considered  
+Have you explored alternative approaches?  
+Why were they insufficient or less suitable?
 
-## 📈 Expected Impact
-How does this improve TimeProofs?
-- Developer experience?
-- Performance?
-- Security?
-- ProofSpec compliance?
-- New use cases?
+📸 Mockups / Examples (optional)  
+Add screenshots, diagrams, or example payloads if useful.
 
-## 🔄 Alternatives Considered
-Have you tried other approaches? Why were they insufficient?
+📝 Additional Context  
+Anything else maintainers should know before evaluating this request.
 
-## 📸 Mockups / Examples (optional)
-Add screenshots, diagrams, or sample JSON if useful.
+📌 Guidelines  
+Feature requests should respect:
+- Privacy-first design  
+- Stateless architecture  
+- Canonical proof format  
+- Ed25519-based verification  
+- ProofSpec alignment  
 
-## 📝 Additional Context
-Anything else we should consider?
-
----
-
-### 📌 Notes
-Feature requests should align with:
-- Privacy-first architecture  
-- Open verification  
-- Edge-native simplicity  
-- ProofSpec roadmap  
-
-Full roadmap: https://timeproofs.io/roadmap.html
+Roadmap reference: https://timeproofs.io/roadmap.html
