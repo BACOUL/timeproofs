@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="dark light"/>
   <title>About — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="Mission, values, governance, and transparency behind TimeProofs — the open, privacy-first standard for digital proof of existence and integrity, with signed .tproof.json bundles and offline verification."/>
+  <meta name="description" content="Mission, values, and transparency behind TimeProofs — the open, privacy-first standard for digital proof of existence and integrity, with signed .tproof.json bundles and offline verification."/>
   <meta name="keywords" content="TimeProofs,about,mission,values,governance,transparency,proof of existence,timestamp API,ProofSpec,.tproof.json,offline verification,privacy-first"/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
@@ -17,13 +17,15 @@
   <link rel="alternate" hreflang="en" href="https://timeproofs.io/about.html"/>
   <link rel="alternate" hreflang="x-default" href="https://timeproofs.io/about.html"/>
 
-  <!-- Sitemap -->
+  <!-- Feeds / Docs (v0.2) -->
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
+  <link rel="alternate" type="application/yaml" href="/openapi.yaml" title="OpenAPI"/>
+  <link rel="author" href="/humans.txt"/>
 
   <!-- Perf -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
   <link rel="dns-prefetch" href="//api.timeproofs.io"/>
-  <link rel="preconnect" href="https://plausible.io" crossorigin>
+  <link rel="preconnect" href="https://plausible.io" crossorigin/>
   <link rel="preload" as="image" href="/assets/logo.png" fetchpriority="high"/>
   <link rel="preload" as="image" href="/og.png"/>
 
@@ -32,12 +34,10 @@
   <link rel="icon" href="/assets/logo.svg" type="image/svg+xml"/>
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"/>
   <link rel="manifest" href="/site.webmanifest"/>
-  <link rel="alternate" type="application/yaml" href="/openapi.yaml"/>
-  <link rel="author" href="/humans.txt"/>
 
   <!-- Social -->
   <meta property="og:title" content="About — TimeProofs"/>
-  <meta property="og:description" content="Mission, values, governance, and transparency behind TimeProofs — open protocol, privacy-first, signed .tproof.json bundles, offline verification."/>
+  <meta property="og:description" content="Mission, values, and transparency behind TimeProofs — open protocol, privacy-first, signed .tproof.json bundles, offline verification."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/about.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
@@ -52,7 +52,28 @@
   <meta name="twitter:description" content="Mission, values, and transparency — open protocol, privacy-first, signed .tproof.json bundles, offline verification."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
-  <!-- JSON-LD Org + Site -->
+  <!-- Security meta -->
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
+
+  <!-- CSP v0.2 -->
+  <meta http-equiv="Content-Security-Policy" content="
+default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
+worker-src 'self' blob:;
+img-src 'self' data: https:;
+style-src 'self' 'unsafe-inline';
+script-src 'self' 'nonce-TP-2025' https://plausible.io;
+connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io;
+font-src 'self' https: data:;
+object-src 'none';
+base-uri 'self';
+form-action 'self';
+frame-ancestors 'none';
+upgrade-insecure-requests">
+
+  <!-- Analytics (Plausible) -->
+  <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
+
+  <!-- JSON-LD: Organization -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -61,7 +82,6 @@
     "alternateName":"TimeProofs Official",
     "url":"https://timeproofs.io/",
     "logo":"https://timeproofs.io/assets/logo.png",
-    "foundingDate":"2025-01-01",
     "knowsAbout":[
       "digital proof of existence",
       "timestamp API",
@@ -81,57 +101,44 @@
     }]
   }
   </script>
+
+  <!-- JSON-LD: WebSite -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
     "@type":"WebSite",
     "name":"TimeProofs",
     "url":"https://timeproofs.io/",
-    "dateModified":"2025-12-28"
+    "inLanguage":"en"
   }
   </script>
 
-  <!-- WebPage JSON-LD -->
+  <!-- JSON-LD: WebPage -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
     "@type":"WebPage",
-    "name":"About — TimeProofs",
+    "name":"About",
     "url":"https://timeproofs.io/about.html",
-    "isPartOf":{"@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"},
-    "dateModified":"2025-12-28"
+    "inLanguage":"en",
+    "isPartOf":{
+      "@type":"WebSite",
+      "name":"TimeProofs",
+      "url":"https://timeproofs.io/"
+    },
+    "dateModified":"2025-12-29",
+    "description":"Mission, values, and transparency behind TimeProofs and its stateless API v0.2 (.tproof.json bundles)."
   }
   </script>
 
-  <!-- Security meta -->
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
-
-  <!-- CSP v0.2 (SW + Analytics + API + fallback) -->
-  <meta http-equiv="Content-Security-Policy" content="
-default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
-worker-src 'self' blob:;
-img-src 'self' data: https:;
-style-src 'self' 'unsafe-inline';
-script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
-connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io https://static.cloudflareinsights.com;
-font-src 'self' https: data:;
-object-src 'none';
-base-uri 'self';
-form-action 'self';
-frame-ancestors 'none';
-upgrade-insecure-requests">
-
-  <!-- Analytics (Plausible) -->
-  <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
-
-  <!-- Styles (from v0.2 index reference) -->
+  <!-- Styles -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
       --ok:#34d399; --warn:#f59e0b; --err:#ef4444;
       --ring:0 0 0 1px #1e293b, 0 10px 40px rgba(34,211,238,.14);
-      --e:cubic-bezier(.22,.61,.36,1)
+      --e:cubic-bezier(.22,.61,.36,1);
     }
     *{ box-sizing:border-box }
 
@@ -140,9 +147,7 @@ upgrade-insecure-requests">
       scroll-behavior:smooth;
       scroll-padding-top:120px;
     }
-    @media (min-width:900px){
-      html{ scroll-padding-top:104px }
-    }
+    @media (min-width:900px){ html{ scroll-padding-top:104px } }
 
     body{
       margin:0; color:var(--text);
@@ -151,48 +156,57 @@ upgrade-insecure-requests">
       background:
         radial-gradient(1200px 600px at 80% -10%, rgba(34,211,238,.06), transparent 60%),
         conic-gradient(from 220deg at 10% -20%, rgba(34,211,238,.04), transparent 30%),
-        var(--bg)
+        var(--bg);
     }
+
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
 
     [id]{ scroll-margin-top:120px }
     @media (min-width:900px){ [id]{ scroll-margin-top:104px } }
 
-    .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
-    .skip:focus{ position:fixed; left:12px; top:12px; width:auto; height:auto; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
+    .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+    .skip:focus{
+      position:fixed; left:12px; top:12px; padding:8px 12px;
+      background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000;
+    }
 
+    /* Header */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
-      background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
-      display:flex; align-items:center; gap:12px; padding:0 16px; transition:background .25s var(--e)
+      background:rgba(11,16,32,.55); backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; gap:12px; padding:0 16px;
+      transition:background .25s var(--e);
     }
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
-    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
+    .tp-brand{
+      display:flex; align-items:center; gap:10px; margin-right:auto;
+      color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none;
+    }
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
 
-    /* Header nav */
     .tp-nav a{
-      color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none;
+      color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block;
       text-underline-offset:3px;
     }
+    .tp-nav a[aria-current="page"]{ color:#9beefb }
+    .tp-nav a:hover{ color:var(--accent); text-decoration:underline }
 
-    /* Header CTA */
     .cta-header{
       display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
-      border-radius:10px; background:var(--accent); color:#06202a; font-weight:800; box-shadow:0 6px 24px rgba(34,211,238,.25)
+      border-radius:10px; background:var(--accent); color:#06202a;
+      font-weight:800; box-shadow:0 6px 24px rgba(34,211,238,.25);
     }
     .cta-header:hover{ filter:brightness(1.05) }
 
-    /* Burger */
     .tp-burger{
-      display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
-      border:1px solid var(--line); border-radius:12px; background:#0c1a2e; color:#fff;
-      cursor:pointer; box-shadow:var(--ring)
+      display:inline-flex; align-items:center; justify-content:center;
+      width:48px; height:48px; border:1px solid var(--line);
+      border-radius:12px; background:#0c1a2e; color:#fff; cursor:pointer;
     }
     .tp-burger span{ font-size:20px; line-height:1 }
 
-    /* Mobile-only nav CTA */
     .nav-cta{ display:none; }
 
     @media (min-width:900px){
@@ -203,125 +217,138 @@ upgrade-insecure-requests">
     @media (max-width:899px){
       .tp-brand img{ height:34px; width:34px }
       .tp-nav{
-        position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
-        display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
-        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease
+        position:fixed; top:64px; left:0; right:0;
+        background:#0c1424; border-top:1px solid var(--line);
+        display:flex; flex-direction:column; gap:10px; padding:14px 16px;
+        box-shadow:0 16px 40px rgba(0,0,0,.45);
+        transform:translateY(-10px); opacity:0; pointer-events:none;
+        transition:opacity .2s ease, transform .2s ease;
       }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
+
       .nav-cta{
-        display:block;
-        margin-top:6px;
-        padding:12px;
-        text-align:center;
-        border-radius:12px;
-        background:var(--accent);
-        color:#06202a;
-        font-weight:800
+        display:block; margin-top:6px; padding:12px; text-align:center;
+        border-radius:12px; background:var(--accent);
+        color:#06202a; font-weight:800;
       }
     }
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
+
+    /* Hero */
     .hero{
-      min-height:calc(100svh - 64px); padding-top:92px; padding-bottom:34px;
-      display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; position:relative; isolation:isolate
+      padding-top:92px; padding-bottom:28px; text-align:center;
+      border-bottom:1px solid var(--line);
     }
     .hero-icon{
       font-size:2.05rem; line-height:1; margin-bottom:8px;
       filter:drop-shadow(0 10px 22px rgba(34,211,238,.14));
     }
     .label{
-      display:inline-flex; gap:8px; align-items:center; padding:6px 12px; border:1px solid #214a57; background:#0d2330; color:#bff1ff;
-      border-radius:999px; font-size:.85rem; margin-bottom:12px; box-shadow:var(--ring)
+      display:inline-flex; gap:8px; align-items:center; padding:6px 12px;
+      border:1px solid #214a57; background:#0d2330; color:#bff1ff;
+      border-radius:999px; font-size:.85rem; margin-bottom:12px;
     }
     .title{
-      font-size:clamp(2.2rem, 6.2vw, 3.4rem); line-height:1.06; margin:.2em auto .3em; font-weight:900; max-width:1000px;
-      background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff); -webkit-background-clip:text; background-clip:text; color:transparent; background-size:220% 100%;
-      text-shadow:0 2px 40px rgba(34,211,238,.10)
+      font-size:clamp(2.0rem, 5.6vw, 3.0rem); line-height:1.06;
+      margin:.2em auto .3em; font-weight:900; max-width:1000px;
+      background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
     }
-    .subtitle{ color:var(--muted); max-width:920px; margin:0 auto 12px; line-height:1.7; font-size:clamp(1rem, 2.8vw, 1.15rem); padding:0 6px }
-
+    .subtitle{
+      color:var(--muted); max-width:920px; margin:0 auto 12px;
+      line-height:1.7; font-size:clamp(1rem, 2.8vw, 1.15rem); padding:0 6px;
+    }
     .cta-wrap{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:12px }
     .cta{
-      background:var(--accent); color:#06202a; border:none; padding:14px 18px; border-radius:12px; font-weight:700;
-      box-shadow:0 8px 30px rgba(34,211,238,.18); transition:transform .18s var(--e), box-shadow .18s
+      background:var(--accent); color:#06202a; border:none; padding:14px 18px; border-radius:12px;
+      font-weight:800; box-shadow:0 8px 30px rgba(34,211,238,.18);
+      transition:transform .18s var(--e), box-shadow .18s;
+      display:inline-flex; align-items:center; justify-content:center;
     }
-    .cta.secondary{ background:#111d33; color:#e2f6ff; border:1px solid #1e2a3e; font-weight:600 }
+    .cta.secondary{ background:#111d33; color:#e2f6ff; border:1px solid #1e2a3e; font-weight:700 }
     .cta:hover{ transform:translateY(-2px); box-shadow:0 12px 38px rgba(34,211,238,.25) }
 
     .micro{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; color:#9fb3c9; margin:10px 0 0 }
-    .micro .chip{ display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border:1px solid #214a57; background:#0d2330; border-radius:999px; font-size:.82rem }
+    .micro .chip{
+      display:inline-flex; align-items:center; gap:6px; padding:4px 10px;
+      border:1px solid #214a57; background:#0d2330; border-radius:999px; font-size:.82rem
+    }
 
     .section{ padding:44px 0; position:relative }
     .section h2{ color:#b9e7f5; font-size:clamp(1.3rem, 2.6vw, 1.6rem); margin:0 0 14px; text-align:center }
-    .grid{ display:grid; gap:16px }
-    .grid.three{ grid-template-columns:1fr }
-    .grid.two{ grid-template-columns:1fr }
-    @media(min-width:900px){ .grid.three{ grid-template-columns:repeat(3,1fr) } .grid.two{ grid-template-columns:1fr 1fr } }
     .section.bg-alt{ background:linear-gradient(180deg,#0b1020,#0c1424); border-top:1px solid #121a2e; border-bottom:1px solid #121a2e }
     .section.bg-solid{ background:#0d1628; border-top:1px solid #1a2640; border-bottom:1px solid #1a2640 }
 
+    .grid{ display:grid; gap:16px }
+    .grid.three{ grid-template-columns:1fr }
+    .grid.two{ grid-template-columns:1fr }
+    @media(min-width:900px){
+      .grid.three{ grid-template-columns:repeat(3,1fr) }
+      .grid.two{ grid-template-columns:1fr 1fr }
+    }
+
     .card{
       position:relative; border-radius:16px; padding:18px; background:#0c1424; color:#dbe7f3; border:1px solid transparent;
-      transition:transform .18s var(--e); max-width:860px; margin-inline:auto
+      transition:transform .18s var(--e);
     }
     .card::before{
       content:""; position:absolute; inset:0; border-radius:inherit; padding:1px;
       background:linear-gradient(135deg, rgba(34,211,238,.35), rgba(34,211,238,.05));
-      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none
+      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none;
     }
     .card:hover{ transform:translateY(-2px) perspective(600px) rotateX(1.2deg) rotateY(.8deg) }
     .card h3{ color:#22d3ee; margin:.2em 0 .3em; font-size:1.08rem }
     .card p{ margin:.15em 0 .4em; line-height:1.6 }
 
-    .tag{ display:inline-block; padding:3px 8px; border-radius:999px; border:1px solid #214a57; background:#0d2330; color:#bff1ff; font-size:.78rem }
+    .tag{
+      display:inline-block; padding:3px 8px; border-radius:999px;
+      border:1px solid #214a57; background:#0d2330; color:#bff1ff; font-size:.78rem;
+    }
 
-    footer{ border-top:1px solid var(--line); margin-top:44px; padding:18px; color:#7c8aa5; text-align:center }
-    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
-    footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff }
-    footer .links a{ font-weight:600; text-underline-offset:3px; }
-    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
-    .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; transition:transform .18s var(--e); color:#cfefff }
+    /* Footer */
+    footer{
+      border-top:1px solid var(--line); margin-top:44px;
+      padding:18px; color:#7c8aa5; text-align:center; background:#0b1020;
+    }
+    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0; flex-wrap:wrap }
+    footer .badge{
+      display:inline-flex; align-items:center; gap:6px; padding:6px 10px;
+      border:1px solid var(--line); border-radius:999px; background:#0d1628;
+      font-size:.9rem; color:#cfefff; text-decoration:none;
+    }
+    footer .links a{
+      color:#cfefff; font-weight:600; text-underline-offset:3px; text-decoration:none;
+    }
+    footer .links a:hover{ color:var(--accent); text-decoration:underline }
+    footer .links a[aria-current="page"]{ color:var(--accent); text-decoration:underline }
+
+    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px; flex-wrap:wrap }
+    .social a{
+      display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px;
+      align-items:center; justify-content:center; background:#0d1628; color:#cfefff;
+      transition:transform .18s var(--e);
+    }
     .social a:hover{ transform:translateY(-2px) }
 
-    .reveal{ opacity:0; transform:translateY(16px); transition:opacity .5s ease, transform .5s ease; will-change:transform,opacity }
-    .reveal.is-in{ opacity:1; transform:none }
-    .progress{ position:fixed; left:0; top:64px; width:100%; height:2px; background:linear-gradient(90deg, rgba(34,211,238,.0), rgba(34,211,238,.35)); transform-origin:left; scale:0 1; z-index:900 }
-
-    a:focus-visible, .cta:focus-visible, .tp-burger:focus-visible{ outline:2px solid #22d3ee; outline-offset:3px; border-radius:12px; }
+    /* Focus */
+    a:focus-visible, .cta:focus-visible, .tp-burger:focus-visible{
+      outline:2px solid #22d3ee; outline-offset:3px; border-radius:12px;
+    }
 
     @media (max-width:899px){
-      .hero{ padding-top:92px; padding-bottom:24px }
       .section{ padding:28px 0 }
-      .grid.two, .grid.three{ grid-template-columns:1fr }
-    }
-    @media (prefers-reduced-motion: reduce){ .reveal{ opacity:1 !important; transform:none !important } }
-
-    /* Nav/Footer alignment */
-    #tp-nav a,
-    footer .links a{
-      color:var(--text);
-      font-weight:600;
-      text-decoration:none;
-      text-underline-offset:3px;
-    }
-    #tp-nav a:hover,
-    footer .links a:hover{
-      color:var(--accent);
-      text-decoration:underline;
-    }
-    #tp-nav a[aria-current="page"],
-    footer .links a[aria-current="page"]{
-      color:var(--accent);
-      text-decoration:underline;
     }
   </style>
-  <noscript><style>.reveal{opacity:1 !important; transform:none !important}</style></noscript>
+  <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
 
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
+  <!-- Header -->
   <header class="tp-header" id="hdr" role="banner">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
@@ -339,25 +366,24 @@ upgrade-insecure-requests">
       <a class="nav-cta" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
     </nav>
     <a class="cta-header" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
-    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu"><span aria-hidden="true">☰</span></button>
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu">
+      <span aria-hidden="true">☰</span>
+    </button>
   </header>
-
-  <div class="progress" id="progress" aria-hidden="true"></div>
 
   <main id="main" class="wrap" role="main">
     <!-- HERO -->
-    <section class="hero reveal" aria-labelledby="hero-title">
+    <section class="hero" aria-labelledby="hero-title">
       <div class="hero-icon" aria-hidden="true">ℹ️</div>
       <div class="label">Status: Public Beta v0.2 · ProofSpec v0.1 · API v0.2 · Privacy-first · No blockchain</div>
       <h1 id="hero-title" class="title">About TimeProofs</h1>
       <p class="subtitle">
         TimeProofs answers a simple question: <strong>when did this data exist, and has it changed?</strong>
-        You hash locally, receive a signed <code>.tproof.json</code> bundle, and anyone can verify it <strong>by uploading the bundle (online) or offline</strong> — without seeing your data.
+        You hash locally, receive a signed <code>.tproof.json</code> bundle, and anyone can verify it
+        <strong>online by submitting the proof bundle</strong> (no original upload) or <strong>offline locally</strong>.
       </p>
-
-      <!-- Micro-block: v0.2 verification clarity -->
       <p style="margin:6px 0 0; color:#9fb3c9; text-align:center; max-width:920px">
-        Verify online: <code>POST /api/verify</code> (<strong>bundle required</strong>) · Verify offline: ProofSpec-compliant verifier · A hash alone cannot be verified in stateless v0.2.
+        Stateless v0.2: verification is <strong>bundle-based</strong>. A hash alone cannot be verified without the bundle.
       </p>
 
       <div class="cta-wrap" role="group" aria-label="Primary actions">
@@ -374,7 +400,7 @@ upgrade-insecure-requests">
     </section>
 
     <!-- Mission -->
-    <section class="section bg-alt reveal" id="mission" aria-labelledby="mission-title">
+    <section class="section bg-alt" id="mission" aria-labelledby="mission-title">
       <h2 id="mission-title">Mission</h2>
       <div class="grid two" style="margin-top:12px">
         <article class="card">
@@ -392,7 +418,7 @@ upgrade-insecure-requests">
     </section>
 
     <!-- Values -->
-    <section class="section bg-solid reveal" id="values" aria-labelledby="values-title">
+    <section class="section bg-solid" id="values" aria-labelledby="values-title">
       <h2 id="values-title">Values</h2>
       <div class="grid three">
         <article class="card">
@@ -402,7 +428,7 @@ upgrade-insecure-requests">
         </article>
         <article class="card">
           <h3>Open verification</h3>
-          <p>Anyone can verify using <strong>POST /api/verify (bundle required)</strong>, or verify offline with a ProofSpec-compliant verifier.</p>
+          <p>Anyone can verify using <strong>POST /api/verify</strong> (<strong>bundle required</strong>), or verify offline with a ProofSpec-compliant verifier.</p>
           <p><span class="tag">Public verify</span> <span class="tag">Offline</span></p>
         </article>
         <article class="card">
@@ -414,7 +440,7 @@ upgrade-insecure-requests">
     </section>
 
     <!-- Transparency -->
-    <section class="section bg-alt reveal" id="transparency" aria-labelledby="transparency-title">
+    <section class="section bg-alt" id="transparency" aria-labelledby="transparency-title">
       <h2 id="transparency-title">Transparency</h2>
       <div class="grid two" style="margin-top:12px">
         <article class="card">
@@ -441,7 +467,7 @@ upgrade-insecure-requests">
     </section>
 
     <!-- Limits -->
-    <section class="section bg-solid reveal" id="limits" aria-labelledby="limits-title">
+    <section class="section bg-solid" id="limits" aria-labelledby="limits-title">
       <h2 id="limits-title">What TimeProofs does — and does not do</h2>
       <div class="grid two" style="margin-top:12px">
         <article class="card">
@@ -467,14 +493,14 @@ upgrade-insecure-requests">
     </section>
 
     <!-- Contact -->
-    <section class="section bg-alt reveal" id="contact" aria-labelledby="contact-title">
+    <section class="section bg-alt" id="contact" aria-labelledby="contact-title">
       <h2 id="contact-title">Contact</h2>
       <div class="grid two" style="margin-top:12px">
         <article class="card">
           <h3>General inquiries</h3>
           <p>Email: <a href="mailto:contact@timeproofs.io">contact@timeproofs.io</a></p>
-          <p style="color:#9fb3c9; font-size:.95rem">Email is for human support; the API itself is stateless and does not collect content.</p>
-          <p style="color:#9fb3c9; font-size:.95rem">For security issues, use the policy referenced in <code>security.txt</code>.</p>
+          <p style="color:#9fb3c9; font-size:.95rem">Email is for human support; the API is stateless and does not collect content.</p>
+          <p style="color:#9fb3c9; font-size:.95rem">For security issues, follow the policy referenced in <code>security.txt</code>.</p>
         </article>
         <article class="card">
           <h3>Follow</h3>
@@ -490,7 +516,7 @@ upgrade-insecure-requests">
     </section>
 
     <!-- Final CTA -->
-    <section class="section bg-solid reveal" aria-labelledby="final-cta">
+    <section class="section bg-solid" aria-labelledby="final-cta">
       <h2 id="final-cta">Use TimeProofs now</h2>
       <div class="cta-wrap" role="group" aria-label="Final actions">
         <a class="cta" href="/verify.html">Create / Verify</a>
@@ -506,7 +532,7 @@ upgrade-insecure-requests">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
       <span class="badge">🛡 Privacy First</span>
-      <a class="badge" href="/proofspec.html">🔍 Open Spec v0.1</a>
+      <a class="badge" href="/proofspec.html">🔍 Open Spec v0.2</a>
     </div>
     © 2025 TimeProofs — Reference implementation of the ProofSpec protocol.
     <div class="links" style="margin-top:6px">
@@ -534,66 +560,88 @@ upgrade-insecure-requests">
     </div>
   </footer>
 
-  <!-- Main JS (defer) -->
   <script defer nonce="TP-2025">
   (function(){
     const hdr=document.getElementById('hdr');
-    const bar=document.getElementById('progress');
-
     function onScroll(){
-      if(window.scrollY>6) hdr.classList.add('scrolled'); else hdr.classList.remove('scrolled');
-      const h=document.documentElement;
-      const p=(h.scrollTop)/((h.scrollHeight-h.clientHeight)||1);
-      bar.style.transform=`scaleX(${Math.max(0,Math.min(1,p))})`;
+      if(window.scrollY>6) hdr.classList.add('scrolled');
+      else hdr.classList.remove('scrolled');
     }
-    onScroll(); window.addEventListener('scroll', onScroll, { passive:true });
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive:true });
 
     const burger=document.getElementById('tp-burger');
     const nav=document.getElementById('tp-nav');
-    function openMenu(){ nav.setAttribute('data-state','open'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
-    function closeMenu(){ nav.setAttribute('data-state','closed'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
-    function toggleMenu(){ (nav.getAttribute('data-state')==='open')?closeMenu():openMenu(); }
+    if(!burger || !nav) return;
 
-    burger.addEventListener('click', toggleMenu, { passive:true });
-    document.addEventListener('click', (e)=>{
-      if(window.matchMedia('(min-width: 900px)').matches) return;
-      if(!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu();
-    }, { passive:true });
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu(); }, { passive:true });
-    window.addEventListener('resize', ()=>{ if(window.matchMedia('(min-width: 900px)').matches) closeMenu(); }, { passive:true });
+    let lastFocus=null;
 
-    // Reveal on view
-    const prefersReduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(!prefersReduced){
-      const targets=[...document.querySelectorAll('.section'), ...document.querySelectorAll('.card'), ...document.querySelectorAll('.hero')];
-      const io=new IntersectionObserver((entries)=>{
-        entries.forEach(entry=>{
-          if(entry.isIntersecting){
-            const el=entry.target;
-            el.classList.add('reveal','is-in');
-            io.unobserve(el);
-          }
-        });
-      }, { rootMargin:'-10% 0px -10% 0px', threshold:0.08 });
-      targets.forEach(el=>{ el.classList.add('reveal'); io.observe(el); });
+    function focusables(){
+      return [...nav.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])')]
+        .filter(el => !el.hasAttribute('disabled') && el.offsetParent !== null);
     }
 
-    // Auto aria-current
+    function openMenu(){
+      lastFocus=document.activeElement;
+      nav.setAttribute('data-state','open');
+      burger.setAttribute('aria-expanded','true');
+      document.body.style.overflow='hidden';
+
+      const f=focusables();
+      if(f[0]) f[0].focus();
+    }
+
+    function closeMenu(){
+      nav.setAttribute('data-state','closed');
+      burger.setAttribute('aria-expanded','false');
+      document.body.style.overflow='';
+
+      if(lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+      lastFocus=null;
+    }
+
+    function toggleMenu(){
+      (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu();
+    }
+
+    burger.addEventListener('click', toggleMenu);
+
+    document.addEventListener('click',(e)=>{
+      if(window.matchMedia('(min-width: 900px)').matches) return;
+      if(!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu();
+    },{ passive:true });
+
+    document.addEventListener('keydown',(e)=>{
+      const open = nav.getAttribute('data-state')==='open';
+      if(!open) return;
+
+      if(e.key==='Escape'){ closeMenu(); return; }
+
+      if(e.key==='Tab'){
+        const f=focusables();
+        if(!f.length) return;
+        const first=f[0], last=f[f.length-1];
+        if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+        else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+      }
+    });
+
+    window.addEventListener('resize',()=>{
+      if(window.matchMedia('(min-width: 900px)').matches) closeMenu();
+    },{ passive:true });
+
     (function markCurrent(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
-      document.querySelectorAll('header nav a, footer .links a').forEach(a=>{
+      document.querySelectorAll('header nav a:not(.nav-cta), footer .links a').forEach(a=>{
         const path=new URL(a.getAttribute('href'), location.origin).pathname;
         if(path===here) a.setAttribute('aria-current','page');
       });
     })();
+
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('/sw.js',{type:'module',scope:'/'}).catch(()=>{});
+    }
   })();
   </script>
-
-  <!-- SW register -->
-  <script nonce="TP-2025">
-    if('serviceWorker' in navigator){
-      navigator.serviceWorker.register('/sw.js', { type:'module', scope:'/' }).catch(()=>{});
-    }
-  </script>
 </body>
-  </html>
+</html>
