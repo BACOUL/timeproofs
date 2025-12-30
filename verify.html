@@ -266,30 +266,6 @@ upgrade-insecure-requests">
     .hero-btn.primary{ background:var(--accent); color:#06202a; border-color:transparent }
     .hero-btn:hover{ text-decoration:underline }
 
-    /* SHA frame (hero) */
-    .sha-frame{
-      max-width:920px; margin:12px auto 0;
-      background:#0b1220; border:1px solid #22314f;
-      border-radius:12px; padding:10px 12px;
-      text-align:left; display:none;
-    }
-    .sha-frame .row{
-      display:flex; flex-wrap:wrap; gap:10px; align-items:center;
-      justify-content:space-between;
-    }
-    .sha-frame .k{
-      color:#9fb3c9; font-size:.85rem; font-weight:700;
-      display:flex; gap:8px; align-items:center;
-    }
-    .sha-frame code{
-      font-size:.9rem; color:#e6fbff;
-      overflow-wrap:anywhere; word-break:break-word;
-    }
-    .sha-frame a{
-      color:#9beefb; font-weight:700; text-decoration:none;
-    }
-    .sha-frame a:hover{ color:var(--accent); text-decoration:underline }
-
     /* Layout cartes */
     main{ padding:0 0 40px }
     .cards-grid{
@@ -557,19 +533,6 @@ upgrade-insecure-requests">
       <p class="lead" style="font-size:.95rem; margin-top:-4px">
         v0.2 is proof-file first: <strong>verification requires the <code>.tproof.json</code> file</strong>.
       </p>
-
-      <!-- SHA frame (filled dynamically from /releases/v0.2.json) -->
-      <div class="sha-frame" id="sha-frame" role="note" aria-label="Page integrity hash">
-        <div class="row">
-          <div class="k"><span aria-hidden="true">🔎</span><span>Page SHA-256</span></div>
-          <div style="flex:1 1 480px; min-width:0;">
-            <code id="page-sha">—</code>
-          </div>
-          <div>
-            <a id="page-sha-link" href="/docs.html" target="_blank" rel="noopener">How to verify</a>
-          </div>
-        </div>
-      </div>
 
       <div class="hero-actions">
         <a href="#create-card" class="hero-btn primary" id="hero-create">Create a proof</a>
@@ -942,44 +905,6 @@ Accept: application/json
       const digest=await crypto.subtle.digest("SHA-256", buf);
       return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,"0")).join("");
     }
-
-    // SHA FRAME loader (from /releases/v0.2.json)
-    (async function loadPageSha(){
-      const frame=document.getElementById("sha-frame");
-      const shaEl=document.getElementById("page-sha");
-      const linkEl=document.getElementById("page-sha-link");
-      if(!frame || !shaEl || !linkEl) return;
-
-      const page=(document.documentElement.getAttribute("data-page") || "verify.html").trim();
-      try{
-        const r=await fetch("/releases/v0.2.json", { cache:"no-store" });
-        if(!r.ok) return;
-
-        const j=await r.json().catch(()=>null);
-        if(!j || typeof j!=="object") return;
-
-        const candidates = [
-          j?.pages?.[page]?.sha256,
-          j?.pages?.[page]?.hash,
-          j?.pages?.[page]?.sha,
-          j?.[page]?.sha256,
-          j?.[page]?.hash,
-          j?.[page]?.sha,
-          j?.release?.pages?.[page]?.sha256,
-          j?.release?.pages?.[page]?.hash,
-          j?.release?.pages?.[page]?.sha
-        ];
-
-        const sha = (candidates.find(v => typeof v === "string" && /^[a-f0-9]{64}$/i.test(v)) || "").toLowerCase();
-        if(!sha) return;
-
-        shaEl.textContent=sha;
-        linkEl.href=`/docs.html`;
-        frame.style.display="block";
-      }catch{
-        /* silent */
-      }
-    })();
 
     // MODE SWITCH (create)
     const modeText=document.getElementById("mode-text");
@@ -1460,4 +1385,4 @@ Accept: application/json
   })();
   </script>
 </body>
-          </html>
+  </html>
