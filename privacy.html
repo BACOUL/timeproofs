@@ -594,7 +594,6 @@ upgrade-insecure-requests">
     function toggleMenu(){
       (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu();
     }
-
     burger && burger.addEventListener('click', toggleMenu);
 
     document.addEventListener('click',(e)=>{
@@ -610,6 +609,7 @@ upgrade-insecure-requests">
       if(window.matchMedia('(min-width: 900px)').matches) closeMenu();
     },{ passive:true });
 
+    // Auto aria-current (exclude .nav-cta)
     (function(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
       document.querySelectorAll('header nav a:not(.nav-cta), footer .links a').forEach(a=>{
@@ -618,6 +618,7 @@ upgrade-insecure-requests">
       });
     })();
 
+    // Copy buttons for <pre>
     (function(){
       document.querySelectorAll('pre').forEach((pre)=>{
         if(pre.querySelector('.copy-btn')) return;
@@ -645,6 +646,7 @@ upgrade-insecure-requests">
       });
     })();
 
+    // Service Worker
     if('serviceWorker' in navigator){
       navigator.serviceWorker.register('/sw.js',{type:'module',scope:'/'}).catch(()=>{});
     }
