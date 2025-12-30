@@ -443,7 +443,7 @@ upgrade-insecure-requests">
       <ul>
         <li><strong>Static site posture:</strong> no sessions, no accounts, no server-rendered pages.</li>
         <li><strong>No uploads:</strong> proofs are created and verified from a <code>.tproof.json</code> proof file.</li>
-        <li><strong>Hardened browser surface:</strong> CSP, no framing, restricted permissions.</li>
+        <li><strong>Bundle-first verification:</strong> hashes are computed locally; cryptographic verification requires the <code>.tproof.json</code> bundle (stateless).</li>
       </ul>
       <p class="muted">
         This page documents controls; it is not a guarantee of security. Always verify a proof file using a trusted verifier and keep your device secure.
@@ -456,7 +456,7 @@ upgrade-insecure-requests">
         <table>
           <thead><tr><th>Threat</th><th>Vector</th><th>Mitigation</th></tr></thead>
           <tbody>
-            <tr><td>Content exfiltration</td><td>Uploads</td><td>No file uploads; hash-only + proof-file model (<code>.tproof.json</code>).</td></tr>
+            <tr><td>Content exfiltration</td><td>Uploads</td><td>No file uploads; hashes are computed locally and verification requires the <code>.tproof.json</code> bundle (stateless).</td></tr>
             <tr><td>API abuse</td><td>Flooding</td><td>Rate limiting, strict validation, predictable 4xx/429 responses.</td></tr>
             <tr><td>Proof forgery</td><td>Tampering</td><td>Signed bundle; verifiers reject modified fields/signatures.</td></tr>
             <tr><td>Replay/spam</td><td>Automation</td><td>Abuse controls and rotation of operational parameters.</td></tr>
@@ -559,7 +559,7 @@ upgrade-insecure-requests">
             <tr><td>Browser</td><td>CSP + no framing + no mixed content</td><td>Frame-ancestors none; upgrade-insecure-requests.</td></tr>
             <tr><td>Abuse</td><td>Rate limiting &amp; validation</td><td>429 + backoff expected.</td></tr>
             <tr><td>Secrets</td><td>No secrets in client</td><td>Signing stays server-side.</td></tr>
-            <tr><td>Privacy</td><td>Proof-file model</td><td>No uploads; hash-only.</td></tr>
+            <tr><td>Privacy</td><td>Proof-file model</td><td>No uploads; hashes computed locally; verification requires the <code>.tproof.json</code> bundle.</td></tr>
             <tr><td>Disclosure</td><td>security.txt</td><td>Coordinated disclosure route.</td></tr>
           </tbody>
         </table>
