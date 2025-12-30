@@ -4,17 +4,22 @@
   "description": "JSON schema for TimeProofs proof bundles (.tproof.json) — version timeproofs-0.2",
   "type": "object",
   "additionalProperties": false,
-  "required": ["version", "hash", "timestamp", "proof"],
+  "required": ["version", "canonical", "hash", "timestamp", "proof"],
   "properties": {
     "version": {
       "type": "string",
       "const": "timeproofs-0.2",
       "description": "Proof bundle version identifier"
     },
+    "canonical": {
+      "type": "string",
+      "minLength": 10,
+      "description": "Canonical string used for signature verification: <hash>|<issuedAt>|<issuer>|<nonce>"
+    },
     "hash": {
       "type": "object",
-      "required": ["algorithm", "value"],
       "additionalProperties": false,
+      "required": ["algorithm", "value"],
       "properties": {
         "algorithm": {
           "type": "string",
@@ -23,15 +28,15 @@
         },
         "value": {
           "type": "string",
-          "pattern": "^[0-9a-fA-F]{64}$",
-          "description": "Hex-encoded SHA-256 digest of the data"
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "Lowercase hex-encoded SHA-256 digest of the data"
         }
       }
     },
     "timestamp": {
       "type": "object",
-      "required": ["issuedAt", "issuer"],
       "additionalProperties": false,
+      "required": ["issuedAt", "issuer", "nonce"],
       "properties": {
         "issuedAt": {
           "type": "string",
@@ -40,39 +45,38 @@
         },
         "issuer": {
           "type": "string",
-          "format": "uri",
-          "description": "Base URL of the TimeProofs API that issued the timestamp"
+          "const": "https://api.timeproofs.io",
+          "description": "Canonical issuer URL (frozen authority for v0.2)"
         },
         "nonce": {
           "type": "string",
-          "description": "Optional random nonce used in the timestamp"
+          "minLength": 8,
+          "description": "Unique nonce per proof"
         }
       }
     },
     "proof": {
       "type": "object",
-      "required": ["algo", "keyId"],
       "additionalProperties": false,
+      "required": ["algo", "signature", "keyId"],
       "properties": {
         "algo": {
           "type": "string",
-          "enum": ["HMAC-SHA256+Ed25519"],
+          "enum": ["Ed25519"],
           "description": "Signature scheme used by TimeProofs v0.2"
         },
-        "hmac": {
-          "type": ["string", "null"],
-          "description": "Hex-encoded HMAC-SHA256 value (may be null if server has no HMAC secret)"
-        },
         "signature": {
-          "type": ["string", "null"],
-          "description": "Base64-encoded Ed25519 signature (null in v0.2 until implemented)"
+          "type": "string",
+          "pattern": "^[a-f0-9]{128}$",
+          "description": "Hex-encoded Ed25519 signature (64 bytes => 128 hex chars)"
         },
         "publicKey": {
-          "type": ["string", "null"],
-          "description": "Base64-encoded Ed25519 public key (null in v0.2)"
+          "type": "string",
+          "description": "Optional informational public key (ignored during verification)"
         },
         "keyId": {
           "type": "string",
+          "minLength": 3,
           "description": "Identifier used to reference the public key (JWKS future use)"
         }
       }
@@ -108,42 +112,21 @@
             "evidence"
           ]
         },
-        "mime": {
-          "type": "string",
-          "description": "MIME type of the associated file (optional)"
-        },
-        "domain": {
-          "type": "string",
-          "description": "Business domain, process or system category"
-        },
-        "purpose": {
-          "type": "string",
-          "description": "Purpose of the proof"
-        },
-        "createdBy": {
-          "type": "string",
-          "description": "User, system or agent that created the bundle"
-        },
-        "tool": {
-          "type": "string",
-          "description": "Software/tool name used to generate the bundle"
-        },
+        "mime": { "type": "string" },
+        "domain": { "type": "string" },
+        "purpose": { "type": "string" },
+        "createdBy": { "type": "string" },
+        "tool": { "type": "string" },
         "labels": {
           "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Custom tags or labels"
+          "items": { "type": "string" }
         },
-        "notes": {
-          "type": "string",
-          "description": "Human-readable notes or context"
-        }
+        "notes": { "type": "string" }
       }
     },
     "userSign": {
       "type": "object",
-      "description": "Optional local signature verifying the metadata (not sent to server)",
+      "description": "Optional local signature (not sent to server)",
       "additionalProperties": false,
       "required": ["publicKey", "algorithm", "signature"],
       "properties": {
