@@ -1,76 +1,80 @@
 # 🚀 Pull Request — TimeProofs
 
-Thank you for contributing to **TimeProofs**, the open and privacy-first proof-of-existence protocol.  
-Please complete the sections below so the maintainers can review efficiently.
+Thank you for contributing to TimeProofs, the open and privacy-first proof-of-existence protocol.
 
----
+This repository follows the v0.2 stateless architecture (Ed25519, canonical proofs, no storage).
+Please ensure your changes comply with these rules.
 
 ## 🔍 Summary
 
-Describe the purpose of this PR and the problem it solves.
+Describe what this PR changes and why.
 
----
+Focus on:
+- correctness
+- protocol consistency
+- backward compatibility
 
 ## 🔄 Type of Change
 
 Select all that apply:
 
-- [ ] `feat` — New feature  
-- [ ] `fix` — Bug fix  
-- [ ] `docs` — Documentation update  
-- [ ] `refactor` — Code restructure  
-- [ ] `chore` — Minor maintenance  
-- [ ] `test` — Test updates  
-
----
+- [ ] feat — New feature  
+- [ ] fix — Bug fix  
+- [ ] docs — Documentation update  
+- [ ] refactor — Internal restructuring (no behavior change)  
+- [ ] chore — Maintenance / cleanup  
+- [ ] test — Tests only  
 
 ## 🧪 How to Test
 
-Describe how reviewers can reproduce and validate your changes.
+Describe how reviewers can validate this change.
 
-Commands, steps, or URLs:
+Example:
 
-```
-<testing steps>
-```
+node sdk/test.js
 
----
+Or:
 
-## 📸 Screenshots / Logs (optional)
+curl -X POST https://api.timeproofs.io/api/timestamp \
+  -H "Content-Type: application/json" \
+  -d '{"hash":"<sha256>"}'
 
-Add visuals or logs if helpful.
+## 🔐 Security & Privacy Checklist
 
----
+Confirm all applicable points:
 
-## 🔒 Security & Privacy Checklist
+- [ ] No personal data stored or transmitted  
+- [ ] Hash-only model preserved (no raw content)  
+- [ ] Stateless API preserved (no persistence added)  
+- [ ] Ed25519 verification logic unchanged or strengthened  
+- [ ] Canonical string format unchanged  
+- [ ] No weakening of key-freeze guarantees  
+- [ ] No sensitive data in logs or errors  
 
-Before submitting, confirm:
+## 🧩 Protocol Compatibility
 
-- [ ] No personal data added or logged  
-- [ ] No raw content stored — hash-only remains intact  
-- [ ] API endpoints still respect privacy-first principles  
-- [ ] Error messages contain no sensitive leakage  
-- [ ] CSP / security headers unchanged or improved  
+- [ ] Compatible with TimeProofs v0.2  
+- [ ] Canonical format preserved (hash|issuedAt|issuer|nonce)  
+- [ ] issuer remains https://api.timeproofs.io  
+- [ ] Ed25519 key freeze respected  
+- [ ] .tproof.json format unchanged  
+- [ ] Existing clients remain compatible  
 
----
+## 🧪 Verification
 
-## 🧩 ProofSpec & API Compatibility
-
-- [ ] Changes align with ProofSpec v0.1  
-- [ ] Public verification remains intact (`/api/verify`)  
-- [ ] Backward compatible with existing clients  
-
----
+- [ ] sdk/verify.js passes  
+- [ ] sdk/test.js passes  
+- [ ] Bundle validates with verifyBundle()  
+- [ ] Offline verification still works  
 
 ## 📦 Additional Notes
 
-Anything else reviewers should know?
+Add any context, rationale, or follow-up work here.
 
----
+## 🛡️ Security Disclosure
 
-### 🛡️ Security Disclosure Reminder
-Security issues must **not** be submitted via Pull Request.  
-Use the official disclosure channel:
+Security issues must not be submitted via Pull Requests.
 
+Please report responsibly via:
 security@timeproofs.io  
 https://timeproofs.io/.well-known/security.txt
