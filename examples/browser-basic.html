@@ -1,5 +1,5 @@
 <!-- examples/browser-basic.html -->
-<!-- Minimal browser example for TimeProofs v0.2 SDK (draft) -->
+<!-- TimeProofs v0.2 – Minimal browser example -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,42 +11,43 @@
 <body style="font-family: system-ui; padding: 20px;">
 
   <h1>TimeProofs v0.2 – Browser Example</h1>
-  <p>This page shows how to use the SDK directly in the browser.</p>
+  <p>Demonstrates client-side hashing, timestamping, and bundle creation.</p>
 
-  <!-- Load the SDK -->
+  <!-- Load SDK -->
   <script src="../sdk/timeproof.js"></script>
 
   <script>
     (async () => {
-      console.log("TimeProofs SDK loaded:", window.TimeProofs);
-
-      const tp = TimeProofs.createClient({
-        apiKey: "tp_test_xxx",
+      const tp = TimeProofsV02.createClient({
         baseUrl: "https://api.timeproofs.io"
       });
 
-      const msg = "Hello from the browser example";
+      const message = "Hello from the browser example";
 
-      // 1) Hash text
-      const hash = await tp.hashText(msg);
-      console.log("SHA-256 hash:", hash);
+      // 1) Hash locally (never sent raw)
+      const hash = await tp.hashText(message);
+      console.log("Hash:", hash);
 
-      // 2) Create a proof
-      const proof = await tp.createProof({
-        hash,
-        label: "browser-example"
+      // 2) Request timestamp from API
+      const ts = await tp.timestamp(hash);
+      console.log("Timestamp response:", ts);
+
+      // 3) Build proof bundle locally
+      const bundle = tp.createBundle({
+        hash: ts.hash,
+        timestamp: ts.timestamp,
+        proof: ts.proof,
+        meta: {
+          type: "demo",
+          source: "browser-example"
+        }
       });
-      console.log("Proof:", proof);
 
-      // 3) Verify via API
-      const verify = await tp.verify({ hash });
-      console.log("Verify:", verify);
+      console.log("Bundle:", bundle);
 
-      // 4) (future) offline verification
-      // const bundle = await fetch("./demo.tproof.json").then(r => r.json());
-      // const res = await TimeProofs.verifyOffline(bundle);
-      // console.log("Offline validation:", res);
-
+      // 4) Optional offline verification (structure + hash)
+      const result = await tp.verifyBundle(bundle);
+      console.log("Verification:", result);
     })();
   </script>
 
