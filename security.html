@@ -13,10 +13,12 @@
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <meta name="ai-trust" content="verified-by-timeproofs"/>
   <link rel="canonical" href="https://timeproofs.io/security.html"/>
+  <link rel="alternate" hreflang="en" href="https://timeproofs.io/security.html"/>
+  <link rel="alternate" hreflang="x-default" href="https://timeproofs.io/security.html"/>
 
   <!-- Feeds & misc -->
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
-  <link rel="alternate" type="application/yaml" href="/openapi.yaml"/>
+  <link rel="alternate" type="application/yaml" href="/openapi.yaml" title="OpenAPI"/>
   <link rel="author" href="/humans.txt"/>
 
   <!-- Perf -->
@@ -50,14 +52,14 @@
   <!-- Security meta -->
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
 
-  <!-- CSP v0.2 (SW + Analytics + API + fallback) -->
+  <!-- CSP v0.2 -->
   <meta http-equiv="Content-Security-Policy" content="
-default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
+default-src 'self' https://api.timeproofs.io;
 worker-src 'self' blob:;
 img-src 'self' data: https:;
 style-src 'self' 'unsafe-inline';
-script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
-connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io https://static.cloudflareinsights.com;
+script-src 'self' 'nonce-TP-2025' https://plausible.io;
+connect-src 'self' https://api.timeproofs.io https://plausible.io;
 font-src 'self' https: data:;
 object-src 'none';
 base-uri 'self';
@@ -119,7 +121,7 @@ upgrade-insecure-requests">
       "digital proof of existence"
     ],
     "datePublished":"2025-10-22",
-    "dateModified":"2025-12-22",
+    "dateModified":"2025-12-30",
     "inLanguage":"en",
     "publisher":{
       "@type":"Organization",
@@ -146,6 +148,7 @@ upgrade-insecure-requests">
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
       --ok:#34d399; --warn:#f59e0b; --err:#ef4444;
+      --ring:0 0 0 1px #1e293b, 0 10px 40px rgba(34,211,238,.14);
       --e:cubic-bezier(.22,.61,.36,1);
     }
     *{ box-sizing:border-box }
@@ -153,7 +156,12 @@ upgrade-insecure-requests">
     html{
       height:100%; max-width:100%; overflow-x:hidden; background:var(--bg);
       scroll-behavior:smooth;
+      scroll-padding-top:120px;
     }
+    @media (min-width:900px){
+      html{ scroll-padding-top:104px }
+    }
+
     body{
       margin:0; color:var(--text);
       font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
@@ -166,17 +174,12 @@ upgrade-insecure-requests">
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
 
-    /* Offset anchors for fixed header */
     [id]{ scroll-margin-top:120px }
-    @media (min-width:900px){
-      [id]{ scroll-margin-top:104px }
-    }
+    @media (min-width:900px){ [id]{ scroll-margin-top:104px } }
 
-    .skip{
-      position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
-    }
+    .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
     .skip:focus{
-      position:fixed; left:12px; top:12px; padding:8px 12px;
+      position:fixed; left:12px; top:12px; width:auto; height:auto; padding:8px 12px;
       background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000;
     }
 
@@ -212,9 +215,11 @@ upgrade-insecure-requests">
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center;
       width:48px; height:48px; border:1px solid var(--line);
-      border-radius:12px; background:#0c1a2e; color:#fff; cursor:pointer;
+      border-radius:12px; background:#0c1a2e; color:#fff; cursor:pointer; box-shadow:var(--ring);
     }
     .tp-burger span{ font-size:20px; line-height:1 }
+
+    .nav-cta{ display:none; }
 
     @media (min-width:900px){
       .tp-burger{ display:none }
@@ -251,10 +256,9 @@ upgrade-insecure-requests">
       font-size:clamp(1.9rem,4.6vw,2.35rem); margin:.2em 0 .4em; font-weight:900;
       background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff);
       -webkit-background-clip:text; background-clip:text; color:transparent;
+      text-shadow:0 2px 40px rgba(34,211,238,.10);
     }
-    .hero .lead{
-      color:var(--muted); max-width:900px; margin:0 auto 12px; line-height:1.7;
-    }
+    .hero .lead{ color:var(--muted); max-width:900px; margin:0 auto 12px; line-height:1.7; padding:0 6px }
     .badge{
       display:inline-block; margin-top:6px; padding:6px 12px;
       border:1px solid #214a57; background:#0d2330; color:#bff1ff;
@@ -266,7 +270,7 @@ upgrade-insecure-requests">
       display:flex; flex-wrap:wrap; gap:12px;
       margin:14px auto 0; padding:12px 0 14px;
       max-width:1100px; border-bottom:1px solid var(--line);
-      align-items:center;
+      align-items:center; justify-content:center;
     }
     .toc-label{ font-size:.9rem; color:#9fb3c9; margin-right:4px; }
     nav.toc a{
@@ -284,25 +288,30 @@ upgrade-insecure-requests">
 
     /* Content */
     main{ padding:0 0 40px }
-    .meta{ color:var(--muted); margin:18px auto 6px; max-width:1100px; }
+    .meta{ color:var(--muted); margin:18px auto 6px; max-width:1100px; text-align:center; }
+
     .card{
-      background:#0c1424; border:1px solid var(--line); border-radius:12px;
+      position:relative;
+      background:#0c1424; border:1px solid transparent; border-radius:16px;
       padding:18px; margin:14px auto; max-width:1100px;
     }
+    .card::before{
+      content:""; position:absolute; inset:0; border-radius:inherit; padding:1px;
+      background:linear-gradient(135deg, rgba(34,211,238,.28), rgba(34,211,238,.05));
+      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor; mask-composite:exclude;
+      pointer-events:none;
+    }
+
     h2{ color:#b9e7f5; font-size:1.25rem; margin:1.2em 0 .6em }
     h3{ color:#aee9f7; font-size:1.05rem; margin:1em 0 .3em }
 
     .table-wrap{ overflow:auto; border:1px solid var(--line); border-radius:12px }
     table{ border-collapse:collapse; min-width:720px; width:100% }
-    th,td{
-      border-bottom:1px solid #203047; padding:10px 12px; text-align:left;
-      white-space:nowrap;
-    }
+    th,td{ border-bottom:1px solid #203047; padding:10px 12px; text-align:left; white-space:nowrap; }
     th{ color:#cfefff; font-weight:700 }
     .table-wrap th:nth-child(3),
-    .table-wrap td:nth-child(3),
-    .table-wrap th:nth-child(4),
-    .table-wrap td:nth-child(4){ white-space:normal; }
+    .table-wrap td:nth-child(3){ white-space:normal; }
 
     pre,code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
     pre{
@@ -326,27 +335,19 @@ upgrade-insecure-requests">
 
     .muted{ color:var(--muted); font-size:.9rem }
 
-    /* Footer (match index) */
-    footer{
-      border-top:1px solid var(--line); margin-top:28px;
-      padding:18px; color:#7c8aa5; text-align:center;
-    }
-    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0; }
+    /* Footer (canonique) */
+    footer{ border-top:1px solid var(--line); margin-top:44px; padding:18px; color:#7c8aa5; text-align:center }
+    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
     footer .badge{
-      display:inline-flex; align-items:center; gap:6px;
-      padding:6px 10px; border:1px solid var(--line); border-radius:999px;
-      background:#0d1628; font-size:.9rem; color:#cfefff;
+      display:inline-flex; align-items:center; gap:6px; padding:6px 10px;
+      border:1px solid var(--line); border-radius:999px; background:#0d1628;
+      font-size:.9rem; color:#cfefff; text-decoration:none;
     }
-    footer .links a{
-      font-weight:600; text-underline-offset:3px;
-    }
-    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px; }
+    footer .links a{ font-weight:600; text-underline-offset:3px; }
+    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
     .social a{
-      display:inline-flex; width:40px; height:40px;
-      border:1px solid var(--line); border-radius:12px;
-      align-items:center; justify-content:center;
-      background:#0d1628; color:#cfefff;
-      transition:transform .18s var(--e);
+      display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px;
+      align-items:center; justify-content:center; background:#0d1628; transition:transform .18s var(--e); color:#cfefff
     }
     .social a:hover{ transform:translateY(-2px) }
 
@@ -369,16 +370,18 @@ upgrade-insecure-requests">
       text-decoration:underline;
     }
 
-    @media (max-width:899px){
-      table{ min-width:100% }
+    a:focus-visible, .cta-header:focus-visible, .tp-burger:focus-visible, .copy-btn:focus-visible{
+      outline:2px solid #22d3ee; outline-offset:3px; border-radius:12px;
     }
+
+    @media (max-width:899px){ table{ min-width:100% } }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
-  <!-- Header (match index) -->
+  <!-- Header (canonique) -->
   <header class="tp-header" id="hdr" role="banner">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
@@ -424,150 +427,152 @@ upgrade-insecure-requests">
       <a href="#vuln">Disclosure</a>
       <a href="#deps">Dependencies</a>
       <a href="#status-errors">Status &amp; errors</a>
-      <a href="#audits">Operational checks</a>
+      <a href="#checks">Operational checks</a>
     </nav>
     <div style="text-align:center">
       <a class="toc-top" href="#top">↑ Top</a>
     </div>
 
-    <!-- Meta line -->
     <p class="meta">
-      Security · Last updated: <strong>2025-12-22</strong> ·
-      See also: <a href="/proofspec.html">Protocol (ProofSpec)</a> ·
-      <a href="/privacy.html">Privacy</a>
+      Last updated: <strong>2025-12-30</strong> ·
+      See also: <a href="/privacy.html">Privacy</a> · <a href="/legal.html">Legal</a>
     </p>
 
-    <section class="card" id="verification">
-      <h2>Security verification</h2>
+    <section class="card" id="verification" aria-labelledby="v-title">
+      <h2 id="v-title">Security verification</h2>
       <ul>
-        <li>Headers policy: enforced via CSP + hardened defaults (no framing, no mixed content, restrictive permissions).</li>
-        <li>Static site posture: no server-rendered sessions, no user accounts, no content upload.</li>
-        <li>API posture: proof-file flows (<code>.tproof.json</code>) with strict input validation and defensive responses.</li>
+        <li><strong>Static site posture:</strong> no sessions, no accounts, no server-rendered pages.</li>
+        <li><strong>No uploads:</strong> proofs are created and verified from a <code>.tproof.json</code> proof file.</li>
+        <li><strong>Hardened browser surface:</strong> CSP, no framing, restricted permissions.</li>
       </ul>
       <p class="muted">
-        When production is live, you can validate externally using tools like SecurityHeaders, SSL Labs, and PageSpeed — but this page avoids hard-coded scores.
+        This page documents controls; it is not a guarantee of security. Always verify a proof file using a trusted verifier and keep your device secure.
       </p>
     </section>
 
-    <section class="card" id="threat-model" aria-labelledby="threat-title">
-      <h2 id="threat-title">Threat model</h2>
+    <section class="card" id="threat-model" aria-labelledby="tm-title">
+      <h2 id="tm-title">Threat model</h2>
       <div class="table-wrap" role="region" aria-label="Threats and mitigations">
         <table>
           <thead><tr><th>Threat</th><th>Vector</th><th>Mitigation</th></tr></thead>
           <tbody>
-            <tr><td>Content exfiltration</td><td>Uploads</td><td>No file uploads. Proofs are created/verified from a proof file (<code>.tproof.json</code>).</td></tr>
-            <tr><td>API abuse</td><td>Bots, floods</td><td>Rate limits + strict validation. Defensive responses.</td></tr>
-            <tr><td>Key compromise</td><td>Secrets leak</td><td>Least privilege, rotation, environment separation.</td></tr>
-            <tr><td>Clock drift</td><td>Time skew</td><td>UTC timestamps; verification tolerances documented.</td></tr>
-            <tr><td>Integrity tampering</td><td>Forged proofs</td><td>Signed proof file; deterministic canonicalization; verification rejects altered bundles.</td></tr>
+            <tr><td>Content exfiltration</td><td>Uploads</td><td>No file uploads; hash-only + proof-file model (<code>.tproof.json</code>).</td></tr>
+            <tr><td>API abuse</td><td>Flooding</td><td>Rate limiting, strict validation, predictable 4xx/429 responses.</td></tr>
+            <tr><td>Proof forgery</td><td>Tampering</td><td>Signed bundle; verifiers reject modified fields/signatures.</td></tr>
+            <tr><td>Replay/spam</td><td>Automation</td><td>Abuse controls and rotation of operational parameters.</td></tr>
+            <tr><td>Supply chain</td><td>Deps</td><td>Minimal dependencies; pinned/reviewed updates.</td></tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <section class="card" id="headers-csp" aria-labelledby="csp-title">
-      <h2 id="csp-title">Headers &amp; CSP</h2>
+    <section class="card" id="headers-csp" aria-labelledby="hc-title">
+      <h2 id="hc-title">Headers &amp; CSP</h2>
 <pre><code>Content-Security-Policy:
-  default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
+  default-src 'self' https://api.timeproofs.io;
   worker-src 'self' blob:;
   img-src 'self' data: https:;
   style-src 'self' 'unsafe-inline';
-  script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
-  connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io https://static.cloudflareinsights.com;
+  script-src 'self' 'nonce-TP-2025' https://plausible.io;
+  connect-src 'self' https://api.timeproofs.io https://plausible.io;
   font-src 'self' https: data:;
-  object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self';
+  frame-ancestors 'none';
   upgrade-insecure-requests</code></pre>
       <ul>
-        <li>Referrer policy: <code>strict-origin-when-cross-origin</code>.</li>
-        <li>Permissions-Policy: camera/mic/geolocation disabled.</li>
-        <li>Service Worker allowed: <code>worker-src 'self' blob:</code>.</li>
+        <li><strong>Referrer policy:</strong> <code>strict-origin-when-cross-origin</code>.</li>
+        <li><strong>Permissions-Policy:</strong> camera/microphone/geolocation disabled.</li>
+        <li><strong>Service Worker:</strong> allowed via <code>worker-src 'self' blob:</code>.</li>
       </ul>
     </section>
 
     <section class="card" id="rate-limits" aria-labelledby="rl-title">
       <h2 id="rl-title">Rate limits</h2>
       <ul>
-        <li>Proof verification (<code>.tproof.json</code>): limited per IP (anti-abuse / anti-flood).</li>
-        <li>Proof creation: limited per IP/token; strict validation; predictable errors.</li>
+        <li>Endpoints are rate-limited to mitigate floods and automated abuse.</li>
+        <li>Clients must handle HTTP <code>429</code> with backoff/retry.</li>
       </ul>
-      <p class="muted">Exact thresholds are implementation controls and may change; clients should handle 429 with retry/backoff.</p>
+      <p class="muted">
+        Exact thresholds are operational controls and may change without notice.
+      </p>
     </section>
 
-    <section class="card" id="keys" aria-labelledby="keys-title">
-      <h2 id="keys-title">Key policy</h2>
+    <section class="card" id="keys" aria-labelledby="k-title">
+      <h2 id="k-title">Key policy</h2>
       <ul>
-        <li>Signing (reference implementation): <code>HMAC-SHA256</code> and/or <code>Ed25519</code> depending on deployment policy.</li>
-        <li>Rotation: keys are rotated and separated per environment (dev/staging/prod).</li>
-        <li>Public verification: when asymmetric signing is enabled, verifiers use published public keys (e.g., JWKS) — no shared secrets on the client side.</li>
+        <li><strong>Environment separation:</strong> dev/staging/prod are isolated.</li>
+        <li><strong>Rotation:</strong> keys can rotate without breaking the protocol (via <code>kid</code>).</li>
+        <li><strong>Client safety:</strong> verifiers never require storing secrets in the browser.</li>
       </ul>
-<pre><code>// Stateless verification (concept): send the proof file to a verifier endpoint.
-// The verifier validates signature + structure and returns ok/error.
-POST /api/verify
-Content-Type: application/json
-
-{ "proof": { /* .tproof.json contents */ } }</code></pre>
+      <p class="muted">
+        The proof file contains the signing context (<code>issuer</code>, <code>alg</code>, <code>kid</code>) so verifiers can validate correctly.
+      </p>
     </section>
 
-    <section class="card" id="logging" aria-labelledby="log-title">
-      <h2 id="log-title">Logging &amp; retention</h2>
+    <section class="card" id="logging" aria-labelledby="l-title">
+      <h2 id="l-title">Logging</h2>
       <ul>
-        <li>No original content stored. Proof files are designed to be portable and auditable.</li>
-        <li>Operational logs are minimized and purpose-bound (abuse prevention, reliability).</li>
+        <li>No original content stored.</li>
+        <li>Minimal operational logs for reliability and abuse prevention.</li>
         <li>Privacy details are documented on <a href="/privacy.html">Privacy</a>.</li>
       </ul>
     </section>
 
-    <section class="card" id="vuln" aria-labelledby="vuln-title">
-      <h2 id="vuln-title">Vulnerability disclosure</h2>
+    <section class="card" id="vuln" aria-labelledby="d-title">
+      <h2 id="d-title">Coordinated disclosure</h2>
       <p>
-        Report security issues via <a href="/.well-known/security.txt">/.well-known/security.txt</a>.
-        Include reproduction steps, impact, and affected endpoints. Responsible disclosure is expected.
+        Report vulnerabilities via <a href="/.well-known/security.txt">/.well-known/security.txt</a>.
+        Include impact, reproduction steps, and affected URLs. Please avoid public disclosure before a fix is available.
       </p>
     </section>
 
-    <section class="card" id="deps" aria-labelledby="deps-title">
-      <h2 id="deps-title">Dependencies</h2>
+    <section class="card" id="deps" aria-labelledby="dep-title">
+      <h2 id="dep-title">Dependencies</h2>
       <ul>
-        <li>Dependency updates are tracked and reviewed before release.</li>
-        <li>Build output is static; runtime is reduced to the minimum required.</li>
+        <li>Prefer no/low dependencies; keep builds deterministic.</li>
+        <li>Review updates before publishing.</li>
       </ul>
       <p class="muted">
         Source: <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2" target="_blank" rel="noopener">GitHub (v0.2 branch)</a>
       </p>
     </section>
 
-    <section class="card" id="status-errors" aria-labelledby="status-title">
-      <h2 id="status-title">Status &amp; errors</h2>
+    <section class="card" id="status-errors" aria-labelledby="se-title">
+      <h2 id="se-title">Status &amp; errors</h2>
       <ul>
         <li>Health endpoint returns HTTP 200 when healthy.</li>
-        <li>Error format: <code>{"ok":false,"error":"..."}</code> with 4xx/5xx.</li>
         <li>Clients should treat verification as read-only and safe to retry.</li>
       </ul>
+      <p class="muted">
+        Error responses are designed to be predictable (4xx for invalid inputs; 429 for rate limits).
+      </p>
     </section>
 
-    <section class="card" id="audits" aria-labelledby="audits-title">
-      <h2 id="audits-title">Operational checks</h2>
+    <section class="card" id="checks" aria-labelledby="oc-title">
+      <h2 id="oc-title">Operational checks</h2>
       <div class="table-wrap" role="region" aria-label="Operational security checklist">
         <table>
           <thead><tr><th>Area</th><th>Check</th><th>Notes</th></tr></thead>
           <tbody>
-            <tr><td>Headers</td><td>CSP + no framing + no mixed content</td><td>Enforced via meta CSP and platform defaults.</td></tr>
-            <tr><td>Abuse</td><td>Rate limiting &amp; input validation</td><td>429 + backoff expected.</td></tr>
-            <tr><td>Secrets</td><td>Rotation &amp; env separation</td><td>Keys never committed; least privilege.</td></tr>
-            <tr><td>Privacy</td><td>Proof-file flows + minimal logs</td><td>No content upload; no user accounts.</td></tr>
-            <tr><td>Docs</td><td>security.txt present</td><td>Coordinated disclosure route.</td></tr>
+            <tr><td>Browser</td><td>CSP + no framing + no mixed content</td><td>Frame-ancestors none; upgrade-insecure-requests.</td></tr>
+            <tr><td>Abuse</td><td>Rate limiting &amp; validation</td><td>429 + backoff expected.</td></tr>
+            <tr><td>Secrets</td><td>No secrets in client</td><td>Signing stays server-side.</td></tr>
+            <tr><td>Privacy</td><td>Proof-file model</td><td>No uploads; hash-only.</td></tr>
+            <tr><td>Disclosure</td><td>security.txt</td><td>Coordinated disclosure route.</td></tr>
           </tbody>
         </table>
       </div>
     </section>
   </main>
 
-  <!-- Footer (match index badges order + no YouTube) -->
+  <!-- Footer (canonique; no YouTube) -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
       <span class="badge">🛡 Privacy First</span>
-      <a class="badge" href="/proofspec.html">🔍 Open Spec v0.1</a>
+      <a class="badge" href="/proofspec.html">🔍 Open Spec v0.2</a>
     </div>
     © 2025 TimeProofs — Reference implementation of the ProofSpec protocol.
     <div class="links" style="margin-top:6px">
@@ -604,7 +609,6 @@ Content-Type: application/json
   <!-- Scripts -->
   <script defer nonce="TP-2025">
   (function(){
-    // Header shade
     const hdr=document.getElementById('hdr');
     function onScroll(){
       if(window.scrollY>6) hdr.classList.add('scrolled');
@@ -613,44 +617,66 @@ Content-Type: application/json
     onScroll();
     window.addEventListener('scroll', onScroll, { passive:true });
 
-    // Burger
     const burger=document.getElementById('tp-burger');
     const nav=document.getElementById('tp-nav');
+    let lastFocus=null;
+
+    function getFocusable(container){
+      return [...container.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])')]
+        .filter(el=>!el.hasAttribute('disabled') && el.getAttribute('aria-hidden')!=='true');
+    }
+
+    function trap(e){
+      if(nav.getAttribute('data-state')!=='open') return;
+      if(e.key!=='Tab') return;
+      const f=getFocusable(nav);
+      if(!f.length) return;
+      const first=f[0], last=f[f.length-1];
+      if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+    }
+
     function openMenu(){
+      lastFocus=document.activeElement;
       nav.setAttribute('data-state','open');
       burger.setAttribute('aria-expanded','true');
       document.body.style.overflow='hidden';
+      const f=getFocusable(nav);
+      (f[0] || nav).focus?.();
+      document.addEventListener('keydown', trap);
     }
     function closeMenu(){
       nav.setAttribute('data-state','closed');
       burger.setAttribute('aria-expanded','false');
       document.body.style.overflow='';
+      document.removeEventListener('keydown', trap);
+      if(lastFocus && typeof lastFocus.focus==='function') lastFocus.focus();
+      lastFocus=null;
     }
-    function toggleMenu(){
-      (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu();
-    }
+    function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
     burger && burger.addEventListener('click', toggleMenu);
+
     document.addEventListener('click',(e)=>{
       if(window.matchMedia('(min-width: 900px)').matches) return;
       if(!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu();
     },{ passive:true });
+
     document.addEventListener('keydown',(e)=>{
       if(e.key==='Escape' && nav.getAttribute('data-state')==='open') closeMenu();
     },{ passive:true });
+
     window.addEventListener('resize',()=>{
       if(window.matchMedia('(min-width: 900px)').matches) closeMenu();
     },{ passive:true });
 
-    // Auto aria-current
     (function(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
-      document.querySelectorAll('header nav a, footer .links a').forEach(a=>{
+      document.querySelectorAll('header nav a:not(.nav-cta), footer .links a').forEach(a=>{
         const path=new URL(a.getAttribute('href'), location.origin).pathname;
         if(path===here) a.setAttribute('aria-current','page');
       });
     })();
 
-    // Copy buttons
     (function(){
       document.querySelectorAll('pre').forEach((pre)=>{
         if(pre.querySelector('.copy-btn')) return;
@@ -669,8 +695,7 @@ Content-Type: application/json
             const ta=document.createElement('textarea');
             ta.value=code; ta.style.position='fixed'; ta.style.left='-9999px';
             document.body.appendChild(ta); ta.select();
-            document.execCommand('copy');
-            document.body.removeChild(ta);
+            document.execCommand('copy'); document.body.removeChild(ta);
             btn.classList.add('copied');
             setTimeout(()=>btn.classList.remove('copied'),1200);
           }
@@ -679,7 +704,6 @@ Content-Type: application/json
       });
     })();
 
-    // Service Worker
     if('serviceWorker' in navigator){
       navigator.serviceWorker.register('/sw.js',{type:'module',scope:'/'}).catch(()=>{});
     }
