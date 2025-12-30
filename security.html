@@ -158,9 +158,7 @@ upgrade-insecure-requests">
       scroll-behavior:smooth;
       scroll-padding-top:120px;
     }
-    @media (min-width:900px){
-      html{ scroll-padding-top:104px }
-    }
+    @media (min-width:900px){ html{ scroll-padding-top:104px } }
 
     body{
       margin:0; color:var(--text);
@@ -351,7 +349,7 @@ upgrade-insecure-requests">
     }
     .social a:hover{ transform:translateY(-2px) }
 
-    /* Nav/Footer alignment */
+    /* Nav/Footer aria-current + hover */
     #tp-nav a,
     footer .links a{
       color:var(--text);
@@ -407,7 +405,7 @@ upgrade-insecure-requests">
   <main id="main" class="wrap" role="main" aria-describedby="page-title">
     <!-- HERO -->
     <section class="hero" role="region" aria-labelledby="page-title">
-      <div class="icon" aria-hidden="true">🛡️</div>
+      <div class="icon" aria-hidden="true">🔒</div>
       <p class="badge">Status: Public Beta v0.2 · ProofSpec v0.1 · API v0.2 · Privacy-first · No blockchain</p>
       <h1 id="page-title">Security</h1>
       <p class="lead">
@@ -442,8 +440,8 @@ upgrade-insecure-requests">
       <h2 id="v-title">Security verification</h2>
       <ul>
         <li><strong>Static site posture:</strong> no sessions, no accounts, no server-rendered pages.</li>
-        <li><strong>No uploads:</strong> proofs are created and verified from a <code>.tproof.json</code> proof file.</li>
-        <li><strong>Bundle-first verification:</strong> hashes are computed locally; cryptographic verification requires the <code>.tproof.json</code> bundle (stateless).</li>
+        <li><strong>No uploads:</strong> hashes are computed locally; you only send hashes to the API.</li>
+        <li><strong>Bundle-first verification:</strong> verification is based on a proof file (<code>.tproof.json</code>), offline or via stateless verification.</li>
       </ul>
       <p class="muted">
         This page documents controls; it is not a guarantee of security. Always verify a proof file using a trusted verifier and keep your device secure.
@@ -456,11 +454,11 @@ upgrade-insecure-requests">
         <table>
           <thead><tr><th>Threat</th><th>Vector</th><th>Mitigation</th></tr></thead>
           <tbody>
-            <tr><td>Content exfiltration</td><td>Uploads</td><td>No file uploads; hashes are computed locally and verification requires the <code>.tproof.json</code> bundle (stateless).</td></tr>
+            <tr><td>Content exfiltration</td><td>Uploads</td><td>No file uploads; hashes computed locally; proof file contains no original content.</td></tr>
             <tr><td>API abuse</td><td>Flooding</td><td>Rate limiting, strict validation, predictable 4xx/429 responses.</td></tr>
-            <tr><td>Proof forgery</td><td>Tampering</td><td>Signed bundle; verifiers reject modified fields/signatures.</td></tr>
-            <tr><td>Replay/spam</td><td>Automation</td><td>Abuse controls and rotation of operational parameters.</td></tr>
-            <tr><td>Supply chain</td><td>Deps</td><td>Minimal dependencies; pinned/reviewed updates.</td></tr>
+            <tr><td>Proof forgery</td><td>Tampering</td><td>Signed proof file; verifiers reject modified fields/signatures.</td></tr>
+            <tr><td>Replay/spam</td><td>Automation</td><td>Abuse controls and operational monitoring.</td></tr>
+            <tr><td>Supply chain</td><td>Deps</td><td>Minimal dependencies; reviewed updates.</td></tr>
           </tbody>
         </table>
       </div>
@@ -492,11 +490,9 @@ upgrade-insecure-requests">
       <h2 id="rl-title">Rate limits</h2>
       <ul>
         <li>Endpoints are rate-limited to mitigate floods and automated abuse.</li>
-        <li>Clients must handle HTTP <code>429</code> with backoff/retry.</li>
+        <li>Clients should handle HTTP <code>429</code> with backoff/retry.</li>
       </ul>
-      <p class="muted">
-        Exact thresholds are operational controls and may change without notice.
-      </p>
+      <p class="muted">Exact thresholds are operational controls and may change without notice.</p>
     </section>
 
     <section class="card" id="keys" aria-labelledby="k-title">
@@ -504,10 +500,10 @@ upgrade-insecure-requests">
       <ul>
         <li><strong>Environment separation:</strong> dev/staging/prod are isolated.</li>
         <li><strong>Rotation:</strong> keys can rotate without breaking the protocol (via <code>kid</code>).</li>
-        <li><strong>Client safety:</strong> verifiers never require storing secrets in the browser.</li>
+        <li><strong>Verifier safety:</strong> no client-side secrets required for verification.</li>
       </ul>
       <p class="muted">
-        The proof file contains the signing context (<code>issuer</code>, <code>alg</code>, <code>kid</code>) so verifiers can validate correctly.
+        The proof file contains the verification context (<code>issuer</code>, <code>alg</code>, <code>kid</code>) so independent tools can validate consistently.
       </p>
     </section>
 
@@ -516,7 +512,7 @@ upgrade-insecure-requests">
       <ul>
         <li>No original content stored.</li>
         <li>Minimal operational logs for reliability and abuse prevention.</li>
-        <li>Privacy details are documented on <a href="/privacy.html">Privacy</a>.</li>
+        <li>Privacy details and principles are documented on <a href="/privacy.html">Privacy</a>.</li>
       </ul>
     </section>
 
@@ -525,6 +521,9 @@ upgrade-insecure-requests">
       <p>
         Report vulnerabilities via <a href="/.well-known/security.txt">/.well-known/security.txt</a>.
         Include impact, reproduction steps, and affected URLs. Please avoid public disclosure before a fix is available.
+      </p>
+      <p class="muted">
+        For encrypted reports, use the PGP key listed in <a href="/.well-known/security.txt">security.txt</a>.
       </p>
     </section>
 
@@ -544,10 +543,8 @@ upgrade-insecure-requests">
       <ul>
         <li>Health endpoint returns HTTP 200 when healthy.</li>
         <li>Clients should treat verification as read-only and safe to retry.</li>
+        <li>Error responses are designed to be predictable (4xx invalid input; 429 rate limits).</li>
       </ul>
-      <p class="muted">
-        Error responses are designed to be predictable (4xx for invalid inputs; 429 for rate limits).
-      </p>
     </section>
 
     <section class="card" id="checks" aria-labelledby="oc-title">
@@ -559,7 +556,7 @@ upgrade-insecure-requests">
             <tr><td>Browser</td><td>CSP + no framing + no mixed content</td><td>Frame-ancestors none; upgrade-insecure-requests.</td></tr>
             <tr><td>Abuse</td><td>Rate limiting &amp; validation</td><td>429 + backoff expected.</td></tr>
             <tr><td>Secrets</td><td>No secrets in client</td><td>Signing stays server-side.</td></tr>
-            <tr><td>Privacy</td><td>Proof-file model</td><td>No uploads; hashes computed locally; verification requires the <code>.tproof.json</code> bundle.</td></tr>
+            <tr><td>Privacy</td><td>Hash-only + proof-file model</td><td>No uploads; verification uses <code>.tproof.json</code>.</td></tr>
             <tr><td>Disclosure</td><td>security.txt</td><td>Coordinated disclosure route.</td></tr>
           </tbody>
         </table>
@@ -669,6 +666,7 @@ upgrade-insecure-requests">
       if(window.matchMedia('(min-width: 900px)').matches) closeMenu();
     },{ passive:true });
 
+    // Auto aria-current (exclude .nav-cta)
     (function(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
       document.querySelectorAll('header nav a:not(.nav-cta), footer .links a').forEach(a=>{
@@ -677,6 +675,7 @@ upgrade-insecure-requests">
       });
     })();
 
+    // Copy buttons for <pre>
     (function(){
       document.querySelectorAll('pre').forEach((pre)=>{
         if(pre.querySelector('.copy-btn')) return;
@@ -704,6 +703,7 @@ upgrade-insecure-requests">
       });
     })();
 
+    // Service Worker
     if('serviceWorker' in navigator){
       navigator.serviceWorker.register('/sw.js',{type:'module',scope:'/'}).catch(()=>{});
     }
