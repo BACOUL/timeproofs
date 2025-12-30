@@ -1,60 +1,107 @@
 /* sdk/verify.js
- * TimeProofs v0.2 – Offline verification helpers
+ * TimeProofs v0.2 — Offline verification (stateless, Ed25519-only)
  *
- * - verifyBundle(bundle, fileOrBytes?)
- *   → { valid, schemaValid, proofValid, hashMatches, userSignValid, errors }
+ * verifyBundle(bundle, fileOrBytes?, options?)
+ * → { valid, schemaValid, canonicalValid, proofValid, hashMatches, errors }
  *
- * Remarques v0.2 :
- * - La vérification Ed25519 n'est pas encore implémentée.
- * - La vérification HMAC côté serveur n'est pas possible côté client (secret).
- * - Ce module vérifie :
- *   - la structure minimale du bundle,
- *   - la cohérence du hash si un fichier ou des bytes sont fournis.
+ * options:
+ * - expectedIssuer?: string (default: https://api.timeproofs.io)
+ * - trustedPublicKey: string (base64 SPKI Ed25519 public key)  REQUIRED
  */
 
 import { hashBytes, hashFile, hashText, isBrowser } from "./hash.js";
-import { BUNDLE_VERSION } from "./bundle.js";
+import { BUNDLE_VERSION, CANONICAL_ISSUER } from "./bundle.js";
 
-/**
- * Vérifie rapidement si une valeur ressemble à un SHA-256 hex.
- * @param {string} hex
- * @returns {boolean}
- */
-function isValidSha256Hex(hex) {
-  return typeof hex === "string" && /^[0-9a-fA-F]{64}$/.test(hex.trim());
+function isValidSha256HexLower(hex) {
+  return typeof hex === "string" && /^[a-f0-9]{64}$/.test(hex);
 }
 
-/**
- * Validation structurelle minimale du bundle.
- * On ne remplace pas le JSON Schema officiel, on fait une passe rapide.
- *
- * @param {any} bundle
- * @param {string[]} errors
- * @returns {boolean} schemaValid
- */
-function basicSchemaCheck(bundle, errors) {
+function isValidHex(hex) {
+  return typeof hex === "string" && /^[a-f0-9]+$/.test(hex);
+}
+
+function hexToBytes(hex) {
+  const h = String(hex || "").toLowerCase().trim();
+  if (!/^[a-f0-9]+$/.test(h) || h.length % 2 !== 0) return null;
+  const out = new Uint8Array(h.length / 2);
+  for (let i = 0; i < out.length; i++) out[i] = parseInt(h.slice(i * 2, i * 2 + 2), 16);
+  return out;
+}
+
+function b64ToBytes(b64) {
+  const s = String(b64 || "").trim();
+  if (!s) return null;
+
+  if (typeof atob === "function") {
+    const bin = atob(s);
+    const out = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out;
+  }
+
+  if (typeof Buffer !== "undefined") {
+    return new Uint8Array(Buffer.from(s, "base64"));
+  }
+
+  return null;
+}
+
+function buildCanonical(hashHex, issuedAt, issuer, nonce) {
+  return `${hashHex}|${issuedAt}|${issuer}|${nonce}`;
+}
+
+function normalizeHashObject(h, errors) {
+  if (!h || typeof h !== "object") {
+    errors.push("hash-missing");
+    return null;
+  }
+  if (h.algorithm !== "SHA-256") {
+    errors.push('hash.algorithm-must-be-"SHA-256"');
+  }
+  const v = typeof h.value === "string" ? h.value.toLowerCase().trim() : "";
+  if (!isValidSha256HexLower(v)) {
+    errors.push("hash.value-invalid-sha256");
+  }
+  if (errors.length) return null;
+  return { algorithm: "SHA-256", value: v };
+}
+
+async function ed25519VerifySpkiB64(publicSpkiB64, msg, signatureHex) {
+  if (typeof crypto === "undefined" || !crypto.subtle) {
+    throw new Error("WebCrypto (crypto.subtle) not available");
+  }
+
+  const pubBytes = b64ToBytes(publicSpkiB64);
+  if (!pubBytes) throw new Error("invalid public key (base64 SPKI expected)");
+
+  const sigBytes = hexToBytes(signatureHex);
+  if (!sigBytes) return false;
+
+  const key = await crypto.subtle.importKey("spki", pubBytes, { name: "Ed25519" }, false, [
+    "verify",
+  ]);
+
+  const data = new TextEncoder().encode(msg);
+  return crypto.subtle.verify("Ed25519", key, sigBytes, data);
+}
+
+function basicSchemaCheck(bundle, errors, expectedIssuer) {
   if (!bundle || typeof bundle !== "object") {
     errors.push("bundle-not-object");
     return false;
   }
 
-  // version
   if (bundle.version !== BUNDLE_VERSION) {
     errors.push(`invalid-version: expected ${BUNDLE_VERSION}`);
   }
 
-  // hash
-  const h = bundle.hash;
-  if (!h || typeof h !== "object") {
-    errors.push("hash-missing");
-  } else {
-    if (h.algorithm !== "SHA-256") {
-      errors.push('hash.algorithm-must-be-"SHA-256"');
-    }
-    if (!isValidSha256Hex(h.value || "")) {
-      errors.push("hash.value-invalid-sha256");
-    }
+  // canonical
+  if (typeof bundle.canonical !== "string" || !bundle.canonical.trim()) {
+    errors.push("canonical-missing");
   }
+
+  // hash
+  const hash = normalizeHashObject(bundle.hash, errors);
 
   // timestamp
   const t = bundle.timestamp;
@@ -66,6 +113,11 @@ function basicSchemaCheck(bundle, errors) {
     }
     if (typeof t.issuer !== "string" || !t.issuer.length) {
       errors.push("timestamp.issuer-invalid");
+    } else if (t.issuer !== expectedIssuer) {
+      errors.push("timestamp.issuer-unexpected");
+    }
+    if (typeof t.nonce !== "string" || !t.nonce.length) {
+      errors.push("timestamp.nonce-missing");
     }
   }
 
@@ -74,52 +126,55 @@ function basicSchemaCheck(bundle, errors) {
   if (!p || typeof p !== "object") {
     errors.push("proof-missing");
   } else {
-    if (typeof p.algo !== "string" || !p.algo.length) {
-      errors.push("proof.algo-invalid");
+    if (p.algo !== "Ed25519") {
+      errors.push('proof.algo-must-be-"Ed25519"');
+    }
+    const sig = typeof p.signature === "string" ? p.signature.toLowerCase().trim() : "";
+    if (!sig || !isValidHex(sig)) {
+      errors.push("proof.signature-invalid");
     }
     if (typeof p.keyId !== "string" || !p.keyId.length) {
       errors.push("proof.keyId-invalid");
     }
   }
 
-  return errors.length === 0;
+  return errors.length === 0 && !!hash;
 }
 
-/**
- * Recalcule le hash d'un support fourni et compare au bundle.hash.value.
- *
- * @param {object} bundle
- * @param {any} fileOrBytes
- * @param {string[]} errors
- * @returns {Promise<boolean|null>} hashMatches
- */
+function checkCanonical(bundle, errors) {
+  const hashHex = bundle?.hash?.value ? String(bundle.hash.value).toLowerCase().trim() : "";
+  const issuedAt = bundle?.timestamp?.issuedAt || "";
+  const issuer = bundle?.timestamp?.issuer || "";
+  const nonce = bundle?.timestamp?.nonce || "";
+  const canonical = String(bundle?.canonical || "").trim();
+
+  if (!hashHex || !issuedAt || !issuer || !nonce || !canonical) return false;
+
+  const expected = buildCanonical(hashHex, issuedAt, issuer, nonce);
+  const ok = canonical === expected;
+  if (!ok) errors.push("canonical-mismatch");
+  return ok;
+}
+
 async function checkHashMatch(bundle, fileOrBytes, errors) {
-  if (fileOrBytes == null) {
-    return null; // pas de fichier fourni → pas de comparaison possible
-  }
+  if (fileOrBytes == null) return null;
 
-  const targetHex = (bundle.hash && bundle.hash.value
-    ? String(bundle.hash.value)
-    : ""
-  ).toLowerCase().trim();
+  const targetHex = (bundle.hash && bundle.hash.value ? String(bundle.hash.value) : "")
+    .toLowerCase()
+    .trim();
 
-  if (!isValidSha256Hex(targetHex)) {
+  if (!isValidSha256HexLower(targetHex)) {
     errors.push("hash.value-invalid-sha256");
     return false;
   }
 
   let computedHex;
 
-  // Uint8Array
   if (fileOrBytes instanceof Uint8Array) {
     computedHex = (await hashBytes(fileOrBytes)).toLowerCase();
-  }
-  // File/Blob (navigateur)
-  else if (isBrowser && fileOrBytes instanceof Blob) {
+  } else if (isBrowser && fileOrBytes instanceof Blob) {
     computedHex = (await hashFile(fileOrBytes)).toLowerCase();
-  }
-  // string → hashText (optionnel)
-  else if (typeof fileOrBytes === "string") {
+  } else if (typeof fileOrBytes === "string") {
     computedHex = (await hashText(fileOrBytes)).toLowerCase();
   } else {
     errors.push("unsupported-fileOrBytes-type");
@@ -134,106 +189,58 @@ async function checkHashMatch(bundle, fileOrBytes, errors) {
   return true;
 }
 
-/**
- * Vérification de la signature serveur (Ed25519 + HMAC).
- * v0.2 : placeholder – pas de vérification cryptographique, uniquement marquage.
- *
- * @param {object} bundle
- * @param {string[]} errors
- * @returns {boolean} proofValid
- */
-function checkServerProof(bundle, errors) {
-  const proof = bundle.proof || {};
-  const algo = proof.algo || "";
-
-  // On accepte le schéma mais on signale que la vérification Ed25519 n'est pas encore faite.
-  if (!algo) {
-    errors.push("proof.algo-missing");
+async function checkEd25519Proof(bundle, trustedPublicKey, errors) {
+  if (!trustedPublicKey) {
+    errors.push("missing-trustedPublicKey");
     return false;
   }
 
-  // TODO v0.2+ : vérifier Ed25519 + keyId via JWKS
-  errors.push("ed25519-verification-not-implemented-v0.2");
+  const canonical = String(bundle.canonical || "").trim();
+  const sig = String(bundle?.proof?.signature || "").toLowerCase().trim();
 
-  // Pour l’instant, on considère proofValid = true structurellement,
-  // mais on garde une alerte dans errors.
-  return true;
-}
+  if (!canonical || !sig) return false;
 
-/**
- * Vérification de la signature locale utilisateur (userSign).
- * v0.2 : placeholder – pas d’Ed25519 client, on marque seulement la présence.
- *
- * @param {object} bundle
- * @param {string[]} errors
- * @returns {boolean|null} userSignValid
- */
-function checkUserSign(bundle, errors) {
-  const us = bundle.userSign;
-  if (!us) return null;
-
-  // On vérifie seulement la présence des champs
-  if (
-    typeof us.publicKey !== "string" ||
-    !us.publicKey.length ||
-    typeof us.algorithm !== "string" ||
-    !us.algorithm.length ||
-    typeof us.signature !== "string" ||
-    !us.signature.length
-  ) {
-    errors.push("userSign-structure-invalid");
+  try {
+    const ok = await ed25519VerifySpkiB64(trustedPublicKey, canonical, sig);
+    if (!ok) errors.push("invalid-signature");
+    return ok;
+  } catch (e) {
+    errors.push("ed25519-verify-error");
     return false;
   }
-
-  // TODO v0.2+ : vérifier la signature Ed25519 sur meta
-  errors.push("userSign-verification-not-implemented-v0.2");
-  return true;
 }
 
-/**
- * Vérifie un bundle .tproof.json hors-ligne.
- *
- * @param {object} bundle
- * @param {any} [fileOrBytes]  // optionnel : Uint8Array, Blob/File (browser), string
- * @returns {Promise<{
- *   valid: boolean,
- *   schemaValid: boolean,
- *   proofValid: boolean,
- *   hashMatches: boolean | null,
- *   userSignValid: boolean | null,
- *   errors: string[]
- * }>}
- */
-export async function verifyBundle(bundle, fileOrBytes) {
+export async function verifyBundle(bundle, fileOrBytes, options = {}) {
   const errors = [];
+  const expectedIssuer = options.expectedIssuer || CANONICAL_ISSUER;
+  const trustedPublicKey =
+    typeof options.trustedPublicKey === "string" && options.trustedPublicKey.trim()
+      ? options.trustedPublicKey.trim()
+      : null;
 
-  // 1) Schéma minimal
-  const schemaValid = basicSchemaCheck(bundle, errors);
+  const schemaValid = basicSchemaCheck(bundle, errors, expectedIssuer);
 
-  // 2) Preuve serveur (sans crypto Ed25519 pour l’instant)
-  const proofValid = schemaValid ? checkServerProof(bundle, errors) : false;
+  const canonicalValid = schemaValid ? checkCanonical(bundle, errors) : false;
 
-  // 3) Hash local si un fichier est fourni
   const hashMatches = schemaValid
     ? await checkHashMatch(bundle, fileOrBytes, errors)
     : null;
 
-  // 4) userSign (si présent)
-  const userSignValid = schemaValid ? checkUserSign(bundle, errors) : null;
+  const proofValid =
+    schemaValid && canonicalValid ? await checkEd25519Proof(bundle, trustedPublicKey, errors) : false;
 
-  // 5) Agrégation
   const valid =
     schemaValid &&
-    proofValid &&
-    (hashMatches !== false) &&
-    (userSignValid !== false);
+    canonicalValid &&
+    proofValid === true &&
+    (hashMatches !== false);
 
   return {
     valid,
     schemaValid,
+    canonicalValid,
     proofValid,
     hashMatches,
-    userSignValid,
     errors,
   };
-  }
+      }
