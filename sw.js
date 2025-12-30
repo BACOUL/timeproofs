@@ -1,2 +1,10 @@
-self.addEventListener('install', e => self.skipWaiting());
-self.addEventListener('activate', e => self.clients.claim());
+// Immediate activation: no waiting, no caching.
+// Safe for stateless, hash-based architecture.
+
+self.addEventListener('install', () => {
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(self.clients.claim());
+});
