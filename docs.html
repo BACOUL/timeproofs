@@ -111,7 +111,7 @@ upgrade-insecure-requests">
     "name":"TimeProofs",
     "url":"https://timeproofs.io/",
     "inLanguage":"en",
-    "dateModified":"2025-12-29"
+    "dateModified":"2025-12-30"
   }
   </script>
 
@@ -522,42 +522,56 @@ Accept: application/json
 
         <div class="step-label" id="errors" style="margin-top:16px;">Ops · Errors</div>
         <h2>Errors</h2>
-        <p class="hint">Common failure cases you should handle in clients.</p>
+        <p class="hint">
+          Clients should treat errors as <strong>HTTP status + a human message</strong>. Do not hardcode undocumented error codes.
+        </p>
 
-        <div class="kvs" role="list">
+        <div class="kvs" role="list" aria-label="Common error categories">
           <div class="kv" role="listitem">
-            <div class="k">invalid_hash</div>
-            <div class="v">Hash must be 64 hex characters (SHA-256).</div>
+            <div class="k">400 Bad Request</div>
+            <div class="v">Invalid input (e.g., missing fields, malformed JSON, hash not 64-hex).</div>
           </div>
           <div class="kv" role="listitem">
-            <div class="k">invalid_bundle</div>
-            <div class="v">Proof missing required fields (hash, timestamp, signature).</div>
+            <div class="k">413 Payload Too Large</div>
+            <div class="v">Request exceeds limits (client should reduce payload).</div>
           </div>
           <div class="kv" role="listitem">
-            <div class="k">signature_invalid</div>
-            <div class="v">Signature check failed (tampered proof or unknown key).</div>
+            <div class="k">429 Too Many Requests</div>
+            <div class="v">Rate limited: exponential backoff + jitter (client responsibility).</div>
           </div>
           <div class="kv" role="listitem">
-            <div class="k">rate_limited</div>
-            <div class="v">Backoff + retry with jitter (client responsibility).</div>
+            <div class="k">5xx Server Error</div>
+            <div class="v">Temporary failure: retry with backoff and surface a clear message.</div>
           </div>
         </div>
+
+        <h3>Typical error payload (example)</h3>
+<pre><code>{
+  "error": "bad_request",
+  "message": "Hash must be 64 hex characters."
+}</code></pre>
+        <p class="hint">
+          Your integration should always handle: non-JSON responses, missing fields, and unexpected shapes.
+        </p>
 
         <div class="step-label" id="offline" style="margin-top:16px;">Offline · What “offline” means</div>
         <h2>Offline</h2>
         <p class="hint">
-          “Offline” means you can keep and inspect the proof locally anytime. When you want cryptographic validation,
-          verify using the proof (no original upload).
+          “Offline” means you can <strong>keep, move, inspect, and archive</strong> the proof file locally anytime.
+          A proof is self-contained: it carries the hash, timestamp, and signature.
         </p>
         <p class="hint">
-          The simplest workflow is to keep <code>.tproof.json</code> next to the file you proved, then use
-          <a href="/verify.html">Create / Verify</a>.
+          For <strong>cryptographic validation</strong>, you need a verifier that knows TimeProofs public keys:
+          you can use the TimeProofs API (<code>/api/verify</code>) when online, or any ProofSpec-compatible verifier that supports the same keys.
+        </p>
+        <p class="hint">
+          Practical workflow: store <code>.tproof.json</code> next to the original file, keep both immutable, and re-verify after transfers/pipelines.
         </p>
 
         <div class="step-label" id="faq" style="margin-top:16px;">Help · FAQ</div>
         <h2>FAQ</h2>
-        <p><strong>Do you store my content?</strong><br/>No. Only hashes and proofs circulate. Your original file stays with you.</p>
-        <p><strong>Why is v0.2 “stateless”?</strong><br/>Verification uses the proof, not a database lookup.</p>
+        <p><strong>Do you store my content?</strong><br/>No. Your original file stays with you. Proofs are hash-only.</p>
+        <p><strong>Why is v0.2 “stateless”?</strong><br/>Verification uses the proof file, not a database lookup.</p>
         <p><strong>Is a file date enough?</strong><br/>No. File dates are local and editable. TimeProofs signs a cryptographic fingerprint at a precise time.</p>
         <p><strong>Is this notarization / legal certification?</strong><br/>No. TimeProofs provides a technical proof of existence and integrity, not a legal qualification.</p>
 
