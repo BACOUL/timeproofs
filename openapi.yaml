@@ -174,6 +174,8 @@ components:
           const: "https://api.timeproofs.io"
         nonce:
           type: string
+          pattern: "^[a-f0-9]{16,128}$"
+          description: Unpredictable nonce (lowercase hex recommended).
 
     ProofObject:
       type: object
@@ -185,10 +187,12 @@ components:
           enum: ["Ed25519"]
         signature:
           type: string
-          description: Hex-encoded Ed25519 signature
+          description: Hex-encoded Ed25519 signature (64 bytes => 128 hex chars)
+          pattern: "^[a-f0-9]{128}$"
         publicKey:
           type: string
-          description: Optional informational public key (ignored during verification)
+          description: Optional informational public key (base64 SPKI DER). Ignored during verification if issuer key is pinned.
+          contentEncoding: base64
         keyId:
           type: string
           example: "tp-v0-2-main"
