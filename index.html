@@ -352,7 +352,7 @@ upgrade-insecure-requests">
   <main id="main" class="wrap" role="main">
     <!-- HERO -->
     <section class="hero" aria-labelledby="hero-title">
-      <div class="label">Status: Public Beta v0.2 · Privacy-first · No blockchain</div>
+      <div class="label">Status: Public Beta v0.2 · Stateless API · Privacy-first · No blockchain</div>
       <h1 id="hero-title" class="title">Prove when your data existed — without exposing it.</h1>
 
       <p class="subtitle">
@@ -387,25 +387,57 @@ upgrade-insecure-requests">
       </p>
     </section>
 
+    <!-- What it is / is not -->
+    <section class="section bg-solid" id="what" aria-labelledby="what-title">
+      <h2 id="what-title">What TimeProofs is (and is not)</h2>
+
+      <div class="grid three" aria-label="Definition blocks">
+        <article class="card">
+          <h3>✅ It IS</h3>
+          <p><strong>A proof file</strong> you can store and share (<code>.tproof.json</code>).</p>
+          <p><strong>A signed timestamp</strong> from a stateless API (no server-side storage required).</p>
+          <p><strong>Independent verification</strong> later (online or offline) to confirm the content existed and is unchanged.</p>
+        </article>
+
+        <article class="card">
+          <h3>✅ It IS</h3>
+          <p><strong>Privacy-first</strong>: your original content stays on your device.</p>
+          <p><strong>Open protocol</strong>: designed to be implemented by other tools and verifiers.</p>
+          <p><strong>Domain-agnostic</strong>: works for files, AI outputs, datasets, releases, audits.</p>
+        </article>
+
+        <article class="card">
+          <h3>❌ It is NOT</h3>
+          <p><strong>Not storage</strong>: TimeProofs doesn’t host your content.</p>
+          <p><strong>Not blockchain</strong>: no chain, no tokens, no mining.</p>
+          <p><strong>Not identity / authorship</strong>: it doesn’t prove who created it, or why.</p>
+        </article>
+      </div>
+
+      <p class="positioning" style="text-align:center; margin-top:10px">
+        For details and examples, see <a href="/docs.html">Developer Docs</a> and the <a href="/proofspec.html">Protocol</a>.
+      </p>
+    </section>
+
     <!-- How it works (public) -->
-    <section class="section bg-solid" aria-labelledby="how">
+    <section class="section bg-alt" aria-labelledby="how">
       <h2 id="how">How It Works</h2>
       <p style="text-align:center; color:#9fb3c9; margin:-6px 0 12px">
-        Three steps: <strong>create a fingerprint → receive a proof file → verify later</strong>
+        Three steps: <strong>hash locally → request a signed timestamp → verify with the proof file</strong>
       </p>
 
       <div class="grid three">
         <article class="card">
-          <h3>1) Create the fingerprint (on your device)</h3>
-          <p>Your device creates a unique fingerprint for your content. Your content stays on your device.</p>
+          <h3>1) Hash locally (SHA-256)</h3>
+          <p>Your device computes a SHA-256 hash of your content. The original content never leaves your device.</p>
         </article>
         <article class="card">
-          <h3>2) Get a proof file</h3>
-          <p>You receive a small proof file you can store next to your content and share when needed.</p>
+          <h3>2) Request a signed timestamp</h3>
+          <p>You send only the hash to the stateless API and receive a signed timestamp response.</p>
         </article>
         <article class="card">
-          <h3>3) Verify anytime</h3>
-          <p>Anyone can check the proof later to confirm the content existed at that time and hasn’t changed.</p>
+          <h3>3) Download &amp; verify the proof file</h3>
+          <p>You store the proof (<code>.tproof.json</code>) next to your content. Anyone can verify later that the content existed at that time and hasn’t changed.</p>
         </article>
       </div>
 
@@ -415,7 +447,7 @@ upgrade-insecure-requests">
     </section>
 
     <!-- Why -->
-    <section class="section bg-alt" aria-labelledby="why">
+    <section class="section bg-solid" aria-labelledby="why">
       <h2 id="why">Why TimeProofs</h2>
       <div class="grid three">
         <article class="card"><h3>Private by default</h3><p>Your content stays with you. The proof is designed to be shareable without revealing the original.</p></article>
@@ -425,7 +457,7 @@ upgrade-insecure-requests">
     </section>
 
     <!-- Proof of Release (index only) -->
-    <section class="section bg-solid" aria-labelledby="site-proof-title" id="site-proof">
+    <section class="section bg-alt" aria-labelledby="site-proof-title" id="site-proof">
       <p class="label" style="margin-bottom:8px">🔏 Proof of Release</p>
       <h2 id="site-proof-title">Verified by TimeProofs</h2>
       <p style="text-align:center; color:#9fb3c9; max-width:900px; margin:0 auto 12px;">
@@ -446,7 +478,7 @@ upgrade-insecure-requests">
     </section>
 
     <!-- Final CTA -->
-    <section class="section bg-alt" aria-labelledby="final-cta">
+    <section class="section bg-solid" aria-labelledby="final-cta">
       <h2 id="final-cta">Ready to prove it?</h2>
       <div class="cta-wrap" role="group" aria-label="Final actions">
         <a class="cta" href="/verify.html">Create / Verify a Proof</a>
@@ -638,4 +670,4 @@ upgrade-insecure-requests">
   })();
   </script>
 </body>
-</html>
+        </html>
