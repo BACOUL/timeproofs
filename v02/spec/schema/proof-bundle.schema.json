@@ -30,7 +30,7 @@
     },
     "timestamp": {
       "type": "object",
-      "required": ["issuedAt", "issuer"],
+      "required": ["issuedAt", "issuer", "nonce"],
       "additionalProperties": false,
       "properties": {
         "issuedAt": {
@@ -45,13 +45,13 @@
         },
         "nonce": {
           "type": "string",
-          "description": "Optional nonce to distinguish multiple proofs for the same hash"
+          "description": "Nonce to distinguish multiple proofs for the same hash (required in v0.2)"
         }
       }
     },
     "proof": {
       "type": "object",
-      "required": ["algo", "hmac", "signature", "publicKey", "keyId"],
+      "required": ["algo", "keyId"],
       "additionalProperties": false,
       "properties": {
         "algo": {
@@ -60,20 +60,21 @@
           "description": "Proof scheme identifier"
         },
         "hmac": {
-          "type": "string",
-          "description": "Base64-encoded HMAC-SHA256 over a canonical payload"
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-fA-F]+$",
+          "description": "Hex-encoded HMAC-SHA256 (null if not present)"
         },
         "signature": {
-          "type": "string",
-          "description": "Base64-encoded Ed25519 signature over a canonical payload"
+          "type": ["string", "null"],
+          "description": "Ed25519 signature (null in v0.2 until implemented)"
         },
         "publicKey": {
-          "type": "string",
-          "description": "Base64-encoded Ed25519 public key used to verify the signature"
+          "type": ["string", "null"],
+          "description": "Ed25519 public key (null in v0.2 until implemented)"
         },
         "keyId": {
           "type": "string",
-          "description": "Key identifier, mapped to issuer JWKS (/.well-known/jwks.json)"
+          "description": "Key identifier (future JWKS mapping)"
         }
       }
     },
@@ -108,37 +109,13 @@
             "evidence"
           ]
         },
-        "mime": {
-          "type": "string",
-          "description": "MIME type of the data (e.g. application/pdf, image/png)"
-        },
-        "domain": {
-          "type": "string",
-          "description": "Business or process domain (e.g. legal, finance, ml-training)"
-        },
-        "purpose": {
-          "type": "string",
-          "description": "Why this proof was created (release, audit-log, regulatory-archive, etc.)"
-        },
-        "createdBy": {
-          "type": "string",
-          "description": "Local identifier of the user, system, or agent that created the bundle"
-        },
-        "tool": {
-          "type": "string",
-          "description": "Tool name and version that produced the bundle"
-        },
-        "labels": {
-          "type": "array",
-          "description": "Arbitrary local tags",
-          "items": {
-            "type": "string"
-          }
-        },
-        "notes": {
-          "type": "string",
-          "description": "Free-text local-only description"
-        }
+        "mime": { "type": "string" },
+        "domain": { "type": "string" },
+        "purpose": { "type": "string" },
+        "createdBy": { "type": "string" },
+        "tool": { "type": "string" },
+        "labels": { "type": "array", "items": { "type": "string" } },
+        "notes": { "type": "string" }
       }
     },
     "userSign": {
@@ -147,19 +124,9 @@
       "required": ["publicKey", "algorithm", "signature"],
       "additionalProperties": false,
       "properties": {
-        "publicKey": {
-          "type": "string",
-          "description": "Base64-encoded public key held by the user or organization"
-        },
-        "algorithm": {
-          "type": "string",
-          "enum": ["Ed25519"],
-          "description": "Signature algorithm"
-        },
-        "signature": {
-          "type": "string",
-          "description": "Base64-encoded signature over a canonical representation of meta"
-        }
+        "publicKey": { "type": "string" },
+        "algorithm": { "type": "string", "enum": ["Ed25519"] },
+        "signature": { "type": "string" }
       }
     }
   }
