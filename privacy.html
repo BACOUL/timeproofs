@@ -7,8 +7,7 @@
   <meta name="color-scheme" content="dark light"/>
   <title>Privacy — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="Privacy-first by design: proof-file model (.tproof.json), no file uploads, minimal logs, verification without tracking. TimeProofs v0.2 privacy policy."/>
-  <meta name="keywords" content="privacy-first,hash-only,no uploads,proof of existence,TimeProofs,GDPR,analytics,plausible,.tproof.json"/>
+  <meta name="description" content="Privacy-first by design: hash-only proofs (.tproof.json), no file uploads, minimal operational logs, and stateless verification. TimeProofs v0.2 privacy policy."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -17,7 +16,7 @@
   <link rel="alternate" hreflang="en" href="https://timeproofs.io/privacy.html"/>
   <link rel="alternate" hreflang="x-default" href="https://timeproofs.io/privacy.html"/>
 
-  <!-- Feeds -->
+  <!-- Feeds & misc -->
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
   <link rel="alternate" type="application/yaml" href="/openapi.yaml" title="OpenAPI"/>
   <link rel="author" href="/humans.txt"/>
@@ -37,7 +36,7 @@
 
   <!-- Social -->
   <meta property="og:title" content="Privacy — TimeProofs"/>
-  <meta property="og:description" content="Proof-file model (.tproof.json). No uploads. Minimal logs. Verification without tracking."/>
+  <meta property="og:description" content="Hash-only proofs (.tproof.json). No uploads. Minimal logs. Stateless verification."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/privacy.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
@@ -47,7 +46,7 @@
   <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Privacy — TimeProofs"/>
-  <meta name="twitter:description" content="Privacy-first. No blockchain. Proof file (.tproof.json)."/>
+  <meta name="twitter:description" content="Privacy-first. Hash-only proofs (.tproof.json). No blockchain."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- Security meta -->
@@ -68,10 +67,10 @@ form-action 'self';
 frame-ancestors 'none';
 upgrade-insecure-requests">
 
-  <!-- Analytics (Plausible) -->
+  <!-- Analytics -->
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
-  <!-- JSON-LD -->
+  <!-- JSON-LD (Org + Site + WebPage) -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -112,10 +111,10 @@ upgrade-insecure-requests">
   {
     "@context":"https://schema.org",
     "@type":"WebPage",
-    "name":"Privacy",
+    "name":"Privacy — TimeProofs",
     "url":"https://timeproofs.io/privacy.html",
     "isPartOf":{"@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"},
-    "about":"Privacy-first: hash-only processing; no file uploads; minimal logs; privacy-first analytics",
+    "about":"Privacy-first: hash-only processing; no file uploads; minimal operational logs; stateless verification",
     "dateModified":"2025-12-30",
     "inLanguage":"en",
     "description":"TimeProofs v0.2 privacy policy for the website and reference API."
@@ -128,8 +127,7 @@ upgrade-insecure-requests">
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
       --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
       --ok:#34d399; --warn:#f59e0b; --err:#ef4444;
-      --ring:0 0 0 1px #1e293b, 0 10px 40px rgba(34,211,238,.14);
-      --e:cubic-bezier(.22,.61,.36,1)
+      --e:cubic-bezier(.22,.61,.36,1);
     }
     *{ box-sizing:border-box }
 
@@ -147,7 +145,7 @@ upgrade-insecure-requests">
       background:
         radial-gradient(1200px 600px at 80% -10%, rgba(34,211,238,.06), transparent 60%),
         conic-gradient(from 220deg at 10% -20%, rgba(34,211,238,.04), transparent 30%),
-        var(--bg)
+        var(--bg);
     }
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
@@ -156,43 +154,46 @@ upgrade-insecure-requests">
     @media (min-width:900px){ [id]{ scroll-margin-top:104px } }
 
     .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
-    .skip:focus{ position:fixed; left:12px; top:12px; width:auto; height:auto; padding:8px 12px; background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000 }
+    .skip:focus{
+      position:fixed; left:12px; top:12px; padding:8px 12px;
+      background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000;
+    }
 
     /* Header */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
-      background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
-      display:flex; align-items:center; gap:12px; padding:0 16px; transition:background .25s var(--e)
+      background:rgba(11,16,32,.55); backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; gap:12px; padding:0 16px;
+      transition:background .25s var(--e);
     }
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
-    .tp-brand{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto }
+    .tp-brand{
+      display:flex; align-items:center; gap:10px; margin-right:auto;
+      color:var(--text); font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none;
+    }
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
 
-    /* Header nav */
     .tp-nav a{
-      color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block; text-decoration:none;
+      color:var(--text); font-weight:700; margin-left:18px; padding:10px 0; display:inline-block;
       text-underline-offset:3px;
     }
     .tp-nav a[aria-current="page"]{ color:#9beefb }
     .tp-nav a:hover{ color:var(--accent); text-decoration:underline }
 
-    /* Header CTA */
     .cta-header{
       display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
-      border-radius:10px; background:var(--accent); color:#06202a; font-weight:800; box-shadow:0 6px 24px rgba(34,211,238,.25)
+      border-radius:10px; background:var(--accent); color:#06202a;
+      font-weight:800; box-shadow:0 6px 24px rgba(34,211,238,.25);
     }
     .cta-header:hover{ filter:brightness(1.05) }
 
-    /* Burger */
     .tp-burger{
-      display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
-      border:1px solid var(--line); border-radius:12px; background:#0c1a2e; color:#fff;
-      cursor:pointer; box-shadow:var(--ring)
+      display:inline-flex; align-items:center; justify-content:center;
+      width:48px; height:48px; border:1px solid var(--line);
+      border-radius:12px; background:#0c1a2e; color:#fff; cursor:pointer;
     }
     .tp-burger span{ font-size:20px; line-height:1 }
-
-    /* Mobile-only nav CTA */
-    .nav-cta{ display:none; }
 
     @media (min-width:900px){
       .tp-burger{ display:none }
@@ -202,15 +203,18 @@ upgrade-insecure-requests">
     @media (max-width:899px){
       .tp-brand img{ height:34px; width:34px }
       .tp-nav{
-        position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
-        display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
-        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease
+        position:fixed; top:64px; left:0; right:0;
+        background:#0c1424; border-top:1px solid var(--line);
+        display:flex; flex-direction:column; gap:10px; padding:14px 16px;
+        box-shadow:0 16px 40px rgba(0,0,0,.45);
+        transform:translateY(-10px); opacity:0; pointer-events:none;
+        transition:opacity .2s ease, transform .2s ease;
       }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
       .nav-cta{
         display:block; margin-top:6px; padding:12px; text-align:center;
-        border-radius:12px; background:var(--accent); color:#06202a; font-weight:800
+        border-radius:12px; background:var(--accent); color:#06202a; font-weight:800;
       }
     }
 
@@ -226,9 +230,8 @@ upgrade-insecure-requests">
       font-size:clamp(1.9rem,4.6vw,2.35rem); margin:.2em 0 .4em; font-weight:900;
       background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff);
       -webkit-background-clip:text; background-clip:text; color:transparent;
-      text-shadow:0 2px 40px rgba(34,211,238,.10)
     }
-    .hero .lead{ color:var(--muted); max-width:900px; margin:0 auto 12px; line-height:1.7; padding:0 6px }
+    .hero .lead{ color:var(--muted); max-width:920px; margin:0 auto 12px; line-height:1.7; }
     .badge{
       display:inline-block; margin-top:6px; padding:6px 12px;
       border:1px solid #214a57; background:#0d2330; color:#bff1ff;
@@ -251,35 +254,21 @@ upgrade-insecure-requests">
     nav.toc a:hover{ text-decoration:underline }
     .toc-top{
       display:inline-block; margin:8px auto 0; padding:6px 10px;
-      border-radius:999px; border:1px solid #214a57; background:#0d2330; color:#bff1ff;
-      font-size:.85rem; text-decoration:none;
+      border-radius:999px; border:1px solid #214a57; background:#0d2330;
+      color:#bff1ff; font-size:.85rem; text-decoration:none;
     }
     .toc-top:hover{ text-decoration:underline }
 
+    /* Content */
     main{ padding:0 0 40px }
     .meta{ color:var(--muted); margin:18px auto 6px; max-width:1100px; text-align:center; }
-
     .card{
-      position:relative;
-      background:#0c1424; border:1px solid transparent; border-radius:16px;
+      background:#0c1424; border:1px solid var(--line); border-radius:12px;
       padding:18px; margin:14px auto; max-width:1100px;
     }
-    .card::before{
-      content:""; position:absolute; inset:0; border-radius:inherit; padding:1px;
-      background:linear-gradient(135deg, rgba(34,211,238,.28), rgba(34,211,238,.05));
-      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude;
-      pointer-events:none;
-    }
-
     h2{ color:#b9e7f5; font-size:1.25rem; margin:1.2em 0 .6em }
     h3{ color:#aee9f7; font-size:1.05rem; margin:1em 0 .3em }
-
-    .table-wrap{ overflow:auto; border:1px solid var(--line); border-radius:12px }
-    table{ border-collapse:collapse; min-width:720px; width:100% }
-    th,td{ border-bottom:1px solid #203047; padding:10px 12px; text-align:left; white-space:nowrap; }
-    th{ color:#cfefff; font-weight:700 }
-    .table-wrap th:nth-child(3),
-    .table-wrap td:nth-child(3){ white-space:normal; }
+    .muted{ color:var(--muted); font-size:.9rem }
 
     pre,code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
     pre{
@@ -299,43 +288,35 @@ upgrade-insecure-requests">
     .copy-btn.copied .ok{ display:inline }
     .copy-btn.copied .txt{ display:none }
 
-    .muted{ color:var(--muted); font-size:.9rem }
-
     /* Footer (canonique) */
-    footer{ border-top:1px solid var(--line); margin-top:44px; padding:18px; color:#7c8aa5; text-align:center }
-    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
-    footer .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; background:#0d1628; font-size:.9rem; color:#cfefff; text-decoration:none }
-    footer .links a{ font-weight:600; text-underline-offset:3px; }
-    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
-    .social a{ display:inline-flex; width:40px; height:40px; border:1px solid var(--line); border-radius:12px; align-items:center; justify-content:center; background:#0d1628; transition:transform .18s var(--e); color:#cfefff }
-    .social a:hover{ transform:translateY(-2px) }
+    footer{
+      border-top:1px solid var(--line); margin-top:28px;
+      padding:18px; color:#7c8aa5; text-align:center;
+    }
+    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0; }
+    footer .badge{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px; border:1px solid var(--line); border-radius:999px;
+      background:#0d1628; font-size:.9rem; color:#cfefff; text-decoration:none;
+    }
+    footer .links a{ color:#cfefff; font-weight:600; text-underline-offset:3px; }
+    footer .links a:hover{ color:var(--accent); text-decoration:underline; }
+    footer .links a[aria-current="page"]{ color:var(--accent); text-decoration:underline; }
 
-    /* Nav/Footer alignment */
-    #tp-nav a,
-    footer .links a{
-      color:var(--text);
-      font-weight:600;
-      text-decoration:none;
-      text-underline-offset:3px;
+    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px; }
+    .social a{
+      display:inline-flex; width:40px; height:40px;
+      border:1px solid var(--line); border-radius:12px;
+      align-items:center; justify-content:center;
+      background:#0d1628; color:#cfefff;
+      transition:transform .18s var(--e);
     }
-    #tp-nav a:hover,
-    footer .links a:hover{
-      color:var(--accent);
-      text-decoration:underline;
-    }
-    #tp-nav a[aria-current="page"],
-    footer .links a[aria-current="page"]{
-      color:var(--accent);
-      text-decoration:underline;
-    }
+    .social a:hover{ transform:translateY(-2px) }
 
     a:focus-visible, .cta-header:focus-visible, .tp-burger:focus-visible, .copy-btn:focus-visible{
       outline:2px solid #22d3ee; outline-offset:3px; border-radius:12px;
     }
-
-    @media (max-width:899px){ table{ min-width:100% } }
   </style>
-  <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
 <body>
   <a href="#main" class="skip">Skip to main content</a>
@@ -366,24 +347,23 @@ upgrade-insecure-requests">
   <main id="main" class="wrap" role="main" aria-describedby="page-title">
     <!-- HERO -->
     <section class="hero" role="region" aria-labelledby="page-title">
-      <div class="icon" aria-hidden="true">🔒</div>
+      <div class="icon" aria-hidden="true">🕊️</div>
       <p class="badge">Status: Public Beta v0.2 · ProofSpec v0.1 · API v0.2 · Privacy-first · No blockchain</p>
       <h1 id="page-title">Privacy</h1>
       <p class="lead">
-        TimeProofs is privacy-first by design: we process hashes, not content. Files and text never upload, and verification works without tracking.
+        TimeProofs is hash-only and stateless. Your files never need to be uploaded: you create and keep a proof file (<code>.tproof.json</code>) and verify it later.
       </p>
     </section>
 
     <!-- TOC -->
     <nav class="toc" aria-label="Contents">
       <span class="toc-label">On this page</span>
-      <a href="#at-a-glance">At a glance</a>
-      <a href="#principles">Principles</a>
-      <a href="#what-we-process">What we process</a>
-      <a href="#what-we-dont">What we do not process</a>
+      <a href="#summary">Summary</a>
+      <a href="#data">What we collect</a>
+      <a href="#proofs">Proof data model</a>
       <a href="#analytics">Analytics</a>
-      <a href="#cookies-sw">Cookies &amp; Service Worker</a>
-      <a href="#logs-retention">Logs &amp; retention</a>
+      <a href="#security">Security</a>
+      <a href="#retention">Retention</a>
       <a href="#rights">Your rights</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -391,127 +371,117 @@ upgrade-insecure-requests">
       <a class="toc-top" href="#top">↑ Top</a>
     </div>
 
-    <!-- Meta -->
     <p class="meta">
       Last updated: <strong>2025-12-30</strong> ·
       Contact: <a href="mailto:contact@timeproofs.io">contact@timeproofs.io</a> ·
-      See also: <a href="/legal.html">Legal</a>, <a href="/security.html">Security</a>
+      See also: <a href="/legal.html">Legal</a> · <a href="/security.html">Security</a>
     </p>
 
-    <section class="card" id="at-a-glance" aria-labelledby="glance-title">
-      <h2 id="glance-title">Privacy at a glance</h2>
+    <section class="card" id="summary">
+      <h2>1. Summary</h2>
       <ul>
-        <li><strong>No content upload.</strong> Originals never leave your device.</li>
-        <li><strong>Hash-only.</strong> We process hashes and proof data, not files.</li>
-        <li><strong>No accounts.</strong> No identity required to create or verify proofs.</li>
-        <li><strong>No marketing cookies.</strong> We do not run behavioral advertising.</li>
-        <li><strong>Bundle-first.</strong> Verification is based on a <code>.tproof.json</code> proof file.</li>
+        <li><strong>No content upload:</strong> originals stay on your device.</li>
+        <li><strong>Hash-only:</strong> we process SHA-256 hashes and proof fields, not files.</li>
+        <li><strong>Stateless verification:</strong> verification is based on the proof file (<code>.tproof.json</code>), not a database lookup.</li>
+        <li><strong>No accounts (v0.2):</strong> you can create/verify without identity.</li>
+        <li><strong>No behavioral ads:</strong> we do not run advertising targeting.</li>
       </ul>
       <p class="muted">
-        Note: a hash may be linkable to a person if the original content is unique and publicly disclosed elsewhere. Avoid placing personal data in metadata.
+        Important: a hash can be linkable to a person if your own systems or publications link it to identity. Avoid placing personal data or secrets in metadata.
       </p>
     </section>
 
-    <section class="card" id="principles" aria-labelledby="pr-title">
-      <h2 id="pr-title">Principles</h2>
+    <section class="card" id="data">
+      <h2>2. What we collect</h2>
+      <h3>Website</h3>
       <ul>
-        <li><strong>Minimization.</strong> Only what is needed to issue/verify proofs and prevent abuse.</li>
-        <li><strong>No content.</strong> No files, prompts, or outputs are uploaded or stored by TimeProofs.</li>
-        <li><strong>Transparency.</strong> Open protocol (ProofSpec) and public verification.</li>
+        <li><strong>Operational logs (hosting/CDN):</strong> typical security and reliability logs may include IP/user-agent for limited time (abuse prevention, diagnostics).</li>
+        <li><strong>Analytics (optional):</strong> Plausible for aggregate usage (no behavioral advertising by us).</li>
       </ul>
-    </section>
 
-    <section class="card" id="what-we-process" aria-labelledby="wwp-title">
-      <h2 id="wwp-title">What we process</h2>
-      <div class="table-wrap" role="region" aria-label="Processed data">
-        <table>
-          <thead><tr><th>Field</th><th>Example</th><th>Purpose</th></tr></thead>
-          <tbody>
-            <tr><td>hash</td><td><code>[a-f0-9]{64}</code></td><td>Proof subject identifier (hash of your data)</td></tr>
-            <tr><td>timestamp</td><td><code>2025-01-01T00:00:00.000Z</code></td><td>When the proof was issued</td></tr>
-            <tr><td>issuer / alg / kid</td><td><code>timeproofs.io</code></td><td>Cryptographic verification context</td></tr>
-            <tr><td>meta (optional)</td><td><code>{"source":"docs"}</code></td><td>Optional context. Do not include personal data.</td></tr>
-          </tbody>
-        </table>
-      </div>
+      <h3>API</h3>
+      <ul>
+        <li><strong>Required:</strong> a hash (SHA-256) and proof parameters needed to issue/verify signatures.</li>
+        <li><strong>Optional:</strong> metadata (<code>meta</code>) — do not include personal data.</li>
+      </ul>
+
       <p class="muted">
-        The v0.2 model is self-contained: you download a <code>.tproof.json</code> bundle and keep it. Verification uses that proof file.
+        Reminder: a file date is local and editable. A proof file is independently verifiable later for a specific hash at a specific time.
       </p>
     </section>
 
-    <section class="card" id="what-we-dont" aria-labelledby="nwp-title">
-      <h2 id="nwp-title">What we do not process</h2>
+    <section class="card" id="proofs">
+      <h2>3. Proof data model</h2>
+      <p>A proof file typically contains:</p>
       <ul>
-        <li>No original files, text bodies, prompts, outputs, datasets, or attachments.</li>
-        <li>No accounts, identity profiles, or authentication cookies.</li>
-        <li>No fingerprinting, cross-site tracking, or ad targeting.</li>
-        <li>No sale of personal data.</li>
+        <li><strong>hash</strong> (SHA-256 hex)</li>
+        <li><strong>issuedAt</strong> (UTC timestamp)</li>
+        <li><strong>issuer / algorithm / key id</strong> (verification context)</li>
+        <li><strong>signature</strong> (verifiable cryptographic signature)</li>
+        <li><strong>meta</strong> (optional, user-provided context)</li>
       </ul>
-    </section>
-
-    <section class="card" id="analytics" aria-labelledby="an-title">
-      <h2 id="an-title">Analytics</h2>
-      <p>
-        We use Plausible Analytics to understand aggregated website traffic (page views and referrers) and improve documentation and UX.
-      </p>
-      <ul>
-        <li><strong>No marketing cookies</strong> are used for ads.</li>
-        <li>Blocking analytics does not prevent core site functionality.</li>
-      </ul>
-    </section>
-
-    <section class="card" id="cookies-sw" aria-labelledby="csw-title">
-      <h2 id="csw-title">Cookies &amp; Service Worker</h2>
-      <ul>
-        <li><strong>Cookies:</strong> TimeProofs does not use cookies for login (no accounts).</li>
-        <li><strong>Local storage:</strong> may be used for minimal UI state (e.g., menu), not tracking.</li>
-        <li><strong>Service Worker:</strong> caches static assets for performance/offline UX. It does not read your local files.</li>
-      </ul>
-    </section>
-
-    <section class="card" id="logs-retention" aria-labelledby="lr-title">
-      <h2 id="lr-title">Logs &amp; retention</h2>
-      <ul>
-        <li><strong>Operational logs:</strong> minimal metrics for reliability and abuse prevention; rotated periodically.</li>
-        <li><strong>Proofs:</strong> v0.2 is stateless—your proof bundle is stored by you, not by TimeProofs.</li>
-      </ul>
+      <p><strong>It does not contain your original content.</strong></p>
 
       <pre><code>{
   "hash": "&lt;64-hex&gt;",
-  "type": "event",
-  "timestamp": "2025-01-01T00:00:00.000Z",
+  "issuedAt": "2025-01-01T00:00:00.000Z",
   "issuer": "timeproofs.io",
   "alg": "HMAC-SHA256",
-  "kid": "v1"
+  "kid": "v1",
+  "meta": { "context": "optional-non-personal" }
 }</code></pre>
 
       <p class="muted">
-        Recommendation: do not put personal data in <code>meta</code>. If you need identity binding, do it outside TimeProofs and timestamp only the resulting hash.
+        Best practice: keep <code>meta</code> generic. If you need identity binding, do it in your own system and timestamp only the resulting hash.
       </p>
     </section>
 
-    <section class="card" id="rights" aria-labelledby="rg-title">
-      <h2 id="rg-title">Your rights</h2>
+    <section class="card" id="analytics">
+      <h2>4. Analytics</h2>
+      <p>
+        We use Plausible Analytics to understand aggregated website usage and improve docs and UX.
+        Blocking analytics does not prevent core site functionality.
+      </p>
+    </section>
+
+    <section class="card" id="security">
+      <h2>5. Security</h2>
+      <ul>
+        <li>We keep the product minimal to reduce data exposure.</li>
+        <li>Proofs are verifiable via signatures and public verification rules (ProofSpec).</li>
+        <li>Security contact is published in <a href="/.well-known/security.txt">/.well-known/security.txt</a>.</li>
+      </ul>
+    </section>
+
+    <section class="card" id="retention">
+      <h2>6. Retention</h2>
+      <ul>
+        <li><strong>Proofs:</strong> you keep your proof files (<code>.tproof.json</code>).</li>
+        <li><strong>Website/API:</strong> operational logs (if any) are retained only as needed for reliability and abuse prevention.</li>
+      </ul>
+    </section>
+
+    <section class="card" id="rights">
+      <h2>7. Your rights</h2>
       <p>
         Depending on your location, you may have rights related to personal data (access, deletion, objection).
-        TimeProofs is designed to avoid collecting personal data.
+        TimeProofs is designed to minimize personal data collection.
       </p>
       <p class="muted">
-        If you believe a record relates to you, contact us with the relevant hash and context. We respond consistent with applicable law.
+        If you believe information processed by our services relates to you, contact us with the relevant context.
       </p>
     </section>
 
-    <section class="card" id="contact" aria-labelledby="ct-title">
-      <h2 id="ct-title">Contact</h2>
+    <section class="card" id="contact">
+      <h2>8. Contact</h2>
       <p>
         General: <a href="mailto:contact@timeproofs.io">contact@timeproofs.io</a> ·
-        Privacy: <a href="mailto:privacy@timeproofs.io">privacy@timeproofs.io</a> ·
-        Security disclosure: <a href="/.well-known/security.txt">/.well-known/security.txt</a>
+        Security: <a href="/.well-known/security.txt">/.well-known/security.txt</a>
       </p>
     </section>
   </main>
 
-  <!-- Footer (canonique) -->
+  <!-- Footer (canonique; no YouTube) -->
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
@@ -536,7 +506,7 @@ upgrade-insecure-requests">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
       </a>
       <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.8 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
       </a>
       <a href="https://www.linkedin.com/in/jeason-bacoul-667938281?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noopener" aria-label="Jeason Bacoul on LinkedIn">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg>
@@ -547,6 +517,7 @@ upgrade-insecure-requests">
   <!-- Scripts -->
   <script defer nonce="TP-2025">
   (function(){
+    // Header shade
     const hdr=document.getElementById('hdr');
     function onScroll(){
       if(window.scrollY>6) hdr.classList.add('scrolled');
@@ -555,15 +526,15 @@ upgrade-insecure-requests">
     onScroll();
     window.addEventListener('scroll', onScroll, { passive:true });
 
+    // Burger + focus trap (mobile)
     const burger=document.getElementById('tp-burger');
     const nav=document.getElementById('tp-nav');
     let lastFocus=null;
 
     function getFocusable(container){
-      return [...container.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])')]
-        .filter(el=>!el.hasAttribute('disabled') && el.getAttribute('aria-hidden')!=='true');
+      return [...container.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')]
+        .filter(el => !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length));
     }
-
     function trap(e){
       if(nav.getAttribute('data-state')!=='open') return;
       if(e.key!=='Tab') return;
@@ -573,7 +544,6 @@ upgrade-insecure-requests">
       if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
       else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
     }
-
     function openMenu(){
       lastFocus=document.activeElement;
       nav.setAttribute('data-state','open');
@@ -591,9 +561,7 @@ upgrade-insecure-requests">
       if(lastFocus && typeof lastFocus.focus==='function') lastFocus.focus();
       lastFocus=null;
     }
-    function toggleMenu(){
-      (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu();
-    }
+    function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
     burger && burger.addEventListener('click', toggleMenu);
 
     document.addEventListener('click',(e)=>{
