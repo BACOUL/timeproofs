@@ -1,143 +1,142 @@
-# TimeProofs CLI v0.2 – Specification (Draft)
+# TimeProofs CLI v0.2 – Specification
 
-This document defines the behavior of the `timeproofs` command-line interface (CLI) for API v0.2.
+This document defines the behavior of the `timeproofs` command-line interface (CLI) for TimeProofs API v0.2.
 
 The CLI is a local tool. It:
-
 - never sends raw data to the TimeProofs API
-- only sends hashes and protocol parameters
-- generates and verifies `.tproof.json` bundles according to the Proof Bundles spec and JSON Schema
+- only sends SHA-256 hashes to the API
+- builds and verifies `.tproof.json` bundles locally
 
 The CLI has three primary commands:
+- timeproofs hash <file>
+- timeproofs timestamp <file>
+- timeproofs verify <bundle>
 
-- `timeproofs hash <file>`
-- `timeproofs timestamp <file>`
-- `timeproofs verify <bundle>`
-
-## 1. Common behavior
+1. Common behavior
 
 - Exit code 0 on success, non-zero on error.
 - Errors must be printed to stderr.
-- For v0.2, human-readable output is sufficient.
+- Human-readable output is sufficient.
 - No raw file data must ever be sent to the API.
 
-## 2. Command: `timeproofs hash <file>`
+2. Command: timeproofs hash <file>
 
-Purpose: compute a SHA-256 hash of a file using canonical rules.
+Purpose
+Compute a SHA-256 hash of a file.
 
-Usage:
+Usage
+timeproofs hash <file>
 
-`timeproofs hash <file>`
+Behavior
+1) Read <file> as raw bytes.
+2) Compute SHA-256 digest (no normalization).
+3) Output lowercase hex hash.
 
-Behavior:
+Example output
+✔ Hash (SHA-256)
+4b227777d4dd1fc61c6f884f48641d02b8f8f8d...
 
-1. Read `<file>` as raw bytes.
-2. Compute SHA-256 digest (no normalization).
-3. Output lowercase hex hash.
+3. Command: timeproofs timestamp <file>
 
-Example output:
+Purpose
+Compute a file hash, request a stateless timestamp from the API, and generate a `.tproof.json` bundle locally.
 
-✔ Hash (SHA-256)  
-`4b227777d4dd1fc61c6f884f48641d02b8f8f8d...`
+Minimal usage
+timeproofs timestamp <file>
 
-## 3. Command: `timeproofs timestamp <file>`
+Usage with metadata
+timeproofs timestamp <file> --type document --domain legal --purpose contract-draft --mime application/pdf --label confidential --label v1 --notes "First draft" --out ./contract.tproof.json
 
-Purpose: compute hash, request timestamp from API, generate `.tproof.json` bundle.
+Supported flags
+--api <base-url> (default https://api.timeproofs.io)
+--type <type>
+--domain <domain>
+--purpose <purpose>
+--mime <mime-type>
+--label <label> (repeatable)
+--notes <text>
+--out <path>
 
-Minimal usage:
+Notes about flags
+- All metadata flags are LOCAL ONLY. They are written into the bundle under meta and are never sent to the API.
+- --label is repeatable. If provided multiple times, all values are included in meta.labels.
 
-`timeproofs timestamp <file>`
+Behavior
+1) Compute SHA-256 hash of <file> locally.
+2) POST { "hash": "<sha256-hex>" } to {api}/api/timestamp.
+3) Receive the stateless timestamp response containing:
+   - hash: { algorithm, value }
+   - timestamp: { issuedAt, issuer, nonce? }
+   - proof: { algo, hmac, signature, publicKey, keyId }
+4) Build a Proof Bundle locally:
+   - version = "timeproofs-0.2"
+   - hash, timestamp, proof from the API response
+   - meta from flags (optional)
+5) Write the bundle to disk:
+   - If --out is provided: write to that path
+   - Otherwise: write next to the file using <file>.tproof.json
+6) Print a short summary.
 
-Usage with metadata:
+Example output
+✔ Hash computed (SHA-256)
+✔ Timestamp issued by https://api.timeproofs.io
+✔ Bundle saved: ./contract.tproof.json
 
-`timeproofs timestamp <file> --type document --domain legal --purpose contract-draft --mime application/pdf --label confidential --label v1 --notes "First draft" --user-key ./user-key.json --out ./contract.tproof.json`
+4. Command: timeproofs verify <bundle>
 
-Supported flags:
+Purpose
+Verify a `.tproof.json` bundle offline (schema-like structural checks, optional file hash match).
 
-- `--type <type>`  
-  One of: `document`, `image`, `video`, `code`, `dataset`, `model`, `log`, `contract`, `release`, `config`, `archive`, `financial-statement`, `medical-record`, `supply-record`, `product-info`, `ai-output`, `ai-training-set`, `ai-prompt`, `audit-proof`, `evidence`.
-- `--domain <domain>`
-- `--purpose <purpose>`
-- `--mime <mime-type>`
-- `--label <label>` (repeatable)
-- `--notes <text>`
-- `--user-key <path>` (JSON file containing Ed25519 privateKey/publicKey)
-- `--out <path>`
-- `--api <base-url>` (default `https://api.timeproofs.io`)
+Basic usage
+timeproofs verify <bundle>
 
-Behavior:
+Usage with file
+timeproofs verify <bundle> --file <file>
 
-1. Compute SHA-256 hash of file.
-2. POST `{ hash }` to `{api}/api/timestamp` (server never receives file).
-3. Receive timestamp + proof (HMAC-SHA256 + optional Ed25519).
-4. Build Proof Bundle:
+Supported flags
+--file <file>
 
-   - `version = "timeproofs-0.2"`
-   - `hash`, `timestamp`, `proof`
-   - `meta` (from flags, optional)
-   - `userSign` (if `--user-key` provided)
+Behavior
+1) Load and parse <bundle> as JSON.
+2) Perform offline structural validation:
+   - version must be "timeproofs-0.2"
+   - hash.algorithm must be "SHA-256"
+   - hash.value must be a 64-hex string
+   - timestamp.issuedAt and timestamp.issuer must be present
+   - proof.algo and proof.keyId must be present
+3) If --file is provided:
+   - compute SHA-256 hash of <file>
+   - compare it to bundle.hash.value
+4) Print a clear summary and exit:
+   - exit code 0 if structural checks pass and (if --file is provided) the hash matches
+   - non-zero exit code otherwise
 
-5. Validate locally against `schemas/timeproofs-bundle-v02.schema.json`.
-6. Save bundle to output path (default: `<file>.tproof.json` if `--out` not provided).
-7. Print summary.
+Example outputs
 
-Example output:
+Minimal (no file)
+✔ Bundle schema: OK
+ℹ No file provided (hash not checked)
+ℹ Server proof (Ed25519) not verified in v0.2
 
-✔ Hash computed (SHA-256)  
-✔ Timestamp issued by `https://api.timeproofs.io`  
-✔ Proof received (HMAC / Ed25519)  
-✔ Bundle saved: `./contract.tproof.json`
+With file
+✔ Bundle schema: OK
+✔ File hash matches bundle.hash.value
+ℹ Server proof (Ed25519) not verified in v0.2
 
-## 4. Command: `timeproofs verify <bundle>`
+5. v0.2 cryptographic verification scope
 
-Purpose: verify a `.tproof.json` bundle (schema, signature, hash consistency, optional userSign).
+v0.2 CLI verification is offline and focuses on:
+- bundle structure checks
+- optional file hash match
 
-Basic usage:
+Cryptographic verification of the server proof (Ed25519) is not performed by the CLI in v0.2.
 
-`timeproofs verify <bundle>`
-
-Usage with file:
-
-`timeproofs verify <bundle> --file <file>`
-
-Supported flags:
-
-- `--file <file>`  
-  Optional, to recompute and compare the file hash.
-- `--api <base-url>`  
-  Optional, for future online checks (not required in v0.2).
-
-Behavior:
-
-1. Load and parse bundle (JSON).
-2. Validate against `schemas/timeproofs-bundle-v02.schema.json`.
-3. Verify server proof (HMAC + Ed25519) when keys are available (future versions).
-4. If `--file` provided: recompute hash from file and compare with bundle hash.
-5. If `userSign` present: verify signature on metadata (future versions).
-6. Print summary and exit with code 0 if all checks pass.
-
-Example outputs:
-
-Minimal:
-
-✔ Bundle schema: OK  
-✔ Server proof: OK (if keys configured)  
-ℹ No file provided  
-ℹ No userSign present
-
-With file and userSign:
-
-✔ Bundle schema: OK  
-✔ Server proof: OK  
-✔ File hash matches  
-✔ Local userSign: OK
-
-## 5. Privacy and statelessness guarantees
+6. Privacy and statelessness guarantees
 
 The CLI must:
-
 - never send original file contents to the API
-- never send `meta` or `userSign`
-- keep all contextual information local in `.tproof.json`
+- never send meta or user context to the API
+- only send SHA-256 hashes to the API
+- keep all contextual information local inside `.tproof.json`
 
-The TimeProofs API remains stateless, privacy-first, and universal across domains. The CLI is a local companion that builds and verifies bundles on the user’s side.
+The TimeProofs API remains stateless: it does not store proofs and does not fetch any data for verification.
