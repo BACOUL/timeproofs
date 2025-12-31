@@ -110,7 +110,7 @@ upgrade-insecure-requests">
     "@type":"WebSite",
     "name":"TimeProofs",
     "url":"https://timeproofs.io/",
-    "dateModified":"2025-12-29"
+    "dateModified":"2025-12-31"
   }
   </script>
 
@@ -214,7 +214,7 @@ upgrade-insecure-requests">
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* Index-only sections (kept from your index; compatible styling) */
+    /* Index-only sections */
     .hero{
       min-height:calc(100svh - 64px); padding-top:92px; padding-bottom:34px;
       display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
@@ -248,6 +248,7 @@ upgrade-insecure-requests">
     .grid{ display:grid; gap:16px }
     .grid.three{ grid-template-columns:1fr }
     @media(min-width:900px){ .grid.three{ grid-template-columns:repeat(3,1fr) } }
+
     .section.bg-alt{ background:linear-gradient(180deg,#0b1020,#0c1424); border-top:1px solid #121a2e; border-bottom:1px solid #121a2e }
     .section.bg-solid{ background:#0d1628; border-top:1px solid #1a2640; border-bottom:1px solid #1a2640 }
     .card{
@@ -359,9 +360,9 @@ upgrade-insecure-requests">
       <h1 id="hero-title" class="title">Prove when a file existed — without uploading it.</h1>
 
       <p class="subtitle">
-        Prove that specific content existed at a point in time — without revealing it.<br/>
-        When a file is contested, a date or a screenshot is not enough.<br/>
-        TimeProofs creates a verifiable proof that the exact content existed then, and has not changed since.
+        Prove that a specific piece of content already existed at a point in time — without revealing it.<br/>
+        When a file is disputed, a date or a screenshot is not enough.<br/>
+        TimeProofs proves <strong>when</strong> an exact content existed and that it has <strong>not changed</strong> since.
       </p>
 
       <div class="cta-wrap" role="group" aria-label="Primary actions">
@@ -424,20 +425,37 @@ upgrade-insecure-requests">
       </p>
     </section>
 
-    <!-- Examples (short situations, not Use Cases) -->
+    <!-- Examples (short, scannable) -->
     <section class="section bg-alt" id="examples" aria-labelledby="examples-title">
       <h2 id="examples-title">Examples of when a proof matters</h2>
-      <p style="text-align:center; color:#9fb3c9; max-width:900px; margin:0 auto 12px;">
-        A few everyday situations where proving “it existed then” becomes critical:
+      <p style="text-align:center; color:#9fb3c9; max-width:900px; margin:0 auto 14px;">
+        When it becomes sensitive, a date or a screenshot is not enough.
       </p>
-      <p style="text-align:center; color:#9fb3c9; max-width:860px; margin:0 auto;">
-        A contract or document version before it was changed ·
-        A report or policy before an audit ·
-        An AI output used in a decision ·
-        A dataset or research snapshot ·
-        A software release or technical specification
-      </p>
-      <p style="text-align:center; margin-top:10px; color:#9fb3c9">
+
+      <div class="grid three" aria-label="Examples">
+        <article class="card">
+          <h3>📄 Contract / document</h3>
+          <p>Prove the exact version before it was changed.</p>
+        </article>
+        <article class="card">
+          <h3>🧾 Audit / compliance</h3>
+          <p>Show what existed <em>before</em> an audit or review.</p>
+        </article>
+        <article class="card">
+          <h3>🤖 AI output</h3>
+          <p>Trace an output used in a decision or workflow.</p>
+        </article>
+        <article class="card">
+          <h3>📊 Dataset / research snapshot</h3>
+          <p>Freeze a dataset, report, or methodology at a point in time.</p>
+        </article>
+        <article class="card">
+          <h3>🚀 Release / technical spec</h3>
+          <p>Attest a software release or specification version.</p>
+        </article>
+      </div>
+
+      <p style="text-align:center; margin-top:12px; color:#9fb3c9">
         These are moments where a simple timestamp is not enough.
       </p>
     </section>
@@ -579,7 +597,7 @@ upgrade-insecure-requests">
     onScroll();
     window.addEventListener('scroll', onScroll, { passive:true });
 
-    // Burger + focus trap (from proofspec)
+    // Burger + focus trap
     const burger=document.getElementById('tp-burger');
     const nav=document.getElementById('tp-nav');
     let lastFocus=null;
@@ -663,7 +681,7 @@ upgrade-insecure-requests">
 
         // v0.2 format: { version, artifact:{hash}, verify:{url}, proof? }
         if (data.version && data.artifact && data.artifact.hash){
-          if (releaseEl) releaseEl.textContent = data.version; // "v0.2"
+          if (releaseEl) releaseEl.textContent = data.version;
           if (hashEl)    hashEl.textContent    = data.artifact.hash;
           if (linkEl)    linkEl.href           = (data.verify && data.verify.url) ? data.verify.url : '/verify.html';
           return;
