@@ -623,20 +623,33 @@ upgrade-insecure-requests">
       });
     })();
 
-    // Release info (v0.2 with v0.1 fallback)
+    // Release info (v0.2 site-wide manifest + v0.1 legacy fallback)
     (async function loadRelease(){
       try{
         const candidates = ['/releases/v0.2.json','/releases/v0.1.json'];
-        let map = null;
+        let data = null;
 
         for (const url of candidates){
           try{
             const r = await fetch(url, { cache:'no-store' });
-            if (r.ok){ map = await r.json(); break; }
+            if (r.ok){ data = await r.json(); break; }
           }catch{}
         }
-        if(!map) return;
+        if(!data || typeof data !== 'object') return;
 
+        const releaseEl = document.getElementById('page-proof-release');
+        const hashEl    = document.getElementById('page-proof-hash');
+        const linkEl    = document.getElementById('page-proof-link');
+
+        // v0.2 format: { version, artifact:{hash}, verify:{url}, proof? }
+        if (data.version && data.artifact && data.artifact.hash){
+          if (releaseEl) releaseEl.textContent = data.version; // "v0.2"
+          if (hashEl)    hashEl.textContent    = data.artifact.hash;
+          if (linkEl)    linkEl.href           = (data.verify && data.verify.url) ? data.verify.url : '/verify.html';
+          return;
+        }
+
+        // v0.1 legacy format: map by page + api
         const pageIdRaw = (document.documentElement.dataset.page || 'index.html').trim();
         const pageId = pageIdRaw.replace(/^\/+/, '');
 
@@ -653,18 +666,13 @@ upgrade-insecure-requests">
 
         let rel = null;
         for (const k of keys){
-          if (map && typeof map === 'object' && map[k]) { rel = map[k]; break; }
+          if (data && typeof data === 'object' && data[k]) { rel = data[k]; break; }
         }
-        if(!rel && map && typeof map === 'object') rel = map;
-
-        const releaseEl = document.getElementById('page-proof-release');
-        const hashEl    = document.getElementById('page-proof-hash');
-        const linkEl    = document.getElementById('page-proof-link');
 
         if (rel && typeof rel === 'object'){
-          if (rel.release && releaseEl) releaseEl.textContent = rel.release;
-          if (rel.hash && hashEl)       hashEl.textContent = rel.hash;
-          if (linkEl) linkEl.href = '/verify.html';
+          if (releaseEl) releaseEl.textContent = rel.release || data.version || 'v0.1';
+          if (hashEl)    hashEl.textContent    = rel.hash || '…';
+          if (linkEl)    linkEl.href           = rel.verify || '/verify.html';
         }
       }catch{}
     })();
@@ -676,4 +684,4 @@ upgrade-insecure-requests">
   })();
   </script>
 </body>
-  </html>
+</html>
