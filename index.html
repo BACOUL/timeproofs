@@ -110,7 +110,7 @@ upgrade-insecure-requests">
     "@type":"WebSite",
     "name":"TimeProofs",
     "url":"https://timeproofs.io/",
-    "dateModified":"2025-12-31"
+    "dateModified":"2025-12-29"
   }
   </script>
 
@@ -248,7 +248,6 @@ upgrade-insecure-requests">
     .grid{ display:grid; gap:16px }
     .grid.three{ grid-template-columns:1fr }
     @media(min-width:900px){ .grid.three{ grid-template-columns:repeat(3,1fr) } }
-
     .section.bg-alt{ background:linear-gradient(180deg,#0b1020,#0c1424); border-top:1px solid #121a2e; border-bottom:1px solid #121a2e }
     .section.bg-solid{ background:#0d1628; border-top:1px solid #1a2640; border-bottom:1px solid #1a2640 }
     .card{
@@ -265,6 +264,10 @@ upgrade-insecure-requests">
     .card:hover{ transform:translateY(-2px) perspective(600px) rotateX(1.2deg) rotateY(.8deg) }
     .card h3{ color:#22d3ee; margin:.2em 0 .3em; font-size:1.08rem }
     .card p{ margin:.15em 0 .4em; line-height:1.6 }
+    .card p:last-child{ margin-bottom:0 }
+    .k{ color:#9fb3c9; font-weight:800; letter-spacing:.2px; text-transform:uppercase; font-size:.78rem }
+    .hl{ color:#eaf7ff }
+
     code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
 
     /* Prevent proof hash overflow on small screens */
@@ -360,9 +363,8 @@ upgrade-insecure-requests">
       <h1 id="hero-title" class="title">Prove when a file existed — without uploading it.</h1>
 
       <p class="subtitle">
-        Prove that a specific piece of content already existed at a point in time — without revealing it.<br/>
-        When a file is disputed, a date or a screenshot is not enough.<br/>
-        TimeProofs proves <strong>when</strong> an exact content existed and that it has <strong>not changed</strong> since.
+        Create a signed proof file (<code>.tproof.json</code>) you can keep and share — without revealing the original content.<br/>
+        When something is disputed, a file date or screenshot is not evidence.
       </p>
 
       <div class="cta-wrap" role="group" aria-label="Primary actions">
@@ -425,38 +427,47 @@ upgrade-insecure-requests">
       </p>
     </section>
 
-    <!-- Examples (short, scannable) -->
-    <section class="section bg-alt" id="examples" aria-labelledby="examples-title">
-      <h2 id="examples-title">Examples of when a proof matters</h2>
-      <p style="text-align:center; color:#9fb3c9; max-width:900px; margin:0 auto 14px;">
-        When it becomes sensitive, a date or a screenshot is not enough.
+    <!-- Examples (scannable, human-first) -->
+    <section class="section bg-alt" aria-labelledby="examples">
+      <h2 id="examples">Examples of when a proof matters</h2>
+      <p style="text-align:center; color:#9fb3c9; margin:-6px auto 14px; max-width:920px;">
+        Typical situations where a file date is challenged — and you need something independently verifiable.
       </p>
 
-      <div class="grid three" aria-label="Examples">
+      <div class="grid three" aria-label="Examples where proof matters">
         <article class="card">
-          <h3>📄 Contract / document</h3>
-          <p>Prove the exact version before it was changed.</p>
+          <p class="k">📄 Contract / Document</p>
+          <h3>“This version existed before the edit.”</h3>
+          <p><span class="hl">Protects:</span> exact wording before a change or dispute.</p>
         </article>
+
         <article class="card">
-          <h3>🧾 Audit / compliance</h3>
-          <p>Show what existed <em>before</em> an audit or review.</p>
+          <p class="k">🧾 Audit / Compliance</p>
+          <h3>“This policy was in place on that date.”</h3>
+          <p><span class="hl">Protects:</span> what was published before a review or audit.</p>
         </article>
+
         <article class="card">
-          <h3>🤖 AI output</h3>
-          <p>Trace an output used in a decision or workflow.</p>
+          <p class="k">🤖 AI Output</p>
+          <h3>“This output was used in the decision.”</h3>
+          <p><span class="hl">Protects:</span> the exact AI result that was relied upon.</p>
         </article>
+
         <article class="card">
-          <h3>📊 Dataset / research snapshot</h3>
-          <p>Freeze a dataset, report, or methodology at a point in time.</p>
+          <p class="k">📚 Dataset / Research</p>
+          <h3>“This snapshot existed at T.”</h3>
+          <p><span class="hl">Protects:</span> dataset, report, or methodology versions over time.</p>
         </article>
+
         <article class="card">
-          <h3>🚀 Release / technical spec</h3>
-          <p>Attest a software release or specification version.</p>
+          <p class="k">🚀 Release / Spec</p>
+          <h3>“This build/spec is the one shipped.”</h3>
+          <p><span class="hl">Protects:</span> release integrity and version accountability.</p>
         </article>
       </div>
 
-      <p style="text-align:center; margin-top:12px; color:#9fb3c9">
-        These are moments where a simple timestamp is not enough.
+      <p class="positioning" style="text-align:center; margin-top:12px">
+        In these moments, a simple timestamp is not enough.
       </p>
     </section>
 
@@ -597,7 +608,7 @@ upgrade-insecure-requests">
     onScroll();
     window.addEventListener('scroll', onScroll, { passive:true });
 
-    // Burger + focus trap
+    // Burger + focus trap (from proofspec)
     const burger=document.getElementById('tp-burger');
     const nav=document.getElementById('tp-nav');
     let lastFocus=null;
@@ -681,7 +692,7 @@ upgrade-insecure-requests">
 
         // v0.2 format: { version, artifact:{hash}, verify:{url}, proof? }
         if (data.version && data.artifact && data.artifact.hash){
-          if (releaseEl) releaseEl.textContent = data.version;
+          if (releaseEl) releaseEl.textContent = data.version; // "v0.2"
           if (hashEl)    hashEl.textContent    = data.artifact.hash;
           if (linkEl)    linkEl.href           = (data.verify && data.verify.url) ? data.verify.url : '/verify.html';
           return;
