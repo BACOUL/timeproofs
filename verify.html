@@ -298,6 +298,8 @@ upgrade-insecure-requests">
       background:#0b1220; color:#f8fafc;
       border:1px solid #1f2937; border-radius:10px; padding:10px 12px;
       font-size:.95rem;
+      min-width:0;
+      max-width:100%;
     }
     textarea{ min-height:110px; resize:vertical; overflow:auto; overflow-wrap:anywhere }
 
@@ -333,31 +335,54 @@ upgrade-insecure-requests">
       display:none; grid-template-columns:minmax(0,1fr); gap:6px;
       font-size:.9rem;
       min-width:0;
+      max-width:100%;
+      overflow:hidden;
     }
-    .summary .item{ display:flex; gap:8px; align-items:center; min-width:0 }
+    .summary .item{
+      display:flex; gap:8px; align-items:flex-start;
+      min-width:0; max-width:100%;
+    }
     .summary .k{ color:#9fb3c9; flex:0 0 140px; min-width:0; }
     .summary code{
-      font-size:.9rem; display:inline-block;
-      max-width:100%;
+      font-size:.9rem;
+      display:inline-block;
       min-width:0;
+      max-width:100%;
+      white-space:normal;          /* allow wrap */
+      word-break:break-all;        /* strongest for long hex */
+      overflow-wrap:anywhere;
+      line-break:anywhere;
       overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
-      vertical-align:bottom;
+      text-overflow:clip;
     }
 
-    /* Fix hash overflow everywhere */
+    /* Fix hash overflow everywhere (strong, explicit) */
     pre, code{ max-width:100% }
-    pre, code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
     pre{
       position:relative;
       margin-top:10px; max-height:260px; overflow:auto;
       padding:12px; border-radius:12px; background:#0b1426; border:1px solid #1f2a44; font-size:.9rem;
       min-width:0;
+      max-width:100%;
+    }
+    pre code{
+      white-space:pre-wrap;
+      word-break:break-word;
+      overflow-wrap:anywhere;
+      line-break:anywhere;
+    }
+
+    /* Any “Loaded: <hash>” / preview lines must wrap */
+    #bundle-info, #hash-preview-text, #hash-preview-file, #file-info{
+      max-width:100%;
+      overflow-wrap:anywhere;
+      word-break:break-all;
+      white-space:normal;
     }
 
     .file-actions{
       display:flex; gap:8px; align-items:center; justify-content:flex-end; margin-top:8px;
+      flex-wrap:wrap;
     }
     .file-actions .hero-btn{ padding:6px 10px; font-size:.85rem; border-radius:10px; }
 
@@ -371,6 +396,8 @@ upgrade-insecure-requests">
       gap:6px;
       font-size:.9rem;
       min-width:0;
+      max-width:100%;
+      overflow:hidden;
     }
     .checks .rowc{
       display:flex; gap:8px; align-items:center; justify-content:space-between;
@@ -380,7 +407,13 @@ upgrade-insecure-requests">
     }
     .checks .rowc:first-child{ border-top:0; padding-top:0 }
     .checks .k{ color:#9fb3c9; font-weight:700 }
-    .checks .v{ color:#e6fbff; font-weight:700; min-width:0 }
+    .checks .v{
+      color:#e6fbff; font-weight:700;
+      min-width:0;
+      max-width:100%;
+      overflow-wrap:anywhere;
+      word-break:break-word;
+    }
     .tag{
       display:inline-flex; align-items:center; gap:6px;
       padding:3px 8px; border-radius:999px; font-size:.82rem;
@@ -400,6 +433,9 @@ upgrade-insecure-requests">
       color:#cfefff;
       font-size:.95rem;
       line-height:1.65;
+      min-width:0;
+      max-width:100%;
+      overflow-wrap:anywhere;
     }
     .note strong{ color:#e6fbff }
 
@@ -419,7 +455,7 @@ upgrade-insecure-requests">
       text-align:center;
       background:#0b1020;
     }
-    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
+    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0; flex-wrap:wrap }
     footer .badge{
       display:inline-flex; align-items:center; gap:6px;
       padding:6px 10px; border:1px solid var(--line); border-radius:999px;
@@ -576,7 +612,7 @@ upgrade-insecure-requests">
         </div>
 
         <div style="position:relative; margin-top:10px;">
-          <pre id="create-output" aria-live="polite">{}</pre>
+          <pre id="create-output" aria-live="polite"><code>{}</code></pre>
         </div>
 
         <div class="row" id="create-actions" style="display:none; gap:8px; margin-top:10px;">
@@ -596,7 +632,6 @@ upgrade-insecure-requests">
         <h2 id="verify-title">Verify a proof file</h2>
         <p class="hint">Select your <code>.tproof.json</code> proof file, then verify its signature.</p>
 
-        <!-- LOCKING BLOCKS (why file required + negative path + what is verified) -->
         <div class="note mini" aria-label="Why a proof file is required">
           <strong>Why a proof file is required:</strong>
           the <code>.tproof.json</code> contains the timestamp + issuer + signature. A hash alone cannot prove <em>when</em> it was issued or <em>by whom</em> it was signed.<br/>
@@ -638,7 +673,7 @@ upgrade-insecure-requests">
         </div>
 
         <div style="position:relative; margin-top:10px;">
-          <pre id="verify-output" aria-live="polite">{}</pre>
+          <pre id="verify-output" aria-live="polite"><code>{}</code></pre>
         </div>
 
         <div class="note" style="margin-top:14px" aria-label="What is verified / what is not">
@@ -1002,7 +1037,7 @@ upgrade-insecure-requests">
       createSummary.style.display="none";
       createActions.style.display="none";
       if(downloadHint) downloadHint.style.display="none";
-      outCreate.textContent="{}";
+      outCreate.querySelector('code').textContent="{}";
 
       try{
         let hashHex="";
@@ -1049,7 +1084,7 @@ upgrade-insecure-requests">
 
         createSummary.style.display="grid";
 
-        outCreate.textContent=JSON.stringify(proofObj,null,2);
+        outCreate.querySelector('code').textContent=JSON.stringify(proofObj,null,2);
         enableCreateActions(proofObj, hashHex);
       }catch(e){
         showCreateError(String(e.message||e));
@@ -1116,7 +1151,7 @@ upgrade-insecure-requests">
       checksBox.style.display="none";
       chkOverall.textContent="—";
       chkEd.textContent="—";
-      outVerify.textContent="{}";
+      outVerify.querySelector('code').textContent="{}";
     }
 
     function renderVerifyLoaded(ui, msg){
@@ -1141,7 +1176,7 @@ upgrade-insecure-requests">
         fail("Invalid proof: missing hash.value (64-hex).");
       }
       renderVerifyLoaded(ui, "Proof loaded.");
-      outVerify.textContent = JSON.stringify(b, null, 2);
+      outVerify.querySelector('code').textContent = JSON.stringify(b, null, 2);
       setHint(bundleInfo, `Loaded: ${ui.hashHex}`);
     }
     async function loadProofFromFile(f){
@@ -1152,7 +1187,6 @@ upgrade-insecure-requests">
       await loadProofObject(b);
     }
 
-    // CLEAR verify input
     const clearBundleBtn = document.getElementById("clear-bundle-file");
     clearBundleBtn?.addEventListener("click", ()=>{
       bundleFileInput.value = "";
@@ -1197,7 +1231,7 @@ upgrade-insecure-requests">
         chkOverall.innerHTML = valid ? `<span class="tag ok">valid</span>` : `<span class="tag bad">invalid</span>`;
         chkEd.innerHTML = tagFromCheck(j && j.checks && j.checks.ed25519);
 
-        outVerify.textContent = JSON.stringify({ verify: j, bundle: loadedProof }, null, 2);
+        outVerify.querySelector('code').textContent = JSON.stringify({ verify: j, bundle: loadedProof }, null, 2);
 
         const note = (j && typeof j.note === "string") ? j.note : "";
         if(note) showVerifyInfo((valid ? "Valid. " : "Checked. ") + note);
@@ -1208,7 +1242,6 @@ upgrade-insecure-requests">
       }
     };
 
-    // drag & drop proof file
     const dropBundle=document.getElementById("drop-bundle");
     dropBundle.addEventListener("dragenter",e=>{e.preventDefault(); dropBundle.classList.add("drag");});
     dropBundle.addEventListener("dragover",e=>{e.preventDefault(); dropBundle.classList.add("drag");});
@@ -1237,7 +1270,6 @@ upgrade-insecure-requests">
       }
     });
 
-    // Auto aria-current (exclude .nav-cta)
     (function(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
       document.querySelectorAll('header nav a:not(.nav-cta), footer .links a').forEach(a=>{
@@ -1246,11 +1278,10 @@ upgrade-insecure-requests">
       });
     })();
 
-    // Service worker
     if('serviceWorker' in navigator){
       navigator.serviceWorker.register('/sw.js',{type:'module',scope:'/'}).catch(()=>{});
     }
   })();
   </script>
 </body>
-  </html>
+      </html>
