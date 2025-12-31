@@ -214,7 +214,7 @@ upgrade-insecure-requests">
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* Index-only sections */
+    /* Index-only sections (kept from your index; compatible styling) */
     .hero{
       min-height:calc(100svh - 64px); padding-top:92px; padding-bottom:34px;
       display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
@@ -248,6 +248,11 @@ upgrade-insecure-requests">
     .grid{ display:grid; gap:16px }
     .grid.three{ grid-template-columns:1fr }
     @media(min-width:900px){ .grid.three{ grid-template-columns:repeat(3,1fr) } }
+
+    /* Added for readable "Examples" layout */
+    .grid.two{ grid-template-columns:1fr }
+    @media(min-width:900px){ .grid.two{ grid-template-columns:repeat(2,1fr) } }
+
     .section.bg-alt{ background:linear-gradient(180deg,#0b1020,#0c1424); border-top:1px solid #121a2e; border-bottom:1px solid #121a2e }
     .section.bg-solid{ background:#0d1628; border-top:1px solid #1a2640; border-bottom:1px solid #1a2640 }
     .card{
@@ -264,10 +269,6 @@ upgrade-insecure-requests">
     .card:hover{ transform:translateY(-2px) perspective(600px) rotateX(1.2deg) rotateY(.8deg) }
     .card h3{ color:#22d3ee; margin:.2em 0 .3em; font-size:1.08rem }
     .card p{ margin:.15em 0 .4em; line-height:1.6 }
-    .card p:last-child{ margin-bottom:0 }
-    .k{ color:#9fb3c9; font-weight:800; letter-spacing:.2px; text-transform:uppercase; font-size:.78rem }
-    .hl{ color:#eaf7ff }
-
     code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
 
     /* Prevent proof hash overflow on small screens */
@@ -363,8 +364,8 @@ upgrade-insecure-requests">
       <h1 id="hero-title" class="title">Prove when a file existed — without uploading it.</h1>
 
       <p class="subtitle">
-        Create a signed proof file (<code>.tproof.json</code>) you can keep and share — without revealing the original content.<br/>
-        When something is disputed, a file date or screenshot is not evidence.
+        When a file is disputed, a “creation date” or a screenshot is not proof.
+        TimeProofs creates a verifiable proof file (<code>.tproof.json</code>) that shows <strong>when</strong> this exact content existed and that it <strong>hasn’t changed</strong> — without revealing the original.
       </p>
 
       <div class="cta-wrap" role="group" aria-label="Primary actions">
@@ -427,47 +428,43 @@ upgrade-insecure-requests">
       </p>
     </section>
 
-    <!-- Examples (scannable, human-first) -->
-    <section class="section bg-alt" aria-labelledby="examples">
-      <h2 id="examples">Examples of when a proof matters</h2>
-      <p style="text-align:center; color:#9fb3c9; margin:-6px auto 14px; max-width:920px;">
-        Typical situations where a file date is challenged — and you need something independently verifiable.
+    <!-- Examples (short, readable, not "Use Cases") -->
+    <section class="section bg-alt" id="examples" aria-labelledby="examples-title">
+      <h2 id="examples-title">Examples of when a proof matters</h2>
+
+      <p style="text-align:center; color:#9fb3c9; max-width:900px; margin:0 auto 14px;">
+        Situations where “this existed then” becomes critical:
       </p>
 
-      <div class="grid three" aria-label="Examples where proof matters">
+      <div class="grid two" aria-label="Example situations">
         <article class="card">
-          <p class="k">📄 Contract / Document</p>
-          <h3>“This version existed before the edit.”</h3>
-          <p><span class="hl">Protects:</span> exact wording before a change or dispute.</p>
+          <h3>Contract or document before changes</h3>
+          <p>Keep a verifiable record of the exact version you had at a specific time.</p>
         </article>
 
         <article class="card">
-          <p class="k">🧾 Audit / Compliance</p>
-          <h3>“This policy was in place on that date.”</h3>
-          <p><span class="hl">Protects:</span> what was published before a review or audit.</p>
+          <h3>Report or policy before an audit</h3>
+          <p>Show what was published internally (or externally) before review or investigation.</p>
         </article>
 
         <article class="card">
-          <p class="k">🤖 AI Output</p>
-          <h3>“This output was used in the decision.”</h3>
-          <p><span class="hl">Protects:</span> the exact AI result that was relied upon.</p>
+          <h3>AI output used in a decision</h3>
+          <p>Freeze the exact output that influenced a human or automated workflow.</p>
         </article>
 
         <article class="card">
-          <p class="k">📚 Dataset / Research</p>
-          <h3>“This snapshot existed at T.”</h3>
-          <p><span class="hl">Protects:</span> dataset, report, or methodology versions over time.</p>
+          <h3>Dataset or research snapshot</h3>
+          <p>Prove the state of data at time T, and detect any later changes.</p>
         </article>
 
         <article class="card">
-          <p class="k">🚀 Release / Spec</p>
-          <h3>“This build/spec is the one shipped.”</h3>
-          <p><span class="hl">Protects:</span> release integrity and version accountability.</p>
+          <h3>Software release or technical specification</h3>
+          <p>Attach a proof to releases or specs to support integrity and traceability.</p>
         </article>
       </div>
 
-      <p class="positioning" style="text-align:center; margin-top:12px">
-        In these moments, a simple timestamp is not enough.
+      <p style="text-align:center; margin-top:12px; color:#9fb3c9;">
+        In these moments, a file date or a screenshot is not enough.
       </p>
     </section>
 
