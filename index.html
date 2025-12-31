@@ -266,6 +266,9 @@ upgrade-insecure-requests">
     .card p{ margin:.15em 0 .4em; line-height:1.6 }
     code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
 
+    /* Prevent proof hash overflow on small screens */
+    #page-proof-hash{ display:inline-block; max-width:min(92vw, 980px); vertical-align:middle }
+
     .progress{
       position:fixed; left:0; top:64px; width:100%; height:2px;
       background:linear-gradient(90deg, rgba(34,211,238,.0), rgba(34,211,238,.35));
@@ -353,20 +356,20 @@ upgrade-insecure-requests">
     <!-- HERO -->
     <section class="hero" aria-labelledby="hero-title">
       <div class="label">Status: Public Beta v0.2 · Stateless API · Privacy-first · No blockchain</div>
-      <h1 id="hero-title" class="title">Prove when your data existed — without exposing it.</h1>
+      <h1 id="hero-title" class="title">Prove when a file existed — without uploading it.</h1>
 
       <p class="subtitle">
-        Create a small proof file you can keep and share. Anyone can verify later that this exact content existed at that time — without seeing your data.
-      </p>
-
-      <p style="margin:6px 0 0; color:#9fb3c9">
-        <a href="/regulations.html" style="color:#9beefb">Regulations &amp; Compliance →</a>
+        Your device hashes the content locally. You download a signed proof file (<code>.tproof.json</code>) and can verify later that the file is unchanged — without revealing the original.
       </p>
 
       <div class="cta-wrap" role="group" aria-label="Primary actions">
         <a class="cta" href="/verify.html" aria-label="Create or verify a proof">Create / Verify a Proof</a>
-        <a class="cta secondary" href="/docs.html" aria-label="Open Developer Docs">Developer Docs →</a>
+        <a class="cta secondary" href="/proofspec.html" aria-label="Read the protocol">Read the Protocol →</a>
       </div>
+
+      <p class="positioning" style="text-align:center; margin:10px 0 0">
+        Developers: see <a href="/docs.html">API Docs</a>.
+      </p>
 
       <div class="micro" aria-label="Key claims">
         <span class="chip">🔏 Verifiable proof file</span>
@@ -393,21 +396,21 @@ upgrade-insecure-requests">
 
       <div class="grid three" aria-label="Definition blocks">
         <article class="card">
-          <h3>✅ It IS</h3>
+          <h3>What you get</h3>
           <p><strong>A proof file</strong> you can store and share (<code>.tproof.json</code>).</p>
           <p><strong>A signed timestamp</strong> from a stateless API (no server-side storage required).</p>
           <p><strong>Independent verification</strong> later (online or offline) to confirm the content existed and is unchanged.</p>
         </article>
 
         <article class="card">
-          <h3>✅ It IS</h3>
+          <h3>Why it’s safe</h3>
           <p><strong>Privacy-first</strong>: your original content stays on your device.</p>
           <p><strong>Open protocol</strong>: designed to be implemented by other tools and verifiers.</p>
           <p><strong>Domain-agnostic</strong>: works for files, AI outputs, datasets, releases, audits.</p>
         </article>
 
         <article class="card">
-          <h3>❌ It is NOT</h3>
+          <h3>What it’s not</h3>
           <p><strong>Not storage</strong>: TimeProofs doesn’t host your content.</p>
           <p><strong>Not blockchain</strong>: no chain, no tokens, no mining.</p>
           <p><strong>Not identity / authorship</strong>: it doesn’t prove who created it, or why.</p>
@@ -415,7 +418,7 @@ upgrade-insecure-requests">
       </div>
 
       <p class="positioning" style="text-align:center; margin-top:10px">
-        For details and examples, see <a href="/docs.html">Developer Docs</a> and the <a href="/proofspec.html">Protocol</a>.
+        For details and examples, see <a href="/docs.html">API Docs</a> and the <a href="/proofspec.html">Protocol</a>.
       </p>
     </section>
 
@@ -433,7 +436,7 @@ upgrade-insecure-requests">
         </article>
         <article class="card">
           <h3>2) Request a signed timestamp</h3>
-          <p>You send only the hash to the stateless API and receive a signed timestamp response.</p>
+          <p>No content is uploaded — only a cryptographic hash is sent. The API returns a signed timestamp for your proof file.</p>
         </article>
         <article class="card">
           <h3>3) Download &amp; verify the proof file</h3>
@@ -442,7 +445,7 @@ upgrade-insecure-requests">
       </div>
 
       <p class="positioning" style="text-align:center; margin-top:10px">
-        Want technical details and examples? See <a href="/docs.html">Developer Docs</a> and <a href="/use-cases.html">Use Cases</a>.
+        Want technical details and examples? See <a href="/docs.html">API Docs</a> and <a href="/use-cases.html">Use Cases</a>.
       </p>
     </section>
 
@@ -454,6 +457,9 @@ upgrade-insecure-requests">
         <article class="card"><h3>Verifiable later</h3><p>Independent checks, without relying on trust in a single platform or a screenshot.</p></article>
         <article class="card"><h3>Built for real-world proof</h3><p>Useful for files, AI outputs, datasets, audits, releases, and compliance workflows.</p></article>
       </div>
+      <p class="positioning" style="text-align:center; margin-top:10px">
+        Compliance context: <a href="/regulations.html">Regulations &amp; Legal framework →</a>
+      </p>
     </section>
 
     <!-- Proof of Release (index only) -->
@@ -461,7 +467,7 @@ upgrade-insecure-requests">
       <p class="label" style="margin-bottom:8px">🔏 Proof of Release</p>
       <h2 id="site-proof-title">Verified by TimeProofs</h2>
       <p style="text-align:center; color:#9fb3c9; max-width:900px; margin:0 auto 12px;">
-        We publish a public proof of this website build. Verification requires the proof file (<code>.tproof.json</code>) — no hash-only verification.
+        We publish a signed proof file for this website build, so anyone can independently verify integrity. Verification requires the proof file (<code>.tproof.json</code>) — no hash-only verification.
       </p>
 
       <p style="text-align:center; color:#9fb3c9">
@@ -670,4 +676,4 @@ upgrade-insecure-requests">
   })();
   </script>
 </body>
-        </html>
+  </html>
