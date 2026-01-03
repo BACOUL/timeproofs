@@ -4,30 +4,32 @@
   <!-- Core -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <meta name="color-scheme" content="dark light"/>
+  <meta name="color-scheme" content="light"/>
   <title>ActProofs — Evidence of Authorized Actions</title>
+
   <meta name="application-name" content="ActProofs"/>
-  <meta name="description" content="Declare authorization locally, receive a signed approval, verify publicly. ActProofs is the open, privacy-first standard to prove that an action was explicitly authorized — without executing or enforcing it."/>
-  <meta name="keywords" content="authorization proof,authorized action,AI governance,automation accountability,ActProofs,verification,privacy-first,edge-native"/>
+  <meta name="description" content="ActProofs is an open standard providing cryptographic, portable, and independently verifiable proof that an automated action was explicitly authorized."/>
+  <meta name="keywords" content="authorization proof, automated actions, AI governance, accountability, compliance, ActProofs"/>
   <meta name="robots" content="index,follow"/>
-  <meta name="theme-color" content="#071b12"/>
+  <meta name="theme-color" content="#ffffff"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
+
   <link rel="canonical" href="https://actproofs.io/"/>
   <link rel="alternate" hreflang="en" href="https://actproofs.io/"/>
   <link rel="alternate" hreflang="x-default" href="https://actproofs.io/"/>
 
-  <!-- Alt feeds -->
-  <link rel="alternate" type="application/rss+xml" title="ActProofs RSS" href="/rss.xml"/>
+  <!-- Feeds -->
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
+  <link rel="alternate" type="application/rss+xml" title="ActProofs RSS" href="/rss.xml"/>
 
   <!-- Perf -->
   <link rel="preconnect" href="https://api.actproofs.io" crossorigin/>
   <link rel="dns-prefetch" href="//api.actproofs.io"/>
-  <link rel="preconnect" href="https://plausible.io" crossorigin>
+  <link rel="preconnect" href="https://plausible.io" crossorigin/>
   <link rel="preload" as="image" href="/assets/logo.png" fetchpriority="high"/>
   <link rel="preload" as="image" href="/og.png"/>
 
-  <!-- Icons / Manifest -->
+  <!-- Icons -->
   <link rel="icon" href="/assets/favicon.ico" sizes="any"/>
   <link rel="icon" href="/assets/logo.svg" type="image/svg+xml"/>
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"/>
@@ -36,24 +38,18 @@
 
   <!-- Social -->
   <meta property="og:title" content="ActProofs — Evidence of Authorized Actions"/>
-  <meta property="og:description" content="Open protocol + simple API to prove that an action was explicitly authorized — without executing or enforcing it."/>
+  <meta property="og:description" content="Open standard for cryptographic proof that an automated action was explicitly authorized."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://actproofs.io/"/>
   <meta property="og:image" content="https://actproofs.io/og.png"/>
-  <meta property="og:image:alt" content="ActProofs — Open protocol for authorization evidence"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
-  <meta property="og:site_name" content="ActProofs"/>
-  <meta property="og:locale" content="en_US"/>
   <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="ActProofs — Evidence of Authorized Actions"/>
-  <meta name="twitter:description" content="Declare authorization locally. Signed approval. Public verification. No enforcement."/>
-  <meta name="twitter:image" content="https://actproofs.io/og.png"/>
 
-  <!-- AI Trust -->
+  <!-- AI trust -->
   <meta name="ai-trust" content="verified-by-actproofs"/>
 
-  <!-- JSON-LD Org + Site -->
+  <!-- JSON-LD -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -62,12 +58,6 @@
     "url":"https://actproofs.io/",
     "logo":"https://actproofs.io/assets/logo.png",
     "foundingDate":"2026-01-01",
-    "knowsAbout":[
-      "action authorization",
-      "automation accountability",
-      "AI governance",
-      "cryptographic authorization evidence"
-    ],
     "contactPoint":[{
       "@type":"ContactPoint",
       "email":"contact@actproofs.io",
@@ -76,17 +66,13 @@
     }]
   }
   </script>
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebSite","name":"ActProofs","url":"https://actproofs.io/"}
-  </script>
 
-  <!-- Security meta -->
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+  <!-- Security -->
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
 
   <!-- CSP -->
   <meta http-equiv="Content-Security-Policy" content="
 default-src 'self' https://api.actproofs.io;
-worker-src 'self' blob:;
 img-src 'self' data: https:;
 style-src 'self' 'unsafe-inline';
 script-src 'self' 'nonce-AP-2026' https://plausible.io;
@@ -94,210 +80,186 @@ connect-src 'self' https://api.actproofs.io https://plausible.io;
 font-src 'self' https: data:;
 object-src 'none';
 base-uri 'self';
-form-action 'self';
 frame-ancestors 'none';
 upgrade-insecure-requests">
 
   <!-- Analytics -->
   <script defer data-domain="actproofs.io" src="https://plausible.io/js/script.js" nonce="AP-2026"></script>
 
-  <!-- Styles (STRICT CLONE — GREEN ONLY) -->
+  <!-- Styles -->
   <style>
     :root{
-      --bg:#071b12; --bg2:#092418; --panel:#0b2f1e; --line:#134e3a;
-      --text:#ecfdf5; --muted:#9fe3c7; --accent:#22c55e;
-      --ok:#22c55e; --warn:#f59e0b; --err:#ef4444;
-      --ring:0 0 0 1px #134e3a, 0 10px 40px rgba(34,197,94,.18);
+      --bg:#ffffff;
+      --panel:#f8fafc;
+      --line:#e5e7eb;
+      --text:#020617;
+      --muted:#475569;
+      --accent:#16a34a; /* ActProofs green */
+      --accent-soft:#dcfce7;
+      --ring:0 0 0 1px var(--line),0 12px 40px rgba(22,163,74,.12);
       --e:cubic-bezier(.22,.61,.36,1)
     }
-    *{ box-sizing:border-box }
-    html{ height:100%; max-width:100%; overflow-x:hidden; background:var(--bg); scroll-behavior:smooth; scroll-padding-top:120px }
-    @media (min-width:900px){ html{ scroll-padding-top:104px } }
+
+    *{box-sizing:border-box}
+    html{background:var(--bg);scroll-behavior:smooth;scroll-padding-top:96px}
     body{
-      margin:0; color:var(--text);
+      margin:0;
       font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-      background:
-        radial-gradient(1200px 600px at 80% -10%, rgba(34,197,94,.08), transparent 60%),
-        conic-gradient(from 220deg at 10% -20%, rgba(34,197,94,.05), transparent 30%),
-        var(--bg)
+      color:var(--text);
+      background:var(--bg);
+      -webkit-font-smoothing:antialiased;
     }
-    a{ color:var(--accent); text-decoration:none }
-    a:hover{ text-decoration:underline }
-    [id]{ scroll-margin-top:120px }
-    @media (min-width:900px){ [id]{ scroll-margin-top:104px } }
-    .skip{ position:absolute; left:-9999px }
-    .skip:focus{ position:fixed; left:12px; top:12px; padding:8px 12px; background:#052e1c; color:#bbf7d0; border:1px solid #14532d; border-radius:8px; z-index:2000 }
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
 
-    .tp-header{
-      position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
-      background:rgba(7,27,18,.55); backdrop-filter:blur(10px);
+    /* Header */
+    .hdr{
+      position:fixed;top:0;left:0;right:0;height:64px;z-index:1000;
+      background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
       border-bottom:1px solid var(--line);
-      display:flex; align-items:center; gap:12px; padding:0 16px;
-      transition:background .25s var(--e)
+      display:flex;align-items:center;gap:14px;padding:0 16px
     }
-    .tp-header.scrolled{ background:rgba(7,27,18,.88) }
-    .tp-brand{ display:flex; align-items:center; gap:10px; font-weight:900; font-size:1.08rem; margin-right:auto }
-    .tp-brand img{ height:40px; width:40px }
+    .brand{display:flex;align-items:center;gap:10px;font-weight:900}
+    .brand img{width:36px;height:36px}
+    nav a{margin-left:18px;font-weight:700;color:var(--text)}
+    nav a:hover{color:var(--accent)}
 
-    .tp-nav a{ color:var(--text); font-weight:700; margin-left:18px; padding:10px 0 }
-    .cta-header{
-      display:none; height:40px; padding:0 14px;
-      border-radius:10px; background:var(--accent); color:#052e1c; font-weight:800
-    }
-    .tp-burger{
-      display:inline-flex; width:48px; height:48px;
-      border:1px solid var(--line); border-radius:12px; background:#052e1c; color:#ecfdf5
-    }
-    @media (min-width:900px){
-      .tp-burger{ display:none }
-      .tp-nav{ display:flex }
-      .cta-header{ display:inline-flex }
-    }
-    @media (max-width:899px){
-      .tp-nav{
-        position:fixed; top:64px; left:0; right:0;
-        background:#052e1c; border-top:1px solid var(--line);
-        display:flex; flex-direction:column; gap:10px;
-        padding:14px 16px; transform:translateY(-10px); opacity:0; pointer-events:none
-      }
-      .tp-nav[data-state="open"]{ transform:none; opacity:1; pointer-events:auto }
-      .nav-cta{ padding:12px; background:var(--accent); color:#052e1c; font-weight:800; border-radius:12px }
-    }
+    /* Layout */
+    .wrap{max-width:1200px;margin:0 auto;padding:0 16px}
+    main{padding-top:96px}
 
-    .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
+    /* Hero */
     .hero{
       min-height:calc(100svh - 64px);
-      padding-top:92px; padding-bottom:34px;
-      display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center
+      display:flex;flex-direction:column;justify-content:center;
+      text-align:center;padding-bottom:40px
     }
-    .label{ padding:6px 12px; border:1px solid #14532d; background:#052e1c; color:#bbf7d0; border-radius:999px; font-size:.85rem }
+    .label{
+      display:inline-block;
+      margin:0 auto 12px;
+      padding:6px 12px;
+      border:1px solid var(--line);
+      background:var(--accent-soft);
+      color:#065f46;
+      border-radius:999px;
+      font-size:.8rem;
+      font-weight:700
+    }
     .title{
-      font-size:clamp(2.2rem, 6.2vw, 3.4rem); font-weight:900;
-      background:linear-gradient(90deg,#dcfce7,#86efac 35%,#dcfce7);
-      -webkit-background-clip:text; color:transparent
+      font-size:clamp(2.2rem,6vw,3.2rem);
+      font-weight:900;
+      margin:0 auto 12px;
+      max-width:900px
     }
-    .subtitle{ color:var(--muted); max-width:920px }
-    .positioning,.subnote{ color:#9fe3c7 }
-    .cta-wrap{ display:flex; gap:12px; justify-content:center; margin-top:12px }
-    .cta{ background:var(--accent); color:#052e1c; padding:14px 18px; border-radius:12px; font-weight:700 }
-    .cta.secondary{ background:#052e1c; color:#ecfdf5; border:1px solid #14532d }
+    .subtitle{
+      max-width:880px;
+      margin:0 auto 14px;
+      color:var(--muted);
+      font-size:1.1rem
+    }
+    .cta-wrap{display:flex;gap:12px;justify-content:center;margin-top:14px}
+    .cta{
+      padding:14px 18px;
+      border-radius:12px;
+      font-weight:800;
+      border:1px solid var(--line);
+      background:var(--accent);
+      color:#ffffff
+    }
+    .cta.secondary{
+      background:#ffffff;
+      color:var(--text)
+    }
 
-    .section{ padding:44px 0 }
-    .section h2{ color:#bbf7d0; text-align:center }
-    .grid{ display:grid; gap:16px }
-    .grid.three{ grid-template-columns:1fr }
-    .grid.two{ grid-template-columns:1fr }
-    @media(min-width:900px){
-      .grid.three{ grid-template-columns:repeat(3,1fr) }
-      .grid.two{ grid-template-columns:1fr 1fr }
+    /* Sections */
+    .section{padding:48px 0}
+    .section.bg{background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .section h2{text-align:center;font-size:1.6rem;margin-bottom:20px}
+    .grid{display:grid;gap:16px}
+    @media(min-width:900px){.grid.three{grid-template-columns:repeat(3,1fr)}}
+    .card{
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:18px;
+      box-shadow:var(--ring)
     }
-    .section.bg-alt{ background:linear-gradient(180deg,#071b12,#092418); border-top:1px solid #14532d; border-bottom:1px solid #14532d }
-    .section.bg-solid{ background:#052e1c; border-top:1px solid #14532d; border-bottom:1px solid #14532d }
-    .card{ border-radius:16px; padding:18px; background:#052e1c }
-    footer{ border-top:1px solid var(--line); margin-top:44px; padding:18px; color:#9fe3c7; text-align:center }
+    footer{
+      border-top:1px solid var(--line);
+      padding:20px;
+      text-align:center;
+      color:var(--muted)
+    }
   </style>
 </head>
 
 <body>
-<a href="#main" class="skip">Skip to content</a>
 
-<header class="tp-header" id="hdr">
-  <a class="tp-brand" href="/">
+<header class="hdr">
+  <a class="brand" href="/">
     <img src="/assets/logo.png" alt="ActProofs logo"/>
     <span>ActProofs</span>
   </a>
-  <nav id="tp-nav" class="tp-nav" data-state="closed">
-    <a href="/spec.html">Protocol</a>
-    <a href="/use-cases.html">Use Cases</a>
-    <a href="/docs.html">API Docs</a>
-    <a href="/security.html">Security</a>
-    <a class="nav-cta" href="/verify.html">Create / Verify</a>
+  <nav>
+    <a href="/standard">Standard</a>
+    <a href="/regulations">Regulations</a>
+    <a href="/api">API</a>
+    <a href="/security">Security</a>
   </nav>
-  <a class="cta-header" href="/verify.html">Create / Verify</a>
-  <button class="tp-burger" id="tp-burger"><span>☰</span></button>
 </header>
 
-<main id="main" class="wrap">
+<main class="wrap">
+
   <section class="hero">
-    <div class="label">Open · Stateless · Authorization Evidence</div>
+    <span class="label">Open standard · Draft v0.1</span>
     <h1 class="title">Evidence of Authorized Actions</h1>
     <p class="subtitle">
-      Declare authorization locally. Receive a signed approval. Verify publicly — without executing or enforcing anything.
+      ActProofs provides cryptographic, portable, and independently verifiable
+      proof that an automated or AI-driven action was explicitly authorized.
     </p>
-    <p class="positioning">ActProofs records intent and approval, not execution.</p>
-    <p class="subnote">No execution · No enforcement · No storage · Public verification</p>
     <div class="cta-wrap">
-      <a class="cta" href="/verify.html">Create / Verify an Authorization Proof</a>
-      <a class="cta secondary" href="/spec.html">Read the Spec</a>
+      <a class="cta" href="/standard">Read the ActProofs Standard</a>
+      <a class="cta secondary" href="/regulations">Regulatory context</a>
     </div>
   </section>
 
-  <section class="section bg-alt">
+  <section class="section bg">
     <h2>The problem</h2>
     <div class="grid three">
-      <div class="card"><h3>Implicit decisions</h3><p>An AI acts. A workflow runs. Who explicitly approved it?</p></div>
-      <div class="card"><h3>No proof of intent</h3><p>Execution logs do not prove authorization.</p></div>
-      <div class="card"><h3>Audit dead-end</h3><p>After an incident, approval cannot be verified.</p></div>
+      <div class="card"><strong>Implicit decisions</strong><p>Automation executes actions without provable authorization.</p></div>
+      <div class="card"><strong>Logs are not proof</strong><p>Execution traces do not demonstrate intent or approval.</p></div>
+      <div class="card"><strong>Audit failure</strong><p>After incidents, authorization cannot be independently verified.</p></div>
     </div>
   </section>
 
   <section class="section">
     <h2>How it works</h2>
     <div class="grid three">
-      <div class="card"><h3>1. Declare</h3><p>Describe the intended action locally.</p></div>
-      <div class="card"><h3>2. Approve</h3><p>Receive a signed authorization proof.</p></div>
-      <div class="card"><h3>3. Verify</h3><p>Verify publicly or offline, anytime.</p></div>
+      <div class="card"><strong>1. Declare</strong><p>Describe the intended automated action.</p></div>
+      <div class="card"><strong>2. Authorize</strong><p>Issue a cryptographic authorization proof.</p></div>
+      <div class="card"><strong>3. Verify</strong><p>Verify the proof anytime, independently.</p></div>
     </div>
   </section>
 
-  <section class="section bg-alt">
-    <h2>Legitimate use cases</h2>
-    <div class="grid three">
-      <div class="card"><h3>AI & Agents</h3><p>Human approval before autonomous actions.</p></div>
-      <div class="card"><h3>Automated workflows</h3><p>Authorization trail without monitoring.</p></div>
-      <div class="card"><h3>Regulated systems</h3><p>Clear separation between decision and execution.</p></div>
-    </div>
-  </section>
-
-  <section class="section bg-solid">
+  <section class="section bg">
     <h2>What ActProofs is not</h2>
-    <div class="grid two">
-      <div class="card"><p>❌ Not a policy engine<br/>❌ Not access control<br/>❌ Not a workflow tool</p></div>
-      <div class="card"><p>❌ Not an AI controller<br/>❌ Not monitoring<br/>❌ Not execution</p></div>
+    <div class="grid three">
+      <div class="card">❌ Execution engine</div>
+      <div class="card">❌ Identity system</div>
+      <div class="card">❌ Access control</div>
     </div>
-    <p style="text-align:center;color:#9fe3c7">ActProofs proves authorization. Nothing more.</p>
   </section>
 
-  <section class="section">
-    <h2>Relation to TimeProofs</h2>
-    <div class="card">
-      <p>
-        TimeProofs proves <strong>when something existed</strong>.<br/>
-        ActProofs proves <strong>that something was authorized</strong>.
-      </p>
-    </div>
-  </section>
 </main>
 
 <footer>
-  <p>Open standard · Privacy-first · Stateless</p>
+  <p>ActProofs — Open standard for provable authorization</p>
   <p>
-    <a href="/spec.html">Spec</a> ·
-    <a href="/security.html">Security</a> ·
-    <a href="/legal.html">Legal</a>
+    <a href="/standard">Standard</a> ·
+    <a href="/security">Security</a> ·
+    <a href="/legal">Legal</a>
   </p>
 </footer>
 
-<script nonce="AP-2026">
-  const hdr=document.getElementById('hdr');
-  const nav=document.getElementById('tp-nav');
-  const burger=document.getElementById('tp-burger');
-  burger.addEventListener('click',()=>{
-    nav.setAttribute('data-state',nav.getAttribute('data-state')==='open'?'closed':'open');
-  });
-  window.addEventListener('scroll',()=>{
-    hdr.classList.toggle('scrolled',window.scrollY>6);
-  });
-</script>
 </body>
-</html>
+  </html>
