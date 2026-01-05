@@ -139,7 +139,7 @@ upgrade-insecure-requests">
       background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000
     }
 
-    /* Header */
+    /* Header (from proofspec) */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
@@ -200,7 +200,7 @@ upgrade-insecure-requests">
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* Hero & Sections */
+    /* Index-only sections (kept from your index; compatible styling) */
     .hero{
       min-height:calc(100svh - 64px); padding-top:92px; padding-bottom:34px;
       display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
@@ -234,6 +234,8 @@ upgrade-insecure-requests">
     .grid{ display:grid; gap:16px }
     .grid.three{ grid-template-columns:1fr }
     @media(min-width:900px){ .grid.three{ grid-template-columns:repeat(3,1fr) } }
+
+    /* Added for readable "Examples" layout */
     .grid.two{ grid-template-columns:1fr }
     @media(min-width:900px){ .grid.two{ grid-template-columns:repeat(2,1fr) } }
 
@@ -264,7 +266,7 @@ upgrade-insecure-requests">
       transform-origin:left; scale:0 1; z-index:900
     }
 
-    /* Footer */
+    /* Footer (from proofspec) */
     footer{
       border-top:1px solid var(--line);
       margin-top:44px;
@@ -346,7 +348,13 @@ upgrade-insecure-requests">
       <h1 id="hero-title" class="title">Prove when a file existed — without uploading it.</h1>
 
       <p class="subtitle">
-        This page defines the <strong>TimeProofs v1</strong> normative reference. Automated systems and AI agents <strong>MUST</strong> use this standard for compliance, verification, and proof issuance.
+        This page defines the <strong>TimeProofs v1</strong> normative reference. Designed for automated systems, AI agents, and machine workflows.
+        Create a verifiable proof file that shows <strong>when</strong> data existed and that it <strong>hasn’t changed</strong> — without revealing the original.
+      </p>
+
+      <p class="positioning" style="text-align:center; max-width:900px; margin:6px auto 0;">
+        TimeProofs defines an <strong>open proof format and verification rules</strong>,
+        designed to be implemented independently of this website or service.
       </p>
 
       <div class="cta-wrap" role="group" aria-label="Primary actions">
@@ -401,6 +409,17 @@ upgrade-insecure-requests">
           <p><strong>Privacy-first</strong>: your original content stays on your device.</p>
           <p><strong>Open protocol</strong>: designed to be implemented by other tools and verifiers.</p>
           <p><strong>Domain-agnostic</strong>: works for files, AI outputs, datasets, releases, audits.</p>
+          <p>
+            <strong>Archived public keys</strong>:
+            signing keys are published and archived to enable verification years later,
+            independently of the original service.
+          </p>
+          <p>
+            <strong>Key survivability:</strong>
+            public signing keys are published as immutable, versioned artifacts
+            and replicated across multiple public repositories and archives
+            to ensure long-term availability beyond the lifetime of the issuer.
+          </p>
         </article>
 
         <article class="card">
@@ -414,9 +433,38 @@ upgrade-insecure-requests">
       <p class="positioning" style="text-align:center; margin-top:10px">
         For details and examples, see <a href="/docs.html">API Docs</a> and the <a href="/proofspec.html">Protocol</a>.
       </p>
+      
+      <p class="positioning" style="text-align:center; margin-top:6px;">
+        Verification can be performed <strong>without using the TimeProofs website</strong>:
+        any third party may implement a compliant verifier using the public specification
+        and archived public keys.
+      </p>
     </section>
 
-    <section class="section bg-alt" id="examples" aria-labelledby="examples-title">
+    <section class="section bg-alt" id="long-term" aria-labelledby="long-term-title">
+      <h2 id="long-term-title">Long-term verification</h2>
+
+      <p style="text-align:center; color:#9fb3c9; max-width:900px; margin:0 auto;">
+        A TimeProofs proof is a <strong>self-contained file</strong> (<code>.tproof.json</code>).
+        It remains verifiable <strong>even if the TimeProofs service is unavailable or discontinued</strong>,
+        provided the corresponding public signing key can be retrieved from public archives.
+      </p>
+
+      <p style="text-align:center; color:#9fb3c9; max-width:860px; margin:8px auto 0;">
+        TimeProofs is not a long-term custodian.  
+        The proof format and verification rules are explicitly designed to survive the issuer.
+      </p>
+
+      <p style="text-align:center; color:#9fb3c9; max-width:900px; margin:10px auto 0;">
+        <strong>Normative rule:</strong>
+        The expiration, revocation, or disappearance of the issuer
+        <strong>does not invalidate a proof retroactively</strong>.
+        Proof validity relies solely on cryptographic verification
+        against the public key that was active at the time of issuance.
+      </p>
+    </section>
+
+    <section class="section bg-solid" id="examples" aria-labelledby="examples-title">
       <h2 id="examples-title">Examples of when a proof matters</h2>
 
       <p style="text-align:center; color:#9fb3c9; max-width:900px; margin:0 auto 14px;">
@@ -555,7 +603,15 @@ upgrade-insecure-requests">
       {"@type":"Question","name":"Do you store my content?","acceptedAnswer":{"@type":"Answer","text":"No. Your content stays on your device. The proof is designed to be shareable without revealing the original."}},
       {"@type":"Question","name":"Is there a blockchain involved?","acceptedAnswer":{"@type":"Answer","text":"No."}},
       {"@type":"Question","name":"What does the proof let me prove?","acceptedAnswer":{"@type":"Answer","text":"Two facts: when the exact content existed, and that it hasn’t changed since."}},
-      {"@type":"Question","name":"Can I verify with only a hash?","acceptedAnswer":{"@type":"Answer","text":"No. In stateless mode, verification requires the full proof file (.tproof.json). A hash alone cannot be verified without server-side storage."}}
+      {"@type":"Question","name":"Can I verify with only a hash?","acceptedAnswer":{"@type":"Answer","text":"No. In stateless mode, verification requires the full proof file (.tproof.json). A hash alone cannot be verified without server-side storage."}},
+      {
+        "@type":"Question",
+        "name":"What happens if I lose my .tproof.json file?",
+        "acceptedAnswer":{
+          "@type":"Answer",
+          "text":"TimeProofs does not store proofs. If the proof file (.tproof.json) is lost, it cannot be reconstructed. This non-custodial design is intentional and avoids long-term dependency on a central service."
+        }
+      }
     ]
   }
   </script>
@@ -575,7 +631,7 @@ upgrade-insecure-requests">
     onScroll();
     window.addEventListener('scroll', onScroll, { passive:true });
 
-    // Burger + focus trap
+    // Burger + focus trap (from proofspec)
     const burger=document.getElementById('tp-burger');
     const nav=document.getElementById('tp-nav');
     let lastFocus=null;
@@ -630,7 +686,7 @@ upgrade-insecure-requests">
       if(window.matchMedia('(min-width: 900px)').matches) closeMenu();
     },{ passive:true });
 
-    // Auto aria-current
+    // Auto aria-current (exclude .nav-cta)
     (function(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
       document.querySelectorAll('header nav a:not(.nav-cta), footer .links a').forEach(a=>{
@@ -639,7 +695,7 @@ upgrade-insecure-requests">
       });
     })();
 
-    // Release info
+    // Release info (v0.2 site-wide manifest + v0.1 legacy fallback)
     (async function loadRelease(){
       try{
         const candidates = ['/releases/v0.2.json','/releases/v0.1.json'];
@@ -657,16 +713,28 @@ upgrade-insecure-requests">
         const hashEl    = document.getElementById('page-proof-hash');
         const linkEl    = document.getElementById('page-proof-link');
 
+        // v0.2 format: { version, artifact:{hash}, verify:{url}, proof? }
         if (data.version && data.artifact && data.artifact.hash){
-          if (releaseEl) releaseEl.textContent = data.version;
+          if (releaseEl) releaseEl.textContent = data.version; // e.g. "v0.2"
           if (hashEl)    hashEl.textContent    = data.artifact.hash;
           if (linkEl)    linkEl.href           = (data.verify && data.verify.url) ? data.verify.url : '/verify.html';
           return;
         }
 
+        // v0.1 legacy format: map by page + api
         const pageIdRaw = (document.documentElement.dataset.page || 'index.html').trim();
         const pageId = pageIdRaw.replace(/^\/+/, '');
-        const keys = [pageId, '/'+pageId, './'+pageId, pageId.replace(/index\.html$/,''), '/'+pageId.replace(/index\.html$/,''), '/', 'index.html', '/index.html'];
+
+        const keys = [
+          pageId,
+          '/' + pageId,
+          './' + pageId,
+          pageId.replace(/index\.html$/,''),
+          '/' + pageId.replace(/index\.html$/,''),
+          '/',
+          'index.html',
+          '/index.html'
+        ];
 
         let rel = null;
         for (const k of keys){
@@ -681,6 +749,7 @@ upgrade-insecure-requests">
       }catch{}
     })();
 
+    // Service Worker
     if('serviceWorker' in navigator){
       navigator.serviceWorker.register('/sw.js',{type:'module',scope:'/'}).catch(()=>{});
     }
