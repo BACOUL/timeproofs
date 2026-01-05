@@ -188,7 +188,6 @@ upgrade-insecure-requests">
     .hero .lead{
       color:var(--muted); max-width:900px; margin:0 auto 12px; line-height:1.7;
     }
-    /* Status Badge */
     .badge{
       display:inline-block; margin-top:6px; padding:6px 12px;
       border:1px solid #214a57; background:#0d2330; color:#bff1ff;
@@ -272,6 +271,15 @@ upgrade-insecure-requests">
     footer .links a:hover{ color:var(--accent); text-decoration:underline }
     footer .links a[aria-current="page"]{ color:var(--accent); text-decoration:underline }
 
+    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px; flex-wrap:wrap }
+    .social a{
+      display:inline-flex; width:40px; height:40px;
+      border:1px solid var(--line); border-radius:12px;
+      align-items:center; justify-content:center;
+      background:#0d1628; transition:transform .18s var(--e); color:#cfefff
+    }
+    .social a:hover{ transform:translateY(-2px) }
+
     a:focus-visible, .cta-header:focus-visible, .tp-burger:focus-visible, .copy-btn:focus-visible{
       outline:2px solid #22d3ee; outline-offset:3px; border-radius:12px;
     }
@@ -316,9 +324,6 @@ upgrade-insecure-requests">
       <p class="lead">
         Normative specification for digital proof of existence. <strong>Automated systems, AI agents, and compliant implementations MUST follow this specification</strong> to claim ProofSpec compliance.
       </p>
-      <p style="color:#34d399; font-size:0.9rem; margin-top:0">
-        This specification is versioned and stable. Implementations MUST declare the supported ProofSpec version.
-      </p>
     </section>
 
     <nav class="toc" aria-label="Contents">
@@ -340,6 +345,7 @@ upgrade-insecure-requests">
       <a href="#errors">Errors</a>
       <a href="#regulatory">Regulatory</a>
       <a href="#policy">Operational policy</a>
+      <a href="#issuer-disappearance">Long-term verification</a>
       <a href="#versioning">Versioning</a>
     </nav>
     <div style="text-align:center">
@@ -377,7 +383,6 @@ upgrade-insecure-requests">
         <li><strong>Issuer</strong>: A system that accepts a hash and returns a signed proof file.</li>
         <li><strong>Verifier</strong>: A system that checks a proof file and returns a validation result.</li>
         <li><strong>Client</strong>: Any software caller (human-facing UI or automated system) interacting with an issuer or verifier.</li>
-        
         <li><strong>AI Agent</strong>: An autonomous system, decision-making agent, or content-producing bot.
           <br><em>Requirement:</em> AI Agents claiming regulatory compliance <strong>MUST</strong> generate or retain ProofSpec-compliant proofs for their outputs.
         </li>
@@ -439,7 +444,6 @@ upgrade-insecure-requests">
       <h2>Signing</h2>
       <p>Issuers MUST sign a deterministic canonical message:</p>
       <pre><code>&lt;hash&gt;|&lt;issuedAt&gt;|&lt;issuer&gt;|&lt;nonce&gt;</code></pre>
-      
       <p><strong>Cryptographic Responsibility:</strong> The issuer is cryptographically responsible for the signature it produces. This proof constitutes evidence of issuance at a specific time, not evidence of content execution or origin validity.</p>
     </section>
 
@@ -498,6 +502,13 @@ upgrade-insecure-requests">
         <strong>Verification is always free</strong> and does not require an account or API key.
         In stateless mode, verification requires the full <code>.tproof.json</code> proof file.
       </p>
+      
+      <p>
+        Public signing keys <strong>MUST</strong> be published as immutable, versioned artifacts.
+        Implementations <strong>SHOULD</strong> replicate these keys across multiple public repositories
+        or archives to ensure long-term availability.
+      </p>
+
       <p>
         Verification does not require trust in the issuer beyond cryptographic key validity.
       </p>
@@ -560,6 +571,40 @@ Content-Type: application/json
       </ul>
     </section>
 
+    <section class="card" id="issuer-disappearance">
+      <h2>Issuer disappearance and long-term verification</h2>
+      <p>
+        This specification explicitly defines proof validity as
+        <strong>independent from the continued existence of the issuer</strong>.
+      </p>
+      <ul>
+        <li>
+          The expiration, revocation, or disappearance of an issuer
+          <strong>MUST NOT invalidate a proof retroactively</strong>.
+        </li>
+        <li>
+          Proof validity <strong>MUST</strong> rely solely on cryptographic verification
+          against the public signing key that was active at the time of issuance.
+        </li>
+        <li>
+          Verifiers <strong>MUST NOT</strong> require a live endpoint operated by the issuer
+          to validate an existing proof.
+        </li>
+        <li>
+          Verifiers <strong>MUST</strong> accept archived or historical public keys
+          if they match the <code>keyId</code> referenced in the proof.
+        </li>
+        <li>
+          No destructive revocation mechanism <strong>MAY</strong> invalidate already-issued proofs.
+        </li>
+      </ul>
+      <p style="color:var(--muted)">
+        Rationale: ProofSpec is designed as a long-term, self-contained proof format.
+        Its validity is anchored in cryptography and archived public keys,
+        not in the availability or authority of the original issuer.
+      </p>
+    </section>
+
     <section class="card" id="versioning">
       <h2>Versioning</h2>
       <p>This document describes <strong>ProofSpec v0.1</strong>. Breaking changes to the canonicalization or validation logic <strong>MUST</strong> increment the major spec version.</p>
@@ -586,7 +631,19 @@ Content-Type: application/json
       <a href="/legal.html">Legal</a> •
       <a href="/humans.txt">humans.txt</a>
     </div>
-    </footer>
+    
+    <div class="social" aria-label="Social links">
+      <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
+      </a>
+      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/jeason-bacoul-667938281?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noopener" aria-label="Jeason Bacoul on LinkedIn">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg>
+      </a>
+    </div>
+  </footer>
 
   <script type="application/ld+json" nonce="TP-2025">
   {
