@@ -47,6 +47,11 @@
   <meta property="og:locale" content="en_US"/>
   <meta property="og:locale:alternate" content="fr_FR"/>
 
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="TimeProofs — Freeze Before Sending. Verifiable Proof, Private."/>
+  <meta name="twitter:description" content="Freeze before sending. Create a verifiable proof of what you sent — without uploading your content. Verify later."/>
+  <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
+
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
 
   <meta http-equiv="Content-Security-Policy" content="
@@ -100,6 +105,17 @@ upgrade-insecure-requests">
   }
   </script>
 
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebPage",
+    "name":"TimeProofs — Freeze Before Sending",
+    "url":"https://timeproofs.io/",
+    "description":"Freeze before sending. Create a verifiable proof of what you sent — privately, in one click, without uploading your content.",
+    "isPartOf":{"@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"}
+  }
+  </script>
+
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
@@ -114,6 +130,8 @@ upgrade-insecure-requests">
       height:100%; max-width:100%; overflow-x:hidden; background:var(--bg);
       scroll-behavior:smooth;
       scroll-padding-top:120px;
+      text-size-adjust:100%;
+      -webkit-text-size-adjust:100%;
     }
     @media (min-width:900px){ html{ scroll-padding-top:104px } }
 
@@ -147,13 +165,13 @@ upgrade-insecure-requests">
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
     .tp-brand{
       display:flex; align-items:center; gap:10px; color:var(--text);
-      font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto
+      font-weight:950; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto
     }
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
 
     .tp-nav a{
       color:var(--text);
-      font-weight:700;
+      font-weight:850;
       margin-left:18px;
       padding:10px 0;
       display:inline-block;
@@ -164,7 +182,7 @@ upgrade-insecure-requests">
 
     .cta-header{
       display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
-      border-radius:10px; background:var(--accent); color:#06202a; font-weight:800; box-shadow:0 6px 24px rgba(34,211,238,.25)
+      border-radius:10px; background:var(--accent); color:#06202a; font-weight:950; box-shadow:0 6px 24px rgba(34,211,238,.25)
     }
     .cta-header:hover{ filter:brightness(1.05) }
 
@@ -193,7 +211,7 @@ upgrade-insecure-requests">
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
       .nav-cta{
         display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px;
-        background:var(--accent); color:#06202a; font-weight:800
+        background:var(--accent); color:#06202a; font-weight:950
       }
     }
 
@@ -201,7 +219,7 @@ upgrade-insecure-requests">
 
     /* Sections */
     .hero{
-      min-height:calc(100svh - 64px); padding-top:92px; padding-bottom:34px;
+      min-height:calc(100svh - 64px); padding-top:92px; padding-bottom:28px;
       display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
       position:relative; isolation:isolate
     }
@@ -210,27 +228,194 @@ upgrade-insecure-requests">
       background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem; margin-bottom:12px; box-shadow:var(--ring)
     }
     .title{
-      font-size:clamp(2.2rem, 6.2vw, 3.4rem); line-height:1.06; margin:.2em auto .3em; font-weight:900; max-width:1000px;
+      font-size:clamp(2.25rem, 6.4vw, 3.7rem); line-height:1.03; margin:.2em auto .35em; font-weight:1000; max-width:1040px;
       background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff);
       -webkit-background-clip:text; background-clip:text; color:transparent;
-      text-shadow:0 2px 40px rgba(34,211,238,.10)
+      text-shadow:0 2px 48px rgba(34,211,238,.10)
     }
-    .subtitle{ color:var(--muted); max-width:920px; margin:0 auto 12px; line-height:1.7; font-size:clamp(1rem, 2.8vw, 1.15rem); padding:0 6px }
-    .positioning{ color:#9fb3c9; max-width:860px; margin:0 auto 8px; }
+    .subtitle{
+      color:var(--muted);
+      max-width:960px;
+      margin:0 auto 12px;
+      line-height:1.78;
+      font-size:clamp(1.02rem, 2.9vw, 1.18rem);
+      padding:0 6px
+    }
+
     .cta-wrap{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:12px }
     .cta{
-      background:var(--accent); color:#06202a; border:none; padding:14px 18px; border-radius:12px; font-weight:800;
-      box-shadow:0 8px 30px rgba(34,211,238,.18); transition:transform .18s var(--e), box-shadow .18s
+      background:var(--accent); color:#06202a; border:none; padding:14px 18px; border-radius:12px; font-weight:1000;
+      box-shadow:0 8px 30px rgba(34,211,238,.18);
+      transition:transform .18s var(--e), box-shadow .18s, filter .18s var(--e)
     }
-    .cta.secondary{ background:#111d33; color:#e2f6ff; border:1px solid #1e2a3e; font-weight:700 }
-    .cta.tertiary{ background:transparent; color:#cfefff; border:1px solid #214a57; font-weight:700 }
-    .cta:hover{ transform:translateY(-2px); box-shadow:0 12px 38px rgba(34,211,238,.25) }
+    .cta.secondary{ background:#111d33; color:#e2f6ff; border:1px solid #1e2a3e; font-weight:900 }
+    .cta.tertiary{ background:transparent; color:#cfefff; border:1px solid #214a57; font-weight:900 }
+    .cta:hover{ transform:translateY(-2px); box-shadow:0 12px 38px rgba(34,211,238,.25); filter:brightness(1.02) }
 
-    .micro{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; color:#9fb3c9; margin:10px 0 0 }
-    .micro .chip{ display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border:1px solid #214a57; background:#0d2330; border-radius:999px; font-size:.82rem }
+    .micro{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; color:#9fb3c9; margin:12px 0 0 }
+    .micro .chip{
+      display:inline-flex; align-items:center; gap:6px; padding:6px 12px;
+      border:1px solid #214a57; background:#0d2330; border-radius:999px;
+      font-size:.82rem; line-height:1.15; white-space:nowrap;
+    }
+
+    .hero-grid{
+      width:100%;
+      max-width:1120px;
+      margin:18px auto 0;
+      display:grid;
+      gap:14px;
+      grid-template-columns:1fr;
+      align-items:stretch;
+    }
+    @media(min-width:980px){
+      .hero-grid{ grid-template-columns:1.2fr .8fr }
+    }
+
+    .whatyouget{
+      text-align:left;
+      border-radius:18px;
+      background:#0c1424;
+      border:1px solid #1e2a3e;
+      padding:16px;
+      box-shadow:var(--ring);
+      position:relative;
+      overflow:hidden;
+    }
+    .whatyouget::before{
+      content:"";
+      position:absolute; inset:0;
+      background:radial-gradient(900px 260px at 20% 0%, rgba(34,211,238,.10), transparent 60%);
+      pointer-events:none;
+    }
+    .whatyouget h2{
+      margin:0 0 10px;
+      font-size:1.08rem;
+      color:#e6fbff;
+      letter-spacing:.2px;
+      position:relative;
+    }
+    .bullets{
+      margin:0; padding:0; list-style:none;
+      display:grid; gap:10px;
+      position:relative;
+    }
+    .bullets li{
+      display:flex; gap:10px; align-items:flex-start;
+      color:#dbe7f3;
+      line-height:1.6;
+    }
+    .dot{
+      flex:0 0 auto;
+      width:24px; height:24px;
+      display:inline-flex; align-items:center; justify-content:center;
+      border-radius:999px;
+      background:rgba(34,211,238,.14);
+      border:1px solid rgba(34,211,238,.35);
+      color:#bff1ff;
+      font-weight:950;
+      margin-top:1px;
+    }
+    .bullets strong{ color:#e6fbff }
+
+    .mock{
+      border-radius:18px;
+      background:#0c1424;
+      border:1px solid #1e2a3e;
+      padding:16px;
+      box-shadow:var(--ring);
+      position:relative;
+      overflow:hidden;
+      text-align:left;
+    }
+    .mock::before{
+      content:"";
+      position:absolute; inset:0;
+      background:radial-gradient(900px 260px at 80% 0%, rgba(34,211,238,.10), transparent 60%);
+      pointer-events:none;
+    }
+    .mock h2{
+      margin:0 0 10px;
+      font-size:1.08rem;
+      color:#e6fbff;
+      position:relative;
+    }
+    .ui{
+      position:relative;
+      border-radius:14px;
+      border:1px solid #1e2a3e;
+      background:linear-gradient(180deg,#0b1226,#0c1424);
+      padding:12px;
+      overflow:hidden;
+    }
+    .ui-top{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px;
+      padding:6px 6px 10px;
+      border-bottom:1px solid rgba(148,163,184,.18);
+      margin-bottom:10px;
+    }
+    .ui-left{
+      display:flex; align-items:center; gap:8px;
+      color:#cfefff;
+      font-weight:800;
+      font-size:.92rem;
+      opacity:.95;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(34,211,238,.12);
+      border:1px solid rgba(34,211,238,.35);
+      color:#bff1ff;
+      font-weight:950;
+      white-space:nowrap;
+    }
+    .ui-body{
+      display:grid; gap:10px;
+      color:#dbe7f3;
+      font-size:.95rem;
+      line-height:1.55;
+    }
+    .row{
+      display:flex; align-items:flex-start; gap:10px;
+      padding:10px;
+      border-radius:12px;
+      border:1px solid rgba(148,163,184,.16);
+      background:rgba(11,18,38,.35);
+    }
+    .badge-mini{
+      flex:0 0 auto;
+      display:inline-flex; align-items:center; justify-content:center;
+      width:26px; height:26px;
+      border-radius:10px;
+      background:rgba(52,211,153,.10);
+      border:1px solid rgba(52,211,153,.28);
+      color:#bfffe8;
+      font-weight:950;
+      font-size:.9rem;
+      margin-top:1px;
+    }
+    .row b{ color:#e6fbff }
+    .row .mut{ color:#9fb3c9 }
+
+    .callout{
+      max-width:1120px;
+      margin:14px auto 0;
+      padding:14px 14px;
+      border:1px solid #214a57;
+      background:#0d2330;
+      border-radius:16px;
+      color:#cfefff;
+      box-shadow:var(--ring)
+    }
+    .callout strong{ color:#e6fbff }
+    .callout .mini{ color:#9fb3c9; margin-top:6px; font-size:.95rem }
 
     .section{ padding:44px 0; position:relative }
-    .section h2{ color:#b9e7f5; font-size:clamp(1.3rem, 2.6vw, 1.6rem); margin:0 0 14px; text-align:center }
+    .section h2{ color:#b9e7f5; font-size:clamp(1.3rem, 2.6vw, 1.65rem); margin:0 0 14px; text-align:center }
+
     .grid{ display:grid; gap:16px }
     .grid.three{ grid-template-columns:1fr }
     .grid.two{ grid-template-columns:1fr }
@@ -245,7 +430,7 @@ upgrade-insecure-requests">
     .card{
       position:relative; border-radius:16px; padding:18px; background:#0c1424; color:#dbe7f3; border:1px solid transparent;
       transition:transform .18s var(--e);
-      max-width:900px; margin-inline:auto
+      max-width:920px; margin-inline:auto
     }
     .card::before{
       content:""; position:absolute; inset:0; border-radius:inherit; padding:1px;
@@ -253,17 +438,9 @@ upgrade-insecure-requests">
       -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none
     }
-    .card:hover{ transform:translateY(-2px) perspective(600px) rotateX(1.2deg) rotateY(.8deg) }
-    .card h3{ color:#22d3ee; margin:.2em 0 .35em; font-size:1.08rem }
-    .card p{ margin:.15em 0 .45em; line-height:1.6 }
-
-    .callout{
-      max-width:980px; margin:16px auto 0; padding:14px 14px;
-      border:1px solid #214a57; background:#0d2330; border-radius:16px; color:#cfefff;
-      box-shadow:var(--ring)
-    }
-    .callout strong{ color:#e6fbff }
-    .callout .mini{ color:#9fb3c9; margin-top:6px; font-size:.95rem }
+    .card:hover{ transform:translateY(-2px) perspective(600px) rotateX(1.1deg) rotateY(.7deg) }
+    .card h3{ color:#22d3ee; margin:.15em 0 .35em; font-size:1.08rem }
+    .card p{ margin:.15em 0 .45em; line-height:1.65 }
 
     .steps{
       display:grid; gap:12px; max-width:980px; margin:0 auto;
@@ -281,14 +458,13 @@ upgrade-insecure-requests">
       display:inline-flex; align-items:center; justify-content:center;
       width:28px; height:28px; border-radius:999px;
       background:rgba(34,211,238,.14); border:1px solid rgba(34,211,238,.35);
-      color:#bff1ff; font-weight:900; margin-bottom:8px;
+      color:#bff1ff; font-weight:1000; margin-bottom:8px;
     }
     .step h3{ margin:.1em 0 .25em; color:#e6fbff; font-size:1.06rem }
-    .step p{ margin:.1em 0; color:#cfefff; line-height:1.6 }
+    .step p{ margin:.1em 0; color:#cfefff; line-height:1.65 }
 
     code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
 
-    /* Prevent proof hash overflow on small screens */
     #page-proof-hash{ display:inline-block; max-width:min(92vw, 980px); vertical-align:middle }
 
     .progress{
@@ -297,7 +473,6 @@ upgrade-insecure-requests">
       transform-origin:left; scale:0 1; z-index:900
     }
 
-    /* Footer */
     footer{
       border-top:1px solid var(--line);
       margin-top:44px;
@@ -326,11 +501,14 @@ upgrade-insecure-requests">
     }
 
     @media (max-width:899px){
-      .hero{ padding-top:92px; padding-bottom:24px }
+      .hero{ padding-top:92px; padding-bottom:20px }
       .section{ padding:28px 0 }
+      .micro{ gap:8px }
+      .hero-grid{ margin-top:16px }
     }
     @media (prefers-reduced-motion: reduce){
       *{ scroll-behavior:auto !important }
+      .card:hover, .cta:hover{ transform:none !important }
     }
   </style>
 
@@ -349,9 +527,7 @@ upgrade-insecure-requests">
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
       <a href="/use-cases.html">Use Cases</a>
       <a href="/pricing.html">Pricing</a>
-      <a href="/proofspec.html">Protocol</a>
-      <a href="/docs.html">API Docs</a>
-      <a href="/regulations.html">Regulations</a>
+      <a href="/verify.html">Create / Verify</a>
       <a href="/about.html">About</a>
       <a class="nav-cta" href="/use-cases.html#install" aria-label="Install the Freeze Button">Install the Button</a>
     </nav>
@@ -380,7 +556,7 @@ upgrade-insecure-requests">
 
       <div class="cta-wrap" role="group" aria-label="Primary actions">
         <a class="cta" href="/use-cases.html#install" aria-label="Install the Freeze Button">Install the Freeze Button</a>
-        <a class="cta secondary" href="/verify.html" aria-label="Create or verify a proof manually">Create / Verify (manual)</a>
+        <a class="cta secondary" href="/verify.html" aria-label="Create or verify a proof manually">Try it now (no install)</a>
         <a class="cta tertiary" href="#when" aria-label="See when to use Freeze">When to use it ↓</a>
       </div>
 
@@ -389,14 +565,58 @@ upgrade-insecure-requests">
         <span class="chip">📝 Contracts</span>
         <span class="chip">📎 Files sent to clients</span>
         <span class="chip">✉️ Sensitive emails</span>
-        <span class="chip">🛡 Private by design</span>
+        <span class="chip">🛡 No upload</span>
         <span class="chip">🔎 Verifiable later</span>
+      </div>
+
+      <div class="hero-grid" aria-label="Hero proof blocks">
+        <section class="whatyouget" aria-label="What you get">
+          <h2>What you get (in 10 seconds)</h2>
+          <ul class="bullets">
+            <li><span class="dot">1</span><div><strong>A proof file</strong> (<code>.tproof.json</code>) you keep with your records.</div></li>
+            <li><span class="dot">2</span><div><strong>A timestamped integrity seal</strong> that proves the exact content existed at time T.</div></li>
+            <li><span class="dot">3</span><div><strong>Independent verification</strong> later (you, your client, an auditor).</div></li>
+          </ul>
+          <p style="margin:12px 0 0; color:#9fb3c9; position:relative;">
+            TimeProofs proves <strong>existence at a time</strong> + <strong>integrity over time</strong>. It does not prove authorship or intent.
+          </p>
+        </section>
+
+        <section class="mock" aria-label="Freeze button preview">
+          <h2>How it feels in practice</h2>
+          <div class="ui" role="img" aria-label="Illustration: Click Freeze, proof saved, verify later">
+            <div class="ui-top">
+              <div class="ui-left">
+                <span aria-hidden="true">✉️</span>
+                <span>Before sending…</span>
+              </div>
+              <div class="pill" aria-label="Freeze button">❄️ Freeze</div>
+            </div>
+            <div class="ui-body">
+              <div class="row">
+                <div class="badge-mini" aria-hidden="true">✓</div>
+                <div><b>Proof saved</b> <span class="mut">(.tproof.json)</span><br/><span class="mut">Store it next to the file or in the case folder.</span></div>
+              </div>
+              <div class="row">
+                <div class="badge-mini" aria-hidden="true">✓</div>
+                <div><b>Send as usual</b><br/><span class="mut">Email / PDF / Doc — your workflow stays the same.</span></div>
+              </div>
+              <div class="row">
+                <div class="badge-mini" aria-hidden="true">✓</div>
+                <div><b>Verify later</b><br/><span class="mut">If disputed, verification shows if content changed.</span></div>
+              </div>
+            </div>
+          </div>
+          <p style="margin:12px 0 0; color:#9fb3c9; position:relative;">
+            Privacy-first: your original content stays on your device. The proof is small and shareable.
+          </p>
+        </section>
       </div>
 
       <div class="callout" role="note" aria-label="Simple flow">
         <strong>Simple flow:</strong> Prepare → Freeze → Send → Verify later
         <div class="mini">
-          TimeProofs does not replace your email or file tools. It adds a single action right before you send.
+          TimeProofs adds one action right before you send. Your email and file tools stay the same.
         </div>
       </div>
     </section>
@@ -420,7 +640,7 @@ upgrade-insecure-requests">
         </article>
         <article class="card">
           <h3>Before approving changes by email</h3>
-          <p>Freeze the email content or attached file before you confirm “OK” on scope, timeline, or deliverables.</p>
+          <p>Freeze the email content or attached file before you confirm scope, timeline, or deliverables.</p>
         </article>
         <article class="card">
           <h3>Before delivering “final” files</h3>
@@ -438,7 +658,7 @@ upgrade-insecure-requests">
       <h2 id="disputes-title">Common disputes it prevents</h2>
 
       <p style="text-align:center; color:#9fb3c9; max-width:920px; margin:0 auto 14px;">
-        These disputes are not rare. They are expensive because they cost time, trust, and money.
+        These disputes are expensive because they cost time, trust, and money.
       </p>
 
       <div class="grid two" aria-label="Dispute examples">
@@ -485,7 +705,7 @@ upgrade-insecure-requests">
         <div class="step">
           <div class="n" aria-hidden="true">2</div>
           <h3>Get a proof file</h3>
-          <p>TimeProofs generates a small proof file (<code>.tproof.json</code>) you can store with your records.</p>
+          <p>TimeProofs generates a small proof file (<code>.tproof.json</code>) you store with your records.</p>
         </div>
         <div class="step">
           <div class="n" aria-hidden="true">3</div>
@@ -494,8 +714,10 @@ upgrade-insecure-requests">
         </div>
       </div>
 
-      <p class="positioning" style="text-align:center; margin-top:12px">
-        For installation and workflow examples, see <a href="/use-cases.html#install">Use Cases →</a>
+      <p style="text-align:center; margin-top:12px; color:#9fb3c9;">
+        Install and workflows: <a href="/use-cases.html#install">Use Cases →</a>
+        <span aria-hidden="true"> · </span>
+        Technical reference: <a href="/proofspec.html">Protocol</a> and <a href="/docs.html">API Docs</a>
       </p>
     </section>
 
@@ -533,8 +755,8 @@ upgrade-insecure-requests">
       <h2 id="dev-title">For developers, auditors, and independent verifiers</h2>
 
       <p style="text-align:center; color:#9fb3c9; max-width:980px; margin:0 auto 14px;">
-        TimeProofs also defines an open proof format (<code>.tproof.json</code>) and verification rules designed to be implemented independently.
-        If you need technical details, public keys, and protocol rules, use the resources below.
+        TimeProofs defines an open proof format (<code>.tproof.json</code>) and verification rules designed to be implemented independently.
+        For technical details, public keys, and protocol rules, use the resources below.
       </p>
 
       <div class="grid three" aria-label="Developer resources">
@@ -556,7 +778,7 @@ upgrade-insecure-requests">
       </div>
     </section>
 
-    <!-- PROOF OF THIS WEBSITE BUILD (TRUST, STILL SECONDARY) -->
+    <!-- PROOF OF THIS WEBSITE BUILD -->
     <section class="section bg-solid" aria-labelledby="site-proof-title" id="site-proof">
       <p class="label" style="margin-bottom:8px">🔏 Integrity marker</p>
       <h2 id="site-proof-title">Proof of this website build</h2>
@@ -586,7 +808,7 @@ upgrade-insecure-requests">
       <div class="cta-wrap" role="group" aria-label="Final actions">
         <a class="cta" href="/use-cases.html#install" aria-label="Install the Freeze Button">Install the Freeze Button</a>
         <a class="cta secondary" href="/pricing.html" aria-label="See pricing">See Pricing</a>
-        <a class="cta tertiary" href="/verify.html" aria-label="Create or verify manually">Create / Verify</a>
+        <a class="cta tertiary" href="/verify.html" aria-label="Create or verify manually">Try now</a>
       </div>
       <p style="text-align:center; color:#9fb3c9; margin-top:10px">
         Need formal context? See <a href="/regulations.html">Regulations &amp; Legal framework →</a>
