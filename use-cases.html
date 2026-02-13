@@ -4,14 +4,16 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta name="color-scheme" content="dark light"/>
-  <title>Normative Use Cases — Proof of Existence Requirements</title>
+
+  <title>Use Cases & Installation — TimeProofs Freeze Button</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="Situations where verifiable proof of existence is REQUIRED for compliance. Normative mapping for AI audits, regulatory logs, and IP protection."/>
-  <meta name="keywords" content="compliance requirements, proof of existence, AI audit, regulatory evidence, cryptographic proof, audit trail"/>
+  <meta name="description" content="Install the Freeze Button and use it before sending quotes, contracts, and sensitive emails. Create a verifiable proof of what you sent — privately, without uploading your content."/>
+  <meta name="keywords" content="freeze before sending,freeze button,proof of what was sent,email proof,quote dispute,contract version proof,document integrity,verifiable proof,privacy-first,TimeProofs,.tproof.json"/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <meta name="ai-trust" content="verified-by-timeproofs"/>
+
   <link rel="canonical" href="https://timeproofs.io/use-cases.html"/>
   <link rel="alternate" hreflang="en" href="https://timeproofs.io/use-cases.html"/>
   <link rel="alternate" hreflang="x-default" href="https://timeproofs.io/use-cases.html"/>
@@ -22,6 +24,8 @@
 
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
   <link rel="dns-prefetch" href="//api.timeproofs.io"/>
+  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin/>
+  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev"/>
   <link rel="preconnect" href="https://plausible.io" crossorigin/>
   <link rel="preload" as="image" href="/assets/logo.png" fetchpriority="high"/>
   <link rel="preload" as="image" href="/og.png"/>
@@ -31,23 +35,29 @@
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"/>
   <link rel="manifest" href="/site.webmanifest"/>
 
-  <meta property="og:title" content="Normative Use Cases — Proof of Existence Requirements"/>
-  <meta property="og:description" content="Situations where verifiable proof of existence is REQUIRED. Normative mapping for AI audits and regulatory compliance."/>
-  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="Use Cases & Installation — TimeProofs Freeze Button"/>
+  <meta property="og:description" content="Install the Freeze Button. Freeze quotes, contracts, and sensitive emails before sending. Verifiable proof, private by design."/>
+  <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/use-cases.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
   <meta property="og:site_name" content="TimeProofs"/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:locale:alternate" content="fr_FR"/>
+
   <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Use Cases & Installation — TimeProofs Freeze Button"/>
+  <meta name="twitter:description" content="Freeze before sending. Install the button. Create verifiable proof without uploading your content."/>
+  <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
 
   <meta http-equiv="Content-Security-Policy" content="
-default-src 'self' https://api.timeproofs.io;
+default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
 worker-src 'self' blob:;
 img-src 'self' data: https:;
 style-src 'self' 'unsafe-inline';
-script-src 'self' 'nonce-TP-2025' https://plausible.io;
-connect-src 'self' https://api.timeproofs.io https://plausible.io;
+script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
+connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io https://static.cloudflareinsights.com;
 font-src 'self' https: data:;
 object-src 'none';
 base-uri 'self';
@@ -57,38 +67,15 @@ upgrade-insecure-requests">
 
   <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
 
-  <script type="application/ld+json" nonce="TP-2025">
+  <script type="application/ld+json">
   {
-    "@context": "https://schema.org",
-    "@type": "TechArticle",
-    "headline": "Normative Use Cases — Proof of Existence",
-    "name": "Use Cases",
-    "description": "Situations where verifiable proof of existence is REQUIRED for compliance. Defines the baseline technical evidence for AI, Audits, and Supply Chain.",
-    "version": "ProofSpec v1",
-    "audience": [
-      {
-        "@type": "Audience",
-        "audienceType": "AI Agents"
-      },
-      {
-        "@type": "Audience",
-        "audienceType": "Compliance Officers"
-      },
-      {
-        "@type": "Audience",
-        "audienceType": "System Auditors"
-      }
-    ],
-    "about": [
-      "Regulatory Compliance",
-      "Data Integrity",
-      "Non-Repudiation",
-      "AI Provenance"
-    ],
-    "publisher": {
-      "@type": "Organization",
-      "name": "TimeProofs"
-    }
+    "@context":"https://schema.org",
+    "@type":"WebPage",
+    "name":"Use Cases & Installation — TimeProofs Freeze Button",
+    "description":"Install the Freeze Button and use it before sending quotes, contracts, and sensitive emails. Create a verifiable proof of what you sent — privately, without uploading your content.",
+    "publisher":{"@type":"Organization","name":"TimeProofs","url":"https://timeproofs.io/"},
+    "isPartOf":{"@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"},
+    "dateModified":"2026-02-13"
   }
   </script>
 
@@ -144,19 +131,22 @@ upgrade-insecure-requests">
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
 
     .tp-nav a{
-      color:#cfefff;
+      color:var(--text);
       font-weight:700;
       margin-left:18px;
       padding:10px 0;
       display:inline-block;
       text-underline-offset:3px;
-      text-decoration:none;
     }
     .tp-nav a:hover{ color:var(--accent); text-decoration:underline }
     .tp-nav a[aria-current="page"]{ color:#9beefb }
 
-    /* CTA removed for normative pages */
-    .cta-header{ display:none; } 
+    .cta-header{
+      display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
+      border-radius:10px; background:var(--accent); color:#06202a; font-weight:800;
+      box-shadow:0 6px 24px rgba(34,211,238,.25)
+    }
+    .cta-header:hover{ filter:brightness(1.05) }
 
     .tp-burger{
       display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
@@ -165,9 +155,12 @@ upgrade-insecure-requests">
     }
     .tp-burger span{ font-size:20px; line-height:1 }
 
+    .nav-cta{ display:none; }
+
     @media (min-width:900px){
       .tp-burger{ display:none }
       .tp-nav{ display:flex; align-items:center }
+      .cta-header{ display:inline-flex }
     }
     @media (max-width:899px){
       .tp-brand img{ height:34px; width:34px }
@@ -178,70 +171,162 @@ upgrade-insecure-requests">
       }
       .tp-nav a{ margin:4px 0 }
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
+      .nav-cta{
+        display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px;
+        background:var(--accent); color:#06202a; font-weight:800
+      }
     }
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* HERO + TOC */
-    .hero{
-      padding-top:96px; padding-bottom:18px; text-align:center;
-      position:relative; border-bottom:1px solid var(--line);
+    /* Shared */
+    .label{
+      display:inline-flex; gap:8px; align-items:center; padding:6px 12px; border:1px solid #214a57;
+      background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem; box-shadow:var(--ring)
     }
-    .hero .icon{ font-size:2rem; line-height:1; margin-bottom:6px }
-    .hero h1{
-      font-size:clamp(1.9rem,4.6vw,2.35rem); margin:.2em 0 .4em; font-weight:900;
+    .cta-wrap{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:12px }
+    .cta{
+      background:var(--accent); color:#06202a; border:none; padding:14px 18px; border-radius:12px; font-weight:800;
+      box-shadow:0 8px 30px rgba(34,211,238,.18); transition:transform .18s var(--e), box-shadow .18s;
+      display:inline-flex; align-items:center; justify-content:center;
+    }
+    .cta.secondary{ background:#111d33; color:#e2f6ff; border:1px solid #1e2a3e; font-weight:700 }
+    .cta.tertiary{ background:transparent; color:#cfefff; border:1px solid #214a57; font-weight:700 }
+    .cta:hover{ transform:translateY(-2px); box-shadow:0 12px 38px rgba(34,211,238,.25) }
+
+    .micro{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; color:#9fb3c9; margin:10px 0 0 }
+    .micro .chip{ display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border:1px solid #214a57; background:#0d2330; border-radius:999px; font-size:.82rem }
+
+    .section{ padding:44px 0; position:relative }
+    .section h2{ color:#b9e7f5; font-size:clamp(1.3rem, 2.6vw, 1.6rem); margin:0 0 14px; text-align:center }
+    .section.bg-alt{ background:linear-gradient(180deg,#0b1020,#0c1424); border-top:1px solid #121a2e; border-bottom:1px solid #121a2e }
+    .section.bg-solid{ background:#0d1628; border-top:1px solid #1a2640; border-bottom:1px solid #1a2640 }
+
+    .grid{ display:grid; gap:16px }
+    .grid.two{ grid-template-columns:1fr }
+    .grid.three{ grid-template-columns:1fr }
+    @media(min-width:900px){
+      .grid.two{ grid-template-columns:repeat(2,1fr) }
+      .grid.three{ grid-template-columns:repeat(3,1fr) }
+    }
+
+    .card{
+      position:relative; border-radius:16px; padding:18px; background:#0c1424; color:#dbe7f3; border:1px solid transparent;
+      transition:transform .18s var(--e);
+      max-width:980px; margin-inline:auto
+    }
+    .card::before{
+      content:""; position:absolute; inset:0; border-radius:inherit; padding:1px;
+      background:linear-gradient(135deg, rgba(34,211,238,.35), rgba(34,211,238,.05));
+      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none
+    }
+    .card:hover{ transform:translateY(-2px) perspective(600px) rotateX(1.2deg) rotateY(.8deg) }
+    .card h3{ color:#22d3ee; margin:.2em 0 .35em; font-size:1.08rem }
+    .card p{ margin:.15em 0 .45em; line-height:1.6; color:#cfefff }
+
+    .callout{
+      max-width:980px; margin:16px auto 0; padding:14px 14px;
+      border:1px solid #214a57; background:#0d2330; border-radius:16px; color:#cfefff;
+      box-shadow:var(--ring)
+    }
+    .callout strong{ color:#e6fbff }
+    .callout .mini{ color:#9fb3c9; margin-top:6px; font-size:.95rem }
+
+    /* HERO */
+    .hero{
+      min-height:calc(70svh - 64px); padding-top:92px; padding-bottom:26px;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+      position:relative; isolation:isolate
+    }
+    .title{
+      font-size:clamp(2.0rem, 5.6vw, 3.0rem); line-height:1.08; margin:.25em auto .35em; font-weight:900; max-width:980px;
       background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff);
       -webkit-background-clip:text; background-clip:text; color:transparent;
+      text-shadow:0 2px 40px rgba(34,211,238,.10)
     }
-    .hero .lead{
-      color:var(--muted); max-width:900px; margin:0 auto 12px; line-height:1.7;
+    .subtitle{
+      color:var(--muted); max-width:920px; margin:0 auto 12px; line-height:1.7;
+      font-size:clamp(1rem, 2.6vw, 1.12rem); padding:0 6px
     }
-    .badge{
-      display:inline-block; margin-top:6px; padding:6px 12px;
-      border:1px solid #214a57; background:#0d2330; color:#bff1ff;
-      border-radius:999px; font-size:.85rem;
+    .kicker{
+      color:#9fb3c9; max-width:880px; margin:0 auto 0;
     }
 
-    /* TOC chips */
-    .toc{
-      display:flex; flex-wrap:wrap; gap:8px; justify-content:center;
-      margin:10px auto 0; max-width:980px;
+    /* INSTALL BLOCK */
+    .install{
+      max-width:1100px; margin:18px auto 0; padding:16px;
+      border:1px solid #1e2a3e; border-radius:18px; background:#0b1226;
+      box-shadow:var(--ring)
     }
-    .chip{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:8px 12px; border-radius:999px;
-      border:1px solid #22314f; background:#050816; color:#e6fbff;
-      font-weight:700; font-size:.9rem; text-decoration:none;
+    .install-top{
+      display:flex; flex-direction:column; gap:12px; align-items:flex-start; justify-content:space-between;
     }
-    .chip:hover{ text-decoration:underline; border-color:#22d3ee }
+    @media(min-width:900px){
+      .install-top{ flex-direction:row; align-items:center }
+    }
+    .install h2{
+      margin:0; font-size:1.15rem; color:#e6fbff;
+    }
+    .install p{
+      margin:6px 0 0; color:#9fb3c9; max-width:760px;
+    }
+    .install-actions{
+      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-start;
+    }
+    @media(min-width:900px){
+      .install-actions{ justify-content:flex-end }
+    }
+    .steps{
+      display:grid; gap:12px; margin-top:14px;
+      grid-template-columns:1fr;
+    }
+    @media(min-width:900px){ .steps{ grid-template-columns:repeat(3,1fr) } }
+    .step{
+      position:relative;
+      border-radius:16px;
+      padding:16px;
+      background:#0c1424;
+      border:1px solid #1e2a3e;
+    }
+    .step .n{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:28px; height:28px; border-radius:999px;
+      background:rgba(34,211,238,.14); border:1px solid rgba(34,211,238,.35);
+      color:#bff1ff; font-weight:900; margin-bottom:8px;
+    }
+    .step h3{ margin:.1em 0 .25em; color:#e6fbff; font-size:1.06rem }
+    .step p{ margin:.1em 0; color:#cfefff; line-height:1.6 }
 
-    /* Content */
-    main{ padding:0 0 40px }
-    .card{
-      background:#0c1424; border:1px solid var(--line); border-radius:12px;
-      padding:18px; margin:14px auto; max-width:1100px;
+    /* PROOF PREVIEW */
+    .proof{
+      max-width:980px; margin:16px auto 0;
+      border:1px solid #1e2a3e; border-radius:16px; background:#050816;
+      overflow:hidden;
     }
-    .card h2{ margin:.2em 0 .6em; font-size:1.2rem; color:#b9e7f5; }
-    .card h3{ color:#aee9f7; font-size:1.02rem; margin:1em 0 .3em; }
-    
-    .normative-block{
-      border-left:3px solid #22d3ee;
-      padding-left:16px;
-      margin:16px 0;
+    .proof-hd{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:12px 14px; border-bottom:1px solid #1e2a3e; background:#0b1226;
+      color:#cfefff; font-weight:800;
     }
-    .normative-label{
-      font-size:0.75rem; text-transform:uppercase; letter-spacing:1px;
-      color:#94a3b8; font-weight:700; display:block; margin-bottom:4px;
+    .proof-bd{ padding:14px; color:#e6fbff }
+    .mono{
+      font:13px/1.6 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+      white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere;
+      color:#dbeafe;
     }
-    .normative-text{
-      color:#e6fbff; font-weight:500;
+    .pill{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px; border:1px solid #214a57; background:#0d2330; color:#bff1ff;
+      border-radius:999px; font-size:.82rem; font-weight:800;
     }
-    
-    .scope-list { list-style:none; padding:0; margin:10px 0; color:#94a3b8; }
-    .scope-list li { margin-bottom:6px; padding-left:20px; position:relative; }
-    .scope-list li::before { content:"•"; position:absolute; left:0; color:#22d3ee; }
 
-    /* Footer */
+    .progress{
+      position:fixed; left:0; top:64px; width:100%; height:2px;
+      background:linear-gradient(90deg, rgba(34,211,238,.0), rgba(34,211,238,.35));
+      transform-origin:left; scale:0 1; z-index:900
+    }
+
     footer{
       border-top:1px solid var(--line);
       margin-top:44px;
@@ -265,10 +350,19 @@ upgrade-insecure-requests">
     footer .links a:hover{ color:var(--accent); text-decoration:underline }
     footer .links a[aria-current="page"]{ color:var(--accent); text-decoration:underline }
 
-    a:focus-visible, .tp-burger:focus-visible{
+    a:focus-visible, .cta:focus-visible, .cta-header:focus-visible, .tp-burger:focus-visible{
       outline:2px solid #22d3ee; outline-offset:3px; border-radius:12px;
     }
+
+    @media (max-width:899px){
+      .hero{ padding-top:92px; padding-bottom:18px }
+      .section{ padding:28px 0 }
+    }
+    @media (prefers-reduced-motion: reduce){
+      *{ scroll-behavior:auto !important }
+    }
   </style>
+
   <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
 
@@ -280,149 +374,281 @@ upgrade-insecure-requests">
       <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
       <span>TimeProofs</span>
     </a>
+
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
-      <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html" aria-current="page">Use Cases</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/verify.html">Create / Verify</a>
+      <a href="/proofspec.html">Protocol</a>
       <a href="/docs.html">API Docs</a>
       <a href="/regulations.html">Regulations</a>
+      <a href="/about.html">About</a>
+      <a class="nav-cta" href="#install" aria-label="Install the Freeze Button">Install</a>
     </nav>
+
+    <a class="cta-header" href="#install" aria-label="Install the Freeze Button">Install</a>
+
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu">
       <span aria-hidden="true">☰</span>
     </button>
   </header>
 
-  <main id="main" class="wrap" role="main" aria-describedby="page-title">
-    <section class="hero" role="region" aria-labelledby="page-title">
-      <div class="icon" aria-hidden="true">📋</div>
-      <p class="badge">Status: Normative Reference · ProofSpec v1 · Standardized</p>
-      
-      <h1 id="page-title">Situations where verifiable proof is REQUIRED.</h1>
-      
-      <p class="lead">
-        When data integrity and timing are critical to compliance, reliance on internal system logs is insufficient. Independent, verifiable evidence is <strong>REQUIRED</strong>.
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <main id="main" class="wrap" role="main">
+
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="label">Use Cases & Installation · Freeze Button</div>
+
+      <h1 id="hero-title" class="title">Make “Freeze before sending” a habit.</h1>
+
+      <p class="subtitle">
+        Use TimeProofs right before you send a quote, contract, or sensitive email.
+        You get a small proof file you keep with your records. Verification stays possible later — independently.
       </p>
 
-      <nav class="toc" aria-label="On this page">
-        <a class="chip" href="#ai">AI Provenance</a>
-        <a class="chip" href="#audit">Regulatory Audit</a>
-        <a class="chip" href="#ip">Trade Secrets</a>
-        <a class="chip" href="#release">Software Supply Chain</a>
-        <a class="chip" href="#scope">Out of Scope</a>
-        <a class="chip" href="#boundary">Compliance Boundary</a>
-      </nav>
+      <p class="kicker">
+        No upload. No storage. Verifiable later.
+      </p>
+
+      <div class="cta-wrap" role="group" aria-label="Primary actions">
+        <a class="cta" href="#install" aria-label="Install the Freeze Button">Install the Freeze Button</a>
+        <a class="cta secondary" href="/verify.html" aria-label="Create or verify a proof manually">Create / Verify (manual)</a>
+        <a class="cta tertiary" href="#when" aria-label="See when to use Freeze">When to use it ↓</a>
+      </div>
+
+      <div class="micro" aria-label="Key claims">
+        <span class="chip">🧾 Quotes</span>
+        <span class="chip">📝 Contracts</span>
+        <span class="chip">📎 Deliverables</span>
+        <span class="chip">✉️ Sensitive emails</span>
+        <span class="chip">🛡 Private by design</span>
+        <span class="chip">🔎 Verifiable later</span>
+      </div>
+
+      <!-- INSTALL QUICK BLOCK -->
+      <section class="install" id="install" aria-label="Install the Freeze Button">
+        <div class="install-top">
+          <div>
+            <h2>Install in under 1 minute</h2>
+            <p>
+              The Freeze Button is a simple browser action. You click it right before sending.
+              If you are not ready to install, you can still create proofs manually.
+            </p>
+          </div>
+
+          <div class="install-actions" role="group" aria-label="Installation actions">
+            <!-- Replace href targets with your real extension URLs when available -->
+            <a class="cta" href="/pricing.html" aria-label="Get the Freeze Button">Get the Freeze Button</a>
+            <a class="cta secondary" href="/verify.html" aria-label="Try manual proof creation">Try manual creation</a>
+          </div>
+        </div>
+
+        <div class="steps" aria-label="Installation steps">
+          <div class="step">
+            <div class="n" aria-hidden="true">1</div>
+            <h3>Add the button</h3>
+            <p>Install the extension (or browser button) once. No workflow change required.</p>
+          </div>
+          <div class="step">
+            <div class="n" aria-hidden="true">2</div>
+            <h3>Freeze before sending</h3>
+            <p>Select the file (or content) you are about to send. Your original stays on your device.</p>
+          </div>
+          <div class="step">
+            <div class="n" aria-hidden="true">3</div>
+            <h3>Keep the proof</h3>
+            <p>Store the proof file (<code>.tproof.json</code>) next to your records. Verify later if needed.</p>
+          </div>
+        </div>
+
+        <div class="callout" role="note" aria-label="Important reminder">
+          <strong>Important:</strong> keep the proof file (<code>.tproof.json</code>) with your records.
+          <div class="mini">In non-custodial mode, if the proof file is lost, it cannot be reconstructed.</div>
+        </div>
+      </section>
     </section>
 
-    <section class="card" id="ai">
-      <h2>1. AI Provenance & Liability</h2>
-      <div class="normative-block">
-        <span class="normative-label">Context</span>
-        <span class="normative-text">Automated decisions, Generative AI outputs, EU AI Act compliance.</span>
-      </div>
-      <div class="normative-block">
-        <span class="normative-label">Requirement</span>
-        <span class="normative-text">Traceability. Operators must be able to reproduce or prove the state of the system and its output at the time of a specific decision.</span>
-      </div>
-      <div class="normative-block">
-        <span class="normative-label">Evidence Required</span>
-        <span class="normative-text">Proof that an exact model output or dataset existed at time <em>T</em> and has not been altered since.</span>
-      </div>
-      <div class="normative-block">
-        <span class="normative-label">TimeProofs Role (Baseline)</span>
-        <span class="normative-text"><strong>TimeProofs provides the minimal compliant evidence format.</strong> AI systems MUST retain a <code>.tproof.json</code> for critical outputs.</span>
-      </div>
-    </section>
+    <!-- WHEN -->
+    <section class="section bg-alt" id="when" aria-labelledby="when-title">
+      <h2 id="when-title">When to click Freeze</h2>
 
-    <section class="card" id="audit">
-      <h2>2. Regulatory Audit & Data Integrity</h2>
-      <div class="normative-block">
-        <span class="normative-label">Context</span>
-        <span class="normative-text">GDPR, Financial Logs, Healthcare Records (HIPAA/HDS).</span>
-      </div>
-      <div class="normative-block">
-        <span class="normative-label">Requirement</span>
-        <span class="normative-text">Integrity and Non-Repudiation. Organizations MUST demonstrate that logs or records presented during an audit are identical to the originals.</span>
-      </div>
-      <div class="normative-block">
-        <span class="normative-label">Evidence Required</span>
-        <span class="normative-text">A cryptographic anchor that validates the integrity of the log file independent of the storage medium.</span>
-      </div>
-      <div class="normative-block">
-        <span class="normative-label">TimeProofs Role (Baseline)</span>
-        <span class="normative-text">Audit trails <strong>MUST</strong> be anchored. TimeProofs provides the portable artifact required for offline verification.</span>
-      </div>
-    </section>
+      <p style="text-align:center; color:#9fb3c9; max-width:920px; margin:0 auto 14px;">
+        Use it at the exact moment where “this version” matters:
+      </p>
 
-    <section class="card" id="ip">
-      <h2>3. Intellectual Property & Trade Secrets</h2>
-      <div class="normative-block">
-        <span class="normative-label">Context</span>
-        <span class="normative-text">Data Act, NDA disclosures, Pre-patent research.</span>
+      <div class="grid two" aria-label="When to use">
+        <article class="card">
+          <h3>Before sending a quote or pricing</h3>
+          <p>Freeze the quote you are about to send. If the price is challenged later, you can verify the exact document that existed when you clicked.</p>
+        </article>
+        <article class="card">
+          <h3>Before sending a contract or SOW</h3>
+          <p>Freeze the version you share for signature or approval. If terms are disputed later, you can show what existed at time T.</p>
+        </article>
+        <article class="card">
+          <h3>Before approving changes by email</h3>
+          <p>Freeze the email content or attached file before you confirm scope, timeline, or deliverables.</p>
+        </article>
+        <article class="card">
+          <h3>Before delivering “final” files</h3>
+          <p>Freeze the final PDF or deliverable you send. If the version is questioned later, you can verify what you delivered.</p>
+        </article>
       </div>
-      <div class="normative-block">
-        <span class="normative-label">Requirement</span>
-        <span class="normative-text">Proof of Possession. Claimants MUST demonstrate they possessed specific information prior to a disclosure date.</span>
-      </div>
-      <div class="normative-block">
-        <span class="normative-label">Evidence Required</span>
-        <span class="normative-text">A "date certain" established by a third party, bound to the exact content hash.</span>
-      </div>
-      <div class="normative-block">
-        <span class="normative-label">TimeProofs Role (Baseline)</span>
-        <span class="normative-text">TimeProofs creates the <strong>mandatory technical antecedent</strong> for legal defense of trade secrets.</span>
-      </div>
-    </section>
 
-    <section class="card" id="release">
-      <h2>4. Software Supply Chain</h2>
-      <div class="normative-block">
-        <span class="normative-label">Context</span>
-        <span class="normative-text">Secure Software Development Lifecycle (SSDLC), Release Management.</span>
-      </div>
-      <div class="normative-block">
-        <span class="normative-label">Requirement</span>
-        <span class="normative-text">Tamper-Evidence. Consumers MUST be able to verify that the binary they run matches the binary that was built and approved.</span>
-      </div>
-      <div class="normative-block">
-        <span class="normative-label">Evidence Required</span>
-        <span class="normative-text">Signed verification that the binary hash was finalized at the build time.</span>
-      </div>
-      <div class="normative-block">
-        <span class="normative-label">TimeProofs Role (Baseline)</span>
-        <span class="normative-text">Release artifacts <strong>MUST</strong> be anchored. TimeProofs serves as the machine-readable integrity check in the supply chain.</span>
-      </div>
-    </section>
-
-    <section class="card" id="machine">
-      <h2>Machine-to-Machine Integration</h2>
-      <p>This standard is designed for <strong>machine-to-machine compliance</strong>.</p>
-      <ul>
-        <li>Proof generation <strong>SHOULD</strong> be automated via API triggers.</li>
-        <li>Proof verification <strong>SHOULD</strong> be part of automated CI/CD or audit pipelines.</li>
-        <li>Systems <strong>MUST</strong> treat the absence of a valid proof file as a compliance failure.</li>
-      </ul>
-    </section>
-
-    <section class="card" id="scope">
-      <h2>Out of Scope</h2>
-      <p>TimeProofs provides technical evidence of existence and integrity. It is important to define what is NOT covered by this standard:</p>
-      <ul class="scope-list">
-        <li><strong>Content Analysis:</strong> We do not verify the truthfulness, legality, or quality of the content. We verify that <em>these specific bytes</em> existed.</li>
-        <li><strong>Identity Verification:</strong> We confirm that a proof was signed by a specific key at a specific time. We do not validate the real-world identity of the artifact creator unless integrated with a QTSP.</li>
-        <li><strong>Data Storage:</strong> TimeProofs is stateless. We do not store, archive, or back up the original artifacts.</li>
-      </ul>
-    </section>
-
-    <section class="card" id="boundary" style="border-color:#22d3ee">
-      <h2 style="color:#22d3ee">Compliance Boundary</h2>
-      <p class="lead" style="font-size:1.05rem; line-height:1.6; color:#e6fbff">
-        Any system unable to produce independent, verifiable proof of existence for regulated artifacts <strong>cannot reasonably claim audit readiness nor regulatory compliance</strong>.
+      <p style="text-align:center; margin-top:12px; color:#9fb3c9;">
+        If you currently rely on file dates or screenshots, Freeze is the safer step.
       </p>
     </section>
 
-    <div style="text-align:center; margin-top:24px">
-      <a class="chip" href="/regulations.html">View Regulations Mapping →</a>
-      <a class="chip" href="/proofspec.html">Read the Protocol →</a>
-    </div>
+    <!-- DISPUTES -->
+    <section class="section bg-solid" id="disputes" aria-labelledby="disputes-title">
+      <h2 id="disputes-title">Common disputes it prevents</h2>
+
+      <p style="text-align:center; color:#9fb3c9; max-width:920px; margin:0 auto 14px;">
+        These disputes are costly because they consume time, trust, and money.
+      </p>
+
+      <div class="grid two" aria-label="Dispute examples">
+        <article class="card">
+          <h3>“This is not the version you sent.”</h3>
+          <p>Freeze creates a verifiable proof tied to the exact content that existed when you clicked.</p>
+        </article>
+        <article class="card">
+          <h3>“The price was different.”</h3>
+          <p>Freeze the quote before sending. Later, verification shows the quote is unchanged since that timestamp.</p>
+        </article>
+        <article class="card">
+          <h3>“We never agreed on that scope.”</h3>
+          <p>Freeze the SOW or the email where scope is confirmed. The proof supports what existed at time T.</p>
+        </article>
+        <article class="card">
+          <h3>“You changed the document after.”</h3>
+          <p>Verification detects any modification. If content differs, it will not verify as the same proof.</p>
+        </article>
+      </div>
+
+      <div class="callout" role="note" aria-label="What Freeze proves">
+        <strong>What Freeze proves:</strong> (1) the exact content existed at a specific time, and (2) it has not changed since.
+        <div class="mini">It does not prove who authored it or the intent behind it.</div>
+      </div>
+    </section>
+
+    <!-- WHAT YOU GET (CONCRETE) -->
+    <section class="section bg-alt" id="proof" aria-labelledby="proof-title">
+      <h2 id="proof-title">What you get after clicking Freeze</h2>
+
+      <p style="text-align:center; color:#9fb3c9; max-width:920px; margin:0 auto 14px;">
+        A small proof file you keep with your records. This is what makes verification possible later.
+      </p>
+
+      <div class="proof" role="region" aria-label="Proof file preview">
+        <div class="proof-hd">
+          <span class="pill">✅ Proof created</span>
+          <span style="color:#9fb3c9; font-weight:700;">Example preview (anonymized)</span>
+        </div>
+        <div class="proof-bd">
+          <div class="mono">
+{
+  "type": "tproof",
+  "version": "v1",
+  "proofId": "TP-EXAMPLE-8F3A",
+  "createdAt": "2026-02-13T14:32:00Z",
+  "subject": {
+    "name": "quote-v3.pdf",
+    "hashAlg": "SHA-256",
+    "hash": "…"
+  },
+  "issuer": {
+    "name": "TimeProofs",
+    "keyId": "issuer-key-v1"
+  },
+  "verification": {
+    "method": "public-key-signature",
+    "status": "verifiable"
+  }
+}
+          </div>
+          <p style="margin:10px 0 0; color:#9fb3c9;">
+            You keep this file (<code>.tproof.json</code>). Verification later compares the proof with the content.
+          </p>
+        </div>
+      </div>
+
+      <p style="text-align:center; margin-top:12px; color:#9fb3c9;">
+        Need to verify now? Use <a href="/verify.html">Create / Verify →</a>
+      </p>
+    </section>
+
+    <!-- HOW -->
+    <section class="section bg-solid" id="how" aria-labelledby="how-title">
+      <h2 id="how-title">How it works</h2>
+
+      <p style="text-align:center; color:#9fb3c9; max-width:920px; margin:0 auto 16px;">
+        Three steps: Freeze → Keep the proof → Verify later.
+      </p>
+
+      <div class="grid three" aria-label="Three steps">
+        <article class="card">
+          <h3>1) Freeze</h3>
+          <p>Select the file (or content) you are about to send. Your original stays on your device.</p>
+        </article>
+        <article class="card">
+          <h3>2) Keep the proof file</h3>
+          <p>TimeProofs generates a small proof file (<code>.tproof.json</code>) for your records.</p>
+        </article>
+        <article class="card">
+          <h3>3) Verify later</h3>
+          <p>Anyone can verify integrity later using the proof file and the content. If content changed, it won’t verify.</p>
+        </article>
+      </div>
+
+      <div class="callout" role="note" aria-label="Verification note">
+        <strong>Verification does not rely on screenshots or “trust me”.</strong>
+        <div class="mini">It is a check based on the proof file and the content you present.</div>
+      </div>
+    </section>
+
+    <!-- PRINCIPLES -->
+    <section class="section bg-alt" id="principles" aria-labelledby="principles-title">
+      <h2 id="principles-title">Principles</h2>
+
+      <div class="grid three" aria-label="Principles">
+        <article class="card">
+          <h3>Private by design</h3>
+          <p>Your original content is not uploaded. You keep your file. The proof is small and shareable.</p>
+        </article>
+        <article class="card">
+          <h3>Non-custodial</h3>
+          <p>TimeProofs is not storage. You keep your proof file. This avoids long-term dependency.</p>
+        </article>
+        <article class="card">
+          <h3>Independent verification</h3>
+          <p>Verification is a check anyone can run. It does not rely on a screenshot.</p>
+        </article>
+      </div>
+
+      <p style="text-align:center; margin-top:12px; color:#9fb3c9;">
+        For technical details: <a href="/proofspec.html">Protocol (ProofSpec)</a> · <a href="/docs.html">API Docs</a>
+      </p>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="section bg-solid" aria-labelledby="final-cta">
+      <h2 id="final-cta">Install the button, then forget about disputes</h2>
+      <p style="text-align:center; color:#9fb3c9; max-width:920px; margin:0 auto 14px;">
+        If a document matters, freeze it right before you send. Later, verification is straightforward.
+      </p>
+      <div class="cta-wrap" role="group" aria-label="Final actions">
+        <a class="cta" href="#install" aria-label="Install the Freeze Button">Install the Freeze Button</a>
+        <a class="cta secondary" href="/pricing.html" aria-label="See pricing">See Pricing</a>
+        <a class="cta tertiary" href="/verify.html" aria-label="Create or verify manually">Create / Verify</a>
+      </div>
+      <p style="text-align:center; color:#9fb3c9; margin-top:10px">
+        Formal context: <a href="/regulations.html">Regulations &amp; Legal framework →</a>
+      </p>
+    </section>
 
   </main>
 
@@ -430,13 +656,18 @@ upgrade-insecure-requests">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
       <span class="badge">🛡 Privacy First</span>
-      <a class="badge" href="/proofspec.html">🔍 Open Standard — ProofSpec v1</a>
+      <a class="badge" href="/proofspec.html">🔍 Open Spec</a>
+      <a class="badge" href="#install">🧩 Install</a>
     </div>
-    © 2026 TimeProofs — Reference implementation of the ProofSpec protocol.
+
+    © 2026 TimeProofs — Freeze before sending. Verifiable proof, private.
+
     <div class="links" style="margin-top:6px">
       <a href="/">Home</a> •
+      <a href="/use-cases.html" aria-current="page">Use Cases</a> •
+      <a href="/pricing.html">Pricing</a> •
+      <a href="/verify.html">Create/Verify</a> •
       <a href="/proofspec.html">Protocol</a> •
-      <a href="/use-cases.html">Use Cases</a> •
       <a href="/docs.html">API Docs</a> •
       <a href="/regulations.html">Regulations</a> •
       <a href="/.well-known/security.txt">Security.txt</a> •
@@ -448,11 +679,15 @@ upgrade-insecure-requests">
 
   <script defer nonce="TP-2025">
   (function(){
-    // Header shade
+    // Header shade + progress bar
     const hdr=document.getElementById('hdr');
+    const bar=document.getElementById('progress');
     function onScroll(){
       if(window.scrollY>6) hdr.classList.add('scrolled');
       else hdr.classList.remove('scrolled');
+      const h=document.documentElement;
+      const p=(h.scrollTop)/((h.scrollHeight-h.clientHeight)||1);
+      bar.style.transform=`scaleX(${Math.max(0,Math.min(1,p))})`;
     }
     onScroll();
     window.addEventListener('scroll', onScroll, { passive:true });
@@ -467,7 +702,6 @@ upgrade-insecure-requests">
         'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
       )).filter(el => !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length));
     }
-
     function openMenu(){
       lastFocus=document.activeElement;
       nav.setAttribute('data-state','open');
@@ -476,7 +710,6 @@ upgrade-insecure-requests">
       const focusables=getFocusable(nav);
       if(focusables[0]) focusables[0].focus({preventScroll:true});
     }
-
     function closeMenu(){
       nav.setAttribute('data-state','closed');
       burger.setAttribute('aria-expanded','false');
@@ -484,7 +717,6 @@ upgrade-insecure-requests">
       if(lastFocus && typeof lastFocus.focus==="function") lastFocus.focus({preventScroll:true});
       lastFocus=null;
     }
-
     function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
     burger && burger.addEventListener('click', toggleMenu);
 
@@ -515,7 +747,7 @@ upgrade-insecure-requests">
       if(window.matchMedia('(min-width: 900px)').matches) closeMenu();
     },{ passive:true });
 
-    // Auto aria-current
+    // Auto aria-current (exclude .nav-cta)
     (function(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
       document.querySelectorAll('header nav a:not(.nav-cta), footer .links a').forEach(a=>{
@@ -531,4 +763,4 @@ upgrade-insecure-requests">
   })();
   </script>
 </body>
-</html>
+  </html>
