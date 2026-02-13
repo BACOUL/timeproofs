@@ -4,14 +4,16 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta name="color-scheme" content="dark light"/>
-  <title>TimeProofs — Prove When Data Existed. Privately.</title>
+
+  <title>TimeProofs — Freeze Before Sending. Verifiable Proof, Private.</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="Create a verifiable proof file that shows when something existed and that it hasn’t changed — without uploading your content. Privacy-first, open standard."/>
-  <meta name="keywords" content="proof of existence,timestamp API,content authenticity,AI provenance,hashing,SHA-256,TimeProofs,verification,privacy-first,edge-native,.tproof.json,stateless API"/>
+  <meta name="description" content="Freeze before sending. Create a verifiable proof of what you sent — privately, in one click, without uploading your content. Verify later, independently."/>
+  <meta name="keywords" content="freeze before sending,proof of what was sent,email proof,contract version proof,quote dispute,document integrity,timestamp proof,content authenticity,verification,privacy-first,TimeProofs,proof file,.tproof.json"/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <meta name="ai-trust" content="verified-by-timeproofs"/>
+
   <link rel="canonical" href="https://timeproofs.io/"/>
   <link rel="alternate" hreflang="en" href="https://timeproofs.io/"/>
   <link rel="alternate" hreflang="x-default" href="https://timeproofs.io/"/>
@@ -33,20 +35,21 @@
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"/>
   <link rel="manifest" href="/site.webmanifest"/>
 
-  <meta property="og:title" content="TimeProofs — Prove When Data Existed. Privately."/>
-  <meta property="og:description" content="Create a verifiable proof file that shows when something existed and that it hasn’t changed — without uploading your content. Open standard, privacy-first."/>
+  <meta property="og:title" content="TimeProofs — Freeze Before Sending. Verifiable Proof, Private."/>
+  <meta property="og:description" content="Freeze before sending. Create a verifiable proof of what you sent — privately, in one click, without uploading your content. Verify later, independently."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
-  <meta property="og:image:alt" content="TimeProofs — Open protocol for proof of existence"/>
+  <meta property="og:image:alt" content="TimeProofs — Freeze before sending"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
   <meta property="og:site_name" content="TimeProofs"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:locale:alternate" content="fr_FR"/>
+
   <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="TimeProofs — Prove When Data Existed. Privately."/>
-  <meta name="twitter:description" content="Create a verifiable proof file. Verify later without exposing your content. No blockchain."/>
+  <meta name="twitter:title" content="TimeProofs — Freeze Before Sending. Verifiable Proof, Private."/>
+  <meta name="twitter:description" content="Freeze before sending. Create a verifiable proof of what you sent — without uploading your content. Verify later."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
@@ -76,13 +79,13 @@ upgrade-insecure-requests">
     "url":"https://timeproofs.io/",
     "logo":"https://timeproofs.io/assets/logo.png",
     "knowsAbout":[
-      "digital proof of existence",
-      "timestamp API",
-      "AI data provenance",
-      "cryptographic verification",
+      "proof of what was sent",
+      "document integrity verification",
+      "timestamp proof format",
+      "privacy-first verification",
       "Ed25519 signatures"
     ],
-    "sameAs":[], 
+    "sameAs":[],
     "contactPoint":[{
       "@type":"ContactPoint",
       "email":"contact@timeproofs.io",
@@ -91,13 +94,14 @@ upgrade-insecure-requests">
     }]
   }
   </script>
+
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
     "@type":"WebSite",
     "name":"TimeProofs",
     "url":"https://timeproofs.io/",
-    "dateModified":"2026-01-05"
+    "dateModified":"2026-02-13"
   }
   </script>
 
@@ -139,7 +143,7 @@ upgrade-insecure-requests">
       background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000
     }
 
-    /* Header (from proofspec) */
+    /* Header */
     .tp-header{
       position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
       background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
@@ -200,7 +204,7 @@ upgrade-insecure-requests">
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* Index-only sections (kept from your index; compatible styling) */
+    /* Sections */
     .hero{
       min-height:calc(100svh - 64px); padding-top:92px; padding-bottom:34px;
       display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
@@ -220,10 +224,11 @@ upgrade-insecure-requests">
     .positioning{ color:#9fb3c9; max-width:860px; margin:0 auto 8px; }
     .cta-wrap{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:12px }
     .cta{
-      background:var(--accent); color:#06202a; border:none; padding:14px 18px; border-radius:12px; font-weight:700;
+      background:var(--accent); color:#06202a; border:none; padding:14px 18px; border-radius:12px; font-weight:800;
       box-shadow:0 8px 30px rgba(34,211,238,.18); transition:transform .18s var(--e), box-shadow .18s
     }
-    .cta.secondary{ background:#111d33; color:#e2f6ff; border:1px solid #1e2a3e; font-weight:600 }
+    .cta.secondary{ background:#111d33; color:#e2f6ff; border:1px solid #1e2a3e; font-weight:700 }
+    .cta.tertiary{ background:transparent; color:#cfefff; border:1px solid #214a57; font-weight:700 }
     .cta:hover{ transform:translateY(-2px); box-shadow:0 12px 38px rgba(34,211,238,.25) }
 
     .micro{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; color:#9fb3c9; margin:10px 0 0 }
@@ -233,18 +238,19 @@ upgrade-insecure-requests">
     .section h2{ color:#b9e7f5; font-size:clamp(1.3rem, 2.6vw, 1.6rem); margin:0 0 14px; text-align:center }
     .grid{ display:grid; gap:16px }
     .grid.three{ grid-template-columns:1fr }
-    @media(min-width:900px){ .grid.three{ grid-template-columns:repeat(3,1fr) } }
-
-    /* Added for readable "Examples" layout */
     .grid.two{ grid-template-columns:1fr }
-    @media(min-width:900px){ .grid.two{ grid-template-columns:repeat(2,1fr) } }
+    @media(min-width:900px){
+      .grid.three{ grid-template-columns:repeat(3,1fr) }
+      .grid.two{ grid-template-columns:repeat(2,1fr) }
+    }
 
     .section.bg-alt{ background:linear-gradient(180deg,#0b1020,#0c1424); border-top:1px solid #121a2e; border-bottom:1px solid #121a2e }
     .section.bg-solid{ background:#0d1628; border-top:1px solid #1a2640; border-bottom:1px solid #1a2640 }
+
     .card{
       position:relative; border-radius:16px; padding:18px; background:#0c1424; color:#dbe7f3; border:1px solid transparent;
       transition:transform .18s var(--e);
-      max-width:760px; margin-inline:auto
+      max-width:900px; margin-inline:auto
     }
     .card::before{
       content:""; position:absolute; inset:0; border-radius:inherit; padding:1px;
@@ -253,8 +259,38 @@ upgrade-insecure-requests">
       -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none
     }
     .card:hover{ transform:translateY(-2px) perspective(600px) rotateX(1.2deg) rotateY(.8deg) }
-    .card h3{ color:#22d3ee; margin:.2em 0 .3em; font-size:1.08rem }
-    .card p{ margin:.15em 0 .4em; line-height:1.6 }
+    .card h3{ color:#22d3ee; margin:.2em 0 .35em; font-size:1.08rem }
+    .card p{ margin:.15em 0 .45em; line-height:1.6 }
+
+    .callout{
+      max-width:980px; margin:16px auto 0; padding:14px 14px;
+      border:1px solid #214a57; background:#0d2330; border-radius:16px; color:#cfefff;
+      box-shadow:var(--ring)
+    }
+    .callout strong{ color:#e6fbff }
+    .callout .mini{ color:#9fb3c9; margin-top:6px; font-size:.95rem }
+
+    .steps{
+      display:grid; gap:12px; max-width:980px; margin:0 auto;
+      grid-template-columns:1fr;
+    }
+    @media(min-width:900px){ .steps{ grid-template-columns:repeat(3,1fr) } }
+    .step{
+      position:relative;
+      border-radius:16px;
+      padding:16px;
+      background:#0c1424;
+      border:1px solid #1e2a3e;
+    }
+    .step .n{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:28px; height:28px; border-radius:999px;
+      background:rgba(34,211,238,.14); border:1px solid rgba(34,211,238,.35);
+      color:#bff1ff; font-weight:900; margin-bottom:8px;
+    }
+    .step h3{ margin:.1em 0 .25em; color:#e6fbff; font-size:1.06rem }
+    .step p{ margin:.1em 0; color:#cfefff; line-height:1.6 }
+
     code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
 
     /* Prevent proof hash overflow on small screens */
@@ -266,7 +302,7 @@ upgrade-insecure-requests">
       transform-origin:left; scale:0 1; z-index:900
     }
 
-    /* Footer (from proofspec) */
+    /* Footer */
     footer{
       border-top:1px solid var(--line);
       margin-top:44px;
@@ -275,7 +311,7 @@ upgrade-insecure-requests">
       text-align:center;
       background:#0b1020;
     }
-    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
+    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0; flex-wrap:wrap }
     footer .badge{
       display:inline-flex; align-items:center; gap:6px;
       padding:6px 10px; border:1px solid var(--line); border-radius:999px;
@@ -290,16 +326,6 @@ upgrade-insecure-requests">
     footer .links a:hover{ color:var(--accent); text-decoration:underline }
     footer .links a[aria-current="page"]{ color:var(--accent); text-decoration:underline }
 
-    /* Pricing Table Micro-Style */
-    .pricing-wrap{ margin-top:28px; display:inline-block; text-align:left; background:#0b1226; border:1px solid #1e293b; padding:16px; border-radius:12px; min-width:280px }
-    .pricing-title{ margin:0 0 10px; font-size:0.8rem; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; font-weight:700 }
-    .pricing-dl{ display:grid; grid-template-columns:auto 1fr; gap:6px 20px; margin:0; font-size:0.95rem }
-    .pricing-dl dt{ color:#f8fafc; font-weight:600 }
-    .pricing-dl dd{ margin:0; text-align:right }
-    .txt-ok{ color:var(--ok) }
-    .txt-acc{ color:var(--accent) }
-    .txt-mut{ color:var(--muted) }
-
     a:focus-visible, .cta:focus-visible, .cta-header:focus-visible, .tp-burger:focus-visible{
       outline:2px solid #22d3ee; outline-offset:3px; border-radius:12px;
     }
@@ -307,12 +333,12 @@ upgrade-insecure-requests">
     @media (max-width:899px){
       .hero{ padding-top:92px; padding-bottom:24px }
       .section{ padding:28px 0 }
-      .grid.three{ grid-template-columns:1fr }
     }
     @media (prefers-reduced-motion: reduce){
       *{ scroll-behavior:auto !important }
     }
   </style>
+
   <noscript><style>.reveal{opacity:1 !important; transform:none !important}</style></noscript>
 </head>
 
@@ -324,16 +350,20 @@ upgrade-insecure-requests">
       <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
       <span>TimeProofs</span>
     </a>
+
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
-      <a href="/proofspec.html">Protocol (ProofSpec)</a>
       <a href="/use-cases.html">Use Cases</a>
-      <a href="/docs.html">API Docs</a>
       <a href="/pricing.html">Pricing</a>
+      <a href="/verify.html">Create / Verify</a>
+      <a href="/proofspec.html">Protocol</a>
+      <a href="/docs.html">API Docs</a>
       <a href="/regulations.html">Regulations</a>
       <a href="/about.html">About</a>
-      <a class="nav-cta" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
+      <a class="nav-cta" href="/use-cases.html#install" aria-label="Install the Freeze Button">Install the Button</a>
     </nav>
-    <a class="cta-header" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
+
+    <a class="cta-header" href="/use-cases.html#install" aria-label="Install the Freeze Button">Install the Button</a>
+
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu">
       <span aria-hidden="true">☰</span>
     </button>
@@ -342,210 +372,202 @@ upgrade-insecure-requests">
   <div class="progress" id="progress" aria-hidden="true"></div>
 
   <main id="main" class="wrap" role="main">
+
+    <!-- HERO -->
     <section class="hero" aria-labelledby="hero-title">
-      <div class="label">TimeProofs v1 · Normative Reference · Stateless API</div>
-      
-      <h1 id="hero-title" class="title">Prove when a file existed — without uploading it.</h1>
+      <div class="label">Freeze before sending · Verifiable later · No upload</div>
+
+      <h1 id="hero-title" class="title">Freeze before sending.</h1>
 
       <p class="subtitle">
-        This page defines the <strong>TimeProofs v1</strong> normative reference. Designed for automated systems, AI agents, and machine workflows.
-        Create a verifiable proof file that shows <strong>when</strong> data existed and that it <strong>hasn’t changed</strong> — without revealing the original.
-      </p>
-
-      <p class="positioning" style="text-align:center; max-width:900px; margin:6px auto 0;">
-        TimeProofs defines an <strong>open proof format and verification rules</strong>,
-        designed to be implemented independently of this website or service.
+        Create a verifiable proof of <strong>what you sent</strong> — privately, in one click.
+        When a quote, contract, or email is disputed later, you can show the exact version that existed at that time.
       </p>
 
       <div class="cta-wrap" role="group" aria-label="Primary actions">
-        <a class="cta" href="/verify.html" aria-label="Create or verify a proof">Create / Verify a Proof</a>
-        <a class="cta secondary" href="/proofspec.html" aria-label="Read the protocol">Read the Protocol →</a>
+        <a class="cta" href="/use-cases.html#install" aria-label="Install the Freeze Button">Install the Freeze Button</a>
+        <a class="cta secondary" href="/verify.html" aria-label="Create or verify a proof manually">Create / Verify (manual)</a>
+        <a class="cta tertiary" href="#when" aria-label="See when to use Freeze">When to use it ↓</a>
       </div>
-
-      <div class="pricing-wrap" role="region" aria-label="Economic Model">
-        <h3 class="pricing-title">Economic Model (v1)</h3>
-        <dl class="pricing-dl">
-          <dt>Verification</dt> <dd class="txt-ok">Free (Universal)</dd>
-          <dt>Issuance</dt>     <dd class="txt-acc">Pay-per-request</dd>
-          <dt>Subscription</dt> <dd class="txt-mut">None (Stateless)</dd>
-        </dl>
-      </div>
-
-      <p class="positioning" style="text-align:center; margin:16px 0 0">
-        Developers: see <a href="/docs.html">API Docs</a>.
-      </p>
 
       <div class="micro" aria-label="Key claims">
-        <span class="chip">🔏 Verifiable proof file</span>
-        <span class="chip">🛡 Your content stays private</span>
-        <span class="chip">⚡ Edge-fast</span>
-        <span class="chip">🌍 Open standard</span>
+        <span class="chip">🧾 Quotes</span>
+        <span class="chip">📝 Contracts</span>
+        <span class="chip">📎 Files sent to clients</span>
+        <span class="chip">✉️ Sensitive emails</span>
+        <span class="chip">🛡 Private by design</span>
+        <span class="chip">🔎 Verifiable later</span>
+      </div>
+
+      <div class="callout" role="note" aria-label="Simple flow">
+        <strong>Simple flow:</strong> Prepare → Freeze → Send → Verify later
+        <div class="mini">
+          TimeProofs does not replace your email or file tools. It adds a single action right before you send.
+        </div>
       </div>
     </section>
 
-    <section class="section bg-alt" id="axiom" aria-labelledby="axiom-title">
-      <h2 id="axiom-title">A file date is not proof</h2>
-      <p style="text-align:center; color:#9fb3c9; max-width:900px; margin:0 auto 12px;">
-        A file “creation date” is local and editable. A TimeProofs proof is verifiable: it proves <strong>when</strong> an exact piece of content existed and that it has <strong>not changed</strong>.
-      </p>
-      <p style="text-align:center; color:#9fb3c9; max-width:860px; margin:0 auto;">
-        TimeProofs doesn’t certify intent or origin. It certifies two facts: <strong>existence at a time</strong> and <strong>integrity over time</strong>.
-      </p>
-    </section>
+    <!-- WHEN -->
+    <section class="section bg-alt" id="when" aria-labelledby="when-title">
+      <h2 id="when-title">When to click Freeze</h2>
 
-    <section class="section bg-solid" id="what" aria-labelledby="what-title">
-      <h2 id="what-title">What TimeProofs is (and is not)</h2>
+      <p style="text-align:center; color:#9fb3c9; max-width:920px; margin:0 auto 14px;">
+        Use it at the exact moment where “this version” matters:
+      </p>
 
-      <div class="grid three" aria-label="Definition blocks">
+      <div class="grid two" aria-label="When to use">
         <article class="card">
-          <h3>What you get</h3>
-          <p><strong>A proof file</strong> you can store and share (<code>.tproof.json</code>).</p>
-          <p><strong>A signed timestamp</strong> from a stateless API (no server-side storage required).</p>
-          <p><strong>Independent verification</strong> later (online or offline) to confirm the content existed and is unchanged.</p>
+          <h3>Before sending a quote or pricing</h3>
+          <p>Freeze the quote you are about to send. If the price is challenged later, you can show the exact document that existed when you sent it.</p>
         </article>
-
         <article class="card">
-          <h3>Why it’s safe</h3>
-          <p><strong>Privacy-first</strong>: your original content stays on your device.</p>
-          <p><strong>Open protocol</strong>: designed to be implemented by other tools and verifiers.</p>
-          <p><strong>Domain-agnostic</strong>: works for files, AI outputs, datasets, releases, audits.</p>
-          <p>
-            <strong>Archived public keys</strong>:
-            signing keys are published and archived to enable verification years later,
-            independently of the original service.
-          </p>
-          <p>
-            <strong>Key survivability:</strong>
-            public signing keys are published as immutable, versioned artifacts
-            and replicated across multiple public repositories and archives
-            to ensure long-term availability beyond the lifetime of the issuer.
-          </p>
+          <h3>Before sending a contract or SOW</h3>
+          <p>Freeze the version you share for signature or approval. If terms change later, you can prove what the other party received at time T.</p>
         </article>
-
         <article class="card">
-          <h3>What it’s not</h3>
-          <p><strong>Not storage</strong>: TimeProofs doesn’t host your content.</p>
-          <p><strong>Not blockchain</strong>: no chain, no tokens, no mining.</p>
-          <p><strong>Not identity / authorship</strong>: it doesn’t prove who created it, or why.</p>
+          <h3>Before approving changes by email</h3>
+          <p>Freeze the email content or attached file before you confirm “OK” on scope, timeline, or deliverables.</p>
         </article>
-      </div>
-
-      <p class="positioning" style="text-align:center; margin-top:10px">
-        For details and examples, see <a href="/docs.html">API Docs</a> and the <a href="/proofspec.html">Protocol</a>.
-      </p>
-      
-      <p class="positioning" style="text-align:center; margin-top:6px;">
-        Verification can be performed <strong>without using the TimeProofs website</strong>:
-        any third party may implement a compliant verifier using the public specification
-        and archived public keys.
-      </p>
-    </section>
-
-    <section class="section bg-alt" id="long-term" aria-labelledby="long-term-title">
-      <h2 id="long-term-title">Long-term verification</h2>
-
-      <p style="text-align:center; color:#9fb3c9; max-width:900px; margin:0 auto;">
-        A TimeProofs proof is a <strong>self-contained file</strong> (<code>.tproof.json</code>).
-        It remains verifiable <strong>even if the TimeProofs service is unavailable or discontinued</strong>,
-        provided the corresponding public signing key can be retrieved from public archives.
-      </p>
-
-      <p style="text-align:center; color:#9fb3c9; max-width:860px; margin:8px auto 0;">
-        TimeProofs is not a long-term custodian.  
-        The proof format and verification rules are explicitly designed to survive the issuer.
-      </p>
-
-      <p style="text-align:center; color:#9fb3c9; max-width:900px; margin:10px auto 0;">
-        <strong>Normative rule:</strong>
-        The expiration, revocation, or disappearance of the issuer
-        <strong>does not invalidate a proof retroactively</strong>.
-        Proof validity relies solely on cryptographic verification
-        against the public key that was active at the time of issuance.
-      </p>
-    </section>
-
-    <section class="section bg-solid" id="examples" aria-labelledby="examples-title">
-      <h2 id="examples-title">Examples of when a proof matters</h2>
-
-      <p style="text-align:center; color:#9fb3c9; max-width:900px; margin:0 auto 14px;">
-        Situations where “this existed then” becomes critical:
-      </p>
-
-      <div class="grid two" aria-label="Example situations">
         <article class="card">
-          <h3>Contract or document before changes</h3>
-          <p>Keep a verifiable record of the exact version you had at a specific time.</p>
-        </article>
-
-        <article class="card">
-          <h3>Report or policy before an audit</h3>
-          <p>Show what was published internally (or externally) before review or investigation.</p>
-        </article>
-
-        <article class="card">
-          <h3>AI output used in a decision</h3>
-          <p>Freeze the exact output that influenced a human or automated workflow.</p>
-        </article>
-
-        <article class="card">
-          <h3>Dataset or research snapshot</h3>
-          <p>Prove the state of data at time T, and detect any later changes.</p>
-        </article>
-
-        <article class="card">
-          <h3>Software release or technical specification</h3>
-          <p>Attach a proof to releases or specs to support integrity and traceability.</p>
+          <h3>Before delivering “final” files</h3>
+          <p>Freeze the final PDF, export, or deliverable you send to a client. If a version is questioned later, you can prove what was delivered.</p>
         </article>
       </div>
 
       <p style="text-align:center; margin-top:12px; color:#9fb3c9;">
-        In these moments, a file date or a screenshot is not enough.
+        If you currently rely on file dates or screenshots, Freeze is the safer step.
       </p>
     </section>
 
-    <section class="section bg-alt" aria-labelledby="how">
-      <h2 id="how">How It Works</h2>
-      <p style="text-align:center; color:#9fb3c9; margin:-6px 0 12px">
-        Three steps: <strong>hash locally → request a signed timestamp → verify with the proof file</strong>
+    <!-- DISPUTES -->
+    <section class="section bg-solid" id="disputes" aria-labelledby="disputes-title">
+      <h2 id="disputes-title">Common disputes it prevents</h2>
+
+      <p style="text-align:center; color:#9fb3c9; max-width:920px; margin:0 auto 14px;">
+        These disputes are not rare. They are expensive because they cost time, trust, and money.
       </p>
 
-      <div class="grid three">
+      <div class="grid two" aria-label="Dispute examples">
         <article class="card">
-          <h3>1) Hash locally (SHA-256)</h3>
-          <p>Your device computes a SHA-256 hash of your content. The original content never leaves your device.</p>
+          <h3>“This is not the version you sent.”</h3>
+          <p>Freeze creates a verifiable proof tied to the exact content that existed when you clicked.</p>
         </article>
         <article class="card">
-          <h3>2) Request a signed timestamp</h3>
-          <p>No content is uploaded — only a cryptographic hash is sent. The API returns a signed timestamp for your proof file.</p>
+          <h3>“The price was different.”</h3>
+          <p>Freeze the quote before sending. Later, verification shows the quote is unchanged since that timestamp.</p>
         </article>
         <article class="card">
-          <h3>3) Download &amp; verify the proof file</h3>
-          <p>You store the proof (<code>.tproof.json</code>) next to your content. Anyone can verify later that the content existed at that time and hasn’t changed.</p>
+          <h3>“We never agreed on that scope.”</h3>
+          <p>Freeze the SOW or the email where scope is confirmed. The proof supports what existed at time T.</p>
+        </article>
+        <article class="card">
+          <h3>“You changed the document after.”</h3>
+          <p>Verification detects any modification. If content differs, it will not verify as the same proof.</p>
         </article>
       </div>
 
-      <p class="positioning" style="text-align:center; margin-top:10px">
-        Want technical details and examples? See <a href="/docs.html">API Docs</a> and <a href="/use-cases.html">Use Cases</a>.
-      </p>
-    </section>
-
-    <section class="section bg-solid" aria-labelledby="why">
-      <h2 id="why">Why TimeProofs</h2>
-      <div class="grid three">
-        <article class="card"><h3>Private by default</h3><p>Your content stays with you. The proof is designed to be shareable without revealing the original.</p></article>
-        <article class="card"><h3>Verifiable later</h3><p>Independent checks, without relying on trust in a single platform or a screenshot.</p></article>
-        <article class="card"><h3>Built for real-world proof</h3><p>Useful for files, AI outputs, datasets, audits, releases, and compliance workflows.</p></article>
+      <div class="callout" role="note" aria-label="What Freeze proves">
+        <strong>What Freeze proves:</strong> (1) the exact content existed at a specific time, and (2) it has not changed since.
+        <div class="mini">
+          It does not prove who authored it or the intent behind it.
+        </div>
       </div>
-      <p class="positioning" style="text-align:center; margin-top:10px">
-        Compliance context: <a href="/regulations.html">Regulations &amp; Legal framework →</a>
+    </section>
+
+    <!-- HOW (NON-TECH) -->
+    <section class="section bg-alt" id="how" aria-labelledby="how-title">
+      <h2 id="how-title">How it works</h2>
+
+      <p style="text-align:center; color:#9fb3c9; max-width:920px; margin:0 auto 16px;">
+        A single action before you send. Verification remains possible later — even for third parties.
+      </p>
+
+      <div class="steps" aria-label="Three steps">
+        <div class="step">
+          <div class="n" aria-hidden="true">1</div>
+          <h3>Click Freeze</h3>
+          <p>Select the file (or content) you are about to send. Your original stays on your device.</p>
+        </div>
+        <div class="step">
+          <div class="n" aria-hidden="true">2</div>
+          <h3>Get a proof file</h3>
+          <p>TimeProofs generates a small proof file (<code>.tproof.json</code>) you can store with your records.</p>
+        </div>
+        <div class="step">
+          <div class="n" aria-hidden="true">3</div>
+          <h3>Verify later</h3>
+          <p>Anyone can verify integrity later using the proof file and the content. No screenshot trust required.</p>
+        </div>
+      </div>
+
+      <p class="positioning" style="text-align:center; margin-top:12px">
+        For installation and workflow examples, see <a href="/use-cases.html#install">Use Cases →</a>
       </p>
     </section>
 
-    <section class="section bg-alt" aria-labelledby="site-proof-title" id="site-proof">
-      <p class="label" style="margin-bottom:8px">🔏 Proof of Release</p>
-      <h2 id="site-proof-title">Verified by TimeProofs</h2>
-      <p style="text-align:center; color:#9fb3c9; max-width:900px; margin:0 auto 12px;">
-        We publish a signed proof file for this website build, so anyone can independently verify integrity. Verification requires the proof file (<code>.tproof.json</code>) — no hash-only verification.
+    <!-- TRUST / PRINCIPLES -->
+    <section class="section bg-solid" id="principles" aria-labelledby="principles-title">
+      <h2 id="principles-title">Designed for real-world proof</h2>
+
+      <div class="grid three" aria-label="Principles">
+        <article class="card">
+          <h3>Private by design</h3>
+          <p>Your original content is not uploaded. You keep your file. The proof is small and shareable.</p>
+        </article>
+
+        <article class="card">
+          <h3>Verifiable independently</h3>
+          <p>Verification is a check anyone can run. It does not rely on “trust me” or a screenshot.</p>
+        </article>
+
+        <article class="card">
+          <h3>Non-custodial</h3>
+          <p>TimeProofs is not a storage service. You keep your proof file. This avoids long-term dependency.</p>
+        </article>
+      </div>
+
+      <div class="callout" role="note" aria-label="Important reminder">
+        <strong>Important:</strong> keep the proof file (<code>.tproof.json</code>) with your records.
+        <div class="mini">
+          If the proof file is lost, it cannot be reconstructed in non-custodial mode.
+        </div>
+      </div>
+    </section>
+
+    <!-- DEVELOPERS / AUDITORS (SECONDARY) -->
+    <section class="section bg-alt" id="dev" aria-labelledby="dev-title">
+      <h2 id="dev-title">For developers, auditors, and independent verifiers</h2>
+
+      <p style="text-align:center; color:#9fb3c9; max-width:980px; margin:0 auto 14px;">
+        TimeProofs also defines an open proof format (<code>.tproof.json</code>) and verification rules designed to be implemented independently.
+        If you need technical details, public keys, and protocol rules, use the resources below.
+      </p>
+
+      <div class="grid three" aria-label="Developer resources">
+        <article class="card">
+          <h3>Protocol (ProofSpec)</h3>
+          <p>Normative reference for proof format and verification rules.</p>
+          <p><a href="/proofspec.html" aria-label="Read the protocol">Read the Protocol →</a></p>
+        </article>
+        <article class="card">
+          <h3>API Docs</h3>
+          <p>Reference implementation endpoints and examples for automated workflows.</p>
+          <p><a href="/docs.html" aria-label="Open API documentation">Open API Docs →</a></p>
+        </article>
+        <article class="card">
+          <h3>Create / Verify</h3>
+          <p>Manual creation and verification tool for proof files.</p>
+          <p><a href="/verify.html" aria-label="Open Create/Verify tool">Open Create / Verify →</a></p>
+        </article>
+      </div>
+    </section>
+
+    <!-- PROOF OF THIS WEBSITE BUILD (TRUST, STILL SECONDARY) -->
+    <section class="section bg-solid" aria-labelledby="site-proof-title" id="site-proof">
+      <p class="label" style="margin-bottom:8px">🔏 Integrity marker</p>
+      <h2 id="site-proof-title">Proof of this website build</h2>
+      <p style="text-align:center; color:#9fb3c9; max-width:980px; margin:0 auto 12px;">
+        We publish a proof file for this website build. It allows independent verification that the released artifact has not changed since issuance.
       </p>
 
       <p style="text-align:center; color:#9fb3c9">
@@ -561,32 +583,41 @@ upgrade-insecure-requests">
       </p>
     </section>
 
-    <section class="section bg-solid" aria-labelledby="final-cta">
-      <h2 id="final-cta">Ready to prove it?</h2>
+    <!-- FINAL CTA -->
+    <section class="section bg-alt" aria-labelledby="final-cta">
+      <h2 id="final-cta">Make “Freeze before sending” a habit</h2>
+      <p style="text-align:center; color:#9fb3c9; max-width:920px; margin:0 auto 14px;">
+        If a document matters, freeze it right before you send. Later, verification is straightforward.
+      </p>
       <div class="cta-wrap" role="group" aria-label="Final actions">
-        <a class="cta" href="/verify.html">Create / Verify a Proof</a>
-        <a class="cta secondary" href="/use-cases.html">See Use Cases</a>
+        <a class="cta" href="/use-cases.html#install" aria-label="Install the Freeze Button">Install the Freeze Button</a>
+        <a class="cta secondary" href="/pricing.html" aria-label="See pricing">See Pricing</a>
+        <a class="cta tertiary" href="/verify.html" aria-label="Create or verify manually">Create / Verify</a>
       </div>
       <p style="text-align:center; color:#9fb3c9; margin-top:10px">
-        Looking for mission and transparency? See <a href="/about.html">About →</a>
+        Need formal context? See <a href="/regulations.html">Regulations &amp; Legal framework →</a>
       </p>
     </section>
+
   </main>
 
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
       <span class="badge">🛡 Privacy First</span>
-      <a class="badge" href="/proofspec.html">🔍 Open Spec v1</a>
+      <a class="badge" href="/proofspec.html">🔍 Open Spec</a>
+      <a class="badge" href="/use-cases.html#install">🧩 Install</a>
     </div>
-    © 2026 TimeProofs — Reference implementation of the ProofSpec protocol.
+
+    © 2026 TimeProofs — Freeze before sending. Verifiable proof, private.
+
     <div class="links" style="margin-top:6px">
       <a href="/">Home</a> •
-      <a href="/proofspec.html">Protocol</a> •
       <a href="/use-cases.html">Use Cases</a> •
-      <a href="/verify.html">Create/Verify</a> •
-      <a href="/docs.html">API Docs</a> •
       <a href="/pricing.html">Pricing</a> •
+      <a href="/verify.html">Create/Verify</a> •
+      <a href="/proofspec.html">Protocol</a> •
+      <a href="/docs.html">API Docs</a> •
       <a href="/regulations.html">Regulations</a> •
       <a href="/.well-known/security.txt">Security.txt</a> •
       <a href="/privacy.html">Privacy</a> •
@@ -600,16 +631,44 @@ upgrade-insecure-requests">
     "@context":"https://schema.org",
     "@type":"FAQPage",
     "mainEntity":[
-      {"@type":"Question","name":"Do you store my content?","acceptedAnswer":{"@type":"Answer","text":"No. Your content stays on your device. The proof is designed to be shareable without revealing the original."}},
-      {"@type":"Question","name":"Is there a blockchain involved?","acceptedAnswer":{"@type":"Answer","text":"No."}},
-      {"@type":"Question","name":"What does the proof let me prove?","acceptedAnswer":{"@type":"Answer","text":"Two facts: when the exact content existed, and that it hasn’t changed since."}},
-      {"@type":"Question","name":"Can I verify with only a hash?","acceptedAnswer":{"@type":"Answer","text":"No. In stateless mode, verification requires the full proof file (.tproof.json). A hash alone cannot be verified without server-side storage."}},
+      {
+        "@type":"Question",
+        "name":"Do you store my content?",
+        "acceptedAnswer":{
+          "@type":"Answer",
+          "text":"No. Your original content stays on your device. TimeProofs generates a proof file you store with your records."
+        }
+      },
+      {
+        "@type":"Question",
+        "name":"What does Freeze prove?",
+        "acceptedAnswer":{
+          "@type":"Answer",
+          "text":"Two facts: the exact content existed at a specific time, and it has not changed since. It does not prove authorship or intent."
+        }
+      },
+      {
+        "@type":"Question",
+        "name":"Can I verify later without trusting a screenshot?",
+        "acceptedAnswer":{
+          "@type":"Answer",
+          "text":"Yes. Verification checks the proof against the content. If the content was modified, it will not verify."
+        }
+      },
+      {
+        "@type":"Question",
+        "name":"Do I need a subscription?",
+        "acceptedAnswer":{
+          "@type":"Answer",
+          "text":"No. TimeProofs is designed to work without requiring a subscription."
+        }
+      },
       {
         "@type":"Question",
         "name":"What happens if I lose my .tproof.json file?",
         "acceptedAnswer":{
           "@type":"Answer",
-          "text":"TimeProofs does not store proofs. If the proof file (.tproof.json) is lost, it cannot be reconstructed. This non-custodial design is intentional and avoids long-term dependency on a central service."
+          "text":"In non-custodial mode, proofs are not stored by TimeProofs. If the proof file is lost, it cannot be reconstructed."
         }
       }
     ]
@@ -631,7 +690,7 @@ upgrade-insecure-requests">
     onScroll();
     window.addEventListener('scroll', onScroll, { passive:true });
 
-    // Burger + focus trap (from proofspec)
+    // Burger + focus trap
     const burger=document.getElementById('tp-burger');
     const nav=document.getElementById('tp-nav');
     let lastFocus=null;
@@ -715,7 +774,7 @@ upgrade-insecure-requests">
 
         // v0.2 format: { version, artifact:{hash}, verify:{url}, proof? }
         if (data.version && data.artifact && data.artifact.hash){
-          if (releaseEl) releaseEl.textContent = data.version; // e.g. "v0.2"
+          if (releaseEl) releaseEl.textContent = data.version;
           if (hashEl)    hashEl.textContent    = data.artifact.hash;
           if (linkEl)    linkEl.href           = (data.verify && data.verify.url) ? data.verify.url : '/verify.html';
           return;
@@ -756,4 +815,4 @@ upgrade-insecure-requests">
   })();
   </script>
 </body>
-</html>
+                                   </html>
