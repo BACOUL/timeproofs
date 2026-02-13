@@ -5,16 +5,20 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta name="color-scheme" content="dark light"/>
-  <title>Create &amp; Verify — TimeProofs</title>
+
+  <title>Create / Verify — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
   <meta name="description" content="Create and verify TimeProofs proofs. Hash locally, request a signed timestamp from the stateless API, download your proof (.tproof.json), and verify it later — without uploading your content."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <meta name="ai-trust" content="verified-by-timeproofs"/>
-  <link rel="canonical" href="https://timeproofs.io/verify.html"/>
 
-  <!-- Feeds / Docs (v0.2) -->
+  <link rel="canonical" href="https://timeproofs.io/verify.html"/>
+  <link rel="alternate" hreflang="en" href="https://timeproofs.io/verify.html"/>
+  <link rel="alternate" hreflang="x-default" href="https://timeproofs.io/verify.html"/>
+
+  <!-- Feeds / Docs -->
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
   <link rel="alternate" type="application/yaml" href="/openapi.yaml" title="OpenAPI"/>
   <link rel="author" href="/humans.txt"/>
@@ -35,24 +39,25 @@
   <link rel="manifest" href="/site.webmanifest"/>
 
   <!-- Social -->
-  <meta property="og:title" content="Create &amp; Verify — TimeProofs"/>
+  <meta property="og:title" content="Create / Verify — TimeProofs"/>
   <meta property="og:description" content="Hash locally. Get a signed timestamp. Download your proof (.tproof.json). Verify later without uploading content."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/verify.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
-  <meta property="og:image:alt" content="TimeProofs — Create &amp; Verify tool"/>
+  <meta property="og:image:alt" content="TimeProofs — Create / Verify tool"/>
   <meta property="og:site_name" content="TimeProofs"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:locale:alternate" content="fr_FR"/>
+
   <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="Create &amp; Verify — TimeProofs"/>
+  <meta name="twitter:title" content="Create / Verify — TimeProofs"/>
   <meta name="twitter:description" content="Create proofs, download .tproof.json proof files, and verify them later — without uploading content."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- Security meta -->
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
 
-  <!-- CSP v0.2 -->
+  <!-- CSP -->
   <meta http-equiv="Content-Security-Policy" content="
 default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
 worker-src 'self' blob:;
@@ -85,13 +90,13 @@ upgrade-insecure-requests">
     "knowsAbout":[
       "digital proof of existence",
       "timestamp API",
-      "AI data provenance",
+      "data provenance",
       "cryptographic verification"
     ],
     "sameAs":[
       "https://x.com/timeproofs",
       "https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2",
-      "https://www.linkedin.com/in/jeason-bacoul-667938281?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+      "https://www.linkedin.com/in/jeason-bacoul-667938281"
     ],
     "contactPoint":[{
       "@type":"ContactPoint",
@@ -118,7 +123,7 @@ upgrade-insecure-requests">
   {
     "@context":"https://schema.org",
     "@type":"WebPage",
-    "name":"Create & Verify",
+    "name":"Create / Verify",
     "url":"https://timeproofs.io/verify.html",
     "inLanguage":"en",
     "isPartOf":{
@@ -126,9 +131,8 @@ upgrade-insecure-requests">
       "name":"TimeProofs",
       "url":"https://timeproofs.io/"
     },
-    "datePublished":"2025-10-22",
-    "dateModified":"2025-12-30",
-    "description":"Create or verify cryptographic proofs of existence. Local hashing, signed timestamp, downloadable .tproof.json proof file, and signature verification (proof file required)."
+    "dateModified":"2026-02-13",
+    "description":"Create and verify cryptographic proofs. Local hashing, signed timestamp, downloadable .tproof.json proof file, and signature verification (proof file required)."
   }
   </script>
 
@@ -346,7 +350,6 @@ upgrade-insecure-requests">
       vertical-align:bottom;
     }
 
-    /* FIX: hash overflow in inline text (hints, info lines) */
     .hint,
     #hash-preview-text,
     #hash-preview-file,
@@ -357,7 +360,6 @@ upgrade-insecure-requests">
       max-width:100%;
     }
 
-    /* Fix hash overflow everywhere */
     pre, code{ max-width:100% }
     pre, code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
     pre{
@@ -430,7 +432,7 @@ upgrade-insecure-requests">
       text-align:center;
       background:#0b1020;
     }
-    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
+    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0; flex-wrap:wrap }
     footer .badge{
       display:inline-flex; align-items:center; gap:6px;
       padding:6px 10px; border:1px solid var(--line); border-radius:999px;
@@ -445,7 +447,7 @@ upgrade-insecure-requests">
     footer .links a:hover{ color:var(--accent); text-decoration:underline }
     footer .links a[aria-current="page"]{ color:var(--accent); text-decoration:underline }
 
-    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
+    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px; flex-wrap:wrap }
     .social a{
       display:inline-flex; width:40px; height:40px;
       border:1px solid var(--line); border-radius:12px;
@@ -471,24 +473,25 @@ upgrade-insecure-requests">
 <body>
   <a href="#main" class="skip">Skip to main content</a>
 
-  <!-- Header (canonical) -->
+  <!-- Header (site-wide canonical nav) -->
   <header class="tp-header" id="hdr" role="banner">
     <a class="tp-brand" href="/" aria-label="TimeProofs Home">
       <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
       <span>TimeProofs</span>
     </a>
+
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
-      <a href="/proofspec.html">Protocol (ProofSpec)</a>
+      <a href="/">Home</a>
+      <a href="/install.html">Install</a>
       <a href="/use-cases.html">Use Cases</a>
-      <a href="/docs.html">API Docs</a>
-      <a href="/regulations.html">Regulations</a>
-      <a href="/security.html">Security</a>
-      <a href="/privacy.html">Privacy</a>
-      <a href="/legal.html">Legal</a>
+      <a href="/verify.html" aria-current="page">Create / Verify</a>
+      <a href="/pricing.html">Pricing</a>
       <a href="/about.html">About</a>
-      <a class="nav-cta" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
+      <a class="nav-cta" href="/install.html" aria-label="Install the Freeze Button">Install</a>
     </nav>
-    <a class="cta-header" href="/verify.html" aria-label="Open Create/Verify">Create / Verify</a>
+
+    <a class="cta-header" href="/install.html" aria-label="Install the Freeze Button">Install</a>
+
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu">
       <span aria-hidden="true">☰</span>
     </button>
@@ -498,14 +501,17 @@ upgrade-insecure-requests">
     <!-- HERO -->
     <section class="hero" role="region" aria-labelledby="page-title">
       <div class="icon" aria-hidden="true">🔐</div>
-      <p class="badge">Status: Public Beta v0.2 · ProofSpec v0.1 · API v0.2 · Privacy-first · No blockchain</p>
+      <p class="badge">Public Beta v0.2 · Proof file first · Privacy-first · No upload</p>
+
       <h1 id="page-title">Create / Verify</h1>
+
       <p class="lead">
-        Hash locally. Request a signed timestamp from the stateless API. Download your proof file
-        <code>.tproof.json</code>, then verify it later. Your content never leaves your device.
+        Create a proof file for a quote, contract, email text, or any document version.
+        Hashing runs locally in your browser. You download a <code>.tproof.json</code> file and keep it with your records.
       </p>
+
       <p class="lead" style="font-size:.95rem; margin-top:-4px">
-        v0.2 is proof-file first: <strong>verification requires the <code>.tproof.json</code> file</strong>.
+        Verification is proof-file first: <strong>verification requires the <code>.tproof.json</code> file</strong>.
       </p>
 
       <div class="hero-actions">
@@ -514,7 +520,7 @@ upgrade-insecure-requests">
       </div>
 
       <p class="lead" style="font-size:.95rem; margin-top:10px">
-        Developers: integration examples live in <a href="/docs.html">API Docs</a>. The protocol is defined in <a href="/proofspec.html">ProofSpec</a>.
+        Want the “Freeze before sending” workflow? Install the button: <a href="/install.html">Install →</a>
       </p>
     </section>
 
@@ -566,11 +572,11 @@ upgrade-insecure-requests">
         <div class="row" style="margin-top:10px;">
           <div>
             <label for="create-type">Type (optional)</label>
-            <input type="text" id="create-type" placeholder="event | prompt | file | other" maxlength="32" autocomplete="off"/>
+            <input type="text" id="create-type" placeholder="event | quote | contract | email | file | other" maxlength="32" autocomplete="off"/>
           </div>
           <div>
             <label for="create-meta">Meta (optional, non-sensitive JSON)</label>
-            <input type="text" id="create-meta" placeholder='{"mime":"text/plain","source":"web"}' maxlength="1024" autocomplete="off" spellcheck="false"/>
+            <input type="text" id="create-meta" placeholder='{"mime":"application/pdf","case":"quote-v3"}' maxlength="1024" autocomplete="off" spellcheck="false"/>
           </div>
         </div>
         <p class="hint" style="margin-top:8px">Do not include personal data. Meta is optional and should remain non-sensitive.</p>
@@ -599,6 +605,11 @@ upgrade-insecure-requests">
           <strong>What this proves:</strong> an exact content fingerprint (SHA-256) existed at the server-issued time and is signed by the TimeProofs key.<br/>
           <strong>What this does not prove:</strong> authorship, intent, delivery, or that someone read/accepted anything.
         </div>
+
+        <div class="note mini" aria-label="Daily workflow">
+          <strong>Daily workflow:</strong> if a document matters, Freeze it right before you send.<br/>
+          <span class="muted">Install the Freeze Button: <a href="/install.html">Install →</a> · See real situations: <a href="/use-cases.html">Use Cases →</a></span>
+        </div>
       </article>
 
       <!-- VERIFY -->
@@ -607,7 +618,6 @@ upgrade-insecure-requests">
         <h2 id="verify-title">Verify a proof file</h2>
         <p class="hint">Select your <code>.tproof.json</code> proof file, then verify its signature.</p>
 
-        <!-- LOCKING BLOCKS (why file required + negative path + what is verified) -->
         <div class="note mini" aria-label="Why a proof file is required">
           <strong>Why a proof file is required:</strong>
           the <code>.tproof.json</code> contains the timestamp + issuer + signature. A hash alone cannot prove <em>when</em> it was issued or <em>by whom</em> it was signed.<br/>
@@ -657,9 +667,15 @@ upgrade-insecure-requests">
           <strong>What is not verified:</strong> this does <strong>NOT</strong> verify your original file automatically — it verifies the proof. To check a file, you must re-hash the exact file and compare it to the hash inside the proof.
         </div>
 
-        <div class="note" style="margin-top:12px" aria-label="Next steps">
-          Need integration snippets? Use <a href="/docs.html">API Docs</a>.<br/>
-          Need the formal spec? Read <a href="/proofspec.html">ProofSpec</a>.
+        <div class="note mini" aria-label="Next steps">
+          <strong>Next:</strong> if you need to check a document version, re-hash the file and compare it to the hash inside the proof.<br/>
+          <span class="muted">Need real workflows? <a href="/use-cases.html">Use Cases →</a></span>
+        </div>
+
+        <div class="note" style="margin-top:12px" aria-label="Technical references">
+          Developers: integration examples live in <a href="/docs.html">API Docs</a>.<br/>
+          The protocol format is defined in <a href="/proofspec.html">ProofSpec</a>.<br/>
+          Formal context: <a href="/regulations.html">Regulations</a> · <a href="/privacy.html">Privacy</a> · <a href="/legal.html">Legal</a>
         </div>
       </article>
     </section>
@@ -670,14 +686,20 @@ upgrade-insecure-requests">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
       <span class="badge">🛡 Privacy First</span>
-      <a class="badge" href="/proofspec.html">🔍 Open Spec v0.2</a>
+      <a class="badge" href="/proofspec.html">🔍 Open Spec</a>
+      <a class="badge" href="/install.html">🧩 Install</a>
     </div>
-    © 2025 TimeProofs — Reference implementation of the ProofSpec protocol.
+
+    © 2026 TimeProofs — Freeze before sending. Verifiable proof, private.
+
     <div class="links" style="margin-top:6px">
       <a href="/">Home</a> •
-      <a href="/proofspec.html">Protocol</a> •
+      <a href="/install.html">Install</a> •
       <a href="/use-cases.html">Use Cases</a> •
-      <a href="/verify.html">Create/Verify</a> •
+      <a href="/verify.html" aria-current="page">Create/Verify</a> •
+      <a href="/pricing.html">Pricing</a> •
+      <a href="/about.html">About</a> •
+      <a href="/proofspec.html">Protocol</a> •
       <a href="/docs.html">API Docs</a> •
       <a href="/regulations.html">Regulations</a> •
       <a href="/.well-known/security.txt">Security.txt</a> •
@@ -685,6 +707,7 @@ upgrade-insecure-requests">
       <a href="/legal.html">Legal</a> •
       <a href="/humans.txt">humans.txt</a>
     </div>
+
     <div class="social" aria-label="Social links">
       <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
@@ -692,7 +715,7 @@ upgrade-insecure-requests">
       <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
       </a>
-      <a href="https://www.linkedin.com/in/jeason-bacoul-667938281?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noopener" aria-label="Jeason Bacoul on LinkedIn">
+      <a href="https://www.linkedin.com/in/jeason-bacoul-667938281" target="_blank" rel="noopener" aria-label="Jeason Bacoul on LinkedIn">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg>
       </a>
     </div>
@@ -1264,4 +1287,5 @@ upgrade-insecure-requests">
   })();
   </script>
 </body>
-          </html>
+</html>
+```0
