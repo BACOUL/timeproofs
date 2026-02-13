@@ -51,7 +51,7 @@
 
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Create / Verify — TimeProofs"/>
-  <meta name="twitter:description" content="Create proofs, download .tproof.json proof files, and verify them later — without uploading content."/>
+  <meta name="twitter:description" content="Create proofs, download .tproof.json proof files, and verify them later — without uploading your content."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- Security meta -->
@@ -330,6 +330,7 @@ upgrade-insecure-requests">
     }
     .pill.ok{ background:#0f3b22; border:1px solid #1c6b3d; color:#b7f7ce }
     .pill.bad{ background:#3b0f12; border:1px solid #6b1c22; color:#ffc3c8 }
+    .pill.neutral{ background:#0c1a2e; border:1px solid #22455a; color:#cfefff }
 
     .summary{
       margin-top:10px; padding:10px;
@@ -423,6 +424,83 @@ upgrade-insecure-requests">
     }
     .note .muted{ color:#9fb3c9 }
 
+    /* VERIFY: Simple "Same file?" panel */
+    .verify-panel{
+      margin-top:12px;
+      padding:12px;
+      border-radius:12px;
+      border:1px solid #22314f;
+      background:#0b1220;
+      display:none;
+      gap:10px;
+      min-width:0;
+    }
+    .verify-panel .vp-title{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      font-weight:900; letter-spacing:.2px;
+    }
+    .verify-panel .vp-big{
+      font-size:1.15rem;
+      font-weight:900;
+      line-height:1.3;
+    }
+    .verify-panel .vp-sub{
+      color:#9fb3c9;
+      font-size:.95rem;
+      line-height:1.55;
+    }
+    .vp-box{
+      border:1px solid rgba(34,49,79,.7);
+      background:#0d1628;
+      border-radius:12px;
+      padding:12px;
+      display:grid;
+      gap:8px;
+      min-width:0;
+    }
+    .vp-grid{
+      display:grid;
+      grid-template-columns: minmax(0,1fr);
+      gap:10px;
+    }
+    .vp-row{
+      display:flex; gap:8px; align-items:flex-start; justify-content:space-between;
+      border-top:1px solid rgba(34,49,79,.55);
+      padding-top:8px;
+      min-width:0;
+    }
+    .vp-row:first-child{ border-top:0; padding-top:0 }
+    .vp-k{ color:#9fb3c9; font-weight:800; flex:0 0 140px; }
+    .vp-v{ color:#e6fbff; font-weight:900; text-align:right; min-width:0; overflow-wrap:anywhere; word-break:break-word }
+    .vp-help{
+      margin-top:8px;
+      color:#9fb3c9;
+      font-size:.93rem;
+      line-height:1.55;
+    }
+    .vp-help strong{ color:#e6fbff }
+    .vp-actions{
+      display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:flex-start;
+    }
+    .secondary-btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:10px 12px;
+      border-radius:10px;
+      border:1px solid #22455a;
+      background:#0c1a2e;
+      color:#cfefff;
+      font-weight:800;
+      cursor:pointer;
+      text-decoration:none;
+    }
+    .secondary-btn:hover{ text-decoration:underline }
+    .secondary-btn[disabled]{ opacity:.6; cursor:default }
+    .small-hint{
+      color:#9fb3c9;
+      font-size:.92rem;
+      line-height:1.55;
+    }
+
     /* Footer (canonical) */
     footer{
       border-top:1px solid var(--line);
@@ -456,7 +534,7 @@ upgrade-insecure-requests">
     }
     .social a:hover{ transform:translateY(-2px) }
 
-    a:focus-visible, .hero-btn:focus-visible, .primary-btn:focus-visible, .cta-header:focus-visible, .tp-burger:focus-visible{
+    a:focus-visible, .hero-btn:focus-visible, .primary-btn:focus-visible, .cta-header:focus-visible, .tp-burger:focus-visible, .secondary-btn:focus-visible{
       outline:2px solid #22d3ee; outline-offset:3px; border-radius:12px;
     }
 
@@ -465,6 +543,7 @@ upgrade-insecure-requests">
       .primary-btn{ margin-top:10px }
       .summary .k{ flex-basis:110px; }
       .summary code{ max-width:100%; }
+      .vp-k{ flex-basis:120px; }
     }
   </style>
   <noscript><style>.card{transform:none !important}</style></noscript>
@@ -616,15 +695,16 @@ upgrade-insecure-requests">
       <article class="card" id="verify-card" aria-labelledby="verify-title">
         <div class="step-label">Step 2 · Verify</div>
         <h2 id="verify-title">Verify a proof file</h2>
-        <p class="hint">Select your <code>.tproof.json</code> proof file, then verify its signature.</p>
+        <p class="hint">Load the proof, then (optionally) drop the file to answer: “Is this the same version?”</p>
 
-        <div class="note mini" aria-label="Why a proof file is required">
-          <strong>Why a proof file is required:</strong>
-          the <code>.tproof.json</code> contains the timestamp + issuer + signature. A hash alone cannot prove <em>when</em> it was issued or <em>by whom</em> it was signed.<br/>
-          <span class="muted">If the file is corrupted, unsupported, or invalid, verification is rejected.</span>
+        <div class="note mini" aria-label="Simple meaning">
+          <strong>Simple meaning:</strong> TimeProofs does <strong>not</strong> protect or lock your file.
+          It proves that a specific version existed at a specific time.<br/>
+          <span class="muted">To check a version, you compare the file’s hash with the hash inside the proof.</span>
         </div>
 
-        <label for="bundle-file">Proof file (.tproof.json)</label>
+        <!-- 1) Load proof -->
+        <label for="bundle-file">1) Proof file (.tproof.json)</label>
         <input type="file" id="bundle-file" accept=".tproof.json,application/json"/>
 
         <div class="file-actions">
@@ -635,11 +715,63 @@ upgrade-insecure-requests">
         <p class="hint" id="bundle-info"></p>
 
         <button class="primary-btn" id="btn-verify" type="button" style="margin-top:12px;">
-          Verify signature
+          Verify proof signature
         </button>
 
         <div class="status-line" id="verify-status" aria-live="polite"></div>
 
+        <!-- SIMPLE RESULT PANEL (answer first) -->
+        <div class="verify-panel" id="verify-panel" aria-live="polite" aria-atomic="true">
+          <div class="vp-box">
+            <div class="vp-title">
+              <div class="vp-big" id="vp-verdict">—</div>
+              <div id="vp-pill"></div>
+            </div>
+
+            <div class="vp-grid">
+              <div class="vp-row">
+                <div class="vp-k">Frozen on</div>
+                <div class="vp-v" id="vp-date">—</div>
+              </div>
+              <div class="vp-row">
+                <div class="vp-k">Proof status</div>
+                <div class="vp-v" id="vp-proof-status">—</div>
+              </div>
+              <div class="vp-row">
+                <div class="vp-k">Proof hash</div>
+                <div class="vp-v" id="vp-proof-hash">—</div>
+              </div>
+              <div class="vp-row" id="vp-file-row" style="display:none;">
+                <div class="vp-k">File hash</div>
+                <div class="vp-v" id="vp-file-hash">—</div>
+              </div>
+              <div class="vp-row" id="vp-compare-row" style="display:none;">
+                <div class="vp-k">Same file?</div>
+                <div class="vp-v" id="vp-compare">—</div>
+              </div>
+            </div>
+
+            <div class="vp-help" id="vp-help">
+              <strong>Tip:</strong> drop the file to check the version (optional). If you don’t have the file, you can still verify the proof signature.
+            </div>
+          </div>
+
+          <div class="vp-actions">
+            <label class="secondary-btn" for="verify-file" id="btn-choose-file" style="cursor:pointer;">
+              Check a file version (optional)
+            </label>
+            <input type="file" id="verify-file" style="display:none" />
+            <button class="secondary-btn" type="button" id="btn-clear-verify-file" disabled>Remove file</button>
+          </div>
+
+          <div class="drop" id="drop-verify-file" style="margin-top:10px;">
+            …or drag &amp; drop the <strong>file</strong> here to check if it matches the frozen version
+          </div>
+
+          <div class="small-hint" id="verify-file-info" style="margin-top:8px;"></div>
+        </div>
+
+        <!-- Existing summary (technical) -->
         <div class="summary" id="verify-summary" aria-live="polite" aria-atomic="true">
           <div class="item"><span class="k">Status</span><span id="verify-s-status">—</span></div>
           <div class="item"><span class="k">Hash (proof)</span><code id="verify-s-hash">—</code></div>
@@ -662,14 +794,8 @@ upgrade-insecure-requests">
           <pre id="verify-output" aria-live="polite">{}</pre>
         </div>
 
-        <div class="note" style="margin-top:14px" aria-label="What is verified / what is not">
-          <strong>What is verified:</strong> the proof file’s structure and cryptographic signature (issuer, timestamp, and the referenced SHA-256).<br/>
-          <strong>What is not verified:</strong> this does <strong>NOT</strong> verify your original file automatically — it verifies the proof. To check a file, you must re-hash the exact file and compare it to the hash inside the proof.
-        </div>
-
-        <div class="note mini" aria-label="Next steps">
-          <strong>Next:</strong> if you need to check a document version, re-hash the file and compare it to the hash inside the proof.<br/>
-          <span class="muted">Need real workflows? <a href="/use-cases.html">Use Cases →</a></span>
+        <div class="note mini" aria-label="Clear promise" style="margin-top:12px;">
+          <strong>Important:</strong> TimeProofs does not encrypt, protect, or lock files. It only proves a version existed at a time.
         </div>
 
         <div class="note" style="margin-top:12px" aria-label="Technical references">
@@ -1109,11 +1235,29 @@ upgrade-insecure-requests">
     const bundleFileInput = document.getElementById("bundle-file");
     const bundleInfo = document.getElementById("bundle-info");
 
+    // Simple panel elements
+    const vp = document.getElementById("verify-panel");
+    const vpVerdict = document.getElementById("vp-verdict");
+    const vpPill = document.getElementById("vp-pill");
+    const vpDate = document.getElementById("vp-date");
+    const vpProofStatus = document.getElementById("vp-proof-status");
+    const vpProofHash = document.getElementById("vp-proof-hash");
+    const vpFileRow = document.getElementById("vp-file-row");
+    const vpFileHash = document.getElementById("vp-file-hash");
+    const vpCompareRow = document.getElementById("vp-compare-row");
+    const vpCompare = document.getElementById("vp-compare");
+    const vpHelp = document.getElementById("vp-help");
+
+    const verifyFileInput = document.getElementById("verify-file");
+    const btnClearVerifyFile = document.getElementById("btn-clear-verify-file");
+    const dropVerifyFile = document.getElementById("drop-verify-file");
+    const verifyFileInfo = document.getElementById("verify-file-info");
+
     function showVerifyError(msg){
       verifyStatus.innerHTML=`<span class="pill bad">❌ ${msg}</span>`;
     }
     function showVerifyInfo(msg){
-      verifyStatus.innerHTML=`<span class="pill ok">ℹ️ ${msg}</span>`;
+      verifyStatus.innerHTML=`<span class="pill neutral">ℹ️ ${msg}</span>`;
     }
 
     function tagFromCheck(c){
@@ -1125,6 +1269,8 @@ upgrade-insecure-requests">
     }
 
     let loadedProof = null;
+    let loadedProofUI = null;
+    let lastFileHash = null;
 
     function getHashFromProof(b){
       if(!b || typeof b !== "object") return "";
@@ -1151,15 +1297,49 @@ upgrade-insecure-requests">
       chkOverall.textContent="—";
       chkEd.textContent="—";
       outVerify.textContent="{}";
+
+      // panel reset
+      vp.style.display="none";
+      vpVerdict.textContent="—";
+      vpPill.innerHTML="";
+      vpDate.textContent="—";
+      vpProofStatus.textContent="—";
+      vpProofHash.textContent="—";
+      vpFileRow.style.display="none";
+      vpCompareRow.style.display="none";
+      vpFileHash.textContent="—";
+      vpCompare.textContent="—";
+      vpHelp.innerHTML=`<strong>Tip:</strong> drop the file to check the version (optional). If you don’t have the file, you can still verify the proof signature.`;
+      verifyFileInfo.textContent="";
+      btnClearVerifyFile.disabled = true;
+      verifyFileInput.value = "";
+      lastFileHash = null;
     }
 
     function renderVerifyLoaded(ui, msg){
       showVerifyInfo(msg);
+
       vsStatus.textContent="Proof loaded";
       vsHash.textContent=short(ui.hashHex);
       vsTSProof.textContent = ui.tsIso ? fmtLocal(ui.tsIso) : "—";
       vsSign.textContent=short(ui.sig || "");
       verifySummary.style.display="grid";
+
+      // panel: show proof details immediately (even before signature verification)
+      vp.style.display="grid";
+      vpVerdict.textContent="Load a file to check: “Same version?” (optional)";
+      vpPill.innerHTML = `<span class="pill neutral">PROOF LOADED</span>`;
+      vpDate.textContent = ui.tsIso ? fmtLocal(ui.tsIso) : "—";
+      vpProofStatus.textContent = "Not checked yet";
+      vpProofHash.textContent = ui.hashHex;
+
+      vpFileRow.style.display="none";
+      vpCompareRow.style.display="none";
+      vpHelp.innerHTML = `<strong>Next:</strong> click “Verify proof signature”. Optional: drop the file to check if it matches the frozen version.`;
+
+      btnClearVerifyFile.disabled = true;
+      verifyFileInfo.textContent = "";
+      lastFileHash = null;
     }
 
     function setHint(el, txt){ if(el) el.textContent = txt || ""; }
@@ -1172,11 +1352,15 @@ upgrade-insecure-requests">
       const ui = normalizeProofForUI(b);
       if(!ui){
         loadedProof = null;
+        loadedProofUI = null;
         fail("Invalid proof: missing hash.value (64-hex).");
       }
+      loadedProofUI = ui;
       renderVerifyLoaded(ui, "Proof loaded.");
       outVerify.textContent = JSON.stringify(b, null, 2);
       setHint(bundleInfo, `Loaded: ${ui.hashHex}`);
+      vpProofHash.textContent = ui.hashHex;
+      vpDate.textContent = ui.tsIso ? fmtLocal(ui.tsIso) : "—";
     }
     async function loadProofFromFile(f){
       if(!f) return;
@@ -1186,20 +1370,121 @@ upgrade-insecure-requests">
       await loadProofObject(b);
     }
 
+    function updateCompare(){
+      if(!loadedProofUI) return;
+      const proofHash = loadedProofUI.hashHex;
+      const fileHash = lastFileHash;
+
+      if(!fileHash){
+        vpFileRow.style.display="none";
+        vpCompareRow.style.display="none";
+        return;
+      }
+
+      vpFileRow.style.display="flex";
+      vpCompareRow.style.display="flex";
+      vpFileHash.textContent = fileHash;
+
+      const same = fileHash === proofHash;
+      vpCompare.innerHTML = same
+        ? `<span class="pill ok">✅ SAME FILE</span>`
+        : `<span class="pill bad">❌ DIFFERENT FILE</span>`;
+
+      if(same){
+        vpVerdict.textContent = "SAME FILE";
+        vpPill.innerHTML = `<span class="pill ok">MATCH</span>`;
+        vpHelp.innerHTML = `<strong>Result:</strong> this file matches the version frozen on <strong>${loadedProofUI.tsIso ? fmtLocal(loadedProofUI.tsIso) : "—"}</strong>.`;
+      }else{
+        vpVerdict.textContent = "DIFFERENT FILE";
+        vpPill.innerHTML = `<span class="pill bad">MISMATCH</span>`;
+        vpHelp.innerHTML = `<strong>Result:</strong> this file does not match the frozen version. It is a different version (or different file).`;
+      }
+    }
+
+    async function loadVerifyFile(f){
+      if(!loadedProofUI) fail("Load the proof file first.");
+      if(!f) return;
+      if(f.size > MAX_FILE_BYTES) fail("File too large (max 50 MB).");
+      const sizeMB=(f.size/1024/1024).toFixed(2);
+      verifyFileInfo.textContent = `File loaded: ${f.name} (${sizeMB} MB) — hashing locally…`;
+      const h = await sha256HexFromFile(f);
+      lastFileHash = h;
+      verifyFileInfo.textContent = `File loaded: ${f.name} (${sizeMB} MB)`;
+      btnClearVerifyFile.disabled = false;
+      updateCompare();
+    }
+
     // CLEAR verify input
     const clearBundleBtn = document.getElementById("clear-bundle-file");
     clearBundleBtn?.addEventListener("click", ()=>{
       bundleFileInput.value = "";
       loadedProof = null;
+      loadedProofUI = null;
       setHint(bundleInfo, "");
       resetVerifyUI();
       showVerifyInfo("Proof cleared.");
     });
 
+    // Clear checked file
+    btnClearVerifyFile?.addEventListener("click", ()=>{
+      verifyFileInput.value = "";
+      lastFileHash = null;
+      verifyFileInfo.textContent = "";
+      btnClearVerifyFile.disabled = true;
+      updateCompare();
+      vpHelp.innerHTML = `<strong>Tip:</strong> drop the file to check the version (optional).`;
+      showVerifyInfo("File cleared.");
+    });
+
+    // Drop / choose file to compare
+    verifyFileInput?.addEventListener("change", async ()=>{
+      const f = verifyFileInput.files?.[0];
+      if(!f) return;
+      try{
+        await loadVerifyFile(f);
+      }catch(err){
+        lastFileHash = null;
+        verifyFileInfo.textContent = "";
+        btnClearVerifyFile.disabled = true;
+        alert(String(err.message||err));
+      }
+    });
+
+    if(dropVerifyFile){
+      ["dragenter","dragover"].forEach(ev=>{
+        dropVerifyFile.addEventListener(ev,e=>{
+          e.preventDefault(); e.stopPropagation(); dropVerifyFile.classList.add("drag");
+        });
+      });
+      ["dragleave","drop"].forEach(ev=>{
+        dropVerifyFile.addEventListener(ev,e=>{
+          e.preventDefault(); e.stopPropagation(); dropVerifyFile.classList.remove("drag");
+        });
+      });
+      dropVerifyFile.addEventListener("drop", async e=>{
+        e.preventDefault(); e.stopPropagation(); dropVerifyFile.classList.remove("drag");
+        const f=e.dataTransfer?.files?.[0];
+        if(!f) return;
+        try{
+          await loadVerifyFile(f);
+        }catch(err){
+          lastFileHash = null;
+          verifyFileInfo.textContent = "";
+          btnClearVerifyFile.disabled = true;
+          alert(String(err.message||err));
+        }
+      });
+    }
+
     btnVerify.onclick = async ()=>{
       if(btnVerify.disabled) return;
       btnVerify.disabled = true;
-      resetVerifyUI();
+
+      // keep loaded proof UI; just reset status + checks + output portion
+      verifyStatus.textContent="";
+      checksBox.style.display="none";
+      chkOverall.textContent="—";
+      chkEd.textContent="—";
 
       try{
         if(!loadedProof) fail("Select or drop a .tproof.json proof file first.");
@@ -1207,6 +1492,8 @@ upgrade-insecure-requests">
         if(!ui) fail("Invalid proof: missing hash.value (64-hex).");
 
         showVerifyInfo("Checking signature…");
+        vp.style.display = "grid";
+        vpProofStatus.textContent = "Checking…";
 
         const r = await fetchAPI("/verify", {
           method:"POST",
@@ -1217,6 +1504,7 @@ upgrade-insecure-requests">
         if(!r.ok) fail(j.message || j.error || `Verify failed (${r.status})`);
 
         const valid = (j && j.valid === true);
+
         verifyStatus.innerHTML = valid
           ? `<span class="pill ok">✅ Valid proof</span>`
           : `<span class="pill bad">❌ Invalid (or not verifiable)</span>`;
@@ -1231,12 +1519,33 @@ upgrade-insecure-requests">
         chkOverall.innerHTML = valid ? `<span class="tag ok">valid</span>` : `<span class="tag bad">invalid</span>`;
         chkEd.innerHTML = tagFromCheck(j && j.checks && j.checks.ed25519);
 
+        // update panel proof status
+        vpProofStatus.textContent = valid ? "Valid proof (signature OK)" : "Invalid proof (signature failed)";
+        vpPill.innerHTML = valid ? `<span class="pill ok">PROOF VALID</span>` : `<span class="pill bad">PROOF INVALID</span>`;
+
+        // If proof invalid, make it clear it cannot be trusted for date/issuer.
+        if(!valid){
+          vpVerdict.textContent = "INVALID PROOF";
+          vpHelp.innerHTML = `<strong>Result:</strong> this proof cannot be verified. Do not rely on its date or issuer.`;
+        }else{
+          // If file already loaded, keep compare verdict; otherwise show next step
+          if(!lastFileHash){
+            vpVerdict.textContent = "PROOF VALID";
+            vpHelp.innerHTML = `<strong>Next:</strong> optional — drop the file to check if it matches the frozen version.`;
+          }else{
+            updateCompare();
+          }
+        }
+
         outVerify.textContent = JSON.stringify({ verify: j, bundle: loadedProof }, null, 2);
 
         const note = (j && typeof j.note === "string") ? j.note : "";
         if(note) showVerifyInfo((valid ? "Valid. " : "Checked. ") + note);
       }catch(e){
         showVerifyError(String(e.message || e));
+        if(vp && vp.style.display !== "none"){
+          vpProofStatus.textContent = "Error";
+        }
       }finally{
         btnVerify.disabled = false;
       }
@@ -1256,17 +1565,19 @@ upgrade-insecure-requests">
         document.getElementById("verify-card").scrollIntoView({behavior:"smooth",block:"start"});
       }catch(err){
         loadedProof=null;
+        loadedProofUI=null;
         alert(String(err.message||err));
       }
     });
 
     bundleFileInput?.addEventListener("change", async ()=>{
       const f = bundleFileInput.files?.[0];
-      if(!f){ setHint(bundleInfo,""); loadedProof=null; return; }
+      if(!f){ setHint(bundleInfo,""); loadedProof=null; loadedProofUI=null; return; }
       try{
         await loadProofFromFile(f);
       }catch(err){
         loadedProof=null;
+        loadedProofUI=null;
         alert(String(err.message||err));
       }
     });
@@ -1284,8 +1595,10 @@ upgrade-insecure-requests">
     if('serviceWorker' in navigator){
       navigator.serviceWorker.register('/sw.js',{type:'module',scope:'/'}).catch(()=>{});
     }
+
+    // init
+    resetVerifyUI();
   })();
   </script>
 </body>
-</html>
-```0
+  </html>
