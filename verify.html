@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta name="color-scheme" content="dark light"/>
 
-  <title>Create / Verify — TimeProofs</title>
+  <title>Verify — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="Create and verify TimeProofs proofs. Hash locally, request a signed timestamp from the stateless API, download your proof (.tproof.json), and verify it later — without uploading your content."/>
+  <meta name="description" content="Verify a TimeProofs proof file (.tproof.json). Check signature validity and optionally confirm whether a file matches the frozen version — without uploading your content."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -39,19 +39,19 @@
   <link rel="manifest" href="/site.webmanifest"/>
 
   <!-- Social -->
-  <meta property="og:title" content="Create / Verify — TimeProofs"/>
-  <meta property="og:description" content="Hash locally. Get a signed timestamp. Download your proof (.tproof.json). Verify later without uploading content."/>
+  <meta property="og:title" content="Verify — TimeProofs"/>
+  <meta property="og:description" content="Verify a .tproof.json proof file. Check signature validity and optionally confirm whether a file matches the frozen version — without uploading your content."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/verify.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
-  <meta property="og:image:alt" content="TimeProofs — Create / Verify tool"/>
+  <meta property="og:image:alt" content="TimeProofs — Verify tool"/>
   <meta property="og:site_name" content="TimeProofs"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:locale:alternate" content="fr_FR"/>
 
   <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="Create / Verify — TimeProofs"/>
-  <meta name="twitter:description" content="Create proofs, download .tproof.json proof files, and verify them later — without uploading content."/>
+  <meta name="twitter:title" content="Verify — TimeProofs"/>
+  <meta name="twitter:description" content="Verify a .tproof.json proof file and optionally check if a file matches the frozen version — without uploading content."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- Security meta -->
@@ -123,7 +123,7 @@ upgrade-insecure-requests">
   {
     "@context":"https://schema.org",
     "@type":"WebPage",
-    "name":"Create / Verify",
+    "name":"Verify",
     "url":"https://timeproofs.io/verify.html",
     "inLanguage":"en",
     "isPartOf":{
@@ -131,8 +131,8 @@ upgrade-insecure-requests">
       "name":"TimeProofs",
       "url":"https://timeproofs.io/"
     },
-    "dateModified":"2026-02-13",
-    "description":"Create and verify cryptographic proofs. Local hashing, signed timestamp, downloadable .tproof.json proof file, and signature verification (proof file required)."
+    "dateModified":"2026-02-14",
+    "description":"Verify a .tproof.json proof file. Signature verification is recommended. Optionally confirm whether a file matches the frozen version by comparing SHA-256 locally."
   }
   </script>
 
@@ -235,7 +235,7 @@ upgrade-insecure-requests">
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
     main{ padding:0 0 40px }
 
-    /* HERO (standard) */
+    /* HERO */
     .hero{
       padding-top:96px; padding-bottom:18px; text-align:center;
       position:relative; border-bottom:1px solid var(--line);
@@ -265,10 +265,9 @@ upgrade-insecure-requests">
 
     /* Cards layout */
     .cards-grid{
-      display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:16px;
-      margin:16px auto 0; max-width:1100px;
+      display:grid; grid-template-columns:minmax(0,1fr); gap:16px;
+      margin:16px auto 0; max-width:920px;
     }
-    @media (max-width:900px){ .cards-grid{ grid-template-columns:minmax(0,1fr) } }
 
     .card{
       background:#0c1424; border:1px solid var(--line); border-radius:12px;
@@ -278,24 +277,6 @@ upgrade-insecure-requests">
     .card h2{ margin:.2em 0 .4em; font-size:1.2rem; color:#b9e7f5; }
     .card p.hint{ margin:0 0 10px; font-size:.9rem; color:#93a1b5; }
 
-    .step-label{
-      display:inline-flex; align-items:center; gap:6px;
-      padding:4px 10px; border-radius:999px; background:#0b1220; border:1px solid #22314f;
-      font-size:.8rem; color:#9fb3c9; margin-bottom:8px;
-    }
-
-    .segmented{
-      display:inline-flex; flex-wrap:wrap; gap:6px; padding:4px;
-      border-radius:999px; background:#050816; border:1px solid #22314f;
-    }
-    .segmented button{
-      border:0; background:transparent; color:#9fb3c9; padding:6px 10px;
-      border-radius:999px; font-size:.9rem; cursor:pointer;
-    }
-    .segmented button[data-active="true"]{
-      background:#0d2330; color:#e5f6ff; border:1px solid #22d3ee;
-    }
-
     label{ display:block; font-size:.85rem; color:#a7b1c2; margin:8px 0 4px }
     input[type="text"], textarea, input[type="file"]{
       width:100%;
@@ -303,10 +284,6 @@ upgrade-insecure-requests">
       border:1px solid #1f2937; border-radius:10px; padding:10px 12px;
       font-size:.95rem;
     }
-    textarea{ min-height:110px; resize:vertical; overflow:auto; overflow-wrap:anywhere }
-
-    .row{ display:flex; flex-wrap:wrap; gap:10px; align-items:flex-start }
-    .row > *{ flex:1 1 220px; min-width:0 }
 
     .drop{
       margin-top:10px; padding:14px; border:1px dashed #2b3b55;
@@ -349,16 +326,6 @@ upgrade-insecure-requests">
       text-overflow:ellipsis;
       white-space:nowrap;
       vertical-align:bottom;
-    }
-
-    .hint,
-    #hash-preview-text,
-    #hash-preview-file,
-    #file-info,
-    #bundle-info{
-      overflow-wrap:anywhere;
-      word-break:break-word;
-      max-width:100%;
     }
 
     pre, code{ max-width:100% }
@@ -447,11 +414,6 @@ upgrade-insecure-requests">
       font-size:1.15rem;
       font-weight:900;
       line-height:1.3;
-    }
-    .verify-panel .vp-sub{
-      color:#9fb3c9;
-      font-size:.95rem;
-      line-height:1.55;
     }
     .vp-box{
       border:1px solid rgba(34,49,79,.7);
@@ -567,7 +529,7 @@ upgrade-insecure-requests">
       <a href="/">Home</a>
       <a href="/install.html">Install</a>
       <a href="/use-cases.html">Use Cases</a>
-      <a href="/verify.html" aria-current="page">Create / Verify</a>
+      <a href="/verify.html" aria-current="page">Verify</a>
       <a href="/pricing.html">Pricing</a>
       <a href="/about.html">About</a>
       <a class="nav-cta" href="/install.html" aria-label="Install the Freeze Button">Install</a>
@@ -583,121 +545,29 @@ upgrade-insecure-requests">
   <main id="main" class="wrap" role="main">
     <!-- HERO -->
     <section class="hero" role="region" aria-labelledby="page-title">
-      <div class="icon" aria-hidden="true">🔐</div>
+      <div class="icon" aria-hidden="true">🔎</div>
       <p class="badge">Public Beta v0.2 · Proof file first · Privacy-first · No upload</p>
 
-      <h1 id="page-title">Create / Verify</h1>
+      <h1 id="page-title">Verify a proof</h1>
 
       <p class="lead">
-        Create a proof file for a quote, contract, email text, or any document version.
-        Hashing runs locally in your browser. You download a <code>.tproof.json</code> file and keep it with your records.
-      </p>
-
-      <p class="lead" style="font-size:.95rem; margin-top:-4px">
-        Verification is proof-file first: <strong>verification requires the <code>.tproof.json</code> file</strong>.
+        Load a <code>.tproof.json</code> file to verify its signature. Optionally, drop a file to confirm whether it matches the frozen version (SHA-256 computed locally).
       </p>
 
       <div class="hero-actions">
-        <a href="#create-card" class="hero-btn primary" id="hero-create">Create a proof</a>
-        <a href="#verify-card" class="hero-btn" id="hero-verify">Verify a proof</a>
+        <a href="#verify-card" class="hero-btn primary" id="hero-verify">Verify now</a>
+        <a href="/install.html" class="hero-btn" id="hero-install">Install the Freeze Button</a>
       </div>
 
       <p class="lead" style="font-size:.95rem; margin-top:10px">
-        Want the “Freeze before sending” workflow? Install the button: <a href="/install.html">Install →</a>
+        Creating proofs is done via the Freeze Button workflow: <a href="/install.html">Install →</a>
       </p>
     </section>
 
     <!-- TOOL AREA -->
-    <section class="cards-grid" aria-label="Create and verify tool">
-      <!-- CREATE -->
-      <article class="card" id="create-card" aria-labelledby="create-title">
-        <div class="step-label">Step 1 · Create</div>
-        <h2 id="create-title">Create a proof file</h2>
-        <p class="hint">Choose text, a file, or an existing SHA-256. Hashing runs locally in your browser.</p>
-
-        <div>
-          <label for="mode-group">Input mode</label>
-          <div class="segmented" id="mode-group" aria-label="Input mode">
-            <button type="button" id="mode-text" data-active="true">Text</button>
-            <button type="button" id="mode-file">File</button>
-            <button type="button" id="mode-hash">Existing SHA-256 (advanced)</button>
-          </div>
-        </div>
-
-        <div id="create-input-text" style="margin-top:10px;">
-          <label for="create-text">Text to hash</label>
-          <textarea id="create-text" placeholder="Paste or type the content you want to prove…" spellcheck="false"></textarea>
-          <p class="hint" id="hash-preview-text"></p>
-        </div>
-
-        <div id="create-input-file" style="display:none; margin-top:10px;">
-          <label for="create-file">File to hash</label>
-          <input type="file" id="create-file" aria-describedby="create-file-hint"/>
-          <p class="hint" id="create-file-hint">We compute SHA-256 locally. Max 50 MB. Nothing is uploaded.</p>
-
-          <div class="file-actions">
-            <button type="button" class="hero-btn" id="clear-create-file" aria-label="Remove selected file">Remove file</button>
-          </div>
-
-          <div class="drop" id="drop-file">…or drag &amp; drop a file here</div>
-          <p class="hint" id="file-info"></p>
-          <p class="hint" id="hash-preview-file"></p>
-        </div>
-
-        <div id="create-input-hash" style="display:none; margin-top:10px;">
-          <label for="create-hash">Existing SHA-256 hash (64 hex)</label>
-          <input type="text" id="create-hash" placeholder="e3b0c44298fc1c149a…" autocapitalize="off" autocomplete="off" spellcheck="false" pattern="[A-Fa-f0-9]{64}"/>
-          <p class="hint" id="hash-preview-raw">
-            Advanced: you must already have the SHA-256 of the exact content. This does not verify anything — it only creates a proof for that fingerprint.
-          </p>
-        </div>
-
-        <div class="row" style="margin-top:10px;">
-          <div>
-            <label for="create-type">Type (optional)</label>
-            <input type="text" id="create-type" placeholder="event | quote | contract | email | file | other" maxlength="32" autocomplete="off"/>
-          </div>
-          <div>
-            <label for="create-meta">Meta (optional, non-sensitive JSON)</label>
-            <input type="text" id="create-meta" placeholder='{"mime":"application/pdf","case":"quote-v3"}' maxlength="1024" autocomplete="off" spellcheck="false"/>
-          </div>
-        </div>
-        <p class="hint" style="margin-top:8px">Do not include personal data. Meta is optional and should remain non-sensitive.</p>
-
-        <button class="primary-btn" id="btn-create" type="button">Create proof now</button>
-
-        <div class="status-line" id="create-status" aria-live="polite"></div>
-
-        <div class="summary" id="create-summary" aria-live="polite" aria-atomic="true">
-          <div class="item"><span class="k">Status</span><span id="create-s-status">—</span></div>
-          <div class="item"><span class="k">Hash (fingerprint)</span><code id="create-s-hash">—</code></div>
-          <div class="item"><span class="k">Issued at (server)</span><span id="create-s-ts-proof">—</span></div>
-          <div class="item"><span class="k">Signature</span><code id="create-s-sign">—</code></div>
-        </div>
-
-        <div style="position:relative; margin-top:10px;">
-          <pre id="create-output" aria-live="polite">{}</pre>
-        </div>
-
-        <div class="row" id="create-actions" style="display:none; gap:8px; margin-top:10px;">
-          <button class="hero-btn" id="download-proof" type="button">Download your proof (.tproof.json)</button>
-        </div>
-        <p class="hint" id="download-hint" style="display:none; margin-top:8px">Keep the <code>.tproof.json</code> proof file. Verification requires it.</p>
-
-        <div class="note" aria-label="What this proves">
-          <strong>What this proves:</strong> an exact content fingerprint (SHA-256) existed at the server-issued time and is signed by the TimeProofs key.<br/>
-          <strong>What this does not prove:</strong> authorship, intent, delivery, or that someone read/accepted anything.
-        </div>
-
-        <div class="note mini" aria-label="Daily workflow">
-          <strong>Daily workflow:</strong> if a document matters, Freeze it right before you send.<br/>
-          <span class="muted">Install the Freeze Button: <a href="/install.html">Install →</a> · See real situations: <a href="/use-cases.html">Use Cases →</a></span>
-        </div>
-      </article>
-
+    <section class="cards-grid" aria-label="Verify tool">
       <!-- VERIFY -->
       <article class="card" id="verify-card" aria-labelledby="verify-title">
-        <div class="step-label">Step 2 · Verify</div>
         <h2 id="verify-title">Verify a proof file</h2>
         <p class="hint">Load the proof, verify it (recommended), then optionally drop the file to answer: “Is this the same version?”</p>
 
@@ -826,7 +696,7 @@ upgrade-insecure-requests">
       <a href="/">Home</a> •
       <a href="/install.html">Install</a> •
       <a href="/use-cases.html">Use Cases</a> •
-      <a href="/verify.html" aria-current="page">Create/Verify</a> •
+      <a href="/verify.html" aria-current="page">Verify</a> •
       <a href="/pricing.html">Pricing</a> •
       <a href="/about.html">About</a> •
       <a href="/proofspec.html">Protocol</a> •
@@ -861,12 +731,12 @@ upgrade-insecure-requests">
     const MAX_FILE_BYTES = 50 * 1024 * 1024;
     const REQ_TIMEOUT_MS = 15000;
 
+    // NOTE: kept for compatibility, but this page does not create proofs.
     const hasBundleSDK =
       typeof TimeProofsV02 !== "undefined" &&
       TimeProofsV02 &&
       typeof TimeProofsV02.createBundle === "function";
 
-    function nowIso(){ return new Date().toISOString(); }
     function isIso(iso){
       if(!iso || typeof iso !== "string") return false;
       const d = new Date(iso);
@@ -951,11 +821,7 @@ upgrade-insecure-requests">
       if(window.matchMedia('(min-width: 900px)').matches) closeMenu();
     },{ passive:true });
 
-    // HERO anchors
-    document.getElementById('hero-create').addEventListener('click', e=>{
-      e.preventDefault();
-      document.getElementById('create-card').scrollIntoView({behavior:'smooth',block:'start'});
-    });
+    // HERO anchor
     document.getElementById('hero-verify').addEventListener('click', e=>{
       e.preventDefault();
       document.getElementById('verify-card').scrollIntoView({behavior:'smooth',block:'start'});
@@ -980,247 +846,11 @@ upgrade-insecure-requests">
       throw lastErr || new Error("Network error");
     }
 
-    async function sha256HexFromText(str){
-      const enc=new TextEncoder().encode(str||"");
-      const buf=await crypto.subtle.digest("SHA-256", enc);
-      return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,"0")).join("");
-    }
     async function sha256HexFromFile(file){
       const buf=await file.arrayBuffer();
       const digest=await crypto.subtle.digest("SHA-256", buf);
       return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,"0")).join("");
     }
-
-    // MODE SWITCH (create)
-    const modeText=document.getElementById("mode-text");
-    const modeFile=document.getElementById("mode-file");
-    const modeHash=document.getElementById("mode-hash");
-    const inputTextBlock=document.getElementById("create-input-text");
-    const inputFileBlock=document.getElementById("create-input-file");
-    const inputHashBlock=document.getElementById("create-input-hash");
-
-    function setMode(mode){
-      [modeText,modeFile,modeHash].forEach(btn=>btn.dataset.active="false");
-      inputTextBlock.style.display="none";
-      inputFileBlock.style.display="none";
-      inputHashBlock.style.display="none";
-      if(mode==="text"){
-        modeText.dataset.active="true"; inputTextBlock.style.display="block";
-      }else if(mode==="file"){
-        modeFile.dataset.active="true"; inputFileBlock.style.display="block";
-      }else{
-        modeHash.dataset.active="true"; inputHashBlock.style.display="block";
-      }
-    }
-    modeText.onclick=()=>setMode("text");
-    modeFile.onclick=()=>setMode("file");
-    modeHash.onclick=()=>setMode("hash");
-    setMode("text");
-
-    // PREVIEWS
-    const textArea=document.getElementById("create-text");
-    const hashPrevText=document.getElementById("hash-preview-text");
-    const hashPrevFile=document.getElementById("hash-preview-file");
-    const fileInput=document.getElementById("create-file");
-    const dropFile=document.getElementById("drop-file");
-    const fileInfo=document.getElementById("file-info");
-
-    let textHashDebounce;
-    textArea?.addEventListener("input",()=>{
-      clearTimeout(textHashDebounce);
-      textHashDebounce=setTimeout(async ()=>{
-        const v=textArea.value||"";
-        if(!v){ hashPrevText.textContent=""; return; }
-        const h=await sha256HexFromText(v);
-        hashPrevText.textContent="SHA-256 (preview): "+h;
-      },200);
-    });
-
-    function setFileInfo(f){
-      if(!f){ fileInfo.textContent=""; hashPrevFile.textContent=""; return; }
-      const sizeMB=(f.size/1024/1024).toFixed(2);
-      fileInfo.textContent=`${f.name} (${sizeMB} MB)`;
-    }
-
-    if(dropFile){
-      ["dragenter","dragover"].forEach(ev=>{
-        dropFile.addEventListener(ev,e=>{
-          e.preventDefault(); e.stopPropagation(); dropFile.classList.add("drag");
-        });
-      });
-      ["dragleave","drop"].forEach(ev=>{
-        dropFile.addEventListener(ev,e=>{
-          e.preventDefault(); e.stopPropagation(); dropFile.classList.remove("drag");
-        });
-      });
-      dropFile.addEventListener("drop",async e=>{
-        const f=e.dataTransfer?.files?.[0];
-        if(!f) return;
-        if(f.size>MAX_FILE_BYTES){ alert("File too large (max 50 MB)."); return; }
-        try{ fileInput.files=e.dataTransfer.files; }catch{}
-        setFileInfo(f);
-        const h=await sha256HexFromFile(f);
-        hashPrevFile.textContent="SHA-256 (preview): "+h;
-      });
-      fileInput.addEventListener("change",async ()=>{
-        const f=fileInput.files?.[0];
-        if(!f){ setFileInfo(null); return; }
-        if(f.size>MAX_FILE_BYTES){ setFileInfo(null); fileInput.value=""; alert("File too large (max 50 MB)."); return; }
-        setFileInfo(f);
-        const h=await sha256HexFromFile(f);
-        hashPrevFile.textContent="SHA-256 (preview): "+h;
-      });
-    }
-
-    // CLEAR create file
-    const clearCreateFileBtn = document.getElementById("clear-create-file");
-    clearCreateFileBtn?.addEventListener("click", ()=>{
-      fileInput.value = "";
-      setFileInfo(null);
-    });
-
-    // CREATE
-    const btnCreate=document.getElementById("btn-create");
-    const createStatus=document.getElementById("create-status");
-    const createSummary=document.getElementById("create-summary");
-    const csStatus=document.getElementById("create-s-status");
-    const csHash=document.getElementById("create-s-hash");
-    const csTSProof=document.getElementById("create-s-ts-proof");
-    const csSign=document.getElementById("create-s-sign");
-    const outCreate=document.getElementById("create-output");
-    const createActions=document.getElementById("create-actions");
-    const downloadProof=document.getElementById("download-proof");
-    const downloadHint=document.getElementById("download-hint");
-
-    function showCreateError(msg){
-      createStatus.innerHTML=`<span class="pill bad">❌ ${msg}</span>`;
-    }
-    function showCreateOk(){
-      createStatus.innerHTML=`<span class="pill ok">✅ Proof created</span>`;
-    }
-
-    function getSigFromProof(b){
-      if(!b || typeof b !== "object") return "";
-      const p=b.proof;
-      if(p && typeof p === "object") return p.signature || "";
-      return "";
-    }
-    function getTsIsoFromProof(b){
-      if(!b || typeof b !== "object") return null;
-      const t=b.timestamp;
-      if(t && typeof t === "object" && typeof t.issuedAt === "string" && isIso(t.issuedAt)) return t.issuedAt;
-      return null;
-    }
-
-    function buildProofFromTimestampResponse(resp, hashHex, type, metaInput){
-      const r = resp || {};
-      const ts = (r.timestamp && typeof r.timestamp === "object") ? r.timestamp : {};
-
-      const proof = {
-        version: "timeproofs-0.2",
-        hash: { algorithm: "SHA-256", value: hashHex },
-        timestamp: {
-          issuedAt: typeof ts.issuedAt === "string" ? ts.issuedAt : nowIso(),
-          issuer: typeof ts.issuer === "string" ? ts.issuer : "https://api.timeproofs.io",
-          nonce: typeof ts.nonce === "string" ? ts.nonce : ""
-        },
-        proof: (r.proof && typeof r.proof === "object")
-          ? {
-              algo: r.proof.algo || "Ed25519",
-              signature: r.proof.signature || null,
-              keyId: r.proof.keyId || "tp-v0-2-main"
-            }
-          : { algo:"Ed25519", signature:null, keyId:"tp-v0-2-main" }
-      };
-
-      const metaFromServer = (r.meta && typeof r.meta === "object") ? r.meta : {};
-      const metaLocal = (metaInput && typeof metaInput === "object") ? metaInput : {};
-      const metaMerged = { ...(type ? { type } : {}), ...metaFromServer, ...metaLocal };
-      if(Object.keys(metaMerged).length) proof.meta = metaMerged;
-
-      if(hasBundleSDK){
-        try{ return TimeProofsV02.createBundle(proof); }
-        catch{ return proof; }
-      }
-      return proof;
-    }
-
-    function enableCreateActions(proofObj, hashHex){
-      createActions.style.display="flex";
-      if(downloadHint) downloadHint.style.display="block";
-
-      downloadProof.onclick=()=>{
-        if(!proofObj) return;
-        const blob=new Blob([JSON.stringify(proofObj,null,2)],{type:"application/json"});
-        const a=document.createElement("a");
-        a.href=URL.createObjectURL(blob);
-        a.download=`${hashHex || "proof"}.tproof.json`;
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      };
-    }
-
-    btnCreate.onclick=async ()=>{
-      if(btnCreate.disabled) return;
-      btnCreate.disabled=true;
-      createStatus.textContent="";
-      createSummary.style.display="none";
-      createActions.style.display="none";
-      if(downloadHint) downloadHint.style.display="none";
-      outCreate.textContent="{}";
-
-      try{
-        let hashHex="";
-        if(inputTextBlock.style.display!=="none"){
-          const text=textArea.value||"";
-          if(!text) fail("Provide text to hash.");
-          hashHex=await sha256HexFromText(text);
-        }else if(inputFileBlock.style.display!=="none"){
-          const file=fileInput.files?.[0];
-          if(!file) fail("Select a file.");
-          if(file.size>MAX_FILE_BYTES) fail("File too large (max 50 MB).");
-          hashHex=await sha256HexFromFile(file);
-        }else{
-          const rawHashEl=document.getElementById("create-hash");
-          hashHex=(rawHashEl.value||"").trim();
-          if(!/^[a-f0-9]{64}$/i.test(hashHex)) fail("Invalid SHA-256 hash (64 hex).");
-          hashHex=hashHex.toLowerCase();
-        }
-
-        const type=(document.getElementById("create-type").value||"event").trim();
-        if(type.length>32) fail("Type too long (max 32).");
-
-        let meta={};
-        const rawMeta=(document.getElementById("create-meta").value||"").trim();
-        if(rawMeta){
-          if(rawMeta.length>1024) fail("Meta too large (max 1 KB).");
-          try{ meta=JSON.parse(rawMeta); }catch{ fail("Meta must be valid JSON."); }
-        }
-
-        const req={hash:hashHex,type,meta};
-        const r=await fetchAPI("/timestamp",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(req)});
-        const j=await r.json().catch(()=> ({}));
-        if(!r.ok || j.error) fail(j.error || `Failed (${r.status})`);
-
-        const proofObj = buildProofFromTimestampResponse(j, hashHex, type, meta);
-        const tsIso = getTsIsoFromProof(proofObj);
-        const sig = getSigFromProof(proofObj);
-
-        showCreateOk();
-        csStatus.textContent="Created";
-        csHash.textContent=short(hashHex);
-        csTSProof.textContent = tsIso ? fmtLocal(tsIso) : "—";
-        csSign.textContent=short(sig || "");
-
-        createSummary.style.display="grid";
-
-        outCreate.textContent=JSON.stringify(proofObj,null,2);
-        enableCreateActions(proofObj, hashHex);
-      }catch(e){
-        showCreateError(String(e.message||e));
-      }finally{
-        btnCreate.disabled=false;
-      }
-    };
 
     // VERIFY
     const btnVerify=document.getElementById("btn-verify");
@@ -1276,9 +906,21 @@ upgrade-insecure-requests">
     let loadedProofUI = null;
     let lastFileHash = null;
 
-    // IMPORTANT: trust boundary for timestamp/date (must verify signature first)
+    // trust boundary for timestamp/date (must verify signature first)
     let proofVerified = false;
 
+    function getSigFromProof(b){
+      if(!b || typeof b !== "object") return "";
+      const p=b.proof;
+      if(p && typeof p === "object") return p.signature || "";
+      return "";
+    }
+    function getTsIsoFromProof(b){
+      if(!b || typeof b !== "object") return null;
+      const t=b.timestamp;
+      if(t && typeof t === "object" && typeof t.issuedAt === "string" && isIso(t.issuedAt)) return t.issuedAt;
+      return null;
+    }
     function getHashFromProof(b){
       if(!b || typeof b !== "object") return "";
       if(typeof b.hash === "string") return b.hash;
@@ -1297,12 +939,8 @@ upgrade-insecure-requests">
       return { hashHex: h, sig, tsIso };
     }
 
-    function openPanel(){
-      vp.classList.add("is-open");
-    }
-    function closePanel(){
-      vp.classList.remove("is-open");
-    }
+    function openPanel(){ vp.classList.add("is-open"); }
+    function closePanel(){ vp.classList.remove("is-open"); }
 
     function resetVerifyUI(){
       verifyStatus.textContent="";
@@ -1312,7 +950,6 @@ upgrade-insecure-requests">
       chkEd.textContent="—";
       outVerify.textContent="{}";
 
-      // panel reset
       closePanel();
       vpVerdict.textContent="—";
       vpPill.innerHTML="";
@@ -1338,13 +975,10 @@ upgrade-insecure-requests">
       openPanel();
       vpVerdict.textContent="Proof loaded. Verify it (recommended).";
       vpPill.innerHTML = `<span class="pill neutral">PROOF LOADED</span>`;
-
-      // Date is NOT trusted until proof is verified
       vpDate.textContent = "(verify proof first)";
       vpProofStatus.textContent = "Not verified yet";
       vpFileRow.style.display="none";
       vpCompareRow.style.display="none";
-
       vpHelp.innerHTML = `<strong>Next (recommended):</strong> click “Verify proof”.<br/><span class="muted">Optional:</span> drop the file to check if it matches the proof hash.`;
     }
 
@@ -1367,7 +1001,6 @@ upgrade-insecure-requests">
     }
 
     function setPanelStateCompareUnverified(match){
-      // file hash can be compared even if proof isn't verified, but MUST be labeled as unverified
       openPanel();
       vpCompareRow.style.display="flex";
       vpFileRow.style.display="flex";
@@ -1420,12 +1053,10 @@ upgrade-insecure-requests">
       btnClearVerifyFile.disabled = true;
       verifyFileInfo.textContent = "";
 
-      // basic UI
       showVerifyInfo("Proof loaded.");
       outVerify.textContent = JSON.stringify(b, null, 2);
       setHint(bundleInfo, `Loaded: ${ui.hashHex}`);
 
-      // panel
       vpProofHash.textContent = ui.hashHex;
       setPanelStateLoaded();
     }
@@ -1443,10 +1074,7 @@ upgrade-insecure-requests">
 
       showVerifyError("Load the proof file first.");
       document.getElementById("verify-card").scrollIntoView({behavior:"smooth",block:"start"});
-
-      // focus the input (best effort)
       try{ bundleFileInput.focus({preventScroll:true}); }catch{}
-
       return false;
     }
 
@@ -1464,14 +1092,13 @@ upgrade-insecure-requests">
       verifyFileInfo.textContent = `File loaded: ${f.name} (${sizeMB} MB)`;
       btnClearVerifyFile.disabled = false;
 
-      // show compare
       vpFileHash.textContent = h;
       const proofHash = loadedProofUI.hashHex;
       const same = (h === proofHash);
 
       if(proofVerified){
         setPanelStateCompareVerified(same);
-        setPanelStateValid(); // keep proof verified pill and date trusted
+        setPanelStateValid();
       }else{
         setPanelStateCompareUnverified(same);
       }
@@ -1500,7 +1127,7 @@ upgrade-insecure-requests">
       }
     }
 
-    // CLEAR verify input (proof)
+    // CLEAR proof
     const clearBundleBtn = document.getElementById("clear-bundle-file");
     clearBundleBtn?.addEventListener("click", ()=>{
       bundleFileInput.value = "";
@@ -1559,7 +1186,6 @@ upgrade-insecure-requests">
       if(btnVerify.disabled) return;
       btnVerify.disabled = true;
 
-      // reset only status/checks (keep panel + loaded proof)
       verifyStatus.textContent="";
       checksBox.style.display="none";
       chkOverall.textContent="—";
@@ -1592,25 +1218,21 @@ upgrade-insecure-requests">
           ? `<span class="pill ok">✅ Valid proof</span>`
           : `<span class="pill bad">❌ Invalid (or not verifiable)</span>`;
 
-        // technical summary
         vsStatus.textContent = valid ? "Valid" : "Invalid / Not verifiable";
         vsHash.textContent = short(ui.hashHex);
         vsTSProof.textContent = ui.tsIso ? fmtLocal(ui.tsIso) : "—";
         vsSign.textContent = short(ui.sig || "");
         verifySummary.style.display = "grid";
 
-        // checks
         checksBox.style.display = "grid";
         chkOverall.innerHTML = valid ? `<span class="tag ok">valid</span>` : `<span class="tag bad">invalid</span>`;
         chkEd.innerHTML = tagFromCheck(j && j.checks && j.checks.ed25519);
 
-        // panel state
         if(!valid){
           setPanelStateInvalid();
         }else{
           setPanelStateValid();
 
-          // If a file is already loaded, re-render compare as VERIFIED result
           if(lastFileHash){
             const same = lastFileHash === ui.hashHex;
             setPanelStateCompareVerified(same);
