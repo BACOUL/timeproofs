@@ -24,8 +24,6 @@
 
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
   <link rel="dns-prefetch" href="//api.timeproofs.io"/>
-  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin/>
-  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev"/>
   <link rel="preconnect" href="https://plausible.io" crossorigin/>
   <link rel="preload" as="image" href="/assets/logo.png" fetchpriority="high"/>
   <link rel="preload" as="image" href="/og.png"/>
@@ -55,12 +53,12 @@
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
 
   <meta http-equiv="Content-Security-Policy" content="
-default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
+default-src 'self' https://api.timeproofs.io;
 worker-src 'self' blob:;
 img-src 'self' data: https:;
 style-src 'self' 'unsafe-inline';
-script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
-connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io https://static.cloudflareinsights.com;
+script-src 'self' 'nonce-TP-2026' https://plausible.io;
+connect-src 'self' https://api.timeproofs.io https://plausible.io;
 font-src 'self' https: data:;
 object-src 'none';
 base-uri 'self';
@@ -68,14 +66,14 @@ form-action 'self';
 frame-ancestors 'none';
 upgrade-insecure-requests">
 
-  <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
+  <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2026"></script>
 
+  <!-- JSON-LD: Organization (Home only) -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
     "@type":"Organization",
     "name":"TimeProofs",
-    "alternateName":"TimeProofs Official",
     "url":"https://timeproofs.io/",
     "logo":"https://timeproofs.io/assets/logo.png",
     "knowsAbout":[
@@ -83,9 +81,8 @@ upgrade-insecure-requests">
       "document integrity verification",
       "timestamp proof format",
       "privacy-first verification",
-      "Ed25519 signatures"
+      "digital signatures"
     ],
-    "sameAs":[],
     "contactPoint":[{
       "@type":"ContactPoint",
       "email":"contact@timeproofs.io",
@@ -95,16 +92,19 @@ upgrade-insecure-requests">
   }
   </script>
 
+  <!-- JSON-LD: WebSite (Home only) -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
     "@type":"WebSite",
     "name":"TimeProofs",
     "url":"https://timeproofs.io/",
-    "dateModified":"2026-02-13"
+    "inLanguage":"en",
+    "dateModified":"2026-02-16"
   }
   </script>
 
+  <!-- JSON-LD: WebPage -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -112,7 +112,9 @@ upgrade-insecure-requests">
     "name":"TimeProofs — Freeze Before Sending",
     "url":"https://timeproofs.io/",
     "description":"Freeze before sending. Create a verifiable proof of what you sent — privately, in one click, without uploading your content.",
-    "isPartOf":{"@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"}
+    "isPartOf":{"@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"},
+    "inLanguage":"en",
+    "dateModified":"2026-02-16"
   }
   </script>
 
@@ -524,18 +526,17 @@ upgrade-insecure-requests">
       <span>TimeProofs</span>
     </a>
 
-    <!-- UPDATED: install is now a first-class page -->
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
+      <a href="/">Home</a>
       <a href="/install.html">Install</a>
       <a href="/use-cases.html">Use Cases</a>
       <a href="/pricing.html">Pricing</a>
       <a href="/verify.html">Verify</a>
       <a href="/about.html">About</a>
-      <a class="nav-cta" href="/install.html" aria-label="Install the Freeze Button">Install the Button</a>
+      <a class="nav-cta" href="/install.html" aria-label="Install the Freeze Button">Install</a>
     </nav>
 
-    <!-- UPDATED: CTA points to install.html (not use-cases anchor) -->
-    <a class="cta-header" href="/install.html" aria-label="Install the Freeze Button">Install the Button</a>
+    <a class="cta-header" href="/install.html" aria-label="Install the Freeze Button">Install</a>
 
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu">
       <span aria-hidden="true">☰</span>
@@ -557,10 +558,9 @@ upgrade-insecure-requests">
         When a quote, contract, or email is disputed later, you can show the exact version that existed at that time.
       </p>
 
-      <!-- UPDATED: primary CTA to install page -->
       <div class="cta-wrap" role="group" aria-label="Primary actions">
         <a class="cta" href="/install.html" aria-label="Install the Freeze Button">Install the Freeze Button</a>
-        <a class="cta secondary" href="/verify.html" aria-label="Create or verify a proof manually">Try it now (no install)</a>
+        <a class="cta secondary" href="/verify.html" aria-label="Verify a proof manually">Try it now (no install)</a>
         <a class="cta tertiary" href="#when" aria-label="See when to use Freeze">When to use it ↓</a>
       </div>
 
@@ -777,9 +777,9 @@ upgrade-insecure-requests">
           <p><a href="/docs.html" aria-label="Open API documentation">Open API Docs →</a></p>
         </article>
         <article class="card">
-          <h3>Create / Verify</h3>
-          <p>Manual creation and verification tool for proof files.</p>
-          <p><a href="/verify.html" aria-label="Open Create/Verify tool">Open Create / Verify →</a></p>
+          <h3>Verify</h3>
+          <p>Manual verification tool for proof files.</p>
+          <p><a href="/verify.html" aria-label="Open Verify tool">Open Verify →</a></p>
         </article>
       </div>
     </section>
@@ -797,7 +797,7 @@ upgrade-insecure-requests">
         <span id="page-proof-release">v1</span> ·
         Hash:
         <code id="page-proof-hash">…</code> ·
-        <a id="page-proof-link" href="/verify.html" title="Open Verify">Verify (upload proof file)</a>
+        <a id="page-proof-link" href="/verify.html" title="Open Verify">Verify</a>
       </p>
 
       <p style="text-align:center; margin-top:6px; color:#9fb3c9">
@@ -814,7 +814,7 @@ upgrade-insecure-requests">
       <div class="cta-wrap" role="group" aria-label="Final actions">
         <a class="cta" href="/install.html" aria-label="Install the Freeze Button">Install the Freeze Button</a>
         <a class="cta secondary" href="/pricing.html" aria-label="See pricing">See Pricing</a>
-        <a class="cta tertiary" href="/verify.html" aria-label="Create or verify manually">Try now</a>
+        <a class="cta tertiary" href="/verify.html" aria-label="Verify a proof manually">Try now</a>
       </div>
       <p style="text-align:center; color:#9fb3c9; margin-top:10px">
         Need formal context? See <a href="/regulations.html">Regulations &amp; Legal framework →</a>
@@ -839,6 +839,7 @@ upgrade-insecure-requests">
       <a href="/use-cases.html">Use Cases</a> •
       <a href="/pricing.html">Pricing</a> •
       <a href="/verify.html">Verify</a> •
+      <a href="/about.html">About</a> •
       <a href="/proofspec.html">Protocol</a> •
       <a href="/docs.html">API Docs</a> •
       <a href="/regulations.html">Regulations</a> •
@@ -898,11 +899,11 @@ upgrade-insecure-requests">
   }
   </script>
 
-  <script defer nonce="TP-2025">
+  <script defer nonce="TP-2026">
   (function(){
-    // Header shade + progress bar
     const hdr=document.getElementById('hdr');
     const bar=document.getElementById('progress');
+
     function onScroll(){
       if(window.scrollY>6) hdr.classList.add('scrolled');
       else hdr.classList.remove('scrolled');
@@ -977,7 +978,7 @@ upgrade-insecure-requests">
       });
     })();
 
-    // Release info (v0.2 site-wide manifest + v0.1 legacy fallback)
+    // Release info manifest
     (async function loadRelease(){
       try{
         const candidates = ['/releases/v0.2.json','/releases/v0.1.json'];
@@ -995,7 +996,6 @@ upgrade-insecure-requests">
         const hashEl    = document.getElementById('page-proof-hash');
         const linkEl    = document.getElementById('page-proof-link');
 
-        // v0.2 format: { version, artifact:{hash}, verify:{url}, proof? }
         if (data.version && data.artifact && data.artifact.hash){
           if (releaseEl) releaseEl.textContent = data.version;
           if (hashEl)    hashEl.textContent    = data.artifact.hash;
@@ -1003,7 +1003,6 @@ upgrade-insecure-requests">
           return;
         }
 
-        // v0.1 legacy format: map by page + api
         const pageIdRaw = (document.documentElement.dataset.page || 'index.html').trim();
         const pageId = pageIdRaw.replace(/^\/+/, '');
 
@@ -1031,7 +1030,6 @@ upgrade-insecure-requests">
       }catch{}
     })();
 
-    // Service Worker
     if('serviceWorker' in navigator){
       navigator.serviceWorker.register('/sw.js',{type:'module',scope:'/'}).catch(()=>{});
     }
