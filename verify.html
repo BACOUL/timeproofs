@@ -23,7 +23,7 @@
   <link rel="alternate" type="application/yaml" href="/openapi.yaml" title="OpenAPI"/>
   <link rel="author" href="/humans.txt"/>
 
-  <!-- Perf (keep only what matters here) -->
+  <!-- Perf -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
   <link rel="dns-prefetch" href="//api.timeproofs.io"/>
   <link rel="preload" as="image" href="/assets/logo.png" fetchpriority="high"/>
@@ -126,7 +126,7 @@ upgrade-insecure-requests">
   }
   </script>
 
-  <!-- Styles (institutional / lightweight) -->
+  <!-- Styles -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --line:#1e293b; --panel:#0c1424;
@@ -274,6 +274,7 @@ upgrade-insecure-requests">
       margin-top:10px; padding:14px; border:1px dashed #2b3b55;
       border-radius:10px; background:#0b1220; color:#cfe3f5;
       text-align:center; font-size:.9rem;
+      user-select:none;
     }
     .drop.drag{ border-color:#22d3ee; background:#0f1f33; }
 
@@ -377,7 +378,7 @@ upgrade-insecure-requests">
       display:none;
     }
 
-    a:focus-visible, .hero-btn:focus-visible, .primary-btn:focus-visible, .cta-header:focus-visible, .tp-burger:focus-visible, .secondary-btn:focus-visible, input:focus-visible{
+    a:focus-visible, .hero-btn:focus-visible, .primary-btn:focus-visible, .cta-header:focus-visible, .tp-burger:focus-visible, .secondary-btn:focus-visible, input:focus-visible, .drop:focus-visible{
       outline:2px solid #22d3ee; outline-offset:3px; border-radius:12px;
     }
 
@@ -475,7 +476,7 @@ upgrade-insecure-requests">
     <!-- VERIFY TOOL -->
     <article class="card" id="verify-tool" aria-labelledby="verify-title">
       <h2 id="verify-title">Proof verifier</h2>
-      <p class="hint">
+      <p class="hint" id="verify-steps">
         1) Load the <code>.tproof.json</code> proof file • 2) Verify the proof signature • 3) (Optional) load the original file to check if it matches the frozen version.
       </p>
 
@@ -487,13 +488,15 @@ upgrade-insecure-requests">
 
       <!-- Proof input -->
       <label for="bundle-file">1) Proof file (.tproof.json)</label>
-      <input type="file" id="bundle-file" accept=".tproof.json,application/json"/>
+      <input type="file" id="bundle-file" accept=".json,application/json" aria-describedby="verify-steps bundle-info"/>
 
       <div class="file-actions">
         <button type="button" class="secondary-btn" id="clear-bundle-file" aria-label="Remove selected proof" disabled>Remove proof</button>
       </div>
 
-      <div class="drop" id="drop-bundle">…or drag &amp; drop a <strong>.tproof.json</strong> file here</div>
+      <div class="drop" id="drop-bundle" role="button" tabindex="0" aria-label="Drop a .tproof.json proof file here or click to pick a file">
+        …or drag &amp; drop a <strong>.tproof.json</strong> file here
+      </div>
       <p class="hint" id="bundle-info"></p>
 
       <button class="primary-btn" id="btn-verify" type="button" disabled>
@@ -547,7 +550,7 @@ upgrade-insecure-requests">
           <button class="secondary-btn" type="button" id="btn-clear-verify-file" disabled>Remove file</button>
         </div>
 
-        <div class="drop" id="drop-verify-file" style="margin-top:10px;">
+        <div class="drop" id="drop-verify-file" role="button" tabindex="0" style="margin-top:10px;" aria-label="Drop the original file here to compare with the proof hash">
           …or drag &amp; drop the <strong>original file</strong> here to check if it matches the frozen version
         </div>
 
@@ -627,7 +630,7 @@ upgrade-insecure-requests">
     onScroll();
     window.addEventListener("scroll", onScroll, { passive:true });
 
-    // Burger + focus trap (canonical)
+    // Burger + focus trap
     const burger=document.getElementById("tp-burger");
     const nav=document.getElementById("tp-nav");
     let lastFocus=null;
@@ -959,6 +962,10 @@ upgrade-insecure-requests">
         if(proofVerified) setPanelValid();
       }
 
+      function openPicker(){
+        try{ bundleFileInput.click(); }catch{}
+      }
+
       // Proof: input handlers
       bundleFileInput.addEventListener("change", async ()=>{
         const f = bundleFileInput.files?.[0];
@@ -968,6 +975,15 @@ upgrade-insecure-requests">
         }catch(err){
           resetUI();
           alert(String(err.message||err));
+        }
+      });
+
+      // Drop zone keyboard (open picker)
+      dropBundle.addEventListener("click", openPicker);
+      dropBundle.addEventListener("keydown", (e)=>{
+        if(e.key === "Enter" || e.key === " "){
+          e.preventDefault();
+          openPicker();
         }
       });
 
