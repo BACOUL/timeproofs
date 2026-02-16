@@ -8,7 +8,7 @@
 
   <title>Verify — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="Verify a TimeProofs proof file (.tproof.json) and optionally check if a file matches the frozen version — without uploading your content."/>
+  <meta name="description" content="Verify a TimeProofs proof file (.tproof.json) and optionally check if a local file matches the frozen version — without uploading your content. This page does not create proofs."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -26,8 +26,6 @@
   <!-- Perf (keep only what matters here) -->
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
   <link rel="dns-prefetch" href="//api.timeproofs.io"/>
-  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin/>
-  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev"/>
   <link rel="preload" as="image" href="/assets/logo.png" fetchpriority="high"/>
 
   <!-- Icons / Manifest -->
@@ -38,7 +36,7 @@
 
   <!-- Social -->
   <meta property="og:title" content="Verify — TimeProofs"/>
-  <meta property="og:description" content="Verify a .tproof.json proof file and optionally check if a file matches the frozen version — without uploading content."/>
+  <meta property="og:description" content="Verify a .tproof.json proof file and optionally check if a local file matches the frozen version — without uploading content. This page does not create proofs."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/verify.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
@@ -49,20 +47,20 @@
 
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Verify — TimeProofs"/>
-  <meta name="twitter:description" content="Verify a .tproof.json proof file and optionally check a file version — without uploading content."/>
+  <meta name="twitter:description" content="Verify a .tproof.json proof file and optionally check a local file version — without uploading content. This page does not create proofs."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
 
   <!-- Security meta -->
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
 
-  <!-- CSP -->
+  <!-- CSP (locked: only api.timeproofs.io allowed for connect) -->
   <meta http-equiv="Content-Security-Policy" content="
-default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
+default-src 'self';
 worker-src 'self' blob:;
 img-src 'self' data: https:;
 style-src 'self' 'unsafe-inline';
 script-src 'self' 'nonce-TP-2026';
-connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
+connect-src 'self' https://api.timeproofs.io;
 font-src 'self' https: data:;
 object-src 'none';
 base-uri 'self';
@@ -123,12 +121,12 @@ upgrade-insecure-requests">
       "name":"TimeProofs",
       "url":"https://timeproofs.io/"
     },
-    "dateModified":"2026-02-14",
-    "description":"Verify a .tproof.json proof file and optionally check if a file matches the frozen version. Proof-file first. Privacy-first. No upload."
+    "dateModified":"2026-02-16",
+    "description":"Verify a .tproof.json proof file and optionally check if a local file matches the frozen version. Verification-only. Privacy-first. No upload."
   }
   </script>
 
-  <!-- Styles (optimized: avoid heavy paints; keep institutional look) -->
+  <!-- Styles (institutional / lightweight) -->
   <style>
     :root{
       --bg:#0b1020; --bg2:#0b1226; --line:#1e293b; --panel:#0c1424;
@@ -455,17 +453,17 @@ upgrade-insecure-requests">
     <!-- HERO -->
     <section class="hero" role="region" aria-labelledby="page-title">
       <div class="icon" aria-hidden="true">🔍</div>
-      <p class="badge">Public Beta v0.2 · Proof-file first · Privacy-first · No upload</p>
+      <p class="badge">Verification-only · Proof-file first · Privacy-first · No upload</p>
 
       <h1 id="page-title">Verify a proof</h1>
 
       <p class="lead">
-        To verify a TimeProofs record, you use <strong>two files</strong>:
-        the <code>.tproof.json</code> proof file and (optionally) the original file to check “same version”.
+        This page verifies an existing <code>.tproof.json</code> proof file.
+        <strong>It does not create proofs.</strong>
       </p>
 
       <p class="lead" style="font-size:.95rem; margin-top:-4px">
-        The proof file is required. The original file is optional and is hashed locally in your browser.
+        To check “same version”, you may also load the original file. It is hashed locally in your browser.
       </p>
 
       <div class="hero-actions">
@@ -564,9 +562,8 @@ upgrade-insecure-requests">
       </div>
 
       <div class="note" aria-label="Technical references" style="margin-top:12px">
-        Developers: integration examples live in <a href="/docs.html">API Docs</a>.<br/>
-        The protocol format is defined in <a href="/proofspec.html">ProofSpec</a>.<br/>
-        Formal context: <a href="/regulations.html">Regulations</a> · <a href="/privacy.html">Privacy</a> · <a href="/legal.html">Legal</a>
+        Developers: <a href="/docs.html">API Docs</a> · <a href="/proofspec.html">ProofSpec</a><br/>
+        Legal: <a href="/regulations.html">Regulations</a> · <a href="/privacy.html">Privacy</a> · <a href="/legal.html">Legal</a>
       </div>
     </article>
   </main>
@@ -611,15 +608,13 @@ upgrade-insecure-requests">
     </div>
   </footer>
 
-  <!-- Scripts (Verify-only, lazy interaction; no analytics; no SW register) -->
+  <!-- Scripts (Verify-only, locked to api.timeproofs.io) -->
   <script nonce="TP-2026">
   (function(){
     "use strict";
 
-    const API_BASES = [
-      "https://api.timeproofs.io/api",
-      "https://timeproofs-api.jeason-bacoul.workers.dev/api"
-    ];
+    // LOCKED: single official API base (no fallback domains)
+    const API_BASE = "https://api.timeproofs.io/api";
     const MAX_FILE_BYTES = 50 * 1024 * 1024;
     const REQ_TIMEOUT_MS = 15000;
 
@@ -711,18 +706,15 @@ upgrade-insecure-requests">
       const t=setTimeout(()=>ctrl.abort(), REQ_TIMEOUT_MS);
       return { ...options, signal:ctrl.signal, _timeoutId:t };
     }
+
     async function fetchAPI(path, options={}){
-      let lastErr, res;
-      for(const base of API_BASES){
-        try{
-          const opt=withTimeout(options);
-          res=await fetch(base+path, opt);
-          clearTimeout(opt._timeoutId);
-          if(res.ok || res.status<500) return res;
-        }catch(e){ lastErr=e; }
+      const opt=withTimeout(options);
+      try{
+        const res=await fetch(API_BASE+path, opt);
+        return res;
+      } finally {
+        clearTimeout(opt._timeoutId);
       }
-      if(res) return res;
-      throw lastErr || new Error("Network error");
     }
 
     function isIso(iso){
@@ -845,7 +837,6 @@ upgrade-insecure-requests">
         loadedProofUI = null;
         proofVerified = false;
 
-        // keep output hidden by default (perf + UX)
         outVerify.style.display = "none";
         outVerify.textContent = "{}";
       }
@@ -1053,8 +1044,7 @@ upgrade-insecure-requests">
             }
           }
 
-          // Keep output hidden unless needed (developer debug)
-          // If you want: add ?debug=1 to show it.
+          // Debug output only if ?debug=1
           const debug = new URL(location.href).searchParams.get("debug") === "1";
           if(debug){
             outVerify.style.display = "block";
@@ -1064,7 +1054,6 @@ upgrade-insecure-requests">
           showVerifyError(String(err.message || err));
           proofVerified = false;
         }finally{
-          // re-enable if proof still loaded
           btnVerify.disabled = !loadedProofUI;
         }
       });
@@ -1141,4 +1130,4 @@ upgrade-insecure-requests">
   })();
   </script>
 </body>
-  </html>
+</html>
