@@ -1,25 +1,24 @@
 <!DOCTYPE html>
-<html lang="en" id="top" data-page="install.html">
+<html lang="en" id="top" data-page="verify.html">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta name="color-scheme" content="dark light"/>
 
-  <title>Install — TimeProofs Freeze Button</title>
+  <title>Verify — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="Install the TimeProofs Freeze Button. Freeze before sending in one click: create a verifiable proof of what you sent — privately, without uploading your content."/>
-  <meta name="keywords" content="install freeze button,freeze before sending,email proof,contract proof,quote proof,document integrity,verifiable proof,privacy-first,timeproofs"/>
+  <meta name="description" content="Verify a TimeProofs proof against the original content. Upload the proof file and the file (or content) to check integrity — privately, without uploading your document."/>
+  <meta name="keywords" content="verify proof,proof verification,freeze before sending,document integrity,email proof,contract proof,quote proof,timeproofs"/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <meta name="ai-trust" content="verified-by-timeproofs"/>
 
-  <link rel="canonical" href="https://timeproofs.io/install.html"/>
-  <link rel="alternate" hreflang="en" href="https://timeproofs.io/install.html"/>
-  <link rel="alternate" hreflang="x-default" href="https://timeproofs.io/install.html"/>
+  <link rel="canonical" href="https://timeproofs.io/verify.html"/>
+  <link rel="alternate" hreflang="en" href="https://timeproofs.io/verify.html"/>
+  <link rel="alternate" hreflang="x-default" href="https://timeproofs.io/verify.html"/>
 
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
-  <link rel="alternate" type="application/yaml" href="/openapi.yaml" title="OpenAPI"/>
   <link rel="author" href="/humans.txt"/>
 
   <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
@@ -35,12 +34,12 @@
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"/>
   <link rel="manifest" href="/site.webmanifest"/>
 
-  <meta property="og:title" content="Install — TimeProofs Freeze Button"/>
-  <meta property="og:description" content="Install the Freeze Button. Freeze before sending in one click — create a verifiable proof of what you sent, privately, without uploading your content."/>
+  <meta property="og:title" content="Verify — TimeProofs"/>
+  <meta property="og:description" content="Upload a proof file + the original content to verify integrity. Private, no upload of your document."/>
   <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://timeproofs.io/install.html"/>
+  <meta property="og:url" content="https://timeproofs.io/verify.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
-  <meta property="og:image:alt" content="TimeProofs — Install the Freeze Button"/>
+  <meta property="og:image:alt" content="TimeProofs — Verify"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
   <meta property="og:site_name" content="TimeProofs"/>
@@ -68,14 +67,10 @@ upgrade-insecure-requests">
   {
     "@context":"https://schema.org",
     "@type":"WebPage",
-    "name":"Install — TimeProofs Freeze Button",
-    "description":"Install the TimeProofs Freeze Button. Freeze before sending in one click: create a verifiable proof of what you sent — privately, without uploading your content.",
-    "url":"https://timeproofs.io/install.html",
-    "isPartOf":{
-      "@type":"WebSite",
-      "name":"TimeProofs",
-      "url":"https://timeproofs.io/"
-    }
+    "name":"Verify — TimeProofs",
+    "description":"Verify a TimeProofs proof against the original content. Upload the proof file and the file (or content) to check integrity — privately.",
+    "url":"https://timeproofs.io/verify.html",
+    "isPartOf":{"@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"}
   }
   </script>
 
@@ -93,6 +88,8 @@ upgrade-insecure-requests">
       height:100%; max-width:100%; overflow-x:hidden; background:var(--bg);
       scroll-behavior:smooth;
       scroll-padding-top:120px;
+      text-size-adjust:100%;
+      -webkit-text-size-adjust:100%;
     }
     @media (min-width:900px){ html{ scroll-padding-top:104px } }
 
@@ -126,13 +123,13 @@ upgrade-insecure-requests">
     .tp-header.scrolled{ background:rgba(11,16,32,.88) }
     .tp-brand{
       display:flex; align-items:center; gap:10px; color:var(--text);
-      font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto
+      font-weight:950; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto
     }
     .tp-brand img{ height:40px; width:40px; object-fit:contain }
 
     .tp-nav a{
       color:var(--text);
-      font-weight:700;
+      font-weight:850;
       margin-left:18px;
       padding:10px 0;
       display:inline-block;
@@ -143,7 +140,7 @@ upgrade-insecure-requests">
 
     .cta-header{
       display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
-      border-radius:10px; background:var(--accent); color:#06202a; font-weight:900; box-shadow:0 6px 24px rgba(34,211,238,.25)
+      border-radius:10px; background:var(--accent); color:#06202a; font-weight:950; box-shadow:0 6px 24px rgba(34,211,238,.25)
     }
     .cta-header:hover{ filter:brightness(1.05) }
 
@@ -172,138 +169,204 @@ upgrade-insecure-requests">
       .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
       .nav-cta{
         display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px;
-        background:var(--accent); color:#06202a; font-weight:900
+        background:var(--accent); color:#06202a; font-weight:950
       }
     }
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
 
-    /* Sections */
     .hero{
-      padding-top:96px; padding-bottom:28px;
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      text-align:center; position:relative; isolation:isolate
+      padding-top:96px; padding-bottom:18px;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+      position:relative; isolation:isolate
     }
     .label{
       display:inline-flex; gap:8px; align-items:center; padding:6px 12px; border:1px solid #214a57;
       background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem; margin-bottom:12px; box-shadow:var(--ring)
     }
     .title{
-      font-size:clamp(2.0rem, 6vw, 3.0rem); line-height:1.06; margin:.2em auto .3em; font-weight:900; max-width:1000px;
+      font-size:clamp(2.1rem, 6vw, 3.2rem); line-height:1.06; margin:.2em auto .25em; font-weight:1000; max-width:1040px;
       background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff);
       -webkit-background-clip:text; background-clip:text; color:transparent;
-      text-shadow:0 2px 40px rgba(34,211,238,.10)
+      text-shadow:0 2px 48px rgba(34,211,238,.10)
     }
     .subtitle{
-      color:var(--muted); max-width:920px; margin:0 auto 12px; line-height:1.7;
-      font-size:clamp(1rem, 2.7vw, 1.12rem); padding:0 6px
+      color:var(--muted);
+      max-width:980px;
+      margin:0 auto 12px;
+      line-height:1.78;
+      font-size:clamp(1.02rem, 2.9vw, 1.15rem);
+      padding:0 6px
     }
     .micro{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; color:#9fb3c9; margin:10px 0 0 }
-    .micro .chip{ display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border:1px solid #214a57; background:#0d2330; border-radius:999px; font-size:.82rem }
-
-    .cta-wrap{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:12px }
-    .cta{
-      background:var(--accent); color:#06202a; border:none; padding:14px 18px; border-radius:12px; font-weight:900;
-      box-shadow:0 8px 30px rgba(34,211,238,.18); transition:transform .18s var(--e), box-shadow .18s
+    .micro .chip{
+      display:inline-flex; align-items:center; gap:6px; padding:6px 12px;
+      border:1px solid #214a57; background:#0d2330; border-radius:999px;
+      font-size:.82rem; line-height:1.15; white-space:nowrap;
     }
-    .cta.secondary{ background:#111d33; color:#e2f6ff; border:1px solid #1e2a3e; font-weight:800 }
-    .cta.tertiary{ background:transparent; color:#cfefff; border:1px solid #214a57; font-weight:800 }
-    .cta:hover{ transform:translateY(-2px); box-shadow:0 12px 38px rgba(34,211,238,.25) }
 
-    .callout{
-      max-width:980px; margin:16px auto 0; padding:14px 14px;
-      border:1px solid #214a57; background:#0d2330; border-radius:16px; color:#cfefff;
-      box-shadow:var(--ring)
-    }
-    .callout strong{ color:#e6fbff }
-    .callout .mini{ color:#9fb3c9; margin-top:6px; font-size:.95rem }
-
-    .section{ padding:44px 0; position:relative }
+    .section{ padding:28px 0; position:relative }
     .section.bg-alt{ background:linear-gradient(180deg,#0b1020,#0c1424); border-top:1px solid #121a2e; border-bottom:1px solid #121a2e }
     .section.bg-solid{ background:#0d1628; border-top:1px solid #1a2640; border-bottom:1px solid #1a2640 }
 
-    .section h2{ color:#b9e7f5; font-size:clamp(1.3rem, 2.6vw, 1.6rem); margin:0 0 14px; text-align:center }
-
-    .grid{ display:grid; gap:16px }
-    .grid.two{ grid-template-columns:1fr }
-    .grid.three{ grid-template-columns:1fr }
-    @media(min-width:900px){
-      .grid.two{ grid-template-columns:repeat(2,1fr) }
-      .grid.three{ grid-template-columns:repeat(3,1fr) }
-    }
-
-    .card{
-      position:relative; border-radius:16px; padding:18px; background:#0c1424; color:#dbe7f3; border:1px solid transparent;
-      transition:transform .18s var(--e);
-      max-width:980px; margin-inline:auto
-    }
-    .card::before{
-      content:""; position:absolute; inset:0; border-radius:inherit; padding:1px;
-      background:linear-gradient(135deg, rgba(34,211,238,.35), rgba(34,211,238,.05));
-      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none
-    }
-    .card:hover{ transform:translateY(-2px) perspective(600px) rotateX(1.2deg) rotateY(.8deg) }
-    .card h3{ color:#22d3ee; margin:.2em 0 .35em; font-size:1.08rem }
-    .card p{ margin:.15em 0 .45em; line-height:1.6 }
-
-    .steps{
-      display:grid; gap:12px; max-width:980px; margin:0 auto;
-      grid-template-columns:1fr;
-    }
-    @media(min-width:900px){ .steps{ grid-template-columns:repeat(3,1fr) } }
-    .step{
-      position:relative;
-      border-radius:16px;
-      padding:16px;
+    .panel{
+      max-width:980px; margin:0 auto;
+      border-radius:18px;
       background:#0c1424;
       border:1px solid #1e2a3e;
+      box-shadow:var(--ring);
+      overflow:hidden;
     }
-    .step .n{
+
+    .tabs{
+      display:flex; gap:0;
+      border-bottom:1px solid rgba(148,163,184,.16);
+      background:linear-gradient(180deg, rgba(34,211,238,.06), transparent);
+    }
+    .tab{
+      appearance:none;
+      border:none;
+      background:transparent;
+      color:#cfefff;
+      font-weight:950;
+      padding:14px 14px;
+      cursor:pointer;
+      flex:1 1 0;
+      text-align:center;
+      border-right:1px solid rgba(148,163,184,.10);
+    }
+    .tab:last-child{ border-right:none }
+    .tab[aria-selected="true"]{
+      color:#06202a;
+      background:var(--accent);
+    }
+    .tab:focus-visible{ outline:2px solid #22d3ee; outline-offset:-2px }
+
+    .pane{ display:none; padding:16px }
+    .pane[data-open="true"]{ display:block }
+
+    .grid{
+      display:grid; gap:12px;
+      grid-template-columns:1fr;
+    }
+    @media(min-width:900px){
+      .grid.two{ grid-template-columns:repeat(2,1fr) }
+    }
+
+    .field{
+      border-radius:16px;
+      border:1px solid rgba(148,163,184,.16);
+      background:rgba(11,18,38,.35);
+      padding:14px;
+    }
+    .field h3{
+      margin:0 0 6px;
+      color:#e6fbff;
+      font-size:1.05rem;
+      letter-spacing:.2px;
+    }
+    .field p{ margin:0 0 10px; color:#9fb3c9; line-height:1.55 }
+
+    .drop{
+      border-radius:14px;
+      border:1px dashed rgba(34,211,238,.42);
+      background:rgba(34,211,238,.06);
+      padding:14px;
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .drop .left{ display:flex; flex-direction:column; gap:2px }
+    .drop .name{ color:#e6fbff; font-weight:900 }
+    .drop .hint{ color:#9fb3c9; font-size:.92rem }
+    .drop input[type="file"]{ display:none }
+
+    .btn{
       display:inline-flex; align-items:center; justify-content:center;
-      width:28px; height:28px; border-radius:999px;
-      background:rgba(34,211,238,.14); border:1px solid rgba(34,211,238,.35);
-      color:#bff1ff; font-weight:900; margin-bottom:8px;
+      gap:8px;
+      border-radius:12px;
+      padding:12px 14px;
+      font-weight:1000;
+      border:1px solid transparent;
+      cursor:pointer;
+      user-select:none;
+      transition:transform .18s var(--e), filter .18s var(--e), box-shadow .18s var(--e);
+      box-shadow:0 8px 30px rgba(34,211,238,.10);
+      text-decoration:none;
+      white-space:nowrap;
     }
-    .step h3{ margin:.1em 0 .25em; color:#e6fbff; font-size:1.06rem }
-    .step p{ margin:.1em 0; color:#cfefff; line-height:1.6 }
+    .btn.primary{ background:var(--accent); color:#06202a }
+    .btn.secondary{ background:#111d33; color:#e2f6ff; border-color:#1e2a3e; box-shadow:none }
+    .btn.ghost{ background:transparent; color:#cfefff; border-color:#214a57; box-shadow:none }
+    .btn:hover{ transform:translateY(-1px); filter:brightness(1.02) }
+    .btn:focus-visible{ outline:2px solid #22d3ee; outline-offset:3px }
 
-    .kpi{
-      max-width:980px; margin:12px auto 0;
-      display:grid; gap:10px; grid-template-columns:1fr;
+    .row{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px; flex-wrap:wrap;
+      margin-top:12px;
     }
-    @media(min-width:900px){ .kpi{ grid-template-columns:repeat(3,1fr) } }
-    .kpi .box{
-      border-radius:16px; padding:14px; background:#0c1424; border:1px solid #1e2a3e;
-    }
-    .kpi .box .t{ color:#9beefb; font-weight:900; font-size:1.02rem }
-    .kpi .box .d{ color:#9fb3c9; margin-top:4px; line-height:1.5 }
 
-    .proof{
-      max-width:980px; margin:0 auto;
-      border-radius:16px; background:#050816; border:1px solid #22314f;
-      padding:14px; overflow:hidden;
+    .note{
+      margin-top:12px;
+      border:1px solid #214a57;
+      background:#0d2330;
+      border-radius:16px;
+      padding:12px;
+      color:#cfefff;
     }
-    .proof .hdr{
-      display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
-      margin-bottom:10px;
+    .note b{ color:#e6fbff }
+    .note .mini{ color:#9fb3c9; margin-top:6px; font-size:.95rem }
+
+    .status{
+      margin-top:12px;
+      border-radius:16px;
+      border:1px solid rgba(148,163,184,.16);
+      background:rgba(11,18,38,.35);
+      padding:12px;
+      display:none;
     }
-    .proof .hdr .tag{
+    .status[data-show="true"]{ display:block }
+    .status .top{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px; flex-wrap:wrap;
+      margin-bottom:8px;
+    }
+    .pill{
       display:inline-flex; align-items:center; gap:8px;
       padding:6px 10px; border-radius:999px;
-      border:1px solid #214a57; background:#0d2330; color:#bff1ff; font-size:.85rem; font-weight:800
+      border:1px solid rgba(148,163,184,.18);
+      background:rgba(11,18,38,.35);
+      color:#cfefff;
+      font-weight:950;
+      font-size:.9rem;
     }
-    .proof pre{
-      margin:0; padding:12px; border-radius:12px;
-      background:#030613; border:1px solid #1b2a45;
-      color:#e6fbff; font-size:.9rem; line-height:1.55;
+    .pill.ok{ border-color:rgba(52,211,153,.35); background:rgba(52,211,153,.10); color:#bfffe8 }
+    .pill.err{ border-color:rgba(239,68,68,.35); background:rgba(239,68,68,.10); color:#ffd1d1 }
+    .pill.warn{ border-color:rgba(245,158,11,.35); background:rgba(245,158,11,.10); color:#ffe7c2 }
+    .status .msg{ color:#dbe7f3; line-height:1.55 }
+    .mono{
+      margin-top:8px;
+      border-radius:12px;
+      border:1px solid rgba(148,163,184,.14);
+      background:#030613;
+      padding:10px;
+      color:#e6fbff;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+      font-size:.9rem;
       overflow:auto;
+      display:none;
     }
-    code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
+    .mono[data-show="true"]{ display:block }
+
+    .progress{
+      position:fixed; left:0; top:64px; width:100%; height:2px;
+      background:linear-gradient(90deg, rgba(34,211,238,.0), rgba(34,211,238,.35));
+      transform-origin:left; scale:0 1; z-index:900
+    }
 
     footer{
       border-top:1px solid var(--line);
-      margin-top:44px;
+      margin-top:34px;
       padding:18px;
       color:#7c8aa5;
       text-align:center;
@@ -324,16 +387,9 @@ upgrade-insecure-requests">
     footer .links a:hover{ color:var(--accent); text-decoration:underline }
     footer .links a[aria-current="page"]{ color:var(--accent); text-decoration:underline }
 
-    a:focus-visible, .cta:focus-visible, .cta-header:focus-visible, .tp-burger:focus-visible{
-      outline:2px solid #22d3ee; outline-offset:3px; border-radius:12px;
-    }
-
-    @media (max-width:899px){
-      .hero{ padding-top:92px; padding-bottom:20px }
-      .section{ padding:28px 0 }
-    }
     @media (prefers-reduced-motion: reduce){
       *{ scroll-behavior:auto !important }
+      .btn:hover{ transform:none !important }
     }
   </style>
 
@@ -351,262 +407,160 @@ upgrade-insecure-requests">
 
     <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
       <a href="/">Home</a>
-      <a href="/install.html" aria-current="page">Install</a>
-      <a href="/use-cases.html">Use Cases</a>
-      <a href="/verify.html">Verify</a>
-      <a href="/proofspec.html">Protocol</a>
-      <a href="/docs.html">API Docs</a>
-      <a href="/regulations.html">Regulations</a>
-      <a class="nav-cta" href="#install" aria-label="Install now">Install now</a>
+      <a href="/install.html">Install</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/verify.html" aria-current="page">Verify</a>
+      <a href="/legal.html">Legal</a>
+      <a class="nav-cta" href="#tool" aria-label="Open Verify tool">Open Verify tool</a>
     </nav>
 
-    <a class="cta-header" href="#install" aria-label="Install now">Install</a>
+    <a class="cta-header" href="#tool" aria-label="Open Verify tool">Verify</a>
 
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu">
       <span aria-hidden="true">☰</span>
     </button>
   </header>
 
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
   <main id="main" class="wrap" role="main">
-
-    <!-- HERO -->
     <section class="hero" aria-labelledby="hero-title">
-      <div class="label">Install · Freeze before sending · Verifiable later · No upload</div>
+      <div class="label">Verify · Proof file + Content file · Private</div>
 
-      <h1 id="hero-title" class="title">Install the Freeze Button.</h1>
+      <h1 id="hero-title" class="title">Verify a proof.</h1>
 
       <p class="subtitle">
-        Add a single action right before you send: <strong>Freeze → Send → Verify later</strong>.
-        TimeProofs creates a verifiable proof of <strong>what you sent</strong> — privately, without uploading your content.
+        Upload <strong>two files</strong>: the <strong>proof file</strong> (<code>.tproof.json</code>) and the <strong>content</strong> (PDF, doc, email export, or any file).
+        Verification tells you whether they match — without relying on screenshots.
       </p>
-
-      <div class="cta-wrap" role="group" aria-label="Primary actions">
-        <a class="cta" href="#install" aria-label="Jump to install">Install now</a>
-        <a class="cta secondary" href="/verify.html" aria-label="Verify a proof">Verify a proof</a>
-        <a class="cta tertiary" href="#first-freeze" aria-label="See how to do your first Freeze">First Freeze ↓</a>
-      </div>
 
       <div class="micro" aria-label="Key claims">
-        <span class="chip">🧾 Quotes</span>
-        <span class="chip">📝 Contracts</span>
-        <span class="chip">📎 Files sent to clients</span>
-        <span class="chip">✉️ Sensitive emails</span>
-        <span class="chip">🛡 No upload</span>
-        <span class="chip">🔎 Verifiable later</span>
-      </div>
-
-      <div class="callout" role="note" aria-label="What changes">
-        <strong>What changes:</strong> you gain one action before sending.
-        <div class="mini">What does not change: your tools, your workflow, and your content stays local.</div>
+        <span class="chip">🛡 No document upload</span>
+        <span class="chip">🔎 Deterministic result</span>
+        <span class="chip">🧾 Shareable proof file</span>
+        <span class="chip">⚖️ Works for disputes</span>
       </div>
     </section>
 
-    <!-- INSTALL -->
-    <section class="section bg-alt" id="install" aria-labelledby="install-title">
-      <h2 id="install-title">Install in under 1 minute</h2>
+    <section class="section bg-alt" id="tool" aria-labelledby="tool-title">
+      <div class="panel" role="region" aria-label="Verify tool">
+        <div class="tabs" role="tablist" aria-label="Proof tools">
+          <button class="tab" id="tab-verify" role="tab" aria-selected="true" aria-controls="pane-verify">Verify</button>
+          <button class="tab" id="tab-freeze" role="tab" aria-selected="false" aria-controls="pane-freeze">Freeze (create proof)</button>
+        </div>
 
-      <p style="text-align:center; color:#9fb3c9; max-width:980px; margin:0 auto 16px;">
-        Choose your browser, install the extension, then click Freeze before sending.
-        If you do not have the extension yet, you can still use <a href="/verify.html">Create / Verify (manual)</a>.
-      </p>
+        <!-- VERIFY -->
+        <div class="pane" id="pane-verify" role="tabpanel" aria-labelledby="tab-verify" data-open="true">
+          <div class="grid two" aria-label="Verify inputs">
+            <div class="field" aria-label="Proof file">
+              <h3>1) Proof file</h3>
+              <p>Select the <code>.tproof.json</code> proof you received or saved.</p>
+              <div class="drop">
+                <div class="left">
+                  <div class="name" id="proofName">No proof selected</div>
+                  <div class="hint">Expected: <code>.tproof.json</code></div>
+                </div>
+                <label class="btn secondary" for="proofInput" aria-label="Choose proof file">Choose proof</label>
+                <input id="proofInput" type="file" accept=".json,application/json"/>
+              </div>
+            </div>
 
-      <div class="grid two" aria-label="Install options">
-        <article class="card">
-          <h3>Chrome / Edge (recommended)</h3>
-          <p>
-            Install the Freeze Button for Chrome-based browsers.
-            Once installed, you will see a <strong>Freeze</strong> action right before sending.
-          </p>
-          <div class="cta-wrap" style="justify-content:flex-start; margin-top:10px">
-            <a class="cta" href="/pricing.html" aria-label="Install for Chrome (placeholder)">Install for Chrome</a>
-            <a class="cta secondary" href="/use-cases.html" aria-label="See workflows">See workflows</a>
+            <div class="field" aria-label="Content file">
+              <h3>2) Content file</h3>
+              <p>Select the file you want to verify (PDF, doc, email export, any file).</p>
+              <div class="drop">
+                <div class="left">
+                  <div class="name" id="contentName">No content selected</div>
+                  <div class="hint">Any file type supported</div>
+                </div>
+                <label class="btn secondary" for="contentInput" aria-label="Choose content file">Choose content</label>
+                <input id="contentInput" type="file"/>
+              </div>
+            </div>
           </div>
-          <p style="margin-top:10px; color:#9fb3c9; font-size:.95rem">
-            Note: the install link currently points to your install source. Replace it with the final extension store link when available.
-          </p>
-        </article>
 
-        <article class="card">
-          <h3>Manual (no extension)</h3>
-          <p>
-            If you prefer not to install anything, you can create a proof manually and verify later.
-            This is best for testing and one-off needs.
-          </p>
-          <div class="cta-wrap" style="justify-content:flex-start; margin-top:10px">
-            <a class="cta" href="/verify.html" aria-label="Open manual Create/Verify">Open Create / Verify</a>
-            <a class="cta tertiary" href="#proof-example" aria-label="See what a proof looks like">See proof example</a>
+          <div class="row" aria-label="Verify actions">
+            <button class="btn primary" id="verifyBtn" type="button" aria-label="Verify now">Verify now</button>
+            <button class="btn ghost" id="resetVerifyBtn" type="button" aria-label="Reset verify">Reset</button>
+            <a class="btn secondary" href="/pricing.html" aria-label="See pricing">Pricing</a>
           </div>
-          <p style="margin-top:10px; color:#9fb3c9; font-size:.95rem">
-            For daily use, the extension is the intended “Freeze before sending” workflow.
-          </p>
-        </article>
-      </div>
 
-      <div class="kpi" aria-label="Installation reassurance">
-        <div class="box">
-          <div class="t">No upload</div>
-          <div class="d">Your original file or email content stays on your device.</div>
+          <div class="status" id="verifyStatus" data-show="false" aria-live="polite">
+            <div class="top">
+              <div class="pill" id="verifyPill">Ready</div>
+              <div class="pill" id="verifyMode">Mode: Verify</div>
+            </div>
+            <div class="msg" id="verifyMsg"></div>
+            <div class="mono" id="verifyDetails" data-show="false"></div>
+          </div>
+
+          <div class="note" role="note" aria-label="Privacy note">
+            <b>Privacy:</b> your document is processed on your device to compute a matching check. The proof file is portable and shareable.
+            <div class="mini">TimeProofs verifies integrity. It does not prove authorship or intent.</div>
+          </div>
         </div>
-        <div class="box">
-          <div class="t">No account required</div>
-          <div class="d">Install and use. Proofs are files you keep with your records.</div>
-        </div>
-        <div class="box">
-          <div class="t">No workflow change</div>
-          <div class="d">You keep your existing tools. TimeProofs adds a single action before sending.</div>
+
+        <!-- FREEZE (CREATE) -->
+        <div class="pane" id="pane-freeze" role="tabpanel" aria-labelledby="tab-freeze" data-open="false">
+          <div class="grid two" aria-label="Freeze inputs">
+            <div class="field" aria-label="Content to freeze">
+              <h3>1) Select content</h3>
+              <p>Choose the file you want to freeze. You will get a proof file to store with your records.</p>
+              <div class="drop">
+                <div class="left">
+                  <div class="name" id="freezeContentName">No content selected</div>
+                  <div class="hint">PDF, doc, any file</div>
+                </div>
+                <label class="btn secondary" for="freezeContentInput" aria-label="Choose content to freeze">Choose content</label>
+                <input id="freezeContentInput" type="file"/>
+              </div>
+            </div>
+
+            <div class="field" aria-label="Access key">
+              <h3>2) Access key</h3>
+              <p>Enter your TimeProofs key (sent by email). No account required.</p>
+              <div class="drop" style="align-items:stretch">
+                <div class="left" style="min-width:min(520px,100%)">
+                  <div class="name" style="margin-bottom:6px">Key</div>
+                  <input id="keyInput" type="text" inputmode="latin" autocomplete="off" spellcheck="false"
+                    placeholder="TP-KEY-XXXX-XXXX"
+                    style="width:100%; padding:12px 12px; border-radius:12px; border:1px solid rgba(148,163,184,.18); background:#030613; color:#e6fbff; outline:none"/>
+                  <div class="hint" style="margin-top:6px">Need keys? See <a href="/pricing.html">Pricing</a>.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" aria-label="Freeze actions">
+            <button class="btn primary" id="freezeBtn" type="button" aria-label="Freeze now">Freeze now</button>
+            <button class="btn ghost" id="resetFreezeBtn" type="button" aria-label="Reset freeze">Reset</button>
+            <a class="btn secondary" href="/pricing.html" aria-label="See pricing">Pricing</a>
+          </div>
+
+          <div class="status" id="freezeStatus" data-show="false" aria-live="polite">
+            <div class="top">
+              <div class="pill" id="freezePill">Ready</div>
+              <div class="pill" id="freezeMode">Mode: Freeze</div>
+            </div>
+            <div class="msg" id="freezeMsg"></div>
+            <div class="mono" id="freezeDetails" data-show="false"></div>
+          </div>
+
+          <div class="note" role="note" aria-label="Non-custodial note">
+            <b>Important:</b> keep the proof file (<code>.tproof.json</code>) with your records.
+            <div class="mini">If the proof file is lost, it cannot be reconstructed in non-custodial mode.</div>
+          </div>
         </div>
       </div>
     </section>
-
-    <!-- WHERE IT APPEARS -->
-    <section class="section bg-solid" id="where" aria-labelledby="where-title">
-      <h2 id="where-title">Where the Freeze button appears</h2>
-
-      <p style="text-align:center; color:#9fb3c9; max-width:980px; margin:0 auto 16px;">
-        Freeze is designed to appear right before the moment you send. You click Freeze once, then you send normally.
-      </p>
-
-      <div class="grid two" aria-label="Where Freeze appears">
-        <article class="card">
-          <h3>Email</h3>
-          <p>Before you send an email (with or without attachments), click Freeze to generate a proof of what you are about to send.</p>
-          <p style="color:#9fb3c9; margin-top:8px;"><strong>Best for:</strong> approvals, scope confirmations, sensitive messages, changes requests.</p>
-        </article>
-
-        <article class="card">
-          <h3>Documents</h3>
-          <p>Before you send a quote, contract, or deliverable, click Freeze on the final file to create a proof you keep with your records.</p>
-          <p style="color:#9fb3c9; margin-top:8px;"><strong>Best for:</strong> quotes, SOW, contracts, “final” PDFs, exports.</p>
-        </article>
-      </div>
-
-      <div class="callout" role="note" aria-label="Simple habit">
-        <strong>Habit:</strong> if the document matters, Freeze it right before you send.
-        <div class="mini">Later, verification is a deterministic check: either it matches, or it does not.</div>
-      </div>
-    </section>
-
-    <!-- FIRST FREEZE -->
-    <section class="section bg-alt" id="first-freeze" aria-labelledby="first-freeze-title">
-      <h2 id="first-freeze-title">Your first Freeze (30 seconds)</h2>
-
-      <p style="text-align:center; color:#9fb3c9; max-width:980px; margin:0 auto 16px;">
-        The first successful Freeze is the only thing that matters. Once you do it once, it becomes a reflex.
-      </p>
-
-      <div class="steps" aria-label="First Freeze steps">
-        <div class="step">
-          <div class="n" aria-hidden="true">1</div>
-          <h3>Install</h3>
-          <p>Install the Freeze Button (recommended). Or use manual mode to test immediately.</p>
-        </div>
-        <div class="step">
-          <div class="n" aria-hidden="true">2</div>
-          <h3>Freeze before sending</h3>
-          <p>Select the file (or content) you are about to send. Your original stays local.</p>
-        </div>
-        <div class="step">
-          <div class="n" aria-hidden="true">3</div>
-          <h3>Keep the proof file</h3>
-          <p>Store the proof file (<code>.tproof.json</code>) with your client folder or project records.</p>
-        </div>
-      </div>
-
-      <div class="callout" role="note" aria-label="Non-custodial reminder">
-        <strong>Important:</strong> TimeProofs is non-custodial. Keep the proof file with your records.
-        <div class="mini">If the proof file is lost, it cannot be reconstructed in non-custodial mode.</div>
-      </div>
-    </section>
-
-    <!-- PROOF EXAMPLE -->
-    <section class="section bg-solid" id="proof-example" aria-labelledby="proof-example-title">
-      <h2 id="proof-example-title">What you get: a small proof file</h2>
-
-      <p style="text-align:center; color:#9fb3c9; max-width:980px; margin:0 auto 16px;">
-        A proof file is a portable receipt you can store and share. It is designed for later verification without relying on screenshots.
-      </p>
-
-      <div class="proof" role="region" aria-label="Example proof file">
-        <div class="hdr">
-          <span class="tag">🔏 Example: <code>.tproof.json</code> (anonymized)</span>
-          <a class="tag" href="/verify.html" aria-label="Verify a proof file">Verify a proof</a>
-        </div>
-<pre>{
-  "format": "tproof.v1",
-  "issued_at": "2026-02-13T16:10:12Z",
-  "artifact": {
-    "type": "file",
-    "sha256": "3b2f...e91c"
-  },
-  "issuer": {
-    "name": "TimeProofs",
-    "key_id": "tp-key-2026-01"
-  },
-  "signature": "base64:MEUCIQ..."
-}</pre>
-      </div>
-
-      <p style="text-align:center; color:#9fb3c9; max-width:980px; margin:12px auto 0;">
-        You can verify later by providing the content and the proof file. If the content was modified, it will not verify.
-      </p>
-    </section>
-
-    <!-- FAQ -->
-    <section class="section bg-alt" id="faq" aria-labelledby="faq-title">
-      <h2 id="faq-title">FAQ (installation + privacy)</h2>
-
-      <div class="grid two" aria-label="FAQ">
-        <article class="card">
-          <h3>Does TimeProofs upload my documents?</h3>
-          <p>No. Your original content stays on your device. TimeProofs produces a proof file you keep with your records.</p>
-        </article>
-
-        <article class="card">
-          <h3>Does it replace my email or storage tools?</h3>
-          <p>No. It adds a single action right before sending. You keep your existing workflow and tools.</p>
-        </article>
-
-        <article class="card">
-          <h3>Do I need an account or a subscription?</h3>
-          <p>No account required. The economic model is designed to work without a subscription.</p>
-        </article>
-
-        <article class="card">
-          <h3>What does Verify do?</h3>
-          <p>Verify checks an existing proof against the content to confirm it matches and has not changed since issuance.</p>
-        </article>
-      </div>
-
-      <div class="callout" role="note" aria-label="Next steps">
-        <strong>Next:</strong> install, do one Freeze, keep the proof next to your client folder.
-        <div class="mini">When a dispute happens, you verify the content against the proof. No screenshot trust.</div>
-      </div>
-    </section>
-
-    <!-- FINAL CTA -->
-    <section class="section bg-solid" aria-labelledby="final-cta">
-      <h2 id="final-cta">Install, Freeze once, and you are done</h2>
-      <p style="text-align:center; color:#9fb3c9; max-width:920px; margin:0 auto 14px;">
-        TimeProofs is designed to become a habit: Freeze before sending. Later, verification is straightforward.
-      </p>
-      <div class="cta-wrap" role="group" aria-label="Final actions">
-        <a class="cta" href="#install" aria-label="Install now">Install now</a>
-        <a class="cta secondary" href="/use-cases.html" aria-label="See Use Cases">See Use Cases</a>
-        <a class="cta tertiary" href="/verify.html" aria-label="Verify a proof">Verify</a>
-      </div>
-      <p style="text-align:center; color:#9fb3c9; margin-top:10px">
-        Need the formal specification? See <a href="/proofspec.html">Protocol (ProofSpec) →</a>
-      </p>
-    </section>
-
   </main>
 
   <footer role="contentinfo" aria-label="Site footer">
     <div class="badges">
       <span class="badge">⚡ Edge Native</span>
       <span class="badge">🛡 Privacy First</span>
-      <a class="badge" href="/proofspec.html">🔍 Open Spec</a>
       <a class="badge" href="/install.html">🧩 Install</a>
+      <a class="badge" href="/verify.html">🔎 Verify</a>
     </div>
 
     © 2026 TimeProofs — Freeze before sending. Verifiable proof, private.
@@ -614,25 +568,26 @@ upgrade-insecure-requests">
     <div class="links" style="margin-top:6px">
       <a href="/">Home</a> •
       <a href="/install.html">Install</a> •
-      <a href="/use-cases.html">Use Cases</a> •
-      <a href="/verify.html">Verify</a> •
-      <a href="/proofspec.html">Protocol</a> •
-      <a href="/docs.html">API Docs</a> •
-      <a href="/regulations.html">Regulations</a> •
-      <a href="/.well-known/security.txt">Security.txt</a> •
+      <a href="/pricing.html">Pricing</a> •
+      <a href="/verify.html" aria-current="page">Verify</a> •
       <a href="/privacy.html">Privacy</a> •
       <a href="/legal.html">Legal</a> •
+      <a href="/.well-known/security.txt">Security.txt</a> •
       <a href="/humans.txt">humans.txt</a>
     </div>
   </footer>
 
   <script defer nonce="TP-2025">
   (function(){
-    // Header shade
+    // Header shade + progress bar
     const hdr=document.getElementById('hdr');
+    const bar=document.getElementById('progress');
     function onScroll(){
       if(window.scrollY>6) hdr.classList.add('scrolled');
       else hdr.classList.remove('scrolled');
+      const h=document.documentElement;
+      const p=(h.scrollTop)/((h.scrollHeight-h.clientHeight)||1);
+      bar.style.transform=`scaleX(${Math.max(0,Math.min(1,p))})`;
     }
     onScroll();
     window.addEventListener('scroll', onScroll, { passive:true });
@@ -701,6 +656,387 @@ upgrade-insecure-requests">
       });
     })();
 
+    // Tabs
+    const tabVerify = document.getElementById('tab-verify');
+    const tabFreeze = document.getElementById('tab-freeze');
+    const paneVerify = document.getElementById('pane-verify');
+    const paneFreeze = document.getElementById('pane-freeze');
+
+    function setTab(which){
+      const isVerify = which === 'verify';
+      tabVerify.setAttribute('aria-selected', String(isVerify));
+      tabFreeze.setAttribute('aria-selected', String(!isVerify));
+      paneVerify.dataset.open = String(isVerify);
+      paneFreeze.dataset.open = String(!isVerify);
+      location.hash = isVerify ? '#tool' : '#tool';
+    }
+    tabVerify.addEventListener('click', ()=>setTab('verify'));
+    tabFreeze.addEventListener('click', ()=>setTab('freeze'));
+
+    // Helpers
+    function setStatus(boxId, pillId, msgId, detailsId, kind, pillText, msg, details){
+      const box = document.getElementById(boxId);
+      const pill = document.getElementById(pillId);
+      const m = document.getElementById(msgId);
+      const d = document.getElementById(detailsId);
+      box.dataset.show = "true";
+      pill.classList.remove('ok','err','warn');
+      if(kind) pill.classList.add(kind);
+      pill.textContent = pillText;
+      m.textContent = msg || '';
+      if(details){
+        d.dataset.show = "true";
+        d.textContent = details;
+      }else{
+        d.dataset.show = "false";
+        d.textContent = '';
+      }
+    }
+
+    function resetStatus(boxId, pillId, msgId, detailsId, pillText){
+      const box = document.getElementById(boxId);
+      const pill = document.getElementById(pillId);
+      const m = document.getElementById(msgId);
+      const d = document.getElementById(detailsId);
+      box.dataset.show = "false";
+      pill.classList.remove('ok','err','warn');
+      pill.textContent = pillText;
+      m.textContent = '';
+      d.dataset.show = "false";
+      d.textContent = '';
+    }
+
+    async function readAsText(file){
+      return new Promise((resolve,reject)=>{
+        const r = new FileReader();
+        r.onload = () => resolve(String(r.result || ''));
+        r.onerror = () => reject(new Error('Could not read file.'));
+        r.readAsText(file);
+      });
+    }
+
+    async function sha256Hex(arrayBuffer){
+      const digest = await crypto.subtle.digest('SHA-256', arrayBuffer);
+      const bytes = new Uint8Array(digest);
+      let hex = '';
+      for(let i=0;i<bytes.length;i++){
+        const h = bytes[i].toString(16).padStart(2,'0');
+        hex += h;
+      }
+      return hex;
+    }
+
+    async function readAsArrayBuffer(file){
+      return new Promise((resolve,reject)=>{
+        const r = new FileReader();
+        r.onload = () => resolve(r.result);
+        r.onerror = () => reject(new Error('Could not read file.'));
+        r.readAsArrayBuffer(file);
+      });
+    }
+
+    function safeJsonParse(text){
+      try{
+        const obj = JSON.parse(text);
+        if(!obj || typeof obj !== 'object') return null;
+        return obj;
+      }catch{
+        return null;
+      }
+    }
+
+    // API base (site can switch without code changes)
+    const API_BASE = (function(){
+      const q = new URLSearchParams(location.search);
+      const override = q.get('api');
+      if(override) return override.replace(/\/+$/,'');
+      // prefer custom domain if available
+      return 'https://api.timeproofs.io';
+    })();
+
+    async function apiPost(path, payload){
+      const url = API_BASE.replace(/\/+$/,'') + path;
+      const res = await fetch(url, {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json' },
+        body: JSON.stringify(payload),
+        cache:'no-store'
+      });
+      const text = await res.text();
+      let data = null;
+      try{ data = JSON.parse(text); }catch{ data = { raw:text }; }
+      if(!res.ok){
+        const msg = (data && (data.error || data.message)) ? (data.error || data.message) : ('HTTP ' + res.status);
+        const err = new Error(msg);
+        err._data = data;
+        err._status = res.status;
+        throw err;
+      }
+      return data;
+    }
+
+    // Inputs + UI wiring (Verify)
+    const proofInput = document.getElementById('proofInput');
+    const contentInput = document.getElementById('contentInput');
+    const proofName = document.getElementById('proofName');
+    const contentName = document.getElementById('contentName');
+
+    let proofFile = null;
+    let contentFile = null;
+
+    proofInput.addEventListener('change', ()=>{
+      proofFile = proofInput.files && proofInput.files[0] ? proofInput.files[0] : null;
+      proofName.textContent = proofFile ? proofFile.name : 'No proof selected';
+      resetStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','Ready');
+    });
+    contentInput.addEventListener('change', ()=>{
+      contentFile = contentInput.files && contentInput.files[0] ? contentInput.files[0] : null;
+      contentName.textContent = contentFile ? contentFile.name : 'No content selected';
+      resetStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','Ready');
+    });
+
+    document.getElementById('resetVerifyBtn').addEventListener('click', ()=>{
+      proofInput.value = '';
+      contentInput.value = '';
+      proofFile = null;
+      contentFile = null;
+      proofName.textContent = 'No proof selected';
+      contentName.textContent = 'No content selected';
+      resetStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','Ready');
+    });
+
+    document.getElementById('verifyBtn').addEventListener('click', async ()=>{
+      resetStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','Ready');
+
+      if(!proofFile || !contentFile){
+        setStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','warn','Missing files',
+          'Please select both the proof file (.tproof.json) and the content file to verify.');
+        return;
+      }
+
+      setStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','warn','Working…',
+        'Computing the matching check locally…');
+
+      try{
+        const proofText = await readAsText(proofFile);
+        const proofObj = safeJsonParse(proofText);
+        if(!proofObj){
+          setStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','err','Invalid proof',
+            'The selected proof file is not valid JSON.');
+          return;
+        }
+
+        const buf = await readAsArrayBuffer(contentFile);
+        const hashHex = await sha256Hex(buf);
+
+        // Minimal, non-technical payload: server decides the verification logic.
+        // Endpoint names are conservative; adjust server mapping if needed.
+        const payload = {
+          proof: proofObj,
+          content: {
+            name: contentFile.name || 'content',
+            size: typeof contentFile.size === 'number' ? contentFile.size : null,
+            sha256: hashHex
+          }
+        };
+
+        // Try common endpoints (first that works wins)
+        const candidates = ['/verify', '/v1/verify', '/proof/verify', '/api/verify'];
+        let data = null;
+        let lastErr = null;
+        for(const p of candidates){
+          try{
+            data = await apiPost(p, payload);
+            lastErr = null;
+            break;
+          }catch(e){
+            lastErr = e;
+          }
+        }
+        if(!data){
+          const hint = lastErr ? String(lastErr.message || lastErr) : 'Unknown error';
+          setStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','err','Verification failed',
+            'We could not reach the verification service with the current endpoint configuration.',
+            'API base: ' + API_BASE + '\nLast error: ' + hint + '\n\nTip: add ?api=https://your-api-base to test another base.');
+          return;
+        }
+
+        // Normalize result
+        const ok = !!(data.ok || data.valid || data.verified || data.match === true);
+        const verdict = data.verdict || (ok ? 'MATCH' : 'NOT MATCH');
+        const reason = data.reason || data.message || (ok ? 'The proof matches the content.' : 'The proof does not match this content.');
+        const proofId = data.id || data.proof_id || data.proofId || data.public_id || null;
+        const issuedAt = data.issued_at || data.issuedAt || null;
+
+        if(ok){
+          setStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','ok','Verified',
+            reason,
+            (proofId ? ('Proof ID: ' + proofId + '\n') : '') +
+            (issuedAt ? ('Issued at: ' + issuedAt + '\n') : '') +
+            ('Result: ' + verdict));
+        }else{
+          setStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','err','Not verified',
+            reason,
+            (proofId ? ('Proof ID: ' + proofId + '\n') : '') +
+            (issuedAt ? ('Issued at: ' + issuedAt + '\n') : '') +
+            ('Result: ' + verdict));
+        }
+      }catch(e){
+        setStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','err','Error',
+          'Verification could not be completed.',
+          String(e && e.message ? e.message : e));
+      }
+    });
+
+    // Inputs + UI wiring (Freeze)
+    const freezeContentInput = document.getElementById('freezeContentInput');
+    const freezeContentName = document.getElementById('freezeContentName');
+    const keyInput = document.getElementById('keyInput');
+    let freezeFile = null;
+
+    freezeContentInput.addEventListener('change', ()=>{
+      freezeFile = freezeContentInput.files && freezeContentInput.files[0] ? freezeContentInput.files[0] : null;
+      freezeContentName.textContent = freezeFile ? freezeFile.name : 'No content selected';
+      resetStatus('freezeStatus','freezePill','freezeMsg','freezeDetails','Ready');
+    });
+
+    document.getElementById('resetFreezeBtn').addEventListener('click', ()=>{
+      freezeContentInput.value = '';
+      keyInput.value = '';
+      freezeFile = null;
+      freezeContentName.textContent = 'No content selected';
+      resetStatus('freezeStatus','freezePill','freezeMsg','freezeDetails','Ready');
+    });
+
+    function downloadText(filename, text){
+      const blob = new Blob([text], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url), 2000);
+    }
+
+    document.getElementById('freezeBtn').addEventListener('click', async ()=>{
+      resetStatus('freezeStatus','freezePill','freezeMsg','freezeDetails','Ready');
+
+      const key = (keyInput.value || '').trim();
+      if(!freezeFile){
+        setStatus('freezeStatus','freezePill','freezeMsg','freezeDetails','warn','Missing content',
+          'Please select a content file to freeze.');
+        return;
+      }
+      if(!key){
+        setStatus('freezeStatus','freezePill','freezeMsg','freezeDetails','warn','Missing key',
+          'Please enter your access key (sent by email).');
+        return;
+      }
+
+      setStatus('freezeStatus','freezePill','freezeMsg','freezeDetails','warn','Working…',
+        'Computing the matching check locally…');
+
+      try{
+        const buf = await readAsArrayBuffer(freezeFile);
+        const hashHex = await sha256Hex(buf);
+
+        const payload = {
+          key: key,
+          content: {
+            name: freezeFile.name || 'content',
+            size: typeof freezeFile.size === 'number' ? freezeFile.size : null,
+            sha256: hashHex
+          },
+          meta: {
+            source: 'web',
+            page: 'verify.html',
+            v: 1
+          }
+        };
+
+        // Try common issuance endpoints
+        const candidates = ['/issue', '/v1/issue', '/proof/issue', '/api/issue', '/freeze', '/v1/freeze'];
+        let data = null;
+        let lastErr = null;
+        for(const p of candidates){
+          try{
+            data = await apiPost(p, payload);
+            lastErr = null;
+            break;
+          }catch(e){
+            lastErr = e;
+          }
+        }
+
+        if(!data){
+          const hint = lastErr ? String(lastErr.message || lastErr) : 'Unknown error';
+          setStatus('freezeStatus','freezePill','freezeMsg','freezeDetails','err','Freeze failed',
+            'We could not reach the issuance service with the current endpoint configuration.',
+            'API base: ' + API_BASE + '\nLast error: ' + hint + '\n\nTip: add ?api=https://your-api-base to test another base.');
+          return;
+        }
+
+        // Expect proof JSON in response
+        const proofObj = data.proof || data.tproof || data.result || data;
+        if(!proofObj || typeof proofObj !== 'object'){
+          setStatus('freezeStatus','freezePill','freezeMsg','freezeDetails','err','Unexpected response',
+            'The issuance service did not return a proof file.');
+          return;
+        }
+
+        // Choose filename
+        const base = (freezeFile.name || 'content').replace(/\.[^.]+$/,'');
+        const proofName = (data.filename || (base + '.tproof.json')).replace(/[\/\\]/g,'_');
+        const outText = JSON.stringify(proofObj, null, 2);
+
+        downloadText(proofName, outText);
+
+        const proofId = data.id || data.proof_id || data.proofId || data.public_id || null;
+        const issuedAt = data.issued_at || data.issuedAt || null;
+
+        setStatus('freezeStatus','freezePill','freezeMsg','freezeDetails','ok','Proof created',
+          'Your proof file was generated and downloaded. Store it with your records.',
+          (proofId ? ('Proof ID: ' + proofId + '\n') : '') +
+          (issuedAt ? ('Issued at: ' + issuedAt + '\n') : '') +
+          ('Saved as: ' + proofName));
+      }catch(e){
+        setStatus('freezeStatus','freezePill','freezeMsg','freezeDetails','err','Error',
+          'Freeze could not be completed.',
+          String(e && e.message ? e.message : e));
+      }
+    });
+
+    // Drag & drop (proof + content + freeze content)
+    function bindDrop(zoneEl, inputEl, onPicked){
+      zoneEl.addEventListener('dragover', (e)=>{ e.preventDefault(); zoneEl.style.filter='brightness(1.03)'; });
+      zoneEl.addEventListener('dragleave', ()=>{ zoneEl.style.filter=''; });
+      zoneEl.addEventListener('drop', (e)=>{
+        e.preventDefault(); zoneEl.style.filter='';
+        const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0] ? e.dataTransfer.files[0] : null;
+        if(!f) return;
+        try{
+          const dt = new DataTransfer();
+          dt.items.add(f);
+          inputEl.files = dt.files;
+          inputEl.dispatchEvent(new Event('change', { bubbles:true }));
+          if(typeof onPicked === 'function') onPicked(f);
+        }catch{}
+      });
+    }
+
+    // Find zones by proximity: label -> input
+    (function(){
+      const proofZone = proofInput && proofInput.parentElement ? proofInput.parentElement : null;
+      const contentZone = contentInput && contentInput.parentElement ? contentInput.parentElement : null;
+      const freezeZone = freezeContentInput && freezeContentInput.parentElement ? freezeContentInput.parentElement : null;
+
+      if(proofZone) bindDrop(proofZone, proofInput, ()=>{});
+      if(contentZone) bindDrop(contentZone, contentInput, ()=>{});
+      if(freezeZone) bindDrop(freezeZone, freezeContentInput, ()=>{});
+    })();
+
     // Service Worker
     if('serviceWorker' in navigator){
       navigator.serviceWorker.register('/sw.js',{type:'module',scope:'/'}).catch(()=>{});
@@ -708,4 +1044,4 @@ upgrade-insecure-requests">
   })();
   </script>
 </body>
-  </html>
+</html>
