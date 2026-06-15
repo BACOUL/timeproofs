@@ -466,7 +466,7 @@ upgrade-insecure-requests">
     <a class="cta-header" href="mailto:contact@timeproofs.io?subject=TimeProofs%20pilot" aria-label="Request a pilot">Request a pilot</a>
 
     <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu">
-      <span aria-hidden="true">Menu</span>
+      <span aria-hidden="true">&#9776;</span>
     </button>
   </header>
 
@@ -753,7 +753,9 @@ upgrade-insecure-requests">
     (function(){
       const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
       document.querySelectorAll('header nav a:not(.nav-cta), footer .links a').forEach(a=>{
-        const path=new URL(a.getAttribute('href'), location.origin).pathname;
+        const href=a.getAttribute('href') || '';
+        if(href.startsWith('#') || href.startsWith('mailto:')) return;
+        const path=new URL(href, location.origin).pathname;
         if(path===here) a.setAttribute('aria-current','page');
       });
     })();
