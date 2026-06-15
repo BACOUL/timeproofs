@@ -6,9 +6,9 @@ Last updated: 2026-06-15
 
 ## North Star
 
-**TimeProofs = la boîte noire des actions IA.**
+**TimeProofs = the black box for AI actions.**
 
-TimeProofs V1 should become the privacy-first black box for observable AI actions. Each important AI action should produce a clear, signed and verifiable Action File. The company keeps that file wherever it wants. TimeProofs seals only the file fingerprint, not sensitive content.
+TimeProofs V1 should become the privacy-first black box for observable AI actions. Each important AI action should produce a clear, signed and verifiable AI Action File. The company keeps that file wherever it wants. TimeProofs seals only the file fingerprint, not sensitive content.
 
 ## Roadmap Principles
 
@@ -18,13 +18,13 @@ TimeProofs V1 should become the privacy-first black box for observable AI action
 - Do not replace technical logs; reference them when useful.
 - Do not promise absolute legal proof or full compliance.
 - Keep each PR focused on one objective.
-- Avoid dashboard work until Action File V1 is validated.
+- Avoid dashboard work until AI Action File V1 is validated.
 - Avoid website repositioning until the product source of truth is accepted.
 - Avoid API or SDK behavior changes until they are explicitly scoped and tested.
 
 ## Current Direction
 
-The previous broad positioning around general proof of existence should now be narrowed for V1. The first sellable product is **TimeProofs Action File v1**: a customer-owned traceability file for one observable AI action, sealed through a TimeProofs fingerprint receipt.
+The previous broad positioning around general proof of existence should now be narrowed for V1. The first sellable product is **TimeProofs Action File v1**: an AI Action File for one observable AI action, sealed through a TimeProofs fingerprint receipt.
 
 This roadmap is intentionally conservative. It protects the privacy-first model, keeps the existing stack stable, and creates a path from positioning to a sellable product without rebuilding the product around a dashboard.
 
@@ -39,7 +39,7 @@ Deliverables:
 - Add `PRODUCT_STRATEGY.md`.
 - Align `ROADMAP.md` with the new V1 positioning.
 - Record what TimeProofs proves and what it does not prove.
-- Record the privacy model and Action File V1 direction.
+- Record the privacy model and AI Action File V1 direction.
 
 Out of scope:
 
@@ -58,16 +58,16 @@ Exit criteria:
 
 ## P002 - Technical Foundations
 
-Objective: map the current TimeProofs primitives to the Action File V1 product without breaking existing behavior.
+Objective: map the current TimeProofs primitives to the AI Action File V1 product without breaking existing behavior.
 
 Planned work:
 
 - Audit the existing timestamp and verification flows.
 - Document which existing primitives already support fingerprint sealing.
-- Define the Action File V1 schema as a product and technical specification.
-- Define local hashing guidance for Action Files.
+- Define the AI Action File V1 schema as a product and technical specification.
+- Define local hashing guidance for AI Action Files.
 - Define receipt fields and verification requirements.
-- Define how customer-owned files reference technical logs without replacing them.
+- Define how customer-owned AI Action Files reference technical logs without replacing them.
 - Add focused tests before any behavior change.
 - Confirm that sensitive action content is not sent to TimeProofs by default.
 
@@ -81,18 +81,18 @@ Out of scope:
 
 Exit criteria:
 
-- The team knows whether Action File V1 can use existing endpoints as-is or needs additive changes.
+- The team knows whether AI Action File V1 can use existing endpoints as-is or needs additive changes.
 - Any proposed API or SDK change has a narrow specification and test plan.
 - The privacy boundary is explicit and testable.
 
-## P003 - Action File V1
+## P003 - AI Action File V1
 
-Objective: create the first sellable product surface.
+Objective: create the first sellable product surface for TimeProofs Action File v1.
 
 Planned work:
 
-- Publish the Action File V1 format.
-- Provide safe example Action Files with redacted or synthetic content.
+- Publish the AI Action File V1 format.
+- Provide safe example AI Action Files with redacted or synthetic content.
 - Provide a generate, hash, seal, and verify workflow.
 - Provide integration guidance for AI agents, workflows, and automation tools.
 - Provide a verification recipe that works for a customer-owned file.
@@ -108,7 +108,7 @@ Out of scope:
 
 Exit criteria:
 
-- A developer can create an Action File for one observable AI action.
+- A developer can create an AI Action File for one observable AI action.
 - The developer can hash it locally.
 - TimeProofs can seal the fingerprint.
 - A third party with the file can verify that the file matches the sealed fingerprint.
@@ -121,7 +121,7 @@ Objective: validate that buyers understand and value TimeProofs Action File v1 b
 Planned work:
 
 - Build a narrow demo around one observable AI action.
-- Show the sequence: AI action, Action File, local hash, TimeProofs seal, verification.
+- Show the sequence: AI action, AI Action File, local hash, TimeProofs seal, verification.
 - Create sales discovery notes based on the product truth.
 - Test the message with early buyers and integrators.
 - Collect objections around privacy, logs, legal expectations, verification, and storage.
@@ -137,7 +137,7 @@ Out of scope:
 Exit criteria:
 
 - The demo proves the core workflow.
-- Sales conversations confirm or reject the Action File V1 value proposition.
+- Sales conversations confirm or reject the TimeProofs Action File v1 value proposition.
 - Next product work is based on buyer feedback, not assumptions.
 
 ## Later Candidates
@@ -145,9 +145,9 @@ Exit criteria:
 These should only happen after the previous phases justify them:
 
 - Website repositioning based on `PRODUCT_STRATEGY.md`.
-- Additive API improvements for Action File workflows.
-- Additive SDK helpers for local Action File generation, hashing, and verification.
-- Optional PDF or human-readable export of an Action File.
+- Additive API improvements for AI Action File workflows.
+- Additive SDK helpers for local AI Action File generation, hashing, and verification.
+- Optional PDF or human-readable export of an AI Action File.
 - Customer evidence storage integrations.
 - Dashboard or team workspace only if repeated customer demand proves it is necessary.
 - Legal review of claims and language before any regulated-market messaging.
