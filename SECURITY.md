@@ -87,6 +87,33 @@ The full design is documented in `docs/signature-model.md`.
 
 ---
 
+## Public Key Registry
+
+The future TimeProofs public key registry is published at:
+
+```text
+/.well-known/timeproofs-keys.json
+```
+
+Human-readable guidance is published at:
+
+```text
+/keys.html
+```
+
+Registry rules:
+
+- public keys are published for independent verification only;
+- private keys must never appear in the registry;
+- each `public_key_id` must be stable and must never be reused for different key material;
+- retired keys remain published for historical verification;
+- compromised keys remain listed with a clear incident state and guidance;
+- placeholder keys must be clearly marked as not production-ready.
+
+Current status: design placeholder until production signing is implemented.
+
+---
+
 ## Private Key Policy
 
 Private keys must never be committed to this repository.
@@ -139,6 +166,8 @@ Researchers who help secure TimeProofs will be acknowledged on:
 ## Policy References
 
 - Canonical security policy: [https://timeproofs.io/.well-known/security.txt](https://timeproofs.io/.well-known/security.txt)
+- Public key registry: [https://timeproofs.io/.well-known/timeproofs-keys.json](https://timeproofs.io/.well-known/timeproofs-keys.json)
+- Public key guidance: [https://timeproofs.io/keys.html](https://timeproofs.io/keys.html)
 - Legal terms: [https://timeproofs.io/legal.html](https://timeproofs.io/legal.html)
 - Privacy policy: [https://timeproofs.io/privacy.html](https://timeproofs.io/privacy.html)
 - Signature model: `docs/signature-model.md`
