@@ -1,0 +1,80 @@
+{
+  "format": "timeproofs.action.v1",
+  "schema_version": "1.0.0-design",
+  "action_core": {
+    "action_id": "act_demo_file_delivery_001",
+    "created_at": "2026-06-16T18:55:00Z",
+    "actor": {
+      "type": "automation",
+      "id": "document_delivery_workflow_demo",
+      "name": "Document delivery workflow",
+      "version": "1.0.0"
+    },
+    "action": {
+      "type": "file.delivered",
+      "status": "target_confirmed",
+      "summary": "Delivered a generated document to an external storage provider.",
+      "occurred_at": "2026-06-16T18:55:00Z"
+    },
+    "proof_level": "externally_verifiable",
+    "workflow": {
+      "provider": "example_workflow_platform",
+      "workflow_id": "wf_document_delivery_demo",
+      "run_id": "run_delivery_001",
+      "step_id": "step_deliver_file",
+      "environment": "demo"
+    },
+    "target_system": {
+      "name": "example_storage_provider",
+      "type": "external_storage",
+      "object_type": "file",
+      "reference": "external-file-demo-001",
+      "confirmed_at": "2026-06-16T18:55:03Z"
+    },
+    "evidence": {
+      "references": [
+        {
+          "type": "external_delivery_receipt_fingerprint",
+          "label": "External delivery receipt fingerprint",
+          "reference": "external-receipt-demo-001",
+          "fingerprint": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+          "stored_by": "third_party"
+        },
+        {
+          "type": "delivered_file_fingerprint",
+          "label": "Delivered file fingerprint",
+          "reference": "delivered-file-demo-001",
+          "fingerprint": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+          "stored_by": "customer"
+        }
+      ]
+    },
+    "redaction": {
+      "applied": true,
+      "profile": "demo-redacted",
+      "notes": [
+        "No raw document content is included.",
+        "The delivered document is represented by a fingerprint."
+      ]
+    },
+    "limitations": [
+      "External verification depends on access rights to the storage provider or receipt.",
+      "TimeProofs does not verify that the recipient opened or accepted the file.",
+      "This file does not prove legal acceptance of the delivery."
+    ],
+    "metadata": {
+      "example": true,
+      "example_type": "externally_verifiable_file_delivery"
+    }
+  },
+  "integrity": {
+    "canonicalization_profile": "timeproofs-json-canonical-v1-draft",
+    "hash_algorithm": "sha256",
+    "payload_hash": "sha256:101d847f15ffca1dceaa26d8e1b0da761fd29b748b2acd314b8b7e12c086e6ad",
+    "seal": {
+      "status": "not_implemented_in_this_example"
+    }
+  },
+  "local_annotations": {},
+  "verification_result": {}
+}
