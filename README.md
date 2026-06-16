@@ -168,6 +168,10 @@ Useful files:
 
 These files should not be deleted or broken during the V1 repositioning.
 
+## Object model
+
+The V1 object boundaries are defined in [docs/objects-model.md](docs/objects-model.md). In short: AI Action File = business traceability file describing one observable AI action; Seal = cryptographic record proving that a canonical fingerprint was sealed at a specific time; Proof Bundle / `.tproof.json` = the existing lower-level technical proof format. `.action.json` is future product-level Action File work, while `.tproof.json` remains backward-compatible.
+
 ## V1 roadmap
 
 The safe execution path is intentionally staged:
