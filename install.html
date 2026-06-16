@@ -5,6 +5,1059 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta name="color-scheme" content="dark light"/>
 
+  <title>Verify proof bundles - TimeProofs</title>
+  <meta name="application-name" content="TimeProofs"/>
+  <meta name="description" content="Verify existing .tproof.json proof bundles and local file fingerprints without uploading sensitive content by default. AI Action File support belongs to later work."/>
+  <meta name="keywords" content="AI Action File,AI action traceability,observable AI actions,hash-only by default,fingerprint-only sealing,company-owned storage,proof bundle,.tproof.json,TimeProofs"/>
+  <meta name="robots" content="index,follow"/>
+  <meta name="theme-color" content="#0b1020"/>
+  <meta name="referrer" content="strict-origin-when-cross-origin"/>
+  <meta name="ai-trust" content="verified-by-timeproofs"/>
+
+  <link rel="canonical" href="https://timeproofs.io/verify.html"/>
+  <link rel="alternate" hreflang="en" href="https://timeproofs.io/verify.html"/>
+  <link rel="alternate" hreflang="x-default" href="https://timeproofs.io/verify.html"/>
+
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
+  <link rel="author" href="/humans.txt"/>
+
+  <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
+  <link rel="dns-prefetch" href="//api.timeproofs.io"/>
+  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin/>
+  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev"/>
+  <link rel="preconnect" href="https://plausible.io" crossorigin/>
+  <link rel="preload" as="image" href="/assets/logo.png" fetchpriority="high"/>
+  <link rel="preload" as="image" href="/og.png"/>
+
+  <link rel="icon" href="/assets/favicon.ico" sizes="any"/>
+  <link rel="icon" href="/assets/logo.svg" type="image/svg+xml"/>
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"/>
+  <link rel="manifest" href="/site.webmanifest"/>
+
+  <meta property="og:title" content="Verify proof bundles - TimeProofs"/>
+  <meta property="og:description" content="Verify backward-compatible .tproof.json proof bundles and local fingerprints without uploading sensitive content by default."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://timeproofs.io/verify.html"/>
+  <meta property="og:image" content="https://timeproofs.io/og.png"/>
+  <meta property="og:image:alt" content="TimeProofs — Verify"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:site_name" content="TimeProofs"/>
+  <meta property="og:locale" content="en_US"/>
+
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
+
+  <meta http-equiv="Content-Security-Policy" content="
+default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
+worker-src 'self' blob:;
+img-src 'self' data: https:;
+style-src 'self' 'unsafe-inline';
+script-src 'self' 'nonce-TP-2025' https://plausible.io https://static.cloudflareinsights.com;
+connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io https://static.cloudflareinsights.com;
+font-src 'self' https: data:;
+object-src 'none';
+base-uri 'self';
+form-action 'self';
+frame-ancestors 'none';
+upgrade-insecure-requests">
+
+  <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebPage",
+    "name":"Verify — TimeProofs",
+    "description":"Verify a TimeProofs proof against the original content. Upload the proof file and the file (or content) to check integrity — privately.",
+    "url":"https://timeproofs.io/verify.html",
+    "isPartOf":{"@type":"WebSite","name":"TimeProofs","url":"https://timeproofs.io/"}
+  }
+  </script>
+
+  <style>
+    :root{
+      --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
+      --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
+      --ok:#34d399; --warn:#f59e0b ; --err:#ef4444;
+      --ring:0 0 0 1px #1e293b, 0 10px 40px rgba(34,211,238,.14);
+      --e:cubic-bezier(.22,.61,.36,1)
+    }
+    *{ box-sizing:border-box }
+
+    html{
+      height:100%; max-width:100%; overflow-x:hidden; background:var(--bg);
+      scroll-behavior:smooth;
+      scroll-padding-top:120px;
+      text-size-adjust:100%;
+      -webkit-text-size-adjust:100%;
+    }
+    @media (min-width:900px){ html{ scroll-padding-top:104px } }
+
+    body{
+      margin:0; color:var(--text);
+      font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      background:
+        radial-gradient(1200px 600px at 80% -10%, rgba(34,211,238,.06), transparent 60%),
+        conic-gradient(from 220deg at 10% -20%, rgba(34,211,238,.04), transparent 30%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+    }
+    a{ color:var(--accent); text-decoration:none }
+    a:hover{ text-decoration:underline }
+
+    [id]{ scroll-margin-top:120px }
+    @media (min-width:900px){ [id]{ scroll-margin-top:104px } }
+
+    .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
+    .skip:focus{
+      position:fixed; left:12px; top:12px; width:auto; height:auto; padding:8px 12px;
+      background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000
+    }
+
+    /* Header */
+    .tp-header{
+      position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
+      background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
+      display:flex; align-items:center; gap:12px; padding:0 16px; transition:background .25s var(--e)
+    }
+    .tp-header.scrolled{ background:rgba(11,16,32,.88) }
+    .tp-brand{
+      display:flex; align-items:center; gap:10px; color:var(--text);
+      font-weight:950; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto
+    }
+    .tp-brand img{ height:40px; width:40px; object-fit:contain }
+
+    .tp-nav a{
+      color:var(--text);
+      font-weight:850;
+      margin-left:18px;
+      padding:10px 0;
+      display:inline-block;
+      text-underline-offset:3px;
+    }
+    .tp-nav a:hover{ color:var(--accent); text-decoration:underline }
+    .tp-nav a[aria-current="page"]{ color:#9beefb }
+
+    .cta-header{
+      display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
+      border-radius:10px; background:var(--accent); color:#06202a; font-weight:950; box-shadow:0 6px 24px rgba(34,211,238,.25)
+    }
+    .cta-header:hover{ filter:brightness(1.05) }
+
+    .tp-burger{
+      display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
+      border:1px solid var(--line); border-radius:12px; background:#0c1a2e; color:#fff;
+      cursor:pointer; box-shadow:var(--ring)
+    }
+    .tp-burger span{ font-size:20px; line-height:1 }
+
+    .nav-cta{ display:none; }
+
+    @media (min-width:900px){
+      .tp-burger{ display:none }
+      .tp-nav{ display:flex; align-items:center }
+      .cta-header{ display:inline-flex }
+    }
+    @media (max-width:899px){
+      .tp-brand img{ height:34px; width:34px }
+      .tp-nav{
+        position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
+        display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
+        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease
+      }
+      .tp-nav a{ margin:4px 0 }
+      .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
+      .nav-cta{
+        display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px;
+        background:var(--accent); color:#06202a; font-weight:950
+      }
+    }
+
+    .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
+
+    .hero{
+      padding-top:96px; padding-bottom:18px;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+      position:relative; isolation:isolate
+    }
+    .label{
+      display:inline-flex; gap:8px; align-items:center; padding:6px 12px; border:1px solid #214a57;
+      background:#0d2330; color:#bff1ff; border-radius:999px; font-size:.85rem; margin-bottom:12px; box-shadow:var(--ring)
+    }
+    .title{
+      font-size:clamp(2.1rem, 6vw, 3.2rem); line-height:1.06; margin:.2em auto .25em; font-weight:1000; max-width:1040px;
+      background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      text-shadow:0 2px 48px rgba(34,211,238,.10)
+    }
+    .subtitle{
+      color:var(--muted);
+      max-width:980px;
+      margin:0 auto 12px;
+      line-height:1.78;
+      font-size:clamp(1.02rem, 2.9vw, 1.15rem);
+      padding:0 6px
+    }
+    .micro{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; color:#9fb3c9; margin:10px 0 0 }
+    .micro .chip{
+      display:inline-flex; align-items:center; gap:6px; padding:6px 12px;
+      border:1px solid #214a57; background:#0d2330; border-radius:999px;
+      font-size:.82rem; line-height:1.15; white-space:nowrap;
+    }
+
+    .section{ padding:28px 0; position:relative }
+    .section.bg-alt{ background:linear-gradient(180deg,#0b1020,#0c1424); border-top:1px solid #121a2e; border-bottom:1px solid #121a2e }
+    .section.bg-solid{ background:#0d1628; border-top:1px solid #1a2640; border-bottom:1px solid #1a2640 }
+
+    .panel{
+      max-width:980px; margin:0 auto;
+      border-radius:18px;
+      background:#0c1424;
+      border:1px solid #1e2a3e;
+      box-shadow:var(--ring);
+      overflow:hidden;
+    }
+
+    .tabs{
+      display:flex; gap:0;
+      border-bottom:1px solid rgba(148,163,184,.16);
+      background:linear-gradient(180deg, rgba(34,211,238,.06), transparent);
+    }
+    .tab{
+      appearance:none;
+      border:none;
+      background:transparent;
+      color:#cfefff;
+      font-weight:950;
+      padding:14px 14px;
+      cursor:pointer;
+      flex:1 1 0;
+      text-align:center;
+      border-right:1px solid rgba(148,163,184,.10);
+    }
+    .tab:last-child{ border-right:none }
+    .tab[aria-selected="true"]{
+      color:#06202a;
+      background:var(--accent);
+    }
+    .tab:focus-visible{ outline:2px solid #22d3ee; outline-offset:-2px }
+
+    .pane{ display:none; padding:16px }
+    .pane[data-open="true"]{ display:block }
+
+    .grid{
+      display:grid; gap:12px;
+      grid-template-columns:1fr;
+    }
+    @media(min-width:900px){
+      .grid.two{ grid-template-columns:repeat(2,1fr) }
+    }
+
+    .field{
+      border-radius:16px;
+      border:1px solid rgba(148,163,184,.16);
+      background:rgba(11,18,38,.35);
+      padding:14px;
+    }
+    .field h3{
+      margin:0 0 6px;
+      color:#e6fbff;
+      font-size:1.05rem;
+      letter-spacing:.2px;
+    }
+    .field p{ margin:0 0 10px; color:#9fb3c9; line-height:1.55 }
+
+    .drop{
+      border-radius:14px;
+      border:1px dashed rgba(34,211,238,.42);
+      background:rgba(34,211,238,.06);
+      padding:14px;
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .drop .left{ display:flex; flex-direction:column; gap:2px }
+    .drop .name{ color:#e6fbff; font-weight:900 }
+    .drop .hint{ color:#9fb3c9; font-size:.92rem }
+    .drop input[type="file"]{ display:none }
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:8px;
+      border-radius:12px;
+      padding:12px 14px;
+      font-weight:1000;
+      border:1px solid transparent;
+      cursor:pointer;
+      user-select:none;
+      transition:transform .18s var(--e), filter .18s var(--e), box-shadow .18s var(--e);
+      box-shadow:0 8px 30px rgba(34,211,238,.10);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    .btn.primary{ background:var(--accent); color:#06202a }
+    .btn.secondary{ background:#111d33; color:#e2f6ff; border-color:#1e2a3e; box-shadow:none }
+    .btn.ghost{ background:transparent; color:#cfefff; border-color:#214a57; box-shadow:none }
+    .btn:hover{ transform:translateY(-1px); filter:brightness(1.02) }
+    .btn:focus-visible{ outline:2px solid #22d3ee; outline-offset:3px }
+
+    .row{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px; flex-wrap:wrap;
+      margin-top:12px;
+    }
+
+    .note{
+      margin-top:12px;
+      border:1px solid #214a57;
+      background:#0d2330;
+      border-radius:16px;
+      padding:12px;
+      color:#cfefff;
+    }
+    .note b{ color:#e6fbff }
+    .note .mini{ color:#9fb3c9; margin-top:6px; font-size:.95rem }
+
+    .status{
+      margin-top:12px;
+      border-radius:16px;
+      border:1px solid rgba(148,163,184,.16);
+      background:rgba(11,18,38,.35);
+      padding:12px;
+      display:none;
+    }
+    .status[data-show="true"]{ display:block }
+    .status .top{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px; flex-wrap:wrap;
+      margin-bottom:8px;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px; border-radius:999px;
+      border:1px solid rgba(148,163,184,.18);
+      background:rgba(11,18,38,.35);
+      color:#cfefff;
+      font-weight:950;
+      font-size:.9rem;
+    }
+    .pill.ok{ border-color:rgba(52,211,153,.35); background:rgba(52,211,153,.10); color:#bfffe8 }
+    .pill.err{ border-color:rgba(239,68,68,.35); background:rgba(239,68,68,.10); color:#ffd1d1 }
+    .pill.warn{ border-color:rgba(245,158,11,.35); background:rgba(245,158,11,.10); color:#ffe7c2 }
+    .status .msg{ color:#dbe7f3; line-height:1.55 }
+    .mono{
+      margin-top:8px;
+      border-radius:12px;
+      border:1px solid rgba(148,163,184,.14);
+      background:#030613;
+      padding:10px;
+      color:#e6fbff;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+      font-size:.9rem;
+      overflow:auto;
+      display:none;
+    }
+    .mono[data-show="true"]{ display:block }
+
+    .progress{
+      position:fixed; left:0; top:64px; width:100%; height:2px;
+      background:linear-gradient(90deg, rgba(34,211,238,.0), rgba(34,211,238,.35));
+      transform-origin:left; scale:0 1; z-index:900
+    }
+
+    footer{
+      border-top:1px solid var(--line);
+      margin-top:34px;
+      padding:18px;
+      color:#7c8aa5;
+      text-align:center;
+      background:#0b1020;
+    }
+    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0; flex-wrap:wrap }
+    footer .badge{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px; border:1px solid var(--line); border-radius:999px;
+      background:#0d1628; font-size:.9rem; color:#cfefff; text-decoration:none
+    }
+    footer .links a{
+      color:#cfefff;
+      font-weight:600;
+      text-underline-offset:3px;
+      text-decoration:none;
+    }
+    footer .links a:hover{ color:var(--accent); text-decoration:underline }
+    footer .links a[aria-current="page"]{ color:var(--accent); text-decoration:underline }
+
+    @media (prefers-reduced-motion: reduce){
+      *{ scroll-behavior:auto !important }
+      .btn:hover{ transform:none !important }
+    }
+  </style>
+
+  <noscript><style>.reveal{opacity:1 !important; transform:none !important}</style></noscript>
+</head>
+
+<body>
+  <a href="#main" class="skip">Skip to main content</a>
+
+  <header class="tp-header" id="hdr" role="banner">
+    <a class="tp-brand" href="/" aria-label="TimeProofs Home">
+      <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
+      <span>TimeProofs</span>
+    </a>
+
+    <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
+      <a href="/">Home</a>
+      <a href="/#solution">Action File</a>
+      <a href="/verify.html">Verify</a>
+      <a href="/use-cases.html">Use Cases</a>
+      <a href="/use-cases.html">For Agencies</a>
+      <a href="/docs.html">Docs</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/security.html">Security</a>
+      <a class="nav-cta" href="mailto:contact@timeproofs.io?subject=TimeProofs%20pilot" aria-label="Request a pilot">Request a pilot</a>
+    </nav>
+
+    <a class="cta-header" href="mailto:contact@timeproofs.io?subject=TimeProofs%20pilot" aria-label="Request a pilot">Request a pilot</a>
+
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu">
+      <span aria-hidden="true">☰</span>
+    </button>
+  </header>
+
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <main id="main" class="wrap" role="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="label">Verify · Proof file + Content file · Private</div>
+
+      <h1 id="hero-title" class="title">Verify a proof.</h1>
+
+      <p class="subtitle">
+        Upload <strong>two files</strong>: the <strong>proof file</strong> (<code>.tproof.json</code>) and the <strong>content</strong> (PDF, doc, email export, or any file).
+        Verification tells you whether they match — without relying on screenshots.
+      </p>
+
+      <div class="micro" aria-label="Key claims">
+        <span class="chip">🛡 No document upload</span>
+        <span class="chip">🔎 Deterministic result</span>
+        <span class="chip">🧾 Shareable proof file</span>
+        <span class="chip">⚖️ Works for disputes</span>
+      </div>
+    </section>
+
+    <section class="section bg-alt" id="tool" aria-labelledby="tool-title">
+      <div class="panel" role="region" aria-label="Verify tool">
+        <div class="tabs" role="tablist" aria-label="Proof tools">
+          <button class="tab" id="tab-verify" role="tab" aria-selected="true" aria-controls="pane-verify">Verify</button>
+          <button class="tab" id="tab-freeze" role="tab" aria-selected="false" aria-controls="pane-freeze">Freeze (create proof)</button>
+        </div>
+
+        <!-- VERIFY -->
+        <div class="pane" id="pane-verify" role="tabpanel" aria-labelledby="tab-verify" data-open="true">
+          <div class="grid two" aria-label="Verify inputs">
+            <div class="field" aria-label="Proof file">
+              <h3>1) Proof file</h3>
+              <p>Select the <code>.tproof.json</code> proof you received or saved.</p>
+              <div class="drop">
+                <div class="left">
+                  <div class="name" id="proofName">No proof selected</div>
+                  <div class="hint">Expected: <code>.tproof.json</code></div>
+                </div>
+                <label class="btn secondary" for="proofInput" aria-label="Choose proof file">Choose proof</label>
+                <input id="proofInput" type="file" accept=".json,application/json"/>
+              </div>
+            </div>
+
+            <div class="field" aria-label="Content file">
+              <h3>2) Content file</h3>
+              <p>Select the file you want to verify (PDF, doc, email export, any file).</p>
+              <div class="drop">
+                <div class="left">
+                  <div class="name" id="contentName">No content selected</div>
+                  <div class="hint">Any file type supported</div>
+                </div>
+                <label class="btn secondary" for="contentInput" aria-label="Choose content file">Choose content</label>
+                <input id="contentInput" type="file"/>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" aria-label="Verify actions">
+            <button class="btn primary" id="verifyBtn" type="button" aria-label="Verify now">Verify now</button>
+            <button class="btn ghost" id="resetVerifyBtn" type="button" aria-label="Reset verify">Reset</button>
+            <a class="btn secondary" href="/pricing.html" aria-label="See pricing">Pricing</a>
+          </div>
+
+          <div class="status" id="verifyStatus" data-show="false" aria-live="polite">
+            <div class="top">
+              <div class="pill" id="verifyPill">Ready</div>
+              <div class="pill" id="verifyMode">Mode: Verify</div>
+            </div>
+            <div class="msg" id="verifyMsg"></div>
+            <div class="mono" id="verifyDetails" data-show="false"></div>
+          </div>
+
+          <div class="note" role="note" aria-label="Privacy note">
+            <b>Privacy:</b> your document is processed on your device to compute a matching check. The proof file is portable and shareable.
+            <div class="mini">TimeProofs verifies integrity. It does not prove authorship or intent.</div>
+          </div>
+        </div>
+
+        <!-- FREEZE (CREATE) -->
+        <div class="pane" id="pane-freeze" role="tabpanel" aria-labelledby="tab-freeze" data-open="false">
+          <div class="grid two" aria-label="Freeze inputs">
+            <div class="field" aria-label="Content to freeze">
+              <h3>1) Select content</h3>
+              <p>Choose the file you want to freeze. You will get a proof file to store with your records.</p>
+              <div class="drop">
+                <div class="left">
+                  <div class="name" id="freezeContentName">No content selected</div>
+                  <div class="hint">PDF, doc, any file</div>
+                </div>
+                <label class="btn secondary" for="freezeContentInput" aria-label="Choose content to freeze">Choose content</label>
+                <input id="freezeContentInput" type="file"/>
+              </div>
+            </div>
+
+            <div class="field" aria-label="Access key">
+              <h3>2) Access key</h3>
+              <p>Enter your TimeProofs key (sent by email). No account required.</p>
+              <div class="drop" style="align-items:stretch">
+                <div class="left" style="min-width:min(520px,100%)">
+                  <div class="name" style="margin-bottom:6px">Key</div>
+                  <input id="keyInput" type="text" inputmode="latin" autocomplete="off" spellcheck="false"
+                    placeholder="TP-KEY-XXXX-XXXX"
+                    style="width:100%; padding:12px 12px; border-radius:12px; border:1px solid rgba(148,163,184,.18); background:#030613; color:#e6fbff; outline:none"/>
+                  <div class="hint" style="margin-top:6px">Need keys? See <a href="/pricing.html">Pricing</a>.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" aria-label="Freeze actions">
+            <button class="btn primary" id="freezeBtn" type="button" aria-label="Freeze now">Freeze now</button>
+            <button class="btn ghost" id="resetFreezeBtn" type="button" aria-label="Reset freeze">Reset</button>
+            <a class="btn secondary" href="/pricing.html" aria-label="See pricing">Pricing</a>
+          </div>
+
+          <div class="status" id="freezeStatus" data-show="false" aria-live="polite">
+            <div class="top">
+              <div class="pill" id="freezePill">Ready</div>
+              <div class="pill" id="freezeMode">Mode: Freeze</div>
+            </div>
+            <div class="msg" id="freezeMsg"></div>
+            <div class="mono" id="freezeDetails" data-show="false"></div>
+          </div>
+
+          <div class="note" role="note" aria-label="Non-custodial note">
+            <b>Important:</b> keep the proof file (<code>.tproof.json</code>) with your records.
+            <div class="mini">If the proof file is lost, it cannot be reconstructed in non-custodial mode.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo" aria-label="Site footer">
+    <div class="badges">
+      <span class="badge">Edge Native</span>
+      <span class="badge">Privacy First</span>
+      <a class="badge" href="/proofspec.html">Open Spec</a>
+      <a class="badge" href="/verify.html">Verify</a>
+    </div>
+
+    &copy; 2026 TimeProofs &mdash; the black box for AI actions.
+
+    <div class="links" style="margin-top:6px">
+      <a href="/">Home</a> &bull;
+      <a href="/use-cases.html">Use Cases</a> &bull;
+      <a href="/pricing.html">Pricing</a> &bull;
+      <a href="/verify.html">Verify</a> &bull;
+      <a href="/docs.html">Docs</a> &bull;
+      <a href="/proofspec.html">Protocol</a> &bull;
+      <a href="/security.html">Security</a> &bull;
+      <a href="/privacy.html">Privacy</a> &bull;
+      <a href="/legal.html">Legal</a> &bull;
+      <a href="/humans.txt">humans.txt</a> &bull;
+      <a href="/.well-known/security.txt">security.txt</a>
+    </div>
+  </footer>
+
+  <script defer nonce="TP-2025">
+  (function(){
+    // Header shade + progress bar
+    const hdr=document.getElementById('hdr');
+    const bar=document.getElementById('progress');
+    function onScroll(){
+      if(window.scrollY>6) hdr.classList.add('scrolled');
+      else hdr.classList.remove('scrolled');
+      const h=document.documentElement;
+      const p=(h.scrollTop)/((h.scrollHeight-h.clientHeight)||1);
+      bar.style.transform=`scaleX(${Math.max(0,Math.min(1,p))})`;
+    }
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive:true });
+
+    // Burger + focus trap
+    const burger=document.getElementById('tp-burger');
+    const nav=document.getElementById('tp-nav');
+    let lastFocus=null;
+
+    function getFocusable(container){
+      return Array.from(container.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )).filter(el => !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length));
+    }
+    function openMenu(){
+      lastFocus=document.activeElement;
+      nav.setAttribute('data-state','open');
+      burger.setAttribute('aria-expanded','true');
+      document.body.style.overflow='hidden';
+      const focusables=getFocusable(nav);
+      if(focusables[0]) focusables[0].focus({preventScroll:true});
+    }
+    function closeMenu(){
+      nav.setAttribute('data-state','closed');
+      burger.setAttribute('aria-expanded','false');
+      document.body.style.overflow='';
+      if(lastFocus && typeof lastFocus.focus==="function") lastFocus.focus({preventScroll:true});
+      lastFocus=null;
+    }
+    function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
+    burger && burger.addEventListener('click', toggleMenu);
+
+    document.addEventListener('click',(e)=>{
+      if(window.matchMedia('(min-width: 900px)').matches) return;
+      if(!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu();
+    },{ passive:true });
+
+    document.addEventListener('keydown',(e)=>{
+      if(window.matchMedia('(min-width: 900px)').matches) return;
+      if(e.key==='Escape' && nav.getAttribute('data-state')==='open'){
+        e.preventDefault(); closeMenu(); return;
+      }
+      if(e.key==='Tab' && nav.getAttribute('data-state')==='open'){
+        const focusables=getFocusable(nav);
+        if(!focusables.length) return;
+        const first=focusables[0];
+        const last=focusables[focusables.length-1];
+        if(e.shiftKey && document.activeElement===first){
+          e.preventDefault(); last.focus();
+        }else if(!e.shiftKey && document.activeElement===last){
+          e.preventDefault(); first.focus();
+        }
+      }
+    });
+
+    window.addEventListener('resize',()=>{
+      if(window.matchMedia('(min-width: 900px)').matches) closeMenu();
+    },{ passive:true });
+
+    // Auto aria-current (exclude .nav-cta)
+    (function(){
+      const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
+      document.querySelectorAll('header nav a:not(.nav-cta), footer .links a').forEach(a=>{
+        const path=new URL(a.getAttribute('href'), location.origin).pathname;
+        if(path===here) a.setAttribute('aria-current','page');
+      });
+    })();
+
+    // Tabs
+    const tabVerify = document.getElementById('tab-verify');
+    const tabFreeze = document.getElementById('tab-freeze');
+    const paneVerify = document.getElementById('pane-verify');
+    const paneFreeze = document.getElementById('pane-freeze');
+
+    function setTab(which){
+      const isVerify = which === 'verify';
+      tabVerify.setAttribute('aria-selected', String(isVerify));
+      tabFreeze.setAttribute('aria-selected', String(!isVerify));
+      paneVerify.dataset.open = String(isVerify);
+      paneFreeze.dataset.open = String(!isVerify);
+      location.hash = isVerify ? '#tool' : '#tool';
+    }
+    tabVerify.addEventListener('click', ()=>setTab('verify'));
+    tabFreeze.addEventListener('click', ()=>setTab('freeze'));
+
+    // Helpers
+    function setStatus(boxId, pillId, msgId, detailsId, kind, pillText, msg, details){
+      const box = document.getElementById(boxId);
+      const pill = document.getElementById(pillId);
+      const m = document.getElementById(msgId);
+      const d = document.getElementById(detailsId);
+      box.dataset.show = "true";
+      pill.classList.remove('ok','err','warn');
+      if(kind) pill.classList.add(kind);
+      pill.textContent = pillText;
+      m.textContent = msg || '';
+      if(details){
+        d.dataset.show = "true";
+        d.textContent = details;
+      }else{
+        d.dataset.show = "false";
+        d.textContent = '';
+      }
+    }
+
+    function resetStatus(boxId, pillId, msgId, detailsId, pillText){
+      const box = document.getElementById(boxId);
+      const pill = document.getElementById(pillId);
+      const m = document.getElementById(msgId);
+      const d = document.getElementById(detailsId);
+      box.dataset.show = "false";
+      pill.classList.remove('ok','err','warn');
+      pill.textContent = pillText;
+      m.textContent = '';
+      d.dataset.show = "false";
+      d.textContent = '';
+    }
+
+    async function readAsText(file){
+      return new Promise((resolve,reject)=>{
+        const r = new FileReader();
+        r.onload = () => resolve(String(r.result || ''));
+        r.onerror = () => reject(new Error('Could not read file.'));
+        r.readAsText(file);
+      });
+    }
+
+    async function sha256Hex(arrayBuffer){
+      const digest = await crypto.subtle.digest('SHA-256', arrayBuffer);
+      const bytes = new Uint8Array(digest);
+      let hex = '';
+      for(let i=0;i<bytes.length;i++){
+        const h = bytes[i].toString(16).padStart(2,'0');
+        hex += h;
+      }
+      return hex;
+    }
+
+    async function readAsArrayBuffer(file){
+      return new Promise((resolve,reject)=>{
+        const r = new FileReader();
+        r.onload = () => resolve(r.result);
+        r.onerror = () => reject(new Error('Could not read file.'));
+        r.readAsArrayBuffer(file);
+      });
+    }
+
+    function safeJsonParse(text){
+      try{
+        const obj = JSON.parse(text);
+        if(!obj || typeof obj !== 'object') return null;
+        return obj;
+      }catch{
+        return null;
+      }
+    }
+
+    // API base (site can switch without code changes)
+    const API_BASE = (function(){
+      const q = new URLSearchParams(location.search);
+      const override = q.get('api');
+      if(override) return override.replace(/\/+$/,'');
+      // prefer custom domain if available
+      return 'https://api.timeproofs.io';
+    })();
+
+    async function apiPost(path, payload){
+      const url = API_BASE.replace(/\/+$/,'') + path;
+      const res = await fetch(url, {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json' },
+        body: JSON.stringify(payload),
+        cache:'no-store'
+      });
+      const text = await res.text();
+      let data = null;
+      try{ data = JSON.parse(text); }catch{ data = { raw:text }; }
+      if(!res.ok){
+        const msg = (data && (data.error || data.message)) ? (data.error || data.message) : ('HTTP ' + res.status);
+        const err = new Error(msg);
+        err._data = data;
+        err._status = res.status;
+        throw err;
+      }
+      return data;
+    }
+
+    // Inputs + UI wiring (Verify)
+    const proofInput = document.getElementById('proofInput');
+    const contentInput = document.getElementById('contentInput');
+    const proofName = document.getElementById('proofName');
+    const contentName = document.getElementById('contentName');
+
+    let proofFile = null;
+    let contentFile = null;
+
+    proofInput.addEventListener('change', ()=>{
+      proofFile = proofInput.files && proofInput.files[0] ? proofInput.files[0] : null;
+      proofName.textContent = proofFile ? proofFile.name : 'No proof selected';
+      resetStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','Ready');
+    });
+    contentInput.addEventListener('change', ()=>{
+      contentFile = contentInput.files && contentInput.files[0] ? contentInput.files[0] : null;
+      contentName.textContent = contentFile ? contentFile.name : 'No content selected';
+      resetStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','Ready');
+    });
+
+    document.getElementById('resetVerifyBtn').addEventListener('click', ()=>{
+      proofInput.value = '';
+      contentInput.value = '';
+      proofFile = null;
+      contentFile = null;
+      proofName.textContent = 'No proof selected';
+      contentName.textContent = 'No content selected';
+      resetStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','Ready');
+    });
+
+    document.getElementById('verifyBtn').addEventListener('click', async ()=>{
+      resetStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','Ready');
+
+      if(!proofFile || !contentFile){
+        setStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','warn','Missing files',
+          'Please select both the proof file (.tproof.json) and the content file to verify.');
+        return;
+      }
+
+      setStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','warn','Working…',
+        'Computing the matching check locally…');
+
+      try{
+        const proofText = await readAsText(proofFile);
+        const proofObj = safeJsonParse(proofText);
+        if(!proofObj){
+          setStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','err','Invalid proof',
+            'The selected proof file is not valid JSON.');
+          return;
+        }
+
+        const buf = await readAsArrayBuffer(contentFile);
+        const hashHex = await sha256Hex(buf);
+
+        // Minimal, non-technical payload: server decides the verification logic.
+        // Endpoint names are conservative; adjust server mapping if needed.
+        const payload = {
+          proof: proofObj,
+          content: {
+            name: contentFile.name || 'content',
+            size: typeof contentFile.size === 'number' ? contentFile.size : null,
+            sha256: hashHex
+          }
+        };
+
+        // Try common endpoints (first that works wins)
+        const candidates = ['/verify', '/v1/verify', '/proof/verify', '/api/verify'];
+        let data = null;
+        let lastErr = null;
+        for(const p of candidates){
+          try{
+            data = await apiPost(p, payload);
+            lastErr = null;
+            break;
+          }catch(e){
+            lastErr = e;
+          }
+        }
+        if(!data){
+          const hint = lastErr ? String(lastErr.message || lastErr) : 'Unknown error';
+          setStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','err','Verification failed',
+            'We could not reach the verification service with the current endpoint configuration.',
+            'API base: ' + API_BASE + '\nLast error: ' + hint + '\n\nTip: add ?api=https://your-api-base to test another base.');
+          return;
+        }
+
+        // Normalize result
+        const ok = !!(data.ok || data.valid || data.verified || data.match === true);
+        const verdict = data.verdict || (ok ? 'MATCH' : 'NOT MATCH');
+        const reason = data.reason || data.message || (ok ? 'The proof matches the content.' : 'The proof does not match this content.');
+        const proofId = data.id || data.proof_id || data.proofId || data.public_id || null;
+        const issuedAt = data.issued_at || data.issuedAt || null;
+
+        if(ok){
+          setStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','ok','Verified',
+            reason,
+            (proofId ? ('Proof ID: ' + proofId + '\n') : '') +
+            (issuedAt ? ('Issued at: ' + issuedAt + '\n') : '') +
+            ('Result: ' + verdict));
+        }else{
+          setStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','err','Not verified',
+            reason,
+            (proofId ? ('Proof ID: ' + proofId + '\n') : '') +
+            (issuedAt ? ('Issued at: ' + issuedAt + '\n') : '') +
+            ('Result: ' + verdict));
+        }
+      }catch(e){
+        setStatus('verifyStatus','verifyPill','verifyMsg','verifyDetails','err','Error',
+          'Verification could not be completed.',
+          String(e && e.message ? e.message : e));
+      }
+    });
+
+    // Inputs + UI wiring (Freeze)
+    const freezeContentInput = document.getElementById('freezeContentInput');
+    const freezeContentName = document.getElementById('freezeContentName');
+    const keyInput = document.getElementById('keyInput');
+    let freezeFile = null;
+
+    freezeContentInput.addEventListener('change', ()=>{
+      freezeFile = freezeContentInput.files && freezeContentInput.files[0] ? freezeContentInput.files[0] : null;
+      freezeContentName.textContent = freezeFile ? freezeFile.name : 'No content selected';
+      resetStatus('freezeStatus','freezePill','freezeMsg','freezeDetails','Ready');
+    });
+
+    document.getElementById('resetFreezeBtn').addEventListener('click', ()=>{
+      freezeContentInput.value = '';
+      keyInput.value = '';
+      freezeFile = null;
+      freezeContentName.textContent = 'No content selected';
+      resetStatus('freezeStatus','freezePill','freezeMsg','freezeDetails','Ready');
+    });
+
+    function downloadText(filename, text){
+      const blob = new Blob([text], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url), 2000);
+    }
+
+    document.getElementById('freezeBtn').addEventListener('click', async ()=>{
+      resetStatus('freezeStatus','freezePill','freezeMsg','freezeDetails','Ready');
+
+      const key = (keyInput.value || '').trim();
+      if(!freezeFile){
+        setStatus('freezeStatus','freezePill','freezeMsg','freezeDetails','warn','Missing content',
+          'Please select a content file to freeze.');
+        return;
+      }
+      if(!key){
+        setStatus('freezeStatus','freezePill','freezeMsg','freezeDetails','warn','Missing key',
+          'Please enter your access key (sent by email).');
+        return;
+      }
+
+      setStatus('freezeStatus','freezePill','freezeMsg','freezeDetails','warn','Working…',
+        'Computing the matching check locally…');
+
+      try{
+        const buf = await readAsArrayBuffer(freezeFile);
+        const hashHex = await sha256Hex(buf);
+
+        const payload = {
+          key: key,
+          content: {
+            name: freezeFile.name || 'content',
+            size: typeof freezeFile.size === 'number' ? freezeFile.size : null,
+            sha256: hashHex
+          },
+          meta: {
+            source: 'web',
+            page: 'verify.html',
+            v: 1
+          }
+        };
+
+        // Try common issuance endpoints
+        const candidates = ['/issue', '/v1/issue', '/proof/issue', '/api/issue', '/freeze', '/v1/freeze'];
+        let data = null;
+        let lastErr = null;
+        for(const p of candidates){
+          try{
+            data = await apiPost(p, payload);
+            lastErr = null;
+            break;
+          }catch(e){
+            lastErr = e;
+          }
+        }
+
+        if(!data){
+          const hint = lastErr ? String(lastErr.message || lastErr) : 'Unknown error';
+          setStatus('freezeStatus','freezePill','freezeMsg','freezeDetails','err','Freeze failed',
+            'We could not reach the issuance service with the current endpoint configuration.',
+            'API base: ' + API_BASE + '\nLast error: ' + hint + '\n\nTip: add ?api=https://your-api-base to test another base.');
+          return;
+        }
+
+        // Expect proof JSON in response
+        const proofObj = data.proof || data.tproof || data.result || data;
+        if(!proofObj || typeof proofObj !== 'object'){
+          setStatus('freezeStatus','freezePill','freezeMsg','freezeDetails','err','Unexpected response',
+            'The issuance service did not return a proof file.');
+          return;
+        }
+
+        // Choose filename
+        const base = (freezeFile.name || 'content').replace(/\.[^.]+$/,'');
+        const proofName = (data.filename || (base + '.tproof.json')).replace(/[\/\\]/g,'_');
+        const outText = JSON.stringify(proofObj, null, 2);
+
+        downloadText(proofName, outText);
+
+        const proofId = data.id || data.proof_id || data.proofId || data.public_id || null;
+        const issuedAt = data.issued_at || data.issuedAt || null;
+
+        setStatus('freezeStatus','freezePill','freezeMsg','freezeDetails','ok','Proof created',
+          'Your proof file was generated and downloaded. Store it with your records.',
+          (proofId ? ('Proof ID: ' + proofId + '\n') : '') +
+          (issuedAt ? ('Issued at: ' + issuedAt + '\n') : '') +
+          ('Saved as: ' + proofName));
+      }catch(e){
+        setStatus('freezeStatus','freezePill','freezeMsg','freezeDetails','err','Error',
+          'Freeze could not be completed.',
+          String(e && e.message ? e.message : e));
+      }
+    });
+
+    // Drag & drop (proof + content + freeze content)
+    function bindDrop(zoneEl, inputEl, onPicked){
+      zoneEl.addEventListener('dragover', (e)=>{ e.preventDefault(); zoneEl.style.filter='brightness(1.03)'; });
+      zoneEl.addEventListener('dragleave', ()=>{ zoneEl.style.filter=''; });
+      zoneEl.addEventListener('drop', (e)=>{
+        e.preventDefault(); zoneEl.style.filter='';
+        const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0] ? e.dataTransfer.files[0] : null;
+        if(!f) return;
+        try{
+          const dt = new DataTransfer();
+          dt.items.add(f);
+          inputEl.files = dt.files;
+          inputEl.dispatchEvent(new Event('change', { bubbles:true }));
+          if(typeof onPicked === 'function') onPicked(f);
+        }catch{}
+      });
+    }
+
+    // Find zones by proximity: label -> input
+    (function(){
+      const proofZone = proofInput && proofInput.parentElement ? proofInput.parentElement : null;
+      const contentZone = contentInput && contentInput.parentElement ? contentInput.parentElement : null;
+      const freezeZone = freezeContentInput && freezeContentInput.parentElement ? freezeContentInput.parentElement : null;
+
+      if(proofZone) bindDrop(proofZone, proofInput, ()=>{});
+      if(contentZone) bindDrop(contentZone, contentInput, ()=>{});
+      if(freezeZone) bindDrop(freezeZone, freezeContentInput, ()=>{});
+    })();
+
+    // Service Worker
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('/sw.js',{type:'module',scope:'/'}).catch(()=>{});
+    }
+  })();
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en" id="top" data-page="verify.html">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <meta name="color-scheme" content="dark light"/>
+
   <title>Verify — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
   <meta name="description" content="Verify a TimeProofs proof against the original content. Upload the proof file and the file (or content) to check integrity — privately, without uploading your document."/>
