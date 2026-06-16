@@ -52,6 +52,8 @@ traceability
 integrity.payload_hash
 ```
 
+Important: `integrity.payload_hash` is a recommended integrity field for the final Action File or its integrity envelope. It must not be part of the hashable Action File core. The hashable core must follow `docs/hash-model.md`, where seal, proof, signature, verification, and self-referential hash fields are excluded before canonicalization.
+
 Future schemas may rename or structure these fields, but the meaning should remain stable.
 
 ## Level 1 — `declared`
@@ -108,7 +110,7 @@ It does not prove that:
 
 ### Example Action Types
 
-- `document.generated` where the document was drafted but not sent
+- `document.generated` where the document was drafted but not stored or delivered
 - `request.classified` where classification was recorded without target confirmation
 - `decision.recorded` where the decision is only declared in a local record
 - `email.drafted` where an email draft was created but not sent
