@@ -1,0 +1,73 @@
+{
+  "format": "timeproofs.action.v1",
+  "schema_version": "1.0.0-design",
+  "action_core": {
+    "action_id": "act_demo_support_ticket_001",
+    "created_at": "2026-06-16T18:50:00Z",
+    "actor": {
+      "type": "ai_agent",
+      "id": "support_triage_agent_demo",
+      "name": "Support triage agent",
+      "version": "1.0.0"
+    },
+    "action": {
+      "type": "support.ticket_created",
+      "status": "target_confirmed",
+      "summary": "Created a support ticket from an incoming request.",
+      "occurred_at": "2026-06-16T18:50:00Z"
+    },
+    "proof_level": "target_confirmed",
+    "workflow": {
+      "provider": "example_workflow_platform",
+      "workflow_id": "wf_support_triage_demo",
+      "run_id": "run_ticket_001",
+      "step_id": "step_create_ticket",
+      "environment": "demo"
+    },
+    "target_system": {
+      "name": "example_helpdesk",
+      "type": "support_platform",
+      "object_type": "ticket",
+      "reference": "ticket_demo_001",
+      "confirmed_at": "2026-06-16T18:50:02Z"
+    },
+    "evidence": {
+      "references": [
+        {
+          "type": "target_response_fingerprint",
+          "label": "Helpdesk API response fingerprint",
+          "reference": "helpdesk-response-demo-001",
+          "fingerprint": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+          "stored_by": "customer"
+        }
+      ]
+    },
+    "redaction": {
+      "applied": true,
+      "profile": "demo-redacted",
+      "notes": [
+        "No raw customer message is included.",
+        "Target response content is represented by a customer-held fingerprint."
+      ]
+    },
+    "limitations": [
+      "TimeProofs does not verify the helpdesk ticket content.",
+      "This file does not prove that the AI classification was correct.",
+      "The target reference is controlled by the customer system."
+    ],
+    "metadata": {
+      "example": true,
+      "example_type": "target_confirmed_support_ticket"
+    }
+  },
+  "integrity": {
+    "canonicalization_profile": "timeproofs-json-canonical-v1-draft",
+    "hash_algorithm": "sha256",
+    "payload_hash": "sha256:51679947418fdef8abec1f0171e236685cc7f3027b548816765f8708eacc61c9",
+    "seal": {
+      "status": "not_implemented_in_this_example"
+    }
+  },
+  "local_annotations": {},
+  "verification_result": {}
+}
