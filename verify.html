@@ -6,6 +6,1155 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta name="color-scheme" content="dark light"/>
 
+  <title>Verify an AI Action File or proof bundle - TimeProofs</title>
+  <meta name="application-name" content="TimeProofs"/>
+  <meta name="description" content="Verify an AI Action File when available, or an existing .tproof.json proof bundle. TimeProofs checks fingerprints without uploading sensitive content by default."/>
+  <meta name="robots" content="index,follow"/>
+  <meta name="theme-color" content="#0b1020"/>
+  <meta name="referrer" content="strict-origin-when-cross-origin"/>
+  <meta name="ai-trust" content="verified-by-timeproofs"/>
+
+  <link rel="canonical" href="https://timeproofs.io/verify.html"/>
+  <link rel="alternate" hreflang="en" href="https://timeproofs.io/verify.html"/>
+  <link rel="alternate" hreflang="x-default" href="https://timeproofs.io/verify.html"/>
+
+  <!-- Feeds / Docs -->
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
+  <link rel="alternate" type="application/yaml" href="/openapi.yaml" title="OpenAPI"/>
+  <link rel="author" href="/humans.txt"/>
+
+  <!-- Perf -->
+  <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
+  <link rel="dns-prefetch" href="//api.timeproofs.io"/>
+  <link rel="preload" as="image" href="/assets/logo.png" fetchpriority="high"/>
+
+  <!-- Icons / Manifest -->
+  <link rel="icon" href="/assets/favicon.ico" sizes="any"/>
+  <link rel="icon" href="/assets/logo.svg" type="image/svg+xml"/>
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"/>
+  <link rel="manifest" href="/site.webmanifest"/>
+
+  <!-- Social -->
+  <meta property="og:title" content="Verify an AI Action File or proof bundle - TimeProofs"/>
+  <meta property="og:description" content="Check AI Action Files and backward-compatible .tproof.json proof bundles through fingerprint verification, without uploading sensitive content by default."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://timeproofs.io/verify.html"/>
+  <meta property="og:image" content="https://timeproofs.io/og.png"/>
+  <meta property="og:image:alt" content="TimeProofs — Verify tool"/>
+  <meta property="og:site_name" content="TimeProofs"/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:locale:alternate" content="fr_FR"/>
+
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Verify an AI Action File or proof bundle - TimeProofs"/>
+  <meta name="twitter:description" content="Verify AI Action Files or .tproof.json proof bundles through fingerprint-only checks."/>
+  <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
+
+  <!-- Security meta -->
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
+
+  <!-- CSP (locked: only api.timeproofs.io allowed for connect) -->
+  <meta http-equiv="Content-Security-Policy" content="
+default-src 'self';
+worker-src 'self' blob:;
+img-src 'self' data: https:;
+style-src 'self' 'unsafe-inline';
+script-src 'self' 'nonce-TP-2026';
+connect-src 'self' https://api.timeproofs.io;
+font-src 'self' https: data:;
+object-src 'none';
+base-uri 'self';
+form-action 'self';
+frame-ancestors 'none';
+upgrade-insecure-requests">
+
+  <!-- JSON-LD: Organization -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"TimeProofs",
+    "url":"https://timeproofs.io/",
+    "logo":"https://timeproofs.io/assets/logo.png",
+    "alternateName":"TimeProofs Official",
+    "knowsAbout":[
+      "AI action traceability",
+      "timestamp verification",
+      "data provenance",
+      "cryptographic verification"
+    ],
+    "sameAs":[
+      "https://x.com/timeproofs",
+      "https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2",
+      "https://www.linkedin.com/in/jeason-bacoul-667938281"
+    ],
+    "contactPoint":[{
+      "@type":"ContactPoint",
+      "email":"contact@timeproofs.io",
+      "contactType":"general",
+      "availableLanguage":["en","fr"]
+    }]
+  }
+  </script>
+
+  <!-- JSON-LD: WebSite -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "name":"TimeProofs",
+    "url":"https://timeproofs.io/",
+    "inLanguage":"en"
+  }
+  </script>
+
+  <!-- JSON-LD: WebPage -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebPage",
+    "name":"Verify",
+    "url":"https://timeproofs.io/verify.html",
+    "inLanguage":"en",
+    "isPartOf":{
+      "@type":"WebSite",
+      "name":"TimeProofs",
+      "url":"https://timeproofs.io/"
+    },
+    "dateModified":"2026-02-16",
+    "description":"Verify a .tproof.json proof file and optionally check if a local file matches the frozen version. Verification-only. Privacy-first. No upload."
+  }
+  </script>
+
+  <!-- Styles -->
+  <style>
+    :root{
+      --bg:#0b1020; --bg2:#0b1226; --line:#1e293b; --panel:#0c1424;
+      --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee;
+      --ok:#34d399; --err:#ef4444;
+      --e:cubic-bezier(.22,.61,.36,1);
+      --ring:0 0 0 1px #1e293b, 0 10px 40px rgba(34,211,238,.12);
+    }
+    *{ box-sizing:border-box }
+
+    html{
+      height:100%; max-width:100%; overflow-x:hidden; background:var(--bg);
+      scroll-behavior:smooth;
+      scroll-padding-top:120px;
+    }
+    @media (min-width:900px){ html{ scroll-padding-top:104px } }
+
+    body{
+      margin:0; color:var(--text);
+      font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      background:linear-gradient(180deg, var(--bg), var(--bg2));
+    }
+    a{ color:var(--accent); text-decoration:none }
+    a:hover{ text-decoration:underline }
+
+    [id]{ scroll-margin-top:120px }
+    @media (min-width:900px){ [id]{ scroll-margin-top:104px } }
+
+    .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
+    .skip:focus{
+      position:fixed; left:12px; top:12px; width:auto; height:auto; padding:8px 12px;
+      background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000
+    }
+
+    /* Header */
+    .tp-header{
+      position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
+      background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
+      display:flex; align-items:center; gap:12px; padding:0 16px; transition:background .25s var(--e)
+    }
+    .tp-header.scrolled{ background:rgba(11,16,32,.88) }
+    .tp-brand{
+      display:flex; align-items:center; gap:10px; color:var(--text);
+      font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto
+    }
+    .tp-brand img{ height:40px; width:40px; object-fit:contain }
+
+    .tp-nav a{
+      color:var(--text);
+      font-weight:700;
+      margin-left:18px;
+      padding:10px 0;
+      display:inline-block;
+      text-underline-offset:3px;
+    }
+    .tp-nav a:hover{ color:var(--accent); text-decoration:underline }
+    .tp-nav a[aria-current="page"]{ color:#9beefb }
+
+    .cta-header{
+      display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
+      border-radius:10px; background:var(--accent); color:#06202a; font-weight:800; box-shadow:0 6px 24px rgba(34,211,238,.20)
+    }
+    .cta-header:hover{ filter:brightness(1.05) }
+
+    .tp-burger{
+      display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
+      border:1px solid var(--line); border-radius:12px; background:#0c1a2e; color:#fff;
+      cursor:pointer; box-shadow:var(--ring)
+    }
+    .tp-burger span{ font-size:20px; line-height:1 }
+    .nav-cta{ display:none; }
+
+    @media (min-width:900px){
+      .tp-burger{ display:none }
+      .tp-nav{ display:flex; align-items:center }
+      .cta-header{ display:inline-flex }
+    }
+    @media (max-width:899px){
+      .tp-brand img{ height:34px; width:34px }
+      .tp-nav{
+        position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
+        display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
+        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease
+      }
+      .tp-nav a{ margin:4px 0 }
+      .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
+      .nav-cta{
+        display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px;
+        background:var(--accent); color:#06202a; font-weight:800
+      }
+    }
+
+    /* Layout */
+    .wrap{ max-width:1100px; margin:0 auto; padding:0 16px }
+    main{ padding:0 0 40px }
+
+    .hero{
+      padding-top:96px; padding-bottom:18px; text-align:center;
+      position:relative; border-bottom:1px solid var(--line);
+    }
+    .hero .icon{ font-size:2rem; line-height:1; margin-bottom:6px }
+    .hero h1{
+      font-size:clamp(1.9rem,4.6vw,2.35rem); margin:.2em 0 .4em; font-weight:900;
+      background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    .badge{
+      display:inline-block; margin-top:6px; padding:6px 12px;
+      border:1px solid #214a57; background:#0d2330; color:#bff1ff;
+      border-radius:999px; font-size:.85rem;
+    }
+    .lead{ color:var(--muted); max-width:900px; margin:0 auto 12px; line-height:1.7; }
+    .hero-actions{
+      margin-top:10px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
+    }
+    .hero-btn{
+      display:inline-block; padding:8px 14px; border-radius:10px;
+      border:1px solid #22455a; background:#0c1a2e; color:#cfefff;
+      font-weight:700; text-decoration:none;
+    }
+    .hero-btn.primary{ background:var(--accent); color:#06202a; border-color:transparent }
+    .hero-btn:hover{ text-decoration:underline }
+
+    /* Card */
+    .card{
+      margin:16px auto 0;
+      background:var(--panel); border:1px solid var(--line); border-radius:12px;
+      padding:18px; position:relative;
+      min-width:0;
+      max-width:980px;
+    }
+    .card h2{ margin:.2em 0 .4em; font-size:1.2rem; color:#b9e7f5; }
+    .hint{ margin:0 0 10px; font-size:.9rem; color:#93a1b5; overflow-wrap:anywhere; word-break:break-word; }
+
+    label{ display:block; font-size:.85rem; color:#a7b1c2; margin:8px 0 4px }
+    input[type="file"]{
+      width:100%;
+      background:#0b1220; color:#f8fafc;
+      border:1px solid #1f2937; border-radius:10px; padding:10px 12px;
+      font-size:.95rem;
+    }
+
+    .drop{
+      margin-top:10px; padding:14px; border:1px dashed #2b3b55;
+      border-radius:10px; background:#0b1220; color:#cfe3f5;
+      text-align:center; font-size:.9rem;
+      user-select:none;
+    }
+    .drop.drag{ border-color:#22d3ee; background:#0f1f33; }
+
+    .primary-btn{
+      margin-top:12px; width:100%; padding:11px 14px;
+      border-radius:10px; border:0; cursor:pointer;
+      font-weight:800; background:var(--accent); color:#06202a;
+      box-shadow:0 8px 28px rgba(34,211,238,.28);
+    }
+    .primary-btn[disabled]{ opacity:.6; cursor:default; box-shadow:none }
+
+    .status-line{ margin-top:10px; min-height:22px; font-size:.9rem }
+    .pill{
+      display:inline-flex; align-items:center; gap:6px; padding:4px 10px;
+      border-radius:999px; font-size:.85rem;
+    }
+    .pill.ok{ background:#0f3b22; border:1px solid #1c6b3d; color:#b7f7ce }
+    .pill.bad{ background:#3b0f12; border:1px solid #6b1c22; color:#ffc3c8 }
+    .pill.neutral{ background:#0c1a2e; border:1px solid #22455a; color:#cfefff }
+
+    .file-actions{
+      display:flex; gap:8px; align-items:center; justify-content:flex-end; margin-top:8px;
+    }
+    .secondary-btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:10px 12px;
+      border-radius:10px;
+      border:1px solid #22455a;
+      background:#0c1a2e;
+      color:#cfefff;
+      font-weight:800;
+      cursor:pointer;
+      text-decoration:none;
+    }
+    .secondary-btn:hover{ text-decoration:underline }
+    .secondary-btn[disabled]{ opacity:.6; cursor:default }
+
+    .note{
+      margin-top:12px;
+      padding:12px;
+      border-radius:12px;
+      background:#0d1628;
+      border:1px solid #1e2a3e;
+      color:#cfefff;
+      font-size:.95rem;
+      line-height:1.65;
+    }
+    .note strong{ color:#e6fbff }
+    .note .muted{ color:#9fb3c9 }
+
+    /* Verify panel */
+    .verify-panel{
+      margin-top:12px;
+      padding:12px;
+      border-radius:12px;
+      border:1px solid #22314f;
+      background:#0b1220;
+      display:none;
+      min-width:0;
+    }
+    .verify-panel.is-open{
+      display:grid;
+      grid-template-columns:minmax(0,1fr);
+      gap:10px;
+    }
+    .vp-box{
+      border:1px solid rgba(34,49,79,.7);
+      background:#0d1628;
+      border-radius:12px;
+      padding:12px;
+      display:grid;
+      gap:8px;
+      min-width:0;
+    }
+    .vp-title{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      font-weight:900; letter-spacing:.2px;
+    }
+    .vp-big{ font-size:1.15rem; font-weight:900; line-height:1.3; }
+    .vp-grid{ display:grid; grid-template-columns:minmax(0,1fr); gap:10px; }
+    .vp-row{
+      display:flex; gap:8px; align-items:flex-start; justify-content:space-between;
+      border-top:1px solid rgba(34,49,79,.55);
+      padding-top:8px;
+      min-width:0;
+    }
+    .vp-row:first-child{ border-top:0; padding-top:0 }
+    .vp-k{ color:#9fb3c9; font-weight:800; flex:0 0 140px; }
+    .vp-v{ color:#e6fbff; font-weight:900; text-align:right; min-width:0; overflow-wrap:anywhere; word-break:break-word }
+    .vp-help{
+      margin-top:8px; color:#9fb3c9; font-size:.93rem; line-height:1.55;
+    }
+    .vp-help strong{ color:#e6fbff }
+
+    pre{
+      position:relative;
+      margin-top:10px; max-height:260px; overflow:auto;
+      padding:12px; border-radius:12px; background:#0b1426; border:1px solid #1f2a44; font-size:.9rem;
+      white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere;
+      min-width:0;
+      display:none;
+    }
+
+    a:focus-visible, .hero-btn:focus-visible, .primary-btn:focus-visible, .cta-header:focus-visible, .tp-burger:focus-visible, .secondary-btn:focus-visible, input:focus-visible, .drop:focus-visible{
+      outline:2px solid #22d3ee; outline-offset:3px; border-radius:12px;
+    }
+
+    /* Footer */
+    footer{
+      border-top:1px solid var(--line);
+      margin-top:28px;
+      padding:18px;
+      color:#7c8aa5;
+      text-align:center;
+      background:#0b1020;
+    }
+    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0; flex-wrap:wrap }
+    footer .badge{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px; border:1px solid var(--line); border-radius:999px;
+      background:#0d1628; font-size:.9rem; color:#cfefff; text-decoration:none
+    }
+    footer .links a{
+      color:#cfefff;
+      font-weight:600;
+      text-underline-offset:3px;
+      text-decoration:none;
+    }
+    footer .links a:hover{ color:var(--accent); text-decoration:underline }
+    footer .links a[aria-current="page"]{ color:var(--accent); text-decoration:underline }
+
+    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px; flex-wrap:wrap }
+    .social a{
+      display:inline-flex; width:40px; height:40px;
+      border:1px solid var(--line); border-radius:12px;
+      align-items:center; justify-content:center;
+      background:#0d1628; transition:transform .18s var(--e); color:#cfefff
+    }
+    .social a:hover{ transform:translateY(-2px) }
+
+    @media (max-width:480px){
+      .card{ padding:14px }
+      .vp-k{ flex-basis:120px; }
+    }
+  </style>
+  <noscript><style>.card{transform:none !important}</style></noscript>
+</head>
+
+<body>
+  <a href="#main" class="skip">Skip to main content</a>
+
+  <!-- Header -->
+  <header class="tp-header" id="hdr" role="banner">
+    <a class="tp-brand" href="/" aria-label="TimeProofs Home">
+      <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
+      <span>TimeProofs</span>
+    </a>
+
+    <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
+      <a href="/">Home</a>
+      <a href="/#solution">Action File</a>
+      <a href="/verify.html" aria-current="page">Verify</a>
+      <a href="/use-cases.html">Use Cases</a>
+      <a href="/use-cases.html">For Agencies</a>
+      <a href="/docs.html">Docs</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/security.html">Security</a>
+      <a class="nav-cta" href="mailto:contact@timeproofs.io?subject=TimeProofs%20pilot" aria-label="Request a pilot">Request a pilot</a>
+    </nav>
+
+    <a class="cta-header" href="mailto:contact@timeproofs.io?subject=TimeProofs%20pilot" aria-label="Request a pilot">Request a pilot</a>
+
+    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu">
+      <span aria-hidden="true">☰</span>
+    </button>
+  </header>
+
+  <main id="main" class="wrap" role="main">
+    <!-- HERO -->
+    <section class="hero" role="region" aria-labelledby="page-title">
+      <div class="icon" aria-hidden="true">🔍</div>
+      <p class="badge">Verification-only · Proof-file first · Privacy-first · No upload</p>
+
+      <h1 id="page-title">Verify a proof</h1>
+
+      <p class="lead">
+        This page verifies an existing <code>.tproof.json</code> proof file.
+        <strong>It does not create proofs.</strong>
+      </p>
+
+      <p class="lead" style="font-size:.95rem; margin-top:-4px">
+        To check “same version”, you may also load the original file. It is hashed locally in your browser.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#verify-tool" class="hero-btn primary" id="hero-verify">Open verifier</a>
+        <a href="/install.html" class="hero-btn" id="hero-install">Install AI Action File</a>
+      </div>
+    </section>
+
+    <!-- VERIFY TOOL -->
+    <article class="card" id="verify-tool" aria-labelledby="verify-title">
+      <h2 id="verify-title">Proof verifier</h2>
+      <p class="hint" id="verify-steps">
+        1) Load the <code>.tproof.json</code> proof file • 2) Verify the proof signature • 3) (Optional) load the original file to check if it matches the frozen version.
+      </p>
+
+      <div class="note" aria-label="Simple meaning">
+        <strong>Simple meaning:</strong> TimeProofs does <strong>not</strong> lock or protect your file.
+        It proves that a specific version existed at a specific time.<br/>
+        <span class="muted">To check a version, we compare the file’s SHA-256 to the hash inside the proof.</span>
+      </div>
+
+      <!-- Proof input -->
+      <label for="bundle-file">1) Proof file (.tproof.json)</label>
+      <input type="file" id="bundle-file" accept=".json,application/json" aria-describedby="verify-steps bundle-info"/>
+
+      <div class="file-actions">
+        <button type="button" class="secondary-btn" id="clear-bundle-file" aria-label="Remove selected proof" disabled>Remove proof</button>
+      </div>
+
+      <div class="drop" id="drop-bundle" role="button" tabindex="0" aria-label="Drop a .tproof.json proof file here or click to pick a file">
+        …or drag &amp; drop a <strong>.tproof.json</strong> file here
+      </div>
+      <p class="hint" id="bundle-info"></p>
+
+      <button class="primary-btn" id="btn-verify" type="button" disabled>
+        Verify proof (recommended)
+      </button>
+
+      <div class="status-line" id="verify-status" aria-live="polite"></div>
+
+      <!-- SIMPLE RESULT PANEL -->
+      <div class="verify-panel" id="verify-panel" aria-live="polite" aria-atomic="true">
+        <div class="vp-box">
+          <div class="vp-title">
+            <div class="vp-big" id="vp-verdict">—</div>
+            <div id="vp-pill"></div>
+          </div>
+
+          <div class="vp-grid">
+            <div class="vp-row">
+              <div class="vp-k">Frozen on</div>
+              <div class="vp-v" id="vp-date">—</div>
+            </div>
+            <div class="vp-row">
+              <div class="vp-k">Proof status</div>
+              <div class="vp-v" id="vp-proof-status">—</div>
+            </div>
+            <div class="vp-row">
+              <div class="vp-k">Proof hash</div>
+              <div class="vp-v" id="vp-proof-hash">—</div>
+            </div>
+            <div class="vp-row" id="vp-file-row" style="display:none;">
+              <div class="vp-k">File hash</div>
+              <div class="vp-v" id="vp-file-hash">—</div>
+            </div>
+            <div class="vp-row" id="vp-compare-row" style="display:none;">
+              <div class="vp-k">Same version?</div>
+              <div class="vp-v" id="vp-compare">—</div>
+            </div>
+          </div>
+
+          <div class="vp-help" id="vp-help">
+            <strong>Tip:</strong> verify the proof first (recommended). Then load the original file to check if it matches the frozen version.
+          </div>
+        </div>
+
+        <!-- Optional file compare -->
+        <div class="file-actions" style="justify-content:flex-start; gap:10px;">
+          <label class="secondary-btn" for="verify-file" id="btn-choose-file" style="cursor:pointer;">
+            Check original file (optional)
+          </label>
+          <input type="file" id="verify-file" accept="*/*" aria-describedby="verify-file-info" style="display:none"/>
+          <button class="secondary-btn" type="button" id="btn-clear-verify-file" disabled>Remove file</button>
+        </div>
+
+        <div class="drop" id="drop-verify-file" role="button" tabindex="0" style="margin-top:10px;" aria-label="Drop the original file here to compare with the proof hash">
+          …or drag &amp; drop the <strong>original file</strong> here to check if it matches the frozen version
+        </div>
+
+        <p class="hint" id="verify-file-info" style="margin-top:8px;"></p>
+      </div>
+
+      <pre id="verify-output" aria-live="polite">{}</pre>
+
+      <div class="note" aria-label="Clear promise" style="margin-top:12px;">
+        <strong>Important:</strong> verification relies on the <code>.tproof.json</code> proof file.
+        The original file never leaves your browser (local hashing only).
+      </div>
+
+      <div class="note" aria-label="Technical references" style="margin-top:12px">
+        Developers: <a href="/docs.html">API Docs</a> · <a href="/proofspec.html">ProofSpec</a><br/>
+        Legal: <a href="/regulations.html">Regulations</a> · <a href="/privacy.html">Privacy</a> · <a href="/legal.html">Legal</a>
+      </div>
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer role="contentinfo" aria-label="Site footer">
+    <div class="badges">
+      <span class="badge">Edge Native</span>
+      <span class="badge">Privacy First</span>
+      <a class="badge" href="/proofspec.html">Open Spec</a>
+      <a class="badge" href="/verify.html">Verify</a>
+    </div>
+
+    &copy; 2026 TimeProofs &mdash; the black box for AI actions.
+
+    <div class="links" style="margin-top:6px">
+      <a href="/">Home</a> &bull;
+      <a href="/use-cases.html">Use Cases</a> &bull;
+      <a href="/pricing.html">Pricing</a> &bull;
+      <a href="/verify.html" aria-current="page">Verify</a> &bull;
+      <a href="/docs.html">Docs</a> &bull;
+      <a href="/proofspec.html">Protocol</a> &bull;
+      <a href="/security.html">Security</a> &bull;
+      <a href="/privacy.html">Privacy</a> &bull;
+      <a href="/legal.html">Legal</a> &bull;
+      <a href="/humans.txt">humans.txt</a> &bull;
+      <a href="/.well-known/security.txt">security.txt</a>
+    </div>
+
+    <div class="social" aria-label="Social links">
+      <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
+      </a>
+      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/jeason-bacoul-667938281" target="_blank" rel="noopener" aria-label="Jeason Bacoul on LinkedIn">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg>
+      </a>
+    </div>
+  </footer>
+
+  <!-- Scripts (Verify-only, locked to api.timeproofs.io) -->
+  <script nonce="TP-2026">
+  (function(){
+    "use strict";
+
+    // LOCKED: single official API base (no fallback domains)
+    const API_BASE = "https://api.timeproofs.io/api";
+    const MAX_FILE_BYTES = 50 * 1024 * 1024;
+    const REQ_TIMEOUT_MS = 15000;
+
+    const hdr = document.getElementById("hdr");
+
+    function onScroll(){
+      if(window.scrollY>6) hdr.classList.add("scrolled");
+      else hdr.classList.remove("scrolled");
+    }
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive:true });
+
+    // Burger + focus trap
+    const burger=document.getElementById("tp-burger");
+    const nav=document.getElementById("tp-nav");
+    let lastFocus=null;
+
+    function getFocusable(container){
+      return Array.from(container.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )).filter(el => !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length));
+    }
+    function openMenu(){
+      lastFocus=document.activeElement;
+      nav.setAttribute("data-state","open");
+      burger.setAttribute("aria-expanded","true");
+      document.body.style.overflow="hidden";
+      const focusables=getFocusable(nav);
+      if(focusables[0]) focusables[0].focus({preventScroll:true});
+    }
+    function closeMenu(){
+      nav.setAttribute("data-state","closed");
+      burger.setAttribute("aria-expanded","false");
+      document.body.style.overflow="";
+      if(lastFocus && typeof lastFocus.focus==="function") lastFocus.focus({preventScroll:true});
+      lastFocus=null;
+    }
+    function toggleMenu(){ (nav.getAttribute("data-state")==="open") ? closeMenu() : openMenu(); }
+    burger && burger.addEventListener("click", toggleMenu);
+
+    document.addEventListener("click",(e)=>{
+      if(window.matchMedia("(min-width: 900px)").matches) return;
+      if(!e.target.closest(".tp-header") && nav.getAttribute("data-state")==="open") closeMenu();
+    },{ passive:true });
+
+    document.addEventListener("keydown",(e)=>{
+      if(window.matchMedia("(min-width: 900px)").matches) return;
+      if(e.key==="Escape" && nav.getAttribute("data-state")==="open"){
+        e.preventDefault(); closeMenu(); return;
+      }
+      if(e.key==="Tab" && nav.getAttribute("data-state")==="open"){
+        const focusables=getFocusable(nav);
+        if(!focusables.length) return;
+        const first=focusables[0];
+        const last=focusables[focusables.length-1];
+        if(e.shiftKey && document.activeElement===first){
+          e.preventDefault(); last.focus();
+        }else if(!e.shiftKey && document.activeElement===last){
+          e.preventDefault(); first.focus();
+        }
+      }
+    });
+
+    window.addEventListener("resize",()=>{
+      if(window.matchMedia("(min-width: 900px)").matches) closeMenu();
+    },{ passive:true });
+
+    // Auto aria-current (exclude .nav-cta)
+    (function(){
+      const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
+      document.querySelectorAll('header nav a:not(.nav-cta), footer .links a').forEach(a=>{
+        const path=new URL(a.getAttribute("href"), location.origin).pathname;
+        if(path===here) a.setAttribute("aria-current","page");
+      });
+    })();
+
+    // Hero anchor
+    document.getElementById("hero-verify").addEventListener("click", (e)=>{
+      e.preventDefault();
+      document.getElementById("verify-tool").scrollIntoView({behavior:"smooth", block:"start"});
+    });
+
+    // ---- Verify logic (lazy init on first interaction) ----
+    const tool = document.getElementById("verify-tool");
+    let inited = false;
+
+    function withTimeout(options={}){
+      const ctrl=new AbortController();
+      const t=setTimeout(()=>ctrl.abort(), REQ_TIMEOUT_MS);
+      return { ...options, signal:ctrl.signal, _timeoutId:t };
+    }
+
+    async function fetchAPI(path, options={}){
+      const opt=withTimeout(options);
+      try{
+        const res=await fetch(API_BASE+path, opt);
+        return res;
+      } finally {
+        clearTimeout(opt._timeoutId);
+      }
+    }
+
+    function isIso(iso){
+      if(!iso || typeof iso !== "string") return false;
+      const d = new Date(iso);
+      return !isNaN(d.getTime());
+    }
+    function fmtLocal(iso){
+      try{
+        if(!isIso(iso)) return "—";
+        return new Intl.DateTimeFormat("en-GB",{
+          year:"numeric", month:"2-digit", day:"2-digit",
+          hour:"2-digit", minute:"2-digit", second:"2-digit"
+        }).format(new Date(iso));
+      }catch{ return "—"; }
+    }
+    function fail(msg){ throw new Error(msg); }
+
+    function getSigFromProof(b){
+      if(!b || typeof b !== "object") return "";
+      const p=b.proof;
+      if(p && typeof p === "object") return p.signature || "";
+      return "";
+    }
+    function getTsIsoFromProof(b){
+      if(!b || typeof b !== "object") return null;
+      const t=b.timestamp;
+      if(t && typeof t === "object" && typeof t.issuedAt === "string" && isIso(t.issuedAt)) return t.issuedAt;
+      return null;
+    }
+    function getHashFromProof(b){
+      if(!b || typeof b !== "object") return "";
+      if(typeof b.hash === "string") return b.hash;
+      if(b.hash && typeof b.hash === "object" && typeof b.hash.value === "string") return b.hash.value;
+      return "";
+    }
+    function normalizeProofForUI(b){
+      if(!b || typeof b !== "object") return null;
+      const h = (getHashFromProof(b) || "").toLowerCase().trim();
+      if(!/^[a-f0-9]{64}$/i.test(h)) return null;
+      return { hashHex: h, sig: getSigFromProof(b) || "", tsIso: getTsIsoFromProof(b) };
+    }
+
+    async function sha256HexFromFile(file){
+      const buf=await file.arrayBuffer();
+      const digest=await crypto.subtle.digest("SHA-256", buf);
+      return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,"0")).join("");
+    }
+
+    function initVerify(){
+      if(inited) return;
+      inited = true;
+
+      const bundleFileInput = document.getElementById("bundle-file");
+      const clearBundleBtn = document.getElementById("clear-bundle-file");
+      const bundleInfo = document.getElementById("bundle-info");
+      const dropBundle = document.getElementById("drop-bundle");
+      const btnVerify = document.getElementById("btn-verify");
+      const verifyStatus = document.getElementById("verify-status");
+
+      const vp = document.getElementById("verify-panel");
+      const vpVerdict = document.getElementById("vp-verdict");
+      const vpPill = document.getElementById("vp-pill");
+      const vpDate = document.getElementById("vp-date");
+      const vpProofStatus = document.getElementById("vp-proof-status");
+      const vpProofHash = document.getElementById("vp-proof-hash");
+      const vpFileRow = document.getElementById("vp-file-row");
+      const vpFileHash = document.getElementById("vp-file-hash");
+      const vpCompareRow = document.getElementById("vp-compare-row");
+      const vpCompare = document.getElementById("vp-compare");
+      const vpHelp = document.getElementById("vp-help");
+
+      const verifyFileInput = document.getElementById("verify-file");
+      const btnClearVerifyFile = document.getElementById("btn-clear-verify-file");
+      const dropVerifyFile = document.getElementById("drop-verify-file");
+      const verifyFileInfo = document.getElementById("verify-file-info");
+
+      const outVerify = document.getElementById("verify-output");
+
+      let loadedProof = null;
+      let loadedProofUI = null;
+      let proofVerified = false;
+      let lastFileHash = null;
+
+      function setHint(el, txt){ if(el) el.textContent = txt || ""; }
+      function openPanel(){ vp.classList.add("is-open"); }
+      function closePanel(){ vp.classList.remove("is-open"); }
+
+      function showVerifyError(msg){
+        verifyStatus.innerHTML = `<span class="pill bad">❌ ${msg}</span>`;
+      }
+      function showVerifyInfo(msg){
+        verifyStatus.innerHTML = `<span class="pill neutral">ℹ️ ${msg}</span>`;
+      }
+
+      function resetUI(){
+        verifyStatus.textContent="";
+        setHint(bundleInfo,"");
+        btnVerify.disabled = true;
+        clearBundleBtn.disabled = true;
+
+        closePanel();
+        vpVerdict.textContent="—";
+        vpPill.innerHTML="";
+        vpDate.textContent="—";
+        vpProofStatus.textContent="—";
+        vpProofHash.textContent="—";
+        vpFileRow.style.display="none";
+        vpCompareRow.style.display="none";
+        vpFileHash.textContent="—";
+        vpCompare.textContent="—";
+        vpHelp.innerHTML = `<strong>Tip:</strong> verify the proof first (recommended). Then load the original file to check if it matches the frozen version.`;
+
+        verifyFileInfo.textContent="";
+        btnClearVerifyFile.disabled = true;
+        verifyFileInput.value = "";
+        lastFileHash = null;
+
+        loadedProof = null;
+        loadedProofUI = null;
+        proofVerified = false;
+
+        outVerify.style.display = "none";
+        outVerify.textContent = "{}";
+      }
+
+      function setPanelLoaded(){
+        openPanel();
+        vpVerdict.textContent = "Proof loaded. Verify it (recommended).";
+        vpPill.innerHTML = `<span class="pill neutral">PROOF LOADED</span>`;
+        vpDate.textContent = "(verify proof first)";
+        vpProofStatus.textContent = "Not verified yet";
+        vpFileRow.style.display="none";
+        vpCompareRow.style.display="none";
+        vpHelp.innerHTML = `<strong>Next (recommended):</strong> click “Verify proof”.<br/><span class="muted">Optional:</span> load the original file to check if it matches the proof hash.`;
+      }
+
+      function setPanelValid(){
+        openPanel();
+        vpPill.innerHTML = `<span class="pill ok">PROOF VERIFIED</span>`;
+        vpProofStatus.textContent = "Verified (signature OK)";
+        vpDate.textContent = (loadedProofUI && loadedProofUI.tsIso) ? fmtLocal(loadedProofUI.tsIso) : "—";
+        if(!lastFileHash){
+          vpVerdict.textContent = "Proof verified. Optional: check the original file.";
+          vpHelp.innerHTML = `<strong>Next:</strong> optional — load the original file to check if it matches the frozen version.`;
+        }
+      }
+
+      function setPanelInvalid(){
+        openPanel();
+        vpVerdict.textContent = "INVALID PROOF";
+        vpPill.innerHTML = `<span class="pill bad">PROOF INVALID</span>`;
+        vpProofStatus.textContent = "Invalid (signature failed)";
+        vpDate.textContent = "(untrusted)";
+        vpHelp.innerHTML = `<strong>Result:</strong> this proof cannot be verified. Do not rely on its date or issuer.`;
+        proofVerified = false;
+      }
+
+      function setCompareState(match){
+        vpFileRow.style.display="flex";
+        vpCompareRow.style.display="flex";
+
+        vpCompare.textContent = match ? "YES" : "NO";
+
+        if(proofVerified){
+          if(match){
+            vpVerdict.textContent = "SAME VERSION";
+            vpPill.innerHTML = `<span class="pill ok">MATCH</span>`;
+            vpHelp.innerHTML = `<strong>Result:</strong> this file is identical to the frozen version.`;
+          }else{
+            vpVerdict.textContent = "DIFFERENT VERSION";
+            vpPill.innerHTML = `<span class="pill bad">MISMATCH</span>`;
+            vpHelp.innerHTML = `<strong>Result:</strong> this file is not the same version (different bytes).`;
+          }
+        }else{
+          vpVerdict.textContent = match
+            ? "File matches this proof hash (unverified proof)"
+            : "File does NOT match this proof hash (unverified proof)";
+          vpPill.innerHTML = `<span class="pill neutral">${match ? "MATCH" : "MISMATCH"} (UNVERIFIED)</span>`;
+          vpHelp.innerHTML = `<strong>Note:</strong> this compares the file hash to the proof hash, but the proof is not verified yet.<br/>Verify the proof to trust the date and issuer.`;
+        }
+      }
+
+      async function readJsonFile(f){
+        const txt = await f.text();
+        return JSON.parse(txt);
+      }
+
+      async function loadProofObject(b){
+        loadedProof = b;
+        const ui = normalizeProofForUI(b);
+        if(!ui){
+          loadedProof = null;
+          loadedProofUI = null;
+          fail("Invalid proof: missing hash.value (64-hex).");
+        }
+
+        loadedProofUI = ui;
+        proofVerified = false;
+        lastFileHash = null;
+
+        verifyFileInput.value = "";
+        btnClearVerifyFile.disabled = true;
+        verifyFileInfo.textContent = "";
+
+        clearBundleBtn.disabled = false;
+        btnVerify.disabled = false;
+
+        showVerifyInfo("Proof loaded.");
+        setHint(bundleInfo, `Loaded proof hash: ${ui.hashHex}`);
+
+        vpProofHash.textContent = ui.hashHex;
+        setPanelLoaded();
+      }
+
+      async function loadProofFromFile(f){
+        if(!f) return;
+        const name = (f.name || "").toLowerCase();
+        if(name && !name.endsWith(".tproof.json") && !name.endsWith(".json")) fail("Select a .tproof.json proof file.");
+        const b = await readJsonFile(f);
+        await loadProofObject(b);
+      }
+
+      async function loadOriginalFile(f){
+        if(!loadedProofUI) fail("Load the proof file first.");
+        if(!f) return;
+        if(f.size > MAX_FILE_BYTES) fail("File too large (max 50 MB).");
+
+        const sizeMB=(f.size/1024/1024).toFixed(2);
+        verifyFileInfo.textContent = `File loaded: ${f.name} (${sizeMB} MB) — hashing locally…`;
+
+        const h = await sha256HexFromFile(f);
+        lastFileHash = h;
+
+        verifyFileInfo.textContent = `File loaded: ${f.name} (${sizeMB} MB)`;
+        btnClearVerifyFile.disabled = false;
+
+        vpFileHash.textContent = h;
+        const same = (h === loadedProofUI.hashHex);
+        setCompareState(same);
+
+        if(proofVerified) setPanelValid();
+      }
+
+      function openPicker(){
+        try{ bundleFileInput.click(); }catch{}
+      }
+
+      // Proof: input handlers
+      bundleFileInput.addEventListener("change", async ()=>{
+        const f = bundleFileInput.files?.[0];
+        if(!f){ resetUI(); return; }
+        try{
+          await loadProofFromFile(f);
+        }catch(err){
+          resetUI();
+          alert(String(err.message||err));
+        }
+      });
+
+      // Drop zone keyboard (open picker)
+      dropBundle.addEventListener("click", openPicker);
+      dropBundle.addEventListener("keydown", (e)=>{
+        if(e.key === "Enter" || e.key === " "){
+          e.preventDefault();
+          openPicker();
+        }
+      });
+
+      // Drag & drop proof
+      ["dragenter","dragover"].forEach(ev=>{
+        dropBundle.addEventListener(ev,(e)=>{
+          e.preventDefault(); e.stopPropagation(); dropBundle.classList.add("drag");
+        });
+      });
+      ["dragleave","drop"].forEach(ev=>{
+        dropBundle.addEventListener(ev,(e)=>{
+          e.preventDefault(); e.stopPropagation(); dropBundle.classList.remove("drag");
+        });
+      });
+      dropBundle.addEventListener("drop", async (e)=>{
+        const f = e.dataTransfer?.files?.[0];
+        if(!f) return;
+        try{
+          bundleFileInput.value = "";
+          await loadProofFromFile(f);
+        }catch(err){
+          resetUI();
+          alert(String(err.message||err));
+        }
+      });
+
+      // Clear proof
+      clearBundleBtn.addEventListener("click", ()=>{
+        bundleFileInput.value = "";
+        resetUI();
+        showVerifyInfo("Proof cleared.");
+      });
+
+      // Verify signature
+      btnVerify.addEventListener("click", async ()=>{
+        if(btnVerify.disabled) return;
+        btnVerify.disabled = true;
+
+        try{
+          if(!loadedProof) fail("Select or drop a .tproof.json proof file first.");
+          const ui = normalizeProofForUI(loadedProof);
+          if(!ui) fail("Invalid proof: missing hash.value (64-hex).");
+
+          showVerifyInfo("Checking signature…");
+          openPanel();
+
+          vpProofHash.textContent = ui.hashHex;
+          vpProofStatus.textContent = "Checking…";
+          vpDate.textContent = "(verify proof first)";
+
+          const r = await fetchAPI("/verify", {
+            method:"POST",
+            headers:{ "Content-Type":"application/json" },
+            body: JSON.stringify({ bundle: loadedProof })
+          });
+          const j = await r.json().catch(()=> ({}));
+          if(!r.ok) fail(j.message || j.error || `Verify failed (${r.status})`);
+
+          const valid = (j && j.valid === true);
+          proofVerified = valid;
+
+          verifyStatus.innerHTML = valid
+            ? `<span class="pill ok">✅ Valid proof</span>`
+            : `<span class="pill bad">❌ Invalid (or not verifiable)</span>`;
+
+          if(!valid){
+            setPanelInvalid();
+          }else{
+            setPanelValid();
+            if(lastFileHash){
+              const same = (lastFileHash === ui.hashHex);
+              setCompareState(same);
+              setPanelValid();
+            }
+          }
+
+          // Debug output only if ?debug=1
+          const debug = new URL(location.href).searchParams.get("debug") === "1";
+          if(debug){
+            outVerify.style.display = "block";
+            outVerify.textContent = JSON.stringify({ verify: j, bundle: loadedProof }, null, 2);
+          }
+        }catch(err){
+          showVerifyError(String(err.message || err));
+          proofVerified = false;
+        }finally{
+          btnVerify.disabled = !loadedProofUI;
+        }
+      });
+
+      // Original file: input handlers
+      verifyFileInput.addEventListener("change", async ()=>{
+        const f = verifyFileInput.files?.[0];
+        if(!f) return;
+        try{
+          await loadOriginalFile(f);
+        }catch(err){
+          verifyFileInput.value = "";
+          verifyFileInfo.textContent = "";
+          btnClearVerifyFile.disabled = true;
+          alert(String(err.message||err));
+        }
+      });
+
+      btnClearVerifyFile.addEventListener("click", ()=>{
+        verifyFileInput.value = "";
+        verifyFileInfo.textContent = "";
+        btnClearVerifyFile.disabled = true;
+        lastFileHash = null;
+
+        vpFileRow.style.display = "none";
+        vpCompareRow.style.display = "none";
+        vpFileHash.textContent = "—";
+        vpCompare.textContent = "—";
+
+        if(loadedProofUI){
+          if(proofVerified) setPanelValid();
+          else setPanelLoaded();
+        }else{
+          resetUI();
+        }
+
+        showVerifyInfo("File cleared.");
+      });
+
+      // Drag & drop original file
+      ["dragenter","dragover"].forEach(ev=>{
+        dropVerifyFile.addEventListener(ev,(e)=>{
+          e.preventDefault(); e.stopPropagation(); dropVerifyFile.classList.add("drag");
+        });
+      });
+      ["dragleave","drop"].forEach(ev=>{
+        dropVerifyFile.addEventListener(ev,(e)=>{
+          e.preventDefault(); e.stopPropagation(); dropVerifyFile.classList.remove("drag");
+        });
+      });
+      dropVerifyFile.addEventListener("drop", async (e)=>{
+        const f = e.dataTransfer?.files?.[0];
+        if(!f) return;
+        try{
+          await loadOriginalFile(f);
+        }catch(err){
+          alert(String(err.message||err));
+        }
+      });
+
+      // init state
+      resetUI();
+    }
+
+    function lazyInitOnce(){
+      if(inited) return;
+      initVerify();
+    }
+
+    // Lazy init triggers (first real interaction)
+    ["pointerdown","keydown","focusin"].forEach(evt=>{
+      tool.addEventListener(evt, lazyInitOnce, { once:true, passive: evt==="pointerdown" });
+    });
+  })();
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en" id="top" data-page="verify.html">
+<head>
+  <!-- Core -->
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <meta name="color-scheme" content="dark light"/>
+
   <title>Verify — TimeProofs</title>
   <meta name="application-name" content="TimeProofs"/>
   <meta name="description" content="Verify a TimeProofs proof file (.tproof.json) and optionally check if a local file matches the frozen version — without uploading your content. This page does not create proofs."/>
