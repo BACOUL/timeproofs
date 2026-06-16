@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>TimeProofs v0.2 Playground</title>
+  <title>TimeProofs v0.2 Playground - Proof bundle demo</title>
+  <meta name="description" content="Local playground for hashing text, requesting a timestamp, and building a backward-compatible .tproof.json proof bundle without sending raw text by default."/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <style>
     body {
@@ -74,23 +75,23 @@
 <body>
   <h1>TimeProofs v0.2 Playground</h1>
   <p>
-    Test local de la chaîne v0.2 : hash → /api/timestamp (stateless) → bundle (.tproof.json, côté client).
-    Cette page n’envoie jamais le texte brut au serveur, seulement le hash.
+    Local v0.2 test flow: hash → /api/timestamp (stateless) → bundle (.tproof.json, client-side).
+    This page never sends raw text to the server, only the hash.
   </p>
 
-  <label for="tp-input">Texte à protéger (demo, rien n’est stocké) :</label>
-  <textarea id="tp-input" placeholder="Tape ici un texte, par exemple un résumé de document, une sortie d'IA, etc."></textarea>
+  <label for="tp-input">Text to protect (demo, nothing is stored):</label>
+  <textarea id="tp-input" placeholder="Type text here, for example a document summary, an AI output, or another demo value."></textarea>
 
   <div>
     <button class="primary" id="btn-run">Hash + Timestamp + Bundle</button>
-    <button class="secondary" id="btn-hash">Juste hash</button>
+    <button class="secondary" id="btn-hash">Hash only</button>
   </div>
 
   <div class="status" id="tp-status"></div>
 
-  <pre id="tp-output" aria-label="Résultat"></pre>
+  <pre id="tp-output" aria-label="Result"></pre>
 
-  <!-- SDK v0.2 (UMD, expose TimeProofsV02 en global) -->
+  <!-- SDK v0.2 (UMD, exposes TimeProofsV02 globally) -->
   <script src="./sdk/timeproof.js"></script>
   <script>
     (function () {
@@ -101,7 +102,7 @@
       const btnHash = document.getElementById("btn-hash");
 
       if (!window.TimeProofsV02) {
-        statusEl.textContent = "Erreur: TimeProofsV02 introuvable. Vérifie le chemin ./sdk/timeproof.js.";
+        statusEl.textContent = "Error: TimeProofsV02 not found. Check the ./sdk/timeproof.js path.";
         statusEl.classList.add("error");
         return;
       }
@@ -134,16 +135,16 @@
         setOutput("");
         const text = inputEl.value || "";
         if (!text.trim()) {
-          setStatus("Merci d'entrer un texte avant de calculer le hash.", true);
+          setStatus("Enter text before calculating the hash.", true);
           return;
         }
         try {
-          setStatus("Calcul du hash…");
+          setStatus("Calculating hash...");
           const hash = await tp.hashText(text);
-          setStatus("Hash (SHA-256) calculé.");
+          setStatus("Hash (SHA-256) calculated.");
           setOutput({ hash });
         } catch (err) {
-          setStatus("Erreur: " + (err && err.message ? err.message : String(err)), true);
+          setStatus("Error: " + (err && err.message ? err.message : String(err)), true);
         }
       });
 
@@ -152,17 +153,17 @@
         setOutput("");
         const text = inputEl.value || "";
         if (!text.trim()) {
-          setStatus("Merci d'entrer un texte avant de lancer la preuve.", true);
+          setStatus("Enter text before creating the proof bundle.", true);
           return;
         }
         try {
-          setStatus("Calcul du hash…");
+          setStatus("Calculating hash...");
           const hashHex = await tp.hashText(text);
 
-          setStatus("Appel à /api/timestamp (v0.2)…");
+          setStatus("Calling /api/timestamp (v0.2)...");
           const ts = await tp.timestamp(hashHex);
 
-          setStatus("Construction du bundle (local, .tproof.json)…");
+          setStatus("Building bundle locally (.tproof.json)...");
           const bundle = tp.createBundle({
             hash: ts.hash,
             timestamp: ts.timestamp,
@@ -176,14 +177,14 @@
             }
           });
 
-          setStatus("OK — bundle généré localement. Rien n'est stocké côté serveur.");
+          setStatus("OK - bundle generated locally. Nothing is stored server-side.");
           setOutput({
             hash: hashHex,
             timestampResponse: ts,
             bundle
           });
         } catch (err) {
-          setStatus("Erreur: " + (err && err.message ? err.message : String(err)), true);
+          setStatus("Error: " + (err && err.message ? err.message : String(err)), true);
         }
       });
     })();
