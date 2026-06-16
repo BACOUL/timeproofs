@@ -2,7 +2,7 @@
  * TimeProofs Action File v1 local helpers
  *
  * Scope:
- * - Local canonicalization and hashing only.
+ * - Local Action File construction, canonicalization, and hashing only.
  * - No API calls.
  * - No seal creation.
  * - No verification of legal/compliance claims.
@@ -29,6 +29,19 @@
 
   const HASHABLE_TOP_LEVEL_KEYS = ["format", "schema_version", "action_core"];
   const NON_HASHABLE_TOP_LEVEL_KEYS = ["integrity", "local_annotations", "verification_result"];
+
+  const ACTOR_TYPES = ["ai_agent", "automation", "human", "system", "hybrid"];
+  const ACTION_STATUSES = ["declared", "executed", "target_confirmed", "failed", "partial", "cancelled"];
+  const PROOF_LEVELS = ["declared", "executed", "target_confirmed", "externally_verifiable"];
+
+  const OPTIONAL_ACTION_CORE_KEYS = [
+    "workflow",
+    "target_system",
+    "evidence",
+    "redaction",
+    "limitations",
+    "metadata",
+  ];
 
   const hasWebCrypto =
     typeof crypto !== "undefined" &&
@@ -81,6 +94,25 @@
     throw new Error(`Unsupported non-JSON value at ${currentPath}`);
   }
 
+  function cloneJson(value, path) {
+    const currentPath = path || "$";
+    assertJsonCompatible(value, currentPath);
+    return JSON.parse(JSON.stringify(value));
+  }
+
+  function assertNonEmptyString(value, path) {
+    if (typeof value !== "string" || value.trim() === "") {
+      throw new Error(`${path} must be a non-empty string`);
+    }
+  }
+
+  function assertEnum(value, allowed, path) {
+    assertNonEmptyString(value, path);
+    if (!allowed.includes(value)) {
+      throw new Error(`${path} must be one of: ${allowed.join(", ")}`);
+    }
+  }
+
   function compareByUnicodeCodePoint(a, b) {
     if (a === b) return 0;
 
@@ -123,6 +155,108 @@
     }
 
     throw new Error("Unsupported non-JSON value");
+  }
+
+  function validateActor(actor) {
+    if (!isPlainObject(actor)) throw new Error("action_core.actor must be an object");
+    assertEnum(actor.type, ACTOR_TYPES, "action_core.actor.type");
+    assertNonEmptyString(actor.id, "action_core.actor.id");
+    assertJsonCompatible(actor, "action_core.actor");
+  }
+
+  function validateAction(action) {
+    if (!isPlainObject(action)) throw new Error("action_core.action must be an object");
+    assertNonEmptyString(action.type, "action_core.action.type");
+    assertEnum(action.status, ACTION_STATUSES, "action_core.action.status");
+    assertNonEmptyString(action.summary, "action_core.action.summary");
+    assertJsonCompatible(action, "action_core.action");
+  }
+
+  function validateActionCore(actionCore) {
+    if (!isPlainObject(actionCore)) throw new Error("action_core must be an object");
+
+    assertNonEmptyString(actionCore.action_id, "action_core.action_id");
+    assertNonEmptyString(actionCore.created_at, "action_core.created_at");
+    validateActor(actionCore.actor);
+    validateAction(actionCore.action);
+    assertEnum(actionCore.proof_level, PROOF_LEVELS, "action_core.proof_level");
+
+    if (Object.prototype.hasOwnProperty.call(actionCore, "limitations") && !Array.isArray(actionCore.limitations)) {
+      throw new Error("action_core.limitations must be an array when present");
+    }
+
+    assertJsonCompatible(actionCore, "action_core");
+    return actionCore;
+  }
+
+  function buildActionCore(input) {
+    if (isPlainObject(input.action_core)) {
+      const clonedActionCore = cloneJson(input.action_core, "action_core");
+      return validateActionCore(clonedActionCore);
+    }
+
+    const actionCore = {
+      action_id: input.action_id,
+      created_at: input.created_at,
+      actor: input.actor,
+      action: input.action,
+      proof_level: input.proof_level,
+    };
+
+    for (const key of OPTIONAL_ACTION_CORE_KEYS) {
+      if (typeof input[key] !== "undefined") {
+        actionCore[key] = cloneJson(input[key], `action_core.${key}`);
+      }
+    }
+
+    return validateActionCore(actionCore);
+  }
+
+  function createActionFile(input, options) {
+    if (!isPlainObject(input)) {
+      throw new Error("createActionFile expects an object");
+    }
+
+    const cfg = isPlainObject(options) ? options : {};
+    const schemaVersion = input.schema_version || cfg.schema_version || DEFAULT_SCHEMA_VERSION;
+    assertNonEmptyString(schemaVersion, "schema_version");
+
+    const actionFile = {
+      format: FORMAT,
+      schema_version: schemaVersion,
+      action_core: buildActionCore(input),
+    };
+
+    if (cfg.include_integrity !== false) {
+      actionFile.integrity = Object.assign(
+        {
+          canonicalization_profile: CANONICALIZATION_PROFILE,
+          hash_algorithm: HASH_ALGORITHM,
+        },
+        isPlainObject(input.integrity) ? cloneJson(input.integrity, "integrity") : {}
+      );
+    }
+
+    if (typeof input.local_annotations !== "undefined") {
+      if (!isPlainObject(input.local_annotations)) {
+        throw new Error("local_annotations must be an object when present");
+      }
+      actionFile.local_annotations = cloneJson(input.local_annotations, "local_annotations");
+    } else if (cfg.include_empty_non_hashable_containers === true) {
+      actionFile.local_annotations = {};
+    }
+
+    if (typeof input.verification_result !== "undefined") {
+      if (!isPlainObject(input.verification_result)) {
+        throw new Error("verification_result must be an object when present");
+      }
+      actionFile.verification_result = cloneJson(input.verification_result, "verification_result");
+    } else if (cfg.include_empty_non_hashable_containers === true) {
+      actionFile.verification_result = {};
+    }
+
+    assertJsonCompatible(actionFile, "action_file");
+    return actionFile;
   }
 
   function createHashableActionFilePayload(actionFile) {
@@ -224,6 +358,11 @@
     HASH_ALGORITHM,
     HASHABLE_TOP_LEVEL_KEYS,
     NON_HASHABLE_TOP_LEVEL_KEYS,
+    ACTOR_TYPES,
+    ACTION_STATUSES,
+    PROOF_LEVELS,
+    createActionFile,
+    validateActionCore,
     createHashableActionFilePayload,
     canonicalizeActionFileCore,
     canonicalizeJsonValue,
