@@ -1,0 +1,363 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://timeproofs.io/schemas/action-file-v1.schema.json",
+  "title": "TimeProofs Action File v1",
+  "description": "Design-stage JSON Schema foundation for TimeProofs Action File v1. This schema is documentation-oriented until runtime validators are implemented in a later PR.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "schema_version",
+    "action_core"
+  ],
+  "properties": {
+    "format": {
+      "type": "string",
+      "const": "timeproofs.action.v1"
+    },
+    "schema_version": {
+      "type": "string",
+      "default": "1.0.0-design",
+      "description": "Design-stage schema version. Future production schema versions may use strict semantic versioning."
+    },
+    "action_core": {
+      "$ref": "#/$defs/action_core"
+    },
+    "integrity": {
+      "$ref": "#/$defs/integrity"
+    },
+    "local_annotations": {
+      "type": "object",
+      "description": "Customer-owned mutable local annotations. This object is explicitly outside the hashable payload.",
+      "additionalProperties": true
+    },
+    "verification_result": {
+      "type": "object",
+      "description": "Verifier-generated result. This object is explicitly outside the hashable payload.",
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "action_core": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "action_id",
+        "created_at",
+        "actor",
+        "action",
+        "proof_level"
+      ],
+      "properties": {
+        "action_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "description": "Stable customer-side action identifier. It should not contain sensitive personal data."
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Action File creation timestamp or stable record timestamp."
+        },
+        "actor": {
+          "$ref": "#/$defs/actor"
+        },
+        "action": {
+          "$ref": "#/$defs/action"
+        },
+        "proof_level": {
+          "$ref": "#/$defs/proof_level"
+        },
+        "workflow": {
+          "$ref": "#/$defs/workflow"
+        },
+        "target_system": {
+          "$ref": "#/$defs/target_system"
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        },
+        "redaction": {
+          "$ref": "#/$defs/redaction"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Stable non-sensitive customer-controlled metadata.",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "id"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "ai_agent",
+            "automation",
+            "human",
+            "system",
+            "hybrid"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "version": {
+          "type": "string",
+          "maxLength": 100
+        }
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "status",
+        "summary"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "description": "Recommended to align with schemas/action-types.json."
+        },
+        "status": {
+          "$ref": "#/$defs/action_status"
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "occurred_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "proof_level": {
+      "type": "string",
+      "enum": [
+        "declared",
+        "executed",
+        "target_confirmed",
+        "externally_verifiable"
+      ]
+    },
+    "action_status": {
+      "type": "string",
+      "enum": [
+        "declared",
+        "executed",
+        "target_confirmed",
+        "failed",
+        "partial",
+        "cancelled"
+      ]
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "provider": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "workflow_id": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "run_id": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "step_id": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "environment": {
+          "type": "string",
+          "maxLength": 100
+        }
+      }
+    },
+    "target_system": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "type": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "object_type": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "reference": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "confirmed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "references": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_reference"
+          },
+          "default": []
+        }
+      }
+    },
+    "evidence_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "reference",
+        "stored_by"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "reference": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "fingerprint": {
+          "type": "string",
+          "pattern": "^sha256:[a-fA-F0-9]{64}$"
+        },
+        "stored_by": {
+          "type": "string",
+          "enum": [
+            "customer",
+            "third_party",
+            "public_record",
+            "unknown"
+          ]
+        }
+      }
+    },
+    "redaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "applied": {
+          "type": "boolean"
+        },
+        "profile": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "description": "Integrity envelope. This object is outside the hashable payload.",
+      "additionalProperties": false,
+      "properties": {
+        "canonicalization_profile": {
+          "type": "string",
+          "default": "timeproofs-json-canonical-v1"
+        },
+        "hash_algorithm": {
+          "type": "string",
+          "const": "sha256"
+        },
+        "payload_hash": {
+          "type": "string",
+          "pattern": "^sha256:[a-fA-F0-9]{64}$",
+          "description": "Hash of canonical JSON over format, schema_version, and action_core. This field must not be included in the hashable payload."
+        },
+        "seal": {
+          "$ref": "#/$defs/seal"
+        },
+        "proof_bundle": {
+          "type": "object",
+          "description": "Optional future bridge to existing .tproof.json proof-bundle primitives.",
+          "additionalProperties": true
+        }
+      }
+    },
+    "seal": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "issuer": {
+          "type": "string"
+        },
+        "issued_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "key_id": {
+          "type": "string"
+        },
+        "signature_algorithm": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
