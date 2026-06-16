@@ -9,6 +9,7 @@ const path = require("path");
 
 const {
   CANONICALIZATION_PROFILE,
+  createActionFile,
   createHashableActionFilePayload,
   canonicalizeActionFileCore,
   hashActionFileCore,
@@ -110,8 +111,102 @@ async function main() {
   assert.ok(!canonical.includes("verification_result"), "canonical payload must not include verification_result");
   assert.ok(!canonical.includes("payload_hash"), "canonical payload must not include payload_hash");
 
+  const createdFromCore = createActionFile(
+    {
+      action_core: targetConfirmed.action_core,
+      local_annotations: { note: "outside hash" },
+    },
+    { include_empty_non_hashable_containers: true }
+  );
+
+  assert.strictEqual(createdFromCore.format, "timeproofs.action.v1");
+  assert.strictEqual(createdFromCore.schema_version, "1.0.0-design");
+  assert.strictEqual(createdFromCore.integrity.canonicalization_profile, "timeproofs-json-canonical-v1");
+  assert.strictEqual(createdFromCore.integrity.hash_algorithm, "sha256");
+  assert.deepStrictEqual(createdFromCore.local_annotations, { note: "outside hash" });
+  assert.deepStrictEqual(createdFromCore.verification_result, {});
+  assert.strictEqual(
+    await hashActionFileCore(createdFromCore),
+    "sha256:51679947418fdef8abec1f0171e236685cc7f3027b548816765f8708eacc61c9",
+    "createActionFile from action_core should preserve the same hashable payload"
+  );
+
+  const createdFromFields = createActionFile({
+    action_id: "act_demo_created_from_fields_001",
+    created_at: "2026-06-16T19:05:00Z",
+    actor: {
+      type: "automation",
+      id: "local_creator_test",
+      name: "Local creator test",
+      version: "1.0.0",
+    },
+    action: {
+      type: "document.generated",
+      status: "executed",
+      summary: "Generated a synthetic document record locally.",
+      occurred_at: "2026-06-16T19:05:00Z",
+    },
+    proof_level: "executed",
+    workflow: {
+      provider: "local_test",
+      workflow_id: "wf_local_creator_test",
+      run_id: "run_local_creator_001",
+      environment: "test",
+    },
+    evidence: {
+      references: [
+        {
+          type: "generated_document_fingerprint",
+          reference: "generated-doc-demo-001",
+          fingerprint: "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+          stored_by: "customer",
+        },
+      ],
+    },
+    limitations: ["Synthetic local creation test only."],
+  });
+
+  assert.strictEqual(createdFromFields.action_core.action_id, "act_demo_created_from_fields_001");
+  assert.strictEqual(createdFromFields.action_core.proof_level, "executed");
+  assert.strictEqual(createdFromFields.integrity.canonicalization_profile, "timeproofs-json-canonical-v1");
+  assert.ok(!createdFromFields.local_annotations, "local_annotations should be omitted unless provided or requested");
+  assert.ok(!createdFromFields.verification_result, "verification_result should be omitted unless provided or requested");
+
+  assert.throws(
+    () =>
+      createActionFile({
+        action_id: "act_invalid_missing_actor",
+        created_at: "2026-06-16T19:10:00Z",
+        action: {
+          type: "email.drafted",
+          status: "declared",
+          summary: "Invalid missing actor.",
+        },
+        proof_level: "declared",
+      }),
+    /actor must be an object/,
+    "createActionFile should reject missing actor"
+  );
+
+  assert.throws(
+    () =>
+      createActionFile({
+        action_id: "act_invalid_proof_level",
+        created_at: "2026-06-16T19:10:00Z",
+        actor: { type: "automation", id: "test" },
+        action: {
+          type: "email.drafted",
+          status: "declared",
+          summary: "Invalid proof level.",
+        },
+        proof_level: "certified",
+      }),
+    /proof_level must be one of/,
+    "createActionFile should reject unsupported proof level"
+  );
+
   assert.ok(fs.existsSync(examplesDir), "examples/action-files directory should exist");
-  console.log("Action File v1 local hash helper tests passed.");
+  console.log("Action File v1 local helper tests passed.");
 }
 
 main().catch((error) => {
