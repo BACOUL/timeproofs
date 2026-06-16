@@ -1,0 +1,43 @@
+{
+  "issuer": "TimeProofs",
+  "purpose": "Public key metadata for future TimeProofs Action File Seal verification.",
+  "status": "design_placeholder",
+  "updated_at": "2026-06-16T22:00:00Z",
+  "canonical_url": "https://timeproofs.io/.well-known/timeproofs-keys.json",
+  "documentation_url": "https://timeproofs.io/keys.html",
+  "warning": "This file is a public-key publication placeholder. It contains no private key material and must not be treated as a production signing key registry until a real production key is published.",
+  "keys": [
+    {
+      "public_key_id": "timeproofs-main-2026-01",
+      "algorithm": "Ed25519",
+      "public_key_encoding": "base64url",
+      "public_key": "REPLACE_WITH_BASE64URL_ED25519_PUBLIC_KEY",
+      "created_at": "2026-01-01T00:00:00Z",
+      "status": "active",
+      "environment": "placeholder",
+      "production_ready": false,
+      "usage": [
+        "timeproofs.seal.v1"
+      ],
+      "notes": "Placeholder only. No matching production private key is committed or implied. Replace before production seal verification is enabled."
+    }
+  ],
+  "status_values": {
+    "active": "Key can verify currently issued seals if production_ready is true.",
+    "retired": "Key is no longer used for new seals but remains published for historical verification.",
+    "compromised": "Key must not be trusted for new verification after the compromise date; keep listed for incident handling."
+  },
+  "rotation_policy": {
+    "summary": "Future production keys should be rotated deliberately, without reusing public_key_id values.",
+    "rules": [
+      "Never reuse a public_key_id for different key material.",
+      "Keep retired public keys available for historical verification.",
+      "Mark compromised keys clearly and publish incident guidance.",
+      "Do not publish private key material in this file or anywhere in the repository."
+    ]
+  },
+  "verification_limits": [
+    "A valid signature can prove that a Seal payload was signed by the corresponding TimeProofs issuer key.",
+    "A valid signature does not prove AI correctness, legal validity, regulatory compliance, business validity, or acceptance by a third party."
+  ]
+}
