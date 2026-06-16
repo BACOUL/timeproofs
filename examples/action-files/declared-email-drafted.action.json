@@ -1,0 +1,66 @@
+{
+  "format": "timeproofs.action.v1",
+  "schema_version": "1.0.0-design",
+  "action_core": {
+    "action_id": "act_demo_declared_email_001",
+    "created_at": "2026-06-16T18:45:00Z",
+    "actor": {
+      "type": "ai_agent",
+      "id": "sales_email_assistant_demo",
+      "name": "Sales email assistant",
+      "version": "1.0.0"
+    },
+    "action": {
+      "type": "email.drafted",
+      "status": "declared",
+      "summary": "Drafted an outreach email for internal review.",
+      "occurred_at": "2026-06-16T18:45:00Z"
+    },
+    "proof_level": "declared",
+    "workflow": {
+      "provider": "example_workflow_platform",
+      "workflow_id": "wf_email_draft_demo",
+      "run_id": "run_declared_email_001",
+      "step_id": "step_generate_draft",
+      "environment": "demo"
+    },
+    "evidence": {
+      "references": [
+        {
+          "type": "draft_content_fingerprint",
+          "label": "Draft email content fingerprint",
+          "reference": "draft-email-demo-001",
+          "fingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+          "stored_by": "customer"
+        }
+      ]
+    },
+    "redaction": {
+      "applied": true,
+      "profile": "demo-redacted",
+      "notes": [
+        "No recipient personal data is included.",
+        "Draft content is represented by a customer-held fingerprint."
+      ]
+    },
+    "limitations": [
+      "This file declares that an email draft was recorded.",
+      "It does not prove that the email was sent or received.",
+      "TimeProofs does not verify the content of the draft."
+    ],
+    "metadata": {
+      "example": true,
+      "example_type": "declared_email_draft"
+    }
+  },
+  "integrity": {
+    "canonicalization_profile": "timeproofs-json-canonical-v1-draft",
+    "hash_algorithm": "sha256",
+    "payload_hash": "sha256:231c6b5ca29078119421fcf4aedaee827917b1b6ffaad8b75c1076b98c5b51ea",
+    "seal": {
+      "status": "not_implemented_in_this_example"
+    }
+  },
+  "local_annotations": {},
+  "verification_result": {}
+}
