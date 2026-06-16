@@ -1,16 +1,17 @@
 # Security Policy — TimeProofs
 
-TimeProofs is an open, privacy-first protocol for digital proof of existence.  
-This document defines how to responsibly report and coordinate security vulnerabilities.
+TimeProofs is a privacy-first traceability system for AI Action Files and proof bundles.
+This document defines how to responsibly report and coordinate security vulnerabilities and summarizes the target security model for Action File sealing.
 
 ---
 
 ## Supported Versions
 
-| Version | Status        | Security Fixes |
-|----------|----------------|----------------|
-| v0.1     | Public Beta    | ✅ Active (monitored) |
-| < v0.1   | Experimental   | ❌ Not supported |
+| Version | Status | Security Fixes |
+|----------|--------|----------------|
+| v0.2 / Proof Bundle | Public beta | ✅ Active (monitored) |
+| Action File v1 design | In development | ✅ Security model under active design |
+| < v0.1 | Experimental | ❌ Not supported |
 
 ---
 
@@ -34,14 +35,86 @@ We commit to:
 ## Scope
 
 This policy covers:
-- API endpoints (`/api/timestamp`, `/api/verify`)
+- Existing API endpoints (`/api/timestamp`, `/api/verify`)
+- Future Action File sealing and verification flows
 - Frontend site (https://timeproofs.io)
-- Cloudflare Workers backend & KV storage
-- Open-source repositories under `github.com/timeproofs`
+- Cloudflare Workers backend & KV storage where used
+- Self-host server code where maintained in this repository
+- Open-source repositories under `github.com/BACOUL` or future TimeProofs organization repositories
 
 Out of scope:
-- Third-party dependencies (handled via Dependabot)
+- Third-party dependencies (handled via dependency monitoring where available)
 - Local integrations or forks not maintained by TimeProofs
+- Customer-created Action File content not controlled by TimeProofs
+
+---
+
+## Action File Security Model
+
+TimeProofs Action File v1 follows a privacy-first hash-only default model:
+
+- the company or integrator creates the Action File;
+- sensitive action content should stay in the customer environment;
+- the hashable Action File payload is canonicalized locally;
+- TimeProofs should receive only a payload hash and minimal sealing metadata by default;
+- the final Action File can be stored wherever the company chooses.
+
+The canonicalization profile is documented in `docs/canonicalization-profile.md`.
+The hash model and anti-circular hash rule are documented in `docs/hash-model.md`.
+
+---
+
+## Asymmetric Signature Model
+
+The target Action File seal model uses asymmetric signatures for public verification.
+
+Preferred algorithm:
+
+```text
+Ed25519
+```
+
+Target principles:
+
+- TimeProofs signs a Seal payload, not raw sensitive action content.
+- Every Seal includes a stable `public_key_id`.
+- The private key is used only by the TimeProofs issuer.
+- Public keys are published for independent verification.
+- Retired keys remain available for historical verification.
+- Compromised keys must remain listed with clear status and guidance.
+
+The full design is documented in `docs/signature-model.md`.
+
+---
+
+## Private Key Policy
+
+Private keys must never be committed to this repository.
+
+Rules:
+
+- production private keys must be stored only in environment variables, secret managers, or dedicated key management infrastructure;
+- logs must never print private key material;
+- CI artifacts must never contain private key material;
+- demo keys, if ever added, must be clearly marked as unsafe and must never be used in production;
+- production signing must fail closed if key material is missing or invalid.
+
+---
+
+## Verification Limits
+
+TimeProofs verification can prove integrity and signature consistency.
+
+It does not prove:
+
+- that the AI was correct;
+- that the action was lawful;
+- that the business decision was valid;
+- that all relevant facts are present;
+- that TimeProofs reviewed the underlying sensitive content;
+- that a court, regulator, insurer, bank, auditor, or partner will accept the record.
+
+Use careful wording: TimeProofs provides a technical traceability and verification artifact, not absolute legal proof.
 
 ---
 
@@ -65,10 +138,13 @@ Researchers who help secure TimeProofs will be acknowledged on:
 
 ## Policy References
 
-- Canonical: [https://timeproofs.io/.well-known/security.txt](https://timeproofs.io/.well-known/security.txt)  
-- Legal terms: [https://timeproofs.io/legal.html](https://timeproofs.io/legal.html)  
+- Canonical security policy: [https://timeproofs.io/.well-known/security.txt](https://timeproofs.io/.well-known/security.txt)
+- Legal terms: [https://timeproofs.io/legal.html](https://timeproofs.io/legal.html)
 - Privacy policy: [https://timeproofs.io/privacy.html](https://timeproofs.io/privacy.html)
+- Signature model: `docs/signature-model.md`
+- Hash model: `docs/hash-model.md`
+- Canonicalization profile: `docs/canonicalization-profile.md`
 
 ---
 
-© 2025 TimeProofs — Proof of Existence. For Everything.
+© 2026 TimeProofs — La boîte noire des actions IA.
