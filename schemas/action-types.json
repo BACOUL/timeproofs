@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://timeproofs.io/schemas/action-types.json",
+  "title": "TimeProofs Action Types Registry",
+  "description": "Initial documentation-oriented registry for future TimeProofs Action File v1 action types and proof-level guidance. This file does not enforce runtime validation yet.",
+  "version": "0.1.0-design",
+  "status": "documentation-only",
+  "proof_levels": [
+    "declared",
+    "executed",
+    "target_confirmed",
+    "externally_verifiable"
+  ],
+  "statuses": [
+    "declared",
+    "executed",
+    "target_confirmed",
+    "failed",
+    "partial",
+    "cancelled"
+  ],
+  "privacy_rules": [
+    "Do not send sensitive action content to TimeProofs by default.",
+    "Use fingerprints for prompts, outputs, documents, API responses, or message bodies where possible.",
+    "Keep customer data and business content in customer-owned systems.",
+    "Use synthetic or redacted data in examples."
+  ],
+  "action_types": {
+    "crm.lead_created": {
+      "label": "CRM lead created",
+      "description": "An AI workflow creates or attempts to create a lead in a CRM.",
+      "recommended_minimum_proof_level": "target_confirmed",
+      "allowed_proof_levels": [
+        "declared",
+        "executed",
+        "target_confirmed",
+        "externally_verifiable"
+      ],
+      "recommended_required_fields": [
+        "action_id",
+        "created_at",
+        "actor",
+        "action.type",
+        "action.status",
+        "proof_level",
+        "target_system",
+        "traceability"
+      ],
+      "target_confirmed_evidence": [
+        "lead_id",
+        "crm_record_id",
+        "target_confirmed_at"
+      ],
+      "notes": "A target CRM reference improves traceability but does not prove lead quality, consent, legality, or CRM content correctness."
+    },
+    "crm.record_updated": {
+      "label": "CRM record updated",
+      "description": "An AI workflow updates or attempts to update a CRM record.",
+      "recommended_minimum_proof_level": "target_confirmed",
+      "allowed_proof_levels": [
+        "declared",
+        "executed",
+        "target_confirmed",
+        "externally_verifiable"
+      ],
+      "recommended_required_fields": [
+        "action_id",
+        "created_at",
+        "actor",
+        "action.type",
+        "action.status",
+        "proof_level",
+        "target_system",
+        "traceability"
+      ],
+      "target_confirmed_evidence": [
+        "record_id",
+        "update_id",
+        "target_confirmed_at"
+      ],
+      "notes": "The Action File can record that an update reference exists; it does not prove that the update was correct or authorized."
+    },
+    "support.ticket_created": {
+      "label": "Support ticket created",
+      "description": "An AI workflow creates or attempts to create a support ticket.",
+      "recommended_minimum_proof_level": "target_confirmed",
+      "allowed_proof_levels": [
+        "declared",
+        "executed",
+        "target_confirmed",
+        "externally_verifiable"
+      ],
+      "recommended_required_fields": [
+        "action_id",
+        "created_at",
+        "actor",
+        "action.type",
+        "action.status",
+        "proof_level",
+        "target_system",
+        "traceability"
+      ],
+      "target_confirmed_evidence": [
+        "ticket_id",
+        "case_id",
+        "target_confirmed_at"
+      ],
+      "notes": "The ticket reference helps reconstruct the action, but TimeProofs does not verify ticket content or support decisions."
+    },
+    "email.sent": {
+      "label": "Email sent",
+      "description": "An AI workflow sends or attempts to send an email.",
+      "recommended_minimum_proof_level": "target_confirmed",
+      "allowed_proof_levels": [
+        "declared",
+        "executed",
+        "target_confirmed",
+        "externally_verifiable"
+      ],
+      "recommended_required_fields": [
+        "action_id",
+        "created_at",
+        "actor",
+        "action.type",
+        "action.status",
+        "proof_level",
+        "target_system",
+        "traceability"
+      ],
+      "target_confirmed_evidence": [
+        "message_id",
+        "delivery_id",
+        "sent_at"
+      ],
+      "notes": "Use fingerprints for subject/body content when possible. Do not include recipient personal data in public examples."
+    },
+    "document.generated": {
+      "label": "Document generated",
+      "description": "An AI workflow generates or attempts to generate a document.",
+      "recommended_minimum_proof_level": "executed",
+      "allowed_proof_levels": [
+        "declared",
+        "executed",
+        "target_confirmed",
+        "externally_verifiable"
+      ],
+      "recommended_required_fields": [
+        "action_id",
+        "created_at",
+        "actor",
+        "action.type",
+        "action.status",
+        "proof_level",
+        "traceability"
+      ],
+      "target_confirmed_evidence": [
+        "file_id",
+        "document_id",
+        "storage_reference",
+        "target_confirmed_at"
+      ],
+      "notes": "Prefer a document fingerprint or storage reference instead of raw document content."
+    },
+    "file.delivered": {
+      "label": "File delivered",
+      "description": "An AI workflow or automation delivers a file to a target system, recipient, or storage location.",
+      "recommended_minimum_proof_level": "target_confirmed",
+      "allowed_proof_levels": [
+        "declared",
+        "executed",
+        "target_confirmed",
+        "externally_verifiable"
+      ],
+      "recommended_required_fields": [
+        "action_id",
+        "created_at",
+        "actor",
+        "action.type",
+        "action.status",
+        "proof_level",
+        "target_system",
+        "traceability"
+      ],
+      "target_confirmed_evidence": [
+        "file_id",
+        "delivery_id",
+        "storage_reference",
+        "delivered_at"
+      ],
+      "notes": "Delivery reference does not prove that the recipient opened, accepted, or understood the file."
+    },
+    "decision.recorded": {
+      "label": "Decision recorded",
+      "description": "An AI-assisted decision, recommendation, or decision-related event is recorded.",
+      "recommended_minimum_proof_level": "declared",
+      "allowed_proof_levels": [
+        "declared",
+        "executed",
+        "target_confirmed",
+        "externally_verifiable"
+      ],
+      "recommended_required_fields": [
+        "action_id",
+        "created_at",
+        "actor",
+        "action.type",
+        "action.status",
+        "proof_level",
+        "traceability",
+        "limitations"
+      ],
+      "target_confirmed_evidence": [
+        "decision_record_id",
+        "register_reference",
+        "recorded_at"
+      ],
+      "notes": "This action type is sensitive. Do not claim that TimeProofs proves the decision was correct, fair, lawful, or compliant."
+    },
+    "request.classified": {
+      "label": "Request classified",
+      "description": "An AI workflow classifies an incoming request, ticket, message, document, or case.",
+      "recommended_minimum_proof_level": "executed",
+      "allowed_proof_levels": [
+        "declared",
+        "executed",
+        "target_confirmed",
+        "externally_verifiable"
+      ],
+      "recommended_required_fields": [
+        "action_id",
+        "created_at",
+        "actor",
+        "action.type",
+        "action.status",
+        "proof_level",
+        "traceability"
+      ],
+      "target_confirmed_evidence": [
+        "classification_id",
+        "ticket_id",
+        "case_id",
+        "recorded_at"
+      ],
+      "notes": "A classification record does not prove that the classification is accurate or unbiased."
+    }
+  }
+}
