@@ -5,6 +5,7 @@
   "description": "Initial documentation-oriented registry for future TimeProofs Action File v1 action types and proof-level guidance. This file does not enforce runtime validation yet.",
   "version": "0.1.0-design",
   "status": "documentation-only",
+  "schema_note": "This registry is not a validation schema for Action Files. The future .action.json schema will be defined separately.",
   "proof_levels": [
     "declared",
     "executed",
@@ -106,6 +107,32 @@
         "target_confirmed_at"
       ],
       "notes": "The ticket reference helps reconstruct the action, but TimeProofs does not verify ticket content or support decisions."
+    },
+    "email.drafted": {
+      "label": "Email drafted",
+      "description": "An AI workflow drafts or prepares an email without confirming that it was sent.",
+      "recommended_minimum_proof_level": "declared",
+      "allowed_proof_levels": [
+        "declared",
+        "executed",
+        "target_confirmed",
+        "externally_verifiable"
+      ],
+      "recommended_required_fields": [
+        "action_id",
+        "created_at",
+        "actor",
+        "action.type",
+        "action.status",
+        "proof_level",
+        "traceability"
+      ],
+      "target_confirmed_evidence": [
+        "draft_id",
+        "message_draft_reference",
+        "created_at"
+      ],
+      "notes": "A drafted email does not prove that the email was sent, received, opened, lawful, or correct. Use fingerprints for subject/body content when possible."
     },
     "email.sent": {
       "label": "Email sent",
