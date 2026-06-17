@@ -2,7 +2,7 @@
  * TimeProofs Action File v1 local helpers
  *
  * Scope:
- * - Local Action File construction, canonicalization, and hashing only.
+ * - Local Action File construction, canonicalization, hashing, and validation only.
  * - No API calls.
  * - No seal creation.
  * - No verification of legal/compliance claims.
@@ -29,10 +29,13 @@
 
   const HASHABLE_TOP_LEVEL_KEYS = ["format", "schema_version", "action_core"];
   const NON_HASHABLE_TOP_LEVEL_KEYS = ["integrity", "local_annotations", "verification_result"];
+  const ALLOWED_TOP_LEVEL_KEYS = HASHABLE_TOP_LEVEL_KEYS.concat(NON_HASHABLE_TOP_LEVEL_KEYS);
 
   const ACTOR_TYPES = ["ai_agent", "automation", "human", "system", "hybrid"];
   const ACTION_STATUSES = ["declared", "executed", "target_confirmed", "failed", "partial", "cancelled"];
   const PROOF_LEVELS = ["declared", "executed", "target_confirmed", "externally_verifiable"];
+
+  const PAYLOAD_HASH_PATTERN = /^sha256:[a-f0-9]{64}$/;
 
   const OPTIONAL_ACTION_CORE_KEYS = [
     "workflow",
@@ -130,7 +133,7 @@
   }
 
   function canonicalizeJsonValue(value) {
-    assertJsonCompatible(value, "$");
+    assertJsonCompatible(value, "$ ".trim());
 
     if (value === null) return "null";
 
@@ -347,6 +350,153 @@
     };
   }
 
+  async function validateActionFile(actionFile, options) {
+    const cfg = isPlainObject(options) ? options : {};
+    const requirePayloadHash = cfg.require_payload_hash !== false;
+    const errors = [];
+    const warnings = [];
+    let expectedPayloadHash = null;
+    let actualPayloadHash = null;
+
+    function addError(message) {
+      errors.push(message);
+    }
+
+    function addWarning(message) {
+      warnings.push(message);
+    }
+
+    if (!isPlainObject(actionFile)) {
+      return {
+        ok: false,
+        status: "invalid_structure",
+        errors: ["Action File must be a JSON object"],
+        warnings,
+        expected_payload_hash: null,
+        actual_payload_hash: null,
+        profile: CANONICALIZATION_PROFILE,
+        hash_algorithm: HASH_ALGORITHM,
+      };
+    }
+
+    try {
+      assertJsonCompatible(actionFile, "action_file");
+    } catch (error) {
+      addError(error.message);
+    }
+
+    for (const key of Object.keys(actionFile)) {
+      if (!ALLOWED_TOP_LEVEL_KEYS.includes(key)) {
+        addError(`Unexpected top-level key: ${key}`);
+      }
+    }
+
+    if (actionFile.format !== FORMAT) {
+      addError(`format must be ${FORMAT}`);
+    }
+
+    if (typeof actionFile.schema_version !== "string" || actionFile.schema_version.trim() === "") {
+      addError("schema_version must be a non-empty string");
+    }
+
+    if (!isPlainObject(actionFile.action_core)) {
+      addError("action_core must be an object");
+    } else {
+      try {
+        validateActionCore(actionFile.action_core);
+      } catch (error) {
+        addError(error.message);
+      }
+    }
+
+    if (Object.prototype.hasOwnProperty.call(actionFile, "integrity")) {
+      if (!isPlainObject(actionFile.integrity)) {
+        addError("integrity must be an object when present");
+      } else {
+        const integrity = actionFile.integrity;
+
+        if (
+          Object.prototype.hasOwnProperty.call(integrity, "canonicalization_profile") &&
+          integrity.canonicalization_profile !== CANONICALIZATION_PROFILE
+        ) {
+          addError(`integrity.canonicalization_profile must be ${CANONICALIZATION_PROFILE}`);
+        }
+
+        if (!Object.prototype.hasOwnProperty.call(integrity, "canonicalization_profile")) {
+          addWarning("integrity.canonicalization_profile is missing");
+        }
+
+        if (
+          Object.prototype.hasOwnProperty.call(integrity, "hash_algorithm") &&
+          integrity.hash_algorithm !== HASH_ALGORITHM
+        ) {
+          addError(`integrity.hash_algorithm must be ${HASH_ALGORITHM}`);
+        }
+
+        if (!Object.prototype.hasOwnProperty.call(integrity, "hash_algorithm")) {
+          addWarning("integrity.hash_algorithm is missing");
+        }
+
+        if (typeof integrity.payload_hash === "string" && integrity.payload_hash.trim() !== "") {
+          expectedPayloadHash = integrity.payload_hash;
+          if (!PAYLOAD_HASH_PATTERN.test(expectedPayloadHash)) {
+            addError("integrity.payload_hash must match sha256:<64 lowercase hex>");
+          }
+        } else if (requirePayloadHash) {
+          addError("integrity.payload_hash is required");
+        }
+      }
+    } else if (requirePayloadHash) {
+      addError("integrity is required when require_payload_hash is true");
+    } else {
+      addWarning("integrity is missing");
+    }
+
+    if (
+      Object.prototype.hasOwnProperty.call(actionFile, "local_annotations") &&
+      !isPlainObject(actionFile.local_annotations)
+    ) {
+      addError("local_annotations must be an object when present");
+    }
+
+    if (
+      Object.prototype.hasOwnProperty.call(actionFile, "verification_result") &&
+      !isPlainObject(actionFile.verification_result)
+    ) {
+      addError("verification_result must be an object when present");
+    }
+
+    const canComputeHash = errors.length === 0 || errors.every((error) => error === "integrity.payload_hash is required");
+
+    if (canComputeHash) {
+      try {
+        actualPayloadHash = await hashActionFileCore(actionFile);
+      } catch (error) {
+        addError(`Unable to compute payload hash: ${error.message}`);
+      }
+    }
+
+    if (expectedPayloadHash && actualPayloadHash && expectedPayloadHash !== actualPayloadHash) {
+      addError("integrity.payload_hash does not match the recomputed payload hash");
+    }
+
+    let status = "valid";
+    if (errors.length > 0) {
+      status = expectedPayloadHash && actualPayloadHash && expectedPayloadHash !== actualPayloadHash ? "modified_payload" : "invalid_structure";
+    }
+
+    return {
+      ok: errors.length === 0,
+      status,
+      errors,
+      warnings,
+      expected_payload_hash: expectedPayloadHash,
+      actual_payload_hash: actualPayloadHash,
+      profile: CANONICALIZATION_PROFILE,
+      hash_algorithm: HASH_ALGORITHM,
+    };
+  }
+
   function isNonHashableTopLevelKey(key) {
     return NON_HASHABLE_TOP_LEVEL_KEYS.includes(key);
   }
@@ -363,6 +513,7 @@
     PROOF_LEVELS,
     createActionFile,
     validateActionCore,
+    validateActionFile,
     createHashableActionFilePayload,
     canonicalizeActionFileCore,
     canonicalizeJsonValue,
