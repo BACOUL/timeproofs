@@ -10,6 +10,7 @@ const path = require("path");
 const {
   CANONICALIZATION_PROFILE,
   createActionFile,
+  validateActionFile,
   createHashableActionFilePayload,
   canonicalizeActionFileCore,
   hashActionFileCore,
@@ -39,6 +40,14 @@ async function expectHash(relativePath, expectedHash) {
   assert.strictEqual(check.expected, expectedHash);
   assert.strictEqual(check.actual, expectedHash);
   assert.strictEqual(check.profile, CANONICALIZATION_PROFILE);
+
+  const validation = await validateActionFile(actionFile);
+  assert.strictEqual(validation.ok, true, `${relativePath} validateActionFile should pass`);
+  assert.strictEqual(validation.status, "valid");
+  assert.strictEqual(validation.expected_payload_hash, expectedHash);
+  assert.strictEqual(validation.actual_payload_hash, expectedHash);
+  assert.deepStrictEqual(validation.errors, []);
+  assert.strictEqual(validation.profile, CANONICALIZATION_PROFILE);
 }
 
 async function main() {
@@ -76,6 +85,8 @@ async function main() {
     originalHash,
     "changing local_annotations must not change payload hash"
   );
+  const localAnnotationValidation = await validateActionFile(localAnnotationMutation);
+  assert.strictEqual(localAnnotationValidation.ok, true, "changing local_annotations should still validate");
 
   const integrityMutation = cloneJson(targetConfirmed);
   integrityMutation.integrity.payload_hash = "sha256:0000000000000000000000000000000000000000000000000000000000000000";
@@ -85,6 +96,10 @@ async function main() {
     originalHash,
     "changing integrity must not change payload hash"
   );
+  const integrityMutationValidation = await validateActionFile(integrityMutation);
+  assert.strictEqual(integrityMutationValidation.ok, false, "wrong integrity.payload_hash should fail validation");
+  assert.strictEqual(integrityMutationValidation.status, "modified_payload");
+  assert.strictEqual(integrityMutationValidation.actual_payload_hash, originalHash);
 
   const actionCoreMutation = cloneJson(targetConfirmed);
   actionCoreMutation.action_core.action.summary = "Created a support ticket from a modified incoming request.";
@@ -92,6 +107,13 @@ async function main() {
     await hashActionFileCore(actionCoreMutation),
     "sha256:0c3ee55db1b65e55eafc3cb33c1c09d5b857161f3cf0535bb169054de537c3a7",
     "changing action_core.action.summary must change payload hash"
+  );
+  const actionCoreMutationValidation = await validateActionFile(actionCoreMutation);
+  assert.strictEqual(actionCoreMutationValidation.ok, false, "changed action_core should fail validation against stored hash");
+  assert.strictEqual(actionCoreMutationValidation.status, "modified_payload");
+  assert.ok(
+    actionCoreMutationValidation.errors.includes("integrity.payload_hash does not match the recomputed payload hash"),
+    "changed action_core should report payload hash mismatch"
   );
 
   const evidenceOrderMutation = cloneJson(readJson("examples/action-files/externally-verifiable-file-delivered.action.json"));
@@ -101,6 +123,9 @@ async function main() {
     "sha256:101d847f15ffca1dceaa26d8e1b0da761fd29b748b2acd314b8b7e12c086e6ad",
     "changing array order inside action_core must change payload hash"
   );
+  const evidenceOrderValidation = await validateActionFile(evidenceOrderMutation);
+  assert.strictEqual(evidenceOrderValidation.ok, false, "changed evidence order should fail validation");
+  assert.strictEqual(evidenceOrderValidation.status, "modified_payload");
 
   const hashablePayload = createHashableActionFilePayload(targetConfirmed);
   assert.deepStrictEqual(Object.keys(hashablePayload).sort(), ["action_core", "format", "schema_version"]);
@@ -129,6 +154,18 @@ async function main() {
     await hashActionFileCore(createdFromCore),
     "sha256:51679947418fdef8abec1f0171e236685cc7f3027b548816765f8708eacc61c9",
     "createActionFile from action_core should preserve the same hashable payload"
+  );
+  const createdFromCoreMissingHash = await validateActionFile(createdFromCore);
+  assert.strictEqual(createdFromCoreMissingHash.ok, false, "created file without payload_hash should fail strict validation");
+  assert.ok(
+    createdFromCoreMissingHash.errors.includes("integrity.payload_hash is required"),
+    "strict validation should require integrity.payload_hash"
+  );
+  const createdFromCoreLooseValidation = await validateActionFile(createdFromCore, { require_payload_hash: false });
+  assert.strictEqual(createdFromCoreLooseValidation.ok, true, "loose validation should allow missing payload_hash");
+  assert.strictEqual(
+    createdFromCoreLooseValidation.actual_payload_hash,
+    "sha256:51679947418fdef8abec1f0171e236685cc7f3027b548816765f8708eacc61c9"
   );
 
   const createdFromFields = createActionFile({
@@ -171,6 +208,24 @@ async function main() {
   assert.strictEqual(createdFromFields.integrity.canonicalization_profile, "timeproofs-json-canonical-v1");
   assert.ok(!createdFromFields.local_annotations, "local_annotations should be omitted unless provided or requested");
   assert.ok(!createdFromFields.verification_result, "verification_result should be omitted unless provided or requested");
+
+  const invalidTopLevel = cloneJson(targetConfirmed);
+  invalidTopLevel.seal = { status: "unexpected_top_level" };
+  const invalidTopLevelValidation = await validateActionFile(invalidTopLevel);
+  assert.strictEqual(invalidTopLevelValidation.ok, false, "unexpected top-level seal should fail validation");
+  assert.ok(
+    invalidTopLevelValidation.errors.includes("Unexpected top-level key: seal"),
+    "unexpected top-level key should be reported"
+  );
+
+  const invalidPayloadHashFormat = cloneJson(targetConfirmed);
+  invalidPayloadHashFormat.integrity.payload_hash = "sha256:ABC";
+  const invalidPayloadHashValidation = await validateActionFile(invalidPayloadHashFormat);
+  assert.strictEqual(invalidPayloadHashValidation.ok, false, "invalid payload hash format should fail validation");
+  assert.ok(
+    invalidPayloadHashValidation.errors.includes("integrity.payload_hash must match sha256:<64 lowercase hex>"),
+    "invalid payload hash format should be reported"
+  );
 
   assert.throws(
     () =>
