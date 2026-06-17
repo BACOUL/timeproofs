@@ -246,10 +246,7 @@ async function handleSeal(req) {
     return sealError("validation_failed", "metadata must be a non-sensitive JSON object when present.", 422);
   }
 
-  const sealSecretB64 =
-    typeof SEAL_ED25519_SECRET === "string" && SEAL_ED25519_SECRET.trim()
-      ? SEAL_ED25519_SECRET.trim()
-      : null;
+  const sealSecretB64 = readOptionalGlobalString("SEAL_ED25519_SECRET");
 
   if (!sealSecretB64) {
     return j(
@@ -265,10 +262,7 @@ async function handleSeal(req) {
     );
   }
 
-  const publicKeyId =
-    typeof SEAL_PUBLIC_KEY_ID === "string" && SEAL_PUBLIC_KEY_ID.trim()
-      ? SEAL_PUBLIC_KEY_ID.trim()
-      : SEAL_DEFAULT_PUBLIC_KEY_ID;
+  const publicKeyId = readOptionalGlobalString("SEAL_PUBLIC_KEY_ID") || SEAL_DEFAULT_PUBLIC_KEY_ID;
 
   const sealPayload = {
     seal_version: SEAL_VERSION,
@@ -645,4 +639,13 @@ function canonicalizeJsonValue(value) {
   }
 
   throw new Error("Unsupported non-JSON value");
+}
+
+function readOptionalGlobalString(name) {
+  try {
+    const value = globalThis[name];
+    return typeof value === "string" && value.trim() ? value.trim() : null;
+  } catch (_) {
+    return null;
+  }
 }
