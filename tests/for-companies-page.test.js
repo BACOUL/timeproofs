@@ -26,7 +26,7 @@ assert.match(html, /Procurement teams/, "page should address procurement teams")
 assert.match(html, /Operations teams/, "page should address operations teams");
 assert.match(html, /Risk and compliance teams/, "page should address risk and compliance teams");
 assert.match(html, /AI builders and integrators/, "page should address AI builders and integrators");
-assert.match(html, /structured \.action\.json/, "page should mention the Action File format");
+assert.match(html, /structured\s*(?:<[^>]+>)*\.action\.json/i, "page should mention the Action File format");
 assert.match(html, /local payload hash/, "page should mention local payload hash");
 assert.match(html, /TimeProofs Seal/, "page should mention the Seal");
 assert.match(html, /detect whether the saved Action File changed/, "page should explain verification value");
