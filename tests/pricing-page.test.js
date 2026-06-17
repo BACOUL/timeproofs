@@ -39,12 +39,12 @@ assert.match(html, /Create an Action File/, "page should include creation CTA");
 assert.match(html, /Verify a proof/, "page should include verification CTA");
 
 for (const forbiddenClaim of [
-  /enterprise certification/i,
-  /court-ready assurance/i,
+  /TimeProofs provides enterprise certification/i,
+  /TimeProofs provides court-ready assurance/i,
   /full compliance guarantee/i,
   /guarantees legal validity/i,
   /guarantees regulatory compliance/i,
-  /AI action was correct/i,
+  /guarantees the AI action was correct/i,
   /online payment is available/i,
   /subscription is available now/i,
   /dashboard included/i,
