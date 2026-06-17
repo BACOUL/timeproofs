@@ -39,8 +39,9 @@ assert.match(html, /Request a pilot/, "page should include pilot CTA");
 for (const forbiddenClaim of [
   /judges whether the AI was correct/i,
   /guarantees legal validity/i,
-  /third party will accept the record/i,
-  /legal proof guarantee/i,
+  /guarantees regulatory compliance/i,
+  /guarantees third-party acceptance/i,
+  /TimeProofs provides a legal proof guarantee/i,
   /court-ready/i,
   /legally proven/i,
   /full compliance guarantee/i,
