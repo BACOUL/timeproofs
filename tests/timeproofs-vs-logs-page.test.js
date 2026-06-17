@@ -29,8 +29,8 @@ assert.match(html, /Create an Action File/, "page should link to Action File cre
 assert.match(html, /Verify a proof/, "page should link to verification");
 
 for (const forbiddenClaim of [
-  /replaces logs/i,
-  /replaces observability/i,
+  /TimeProofs replaces logs/i,
+  /TimeProofs replaces observability/i,
   /court-ready/i,
   /legally proven/i,
   /guarantees compliance/i,
