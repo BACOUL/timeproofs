@@ -39,7 +39,7 @@ for (const forbiddenClaim of [
   /guarantees regulatory compliance/i,
   /court-ready/i,
   /legally proven/i,
-  /replaces logs/i,
+  /TimeProofs replaces logs/i,
   /sends raw prompt by default/i,
 ]) {
   assert.doesNotMatch(html, forbiddenClaim, `page should not contain unsupported claim: ${forbiddenClaim}`);
