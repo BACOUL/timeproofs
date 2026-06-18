@@ -19,7 +19,6 @@ const requiredFiles = [
   "for-companies.html",
   "how-it-works.html",
   "demo-simulated-ai-action.html",
-  "logs-vs-timeproofs.html",
   "verify.html",
   "docs.html",
   "proofspec.html",
@@ -38,6 +37,10 @@ for (const file of requiredFiles) {
   const expectedLoc = file === "index.html" ? "https://timeproofs.io/" : `https://timeproofs.io/${file}`;
   assert.match(sitemap, new RegExp(expectedLoc.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), `sitemap should include ${expectedLoc}`);
 }
+
+assert.doesNotMatch(sitemap, /logs-vs-timeproofs\.html/, "sitemap should not include missing legacy page");
+assert.doesNotMatch(sitemap, /about\.html/, "sitemap should not include old about page unless restored");
+assert.doesNotMatch(sitemap, /regulations\.html/, "sitemap should not include old regulations page unless restored");
 
 const currentPages = [
   "index.html",
@@ -90,7 +93,8 @@ assert.match(security, /public keys/i, "security page should mention public keys
 assert.match(security, /no blockchain by default/i, "security page should mention no blockchain by default");
 
 const privacy = fs.readFileSync(path.join(root, "privacy.html"), "utf8");
-assert.match(privacy, /hash-only sealing by default/i, "privacy page should keep hash-only model");
-assert.match(privacy, /sensitive content is not uploaded by default/i, "privacy page should keep no sensitive upload default");
+assert.match(privacy, /hash-only by default/i, "privacy page should keep hash-only model");
+assert.match(privacy, /What TimeProofs should never receive by default/i, "privacy page should keep sensitive-data boundary");
+assert.match(privacy, /sensitive action data does not need to be uploaded for verification/i, "privacy page should keep local verification privacy boundary");
 
 console.log("TimeProofs V1 final QA static checks passed.");
