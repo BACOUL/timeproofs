@@ -14,6 +14,7 @@ const pagePath = path.join(root, "for-ai-agencies.html");
 const sitemapPath = path.join(root, "sitemap.xml");
 
 assert.ok(fs.existsSync(pagePath), "for-ai-agencies.html should exist");
+assert.ok(fs.existsSync(sitemapPath), "sitemap.xml should exist");
 
 const html = fs.readFileSync(pagePath, "utf8");
 const sitemap = fs.readFileSync(sitemapPath, "utf8");
@@ -21,7 +22,8 @@ const sitemap = fs.readFileSync(sitemapPath, "utf8");
 assert.match(html, /Add a black box to the AI workflows you deliver/i, "page should use agency positioning");
 assert.match(html, /AI agencies/i, "page should address AI agencies");
 assert.match(html, /no-code builders/i, "page should address no-code builders");
-assert.match(html, /Make and n8n builders/i, "page should mention Make and n8n builders");
+assert.match(html, /Make consultants/i, "page should mention Make consultants");
+assert.match(html, /n8n consultants/i, "page should mention n8n consultants");
 assert.match(html, /Zapier consultants/i, "page should mention Zapier consultants");
 assert.match(html, /chatbot integrators/i, "page should mention chatbot integrators");
 assert.match(html, /first channel/i, "page should frame agencies as validation channel");
@@ -30,12 +32,13 @@ assert.match(html, /How agencies install TimeProofs/i, "page should include inst
 assert.match(html, /Generate the Action File after the business action/i, "page should explain Action File generation after business action");
 assert.match(html, /Seal only the payload hash/i, "page should preserve hash-only sealing");
 assert.match(html, /Do not send raw prompts, outputs, files, credentials or client data by default/i, "page should preserve sensitive-data guardrail");
-assert.match(html, /Agency Kit/i, "page should mention Agency Kit");
-assert.match(html, /coming after validation/i, "page should avoid implying Agency Kit is live");
+assert.match(html, /Agency Kit 999 €/i, "page should mention Agency Kit 999 €");
+assert.match(html, /validation-stage offer/i, "page should avoid implying Agency Kit is fully launched");
 assert.match(html, /Request an agency pilot/i, "page should include agency pilot CTA");
 assert.match(html, /\/contact\.html/i, "page should link to contact page");
 assert.match(html, /\/pricing\.html/i, "page should link to pricing page");
 assert.match(html, /\/privacy\.html/i, "page should link to privacy page");
+assert.match(html, /\/demo-simulated-ai-action\.html/i, "page should link to the simulated demo");
 
 const forbiddenClaims = [
   /certified integrator/i,
@@ -46,6 +49,7 @@ const forbiddenClaims = [
   /full AI Act compliance guarantee/i,
   /full GDPR compliance guarantee/i,
   /AI correctness guarantee/i,
+  /proves the AI was correct/i,
   /replaces technical logs/i,
   /upload raw prompts by default/i,
   /upload raw outputs by default/i,
@@ -57,6 +61,7 @@ for (const forbiddenClaim of forbiddenClaims) {
   assert.doesNotMatch(html, forbiddenClaim, `page should avoid unsupported claim: ${forbiddenClaim}`);
 }
 
-assert.match(sitemap, /https:\/\/timeproofs\.io\/for-ai-agencies\.html/i, "sitemap should include for-ai-agencies.html");
+const sitemapMatches = sitemap.match(/https:\/\/timeproofs\.io\/for-ai-agencies\.html/g) || [];
+assert.strictEqual(sitemapMatches.length, 1, "sitemap should include for-ai-agencies.html exactly once");
 
 console.log("For AI Agencies page static checks passed.");
