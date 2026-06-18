@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" id="top" data-page="docs.html">
 <head>
-  <!-- Core -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta name="color-scheme" content="dark light"/>
-  <title>TimeProofs Docs - AI Action Files and proof bundles</title>
+  <title>TimeProofs Developer Docs - Action File V1 API</title>
   <meta name="application-name" content="TimeProofs"/>
-  <meta name="description" content="Docs for TimeProofs AI Action Files, hash-only sealing, .tproof.json proof bundles, fingerprint verification, and backward-compatible proof primitives."/>
+  <meta name="description" content="Developer documentation for TimeProofs Action File V1: /api/seal, /api/verify-seal, canonical payload hashes, public keys, legacy /api/timestamp compatibility, and OpenAI, Make and n8n integration flows."/>
   <meta name="robots" content="index,follow"/>
   <meta name="theme-color" content="#0b1020"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -15,751 +14,232 @@
   <link rel="canonical" href="https://timeproofs.io/docs.html"/>
   <link rel="alternate" hreflang="en" href="https://timeproofs.io/docs.html"/>
   <link rel="alternate" hreflang="x-default" href="https://timeproofs.io/docs.html"/>
-
-  <!-- Feeds / Docs -->
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"/>
   <link rel="alternate" type="application/yaml" href="/openapi.yaml" title="OpenAPI"/>
   <link rel="author" href="/humans.txt"/>
-
-  <!-- Perf -->
-  <link rel="preconnect" href="https://api.timeproofs.io" crossorigin/>
-  <link rel="dns-prefetch" href="//api.timeproofs.io"/>
-  <link rel="preconnect" href="https://timeproofs-api.jeason-bacoul.workers.dev" crossorigin/>
-  <link rel="dns-prefetch" href="//timeproofs-api.jeason-bacoul.workers.dev"/>
-  <link rel="preconnect" href="https://plausible.io" crossorigin/>
   <link rel="preload" as="image" href="/assets/logo.png" fetchpriority="high"/>
-  <link rel="preload" as="image" href="/og.png"/>
-
-  <!-- Icons / Manifest -->
   <link rel="icon" href="/assets/favicon.ico" sizes="any"/>
   <link rel="icon" href="/assets/logo.svg" type="image/svg+xml"/>
-  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"/>
-  <link rel="manifest" href="/site.webmanifest"/>
-
-  <!-- Social -->
-  <meta property="og:title" content="TimeProofs Docs - AI Action Files and proof bundles"/>
-  <meta property="og:description" content="Understand TimeProofs AI Action Files, .tproof.json proof bundles, hash-only sealing, and fingerprint verification."/>
+  <meta property="og:title" content="TimeProofs Developer Docs - Action File V1 API"/>
+  <meta property="og:description" content="Copy-paste developer docs for Action File V1, hash-only sealing, verify-seal and legacy timestamp compatibility."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://timeproofs.io/docs.html"/>
   <meta property="og:image" content="https://timeproofs.io/og.png"/>
-  <meta property="og:image:alt" content="TimeProofs — API Docs"/>
-  <meta property="og:image:width" content="1200"/>
-  <meta property="og:image:height" content="630"/>
   <meta property="og:site_name" content="TimeProofs"/>
-  <meta property="og:locale" content="en_US"/>
-  <meta property="og:locale:alternate" content="fr_FR"/>
   <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="TimeProofs Docs - AI Action Files and proof bundles"/>
-  <meta name="twitter:description" content="AI Action Files, proof bundles, hash-only sealing, and verification docs."/>
+  <meta name="twitter:title" content="TimeProofs Developer Docs - Action File V1 API"/>
+  <meta name="twitter:description" content="Action File V1 API, /api/seal, /api/verify-seal, public keys, curl examples and OpenAI, Make and n8n flows."/>
   <meta name="twitter:image" content="https://timeproofs.io/og.png"/>
-
-  <!-- Security meta -->
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
-
-  <!-- CSP v0.2 -->
-  <meta http-equiv="Content-Security-Policy" content="
-default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev;
-worker-src 'self' blob:;
-img-src 'self' data: https:;
-style-src 'self' 'unsafe-inline';
-script-src 'self' 'nonce-TP-2025' https://plausible.io;
-connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io;
-font-src 'self' https: data:;
-object-src 'none';
-base-uri 'self';
-form-action 'self';
-frame-ancestors 'none';
-upgrade-insecure-requests">
-
-  <!-- Analytics -->
-  <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2025"></script>
-
-  <!-- JSON-LD: Organization -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev; worker-src 'self' blob:; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' 'nonce-TP-2026' https://plausible.io; connect-src 'self' https://api.timeproofs.io https://timeproofs-api.jeason-bacoul.workers.dev https://plausible.io; font-src 'self' https: data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"/>
+  <script defer data-domain="timeproofs.io" src="https://plausible.io/js/script.js" nonce="TP-2026"></script>
   <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"Organization",
-    "name":"TimeProofs",
-    "alternateName":"TimeProofs Official",
-    "url":"https://timeproofs.io/",
-    "logo":"https://timeproofs.io/assets/logo.png",
-    "knowsAbout":[
-      "AI action traceability",
-      "hash-only sealing",
-      "AI Action Files",
-      "cryptographic verification"
-    ],
-    "sameAs":[
-      "https://x.com/timeproofs",
-      "https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2",
-      "https://www.linkedin.com/in/jeason-bacoul-667938281?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
-    ],
-    "contactPoint":[{
-      "@type":"ContactPoint",
-      "email":"contact@timeproofs.io",
-      "contactType":"general",
-      "availableLanguage":["en","fr"]
-    }]
-  }
+  {"@context":"https://schema.org","@type":"TechArticle","headline":"TimeProofs Developer Docs - Action File V1 API","name":"TimeProofs Developer Docs","url":"https://timeproofs.io/docs.html","inLanguage":"en","dateModified":"2026-06-18","description":"Developer documentation for TimeProofs Action File V1, /api/seal, /api/verify-seal, canonical payload hashes, public keys and integration flows."}
   </script>
-
-  <!-- JSON-LD: WebSite -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"WebSite",
-    "name":"TimeProofs",
-    "url":"https://timeproofs.io/",
-    "inLanguage":"en",
-    "dateModified":"2025-12-30"
-  }
-  </script>
-
-  <!-- JSON-LD: WebPage -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"WebPage",
-    "name":"API Docs",
-    "url":"https://timeproofs.io/docs.html",
-    "inLanguage":"en",
-    "isPartOf":{
-      "@type":"WebSite",
-      "name":"TimeProofs",
-      "url":"https://timeproofs.io/"
-    },
-    "datePublished":"2025-10-22",
-    "dateModified":"2025-12-30",
-    "description":"TimeProofs API documentation: timestamp, proof format (.tproof.json), verification, and examples."
-  }
-  </script>
-
-  <!-- Styles -->
   <style>
-    :root{
-      --bg:#0b1020; --bg2:#0b1226; --panel:#0f172a; --line:#1e293b;
-      --text:#f8fafc; --muted:#94a3b8 ; --accent:#22d3ee;
-      --ok:#34d399; --warn:#f59e0b ; --err:#ef4444;
-      --ring:0 0 0 1px #1e293b, 0 10px 40px rgba(34,211,238,.14);
-      --e:cubic-bezier(.22,.61,.36,1)
-    }
-    *{ box-sizing:border-box }
-
-    html{
-      height:100%; max-width:100%; overflow-x:hidden; background:var(--bg);
-      scroll-behavior:smooth;
-      scroll-padding-top:120px;
-    }
-    @media (min-width:900px){ html{ scroll-padding-top:104px } }
-
-    body{
-      margin:0; color:var(--text);
-      font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
-      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-      background:
-        radial-gradient(1200px 600px at 80% -10%, rgba(34,211,238,.06), transparent 60%),
-        conic-gradient(from 220deg at 10% -20%, rgba(34,211,238,.04), transparent 30%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
-    }
-    a{ color:var(--accent); text-decoration:none }
-    a:hover{ text-decoration:underline }
-
-    [id]{ scroll-margin-top:120px }
-    @media (min-width:900px){ [id]{ scroll-margin-top:104px } }
-
-    .skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
-    .skip:focus{
-      position:fixed; left:12px; top:12px; width:auto; height:auto; padding:8px 12px;
-      background:#0d2330; color:#bff1ff; border:1px solid #214a57; border-radius:8px; z-index:2000
-    }
-
-    /* Header */
-    .tp-header{
-      position:fixed; inset:0 0 auto 0; height:64px; z-index:1000;
-      background:rgba(11,16,32,.55); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
-      display:flex; align-items:center; gap:12px; padding:0 16px; transition:background .25s var(--e)
-    }
-    .tp-header.scrolled{ background:rgba(11,16,32,.88) }
-    .tp-brand{
-      display:flex; align-items:center; gap:10px; color:var(--text);
-      font-weight:900; letter-spacing:.2px; font-size:1.08rem; text-decoration:none; margin-right:auto
-    }
-    .tp-brand img{ height:40px; width:40px; object-fit:contain }
-
-    .tp-nav a{
-      color:var(--text);
-      font-weight:700;
-      margin-left:18px;
-      padding:10px 0;
-      display:inline-block;
-      text-underline-offset:3px;
-    }
-    .tp-nav a:hover{ color:var(--accent); text-decoration:underline }
-    .tp-nav a[aria-current="page"]{ color:#9beefb }
-
-    .cta-header{
-      display:none; align-items:center; justify-content:center; height:40px; padding:0 14px;
-      border-radius:10px; background:var(--accent); color:#06202a; font-weight:800; box-shadow:0 6px 24px rgba(34,211,238,.25)
-    }
-    .cta-header:hover{ filter:brightness(1.05) }
-
-    .tp-burger{
-      display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px;
-      border:1px solid var(--line); border-radius:12px; background:#0c1a2e; color:#fff;
-      cursor:pointer; box-shadow:var(--ring)
-    }
-    .tp-burger span{ font-size:20px; line-height:1 }
-
-    .nav-cta{ display:none; }
-
-    @media (min-width:900px){
-      .tp-burger{ display:none }
-      .tp-nav{ display:flex; align-items:center }
-      .cta-header{ display:inline-flex }
-    }
-    @media (max-width:899px){
-      .tp-brand img{ height:34px; width:34px }
-      .tp-nav{
-        position:fixed; top:64px; left:0; right:0; background:#0c1424; border-top:1px solid var(--line);
-        display:flex; flex-direction:column; gap:10px; padding:14px 16px; box-shadow:0 16px 40px rgba(0,0,0,.45);
-        transform:translateY(-10px); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease
-      }
-      .tp-nav a{ margin:4px 0 }
-      .tp-nav[data-state="open"]{ transform:translateY(0); opacity:1; pointer-events:auto }
-      .nav-cta{
-        display:block; margin-top:6px; padding:12px; text-align:center; border-radius:12px;
-        background:var(--accent); color:#06202a; font-weight:800
-      }
-    }
-
-    .wrap{ max-width:1200px; margin:0 auto; padding:0 16px }
-
-    /* HERO */
-    .hero{
-      padding-top:96px; padding-bottom:18px; text-align:center;
-      position:relative; border-bottom:1px solid var(--line);
-    }
-    .hero .icon{ font-size:2rem; line-height:1; margin-bottom:6px }
-    .hero h1{
-      font-size:clamp(1.9rem,4.6vw,2.35rem); margin:.2em 0 .4em; font-weight:900;
-      background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff);
-      -webkit-background-clip:text; background-clip:text; color:transparent;
-    }
-    .hero .lead{
-      color:var(--muted); max-width:900px; margin:0 auto 12px; line-height:1.7;
-    }
-    .badge{
-      display:inline-block; margin-top:6px; padding:6px 12px;
-      border:1px solid #214a57; background:#0d2330; color:#bff1ff;
-      border-radius:999px; font-size:.85rem;
-    }
-
-    .hero-actions{
-      margin-top:10px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
-    }
-    .hero-btn{
-      display:inline-block; padding:8px 14px; border-radius:10px;
-      border:1px solid #22455a; background:#0c1a2e; color:#cfefff;
-      font-weight:700; text-decoration:none; cursor:pointer;
-    }
-    .hero-btn.primary{ background:var(--accent); color:#06202a; border-color:transparent }
-    .hero-btn:hover{ text-decoration:underline }
-
-    /* TOC chips */
-    .toc{
-      display:flex; flex-wrap:wrap; gap:8px; justify-content:center;
-      margin:10px auto 0; max-width:980px;
-    }
-    .chip{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:8px 12px; border-radius:999px;
-      border:1px solid #22314f; background:#050816; color:#e6fbff;
-      font-weight:700; font-size:.9rem; text-decoration:none;
-    }
-    .chip:hover{ text-decoration:underline; border-color:#22d3ee }
-
-    /* Content */
-    main{ padding:0 0 40px }
-    .cards-grid{
-      display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:16px;
-      margin:16px auto 0; max-width:1100px;
-    }
-    @media (max-width:900px){ .cards-grid{ grid-template-columns:minmax(0,1fr) } }
-
-    .card{
-      background:#0c1424; border:1px solid var(--line); border-radius:12px;
-      padding:18px; position:relative;
-    }
-    .card h2{ margin:.2em 0 .4em; font-size:1.2rem; color:#b9e7f5; }
-    .card h3{ color:#aee9f7; font-size:1.02rem; margin:1em 0 .3em; }
-    .hint{ margin:0 0 10px; font-size:.92rem; color:#93a1b5; }
-
-    .step-label{
-      display:inline-flex; align-items:center; gap:6px;
-      padding:4px 10px; border-radius:999px; background:#0b1220; border:1px solid #22314f;
-      font-size:.8rem; color:#9fb3c9; margin-bottom:8px;
-    }
-
-    pre,code{ white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere }
-    pre{
-      max-width:100%; overflow:auto; padding:12px; border-radius:12px;
-      background:#0b1426; border:1px solid #1f2a44; font-size:.9rem; position:relative;
-      max-height:360px;
-    }
-
-    .copy-btn{
-      position:absolute; top:8px; right:8px;
-      display:inline-flex; align-items:center; gap:6px;
-      padding:6px 10px; border-radius:10px;
-      border:1px solid #22455a; background:#0c1a2e; color:#cfefff;
-      font-weight:700; cursor:pointer; font-size:.8rem;
-    }
-    .copy-btn:hover{ filter:brightness(1.1) }
-    .copy-btn .ok{ display:none }
-    .copy-btn.copied .ok{ display:inline }
-    .copy-btn.copied .txt{ display:none }
-
-    .kvs{ display:grid; grid-template-columns:minmax(0,1fr); gap:8px; margin-top:10px; }
-    .kv{
-      display:flex; gap:10px; align-items:flex-start;
-      padding:10px; border-radius:12px; border:1px solid #22314f; background:#0b1220;
-      min-width:0;
-    }
-    .kv .k{ flex:0 0 170px; color:#9fb3c9; font-weight:800; min-width:0 }
-    .kv .v{ color:#e6fbff; font-weight:700; min-width:0; overflow-wrap:anywhere; word-break:break-word }
-    @media (max-width:520px){
-      .kv{ flex-direction:column }
-      .kv .k{ flex-basis:auto }
-    }
-
-    /* Footer */
-    footer{
-      border-top:1px solid var(--line);
-      margin-top:44px;
-      padding:18px;
-      color:#7c8aa5;
-      text-align:center;
-      background:#0b1020;
-    }
-    footer .badges{ display:flex; gap:8px; justify-content:center; margin:10px 0 }
-    footer .badge{
-      display:inline-flex; align-items:center; gap:6px;
-      padding:6px 10px; border:1px solid var(--line); border-radius:999px;
-      background:#0d1628; font-size:.9rem; color:#cfefff; text-decoration:none
-    }
-    footer .links a{
-      color:#cfefff;
-      font-weight:600;
-      text-underline-offset:3px;
-      text-decoration:none;
-    }
-    footer .links a:hover{ color:var(--accent); text-decoration:underline }
-    footer .links a[aria-current="page"]{ color:var(--accent); text-decoration:underline }
-
-    .social{ display:flex; gap:10px; justify-content:center; margin-top:10px }
-    .social a{
-      display:inline-flex; width:40px; height:40px;
-      border:1px solid var(--line); border-radius:12px;
-      align-items:center; justify-content:center;
-      background:#0d1628; transition:transform .18s var(--e); color:#cfefff
-    }
-    .social a:hover{ transform:translateY(-2px) }
-
-    a:focus-visible, .hero-btn:focus-visible, .cta-header:focus-visible, .tp-burger:focus-visible, .copy-btn:focus-visible{
-      outline:2px solid #22d3ee; outline-offset:3px; border-radius:12px;
-    }
+    :root{--bg:#0b1020;--bg2:#0b1226;--panel:#0f172a;--line:#1e293b;--text:#f8fafc;--muted:#94a3b8;--accent:#22d3ee;--ok:#34d399;--warn:#f59e0b;--err:#ef4444;--ring:0 0 0 1px #1e293b,0 10px 40px rgba(34,211,238,.14);--e:cubic-bezier(.22,.61,.36,1)}
+    *{box-sizing:border-box}html{height:100%;max-width:100%;overflow-x:hidden;background:var(--bg);scroll-behavior:smooth;scroll-padding-top:120px;text-size-adjust:100%;-webkit-text-size-adjust:100%}@media(min-width:900px){html{scroll-padding-top:104px}}body{margin:0;color:var(--text);font:16px/1.65 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";background:radial-gradient(1200px 600px at 80% -10%,rgba(34,211,238,.06),transparent 60%),conic-gradient(from 220deg at 10% -20%,rgba(34,211,238,.04),transparent 30%),linear-gradient(180deg,var(--bg),var(--bg2));-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}[id]{scroll-margin-top:120px}@media(min-width:900px){[id]{scroll-margin-top:104px}}.skip{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}.skip:focus{position:fixed;left:12px;top:12px;width:auto;height:auto;padding:8px 12px;background:#0d2330;color:#bff1ff;border:1px solid #214a57;border-radius:8px;z-index:2000}.tp-header{position:fixed;inset:0 0 auto 0;height:64px;z-index:1000;background:rgba(11,16,32,.68);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 16px}.tp-brand{display:flex;align-items:center;gap:10px;color:var(--text);font-weight:950;letter-spacing:.2px;font-size:1.08rem;text-decoration:none;margin-right:auto}.tp-brand img{height:40px;width:40px;object-fit:contain}.tp-nav a{color:var(--text);font-weight:850;margin-left:18px;padding:10px 0;display:inline-block;text-underline-offset:3px}.tp-nav a:hover,.tp-nav a[aria-current="page"]{color:var(--accent);text-decoration:underline}.cta-header{display:none;align-items:center;justify-content:center;height:40px;padding:0 14px;border-radius:10px;background:var(--accent);color:#06202a;font-weight:950;box-shadow:0 6px 24px rgba(34,211,238,.25)}.tp-burger{display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border:1px solid var(--line);border-radius:12px;background:#0c1a2e;color:#fff;cursor:pointer;box-shadow:var(--ring)}.nav-cta{display:none}@media(min-width:900px){.tp-burger{display:none}.tp-nav{display:flex;align-items:center}.cta-header{display:inline-flex}}@media(max-width:899px){.tp-brand img{height:34px;width:34px}.tp-nav{position:fixed;top:64px;left:0;right:0;background:#0c1424;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:10px;padding:14px 16px;box-shadow:0 16px 40px rgba(0,0,0,.45);transform:translateY(-10px);opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease}.tp-nav a{margin:4px 0}.tp-nav[data-state="open"]{transform:translateY(0);opacity:1;pointer-events:auto}.nav-cta{display:block;margin-top:6px;padding:12px;text-align:center;border-radius:12px;background:var(--accent);color:#06202a;font-weight:950}}
+    .wrap{max-width:1200px;margin:0 auto;padding:0 16px}.hero{padding:104px 0 24px;text-align:center;border-bottom:1px solid var(--line)}.badge{display:inline-flex;gap:8px;align-items:center;padding:6px 12px;border:1px solid #214a57;background:#0d2330;color:#bff1ff;border-radius:999px;font-size:.85rem;margin-bottom:12px;box-shadow:var(--ring)}h1{font-size:clamp(2rem,5.4vw,3rem);line-height:1.06;margin:.15em auto .35em;font-weight:1000;max-width:1000px;background:linear-gradient(90deg,#e6fbff,#9beefb 35%,#e6fbff);-webkit-background-clip:text;background-clip:text;color:transparent}.lead{color:var(--muted);max-width:900px;margin:0 auto 14px;line-height:1.75;font-size:clamp(1.02rem,2.5vw,1.15rem)}.hero-actions,.cta-box{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:12px;padding:12px 14px;background:var(--accent);color:#06202a;font-weight:1000;cursor:pointer;text-decoration:none}.btn.secondary{background:#111d33;color:#e2f6ff;border:1px solid #1e2a3e}.btn:hover{filter:brightness(1.04);text-decoration:none}.toc{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px auto 0;max-width:1080px}.chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid #22314f;background:#050816;color:#e6fbff;font-weight:800;font-size:.9rem;text-decoration:none}.chip:hover{border-color:#22d3ee}.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.72fr);gap:16px;margin:18px auto 0}@media(max-width:980px){.layout{grid-template-columns:minmax(0,1fr)}}.card{background:#0c1424;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--ring);position:relative;overflow:hidden}.card h2{margin:.2em 0 .4em;font-size:1.28rem;color:#b9e7f5}.card h3{color:#aee9f7;font-size:1.03rem;margin:1.1em 0 .35em}.hint{margin:0 0 10px;font-size:.95rem;color:#93a1b5}.note{border:1px solid rgba(52,211,153,.35);background:linear-gradient(180deg,rgba(52,211,153,.10),rgba(13,22,40,.96));border-radius:14px;padding:12px;color:#c8f7e2;margin:12px 0}.warning{border-color:rgba(245,158,11,.35);background:linear-gradient(180deg,rgba(245,158,11,.10),rgba(13,22,40,.96));color:#ffe9ba}.step-label{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:#0b1220;border:1px solid #22314f;font-size:.8rem;color:#9fb3c9;margin-bottom:8px;font-weight:900}.kvs{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;margin-top:10px}.kv{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:12px;border:1px solid #22314f;background:#0b1220;min-width:0}.kv .k{flex:0 0 210px;color:#9fb3c9;font-weight:900;min-width:0}.kv .v{color:#e6fbff;font-weight:700;min-width:0;overflow-wrap:anywhere;word-break:break-word}@media(max-width:600px){.kv{flex-direction:column}.kv .k{flex-basis:auto}}pre,code{white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere}pre{max-width:100%;overflow:auto;padding:12px;border-radius:12px;background:#0b1426;border:1px solid #1f2a44;font-size:.9rem;position:relative;max-height:460px}.copy-btn{position:absolute;top:8px;right:8px;display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:10px;border:1px solid #22455a;background:#0c1a2e;color:#cfefff;font-weight:800;cursor:pointer;font-size:.8rem}.copy-btn .ok{display:none}.copy-btn.copied .ok{display:inline}.copy-btn.copied .txt{display:none}ul{color:#cfefff}li{margin:.35em 0}footer{border-top:1px solid var(--line);margin-top:44px;padding:18px;color:#7c8aa5;text-align:center;background:#0b1020}footer .badges{display:flex;gap:8px;justify-content:center;margin:10px 0;flex-wrap:wrap}footer .badge{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:#0d1628;font-size:.9rem;color:#cfefff;text-decoration:none}footer .links a{color:#cfefff;font-weight:600;text-decoration:none}footer .links a:hover{color:var(--accent);text-decoration:underline}a:focus-visible,.btn:focus-visible,.cta-header:focus-visible,.tp-burger:focus-visible,.copy-btn:focus-visible{outline:2px solid #22d3ee;outline-offset:3px;border-radius:12px}
   </style>
-  <noscript><style>.card{transform:none !important}</style></noscript>
 </head>
-
 <body>
   <a href="#main" class="skip">Skip to main content</a>
+  <header class="tp-header" id="hdr" role="banner"><a class="tp-brand" href="/" aria-label="TimeProofs Home"><img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/><span>TimeProofs</span></a><nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation"><a href="/">Home</a><a href="/for-ai-agencies.html">For AI Agencies</a><a href="/logs-vs-timeproofs.html">Logs vs TimeProofs</a><a href="/use-cases-pilots.html">Pilots</a><a href="/for-companies.html">For companies</a><a href="/docs.html" aria-current="page">Docs</a><a href="/pricing.html">Pricing</a><a href="/verify.html">Verify</a><a class="nav-cta" href="/contact.html">Request a pilot</a></nav><a class="cta-header" href="/contact.html">Request a pilot</a><button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu"><span aria-hidden="true">&#9776;</span></button></header>
 
-  <!-- Header -->
-  <header class="tp-header" id="hdr" role="banner">
-    <a class="tp-brand" href="/" aria-label="TimeProofs Home">
-      <img src="/assets/logo.png" alt="TimeProofs logo" width="40" height="40" decoding="async" fetchpriority="high"/>
-      <span>TimeProofs</span>
-    </a>
-    <nav id="tp-nav" class="tp-nav" data-state="closed" aria-label="Main Navigation" role="navigation">
-      <a href="/">Home</a>
-      <a href="/#solution">Action File</a>
-      <a href="/verify.html">Verify</a>
-      <a href="/use-cases.html">Use Cases</a>
-      <a href="/use-cases.html">For Agencies</a>
-      <a href="/docs.html" aria-current="page">Docs</a>
-      <a href="/pricing.html">Pricing</a>
-      <a href="/security.html">Security</a>
-      <a class="nav-cta" href="mailto:contact@timeproofs.io?subject=TimeProofs%20pilot" aria-label="Request a pilot">Request a pilot</a>
-    </nav>
-    <a class="cta-header" href="mailto:contact@timeproofs.io?subject=TimeProofs%20pilot" aria-label="Request a pilot">Request a pilot</a>
-    <button class="tp-burger" id="tp-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tp-nav" aria-haspopup="menu">
-      <span aria-hidden="true">☰</span>
-    </button>
-  </header>
-
-  <main id="main" class="wrap" role="main" aria-describedby="page-title">
-    <section class="hero" role="region" aria-labelledby="page-title">
-      <div class="icon" aria-hidden="true">📚</div>
-      <p class="badge">Status: Public Beta v0.2 · ProofSpec v0.1 · API v0.2 · Privacy-first · No blockchain</p>
-      <h1 id="page-title">API Docs</h1>
-      <p class="lead">
-        Hash locally. Get a signed proof (<code>.tproof.json</code>). Verify later — without uploading your original file.
-      </p>
-
-      <div class="hero-actions">
-        <a class="hero-btn primary" href="/verify.html">Open Verify</a>
-        <a class="hero-btn" href="/proofspec.html">Read ProofSpec</a>
-      </div>
-
-      <nav class="toc" aria-label="On this page">
-        <a class="chip" href="#quickstart">Quickstart</a>
-        <a class="chip" href="#endpoints">Endpoints</a>
-        <a class="chip" href="#proof-file">Proof file</a>
-        <a class="chip" href="#errors">Errors</a>
-        <a class="chip" href="#offline">Offline</a>
-        <a class="chip" href="#faq">FAQ</a>
-      </nav>
+  <main id="main" class="wrap" role="main">
+    <section class="hero" aria-labelledby="page-title">
+      <p class="badge">Developer docs · Action File V1 · Hash-only by default</p>
+      <h1 id="page-title">TimeProofs API for AI Action Files</h1>
+      <p class="lead">Generate an Action File after an AI workflow acts, calculate a canonical payload hash locally, seal only that hash with TimeProofs, then verify the Seal later without uploading sensitive action content by default.</p>
+      <div class="hero-actions"><a class="btn" href="/openapi.yaml">OpenAPI YAML</a><a class="btn secondary" href="/verify.html">Open Verify</a><a class="btn secondary" href="/.well-known/timeproofs-keys.json">Public keys</a></div>
+      <nav class="toc" aria-label="On this page"><a class="chip" href="#flow">Action File flow</a><a class="chip" href="#seal">/api/seal</a><a class="chip" href="#verify-seal">/api/verify-seal</a><a class="chip" href="#legacy">Legacy timestamp</a><a class="chip" href="#keys">Public keys</a><a class="chip" href="#integrations">Integrations</a><a class="chip" href="#limits">Limits</a></nav>
     </section>
 
-    <section class="cards-grid" aria-label="API documentation content">
+    <section class="layout" aria-label="Developer API documentation">
       <article class="card" aria-label="API reference">
-        <div class="step-label" id="quickstart">Start · Quickstart</div>
-        <h2>Quickstart (v0.2)</h2>
-        <p class="hint">
-          Flow: (1) compute SHA-256 locally → (2) POST <code>/api/timestamp</code> → (3) save the <code>.tproof.json</code> proof →
-          (4) verify later with <code>/api/verify</code> using the proof.
-        </p>
+        <div class="step-label" id="flow">Start · Action File generation flow</div>
+        <h2>Recommended Action File V1 flow</h2>
+        <p class="hint">Use this flow after the AI action has already happened in the business system. TimeProofs receives a fingerprint, not the raw client data.</p>
+        <ol>
+          <li>Create the Action File payload with <code>format: "timeproofs.action.v1"</code>.</li>
+          <li>Include the business action: actor, action type, target system, status, proof level and safe references.</li>
+          <li>Do not include <code>integrity.payload_hash</code>, <code>integrity.file_hash</code> or <code>integrity.seal</code> in the payload that is hashed.</li>
+          <li>Canonicalize the payload with deterministic JSON ordering.</li>
+          <li>Compute <code>payload_hash = sha256(canonical_payload)</code>.</li>
+          <li>POST only the hash, action ID and format to <code>/api/seal</code>.</li>
+          <li>Embed the returned Seal and <code>payload_hash</code> in the final <code>.action.json</code>.</li>
+          <li>The company stores the final Action File wherever it wants: Drive, SharePoint, S3, CRM, ticketing system or internal archive.</li>
+        </ol>
+        <div class="note"><strong>Anti-circular-hash rule:</strong> never hash a final file that contains its own hash or Seal. Verification must rebuild the canonical payload with the Seal fields excluded.</div>
 
-<pre><code># 1) Hash locally (example)
-# sha256sum myfile.bin | awk '{print $1}'
+        <h3>Minimal Action File payload before sealing</h3>
+<pre><code>{
+  "format": "timeproofs.action.v1",
+  "action_id": "TP-ACT-2026-000001",
+  "created_at": "2026-06-18T12:00:00Z",
+  "actor": {
+    "type": "ai_agent",
+    "name": "Support assistant",
+    "provider": "OpenAI"
+  },
+  "action": {
+    "type": "support.ticket_created",
+    "status": "target_confirmed",
+    "target_system": "Zendesk",
+    "target_reference": "ticket_12345"
+  },
+  "traceability": {
+    "input_fingerprint": "sha256:&lt;64-hex&gt;",
+    "output_fingerprint": "sha256:&lt;64-hex&gt;"
+  },
+  "proof_level": "target_confirmed"
+}</code></pre>
 
-# 2) Timestamp: server signs the hash and returns a proof
+        <h3>Canonical payload hash</h3>
+<pre><code>// Pseudocode
+const payloadForHash = stripSealFields(actionFile);
+const canonicalPayload = canonicalizeJson(payloadForHash);
+const payloadHash = sha256(canonicalPayload);</code></pre>
+        <p class="hint">The same payload must always produce the same hash even when object keys arrive in a different order.</p>
+
+        <div class="step-label" id="seal">Reference · POST /api/seal</div>
+        <h2>Seal an Action File hash</h2>
+        <p class="hint">Use <code>/api/seal</code> to create a TimeProofs Seal for a canonical Action File payload hash. Do not send raw prompts, outputs, files, credentials or sensitive client content.</p>
+<pre><code>curl -sS https://api.timeproofs.io/api/seal \
+  -H "Content-Type: application/json" \
+  -d '{
+    "payload_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "format": "timeproofs.action.v1",
+    "action_id": "TP-ACT-2026-000001"
+  }'</code></pre>
+        <h3>Example response</h3>
+<pre><code>{
+  "ok": true,
+  "seal_id": "seal_01JZTIMEPROOFS000001",
+  "sealed_at": "2026-06-18T12:00:02Z",
+  "payload_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "format": "timeproofs.action.v1",
+  "action_id": "TP-ACT-2026-000001",
+  "signature": "&lt;signature&gt;",
+  "public_key_id": "timeproofs-main-2026",
+  "verify_url": "https://api.timeproofs.io/api/verify-seal?seal_id=seal_01JZTIMEPROOFS000001"
+}</code></pre>
+
+        <div class="step-label" id="verify-seal">Reference · GET/POST /api/verify-seal</div>
+        <h2>Verify a Seal without raw content</h2>
+        <p class="hint">A verifier can recalculate the local payload hash from the Action File, then verify the Seal by <code>seal_id</code> or by <code>payload_hash</code>. Sensitive action content should stay local.</p>
+<pre><code># GET by seal_id
+curl -sS "https://api.timeproofs.io/api/verify-seal?seal_id=seal_01JZTIMEPROOFS000001"
+
+# POST by seal_id + payload_hash
+curl -sS https://api.timeproofs.io/api/verify-seal \
+  -H "Content-Type: application/json" \
+  -d '{
+    "seal_id": "seal_01JZTIMEPROOFS000001",
+    "payload_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }'</code></pre>
+        <h3>Possible statuses</h3>
+        <div class="kvs" role="list">
+          <div class="kv" role="listitem"><div class="k">valid</div><div class="v">The Seal exists, signature checks pass, and the payload hash matches when provided.</div></div>
+          <div class="kv" role="listitem"><div class="k">not_found</div><div class="v">No Seal was found for the requested identifier or hash.</div></div>
+          <div class="kv" role="listitem"><div class="k">invalid_signature</div><div class="v">The Seal record or signature is not valid.</div></div>
+          <div class="kv" role="listitem"><div class="k">unsupported_format</div><div class="v">The format is not supported by this verifier.</div></div>
+          <div class="kv" role="listitem"><div class="k">key_retired</div><div class="v">The Seal uses a retired key. It may still be historically verifiable if the key was valid at sealing time.</div></div>
+        </div>
+
+        <div class="step-label" id="legacy">Compatibility · Existing /timestamp flow</div>
+        <h2>Backward compatibility: /api/timestamp and /api/verify</h2>
+        <p class="hint">The legacy timestamp API remains documented for existing <code>.tproof.json</code> users. It is a lower-level proof bundle and should not be confused with an Action File.</p>
+<pre><code># Legacy timestamp proof from a hash
 curl -sS https://api.timeproofs.io/api/timestamp \
   -H "Content-Type: application/json" \
   -d '{
-    "hash":"&lt;sha256-hex&gt;",
-    "type":"document",
-    "meta":{"source":"cli"}
+    "hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "type": "document",
+    "meta": { "source": "legacy-client" }
   }' | tee proof.tproof.json
 
-# 3) Verify later (proof-based)
-# Option A (recommended): requires jq
+# Legacy verify using the .tproof.json bundle
 jq -c '{bundle:.}' proof.tproof.json | \
-curl -sS https://api.timeproofs.io/api/verify \
-  -H "Content-Type: application/json" \
-  -d @-
+  curl -sS https://api.timeproofs.io/api/verify \
+    -H "Content-Type: application/json" \
+    -d @-</code></pre>
+        <div class="warning note"><strong>Compatibility note:</strong> <code>.tproof.json</code> proves a timestamped fingerprint. <code>.action.json</code> is the business-level traceability file for an AI action.</div>
 
-# Option B (no jq): paste the proof JSON into "bundle" manually
-# curl -sS https://api.timeproofs.io/api/verify -H "Content-Type: application/json" -d '{"bundle":{...}}'</code></pre>
+        <div class="step-label" id="keys">Trust · Public keys endpoint</div>
+        <h2>Public keys</h2>
+        <p class="hint">Seals include <code>public_key_id</code>. Verifiers should resolve the matching public key from the TimeProofs public keys file and check the signature according to the documented algorithm.</p>
+<pre><code>curl -sS https://timeproofs.io/.well-known/timeproofs-keys.json</code></pre>
+        <p class="hint">The key file should expose key IDs, algorithms, creation dates, statuses such as active or retired, and rotation guidance. Do not rely on private keys or unpublished secrets.</p>
 
-        <div class="step-label" id="endpoints" style="margin-top:16px;">Reference · Endpoints</div>
-        <h2>Endpoints</h2>
-        <p class="hint">Base URL: <code>https://api.timeproofs.io/api</code></p>
+        <div class="step-label" id="integrations">Integration patterns · OpenAI / Make / n8n</div>
+        <h2>Common integration flow</h2>
+        <p class="hint">The correct integration point is after the external business action succeeds, not before. TimeProofs should record what was declared, executed and confirmed.</p>
+        <h3>OpenAI tools / function calls</h3>
+<pre><code>1. AI decides to call a tool such as create_support_ticket.
+2. Your backend executes the real ticket creation in Zendesk, HubSpot or another system.
+3. The target system returns ticket_id, lead_id, message_id or file_id.
+4. Your backend builds a TimeProofs Action File with proof_level = "target_confirmed".
+5. Your backend hashes the canonical payload and calls /api/seal.
+6. Store the final .action.json in the client-controlled archive.</code></pre>
+        <h3>Make scenario</h3>
+<pre><code>Trigger → AI step → business action module → HTTP /api/seal → store .action.json in Drive, SharePoint, S3 or CRM note</code></pre>
+        <h3>n8n workflow</h3>
+<pre><code>Webhook/Cron → AI node → target system node → Function node builds Action File → HTTP Request /api/seal → storage node</code></pre>
 
-        <div class="kvs" role="list">
-          <div class="kv" role="listitem">
-            <div class="k">POST /timestamp</div>
-            <div class="v">Create a signed proof from a SHA-256 hash (no original upload).</div>
-          </div>
-          <div class="kv" role="listitem">
-            <div class="k">POST /verify</div>
-            <div class="v">Verify a proof’s cryptographic integrity (stateless; proof required).</div>
-          </div>
-          <div class="kv" role="listitem">
-            <div class="k">GET /health</div>
-            <div class="v">Health check (service availability).</div>
-          </div>
-        </div>
-
-        <h3>POST /timestamp</h3>
-<pre><code>POST https://api.timeproofs.io/api/timestamp
-Content-Type: application/json
-Accept: application/json
-
-{
-  "hash": "64-hex-sha256",
-  "type": "document",
-  "meta": { "source": "web" }
-}</code></pre>
-
-        <h3>POST /verify</h3>
-<pre><code>POST https://api.timeproofs.io/api/verify
-Content-Type: application/json
-Accept: application/json
-
-{
-  "bundle": { ...the .tproof.json content... }
-}</code></pre>
-
-        <div class="step-label" id="proof-file" style="margin-top:16px;">Format · Proof file</div>
-        <h2>Proof file (.tproof.json)</h2>
-        <p class="hint">
-          A proof contains only hash + timestamp + signature (and optional <code>meta</code>). Your original content is never stored.
-        </p>
-
-<pre><code>{
-  "version": "timeproofs-0.2",
-  "hash": {
-    "algorithm": "SHA-256",
-    "value": "sha256-hex"
-  },
-  "timestamp": {
-    "issuedAt": "2025-11-04T10:22:33.123Z",
-    "issuer": "https://api.timeproofs.io",
-    "nonce": "hex-128bit"
-  },
-  "proof": {
-    "algo": "Ed25519",
-    "signature": "hex-signature",
-    "keyId": "tp-v0-2-main"
-  },
-  "meta": {
-    "type": "document",
-    "source": "web:docs"
-  }
-}</code></pre>
-
-        <div class="step-label" id="errors" style="margin-top:16px;">Ops · Errors</div>
-        <h2>Errors</h2>
-        <p class="hint">
-          Clients should treat errors as <strong>HTTP status + a human message</strong>. Do not hardcode undocumented error codes.
-        </p>
-
-        <div class="kvs" role="list" aria-label="Common error categories">
-          <div class="kv" role="listitem">
-            <div class="k">400 Bad Request</div>
-            <div class="v">Invalid input (e.g., missing fields, malformed JSON, hash not 64-hex).</div>
-          </div>
-          <div class="kv" role="listitem">
-            <div class="k">413 Payload Too Large</div>
-            <div class="v">Request exceeds limits (client should reduce payload).</div>
-          </div>
-          <div class="kv" role="listitem">
-            <div class="k">429 Too Many Requests</div>
-            <div class="v">Rate limited: exponential backoff + jitter (client responsibility).</div>
-          </div>
-          <div class="kv" role="listitem">
-            <div class="k">5xx Server Error</div>
-            <div class="v">Temporary failure: retry with backoff and surface a clear message.</div>
-          </div>
-        </div>
-
-        <h3>Typical error payload (example)</h3>
-<pre><code>{
-  "error": "bad_request",
-  "message": "Hash must be 64 hex characters."
-}</code></pre>
-        <p class="hint">
-          Your integration should always handle: non-JSON responses, missing fields, and unexpected shapes.
-        </p>
-
-        <div class="step-label" id="offline" style="margin-top:16px;">Offline · What “offline” means</div>
-        <h2>Offline</h2>
-        <p class="hint">
-          “Offline” means you can <strong>keep, move, inspect, and archive</strong> the proof file locally anytime.
-          A proof is self-contained: it carries the hash, timestamp, and signature.
-        </p>
-        <p class="hint">
-          For <strong>cryptographic validation</strong>, you need a verifier that knows TimeProofs public keys:
-          you can use the TimeProofs API (<code>/api/verify</code>) when online, or any ProofSpec-compatible verifier that supports the same keys.
-        </p>
-        <p class="hint">
-          Practical workflow: store <code>.tproof.json</code> next to the original file, keep both immutable, and re-verify after transfers/pipelines.
-        </p>
-
-        <div class="step-label" id="faq" style="margin-top:16px;">Help · FAQ</div>
-        <h2>FAQ</h2>
-        <p><strong>Do you store my content?</strong><br/>No. Your original file stays with you. Proofs are hash-only.</p>
-        <p><strong>Why is v0.2 “stateless”?</strong><br/>Verification uses the proof file, not a database lookup.</p>
-        <p><strong>Is a file date enough?</strong><br/>No. File dates are local and editable. TimeProofs signs a cryptographic fingerprint at a precise time.</p>
-        <p><strong>Is this notarization / legal certification?</strong><br/>No. TimeProofs provides a technical proof of existence and integrity, not a legal qualification.</p>
-
-        <div style="margin-top:16px;">
-          <a class="hero-btn" href="#top">↑ Top</a>
-        </div>
+        <div class="step-label" id="limits">Safety · Proof limitations</div>
+        <h2>What the API proves and does not prove</h2>
+        <ul>
+          <li>TimeProofs can show that a canonical payload hash was sealed at a given time by a TimeProofs issuer key.</li>
+          <li>TimeProofs can help verify that an Action File was not modified after sealing, if the verifier rebuilds the same canonical payload hash.</li>
+          <li>TimeProofs does not prove that the AI was correct.</li>
+          <li>TimeProofs does not guarantee legal validity of the underlying action.</li>
+          <li>TimeProofs does not replace technical logs; it complements them with a portable business artifact.</li>
+          <li>Customers remain responsible for Action File content and for storing original evidence.</li>
+        </ul>
+        <div class="cta-box"><a class="btn" href="/openapi.yaml">View OpenAPI</a><a class="btn secondary" href="#top">Top</a></div>
       </article>
 
       <aside class="card" aria-label="Developer shortcuts">
         <div class="step-label">Shortcuts</div>
         <h2>Developer essentials</h2>
-        <p class="hint">Links and minimal references.</p>
-
         <div class="kvs" role="list">
-          <div class="kv" role="listitem">
-            <div class="k">OpenAPI</div>
-            <div class="v"><a href="/openapi.yaml">/openapi.yaml</a></div>
-          </div>
-          <div class="kv" role="listitem">
-            <div class="k">Try in browser</div>
-            <div class="v"><a href="/verify.html">Verify</a></div>
-          </div>
-          <div class="kv" role="listitem">
-            <div class="k">Protocol</div>
-            <div class="v"><a href="/proofspec.html">ProofSpec v0.1</a></div>
-          </div>
-          <div class="kv" role="listitem">
-            <div class="k">Compliance</div>
-            <div class="v"><a href="/regulations.html">Regulations</a></div>
-          </div>
+          <div class="kv" role="listitem"><div class="k">Base URL</div><div class="v"><code>https://api.timeproofs.io</code></div></div>
+          <div class="kv" role="listitem"><div class="k">Seal</div><div class="v"><code>POST /api/seal</code></div></div>
+          <div class="kv" role="listitem"><div class="k">Verify Seal</div><div class="v"><code>GET/POST /api/verify-seal</code></div></div>
+          <div class="kv" role="listitem"><div class="k">Legacy</div><div class="v"><code>POST /api/timestamp</code><br/><code>POST /api/verify</code></div></div>
+          <div class="kv" role="listitem"><div class="k">OpenAPI</div><div class="v"><a href="/openapi.yaml">/openapi.yaml</a></div></div>
+          <div class="kv" role="listitem"><div class="k">Public keys</div><div class="v"><a href="/.well-known/timeproofs-keys.json">/.well-known/timeproofs-keys.json</a></div></div>
+          <div class="kv" role="listitem"><div class="k">Verify UI</div><div class="v"><a href="/verify.html">/verify.html</a></div></div>
+          <div class="kv" role="listitem"><div class="k">Security</div><div class="v"><a href="/security.html">/security.html</a></div></div>
         </div>
-
-        <h3>Best practice</h3>
-        <p class="hint">
-          Store the proof next to the original file, keep both immutable, and re-verify after any transfer or pipeline step.
-        </p>
-
-        <div style="margin-top:14px;">
-          <a class="hero-btn primary" href="/verify.html">Open Verify</a>
-        </div>
+        <h3>Do not send by default</h3>
+        <ul>
+          <li>Raw prompts</li>
+          <li>Raw outputs</li>
+          <li>Client files</li>
+          <li>Credentials or secrets</li>
+          <li>Personal data</li>
+        </ul>
+        <div class="note"><strong>Default model:</strong> hash locally, seal fingerprints, keep sensitive evidence inside the customer environment.</div>
       </aside>
     </section>
   </main>
 
-  <!-- Footer -->
   <footer role="contentinfo" aria-label="Site footer">
-    <div class="badges">
-      <span class="badge">Edge Native</span>
-      <span class="badge">Privacy First</span>
-      <a class="badge" href="/proofspec.html">Open Spec</a>
-      <a class="badge" href="/verify.html">Verify</a>
-    </div>
+    <div class="badges"><a class="badge" href="/openapi.yaml">OpenAPI</a><a class="badge" href="/.well-known/timeproofs-keys.json">Public keys</a><a class="badge" href="/verify.html">Verify</a><a class="badge" href="/security.html">Security</a></div>
     &copy; 2026 TimeProofs &mdash; the black box for AI actions.
-
-    <div class="links" style="margin-top:6px">
-      <a href="/">Home</a> &bull;
-      <a href="/use-cases.html">Use Cases</a> &bull;
-      <a href="/pricing.html">Pricing</a> &bull;
-      <a href="/verify.html">Verify</a> &bull;
-      <a href="/docs.html" aria-current="page">Docs</a> &bull;
-      <a href="/proofspec.html">Protocol</a> &bull;
-      <a href="/security.html">Security</a> &bull;
-      <a href="/privacy.html">Privacy</a> &bull;
-      <a href="/legal.html">Legal</a> &bull;
-      <a href="/humans.txt">humans.txt</a> &bull;
-      <a href="/.well-known/security.txt">security.txt</a>
-    </div>
-    <div class="social" aria-label="Social links">
-      <a href="https://x.com/timeproofs" target="_blank" rel="noopener" aria-label="Follow @timeproofs on X">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 3H22l-9.6 10.9L21.6 21h-6.7l-5.3-6.6L3.6 21H2l10.2-11.6L2.8 3h6.7l4.8 6 4.6-6Z"/></svg>
-      </a>
-      <a href="https://github.com/BACOUL/timeproofs/tree/timeproofs-v0.2" target="_blank" rel="noopener" aria-label="TimeProofs on GitHub">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C16.9 4.9 18 5.2 18 5.2c.6 1.6.2 2.9.1 3.2.8.9 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
-      </a>
-      <a href="https://www.linkedin.com/in/jeason-bacoul-667938281?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noopener" aria-label="Jeason Bacoul on LinkedIn">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-.9 1.8-1.8 3.7-1.8 4 0 4.7 2.6 4.7 6v6.1h-4V15c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V9Z"/></svg>
-      </a>
-    </div>
+    <div class="links" style="margin-top:6px"><a href="/">Home</a> &bull; <a href="/for-ai-agencies.html">For AI Agencies</a> &bull; <a href="/for-companies.html">For companies</a> &bull; <a href="/pricing.html">Pricing</a> &bull; <a href="/verify.html">Verify</a> &bull; <a href="/docs.html" aria-current="page">Docs</a> &bull; <a href="/security.html">Security</a> &bull; <a href="/privacy.html">Privacy</a> &bull; <a href="/legal.html">Legal</a></div>
   </footer>
-
-  <!-- Scripts -->
-  <script defer nonce="TP-2025">
+  <script defer nonce="TP-2026">
   (function(){
-    // Header shade
-    const hdr=document.getElementById('hdr');
-    function onScroll(){
-      if(window.scrollY>6) hdr.classList.add('scrolled');
-      else hdr.classList.remove('scrolled');
-    }
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive:true });
-
-    // Burger + focus trap
     const burger=document.getElementById('tp-burger');
     const nav=document.getElementById('tp-nav');
-    let lastFocus=null;
-
-    function getFocusable(container){
-      return Array.from(container.querySelectorAll(
-        'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-      )).filter(el => !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length));
-    }
-    function openMenu(){
-      lastFocus=document.activeElement;
-      nav.setAttribute('data-state','open');
-      burger.setAttribute('aria-expanded','true');
-      document.body.style.overflow='hidden';
-      const focusables=getFocusable(nav);
-      if(focusables[0]) focusables[0].focus({preventScroll:true});
-    }
-    function closeMenu(){
-      nav.setAttribute('data-state','closed');
-      burger.setAttribute('aria-expanded','false');
-      document.body.style.overflow='';
-      if(lastFocus && typeof lastFocus.focus==="function") lastFocus.focus({preventScroll:true});
-      lastFocus=null;
-    }
-    function toggleMenu(){ (nav.getAttribute('data-state')==='open') ? closeMenu() : openMenu(); }
-    burger && burger.addEventListener('click', toggleMenu);
-
-    document.addEventListener('click',(e)=>{
-      if(window.matchMedia('(min-width: 900px)').matches) return;
-      if(!e.target.closest('.tp-header') && nav.getAttribute('data-state')==='open') closeMenu();
-    },{ passive:true });
-
-    document.addEventListener('keydown',(e)=>{
-      if(window.matchMedia('(min-width: 900px)').matches) return;
-      if(e.key==='Escape' && nav.getAttribute('data-state')==='open'){
-        e.preventDefault(); closeMenu(); return;
-      }
-      if(e.key==='Tab' && nav.getAttribute('data-state')==='open'){
-        const focusables=getFocusable(nav);
-        if(!focusables.length) return;
-        const first=focusables[0];
-        const last=focusables[focusables.length-1];
-        if(e.shiftKey && document.activeElement===first){
-          e.preventDefault(); last.focus();
-        }else if(!e.shiftKey && document.activeElement===last){
-          e.preventDefault(); first.focus();
-        }
-      }
-    });
-
-    window.addEventListener('resize',()=>{
-      if(window.matchMedia('(min-width: 900px)').matches) closeMenu();
-    },{ passive:true });
-
-    // Auto aria-current (do not mark .nav-cta)
-    (function(){
-      const here=new URL(location.href).pathname.replace(/\/index\.html?$/,'/');
-      document.querySelectorAll('header nav a:not(.nav-cta), footer .links a').forEach(a=>{
-        const path=new URL(a.getAttribute('href'), location.origin).pathname;
-        if(path===here) a.setAttribute('aria-current','page');
-      });
-    })();
-
-    // Copy buttons on all code blocks
-    (function installCopyButtons(){
-      document.querySelectorAll('pre').forEach((pre)=>{
-        if(pre.querySelector('.copy-btn')) return;
-        const btn=document.createElement('button');
-        btn.type='button';
-        btn.className='copy-btn';
-        btn.setAttribute('aria-label','Copy code block');
-        btn.innerHTML='<span class="txt">Copy</span><span class="ok">✓ Copied</span>';
-        btn.addEventListener('click', async ()=>{
-          const code = pre.querySelector('code')?.innerText ?? pre.innerText;
-          try{
-            await navigator.clipboard.writeText(code);
-            btn.classList.add('copied');
-            setTimeout(()=>btn.classList.remove('copied'), 1200);
-          }catch{
-            const ta=document.createElement('textarea');
-            ta.value=code; ta.style.position='fixed'; ta.style.left='-9999px';
-            document.body.appendChild(ta); ta.select();
-            document.execCommand('copy'); document.body.removeChild(ta);
-            btn.classList.add('copied');
-            setTimeout(()=>btn.classList.remove('copied'), 1200);
-          }
-        });
-        pre.appendChild(btn);
-      });
-    })();
-
-    // Service Worker
-    if('serviceWorker' in navigator){
-      navigator.serviceWorker.register('/sw.js',{type:'module',scope:'/'}).catch(()=>{});
-    }
+    function toggleMenu(){const open=nav.getAttribute('data-state')==='open';nav.setAttribute('data-state',open?'closed':'open');burger.setAttribute('aria-expanded',String(!open));document.body.style.overflow=open?'':'hidden'}
+    burger&&burger.addEventListener('click',toggleMenu);
+    document.addEventListener('click',(e)=>{if(window.matchMedia('(min-width: 900px)').matches)return;if(!e.target.closest('.tp-header')&&nav.getAttribute('data-state')==='open')toggleMenu()},{passive:true});
+    document.addEventListener('keydown',(e)=>{if(e.key==='Escape'&&nav.getAttribute('data-state')==='open')toggleMenu()});
+    document.querySelectorAll('pre').forEach((pre)=>{if(pre.querySelector('.copy-btn'))return;const btn=document.createElement('button');btn.type='button';btn.className='copy-btn';btn.setAttribute('aria-label','Copy code block');btn.innerHTML='<span class="txt">Copy</span><span class="ok">✓ Copied</span>';btn.addEventListener('click',async()=>{const code=pre.querySelector('code')?.innerText??pre.innerText;try{await navigator.clipboard.writeText(code);btn.classList.add('copied');setTimeout(()=>btn.classList.remove('copied'),1200)}catch{}});pre.appendChild(btn)});
   })();
   </script>
 </body>
