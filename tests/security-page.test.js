@@ -1,5 +1,5 @@
 /* tests/security-page.test.js
- * Lightweight static checks for security.html.
+ * Lightweight static checks for security.html and SECURITY.md.
  *
  * Run from repo root with:
  *   node tests/security-page.test.js
@@ -9,8 +9,11 @@ const assert = require("assert");
 const fs = require("fs");
 const path = require("path");
 
-const filePath = path.join(__dirname, "..", "security.html");
-const html = fs.readFileSync(filePath, "utf8");
+const htmlPath = path.join(__dirname, "..", "security.html");
+const policyPath = path.join(__dirname, "..", "SECURITY.md");
+const html = fs.readFileSync(htmlPath, "utf8");
+const policy = fs.readFileSync(policyPath, "utf8");
+const combined = `${html}\n${policy}`;
 
 assert.match(html, /Security - TimeProofs Action File Seal Model/, "page should expose security title");
 assert.match(html, /Security for verifiable AI Action Files/, "page should explain Action File security positioning");
@@ -37,6 +40,15 @@ assert.match(html, /AI output was correct/, "page should include AI correctness 
 assert.match(html, /No full AI Act or GDPR compliance guarantee/, "page should include compliance limitation");
 assert.match(html, /No court-ready assurance/, "page should include court-ready limitation");
 
+assert.match(policy, /Local hashing and canonical payload hashes/, "policy should include local hashing model");
+assert.match(policy, /TimeProofs Seal model/, "policy should include Seal model");
+assert.match(policy, /Public key registry and rotation/, "policy should include key registry and rotation");
+assert.match(policy, /Private key policy/, "policy should include private key policy");
+assert.match(policy, /Verifier behavior/, "policy should include verifier behavior");
+assert.match(policy, /No blockchain by default/, "policy should state no blockchain by default");
+assert.match(policy, /Verification limits/, "policy should include verification limits");
+assert.match(policy, /not absolute legal proof/, "policy should avoid overclaiming legal proof");
+
 for (const forbiddenClaim of [
   /guarantees the AI output was correct/i,
   /provides absolute legal proof/i,
@@ -48,7 +60,7 @@ for (const forbiddenClaim of [
   /raw sensitive AI content is signed/i,
   /TimeProofs reviews the underlying sensitive content/i,
 ]) {
-  assert.doesNotMatch(html, forbiddenClaim, `page should not contain unsupported claim: ${forbiddenClaim}`);
+  assert.doesNotMatch(combined, forbiddenClaim, `security materials should not contain unsupported claim: ${forbiddenClaim}`);
 }
 
-console.log("Security page static checks passed.");
+console.log("Security page and policy static checks passed.");
