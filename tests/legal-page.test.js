@@ -30,7 +30,7 @@ assert.match(html, /Compliance and audit boundaries/, "page should include compl
 assert.match(html, /not a full AI Act compliance product/, "page should reject full AI Act compliance");
 assert.match(html, /not a full GDPR compliance guarantee/, "page should reject GDPR guarantee");
 assert.match(html, /Customer responsibilities/, "page should include customer responsibilities");
-assert.match(html, /Customer is responsible for the action/, "page should make customer responsible for action content");
+assert.match(html, /customer is responsible for the action/i, "page should make customer responsible for action content");
 assert.match(html, /Use in disputes/, "page should warn about dispute reliance");
 assert.match(html, /Acceptable use/, "page should include acceptable use");
 assert.match(html, /Availability and changes/, "page should include availability limits");
