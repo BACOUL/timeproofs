@@ -2,43 +2,65 @@ openapi: 3.1.0
 
 info:
   title: TimeProofs API
-  version: v0.2
+  version: v1-action-file
   description: |
-    TimeProofs v0.2 is a stateless, cryptographic proof-of-existence API.
+    TimeProofs is the black box for AI actions.
 
-    The server never stores proofs.
-    Clients submit hashes to receive a signed timestamp bundle.
-    Verification is cryptographic and requires the portable `.tproof.json` bundle.
+    The Action File V1 API lets developers seal and verify canonical payload
+    hashes for AI action traceability files. TimeProofs receives fingerprints,
+    not sensitive action content by default.
 
-    Core principles:
-    - Hash locally (SHA-256)
-    - Timestamp via API
-    - Verify cryptographically (Ed25519)
-    - No storage, no blockchain, no personal data
+    Core V1 flow:
+    - Generate a TimeProofs Action File payload after an AI action is declared,
+      executed or confirmed by a target system.
+    - Remove integrity.seal, integrity.file_hash and integrity.payload_hash
+      before hashing to avoid circular hashes.
+    - Canonicalize the payload with deterministic JSON ordering.
+    - Compute payload_hash = sha256(canonical_payload).
+    - POST only payload_hash, format and action_id to /api/seal.
+    - Embed the returned Seal into the final .action.json file.
+    - Verify later with /api/verify-seal without uploading raw sensitive content.
 
+    Backward compatibility:
+    - /api/timestamp and /api/verify remain documented for legacy .tproof.json
+      proof bundles.
+    - .tproof.json is the lower-level proof bundle.
+    - .action.json is the business-level traceability file for AI actions.
+
+    Limitations:
+    - TimeProofs does not prove that the AI was correct.
+    - TimeProofs does not guarantee legal validity of the underlying action.
+    - TimeProofs complements technical logs; it does not replace them.
   contact:
     name: TimeProofs
     url: https://timeproofs.io
     email: contact@timeproofs.io
-
   license:
     name: MPL-2.0
     url: https://www.mozilla.org/en-US/MPL/2.0/
 
 servers:
   - url: https://api.timeproofs.io
-    description: Canonical API endpoint (stateless)
+    description: Canonical TimeProofs API endpoint
+  - url: https://timeproofs.io
+    description: Public website endpoints such as public keys
 
 tags:
-  - name: Core
-    description: Core stateless endpoints
+  - name: ActionFileV1
+    description: Action File V1 seal and verification endpoints
+  - name: Legacy
+    description: Backward-compatible timestamp proof bundle endpoints
+  - name: Trust
+    description: Public trust and key endpoints
+  - name: System
+    description: Health and service metadata
 
 paths:
   /api/health:
     get:
       summary: Health check
       description: Returns API status and metadata.
-      tags: [Core]
+      tags: [System]
       responses:
         "200":
           description: Service is available
@@ -47,22 +69,151 @@ paths:
               schema:
                 $ref: "#/components/schemas/HealthResponse"
 
+  /api/seal:
+    post:
+      summary: Seal an Action File canonical payload hash
+      description: |
+        Creates a TimeProofs Seal for a canonical Action File payload hash.
+        Send only the fingerprint, not raw prompts, raw outputs, original files,
+        credentials or sensitive client content.
+      tags: [ActionFileV1]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SealRequest"
+            examples:
+              supportTicket:
+                summary: Seal a support ticket Action File hash
+                value:
+                  payload_hash: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                  format: timeproofs.action.v1
+                  action_id: TP-ACT-2026-000001
+      responses:
+        "200":
+          description: Seal created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SealResponse"
+        "400":
+          description: Invalid hash, unsupported format or missing action_id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          description: Rate limited
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/verify-seal:
+    get:
+      summary: Verify a Seal by seal_id
+      description: |
+        Looks up and verifies a Seal by seal_id. Use this when the Action File
+        already contains a Seal identifier.
+      tags: [ActionFileV1]
+      parameters:
+        - name: seal_id
+          in: query
+          required: true
+          schema:
+            type: string
+            pattern: "^seal_[A-Za-z0-9_-]{8,128}$"
+          description: TimeProofs Seal identifier.
+      responses:
+        "200":
+          description: Seal verification result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VerifySealResponse"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      summary: Verify a Seal by seal_id and/or payload_hash
+      description: |
+        Verifies a Seal using seal_id, payload_hash, or both. When payload_hash is
+        provided, the server can confirm whether the Seal matches the canonical
+        payload hash recalculated by the client.
+      tags: [ActionFileV1]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VerifySealRequest"
+            examples:
+              bySealAndHash:
+                summary: Verify by Seal ID and payload hash
+                value:
+                  seal_id: seal_01JZTIMEPROOFS000001
+                  payload_hash: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      responses:
+        "200":
+          description: Seal verification result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VerifySealResponse"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /api/timestamp:
     post:
-      summary: Create a stateless timestamp proof
+      summary: Create a legacy stateless timestamp proof
       description: |
+        Backward-compatible endpoint for .tproof.json proof bundles.
         Accepts a SHA-256 hash and returns a signed timestamp bundle.
-        No data is stored server-side.
-      tags: [Core]
+        This is not the Action File V1 business traceability format.
+      tags: [Legacy]
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/TimestampRequestV02"
+            examples:
+              legacyHash:
+                summary: Legacy hash timestamp
+                value:
+                  hash: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+                  type: document
+                  meta:
+                    source: legacy-client
       responses:
         "200":
-          description: Timestamp created
+          description: Timestamp proof created
           content:
             application/json:
               schema:
@@ -82,16 +233,11 @@ paths:
 
   /api/verify:
     post:
-      summary: Verify a TimeProof bundle
+      summary: Verify a legacy TimeProof bundle
       description: |
-        Verifies a `.tproof.json` bundle cryptographically.
-        The server does not store or fetch any data.
-
-        The issuer is frozen and must match the canonical TimeProofs authority:
-        https://api.timeproofs.io
-
-        Note: invalid signatures may return HTTP 200 with ok=false and valid=false.
-      tags: [Core]
+        Backward-compatible endpoint for .tproof.json proof bundles.
+        Verifies cryptographic integrity of the proof bundle.
+      tags: [Legacy]
       requestBody:
         required: true
         content:
@@ -107,13 +253,13 @@ paths:
                       $ref: "#/components/schemas/ProofBundle"
       responses:
         "200":
-          description: Verification result
+          description: Legacy verification result
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/VerifyResponse"
         "400":
-          description: Invalid bundle (missing fields, issuer mismatch, canonical mismatch)
+          description: Invalid bundle
           content:
             application/json:
               schema:
@@ -125,29 +271,297 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /.well-known/timeproofs-keys.json:
+    get:
+      summary: Public TimeProofs verification keys
+      description: |
+        Public keys used by verifiers to check TimeProofs Seal signatures.
+        Keys can be active, retired or compromised. Private keys are never exposed.
+      tags: [Trust]
+      responses:
+        "200":
+          description: Public key set
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PublicKeysResponse"
+
 components:
   schemas:
+    Sha256Hex:
+      type: string
+      pattern: "^[a-f0-9]{64}$"
+      example: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+    ActionFileFormat:
+      type: string
+      const: timeproofs.action.v1
+      example: timeproofs.action.v1
+
+    ProofLevel:
+      type: string
+      enum:
+        - declared
+        - executed
+        - target_confirmed
+        - externally_verifiable
+      example: target_confirmed
+
+    ActionStatus:
+      type: string
+      enum:
+        - declared
+        - executed
+        - target_confirmed
+        - failed
+        - partial
+        - cancelled
+      example: target_confirmed
+
     HealthResponse:
       type: object
-      additionalProperties: false
-      required: [ok, now, version, mode, proof, issuer, keyId]
+      additionalProperties: true
+      required: [ok, now]
       properties:
-        ok: { type: boolean, example: true }
-        now: { type: string, format: date-time }
-        version: { type: string, example: "timeproofs-0.2" }
-        mode: { type: string, example: "stateless" }
-        proof: { type: string, example: "ed25519-only" }
-        issuer: { type: string, const: "https://api.timeproofs.io" }
-        keyId: { type: string, example: "tp-v0-2-main" }
+        ok:
+          type: boolean
+          example: true
+        now:
+          type: string
+          format: date-time
+        version:
+          type: string
+          example: timeproofs-action-file-v1
+        issuer:
+          type: string
+          example: https://api.timeproofs.io
+        keyId:
+          type: string
+          example: timeproofs-main-2026
+
+    SealRequest:
+      type: object
+      additionalProperties: false
+      required: [payload_hash, format, action_id]
+      properties:
+        payload_hash:
+          $ref: "#/components/schemas/Sha256Hex"
+        format:
+          $ref: "#/components/schemas/ActionFileFormat"
+        action_id:
+          type: string
+          minLength: 3
+          maxLength: 128
+          pattern: "^[A-Za-z0-9._:-]{3,128}$"
+          example: TP-ACT-2026-000001
+        metadata:
+          type: object
+          additionalProperties: true
+          description: Optional non-sensitive metadata. Do not include raw prompts, outputs, credentials or personal data.
+
+    SealResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - ok
+        - seal_id
+        - sealed_at
+        - payload_hash
+        - format
+        - action_id
+        - signature
+        - public_key_id
+      properties:
+        ok:
+          type: boolean
+          example: true
+        seal_id:
+          type: string
+          example: seal_01JZTIMEPROOFS000001
+        sealed_at:
+          type: string
+          format: date-time
+        payload_hash:
+          $ref: "#/components/schemas/Sha256Hex"
+        format:
+          $ref: "#/components/schemas/ActionFileFormat"
+        action_id:
+          type: string
+          example: TP-ACT-2026-000001
+        signature:
+          type: string
+          description: Signature over the Seal canonical record.
+          example: ed25519-signature-placeholder
+        public_key_id:
+          type: string
+          example: timeproofs-main-2026
+        verify_url:
+          type: string
+          format: uri
+          example: https://api.timeproofs.io/api/verify-seal?seal_id=seal_01JZTIMEPROOFS000001
+
+    VerifySealRequest:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        seal_id:
+          type: string
+          example: seal_01JZTIMEPROOFS000001
+        payload_hash:
+          $ref: "#/components/schemas/Sha256Hex"
+        format:
+          $ref: "#/components/schemas/ActionFileFormat"
+
+    VerifySealStatus:
+      type: string
+      enum:
+        - valid
+        - not_found
+        - invalid_signature
+        - unsupported_format
+        - key_retired
+        - mismatch
+      example: valid
+
+    VerifySealResponse:
+      type: object
+      additionalProperties: true
+      required: [ok, status, valid]
+      properties:
+        ok:
+          type: boolean
+          example: true
+        valid:
+          type: boolean
+          example: true
+        status:
+          $ref: "#/components/schemas/VerifySealStatus"
+        seal_id:
+          type: string
+          example: seal_01JZTIMEPROOFS000001
+        payload_hash:
+          $ref: "#/components/schemas/Sha256Hex"
+        format:
+          $ref: "#/components/schemas/ActionFileFormat"
+        action_id:
+          type: string
+          example: TP-ACT-2026-000001
+        sealed_at:
+          type: string
+          format: date-time
+        public_key_id:
+          type: string
+          example: timeproofs-main-2026
+        checks:
+          type: object
+          additionalProperties: true
+          example:
+            signature: true
+            payload_hash_match: true
+            format_supported: true
+
+    ActionFileV1:
+      type: object
+      additionalProperties: true
+      required:
+        - format
+        - action_id
+        - created_at
+        - actor
+        - action
+        - traceability
+        - proof_level
+      properties:
+        format:
+          $ref: "#/components/schemas/ActionFileFormat"
+        action_id:
+          type: string
+          example: TP-ACT-2026-000001
+        created_at:
+          type: string
+          format: date-time
+        actor:
+          type: object
+          additionalProperties: true
+        action:
+          type: object
+          additionalProperties: true
+          properties:
+            type:
+              type: string
+              example: support.ticket_created
+            status:
+              $ref: "#/components/schemas/ActionStatus"
+            target_system:
+              type: string
+              example: Zendesk
+            target_reference:
+              type: string
+              example: ticket_12345
+        traceability:
+          type: object
+          additionalProperties: true
+        proof_level:
+          $ref: "#/components/schemas/ProofLevel"
+        integrity:
+          type: object
+          additionalProperties: true
+          description: Final file integrity section. Exclude integrity.seal, integrity.file_hash and integrity.payload_hash before canonical hashing.
+
+    PublicKeyRecord:
+      type: object
+      additionalProperties: true
+      required: [public_key_id, algorithm, public_key, created_at, status]
+      properties:
+        public_key_id:
+          type: string
+          example: timeproofs-main-2026
+        algorithm:
+          type: string
+          example: Ed25519
+        public_key:
+          type: string
+          description: Public verification key material.
+        created_at:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [active, retired, compromised]
+          example: active
+
+    PublicKeysResponse:
+      type: object
+      additionalProperties: true
+      required: [issuer, keys]
+      properties:
+        issuer:
+          type: string
+          example: https://timeproofs.io
+        keys:
+          type: array
+          items:
+            $ref: "#/components/schemas/PublicKeyRecord"
+        rotation_policy:
+          type: string
+        compromise_response:
+          type: string
 
     TimestampRequestV02:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       required: [hash]
       properties:
         hash:
+          $ref: "#/components/schemas/Sha256Hex"
+        type:
           type: string
-          pattern: "^[a-f0-9]{64}$"
+          example: document
+        meta:
+          type: object
+          additionalProperties: true
+          description: Optional metadata. Not interpreted or trusted by the API.
 
     HashObject:
       type: object
@@ -156,10 +570,9 @@ components:
       properties:
         algorithm:
           type: string
-          enum: ["SHA-256"]
+          enum: [SHA-256]
         value:
-          type: string
-          pattern: "^[a-f0-9]{64}$"
+          $ref: "#/components/schemas/Sha256Hex"
 
     TimestampObject:
       type: object
@@ -171,11 +584,11 @@ components:
           format: date-time
         issuer:
           type: string
-          const: "https://api.timeproofs.io"
+          example: https://api.timeproofs.io
         nonce:
           type: string
           pattern: "^[a-f0-9]{16,128}$"
-          description: Unpredictable nonce (lowercase hex recommended).
+          description: Unpredictable nonce, lowercase hex recommended.
 
     ProofObject:
       type: object
@@ -184,18 +597,16 @@ components:
       properties:
         algo:
           type: string
-          enum: ["Ed25519"]
+          enum: [Ed25519]
         signature:
           type: string
-          description: Hex-encoded Ed25519 signature (64 bytes => 128 hex chars)
-          pattern: "^[a-f0-9]{128}$"
+          description: Hex-encoded Ed25519 signature.
         publicKey:
           type: string
-          description: Optional informational public key (base64 SPKI DER). Ignored during verification if issuer key is pinned.
-          contentEncoding: base64
+          description: Optional informational public key. Ignored during verification if issuer key is pinned.
         keyId:
           type: string
-          example: "tp-v0-2-main"
+          example: tp-v0-2-main
 
     ProofBundle:
       type: object
@@ -204,10 +615,10 @@ components:
       properties:
         version:
           type: string
-          const: "timeproofs-0.2"
+          const: timeproofs-0.2
         canonical:
           type: string
-          description: Canonical string used for signature verification: <hash>|<issuedAt>|<issuer>|<nonce>
+          description: Canonical string used for legacy signature verification.
         hash:
           $ref: "#/components/schemas/HashObject"
         timestamp:
@@ -221,13 +632,15 @@ components:
 
     TimestampResponseV02:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       required: [ok, version, canonical, hash, timestamp, proof]
       properties:
-        ok: { type: boolean, example: true }
+        ok:
+          type: boolean
+          example: true
         version:
           type: string
-          const: "timeproofs-0.2"
+          const: timeproofs-0.2
         canonical:
           type: string
         hash:
@@ -242,8 +655,8 @@ components:
 
     VerifyResponse:
       type: object
-      additionalProperties: false
-      required: [ok, valid, version, keyId, hash, timestamp]
+      additionalProperties: true
+      required: [ok, valid]
       properties:
         ok:
           type: boolean
@@ -251,17 +664,17 @@ components:
           type: boolean
         error:
           type: string
-          description: Present when ok=false (for example invalid_signature)
+          description: Present when ok=false.
         code:
           type: integer
         message:
           type: string
         version:
           type: string
-          example: "timeproofs-0.2"
+          example: timeproofs-0.2
         keyId:
           type: string
-          example: "tp-v0-2-main"
+          example: tp-v0-2-main
         hash:
           $ref: "#/components/schemas/HashObject"
         timestamp:
@@ -282,6 +695,7 @@ components:
           example: false
         error:
           type: string
+          example: bad_request
         code:
           type: integer
         message:
@@ -291,5 +705,5 @@ components:
 
 security: []
 externalDocs:
-  description: Full documentation
+  description: Full developer documentation
   url: https://timeproofs.io/docs.html
