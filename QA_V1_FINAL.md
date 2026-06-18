@@ -30,8 +30,9 @@ The sitemap was outdated and still reflected the earlier proof-of-existence stru
 Fixed in this PR:
 
 - Added `contact.html`.
-- Added V1 sales pages such as `pricing.html`, `use-cases-pilots.html`, `for-companies.html`, `how-it-works.html`, `demo-simulated-ai-action.html`, and `logs-vs-timeproofs.html`.
-- Kept legacy/still-useful pages such as `use-cases.html`, `verify.html`, `docs.html`, `proofspec.html`, `security.html`, `privacy.html`, `legal.html`, and `keys.html`.
+- Added current V1 sales pages such as `pricing.html`, `use-cases-pilots.html`, `for-companies.html`, `how-it-works.html`, and `demo-simulated-ai-action.html`.
+- Kept existing legacy/still-useful pages such as `use-cases.html`, `verify.html`, `docs.html`, `proofspec.html`, `security.html`, `privacy.html`, `legal.html`, and `keys.html`.
+- Removed missing legacy paths from the sitemap instead of pointing crawlers to non-existent pages.
 - Updated `lastmod` dates to the V1 QA date.
 
 ### 2. Navigation / footer consistency
