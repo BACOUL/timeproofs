@@ -96,7 +96,8 @@ Current state:
 ✅ Public docs page
 ✅ Public examples page
 ✅ MCP scanner exploration docs and fixtures
-⬜ MCP static core parser not built yet
+✅ MCP static core parser
+⬜ MCP scanner UI not built yet
 ⬜ Agent simulation not built yet
 ```
 
@@ -112,7 +113,7 @@ OpenAPI / MCP / tool schema
 → agentready.json
 ```
 
-Current V1 product flow:
+Current V1 OpenAPI product flow:
 
 ```txt
 OpenAPI JSON/YAML upload
@@ -127,15 +128,16 @@ OpenAPI JSON/YAML upload
 → public docs/examples
 ```
 
-Planned V2 MCP flow:
+Current V2a MCP core flow:
 
 ```txt
 MCP tools JSON
+→ parse tools[]
 → map MCP tools to AgentReady operations
 → reuse action classification
 → reuse risk detection
 → reuse score/report/json generation
-→ MCP AgentReady Report
+→ MCP AgentReady result
 ```
 
 ---
@@ -149,12 +151,15 @@ agentready-core/README.md
 agentready-core/types.js
 agentready-core/parse-yaml.js
 agentready-core/parse-openapi.js
+agentready-core/parse-mcp-tools.js
 agentready-core/extract-operations.js
+agentready-core/extract-mcp-tools.js
 agentready-core/classify-action.js
 agentready-core/detect-risks.js
 agentready-core/score.js
 agentready-core/generate-agentready-json.js
 agentready-core/report.js
+agentready-core/scan-mcp-tools.js
 agentready-core/index.js
 ```
 
@@ -173,12 +178,7 @@ Supported current input:
 ```txt
 OpenAPI JSON 3.0 / 3.1
 OpenAPI YAML 3.0 / 3.1
-```
-
-Exploratory MCP input:
-
-```txt
-MCP tools JSON with server + tools[]
+MCP tools JSON
 ```
 
 Current output:
@@ -189,7 +189,7 @@ operation analysis
 risk findings
 agentready_json
 markdown_report
-printable executive report
+printable executive report for OpenAPI UI
 ```
 
 ---
@@ -204,7 +204,7 @@ agentready-examples.html
 agentready-test.html
 ```
 
-`agentready.html` provides:
+`agentready.html` provides OpenAPI scanning:
 
 ```txt
 local OpenAPI JSON/YAML upload
@@ -230,10 +230,12 @@ browser print / Save as PDF export
 ```txt
 valid JSON fixture scans successfully
 valid YAML fixture scans successfully
-dangerous fixture detects critical risks
-invalid JSON fails cleanly
-invalid YAML fails cleanly
-good fixture scores higher than dangerous fixture
+dangerous OpenAPI fixture detects critical risks
+invalid JSON/YAML fail cleanly
+MCP simple fixture scans successfully
+MCP dangerous fixture detects critical/high risks
+invalid MCP fails cleanly
+MCP tools map to AgentReady operations
 agentready.json is generated
 Markdown report is generated
 ```
@@ -282,23 +284,24 @@ It identifies structural risks that may cause AI agents to misuse APIs, tools or
 
 ## 10. Next PRs to complete the product
 
-### Next — MCP static core parser
+### Next — MCP scanner UI
 
 ```txt
-Add agentready-core/parse-mcp-tools.js.
-Add agentready-core/extract-mcp-tools.js.
-Add agentready-core/scan-mcp-tools.js.
-Map MCP tools to AgentReady operation objects.
-Reuse classify-action/detect-risks/score/report/json generation.
-Keep OpenAPI V1 behavior unchanged.
+Add agentready-mcp.html.
+Support local MCP tools JSON upload.
+Use scanMcpToolsText().
+Display MCP AgentReady Score.
+Display risk counts and tool findings.
+Export agentready.json.
+Export Markdown report.
+Do not add backend, accounts, or payment.
 ```
 
-### Then — MCP scanner UI
+### Then — MCP public docs/examples update
 
 ```txt
-Add agentready-mcp.html or extend agentready.html after core is stable.
-Support local MCP tools JSON upload.
-Generate MCP AgentReady Score and agentready.json.
+Update agentready-docs.html and agentready-examples.html with MCP core and fixtures.
+Update sitemap only if new public pages exist.
 ```
 
 ---
@@ -380,4 +383,4 @@ Because it can become the machine-readable contract between tools and agents.
 
 ## 13. One-line repo state
 
-> TimeProofs is now focused on AgentReady. The repo has a static OpenAPI JSON/YAML scanner page, agentready.json export, Markdown report export, browser print / Save as PDF report, a static browser test harness, public docs/examples pages, and MCP exploration docs/fixtures. The next step is the MCP static core parser.
+> TimeProofs is now focused on AgentReady. The repo has a static OpenAPI JSON/YAML scanner page, agentready.json export, Markdown report export, browser print / Save as PDF report, a static browser test harness, public docs/examples pages, MCP exploration docs/fixtures, and an MCP static core parser. The next step is the MCP scanner UI.
