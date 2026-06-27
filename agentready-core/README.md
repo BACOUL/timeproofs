@@ -1,8 +1,8 @@
-# AgentReady Core V1
+# AgentReady Core
 
-Moteur statique local pour analyser une spec OpenAPI avant exposition à des agents IA.
+Moteur statique local pour analyser des specs OpenAPI et, en exploration V2, des définitions d'outils MCP avant exposition à des agents IA.
 
-## Objectif V1
+## Objectif V1 — OpenAPI
 
 ```txt
 OpenAPI JSON / YAML
@@ -14,15 +14,29 @@ OpenAPI JSON / YAML
 → rapport Markdown
 ```
 
+## Objectif V2a — MCP static core
+
+```txt
+MCP tools JSON
+→ parse tools[]
+→ mapping vers opérations AgentReady
+→ classification des actions
+→ détection des risques
+→ score AgentReady
+→ agentready.json
+→ rapport Markdown
+```
+
 ## Important
 
-Cette V1 :
+Le core :
 
 - n'appelle aucun endpoint externe ;
 - n'exécute aucun code fourni par l'utilisateur ;
 - ne stocke aucune spec ;
 - accepte OpenAPI JSON ;
 - accepte OpenAPI YAML courant ;
+- accepte un format MCP tools JSON exploratoire ;
 - reste statique et déterministe.
 
 ## Formats supportés
@@ -31,17 +45,40 @@ Cette V1 :
 openapi.json
 openapi.yaml
 openapi.yml
+mcp-tools.json
 ```
 
 Le parseur YAML est volontairement léger et interne au repo. Il couvre les structures OpenAPI courantes : objets indentés, listes, scalaires, enums inline, objets inline et blocs texte `|` / `>`.
 
-## Usage navigateur / module ES
+Le format MCP V2a est volontairement simple :
+
+```txt
+{
+  "server": {...},
+  "tools": [...]
+}
+```
+
+## Usage OpenAPI navigateur / module ES
 
 ```js
 import { scanOpenApiText } from './agentready-core/index.js';
 
 const text = await file.text();
 const result = await scanOpenApiText(text, { filename: file.name });
+
+console.log(result.summary.score);
+console.log(result.agentready_json);
+console.log(result.markdown_report);
+```
+
+## Usage MCP navigateur / module ES
+
+```js
+import { scanMcpToolsText } from './agentready-core/index.js';
+
+const text = await file.text();
+const result = await scanMcpToolsText(text, { filename: file.name });
 
 console.log(result.summary.score);
 console.log(result.agentready_json);
@@ -69,7 +106,7 @@ console.log(result.markdown_report);
 0-49   : Not AgentReady
 ```
 
-## Risques détectés V1
+## Risques détectés
 
 ```txt
 unclear_operation_name
@@ -94,4 +131,4 @@ unknown_action_type
 
 TimeProofs AgentReady ne garantit pas qu'un agent IA ne se trompera jamais.
 
-Il identifie les risques structurels d'une spec OpenAPI qui peuvent provoquer une mauvaise utilisation par un agent.
+Il identifie les risques structurels d'une spec OpenAPI ou d'une définition d'outils MCP qui peuvent provoquer une mauvaise utilisation par un agent.
