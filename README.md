@@ -32,20 +32,42 @@ OpenAPI / MCP / tool schema
 ✅ Repo audit completed
 ✅ Static OpenAPI JSON core scanner merged
 ✅ Example OpenAPI fixtures merged
-⬜ Browser upload page
+✅ Browser upload page for OpenAPI JSON
 ⬜ YAML support
-⬜ Human report UI
 ⬜ PDF / print export
 ⬜ MCP scanner
 ⬜ Agent simulation
 ```
 
-## Main folders
+## Main files and folders
 
 ```txt
+index.html
+agentready.html
 agentready-core/
 agentready-examples/
 docs/agentready/
+```
+
+## AgentReady Scanner V1a
+
+The static scanner page is:
+
+```txt
+agentready.html
+```
+
+It currently supports local OpenAPI JSON scanning in the browser.
+
+It can generate:
+
+```txt
+AgentReady Score
+risk counts
+top risks
+endpoint-by-endpoint findings
+agentready.json
+Markdown report
 ```
 
 ## AgentReady Core V1a
@@ -87,22 +109,14 @@ docs/agentready/LEGACY_REMOVAL_DECISION.md
 
 ## Next build step
 
-Create the first usable product page:
+Add YAML support:
 
 ```txt
-agentready.html
+openapi.yaml
+openapi.yml
 ```
 
-Required features:
-
-```txt
-local OpenAPI JSON upload
-AgentReady Score display
-top risks display
-endpoint-by-endpoint findings
-agentready.json export
-Markdown report display
-```
+Then improve report polish and add browser print/PDF export.
 
 ## Non-negotiable rule
 
