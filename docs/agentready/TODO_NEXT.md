@@ -22,6 +22,8 @@
 ✅ browser print / Save as PDF export
 ✅ static fixture checks
 ✅ public docs/examples pages
+✅ MCP exploration document
+✅ MCP simple/dangerous fixtures
 ✅ mandatory limitation text shown
 ✅ submitted API endpoints are never called
 ```
@@ -29,7 +31,7 @@
 ## Immediate next PR
 
 ```txt
-feat(agentready): start MCP scanner exploration
+feat(agentready): add MCP static core parser
 ```
 
 ## Build next
@@ -37,12 +39,15 @@ feat(agentready): start MCP scanner exploration
 Requirements:
 
 ```txt
-1. Define the MCP input shape for V2.
-2. Add an MCP example fixture.
-3. Document how MCP tools map to AgentReady operations.
-4. Identify which OpenAPI risk checks can be reused.
-5. Do not change OpenAPI V1 behavior.
-6. Do not add accounts, payment, or dashboard.
+1. Add agentready-core/parse-mcp-tools.js.
+2. Add agentready-core/extract-mcp-tools.js.
+3. Add agentready-core/scan-mcp-tools.js.
+4. Map MCP tools to AgentReady operation objects.
+5. Reuse classify-action/detect-risks/score/report/json generation.
+6. Verify mcp-tools-simple.json scans successfully.
+7. Verify mcp-tools-dangerous.json detects high/critical risks.
+8. Keep OpenAPI V1 behavior unchanged.
+9. Do not add accounts, payment, dashboard, or runtime firewall.
 ```
 
 ## Do not build yet
