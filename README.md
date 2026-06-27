@@ -170,10 +170,26 @@ MCP Markdown report is generated
 MCP dangerous fixture detects high/critical risks
 ```
 
+## Remaining work
+
+The full execution roadmap is here:
+
+```txt
+docs/agentready/REMAINING_WORK.md
+```
+
+Immediate next step:
+
+```txt
+feat(agentready): polish navigation and product clarity
+```
+
 ## Important files to read first
 
 ```txt
 AGENTREADY_PROJECT_CONTEXT.md
+docs/agentready/REMAINING_WORK.md
+docs/agentready/TODO_NEXT.md
 docs/agentready/TIMEPROOFS_AGENTREADY_MASTER_PLAN.md
 docs/agentready/AGENTREADY_IMPLEMENTATION_CHECKLIST.md
 docs/agentready/AGENTREADY_JSON_SPEC.md
