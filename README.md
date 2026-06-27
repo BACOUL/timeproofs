@@ -1,171 +1,113 @@
-# 🧩 TimeProofs — Proof of Existence for Everything
+# TimeProofs AgentReady
 
-**TimeProofs** is a free, open, privacy-first timestamp API.  
-Hash locally, get a signed timestamp, verify publicly — with **zero personal data**, **no blockchain**, and **full transparency**.
+**TimeProofs AgentReady** is a pre-deployment readiness layer for AI-agent tools.
 
-Website → https://timeproofs.io  
-API → https://api.timeproofs.io  
-Status → Public Beta v0.1
+It checks whether an API, MCP server, or tool schema is ready to be safely and clearly exposed to AI agents.
 
----
+## Product sentence
 
-## ✨ Features (v0.1)
+> See where AI agents will fail before they use your API or MCP tools.
 
-- Hash-only inputs (no upload)
-- Signed timestamp events
-- Public verification endpoint
-- Stateless & privacy-first (no logs of content)
-- Edge-native (Cloudflare Workers)
-- Proof bundle format: `.tproof.json`
-- Full site integrity: each page loads its hash from `/releases/v0.1.json`
+## What this repository is now
 
----
+This repository is now focused on **Agent Tool Readiness**.
 
-## 🚀 Try in 30 Seconds
+The previous TimeProofs proof-of-existence website and timestamp/verify pages have been removed from the active product surface.
 
-### 1. Hash any file
-```sh
-sha256sum myfile.png
+The current product direction is:
+
+```txt
+OpenAPI / MCP / tool schema
+→ AgentReady analysis
+→ AgentReady Score
+→ AgentReady Report
+→ agentready.json
 ```
 
-### 2. Request a timestamp
-```sh
-curl -X POST https://api.timeproofs.io/api/timestamp \
-  -H "Content-Type: application/json" \
-  -d '{"hash":"<SHA256>"}'
+## Current state
+
+```txt
+✅ Product vision documented
+✅ Strict methodology documented
+✅ Repo audit completed
+✅ Static OpenAPI JSON core scanner merged
+✅ Example OpenAPI fixtures merged
+⬜ Browser upload page
+⬜ YAML support
+⬜ Human report UI
+⬜ PDF / print export
+⬜ MCP scanner
+⬜ Agent simulation
 ```
 
-### 3. Verify
-```sh
-curl "https://api.timeproofs.io/api/verify?hash=<SHA256>"
+## Main folders
+
+```txt
+agentready-core/
+agentready-examples/
+docs/agentready/
 ```
 
-You will get:
-```json
-{
-  "ok": true,
-  "hash": "<SHA256>",
-  "ts": 123456789,
-  "timestamp_iso": "2025-11-16T16:54:05Z",
-  "version": "v0.1",
-  "type": "event",
-  "verify_url": "https://api.timeproofs.io/api/verify?hash=<SHA256>"
-}
+## AgentReady Core V1a
+
+The current core can analyze OpenAPI JSON 3.0 / 3.1 and generate:
+
+```txt
+operation extraction
+action classification
+risk findings
+AgentReady Score
+agentready.json
+Markdown report
 ```
 
----
+Usage:
 
-## 🔌 API Reference (v0.1)
+```js
+import { scanOpenApiText } from './agentready-core/index.js';
 
-### `POST /api/timestamp`
-Body:
-```json
-{ "hash": "..." }
+const result = await scanOpenApiText(openApiJsonText, {
+  filename: 'openapi.json'
+});
+
+console.log(result.summary.score);
+console.log(result.agentready_json);
+console.log(result.markdown_report);
 ```
 
-Returns:
-```json
-{
-  "ok": true,
-  "hash": "...",
-  "ts": 123456789,
-  "timestamp_iso": "...",
-  "version": "v0.1",
-  "type": "event",
-  "verify_url": "https://api.timeproofs.io/api/verify?hash=..."
-}
+## Important files to read first
+
+```txt
+AGENTREADY_PROJECT_CONTEXT.md
+docs/agentready/TIMEPROOFS_AGENTREADY_MASTER_PLAN.md
+docs/agentready/AGENTREADY_IMPLEMENTATION_CHECKLIST.md
+docs/agentready/AGENTREADY_JSON_SPEC.md
+docs/agentready/LEGACY_REMOVAL_DECISION.md
 ```
 
----
+## Next build step
 
-### `GET /api/verify?hash=...`
-Checks if a hash has been timestamped.
+Create the first usable product page:
 
-Returns:
-```json
-{
-  "ok": true,
-  "verified": true,
-  "hash": "...",
-  "timestamp_iso": "...",
-  "version": "v0.1"
-}
+```txt
+agentready.html
 ```
 
----
+Required features:
 
-## 📦 Release Integrity (v0.1)
-
-**Official site hash:**  
-```
-41746697c470098393486fb62de886a997875ebfca1b372b574ecf0bbd95b264
-```
-
-**Verify with TimeProofs:**  
-https://api.timeproofs.io/api/verify?hash=41746697c470098393486fb62de886a997875ebfca1b372b574ecf0bbd95b264
-
-**Release proof bundle:**  
-`/release-v0.1.tproof.json` (included in this repository)
-
-This repository and the deployed site are fully **self-verifiable**.
-
----
-
-## 🔐 Privacy
-
-TimeProofs never stores or receives:
-- files  
-- personal data  
-- content  
-- metadata about users  
-
-The only input is a **SHA-256 hash**.
-
----
-
-## 📚 Documentation
-
-Protocol (ProofSpec):  
-https://timeproofs.io/proofspec.html
-
-API Docs:  
-https://timeproofs.io/docs.html
-
-Use Cases:  
-https://timeproofs.io/use-cases.html
-
-Security & CSP:  
-https://timeproofs.io/security.html
-
----
-
-## 🗂 Project Structure (v0.1)
-
-```
-/index.html
-/verify.html
-/proofspec.html
-/use-cases.html
-/docs.html
-/security.html
-/privacy.html
-/legal.html
-/about.html
-/releases/v0.1.json
-/release-v0.1.tproof.json
-/sw.js
-/assets/*
+```txt
+local OpenAPI JSON upload
+AgentReady Score display
+top risks display
+endpoint-by-endpoint findings
+agentready.json export
+Markdown report display
 ```
 
----
+## Non-negotiable rule
 
-## 🧾 License
+Do not rebuild the legacy proof-of-existence product in this repo unless explicitly requested.
 
-This project is licensed under the **MPL-2.0 License**.
+The repo direction is now:
 
----
-
-## 🛠 Maintainer
-
-TimeProofs is developed and maintained by Jeason Bacoul.  
-Follow updates on: https://github.com/BACOUL/timeproofs
+> TimeProofs AgentReady — pre-deployment readiness for AI-agent tools.
