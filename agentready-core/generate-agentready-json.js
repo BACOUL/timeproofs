@@ -5,10 +5,13 @@ export function generateAgentReadyJson(scanResult) {
 
   return {
     agentready_version: AGENTREADY_VERSION,
+    generated_at: new Date().toISOString(),
+    source_type: scanResult.source?.type || 'openapi',
     source: scanResult.source,
     summary: {
       score: summary.score,
       status: summary.status,
+      score_interpretation: getScoreInterpretation(summary.score),
       total_operations: scanResult.operations.length,
       critical_risks: summary.risk_counts?.critical || 0,
       high_risks: summary.risk_counts?.high || 0,
@@ -129,7 +132,7 @@ function buildFailureModes(operation, findingCodes) {
     modes.push('agent cannot verify action success');
   }
 
-  return modes.length > 0 ? modes : ['no major failure mode detected by V1a static analysis'];
+  return modes.length > 0 ? modes : ['no major failure mode detected by V1 static analysis'];
 }
 
 function buildAgentRecommendation(operation, findingCodes, requiresHumanConfirmation) {
@@ -150,4 +153,11 @@ function buildAgentRecommendation(operation, findingCodes, requiresHumanConfirma
   }
 
   return 'Allow autonomous execution under normal authorization and validation controls.';
+}
+
+function getScoreInterpretation(score) {
+  if (score >= 85) return 'Structurally ready for agent use under normal authorization and validation controls.';
+  if (score >= 70) return 'Close to AgentReady, but minor fixes should be completed before broad agent exposure.';
+  if (score >= 50) return 'Needs fixes before being exposed to autonomous or semi-autonomous agents.';
+  return 'Not AgentReady. Do not expose to autonomous agents before structural fixes are applied.';
 }
