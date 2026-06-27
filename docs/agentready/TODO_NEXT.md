@@ -11,9 +11,12 @@
 ✅ risk counts display
 ✅ top risks display
 ✅ endpoint-by-endpoint findings display
+✅ executive summary display
+✅ recommended action plan display
 ✅ Markdown report display
 ✅ agentready.json download
 ✅ markdown report download
+✅ browser print / Save as PDF export
 ✅ mandatory limitation text shown
 ✅ submitted API endpoints are never called
 ```
@@ -21,7 +24,7 @@
 ## Immediate next PR
 
 ```txt
-feat(agentready): polish report and add print export
+feat(agentready): add static test harness
 ```
 
 ## Build next
@@ -29,13 +32,14 @@ feat(agentready): polish report and add print export
 Requirements:
 
 ```txt
-1. Improve the report section layout.
-2. Add a clearer executive summary.
-3. Add recommended action plan.
-4. Add print-friendly CSS.
-5. Add a Print / Save as PDF button using browser print.
-6. Keep agentready.json export unchanged.
-7. Do not add backend PDF generation.
+1. Add a static fixture test page or no-dependency test script.
+2. Verify valid-simple-openapi.json scans successfully.
+3. Verify valid-simple-openapi.yaml scans successfully.
+4. Verify dangerous-actions-openapi.json detects critical risks.
+5. Verify invalid JSON fails cleanly.
+6. Verify invalid YAML fails cleanly.
+7. Verify good fixture scores higher than dangerous fixture.
+8. Keep test harness static and dependency-free.
 ```
 
 ## Do not build yet
