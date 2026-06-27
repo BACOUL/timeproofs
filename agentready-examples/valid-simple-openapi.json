@@ -1,0 +1,92 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Simple Support API",
+    "version": "1.0.0",
+    "description": "Example API used to validate TimeProofs AgentReady static analysis."
+  },
+  "paths": {
+    "/tickets/{ticket_id}": {
+      "get": {
+        "operationId": "getSupportTicketById",
+        "summary": "Get one support ticket by ID",
+        "description": "Use this when an agent needs to read a single support ticket that the user is authorized to access. Do not use this when the ticket ID is missing or when the user has not requested ticket details.",
+        "parameters": [
+          {
+            "name": "ticket_id",
+            "in": "path",
+            "required": true,
+            "description": "Stable support ticket identifier.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ticket found and returned with status and public support metadata.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ticket_id": { "type": "string" },
+                    "status": { "type": "string", "enum": ["open", "pending", "closed"] },
+                    "subject": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ticket_id. Provide a valid ticket_id before retrying."
+          },
+          "404": {
+            "description": "Ticket not found. Ask the user to confirm the ticket_id before retrying."
+          }
+        }
+      }
+    },
+    "/tickets": {
+      "post": {
+        "operationId": "createSupportTicket",
+        "summary": "Create a support ticket",
+        "description": "Use this when the user explicitly asks to create a support request. Do not use this when required fields are missing or when the issue can be answered without opening a ticket.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["subject", "category"],
+                "properties": {
+                  "subject": { "type": "string", "description": "Short issue title." },
+                  "category": { "type": "string", "enum": ["billing", "technical", "account"], "description": "Support category." }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ticket created successfully and returned with a new ticket_id and status."
+          },
+          "400": {
+            "description": "Missing required field. Provide subject and category before retrying."
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    { "supportAuth": [] }
+  ],
+  "components": {
+    "securitySchemes": {
+      "supportAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}
