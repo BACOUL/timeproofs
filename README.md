@@ -30,10 +30,9 @@ OpenAPI / MCP / tool schema
 ✅ Product vision documented
 ✅ Strict methodology documented
 ✅ Repo audit completed
-✅ Static OpenAPI JSON core scanner merged
+✅ Static OpenAPI JSON/YAML core scanner
 ✅ Example OpenAPI fixtures merged
-✅ Browser upload page for OpenAPI JSON
-⬜ YAML support
+✅ Browser upload page for OpenAPI JSON/YAML
 ⬜ PDF / print export
 ⬜ MCP scanner
 ⬜ Agent simulation
@@ -49,7 +48,7 @@ agentready-examples/
 docs/agentready/
 ```
 
-## AgentReady Scanner V1a
+## AgentReady Scanner V1
 
 The static scanner page is:
 
@@ -57,7 +56,13 @@ The static scanner page is:
 agentready.html
 ```
 
-It currently supports local OpenAPI JSON scanning in the browser.
+It currently supports local OpenAPI scanning in the browser for:
+
+```txt
+openapi.json
+openapi.yaml
+openapi.yml
+```
 
 It can generate:
 
@@ -70,9 +75,9 @@ agentready.json
 Markdown report
 ```
 
-## AgentReady Core V1a
+## AgentReady Core V1
 
-The current core can analyze OpenAPI JSON 3.0 / 3.1 and generate:
+The current core can analyze OpenAPI 3.0 / 3.1 in JSON or YAML and generate:
 
 ```txt
 operation extraction
@@ -88,8 +93,8 @@ Usage:
 ```js
 import { scanOpenApiText } from './agentready-core/index.js';
 
-const result = await scanOpenApiText(openApiJsonText, {
-  filename: 'openapi.json'
+const result = await scanOpenApiText(openApiText, {
+  filename: 'openapi.yaml'
 });
 
 console.log(result.summary.score);
@@ -109,14 +114,9 @@ docs/agentready/LEGACY_REMOVAL_DECISION.md
 
 ## Next build step
 
-Add YAML support:
+Improve the human report and add browser print/PDF export.
 
-```txt
-openapi.yaml
-openapi.yml
-```
-
-Then improve report polish and add browser print/PDF export.
+Then begin MCP scanner exploration.
 
 ## Non-negotiable rule
 
