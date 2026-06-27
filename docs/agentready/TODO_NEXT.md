@@ -1,6 +1,6 @@
 # TODO Next — TimeProofs AgentReady
 
-## Current completed V1 base
+## Current completed base
 
 ```txt
 ✅ agentready.html exists
@@ -24,14 +24,17 @@
 ✅ public docs/examples pages
 ✅ MCP exploration document
 ✅ MCP simple/dangerous fixtures
+✅ MCP static core parser
+✅ scanMcpToolsText(fileText, { filename }) handles MCP tools JSON
+✅ MCP tools map to AgentReady operations
 ✅ mandatory limitation text shown
-✅ submitted API endpoints are never called
+✅ submitted API endpoints and MCP tools are never called
 ```
 
 ## Immediate next PR
 
 ```txt
-feat(agentready): add MCP static core parser
+feat(agentready): add MCP scanner UI
 ```
 
 ## Build next
@@ -39,15 +42,16 @@ feat(agentready): add MCP static core parser
 Requirements:
 
 ```txt
-1. Add agentready-core/parse-mcp-tools.js.
-2. Add agentready-core/extract-mcp-tools.js.
-3. Add agentready-core/scan-mcp-tools.js.
-4. Map MCP tools to AgentReady operation objects.
-5. Reuse classify-action/detect-risks/score/report/json generation.
-6. Verify mcp-tools-simple.json scans successfully.
-7. Verify mcp-tools-dangerous.json detects high/critical risks.
-8. Keep OpenAPI V1 behavior unchanged.
-9. Do not add accounts, payment, dashboard, or runtime firewall.
+1. Add agentready-mcp.html.
+2. Accept local MCP tools JSON upload.
+3. Use scanMcpToolsText(fileText, { filename }).
+4. Display MCP AgentReady Score and status.
+5. Display risk counts and top risks.
+6. Display tool-by-tool findings.
+7. Export agentready.json.
+8. Export Markdown report.
+9. Link MCP scanner from landing/docs/examples when stable.
+10. Do not add backend, accounts, payment, dashboard, or runtime firewall.
 ```
 
 ## Do not build yet
