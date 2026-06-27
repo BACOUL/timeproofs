@@ -1,7 +1,8 @@
 export const AGENTREADY_VERSION = '1.0';
 
 export const SUPPORTED_SOURCE_TYPES = Object.freeze({
-  OPENAPI: 'openapi'
+  OPENAPI: 'openapi',
+  MCP: 'mcp'
 });
 
 export const ACTION_TYPES = Object.freeze([
@@ -177,6 +178,42 @@ export const RISK_DEFINITIONS = Object.freeze({
     category: 'clear_names',
     explanation: 'The action type cannot be determined confidently.',
     recommendation: 'Rename the operation and improve its summary/description.'
+  },
+  mcp_vague_tool_name: {
+    severity: 'medium',
+    category: 'clear_names',
+    explanation: 'The MCP tool name is too generic for an agent to select reliably among similar tools.',
+    recommendation: 'Rename the MCP tool with a specific verb and object, for example create_invoice, search_customers, or cancel_subscription.'
+  },
+  mcp_missing_input_schema: {
+    severity: 'high',
+    category: 'strict_parameters',
+    explanation: 'The MCP tool does not declare an inputSchema, so an agent cannot know the expected arguments before calling it.',
+    recommendation: 'Add an inputSchema object with typed properties, descriptions, and required fields.'
+  },
+  mcp_empty_input_schema: {
+    severity: 'medium',
+    category: 'strict_parameters',
+    explanation: 'The MCP tool inputSchema is present but does not define usable properties for the agent.',
+    recommendation: 'Define inputSchema.properties with clear types, descriptions, enums, bounds, and examples where useful.'
+  },
+  mcp_missing_required_fields: {
+    severity: 'medium',
+    category: 'strict_parameters',
+    explanation: 'The MCP tool has input properties but no required field contract, making argument construction ambiguous for agents.',
+    recommendation: 'Add a required array for fields that must always be supplied by the agent.'
+  },
+  mcp_dangerous_tool_weak_description: {
+    severity: 'high',
+    category: 'dangerous_actions',
+    explanation: 'The MCP tool appears to perform a risky action but its description does not provide enough safety boundaries for autonomous use.',
+    recommendation: 'Document when the tool may be used, when it must not be used, whether confirmation is required, and how success is verified.'
+  },
+  mcp_missing_output_schema: {
+    severity: 'medium',
+    category: 'agent_readable_responses',
+    explanation: 'The MCP tool does not declare an outputSchema, so the agent may not know how to interpret the result safely.',
+    recommendation: 'Add an outputSchema that describes the success object, important fields, status values, and error shape.'
   }
 });
 
