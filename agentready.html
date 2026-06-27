@@ -4,58 +4,30 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Scan OpenAPI — TimeProofs AgentReady</title>
-  <meta name="description" content="Upload an OpenAPI JSON file locally and see where AI agents may fail before using your tools." />
+  <meta name="description" content="Upload an OpenAPI JSON or YAML file locally and see where AI agents may fail before using your tools." />
   <meta name="robots" content="index,follow" />
   <meta name="theme-color" content="#0b1020" />
   <link rel="canonical" href="https://timeproofs.io/agentready.html" />
   <link rel="icon" href="/assets/favicon.ico" />
   <style>
-    :root {
-      --bg: #0b1020;
-      --panel: #0f172a;
-      --panel2: #111827;
-      --line: #1e293b;
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --accent: #22d3ee;
-      --accent2: #38bdf8;
-      --ok: #22c55e;
-      --warn: #f59e0b;
-      --bad: #ef4444;
-      --critical: #fb7185;
-    }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; min-height: 100%; }
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(1100px 420px at 75% -10%, rgba(34,211,238,.16), transparent 60%),
-        radial-gradient(900px 320px at 10% 0%, rgba(56,189,248,.08), transparent 60%),
-        var(--bg);
-      color: var(--text);
-      line-height: 1.55;
-    }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .wrap { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
-    header {
-      position: sticky;
-      top: 0;
-      backdrop-filter: blur(12px);
-      background: rgba(11,16,32,.72);
-      border-bottom: 1px solid var(--line);
-      z-index: 10;
-    }
+    :root { --bg:#0b1020; --panel:#0f172a; --panel2:#111827; --line:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --accent2:#38bdf8; --ok:#22c55e; --warn:#f59e0b; --bad:#ef4444; --critical:#fb7185; }
+    * { box-sizing:border-box; }
+    html, body { margin:0; min-height:100%; }
+    body { font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:radial-gradient(1100px 420px at 75% -10%,rgba(34,211,238,.16),transparent 60%),radial-gradient(900px 320px at 10% 0%,rgba(56,189,248,.08),transparent 60%),var(--bg); color:var(--text); line-height:1.55; }
+    a { color:var(--accent); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    .wrap { width:min(1180px,calc(100% - 32px)); margin:0 auto; }
+    header { position:sticky; top:0; backdrop-filter:blur(12px); background:rgba(11,16,32,.72); border-bottom:1px solid var(--line); z-index:10; }
     .nav { display:flex; justify-content:space-between; align-items:center; gap:16px; min-height:68px; }
     .brand { display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; }
     .brand img { width:38px; height:38px; border-radius:10px; }
     .nav-links { display:flex; gap:18px; flex-wrap:wrap; font-size:.94rem; font-weight:700; }
     .hero { padding:54px 0 24px; }
     .eyebrow { display:inline-flex; border:1px solid rgba(34,211,238,.35); color:#b9e7f5; background:rgba(34,211,238,.08); border-radius:999px; padding:6px 12px; font-weight:800; font-size:.84rem; margin-bottom:14px; }
-    h1 { font-size: clamp(2rem, 5vw, 4.2rem); line-height:1; margin:0 0 16px; max-width:980px; letter-spacing:-.05em; }
-    .subtitle { max-width:820px; color:var(--muted); font-size: clamp(1.02rem, 2vw, 1.22rem); margin:0; }
+    h1 { font-size:clamp(2rem,5vw,4.2rem); line-height:1; margin:0 0 16px; max-width:980px; letter-spacing:-.05em; }
+    .subtitle { max-width:820px; color:var(--muted); font-size:clamp(1.02rem,2vw,1.22rem); margin:0; }
     .grid { display:grid; gap:16px; }
-    @media (min-width: 980px) { .grid.two { grid-template-columns: 0.82fr 1.18fr; } .grid.three { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width:980px) { .grid.two { grid-template-columns:.82fr 1.18fr; } .grid.three { grid-template-columns:repeat(3,1fr); } }
     .card { background:rgba(15,23,42,.82); border:1px solid var(--line); border-radius:18px; padding:22px; box-shadow:0 18px 60px rgba(0,0,0,.22); }
     .card h2, .card h3 { margin:0 0 12px; color:#b9e7f5; }
     .muted { color:var(--muted); }
@@ -90,10 +62,7 @@
 <body>
   <header>
     <div class="wrap nav">
-      <a class="brand" href="/" aria-label="TimeProofs AgentReady home">
-        <img src="/assets/logo.png" alt="" />
-        <span>TimeProofs AgentReady</span>
-      </a>
+      <a class="brand" href="/" aria-label="TimeProofs AgentReady home"><img src="/assets/logo.png" alt="" /><span>TimeProofs AgentReady</span></a>
       <nav class="nav-links" aria-label="Main navigation">
         <a href="/agentready.html">Scan</a>
         <a href="/docs/agentready/README.md">Docs</a>
@@ -105,22 +74,23 @@
 
   <main class="wrap">
     <section class="hero">
-      <div class="eyebrow">AgentReady Scanner V1a</div>
+      <div class="eyebrow">AgentReady Scanner V1</div>
       <h1>Scan an OpenAPI spec before giving it to AI agents.</h1>
-      <p class="subtitle">Upload an OpenAPI JSON file. The scan runs locally in your browser and generates an AgentReady Score, endpoint findings, a Markdown report, and <code>agentready.json</code>.</p>
+      <p class="subtitle">Upload an OpenAPI JSON or YAML file. The scan runs locally in your browser and generates an AgentReady Score, endpoint findings, a Markdown report, and <code>agentready.json</code>.</p>
     </section>
 
     <section class="grid two">
       <div class="card">
-        <h2>Upload OpenAPI JSON</h2>
-        <p class="muted">V1a supports OpenAPI JSON 3.0 / 3.1. YAML support is planned next.</p>
+        <h2>Upload OpenAPI JSON or YAML</h2>
+        <p class="muted">Supports OpenAPI 3.0 / 3.1 in <code>.json</code>, <code>.yaml</code>, and <code>.yml</code>.</p>
         <div id="dropzone" class="dropzone">
-          <p><strong>Drop your OpenAPI JSON file here</strong></p>
-          <input id="fileInput" type="file" accept=".json,application/json" />
+          <p><strong>Drop your OpenAPI file here</strong></p>
+          <input id="fileInput" type="file" accept=".json,.yaml,.yml,application/json,text/yaml,application/yaml" />
         </div>
         <div class="actions">
           <button id="scanButton">Scan file</button>
-          <button id="loadGoodExample" class="secondary">Load good example</button>
+          <button id="loadGoodExample" class="secondary">Load JSON example</button>
+          <button id="loadYamlExample" class="secondary">Load YAML example</button>
           <button id="loadDangerExample" class="secondary">Load risky example</button>
         </div>
         <div id="message" class="finding hidden"></div>
@@ -145,14 +115,8 @@
     </section>
 
     <section id="results" class="grid two hidden" style="margin-top:16px;">
-      <div class="card">
-        <h2>Top risks</h2>
-        <div id="topRisks"></div>
-      </div>
-      <div class="card">
-        <h2>Endpoint findings</h2>
-        <div id="endpointFindings"></div>
-      </div>
+      <div class="card"><h2>Top risks</h2><div id="topRisks"></div></div>
+      <div class="card"><h2>Endpoint findings</h2><div id="endpointFindings"></div></div>
     </section>
 
     <section id="reportSection" class="card hidden" style="margin-top:16px;">
@@ -166,9 +130,7 @@
     </section>
   </main>
 
-  <footer>
-    <div class="wrap">TimeProofs AgentReady — tool readiness before agent execution.</div>
-  </footer>
+  <footer><div class="wrap">TimeProofs AgentReady — tool readiness before agent execution.</div></footer>
 
   <script type="module">
     import { scanOpenApiText } from './agentready-core/index.js';
@@ -176,6 +138,7 @@
     const fileInput = document.getElementById('fileInput');
     const scanButton = document.getElementById('scanButton');
     const loadGoodExample = document.getElementById('loadGoodExample');
+    const loadYamlExample = document.getElementById('loadYamlExample');
     const loadDangerExample = document.getElementById('loadDangerExample');
     const dropzone = document.getElementById('dropzone');
     const message = document.getElementById('message');
@@ -199,7 +162,7 @@
     scanButton.addEventListener('click', async () => {
       const file = fileInput.files?.[0];
       if (!file) {
-        showMessage('Choose an OpenAPI JSON file first.', 'error');
+        showMessage('Choose an OpenAPI JSON or YAML file first.', 'error');
         return;
       }
       await scanText(await file.text(), file.name);
@@ -207,6 +170,10 @@
 
     loadGoodExample.addEventListener('click', async () => {
       await loadExample('/agentready-examples/valid-simple-openapi.json', 'valid-simple-openapi.json');
+    });
+
+    loadYamlExample.addEventListener('click', async () => {
+      await loadExample('/agentready-examples/valid-simple-openapi.yaml', 'valid-simple-openapi.yaml');
     });
 
     loadDangerExample.addEventListener('click', async () => {
@@ -272,12 +239,7 @@
       lowCount.textContent = counts.low || 0;
 
       const findings = result.operations.flatMap(operation => (operation.findings || []).map(finding => ({ ...finding, operation })));
-      topRisks.innerHTML = findings
-        .sort((a, b) => severityRank(b.severity) - severityRank(a.severity))
-        .slice(0, 8)
-        .map(renderFinding)
-        .join('') || '<p class="muted">No major AgentReady risks detected by V1a static analysis.</p>';
-
+      topRisks.innerHTML = findings.sort((a, b) => severityRank(b.severity) - severityRank(a.severity)).slice(0, 8).map(renderFinding).join('') || '<p class="muted">No major AgentReady risks detected by static analysis.</p>';
       endpointFindings.innerHTML = result.operations.map(renderOperation).join('');
       markdownReport.textContent = result.markdown_report;
 
@@ -297,10 +259,7 @@
 
     function renderFinding(finding) {
       return `<div class="finding">
-        <div class="finding-title">
-          <span class="pill ${escapeHtml(finding.severity)}">${escapeHtml(finding.severity.toUpperCase())}</span>
-          <span>${escapeHtml(finding.code)}</span>
-        </div>
+        <div class="finding-title"><span class="pill ${escapeHtml(finding.severity)}">${escapeHtml(finding.severity.toUpperCase())}</span><span>${escapeHtml(finding.code)}</span></div>
         <p class="muted">${escapeHtml(finding.method)} ${escapeHtml(finding.path)} · ${escapeHtml(finding.operationId)}</p>
         <p>${escapeHtml(finding.explanation)}</p>
         <p><strong>Fix:</strong> ${escapeHtml(finding.recommendation)}</p>
@@ -313,7 +272,7 @@
         <summary>${escapeHtml(operation.method)} ${escapeHtml(operation.path)} — ${escapeHtml(operation.classification.action_type)} · ${escapeHtml(operation.risk_level)}</summary>
         <p class="muted">Operation ID: ${escapeHtml(operation.operationId)}</p>
         <p class="muted">Requires human confirmation: ${operation.requires_human_confirmation ? 'yes' : 'no'}</p>
-        ${findings.length ? findings.map(renderFinding).join('') : '<p class="muted">No findings detected by V1a static analysis.</p>'}
+        ${findings.length ? findings.map(renderFinding).join('') : '<p class="muted">No findings detected by static analysis.</p>'}
       </details>`;
     }
 
@@ -339,13 +298,7 @@
     }
 
     function escapeHtml(value) {
-      return String(value ?? '').replace(/[&<>'"]/g, char => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        "'": '&#039;',
-        '"': '&quot;'
-      }[char]));
+      return String(value ?? '').replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;' }[char]));
     }
   </script>
 </body>
