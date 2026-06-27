@@ -1,11 +1,11 @@
-# AgentReady Core V1a
+# AgentReady Core V1
 
 Moteur statique local pour analyser une spec OpenAPI avant exposition à des agents IA.
 
-## Objectif V1a
+## Objectif V1
 
 ```txt
-OpenAPI JSON
+OpenAPI JSON / YAML
 → extraction des opérations
 → classification des actions
 → détection des risques
@@ -16,13 +16,24 @@ OpenAPI JSON
 
 ## Important
 
-Cette V1a :
+Cette V1 :
 
 - n'appelle aucun endpoint externe ;
 - n'exécute aucun code fourni par l'utilisateur ;
 - ne stocke aucune spec ;
 - accepte OpenAPI JSON ;
-- prépare YAML pour V1b, mais ne parse pas encore YAML.
+- accepte OpenAPI YAML courant ;
+- reste statique et déterministe.
+
+## Formats supportés
+
+```txt
+openapi.json
+openapi.yaml
+openapi.yml
+```
+
+Le parseur YAML est volontairement léger et interne au repo. Il couvre les structures OpenAPI courantes : objets indentés, listes, scalaires, enums inline, objets inline et blocs texte `|` / `>`.
 
 ## Usage navigateur / module ES
 
@@ -58,7 +69,7 @@ console.log(result.markdown_report);
 0-49   : Not AgentReady
 ```
 
-## Risques détectés V1a
+## Risques détectés V1
 
 ```txt
 unclear_operation_name
@@ -79,8 +90,8 @@ agent_context_confusion
 unknown_action_type
 ```
 
-## Limite V1a
+## Limite
 
-La V1a est volontairement statique et déterministe.
+TimeProofs AgentReady ne garantit pas qu'un agent IA ne se trompera jamais.
 
-Elle ne garantit pas qu'un agent IA ne se trompera jamais. Elle identifie les risques structurels d'une spec OpenAPI qui peuvent provoquer une mauvaise utilisation par un agent.
+Il identifie les risques structurels d'une spec OpenAPI qui peuvent provoquer une mauvaise utilisation par un agent.
