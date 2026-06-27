@@ -7,6 +7,9 @@ export function extractMcpTools(mcpDocument) {
     const required = Array.isArray(inputSchema.required) ? inputSchema.required : [];
     const requestFields = flattenInputSchema(inputSchema);
     const description = String(tool.description || '');
+    const inputProperties = inputSchema && typeof inputSchema.properties === 'object' ? Object.keys(inputSchema.properties) : [];
+    const hasInputSchema = Boolean(tool.inputSchema && typeof tool.inputSchema === 'object');
+    const hasOutputSchema = Boolean(tool.outputSchema && typeof tool.outputSchema === 'object');
 
     return {
       source: 'mcp',
@@ -27,7 +30,11 @@ export function extractMcpTools(mcpDocument) {
         server_name: server.name || '',
         server_description: server.description || '',
         tool_name: tool.name,
-        input_required: required
+        has_input_schema: hasInputSchema,
+        input_properties_count: inputProperties.length,
+        input_required: required,
+        has_output_schema: hasOutputSchema,
+        output_type: hasOutputSchema ? tool.outputSchema.type || 'object' : ''
       }
     };
   });

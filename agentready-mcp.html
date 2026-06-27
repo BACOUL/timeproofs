@@ -56,7 +56,15 @@
     .okbox { border-color:rgba(34,197,94,.45); background:rgba(34,197,94,.08); color:#bbf7d0; }
     details { border:1px solid #1e293b; border-radius:14px; padding:12px; background:#07111f; margin:10px 0; }
     summary { cursor:pointer; font-weight:900; color:#dff7ff; }
+    ul.compact { margin:10px 0 0; padding-left:20px; color:var(--muted); }
     footer { border-top:1px solid var(--line); padding:24px 0; color:#64748b; text-align:center; margin-top:40px; }
+    @media print {
+      header, .hero, #dropzone, #scanButton, #loadSimpleExample, #loadDangerExample, #message, footer { display:none !important; }
+      body { background:#fff; color:#000; }
+      .wrap { width:100%; }
+      .card, .finding, details, pre { background:#fff; color:#000; border-color:#ddd; box-shadow:none; }
+      .muted { color:#333; }
+    }
   </style>
 </head>
 <body>
@@ -75,9 +83,9 @@
 
   <main class="wrap">
     <section class="hero">
-      <div class="eyebrow">AgentReady MCP Scanner V2 draft</div>
+      <div class="eyebrow">AgentReady MCP Scanner V1</div>
       <h1>Scan MCP tools before giving them to AI agents.</h1>
-      <p class="subtitle">Upload an MCP tools JSON file. The scan runs locally in your browser and generates an AgentReady Score, tool findings, a Markdown report, and <code>agentready.json</code>.</p>
+      <p class="subtitle">Upload an MCP tools JSON file. The scan runs locally in your browser and generates an MCP-specific AgentReady Score, tool findings, a Markdown report, a printable report, and <code>agentready.json</code>.</p>
     </section>
 
     <section class="grid two">
@@ -101,6 +109,7 @@
         <h2>MCP AgentReady Score</h2>
         <div id="score" class="score">—</div>
         <span id="status" class="status">—</span>
+        <div id="mcpSummary" class="finding"></div>
         <div class="counts">
           <div class="count"><strong id="criticalCount" class="critical">0</strong>Critical</div>
           <div class="count"><strong id="highCount" class="high">0</strong>High</div>
@@ -110,6 +119,7 @@
         <div class="actions">
           <button id="downloadJsonButton">Download agentready.json</button>
           <button id="downloadReportButton" class="secondary">Download report.md</button>
+          <button id="printReportButton" class="secondary">Print / Save as PDF</button>
         </div>
       </div>
     </section>
@@ -146,6 +156,7 @@
     const reportSection = document.getElementById('reportSection');
     const scoreEl = document.getElementById('score');
     const statusEl = document.getElementById('status');
+    const mcpSummary = document.getElementById('mcpSummary');
     const criticalCount = document.getElementById('criticalCount');
     const highCount = document.getElementById('highCount');
     const mediumCount = document.getElementById('mediumCount');
@@ -155,6 +166,7 @@
     const markdownReport = document.getElementById('markdownReport');
     const downloadJsonButton = document.getElementById('downloadJsonButton');
     const downloadReportButton = document.getElementById('downloadReportButton');
+    const printReportButton = document.getElementById('printReportButton');
 
     let lastResult = null;
 
@@ -171,6 +183,7 @@
     loadDangerExample.addEventListener('click', async () => loadExample('/agentready-examples/mcp-tools-dangerous.json', 'mcp-tools-dangerous.json'));
     downloadJsonButton.addEventListener('click', () => lastResult && downloadFile('agentready-mcp.json', JSON.stringify(lastResult.agentready_json, null, 2), 'application/json'));
     downloadReportButton.addEventListener('click', () => lastResult && downloadFile('agentready-mcp-report.md', lastResult.markdown_report, 'text/markdown'));
+    printReportButton.addEventListener('click', () => window.print());
 
     dropzone.addEventListener('dragover', (event) => { event.preventDefault(); dropzone.classList.add('dragover'); });
     dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
@@ -214,6 +227,7 @@
       highCount.textContent = counts.high || 0;
       mediumCount.textContent = counts.medium || 0;
       lowCount.textContent = counts.low || 0;
+      mcpSummary.innerHTML = renderMcpSummary(result);
 
       const findings = result.operations.flatMap(operation => (operation.findings || []).map(finding => ({ ...finding, operation })));
       topRisks.innerHTML = findings.sort((a, b) => severityRank(b.severity) - severityRank(a.severity)).slice(0, 8).map(renderFinding).join('') || '<p class="muted">No major MCP AgentReady risks detected by static analysis.</p>';
@@ -232,6 +246,20 @@
       topRisks.innerHTML = '';
       toolFindings.innerHTML = '';
       markdownReport.textContent = '';
+      mcpSummary.innerHTML = '';
+    }
+
+    function renderMcpSummary(result) {
+      const confirmationCount = result.operations.filter(operation => operation.requires_human_confirmation).length;
+      const missingInput = result.operations.filter(operation => operation.mcp?.has_input_schema === false).length;
+      const missingOutput = result.operations.filter(operation => operation.mcp?.has_output_schema === false).length;
+      return `<strong>MCP executive summary</strong>
+        <ul class="compact">
+          <li>${escapeHtml(result.operations.length)} tools analyzed from ${escapeHtml(result.source?.server_name || 'unknown server')}.</li>
+          <li>${escapeHtml(confirmationCount)} tools require human confirmation guidance.</li>
+          <li>${escapeHtml(missingInput)} tools are missing inputSchema.</li>
+          <li>${escapeHtml(missingOutput)} tools are missing outputSchema.</li>
+        </ul>`;
     }
 
     function renderFinding(finding) {
@@ -252,8 +280,10 @@
       return `<details>
         <summary>${escapeHtml(operation.operationId)} — ${escapeHtml(operation.classification.action_type)} · ${escapeHtml(operation.risk_level)}</summary>
         <p class="muted">Path: ${escapeHtml(operation.path)}</p>
+        <p class="muted">Input schema: ${operation.mcp?.has_input_schema ? 'present' : 'missing'} · properties: ${escapeHtml(operation.mcp?.input_properties_count ?? 0)}</p>
+        <p class="muted">Required fields: ${required.length ? required.map(escapeHtml).join(', ') : 'none declared'}</p>
+        <p class="muted">Output schema: ${operation.mcp?.has_output_schema ? `present (${escapeHtml(operation.mcp?.output_type || 'object')})` : 'missing'}</p>
         <p class="muted">Requires human confirmation: ${operation.requires_human_confirmation ? 'yes' : 'no'}</p>
-        <p class="muted">Required fields: ${required.length ? required.map(escapeHtml).join(', ') : 'none detected'}</p>
         ${findings.length ? findings.map(finding => renderFinding({ ...finding, operation })).join('') : '<p class="muted">No findings detected by static analysis.</p>'}
       </details>`;
     }
