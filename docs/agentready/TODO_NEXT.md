@@ -24,6 +24,8 @@
 ✅ public docs/examples pages
 ✅ MCP exploration document
 ✅ MCP simple/dangerous fixtures
+✅ MCP static core parser
+✅ MCP tools to AgentReady operations mapping
 ✅ mandatory limitation text shown
 ✅ submitted API endpoints are never called
 ```
@@ -31,7 +33,7 @@
 ## Immediate next PR
 
 ```txt
-feat(agentready): add MCP static core parser
+test(agentready): add MCP checks to static test harness
 ```
 
 ## Build next
@@ -39,14 +41,14 @@ feat(agentready): add MCP static core parser
 Requirements:
 
 ```txt
-1. Add agentready-core/parse-mcp-tools.js.
-2. Add agentready-core/extract-mcp-tools.js.
-3. Add agentready-core/scan-mcp-tools.js.
-4. Map MCP tools to AgentReady operation objects.
-5. Reuse classify-action/detect-risks/score/report/json generation.
-6. Verify mcp-tools-simple.json scans successfully.
-7. Verify mcp-tools-dangerous.json detects high/critical risks.
-8. Keep OpenAPI V1 behavior unchanged.
+1. Load mcp-tools-simple.json in agentready-test.html.
+2. Load mcp-tools-dangerous.json in agentready-test.html.
+3. Verify simple MCP fixture scans successfully.
+4. Verify dangerous MCP fixture scans successfully.
+5. Verify dangerous MCP fixture detects high/critical risks.
+6. Verify MCP scan generates agentready.json.
+7. Verify MCP scan generates Markdown report.
+8. Keep OpenAPI V1 checks unchanged.
 9. Do not add accounts, payment, dashboard, or runtime firewall.
 ```
 
