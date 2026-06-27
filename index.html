@@ -36,70 +36,30 @@
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
     .wrap { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
-    header {
-      position: sticky;
-      top: 0;
-      backdrop-filter: blur(12px);
-      background: rgba(11,16,32,.72);
-      border-bottom: 1px solid var(--line);
-      z-index: 10;
-    }
-    .nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      min-height: 68px;
-    }
+    header { position: sticky; top: 0; backdrop-filter: blur(12px); background: rgba(11,16,32,.72); border-bottom: 1px solid var(--line); z-index: 10; }
+    .nav { display:flex; justify-content:space-between; align-items:center; gap:16px; min-height:68px; }
     .brand { display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; }
-    .brand img { width: 38px; height: 38px; border-radius: 10px; }
+    .brand img { width:38px; height:38px; border-radius:10px; }
     .nav-links { display:flex; gap:18px; flex-wrap:wrap; font-size:.94rem; font-weight:700; }
-    .hero { padding: 82px 0 58px; text-align:center; }
-    .eyebrow {
-      display:inline-flex;
-      border:1px solid rgba(34,211,238,.35);
-      color:#b9e7f5;
-      background:rgba(34,211,238,.08);
-      border-radius:999px;
-      padding:6px 12px;
-      font-weight:800;
-      font-size:.84rem;
-      margin-bottom:18px;
-    }
-    h1 { font-size: clamp(2.2rem, 6vw, 5rem); line-height: .98; margin: 0 auto 20px; max-width: 980px; letter-spacing: -.05em; }
-    .subtitle { max-width: 820px; margin: 0 auto 24px; color: var(--muted); font-size: clamp(1.08rem, 2vw, 1.35rem); }
+    .hero { padding:82px 0 58px; text-align:center; }
+    .eyebrow { display:inline-flex; border:1px solid rgba(34,211,238,.35); color:#b9e7f5; background:rgba(34,211,238,.08); border-radius:999px; padding:6px 12px; font-weight:800; font-size:.84rem; margin-bottom:18px; }
+    h1 { font-size: clamp(2.2rem, 6vw, 5rem); line-height:.98; margin:0 auto 20px; max-width:980px; letter-spacing:-.05em; }
+    .subtitle { max-width:820px; margin:0 auto 24px; color:var(--muted); font-size:clamp(1.08rem, 2vw, 1.35rem); }
     .cta-row { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:26px; }
-    .cta {
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-height:46px;
-      padding:0 18px;
-      border-radius:12px;
-      background:linear-gradient(135deg, var(--accent), var(--accent2));
-      color:#04111f;
-      font-weight:900;
-      border:1px solid rgba(255,255,255,.08);
-    }
+    .cta { display:inline-flex; align-items:center; justify-content:center; min-height:46px; padding:0 18px; border-radius:12px; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#04111f; font-weight:900; border:1px solid rgba(255,255,255,.08); }
     .cta.secondary { background:#101b31; color:#dff7ff; border-color:#20304d; }
     .chips { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:22px; color:#cbd5e1; }
     .chip { border:1px solid #214a57; background:#0d2330; padding:6px 10px; border-radius:999px; font-size:.9rem; }
-    .section { padding: 38px 0; }
+    .section { padding:38px 0; }
     .grid { display:grid; gap:16px; }
-    @media (min-width: 860px) { .grid.three { grid-template-columns: repeat(3, 1fr); } .grid.two { grid-template-columns: repeat(2, 1fr); } }
-    .card {
-      background: rgba(15,23,42,.78);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 22px;
-      box-shadow: 0 18px 60px rgba(0,0,0,.22);
-    }
+    @media (min-width: 860px) { .grid.three { grid-template-columns: repeat(3,1fr); } .grid.two { grid-template-columns: repeat(2,1fr); } }
+    .card { background:rgba(15,23,42,.78); border:1px solid var(--line); border-radius:18px; padding:22px; box-shadow:0 18px 60px rgba(0,0,0,.22); }
     .card h2, .card h3 { margin-top:0; color:#b9e7f5; }
     .card p { color:#cbd5e1; }
     code, pre { background:#020617; color:#e2f6ff; border:1px solid #1e293b; border-radius:12px; }
-    code { padding: 2px 6px; }
-    pre { padding: 16px; overflow:auto; text-align:left; }
-    .status { color: var(--ok); font-weight:900; }
+    code { padding:2px 6px; }
+    pre { padding:16px; overflow:auto; text-align:left; }
+    .status { color:var(--ok); font-weight:900; }
     footer { border-top:1px solid var(--line); padding:24px 0; color:#64748b; text-align:center; margin-top:40px; }
   </style>
 </head>
@@ -111,6 +71,7 @@
         <span>TimeProofs AgentReady</span>
       </a>
       <nav class="nav-links" aria-label="Main navigation">
+        <a href="/agentready.html">Scan</a>
         <a href="/AGENTREADY_PROJECT_CONTEXT.md">Project Context</a>
         <a href="/docs/agentready/README.md">Docs</a>
         <a href="/agentready-core/README.md">Core</a>
@@ -127,12 +88,12 @@
         TimeProofs AgentReady analyzes APIs and tool schemas before they are exposed to AI agents. It produces an AgentReady Score, a human report, and a machine-readable <code>agentready.json</code> contract.
       </p>
       <div class="cta-row">
-        <a class="cta" href="/agentready-core/README.md">View current core</a>
+        <a class="cta" href="/agentready.html">Scan OpenAPI JSON</a>
         <a class="cta secondary" href="/docs/agentready/TIMEPROOFS_AGENTREADY_MASTER_PLAN.md">Read master plan</a>
       </div>
       <div class="chips">
-        <span class="chip">OpenAPI JSON V1a merged</span>
-        <span class="chip">No runtime firewall</span>
+        <span class="chip">OpenAPI JSON scanner live</span>
+        <span class="chip">Local browser analysis</span>
         <span class="chip">No endpoint execution</span>
         <span class="chip">AgentReady Score + JSON</span>
       </div>
@@ -150,7 +111,7 @@
         </article>
         <article class="card">
           <h3>What comes next</h3>
-          <p>The next build step is a local browser upload page: <code>agentready.html</code>, then YAML support, report polish, and PDF/print export.</p>
+          <p>The scanner now supports OpenAPI JSON locally. Next steps: YAML support, report polish, PDF/print export, then MCP scanning.</p>
         </article>
       </div>
     </section>
@@ -163,9 +124,7 @@
 → AgentReady Score
 → AgentReady Report
 → agentready.json</pre>
-        <p>
-          The old proof-of-existence product surface has been removed from the active direction. The repository now focuses on Agent Tool Readiness.
-        </p>
+        <p>The old proof-of-existence product surface has been removed from the active direction. The repository now focuses on Agent Tool Readiness.</p>
       </div>
     </section>
 
@@ -173,8 +132,8 @@
       <div class="grid two">
         <article class="card">
           <h3>Current status</h3>
-          <p><span class="status">Merged:</span> product documentation, strict methodology, repo audit, OpenAPI JSON static core scanner, examples.</p>
-          <p><span class="status">Next:</span> static upload page using <code>agentready-core/index.js</code>.</p>
+          <p><span class="status">Live in repo:</span> product docs, strict methodology, repo audit, OpenAPI JSON static core scanner, examples, and static upload page.</p>
+          <p><span class="status">Next:</span> YAML support and report polish.</p>
         </article>
         <article class="card">
           <h3>Limitation</h3>
