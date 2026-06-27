@@ -50,6 +50,13 @@
     .finding { border:1px solid #1e293b; border-radius:14px; background:#07111f; padding:14px; margin:10px 0; }
     .finding-title { display:flex; gap:8px; flex-wrap:wrap; align-items:center; font-weight:900; }
     .pill { border:1px solid #24455a; background:#0d2330; border-radius:999px; padding:3px 8px; font-size:.82rem; color:#c7edf7; }
+    .report-header { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+    .report-grid { display:grid; gap:16px; margin-top:16px; }
+    @media (min-width:900px) { .report-grid { grid-template-columns:1fr 1fr; } }
+    .report-box { border:1px solid #1e293b; background:#07111f; border-radius:14px; padding:16px; }
+    .report-box h3 { margin:0 0 8px; color:#dff7ff; }
+    .action-list { margin:0; padding-left:20px; }
+    .action-list li { margin:8px 0; }
     pre { background:#020617; color:#e2f6ff; border:1px solid #1e293b; border-radius:14px; padding:16px; overflow:auto; white-space:pre-wrap; word-break:break-word; }
     .hidden { display:none !important; }
     .error { border-color:rgba(239,68,68,.45); background:rgba(239,68,68,.08); color:#fecaca; }
@@ -57,10 +64,24 @@
     details { border:1px solid #1e293b; border-radius:14px; padding:12px; background:#07111f; margin:10px 0; }
     summary { cursor:pointer; font-weight:900; color:#dff7ff; }
     footer { border-top:1px solid var(--line); padding:24px 0; color:#64748b; text-align:center; margin-top:40px; }
+    @media print {
+      :root { --text:#111827; --muted:#374151; --line:#d1d5db; }
+      body { background:#fff !important; color:#111827; font-size:12pt; }
+      header, footer, .hero, .no-print, #results { display:none !important; }
+      .wrap { width:100%; margin:0; }
+      .card, .report-box, pre { background:#fff !important; color:#111827 !important; border-color:#d1d5db !important; box-shadow:none !important; }
+      .card { border:none; padding:0; }
+      .card h2, .card h3, .report-box h3 { color:#111827 !important; }
+      .muted { color:#374151 !important; }
+      .report-grid { grid-template-columns:1fr 1fr; }
+      pre { white-space:pre-wrap; page-break-inside:auto; }
+      .pill { color:#111827 !important; border-color:#9ca3af !important; background:#fff !important; }
+      @page { margin:18mm; }
+    }
   </style>
 </head>
 <body>
-  <header>
+  <header class="no-print">
     <div class="wrap nav">
       <a class="brand" href="/" aria-label="TimeProofs AgentReady home"><img src="/assets/logo.png" alt="" /><span>TimeProofs AgentReady</span></a>
       <nav class="nav-links" aria-label="Main navigation">
@@ -73,13 +94,13 @@
   </header>
 
   <main class="wrap">
-    <section class="hero">
+    <section class="hero no-print">
       <div class="eyebrow">AgentReady Scanner V1</div>
       <h1>Scan an OpenAPI spec before giving it to AI agents.</h1>
       <p class="subtitle">Upload an OpenAPI JSON or YAML file. The scan runs locally in your browser and generates an AgentReady Score, endpoint findings, a Markdown report, and <code>agentready.json</code>.</p>
     </section>
 
-    <section class="grid two">
+    <section class="grid two no-print">
       <div class="card">
         <h2>Upload OpenAPI JSON or YAML</h2>
         <p class="muted">Supports OpenAPI 3.0 / 3.1 in <code>.json</code>, <code>.yaml</code>, and <code>.yml</code>.</p>
@@ -110,27 +131,62 @@
         <div class="actions">
           <button id="downloadJsonButton">Download agentready.json</button>
           <button id="downloadReportButton" class="secondary">Download report.md</button>
+          <button id="printReportButton" class="secondary">Print / Save as PDF</button>
         </div>
       </div>
     </section>
 
-    <section id="results" class="grid two hidden" style="margin-top:16px;">
+    <section id="results" class="grid two hidden no-print" style="margin-top:16px;">
       <div class="card"><h2>Top risks</h2><div id="topRisks"></div></div>
       <div class="card"><h2>Endpoint findings</h2><div id="endpointFindings"></div></div>
     </section>
 
     <section id="reportSection" class="card hidden" style="margin-top:16px;">
-      <h2>Markdown report</h2>
+      <div class="report-header">
+        <div>
+          <div class="eyebrow">Printable AgentReady Report</div>
+          <h2>TimeProofs AgentReady Report</h2>
+          <p id="reportSubtitle" class="muted"></p>
+        </div>
+        <div class="actions no-print">
+          <button id="printReportButton2">Print / Save as PDF</button>
+          <button id="downloadReportButton2" class="secondary">Download report.md</button>
+        </div>
+      </div>
+
+      <div class="report-grid">
+        <div class="report-box">
+          <h3>Executive summary</h3>
+          <div id="executiveSummary"></div>
+        </div>
+        <div class="report-box">
+          <h3>Recommended action plan</h3>
+          <ol id="actionPlan" class="action-list"></ol>
+        </div>
+      </div>
+
+      <div class="report-grid">
+        <div class="report-box">
+          <h3>Risk summary</h3>
+          <div id="riskSummary"></div>
+        </div>
+        <div class="report-box">
+          <h3>AgentReady contract</h3>
+          <p>This scan generated a machine-readable <code>agentready.json</code> contract containing operation risk levels, detected risks, and agent recommendations.</p>
+        </div>
+      </div>
+
+      <h3 style="margin-top:22px;">Markdown report</h3>
       <pre id="markdownReport"></pre>
     </section>
 
-    <section class="card" style="margin-top:16px;">
+    <section class="card no-print" style="margin-top:16px;">
       <h2>Limitations</h2>
       <p>TimeProofs AgentReady does not guarantee that an AI agent will never fail. It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.</p>
     </section>
   </main>
 
-  <footer><div class="wrap">TimeProofs AgentReady — tool readiness before agent execution.</div></footer>
+  <footer class="no-print"><div class="wrap">TimeProofs AgentReady — tool readiness before agent execution.</div></footer>
 
   <script type="module">
     import { scanOpenApiText } from './agentready-core/index.js';
@@ -154,8 +210,15 @@
     const topRisks = document.getElementById('topRisks');
     const endpointFindings = document.getElementById('endpointFindings');
     const markdownReport = document.getElementById('markdownReport');
+    const reportSubtitle = document.getElementById('reportSubtitle');
+    const executiveSummary = document.getElementById('executiveSummary');
+    const actionPlan = document.getElementById('actionPlan');
+    const riskSummary = document.getElementById('riskSummary');
     const downloadJsonButton = document.getElementById('downloadJsonButton');
     const downloadReportButton = document.getElementById('downloadReportButton');
+    const downloadReportButton2 = document.getElementById('downloadReportButton2');
+    const printReportButton = document.getElementById('printReportButton');
+    const printReportButton2 = document.getElementById('printReportButton2');
 
     let lastResult = null;
 
@@ -168,35 +231,17 @@
       await scanText(await file.text(), file.name);
     });
 
-    loadGoodExample.addEventListener('click', async () => {
-      await loadExample('/agentready-examples/valid-simple-openapi.json', 'valid-simple-openapi.json');
-    });
+    loadGoodExample.addEventListener('click', async () => loadExample('/agentready-examples/valid-simple-openapi.json', 'valid-simple-openapi.json'));
+    loadYamlExample.addEventListener('click', async () => loadExample('/agentready-examples/valid-simple-openapi.yaml', 'valid-simple-openapi.yaml'));
+    loadDangerExample.addEventListener('click', async () => loadExample('/agentready-examples/dangerous-actions-openapi.json', 'dangerous-actions-openapi.json'));
+    downloadJsonButton.addEventListener('click', () => lastResult && downloadFile('agentready.json', JSON.stringify(lastResult.agentready_json, null, 2), 'application/json'));
+    downloadReportButton.addEventListener('click', downloadMarkdownReport);
+    downloadReportButton2.addEventListener('click', downloadMarkdownReport);
+    printReportButton.addEventListener('click', printReport);
+    printReportButton2.addEventListener('click', printReport);
 
-    loadYamlExample.addEventListener('click', async () => {
-      await loadExample('/agentready-examples/valid-simple-openapi.yaml', 'valid-simple-openapi.yaml');
-    });
-
-    loadDangerExample.addEventListener('click', async () => {
-      await loadExample('/agentready-examples/dangerous-actions-openapi.json', 'dangerous-actions-openapi.json');
-    });
-
-    downloadJsonButton.addEventListener('click', () => {
-      if (!lastResult) return;
-      downloadFile('agentready.json', JSON.stringify(lastResult.agentready_json, null, 2), 'application/json');
-    });
-
-    downloadReportButton.addEventListener('click', () => {
-      if (!lastResult) return;
-      downloadFile('agentready-report.md', lastResult.markdown_report, 'text/markdown');
-    });
-
-    dropzone.addEventListener('dragover', (event) => {
-      event.preventDefault();
-      dropzone.classList.add('dragover');
-    });
-
+    dropzone.addEventListener('dragover', (event) => { event.preventDefault(); dropzone.classList.add('dragover'); });
     dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
-
     dropzone.addEventListener('drop', async (event) => {
       event.preventDefault();
       dropzone.classList.remove('dragover');
@@ -242,6 +287,10 @@
       topRisks.innerHTML = findings.sort((a, b) => severityRank(b.severity) - severityRank(a.severity)).slice(0, 8).map(renderFinding).join('') || '<p class="muted">No major AgentReady risks detected by static analysis.</p>';
       endpointFindings.innerHTML = result.operations.map(renderOperation).join('');
       markdownReport.textContent = result.markdown_report;
+      reportSubtitle.textContent = `${result.source.filename} · ${result.operations.length} operations · Score ${result.summary.score}/100 · ${result.summary.status}`;
+      executiveSummary.innerHTML = buildExecutiveSummary(result);
+      actionPlan.innerHTML = buildActionPlan(result).map(item => `<li>${escapeHtml(item)}</li>`).join('');
+      riskSummary.innerHTML = buildRiskSummary(result);
 
       summaryCard.classList.remove('hidden');
       results.classList.remove('hidden');
@@ -255,6 +304,51 @@
       topRisks.innerHTML = '';
       endpointFindings.innerHTML = '';
       markdownReport.textContent = '';
+    }
+
+    function buildExecutiveSummary(result) {
+      const score = result.summary.score;
+      const status = result.summary.status;
+      const counts = result.summary.risk_counts || {};
+      const totalRisk = (counts.critical || 0) + (counts.high || 0) + (counts.medium || 0) + (counts.low || 0);
+      const conclusion = score >= 85
+        ? 'This API appears structurally ready for AI-agent use under normal authorization and validation controls.'
+        : score >= 70
+          ? 'This API is close to AgentReady but should receive fixes before broad agent exposure.'
+          : score >= 50
+            ? 'This API needs fixes before being exposed to autonomous or semi-autonomous agents.'
+            : 'This API should not be exposed to autonomous agents before structural fixes are applied.';
+
+      return `<p><strong>Status:</strong> ${escapeHtml(status)}</p>
+        <p><strong>Score:</strong> ${score}/100</p>
+        <p><strong>Total findings:</strong> ${totalRisk}</p>
+        <p>${escapeHtml(conclusion)}</p>
+        <p class="muted">This report identifies structural risks. It does not guarantee that an AI agent will never fail.</p>`;
+    }
+
+    function buildActionPlan(result) {
+      const findings = result.operations.flatMap(operation => operation.findings || []);
+      const codes = new Set(findings.map(finding => finding.code));
+      const actions = [];
+      if (codes.has('dangerous_action_without_confirmation') || codes.has('irreversible_action')) actions.push('Add explicit human confirmation for destructive, financial, publishing, export, or external-send actions.');
+      if (codes.has('ambiguous_tool_description') || codes.has('missing_when_to_use')) actions.push('Improve operation descriptions with clear “when to use” guidance for agents.');
+      if (codes.has('missing_when_not_to_use')) actions.push('Add “when not to use” constraints and forbidden conditions.');
+      if (codes.has('missing_enum')) actions.push('Add enums for closed string fields such as status, type, category, role, currency, language, or country.');
+      if (codes.has('unbounded_parameter')) actions.push('Add minimum and maximum bounds for sensitive numeric parameters such as amount, price, discount, quantity, duration, or limit.');
+      if (codes.has('non_corrective_error') || codes.has('missing_error_recovery')) actions.push('Improve 400/401/403/404/409/422/500 errors with corrective guidance for agents.');
+      if (codes.has('sensitive_data_exposure') || codes.has('overbroad_permission')) actions.push('Define least-privilege security scopes and sensitive-data boundaries.');
+      if (codes.has('missing_success_verification')) actions.push('Return clear success payloads or document verification endpoints after state-changing actions.');
+      if (actions.length === 0) actions.push('Review the generated agentready.json contract before exposing this API to agents.');
+      return actions.slice(0, 8);
+    }
+
+    function buildRiskSummary(result) {
+      const counts = result.summary.risk_counts || {};
+      return `<p><strong class="critical">Critical:</strong> ${counts.critical || 0}</p>
+        <p><strong class="high">High:</strong> ${counts.high || 0}</p>
+        <p><strong class="medium">Medium:</strong> ${counts.medium || 0}</p>
+        <p><strong class="low">Low:</strong> ${counts.low || 0}</p>
+        <p><strong>Operations analyzed:</strong> ${result.operations.length}</p>`;
     }
 
     function renderFinding(finding) {
@@ -274,6 +368,16 @@
         <p class="muted">Requires human confirmation: ${operation.requires_human_confirmation ? 'yes' : 'no'}</p>
         ${findings.length ? findings.map(renderFinding).join('') : '<p class="muted">No findings detected by static analysis.</p>'}
       </details>`;
+    }
+
+    function downloadMarkdownReport() {
+      if (!lastResult) return;
+      downloadFile('agentready-report.md', lastResult.markdown_report, 'text/markdown');
+    }
+
+    function printReport() {
+      if (!lastResult) return;
+      window.print();
     }
 
     function showMessage(text, type) {
