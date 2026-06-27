@@ -1,0 +1,42 @@
+{
+  "mcp_version": "2025-06",
+  "server": {
+    "name": "Simple Support MCP Server",
+    "description": "Example MCP tools used to validate the AgentReady MCP scanner exploration."
+  },
+  "tools": [
+    {
+      "name": "get_support_ticket",
+      "description": "Use this when an agent needs to read a single support ticket that the user is authorized to access. Do not use this when the ticket ID is missing or when the user has not requested ticket details.",
+      "inputSchema": {
+        "type": "object",
+        "required": ["ticket_id"],
+        "properties": {
+          "ticket_id": {
+            "type": "string",
+            "description": "Stable support ticket identifier."
+          }
+        }
+      }
+    },
+    {
+      "name": "create_support_ticket",
+      "description": "Use this when the user explicitly asks to create a support request. Do not use this when required fields are missing or when the issue can be answered without opening a ticket.",
+      "inputSchema": {
+        "type": "object",
+        "required": ["subject", "category"],
+        "properties": {
+          "subject": {
+            "type": "string",
+            "description": "Short issue title."
+          },
+          "category": {
+            "type": "string",
+            "enum": ["billing", "technical", "account"],
+            "description": "Support category."
+          }
+        }
+      }
+    }
+  ]
+}
