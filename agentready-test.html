@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AgentReady Test Harness — TimeProofs</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="theme-color" content="#0b1020" />
+  <link rel="icon" href="/assets/favicon.ico" />
+  <style>
+    :root { --bg:#0b1020; --panel:#0f172a; --line:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --ok:#22c55e; --bad:#ef4444; --warn:#f59e0b; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:radial-gradient(900px 320px at 70% -10%,rgba(34,211,238,.16),transparent 60%),var(--bg); color:var(--text); line-height:1.55; }
+    a { color:var(--accent); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    .wrap { width:min(1080px,calc(100% - 32px)); margin:0 auto; padding:34px 0; }
+    header { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:24px; }
+    h1 { margin:0 0 10px; font-size:clamp(2rem,5vw,4rem); line-height:1; letter-spacing:-.05em; }
+    .muted { color:var(--muted); }
+    .card { background:rgba(15,23,42,.82); border:1px solid var(--line); border-radius:18px; padding:20px; margin:16px 0; box-shadow:0 18px 60px rgba(0,0,0,.22); }
+    button { cursor:pointer; display:inline-flex; align-items:center; justify-content:center; min-height:42px; padding:0 14px; border-radius:12px; border:1px solid rgba(255,255,255,.08); background:linear-gradient(135deg,var(--accent),#38bdf8); color:#04111f; font-weight:900; }
+    button.secondary { background:#101b31; color:#dff7ff; border-color:#20304d; }
+    .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+    .summary { display:grid; gap:12px; grid-template-columns:repeat(4,1fr); margin-top:14px; }
+    @media (max-width:760px) { .summary { grid-template-columns:repeat(2,1fr); } header { align-items:flex-start; flex-direction:column; } }
+    .metric { background:#020617; border:1px solid #1e293b; border-radius:12px; padding:12px; text-align:center; }
+    .metric strong { display:block; font-size:1.8rem; }
+    .test { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; border:1px solid #1e293b; border-radius:14px; background:#07111f; padding:14px; margin:10px 0; }
+    .badge { border-radius:999px; padding:4px 10px; font-size:.82rem; font-weight:900; white-space:nowrap; }
+    .pass { color:#bbf7d0; background:rgba(34,197,94,.12); border:1px solid rgba(34,197,94,.35); }
+    .fail { color:#fecaca; background:rgba(239,68,68,.12); border:1px solid rgba(239,68,68,.35); }
+    .pending { color:#fde68a; background:rgba(245,158,11,.12); border:1px solid rgba(245,158,11,.35); }
+    pre { background:#020617; border:1px solid #1e293b; border-radius:14px; padding:14px; overflow:auto; color:#e2f6ff; white-space:pre-wrap; word-break:break-word; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <div>
+        <h1>AgentReady Test Harness</h1>
+        <p class="muted">Static dependency-free checks for the OpenAPI JSON/YAML scanner.</p>
+      </div>
+      <a href="/agentready.html">Back to scanner</a>
+    </header>
+
+    <section class="card">
+      <h2>Run V1 checks</h2>
+      <p class="muted">This page loads local fixtures, runs <code>scanOpenApiText</code>, and validates expected behavior. It does not call submitted API endpoints.</p>
+      <div class="actions">
+        <button id="runButton">Run tests</button>
+        <button id="clearButton" class="secondary">Clear</button>
+      </div>
+      <div class="summary">
+        <div class="metric"><strong id="passCount">0</strong>Pass</div>
+        <div class="metric"><strong id="failCount">0</strong>Fail</div>
+        <div class="metric"><strong id="totalCount">0</strong>Total</div>
+        <div class="metric"><strong id="duration">—</strong>ms</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Results</h2>
+      <div id="results"></div>
+    </section>
+
+    <section class="card">
+      <h2>Raw output</h2>
+      <pre id="rawOutput">No test run yet.</pre>
+    </section>
+  </main>
+
+  <script type="module">
+    import { scanOpenApiText } from './agentready-core/index.js';
+
+    const runButton = document.getElementById('runButton');
+    const clearButton = document.getElementById('clearButton');
+    const resultsEl = document.getElementById('results');
+    const rawOutput = document.getElementById('rawOutput');
+    const passCount = document.getElementById('passCount');
+    const failCount = document.getElementById('failCount');
+    const totalCount = document.getElementById('totalCount');
+    const durationEl = document.getElementById('duration');
+
+    const invalidJson = '{ "openapi": "3.1.0", "paths": '; 
+    const invalidYaml = 'openapi: 3.1.0\npaths:\n  /broken:\n    get:\n      responses:\n        "200"\n          description: Missing colon nesting';
+
+    runButton.addEventListener('click', runTests);
+    clearButton.addEventListener('click', clearResults);
+
+    async function runTests() {
+      clearResults();
+      const started = performance.now();
+      const results = [];
+
+      const goodJsonText = await loadFixture('/agentready-examples/valid-simple-openapi.json');
+      const goodYamlText = await loadFixture('/agentready-examples/valid-simple-openapi.yaml');
+      const dangerousText = await loadFixture('/agentready-examples/dangerous-actions-openapi.json');
+
+      const goodJson = await capture(() => scanOpenApiText(goodJsonText, { filename: 'valid-simple-openapi.json' }));
+      const goodYaml = await capture(() => scanOpenApiText(goodYamlText, { filename: 'valid-simple-openapi.yaml' }));
+      const dangerous = await capture(() => scanOpenApiText(dangerousText, { filename: 'dangerous-actions-openapi.json' }));
+      const badJson = await capture(() => scanOpenApiText(invalidJson, { filename: 'invalid-json.json' }));
+      const badYaml = await capture(() => scanOpenApiText(invalidYaml, { filename: 'invalid-yaml.yaml' }));
+
+      results.push(assert('valid-simple-openapi.json scans successfully', goodJson.ok));
+      results.push(assert('valid-simple-openapi.yaml scans successfully', goodYaml.ok));
+      results.push(assert('dangerous-actions-openapi.json scans successfully', dangerous.ok));
+      results.push(assert('invalid JSON fails cleanly', !badJson.ok && Boolean(badJson.error?.code)));
+      results.push(assert('invalid YAML fails cleanly', !badYaml.ok && Boolean(badYaml.error?.code)));
+      results.push(assert('good JSON produces agentready.json', Boolean(goodJson.value?.agentready_json?.tools?.length)));
+      results.push(assert('good YAML produces agentready.json', Boolean(goodYaml.value?.agentready_json?.tools?.length)));
+      results.push(assert('dangerous fixture detects critical risk', (dangerous.value?.summary?.risk_counts?.critical || 0) > 0));
+      results.push(assert('good fixture scores higher than dangerous fixture', (goodJson.value?.summary?.score || 0) > (dangerous.value?.summary?.score || 0)));
+      results.push(assert('Markdown report is generated', Boolean(goodJson.value?.markdown_report?.includes('TimeProofs AgentReady Report'))));
+      results.push(assert('same pipeline supports JSON and YAML', goodJson.ok && goodYaml.ok && goodJson.value.operations.length === goodYaml.value.operations.length));
+
+      renderResults(results, performance.now() - started, { goodJson, goodYaml, dangerous, badJson, badYaml });
+    }
+
+    async function loadFixture(url) {
+      const response = await fetch(url, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`Unable to load fixture ${url}: ${response.status}`);
+      return response.text();
+    }
+
+    async function capture(fn) {
+      try {
+        return { ok: true, value: await fn() };
+      } catch (error) {
+        return { ok: false, error: serializeError(error) };
+      }
+    }
+
+    function assert(name, condition) {
+      return { name, pass: Boolean(condition) };
+    }
+
+    function renderResults(results, duration, raw) {
+      const pass = results.filter(result => result.pass).length;
+      const fail = results.length - pass;
+      passCount.textContent = pass;
+      failCount.textContent = fail;
+      totalCount.textContent = results.length;
+      durationEl.textContent = String(Math.round(duration));
+
+      resultsEl.innerHTML = results.map(result => `
+        <div class="test">
+          <div>
+            <strong>${escapeHtml(result.name)}</strong>
+          </div>
+          <span class="badge ${result.pass ? 'pass' : 'fail'}">${result.pass ? 'PASS' : 'FAIL'}</span>
+        </div>
+      `).join('');
+
+      rawOutput.textContent = JSON.stringify({
+        summary: { pass, fail, total: results.length, duration_ms: Math.round(duration) },
+        scores: {
+          good_json: raw.goodJson.value?.summary?.score,
+          good_yaml: raw.goodYaml.value?.summary?.score,
+          dangerous: raw.dangerous.value?.summary?.score
+        },
+        errors: {
+          invalid_json: raw.badJson.error,
+          invalid_yaml: raw.badYaml.error
+        }
+      }, null, 2);
+    }
+
+    function clearResults() {
+      passCount.textContent = '0';
+      failCount.textContent = '0';
+      totalCount.textContent = '0';
+      durationEl.textContent = '—';
+      resultsEl.innerHTML = '<div class="test"><strong>No test run yet.</strong><span class="badge pending">PENDING</span></div>';
+      rawOutput.textContent = 'No test run yet.';
+    }
+
+    function serializeError(error) {
+      return {
+        name: error.name,
+        code: error.code,
+        message: error.message,
+        details: error.details || null
+      };
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;' }[char]));
+    }
+
+    clearResults();
+  </script>
+</body>
+</html>
