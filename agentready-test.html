@@ -38,14 +38,14 @@
     <header>
       <div>
         <h1>AgentReady Test Harness</h1>
-        <p class="muted">Static dependency-free checks for the OpenAPI JSON/YAML scanner.</p>
+        <p class="muted">Static dependency-free checks for the OpenAPI JSON/YAML scanner and MCP tools scanner core.</p>
       </div>
       <a href="/agentready.html">Back to scanner</a>
     </header>
 
     <section class="card">
-      <h2>Run V1 checks</h2>
-      <p class="muted">This page loads local fixtures, runs <code>scanOpenApiText</code>, and validates expected behavior. It does not call submitted API endpoints.</p>
+      <h2>Run AgentReady checks</h2>
+      <p class="muted">This page loads local fixtures, runs <code>scanOpenApiText</code> and <code>scanMcpToolsText</code>, and validates expected behavior. It does not call submitted API endpoints or MCP tools.</p>
       <div class="actions">
         <button id="runButton">Run tests</button>
         <button id="clearButton" class="secondary">Clear</button>
@@ -70,7 +70,7 @@
   </main>
 
   <script type="module">
-    import { scanOpenApiText } from './agentready-core/index.js';
+    import { scanOpenApiText, scanMcpToolsText } from './agentready-core/index.js';
 
     const runButton = document.getElementById('runButton');
     const clearButton = document.getElementById('clearButton');
@@ -81,8 +81,10 @@
     const totalCount = document.getElementById('totalCount');
     const durationEl = document.getElementById('duration');
 
-    const invalidJson = '{ "openapi": "3.1.0", "paths": '; 
+    const invalidJson = '{ "openapi": "3.1.0", "paths": ';
     const invalidYaml = 'openapi: 3.1.0\npaths:\n  /broken:\n    get:\n      responses:\n        "200"\n          description: Missing colon nesting';
+    const invalidMcpJson = '{ "server": { "name": "Broken" }, "tools": [ }';
+    const invalidMcpShape = JSON.stringify({ server: { name: 'Broken' }, not_tools: [] });
 
     runButton.addEventListener('click', runTests);
     clearButton.addEventListener('click', clearResults);
@@ -95,12 +97,18 @@
       const goodJsonText = await loadFixture('/agentready-examples/valid-simple-openapi.json');
       const goodYamlText = await loadFixture('/agentready-examples/valid-simple-openapi.yaml');
       const dangerousText = await loadFixture('/agentready-examples/dangerous-actions-openapi.json');
+      const mcpSimpleText = await loadFixture('/agentready-examples/mcp-tools-simple.json');
+      const mcpDangerousText = await loadFixture('/agentready-examples/mcp-tools-dangerous.json');
 
       const goodJson = await capture(() => scanOpenApiText(goodJsonText, { filename: 'valid-simple-openapi.json' }));
       const goodYaml = await capture(() => scanOpenApiText(goodYamlText, { filename: 'valid-simple-openapi.yaml' }));
       const dangerous = await capture(() => scanOpenApiText(dangerousText, { filename: 'dangerous-actions-openapi.json' }));
       const badJson = await capture(() => scanOpenApiText(invalidJson, { filename: 'invalid-json.json' }));
       const badYaml = await capture(() => scanOpenApiText(invalidYaml, { filename: 'invalid-yaml.yaml' }));
+      const mcpSimple = await capture(() => scanMcpToolsText(mcpSimpleText, { filename: 'mcp-tools-simple.json' }));
+      const mcpDangerous = await capture(() => scanMcpToolsText(mcpDangerousText, { filename: 'mcp-tools-dangerous.json' }));
+      const badMcpJson = await capture(() => scanMcpToolsText(invalidMcpJson, { filename: 'invalid-mcp.json' }));
+      const badMcpShape = await capture(() => scanMcpToolsText(invalidMcpShape, { filename: 'invalid-mcp-shape.json' }));
 
       results.push(assert('valid-simple-openapi.json scans successfully', goodJson.ok));
       results.push(assert('valid-simple-openapi.yaml scans successfully', goodYaml.ok));
@@ -109,12 +117,32 @@
       results.push(assert('invalid YAML fails cleanly', !badYaml.ok && Boolean(badYaml.error?.code)));
       results.push(assert('good JSON produces agentready.json', Boolean(goodJson.value?.agentready_json?.tools?.length)));
       results.push(assert('good YAML produces agentready.json', Boolean(goodYaml.value?.agentready_json?.tools?.length)));
-      results.push(assert('dangerous fixture detects critical risk', (dangerous.value?.summary?.risk_counts?.critical || 0) > 0));
-      results.push(assert('good fixture scores higher than dangerous fixture', (goodJson.value?.summary?.score || 0) > (dangerous.value?.summary?.score || 0)));
-      results.push(assert('Markdown report is generated', Boolean(goodJson.value?.markdown_report?.includes('TimeProofs AgentReady Report'))));
-      results.push(assert('same pipeline supports JSON and YAML', goodJson.ok && goodYaml.ok && goodJson.value.operations.length === goodYaml.value.operations.length));
+      results.push(assert('dangerous OpenAPI fixture detects critical risk', (dangerous.value?.summary?.risk_counts?.critical || 0) > 0));
+      results.push(assert('good OpenAPI fixture scores higher than dangerous OpenAPI fixture', (goodJson.value?.summary?.score || 0) > (dangerous.value?.summary?.score || 0)));
+      results.push(assert('OpenAPI Markdown report is generated', Boolean(goodJson.value?.markdown_report?.includes('TimeProofs AgentReady Report'))));
+      results.push(assert('same pipeline supports OpenAPI JSON and YAML', goodJson.ok && goodYaml.ok && goodJson.value.operations.length === goodYaml.value.operations.length));
+      results.push(assert('mcp-tools-simple.json scans successfully', mcpSimple.ok));
+      results.push(assert('mcp-tools-dangerous.json scans successfully', mcpDangerous.ok));
+      results.push(assert('invalid MCP JSON fails cleanly', !badMcpJson.ok && Boolean(badMcpJson.error?.code)));
+      results.push(assert('invalid MCP shape fails cleanly', !badMcpShape.ok && Boolean(badMcpShape.error?.code)));
+      results.push(assert('MCP simple fixture produces agentready.json', Boolean(mcpSimple.value?.agentready_json?.tools?.length)));
+      results.push(assert('MCP dangerous fixture produces agentready.json', Boolean(mcpDangerous.value?.agentready_json?.tools?.length)));
+      results.push(assert('MCP Markdown report is generated', Boolean(mcpSimple.value?.markdown_report?.includes('TimeProofs AgentReady Report'))));
+      results.push(assert('MCP dangerous fixture detects high or critical risks', hasHighOrCriticalRisks(mcpDangerous.value)));
+      results.push(assert('MCP simple fixture scores higher than MCP dangerous fixture', (mcpSimple.value?.summary?.score || 0) > (mcpDangerous.value?.summary?.score || 0)));
+      results.push(assert('MCP tools are converted to AgentReady operations', mcpSimple.ok && mcpSimple.value.operations.every(operation => operation.source === 'mcp' && operation.method === 'MCP_TOOL')));
 
-      renderResults(results, performance.now() - started, { goodJson, goodYaml, dangerous, badJson, badYaml });
+      renderResults(results, performance.now() - started, {
+        goodJson,
+        goodYaml,
+        dangerous,
+        badJson,
+        badYaml,
+        mcpSimple,
+        mcpDangerous,
+        badMcpJson,
+        badMcpShape
+      });
     }
 
     async function loadFixture(url) {
@@ -133,6 +161,11 @@
 
     function assert(name, condition) {
       return { name, pass: Boolean(condition) };
+    }
+
+    function hasHighOrCriticalRisks(result) {
+      const counts = result?.summary?.risk_counts || {};
+      return (counts.critical || 0) + (counts.high || 0) > 0;
     }
 
     function renderResults(results, duration, raw) {
@@ -155,13 +188,21 @@
       rawOutput.textContent = JSON.stringify({
         summary: { pass, fail, total: results.length, duration_ms: Math.round(duration) },
         scores: {
-          good_json: raw.goodJson.value?.summary?.score,
-          good_yaml: raw.goodYaml.value?.summary?.score,
-          dangerous: raw.dangerous.value?.summary?.score
+          openapi_good_json: raw.goodJson.value?.summary?.score,
+          openapi_good_yaml: raw.goodYaml.value?.summary?.score,
+          openapi_dangerous: raw.dangerous.value?.summary?.score,
+          mcp_simple: raw.mcpSimple.value?.summary?.score,
+          mcp_dangerous: raw.mcpDangerous.value?.summary?.score
+        },
+        risk_counts: {
+          openapi_dangerous: raw.dangerous.value?.summary?.risk_counts,
+          mcp_dangerous: raw.mcpDangerous.value?.summary?.risk_counts
         },
         errors: {
           invalid_json: raw.badJson.error,
-          invalid_yaml: raw.badYaml.error
+          invalid_yaml: raw.badYaml.error,
+          invalid_mcp_json: raw.badMcpJson.error,
+          invalid_mcp_shape: raw.badMcpShape.error
         }
       }, null, 2);
     }
