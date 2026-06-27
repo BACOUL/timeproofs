@@ -95,7 +95,8 @@ Current state:
 ✅ Static browser test harness
 ✅ Public docs page
 ✅ Public examples page
-⬜ MCP scanner not built yet
+✅ MCP scanner exploration docs and fixtures
+⬜ MCP static core parser not built yet
 ⬜ Agent simulation not built yet
 ```
 
@@ -126,6 +127,17 @@ OpenAPI JSON/YAML upload
 → public docs/examples
 ```
 
+Planned V2 MCP flow:
+
+```txt
+MCP tools JSON
+→ map MCP tools to AgentReady operations
+→ reuse action classification
+→ reuse risk detection
+→ reuse score/report/json generation
+→ MCP AgentReady Report
+```
+
 ---
 
 ## 6. Current technical core
@@ -152,6 +164,8 @@ Example files:
 agentready-examples/valid-simple-openapi.json
 agentready-examples/valid-simple-openapi.yaml
 agentready-examples/dangerous-actions-openapi.json
+agentready-examples/mcp-tools-simple.json
+agentready-examples/mcp-tools-dangerous.json
 ```
 
 Supported current input:
@@ -159,6 +173,12 @@ Supported current input:
 ```txt
 OpenAPI JSON 3.0 / 3.1
 OpenAPI YAML 3.0 / 3.1
+```
+
+Exploratory MCP input:
+
+```txt
+MCP tools JSON with server + tools[]
 ```
 
 Current output:
@@ -233,6 +253,7 @@ docs/agentready/AGENTREADY_REPORT_TEMPLATE.md
 docs/agentready/AGENTREADY_IMPLEMENTATION_CHECKLIST.md
 docs/agentready/REPO_AUDIT_INITIAL.md
 docs/agentready/LEGACY_REMOVAL_DECISION.md
+docs/agentready/MCP_SCANNER_EXPLORATION.md
 ```
 
 ---
@@ -244,8 +265,8 @@ docs/agentready/LEGACY_REMOVAL_DECISION.md
 3. Do not rebuild the old timestamp/proof/verify product surface.
 4. Do not introduce Next.js without a specific migration decision.
 5. Do not add payments before the scan/report is useful.
-6. Do not add MCP before OpenAPI V1 is stable.
-7. Do not call external API endpoints from a submitted OpenAPI spec.
+6. Do not break OpenAPI V1 while adding MCP.
+7. Do not call external API endpoints from a submitted OpenAPI or MCP spec.
 8. Do not store user specs by default.
 9. Do not expose secrets/tokens from uploaded specs.
 10. Do not present AgentReady as a guarantee that agents will never fail.
@@ -261,23 +282,23 @@ It identifies structural risks that may cause AI agents to misuse APIs, tools or
 
 ## 10. Next PRs to complete the product
 
-### Next — MCP exploration
+### Next — MCP static core parser
 
 ```txt
-Define MCP input shape.
-Create MCP fixture.
-Extend classifier to MCP tool schemas.
-Keep OpenAPI V1 untouched.
-Do not add accounts, payment, or dashboard.
+Add agentready-core/parse-mcp-tools.js.
+Add agentready-core/extract-mcp-tools.js.
+Add agentready-core/scan-mcp-tools.js.
+Map MCP tools to AgentReady operation objects.
+Reuse classify-action/detect-risks/score/report/json generation.
+Keep OpenAPI V1 behavior unchanged.
 ```
 
-### Then — MCP scanner V2
+### Then — MCP scanner UI
 
 ```txt
-MCP tools schema
-→ tool name/description/input schema analysis
-→ MCP AgentReady Score
-→ MCP agentready.json
+Add agentready-mcp.html or extend agentready.html after core is stable.
+Support local MCP tools JSON upload.
+Generate MCP AgentReady Score and agentready.json.
 ```
 
 ---
@@ -359,4 +380,4 @@ Because it can become the machine-readable contract between tools and agents.
 
 ## 13. One-line repo state
 
-> TimeProofs is now focused on AgentReady. The repo has a static OpenAPI JSON/YAML scanner page, agentready.json export, Markdown report export, browser print / Save as PDF report, a static browser test harness, and public docs/examples pages. The next step is MCP exploration.
+> TimeProofs is now focused on AgentReady. The repo has a static OpenAPI JSON/YAML scanner page, agentready.json export, Markdown report export, browser print / Save as PDF report, a static browser test harness, public docs/examples pages, and MCP exploration docs/fixtures. The next step is the MCP static core parser.
