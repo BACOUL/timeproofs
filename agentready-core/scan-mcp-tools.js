@@ -1,5 +1,5 @@
-import { parseOpenApiText } from './parse-openapi.js';
-import { extractOperations } from './extract-operations.js';
+import { parseMcpToolsText } from './parse-mcp-tools.js';
+import { extractMcpTools } from './extract-mcp-tools.js';
 import { classifyAction } from './classify-action.js';
 import { detectRisks } from './detect-risks.js';
 import { calculateAgentReadyScore } from './score.js';
@@ -7,22 +7,23 @@ import { generateAgentReadyJson } from './generate-agentready-json.js';
 import { generateMarkdownReport } from './report.js';
 import { HUMAN_CONFIRMATION_ACTIONS, maxRiskLevel } from './types.js';
 
-export async function scanOpenApiText(text, options = {}) {
-  const parsed = parseOpenApiText(text, options);
-  return scanOpenApiDocument(parsed.document, {
+export async function scanMcpToolsText(text, options = {}) {
+  const parsed = parseMcpToolsText(text, options);
+  return scanMcpToolsDocument(parsed.document, {
     source: parsed.source
   });
 }
 
-export function scanOpenApiDocument(document, options = {}) {
+export function scanMcpToolsDocument(document, options = {}) {
   const source = options.source || {
-    type: 'openapi',
-    filename: options.filename || 'openapi.json',
-    openapi_version: String(document.openapi || '')
+    type: 'mcp',
+    filename: options.filename || 'mcp-tools.json',
+    mcp_version: String(document.mcp_version || ''),
+    server_name: String(document.server?.name || '')
   };
 
-  const extractedOperations = extractOperations(document);
-  const operations = extractedOperations.map((operation) => {
+  const extractedTools = extractMcpTools(document);
+  const operations = extractedTools.map((operation) => {
     const classification = classifyAction(operation);
     const riskResult = detectRisks(operation, classification);
     const findingLevels = riskResult.findings.map((finding) => finding.severity);
@@ -54,14 +55,3 @@ export function scanOpenApiDocument(document, options = {}) {
     markdown_report: generateMarkdownReport(result)
   };
 }
-
-export { parseOpenApiText } from './parse-openapi.js';
-export { extractOperations } from './extract-operations.js';
-export { parseMcpToolsText } from './parse-mcp-tools.js';
-export { extractMcpTools } from './extract-mcp-tools.js';
-export { scanMcpToolsText, scanMcpToolsDocument } from './scan-mcp-tools.js';
-export { classifyAction } from './classify-action.js';
-export { detectRisks } from './detect-risks.js';
-export { calculateAgentReadyScore } from './score.js';
-export { generateAgentReadyJson } from './generate-agentready-json.js';
-export { generateMarkdownReport } from './report.js';
