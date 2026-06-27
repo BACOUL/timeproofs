@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scan OpenAPI — TimeProofs AgentReady</title>
+  <meta name="description" content="Upload an OpenAPI JSON file locally and see where AI agents may fail before using your tools." />
+  <meta name="robots" content="index,follow" />
+  <meta name="theme-color" content="#0b1020" />
+  <link rel="canonical" href="https://timeproofs.io/agentready.html" />
+  <link rel="icon" href="/assets/favicon.ico" />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #0f172a;
+      --panel2: #111827;
+      --line: #1e293b;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #22d3ee;
+      --accent2: #38bdf8;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+      --critical: #fb7185;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(1100px 420px at 75% -10%, rgba(34,211,238,.16), transparent 60%),
+        radial-gradient(900px 320px at 10% 0%, rgba(56,189,248,.08), transparent 60%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
+    header {
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(12px);
+      background: rgba(11,16,32,.72);
+      border-bottom: 1px solid var(--line);
+      z-index: 10;
+    }
+    .nav { display:flex; justify-content:space-between; align-items:center; gap:16px; min-height:68px; }
+    .brand { display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; }
+    .brand img { width:38px; height:38px; border-radius:10px; }
+    .nav-links { display:flex; gap:18px; flex-wrap:wrap; font-size:.94rem; font-weight:700; }
+    .hero { padding:54px 0 24px; }
+    .eyebrow { display:inline-flex; border:1px solid rgba(34,211,238,.35); color:#b9e7f5; background:rgba(34,211,238,.08); border-radius:999px; padding:6px 12px; font-weight:800; font-size:.84rem; margin-bottom:14px; }
+    h1 { font-size: clamp(2rem, 5vw, 4.2rem); line-height:1; margin:0 0 16px; max-width:980px; letter-spacing:-.05em; }
+    .subtitle { max-width:820px; color:var(--muted); font-size: clamp(1.02rem, 2vw, 1.22rem); margin:0; }
+    .grid { display:grid; gap:16px; }
+    @media (min-width: 980px) { .grid.two { grid-template-columns: 0.82fr 1.18fr; } .grid.three { grid-template-columns: repeat(3, 1fr); } }
+    .card { background:rgba(15,23,42,.82); border:1px solid var(--line); border-radius:18px; padding:22px; box-shadow:0 18px 60px rgba(0,0,0,.22); }
+    .card h2, .card h3 { margin:0 0 12px; color:#b9e7f5; }
+    .muted { color:var(--muted); }
+    .dropzone { border:2px dashed #245269; background:rgba(34,211,238,.06); border-radius:18px; padding:24px; text-align:center; transition:.2s; }
+    .dropzone.dragover { border-color:var(--accent); background:rgba(34,211,238,.14); }
+    input[type="file"] { width:100%; padding:12px; border:1px solid var(--line); border-radius:12px; background:#020617; color:var(--text); }
+    button, .button { cursor:pointer; display:inline-flex; align-items:center; justify-content:center; min-height:42px; padding:0 14px; border-radius:12px; border:1px solid rgba(255,255,255,.08); background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#04111f; font-weight:900; text-decoration:none; }
+    button.secondary, .button.secondary { background:#101b31; color:#dff7ff; border-color:#20304d; }
+    button:disabled { opacity:.45; cursor:not-allowed; }
+    .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+    .score { font-size:3.5rem; font-weight:950; letter-spacing:-.06em; margin:4px 0; }
+    .status { display:inline-flex; padding:5px 10px; border-radius:999px; font-weight:900; background:#101b31; border:1px solid #20304d; color:#dff7ff; }
+    .counts { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:14px; }
+    .count { background:#020617; border:1px solid #1e293b; border-radius:12px; padding:10px; text-align:center; }
+    .count strong { display:block; font-size:1.45rem; }
+    .critical { color:var(--critical); }
+    .high { color:var(--bad); }
+    .medium { color:var(--warn); }
+    .low { color:var(--ok); }
+    .finding { border:1px solid #1e293b; border-radius:14px; background:#07111f; padding:14px; margin:10px 0; }
+    .finding-title { display:flex; gap:8px; flex-wrap:wrap; align-items:center; font-weight:900; }
+    .pill { border:1px solid #24455a; background:#0d2330; border-radius:999px; padding:3px 8px; font-size:.82rem; color:#c7edf7; }
+    pre { background:#020617; color:#e2f6ff; border:1px solid #1e293b; border-radius:14px; padding:16px; overflow:auto; white-space:pre-wrap; word-break:break-word; }
+    .hidden { display:none !important; }
+    .error { border-color:rgba(239,68,68,.45); background:rgba(239,68,68,.08); color:#fecaca; }
+    .okbox { border-color:rgba(34,197,94,.45); background:rgba(34,197,94,.08); color:#bbf7d0; }
+    details { border:1px solid #1e293b; border-radius:14px; padding:12px; background:#07111f; margin:10px 0; }
+    summary { cursor:pointer; font-weight:900; color:#dff7ff; }
+    footer { border-top:1px solid var(--line); padding:24px 0; color:#64748b; text-align:center; margin-top:40px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="/" aria-label="TimeProofs AgentReady home">
+        <img src="/assets/logo.png" alt="" />
+        <span>TimeProofs AgentReady</span>
+      </a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="/agentready.html">Scan</a>
+        <a href="/docs/agentready/README.md">Docs</a>
+        <a href="/agentready-core/README.md">Core</a>
+        <a href="/agentready-examples/README.md">Examples</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="eyebrow">AgentReady Scanner V1a</div>
+      <h1>Scan an OpenAPI spec before giving it to AI agents.</h1>
+      <p class="subtitle">Upload an OpenAPI JSON file. The scan runs locally in your browser and generates an AgentReady Score, endpoint findings, a Markdown report, and <code>agentready.json</code>.</p>
+    </section>
+
+    <section class="grid two">
+      <div class="card">
+        <h2>Upload OpenAPI JSON</h2>
+        <p class="muted">V1a supports OpenAPI JSON 3.0 / 3.1. YAML support is planned next.</p>
+        <div id="dropzone" class="dropzone">
+          <p><strong>Drop your OpenAPI JSON file here</strong></p>
+          <input id="fileInput" type="file" accept=".json,application/json" />
+        </div>
+        <div class="actions">
+          <button id="scanButton">Scan file</button>
+          <button id="loadGoodExample" class="secondary">Load good example</button>
+          <button id="loadDangerExample" class="secondary">Load risky example</button>
+        </div>
+        <div id="message" class="finding hidden"></div>
+        <p class="muted">No submitted API endpoint is called. The file is not uploaded by this static page.</p>
+      </div>
+
+      <div id="summaryCard" class="card hidden">
+        <h2>AgentReady Score</h2>
+        <div id="score" class="score">—</div>
+        <span id="status" class="status">—</span>
+        <div class="counts">
+          <div class="count"><strong id="criticalCount" class="critical">0</strong>Critical</div>
+          <div class="count"><strong id="highCount" class="high">0</strong>High</div>
+          <div class="count"><strong id="mediumCount" class="medium">0</strong>Medium</div>
+          <div class="count"><strong id="lowCount" class="low">0</strong>Low</div>
+        </div>
+        <div class="actions">
+          <button id="downloadJsonButton">Download agentready.json</button>
+          <button id="downloadReportButton" class="secondary">Download report.md</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="results" class="grid two hidden" style="margin-top:16px;">
+      <div class="card">
+        <h2>Top risks</h2>
+        <div id="topRisks"></div>
+      </div>
+      <div class="card">
+        <h2>Endpoint findings</h2>
+        <div id="endpointFindings"></div>
+      </div>
+    </section>
+
+    <section id="reportSection" class="card hidden" style="margin-top:16px;">
+      <h2>Markdown report</h2>
+      <pre id="markdownReport"></pre>
+    </section>
+
+    <section class="card" style="margin-top:16px;">
+      <h2>Limitations</h2>
+      <p>TimeProofs AgentReady does not guarantee that an AI agent will never fail. It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">TimeProofs AgentReady — tool readiness before agent execution.</div>
+  </footer>
+
+  <script type="module">
+    import { scanOpenApiText } from './agentready-core/index.js';
+
+    const fileInput = document.getElementById('fileInput');
+    const scanButton = document.getElementById('scanButton');
+    const loadGoodExample = document.getElementById('loadGoodExample');
+    const loadDangerExample = document.getElementById('loadDangerExample');
+    const dropzone = document.getElementById('dropzone');
+    const message = document.getElementById('message');
+    const summaryCard = document.getElementById('summaryCard');
+    const results = document.getElementById('results');
+    const reportSection = document.getElementById('reportSection');
+    const scoreEl = document.getElementById('score');
+    const statusEl = document.getElementById('status');
+    const criticalCount = document.getElementById('criticalCount');
+    const highCount = document.getElementById('highCount');
+    const mediumCount = document.getElementById('mediumCount');
+    const lowCount = document.getElementById('lowCount');
+    const topRisks = document.getElementById('topRisks');
+    const endpointFindings = document.getElementById('endpointFindings');
+    const markdownReport = document.getElementById('markdownReport');
+    const downloadJsonButton = document.getElementById('downloadJsonButton');
+    const downloadReportButton = document.getElementById('downloadReportButton');
+
+    let lastResult = null;
+
+    scanButton.addEventListener('click', async () => {
+      const file = fileInput.files?.[0];
+      if (!file) {
+        showMessage('Choose an OpenAPI JSON file first.', 'error');
+        return;
+      }
+      await scanText(await file.text(), file.name);
+    });
+
+    loadGoodExample.addEventListener('click', async () => {
+      await loadExample('/agentready-examples/valid-simple-openapi.json', 'valid-simple-openapi.json');
+    });
+
+    loadDangerExample.addEventListener('click', async () => {
+      await loadExample('/agentready-examples/dangerous-actions-openapi.json', 'dangerous-actions-openapi.json');
+    });
+
+    downloadJsonButton.addEventListener('click', () => {
+      if (!lastResult) return;
+      downloadFile('agentready.json', JSON.stringify(lastResult.agentready_json, null, 2), 'application/json');
+    });
+
+    downloadReportButton.addEventListener('click', () => {
+      if (!lastResult) return;
+      downloadFile('agentready-report.md', lastResult.markdown_report, 'text/markdown');
+    });
+
+    dropzone.addEventListener('dragover', (event) => {
+      event.preventDefault();
+      dropzone.classList.add('dragover');
+    });
+
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+
+    dropzone.addEventListener('drop', async (event) => {
+      event.preventDefault();
+      dropzone.classList.remove('dragover');
+      const file = event.dataTransfer.files?.[0];
+      if (!file) return;
+      await scanText(await file.text(), file.name);
+    });
+
+    async function loadExample(url, filename) {
+      try {
+        const response = await fetch(url, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`Unable to load example: ${response.status}`);
+        await scanText(await response.text(), filename);
+      } catch (error) {
+        showMessage(error.message || 'Unable to load example.', 'error');
+      }
+    }
+
+    async function scanText(text, filename) {
+      try {
+        showMessage('Scanning locally…', 'ok');
+        const result = await scanOpenApiText(text, { filename });
+        lastResult = result;
+        renderResult(result);
+        showMessage(`Scan complete for ${filename}.`, 'ok');
+      } catch (error) {
+        lastResult = null;
+        renderEmpty();
+        showMessage(`${error.code || 'ERROR'}: ${error.message}`, 'error');
+      }
+    }
+
+    function renderResult(result) {
+      const counts = result.summary.risk_counts || {};
+      scoreEl.textContent = `${result.summary.score}/100`;
+      statusEl.textContent = result.summary.status;
+      criticalCount.textContent = counts.critical || 0;
+      highCount.textContent = counts.high || 0;
+      mediumCount.textContent = counts.medium || 0;
+      lowCount.textContent = counts.low || 0;
+
+      const findings = result.operations.flatMap(operation => (operation.findings || []).map(finding => ({ ...finding, operation })));
+      topRisks.innerHTML = findings
+        .sort((a, b) => severityRank(b.severity) - severityRank(a.severity))
+        .slice(0, 8)
+        .map(renderFinding)
+        .join('') || '<p class="muted">No major AgentReady risks detected by V1a static analysis.</p>';
+
+      endpointFindings.innerHTML = result.operations.map(renderOperation).join('');
+      markdownReport.textContent = result.markdown_report;
+
+      summaryCard.classList.remove('hidden');
+      results.classList.remove('hidden');
+      reportSection.classList.remove('hidden');
+    }
+
+    function renderEmpty() {
+      summaryCard.classList.add('hidden');
+      results.classList.add('hidden');
+      reportSection.classList.add('hidden');
+      topRisks.innerHTML = '';
+      endpointFindings.innerHTML = '';
+      markdownReport.textContent = '';
+    }
+
+    function renderFinding(finding) {
+      return `<div class="finding">
+        <div class="finding-title">
+          <span class="pill ${escapeHtml(finding.severity)}">${escapeHtml(finding.severity.toUpperCase())}</span>
+          <span>${escapeHtml(finding.code)}</span>
+        </div>
+        <p class="muted">${escapeHtml(finding.method)} ${escapeHtml(finding.path)} · ${escapeHtml(finding.operationId)}</p>
+        <p>${escapeHtml(finding.explanation)}</p>
+        <p><strong>Fix:</strong> ${escapeHtml(finding.recommendation)}</p>
+      </div>`;
+    }
+
+    function renderOperation(operation) {
+      const findings = operation.findings || [];
+      return `<details>
+        <summary>${escapeHtml(operation.method)} ${escapeHtml(operation.path)} — ${escapeHtml(operation.classification.action_type)} · ${escapeHtml(operation.risk_level)}</summary>
+        <p class="muted">Operation ID: ${escapeHtml(operation.operationId)}</p>
+        <p class="muted">Requires human confirmation: ${operation.requires_human_confirmation ? 'yes' : 'no'}</p>
+        ${findings.length ? findings.map(renderFinding).join('') : '<p class="muted">No findings detected by V1a static analysis.</p>'}
+      </details>`;
+    }
+
+    function showMessage(text, type) {
+      message.textContent = text;
+      message.className = `finding ${type === 'error' ? 'error' : 'okbox'}`;
+    }
+
+    function downloadFile(filename, content, type) {
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function severityRank(severity) {
+      return { critical: 4, high: 3, medium: 2, low: 1 }[severity] || 0;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>'"]/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#039;',
+        '"': '&quot;'
+      }[char]));
+    }
+  </script>
+</body>
+</html>
