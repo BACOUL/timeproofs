@@ -33,7 +33,9 @@ OpenAPI / MCP / tool schema
 ✅ Static OpenAPI JSON/YAML core scanner
 ✅ Example OpenAPI fixtures merged
 ✅ Browser upload page for OpenAPI JSON/YAML
-⬜ PDF / print export
+✅ Executive report section
+✅ Browser print / Save as PDF export
+⬜ Test harness
 ⬜ MCP scanner
 ⬜ Agent simulation
 ```
@@ -71,8 +73,11 @@ AgentReady Score
 risk counts
 top risks
 endpoint-by-endpoint findings
+executive summary
+recommended action plan
 agentready.json
 Markdown report
+browser print / Save as PDF report
 ```
 
 ## AgentReady Core V1
@@ -114,7 +119,7 @@ docs/agentready/LEGACY_REMOVAL_DECISION.md
 
 ## Next build step
 
-Improve the human report and add browser print/PDF export.
+Add a test harness to validate JSON/YAML fixtures and dangerous-risk detection.
 
 Then begin MCP scanner exploration.
 

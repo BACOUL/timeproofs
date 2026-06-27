@@ -89,7 +89,10 @@ Current state:
 ✅ Root README repositioned around AgentReady
 ✅ Root landing page repositioned around AgentReady
 ✅ Browser upload page for OpenAPI JSON/YAML
-⬜ PDF/print export not built yet
+✅ Executive report section
+✅ Recommended action plan
+✅ Browser print / Save as PDF export
+⬜ Test harness not built yet
 ⬜ MCP scanner not built yet
 ⬜ Agent simulation not built yet
 ```
@@ -116,6 +119,7 @@ OpenAPI JSON/YAML upload
 → recommendations
 → agentready.json
 → Markdown report
+→ printable executive report
 ```
 
 ---
@@ -161,6 +165,7 @@ operation analysis
 risk findings
 agentready_json
 markdown_report
+printable executive report
 ```
 
 ---
@@ -182,8 +187,11 @@ score/status display
 risk counts
 top risks
 endpoint findings
+executive summary
+recommended action plan
 agentready.json export
 Markdown report export
+browser print / Save as PDF export
 ```
 
 ---
@@ -229,16 +237,7 @@ It identifies structural risks that may cause AI agents to misuse APIs, tools or
 
 ## 10. Next PRs to complete the product
 
-### Next — Report polish and PDF/print export
-
-```txt
-Improve human report section.
-Add print-friendly CSS.
-Add browser print-to-PDF support.
-Add clearer summary/action plan.
-```
-
-### Then — Test harness
+### Next — Test harness
 
 ```txt
 Verify JSON good fixture works.
@@ -252,6 +251,14 @@ Verify invalid JSON/YAML fail cleanly.
 ```txt
 Add stable docs/examples HTML pages.
 Update sitemap only when pages exist.
+```
+
+### Then — MCP exploration
+
+```txt
+Define MCP input shape.
+Create MCP fixture.
+Extend classifier to MCP tool schemas.
 ```
 
 ---
@@ -333,4 +340,4 @@ Because it can become the machine-readable contract between tools and agents.
 
 ## 13. One-line repo state
 
-> TimeProofs is now focused on AgentReady. The old proof-of-existence product surface has been removed. The repo now has a static OpenAPI JSON/YAML scanner page and the next step is report polish plus print/PDF export.
+> TimeProofs is now focused on AgentReady. The repo has a static OpenAPI JSON/YAML scanner page, agentready.json export, Markdown report export, and browser print / Save as PDF report. The next step is a test harness.
