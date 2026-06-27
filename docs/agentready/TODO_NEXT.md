@@ -12,7 +12,7 @@
 ✅ Public landing page
 ✅ Public docs page with OpenAPI/MCP split
 ✅ Public examples page with OpenAPI/MCP fixtures
-✅ Static browser test harness
+✅ Static browser test harness with OpenAPI/MCP/export groups
 ✅ OpenAPI fixtures
 ✅ MCP fixtures
 ✅ agentready.json export
@@ -32,7 +32,7 @@ docs/agentready/REMAINING_WORK.md
 ## Immediate next PR
 
 ```txt
-test(agentready): harden static test harness
+feat(agentready): polish MCP scanner report
 ```
 
 ## Build next
@@ -40,29 +40,29 @@ test(agentready): harden static test harness
 Requirements:
 
 ```txt
-1. Split results into OpenAPI tests and MCP tests visually.
-2. Add pass/fail grouping.
-3. Add a final overall status banner.
-4. Add clearer error output for failed tests.
-5. Add tests for missing tools[] in MCP.
-6. Add tests for empty tools[] in MCP.
-7. Add tests for missing MCP tool name.
-8. Add tests that exports contain expected fields.
-9. Add a note explaining that browser fetch requires serving files over HTTP, not opening file:// directly.
+1. Add MCP-specific risk wording in findings where possible.
+2. Improve action classification for MCP tool names.
+3. Detect missing inputSchema more explicitly.
+4. Detect empty inputSchema properties.
+5. Detect missing required fields.
+6. Detect tools with vague names like run, execute, process, handle, do_task.
+7. Detect dangerous tool names with weak descriptions.
+8. Detect missing outputSchema / output contract.
+9. Add a small MCP executive summary section.
+10. Add browser print / Save as PDF to MCP report.
 ```
 
 ## Then
 
 ```txt
-1. feat(agentready): polish MCP scanner report
-2. feat(agentready): polish OpenAPI scanner report
-3. docs(agentready): strengthen agentready.json contract spec
-4. docs(agentready): start agent simulation exploration
-5. feat(agentready): add CLI only after browser product is stable
-6. docs/seo: add public acquisition pages
-7. docs(agentready): define AgentReady Checked trust layer
-8. docs(product): prepare monetization path
-9. chore(deploy): prepare Vercel reconnect after 2026-07-09
+1. feat(agentready): polish OpenAPI scanner report
+2. docs(agentready): strengthen agentready.json contract spec
+3. docs(agentready): start agent simulation exploration
+4. feat(agentready): add CLI only after browser product is stable
+5. docs/seo: add public acquisition pages
+6. docs(agentready): define AgentReady Checked trust layer
+7. docs(product): prepare monetization path
+8. chore(deploy): prepare Vercel reconnect after 2026-07-09
 ```
 
 ## Do not build yet

@@ -13,9 +13,10 @@
     body { margin:0; min-height:100vh; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:radial-gradient(900px 320px at 70% -10%,rgba(34,211,238,.16),transparent 60%),var(--bg); color:var(--text); line-height:1.55; }
     a { color:var(--accent); text-decoration:none; }
     a:hover { text-decoration:underline; }
-    .wrap { width:min(1080px,calc(100% - 32px)); margin:0 auto; padding:34px 0; }
+    .wrap { width:min(1120px,calc(100% - 32px)); margin:0 auto; padding:34px 0; }
     header { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:24px; }
     h1 { margin:0 0 10px; font-size:clamp(2rem,5vw,4rem); line-height:1; letter-spacing:-.05em; }
+    h2 { margin-top:0; color:#b9e7f5; }
     .muted { color:var(--muted); }
     .card { background:rgba(15,23,42,.82); border:1px solid var(--line); border-radius:18px; padding:20px; margin:16px 0; box-shadow:0 18px 60px rgba(0,0,0,.22); }
     button { cursor:pointer; display:inline-flex; align-items:center; justify-content:center; min-height:42px; padding:0 14px; border-radius:12px; border:1px solid rgba(255,255,255,.08); background:linear-gradient(135deg,var(--accent),#38bdf8); color:#04111f; font-weight:900; }
@@ -25,12 +26,20 @@
     @media (max-width:760px) { .summary { grid-template-columns:repeat(2,1fr); } header { align-items:flex-start; flex-direction:column; } }
     .metric { background:#020617; border:1px solid #1e293b; border-radius:12px; padding:12px; text-align:center; }
     .metric strong { display:block; font-size:1.8rem; }
+    .overall { border:1px solid #1e293b; border-radius:16px; padding:16px; background:#07111f; margin-top:14px; }
+    .overall.pass { color:#bbf7d0; border-color:rgba(34,197,94,.35); background:rgba(34,197,94,.1); }
+    .overall.fail { color:#fecaca; border-color:rgba(239,68,68,.35); background:rgba(239,68,68,.1); }
+    .group { margin-top:18px; }
+    .group-header { display:flex; align-items:center; justify-content:space-between; gap:12px; border-bottom:1px solid #1e293b; padding-bottom:10px; margin-bottom:10px; }
     .test { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; border:1px solid #1e293b; border-radius:14px; background:#07111f; padding:14px; margin:10px 0; }
+    .test small { display:block; color:var(--muted); margin-top:4px; }
     .badge { border-radius:999px; padding:4px 10px; font-size:.82rem; font-weight:900; white-space:nowrap; }
-    .pass { color:#bbf7d0; background:rgba(34,197,94,.12); border:1px solid rgba(34,197,94,.35); }
-    .fail { color:#fecaca; background:rgba(239,68,68,.12); border:1px solid rgba(239,68,68,.35); }
-    .pending { color:#fde68a; background:rgba(245,158,11,.12); border:1px solid rgba(245,158,11,.35); }
+    .pass-badge { color:#bbf7d0; background:rgba(34,197,94,.12); border:1px solid rgba(34,197,94,.35); }
+    .fail-badge { color:#fecaca; background:rgba(239,68,68,.12); border:1px solid rgba(239,68,68,.35); }
+    .pending-badge { color:#fde68a; background:rgba(245,158,11,.12); border:1px solid rgba(245,158,11,.35); }
     pre { background:#020617; border:1px solid #1e293b; border-radius:14px; padding:14px; overflow:auto; color:#e2f6ff; white-space:pre-wrap; word-break:break-word; }
+    code { background:#020617; color:#e2f6ff; border:1px solid #1e293b; border-radius:8px; padding:2px 6px; }
+    .note { border-left:4px solid var(--warn); padding:10px 14px; background:rgba(245,158,11,.08); border-radius:10px; }
   </style>
 </head>
 <body>
@@ -40,12 +49,16 @@
         <h1>AgentReady Test Harness</h1>
         <p class="muted">Static dependency-free checks for the OpenAPI JSON/YAML scanner and MCP tools scanner core.</p>
       </div>
-      <a href="/agentready.html">Back to scanner</a>
+      <div class="actions">
+        <a href="/agentready.html">OpenAPI Scan</a>
+        <a href="/agentready-mcp.html">MCP Scan</a>
+      </div>
     </header>
 
     <section class="card">
       <h2>Run AgentReady checks</h2>
       <p class="muted">This page loads local fixtures, runs <code>scanOpenApiText</code> and <code>scanMcpToolsText</code>, and validates expected behavior. It does not call submitted API endpoints or MCP tools.</p>
+      <p class="note"><strong>Manual QA note:</strong> open this page through a local or hosted HTTP server. Browser <code>fetch()</code> may fail if this file is opened directly with <code>file://</code>.</p>
       <div class="actions">
         <button id="runButton">Run tests</button>
         <button id="clearButton" class="secondary">Clear</button>
@@ -56,11 +69,17 @@
         <div class="metric"><strong id="totalCount">0</strong>Total</div>
         <div class="metric"><strong id="duration">—</strong>ms</div>
       </div>
+      <div id="overallStatus" class="overall">No test run yet.</div>
     </section>
 
     <section class="card">
-      <h2>Results</h2>
+      <h2>Grouped results</h2>
       <div id="results"></div>
+    </section>
+
+    <section class="card">
+      <h2>Failure details</h2>
+      <pre id="failureOutput">No failures yet.</pre>
     </section>
 
     <section class="card">
@@ -76,6 +95,8 @@
     const clearButton = document.getElementById('clearButton');
     const resultsEl = document.getElementById('results');
     const rawOutput = document.getElementById('rawOutput');
+    const failureOutput = document.getElementById('failureOutput');
+    const overallStatus = document.getElementById('overallStatus');
     const passCount = document.getElementById('passCount');
     const failCount = document.getElementById('failCount');
     const totalCount = document.getElementById('totalCount');
@@ -85,6 +106,8 @@
     const invalidYaml = 'openapi: 3.1.0\npaths:\n  /broken:\n    get:\n      responses:\n        "200"\n          description: Missing colon nesting';
     const invalidMcpJson = '{ "server": { "name": "Broken" }, "tools": [ }';
     const invalidMcpShape = JSON.stringify({ server: { name: 'Broken' }, not_tools: [] });
+    const emptyMcpTools = JSON.stringify({ server: { name: 'Empty MCP Server' }, tools: [] });
+    const missingMcpToolName = JSON.stringify({ server: { name: 'Broken MCP Server' }, tools: [{ description: 'Missing tool name.', inputSchema: { type: 'object' } }] });
 
     runButton.addEventListener('click', runTests);
     clearButton.addEventListener('click', clearResults);
@@ -92,57 +115,63 @@
     async function runTests() {
       clearResults();
       const started = performance.now();
-      const results = [];
+      const groups = {
+        openapi: [],
+        mcp: [],
+        exports: []
+      };
 
-      const goodJsonText = await loadFixture('/agentready-examples/valid-simple-openapi.json');
-      const goodYamlText = await loadFixture('/agentready-examples/valid-simple-openapi.yaml');
-      const dangerousText = await loadFixture('/agentready-examples/dangerous-actions-openapi.json');
-      const mcpSimpleText = await loadFixture('/agentready-examples/mcp-tools-simple.json');
-      const mcpDangerousText = await loadFixture('/agentready-examples/mcp-tools-dangerous.json');
+      const raw = {};
 
-      const goodJson = await capture(() => scanOpenApiText(goodJsonText, { filename: 'valid-simple-openapi.json' }));
-      const goodYaml = await capture(() => scanOpenApiText(goodYamlText, { filename: 'valid-simple-openapi.yaml' }));
-      const dangerous = await capture(() => scanOpenApiText(dangerousText, { filename: 'dangerous-actions-openapi.json' }));
-      const badJson = await capture(() => scanOpenApiText(invalidJson, { filename: 'invalid-json.json' }));
-      const badYaml = await capture(() => scanOpenApiText(invalidYaml, { filename: 'invalid-yaml.yaml' }));
-      const mcpSimple = await capture(() => scanMcpToolsText(mcpSimpleText, { filename: 'mcp-tools-simple.json' }));
-      const mcpDangerous = await capture(() => scanMcpToolsText(mcpDangerousText, { filename: 'mcp-tools-dangerous.json' }));
-      const badMcpJson = await capture(() => scanMcpToolsText(invalidMcpJson, { filename: 'invalid-mcp.json' }));
-      const badMcpShape = await capture(() => scanMcpToolsText(invalidMcpShape, { filename: 'invalid-mcp-shape.json' }));
+      try {
+        const goodJsonText = await loadFixture('/agentready-examples/valid-simple-openapi.json');
+        const goodYamlText = await loadFixture('/agentready-examples/valid-simple-openapi.yaml');
+        const dangerousText = await loadFixture('/agentready-examples/dangerous-actions-openapi.json');
+        const mcpSimpleText = await loadFixture('/agentready-examples/mcp-tools-simple.json');
+        const mcpDangerousText = await loadFixture('/agentready-examples/mcp-tools-dangerous.json');
 
-      results.push(assert('valid-simple-openapi.json scans successfully', goodJson.ok));
-      results.push(assert('valid-simple-openapi.yaml scans successfully', goodYaml.ok));
-      results.push(assert('dangerous-actions-openapi.json scans successfully', dangerous.ok));
-      results.push(assert('invalid JSON fails cleanly', !badJson.ok && Boolean(badJson.error?.code)));
-      results.push(assert('invalid YAML fails cleanly', !badYaml.ok && Boolean(badYaml.error?.code)));
-      results.push(assert('good JSON produces agentready.json', Boolean(goodJson.value?.agentready_json?.tools?.length)));
-      results.push(assert('good YAML produces agentready.json', Boolean(goodYaml.value?.agentready_json?.tools?.length)));
-      results.push(assert('dangerous OpenAPI fixture detects critical risk', (dangerous.value?.summary?.risk_counts?.critical || 0) > 0));
-      results.push(assert('good OpenAPI fixture scores higher than dangerous OpenAPI fixture', (goodJson.value?.summary?.score || 0) > (dangerous.value?.summary?.score || 0)));
-      results.push(assert('OpenAPI Markdown report is generated', Boolean(goodJson.value?.markdown_report?.includes('TimeProofs AgentReady Report'))));
-      results.push(assert('same pipeline supports OpenAPI JSON and YAML', goodJson.ok && goodYaml.ok && goodJson.value.operations.length === goodYaml.value.operations.length));
-      results.push(assert('mcp-tools-simple.json scans successfully', mcpSimple.ok));
-      results.push(assert('mcp-tools-dangerous.json scans successfully', mcpDangerous.ok));
-      results.push(assert('invalid MCP JSON fails cleanly', !badMcpJson.ok && Boolean(badMcpJson.error?.code)));
-      results.push(assert('invalid MCP shape fails cleanly', !badMcpShape.ok && Boolean(badMcpShape.error?.code)));
-      results.push(assert('MCP simple fixture produces agentready.json', Boolean(mcpSimple.value?.agentready_json?.tools?.length)));
-      results.push(assert('MCP dangerous fixture produces agentready.json', Boolean(mcpDangerous.value?.agentready_json?.tools?.length)));
-      results.push(assert('MCP Markdown report is generated', Boolean(mcpSimple.value?.markdown_report?.includes('TimeProofs AgentReady Report'))));
-      results.push(assert('MCP dangerous fixture detects high or critical risks', hasHighOrCriticalRisks(mcpDangerous.value)));
-      results.push(assert('MCP simple fixture scores higher than MCP dangerous fixture', (mcpSimple.value?.summary?.score || 0) > (mcpDangerous.value?.summary?.score || 0)));
-      results.push(assert('MCP tools are converted to AgentReady operations', mcpSimple.ok && mcpSimple.value.operations.every(operation => operation.source === 'mcp' && operation.method === 'MCP_TOOL')));
+        raw.goodJson = await capture(() => scanOpenApiText(goodJsonText, { filename: 'valid-simple-openapi.json' }));
+        raw.goodYaml = await capture(() => scanOpenApiText(goodYamlText, { filename: 'valid-simple-openapi.yaml' }));
+        raw.dangerous = await capture(() => scanOpenApiText(dangerousText, { filename: 'dangerous-actions-openapi.json' }));
+        raw.badJson = await capture(() => scanOpenApiText(invalidJson, { filename: 'invalid-json.json' }));
+        raw.badYaml = await capture(() => scanOpenApiText(invalidYaml, { filename: 'invalid-yaml.yaml' }));
+        raw.mcpSimple = await capture(() => scanMcpToolsText(mcpSimpleText, { filename: 'mcp-tools-simple.json' }));
+        raw.mcpDangerous = await capture(() => scanMcpToolsText(mcpDangerousText, { filename: 'mcp-tools-dangerous.json' }));
+        raw.badMcpJson = await capture(() => scanMcpToolsText(invalidMcpJson, { filename: 'invalid-mcp.json' }));
+        raw.badMcpShape = await capture(() => scanMcpToolsText(invalidMcpShape, { filename: 'invalid-mcp-shape.json' }));
+        raw.emptyMcpTools = await capture(() => scanMcpToolsText(emptyMcpTools, { filename: 'empty-mcp-tools.json' }));
+        raw.missingMcpToolName = await capture(() => scanMcpToolsText(missingMcpToolName, { filename: 'missing-mcp-tool-name.json' }));
 
-      renderResults(results, performance.now() - started, {
-        goodJson,
-        goodYaml,
-        dangerous,
-        badJson,
-        badYaml,
-        mcpSimple,
-        mcpDangerous,
-        badMcpJson,
-        badMcpShape
-      });
+        groups.openapi.push(assert('valid-simple-openapi.json scans successfully', raw.goodJson.ok, 'The good JSON OpenAPI fixture should scan without throwing.'));
+        groups.openapi.push(assert('valid-simple-openapi.yaml scans successfully', raw.goodYaml.ok, 'The good YAML OpenAPI fixture should scan without throwing.'));
+        groups.openapi.push(assert('dangerous-actions-openapi.json scans successfully', raw.dangerous.ok, 'The risky OpenAPI fixture should scan so findings can be inspected.'));
+        groups.openapi.push(assert('invalid OpenAPI JSON fails cleanly', !raw.badJson.ok && Boolean(raw.badJson.error?.code), 'Invalid JSON should return a structured error code.'));
+        groups.openapi.push(assert('invalid OpenAPI YAML fails cleanly', !raw.badYaml.ok && Boolean(raw.badYaml.error?.code), 'Invalid YAML should return a structured error code.'));
+        groups.openapi.push(assert('dangerous OpenAPI fixture detects critical risk', (raw.dangerous.value?.summary?.risk_counts?.critical || 0) > 0, 'The risky OpenAPI fixture should produce at least one critical finding.'));
+        groups.openapi.push(assert('good OpenAPI fixture scores higher than dangerous OpenAPI fixture', (raw.goodJson.value?.summary?.score || 0) > (raw.dangerous.value?.summary?.score || 0), 'The healthier OpenAPI fixture should score higher than the risky fixture.'));
+        groups.openapi.push(assert('same pipeline supports OpenAPI JSON and YAML', raw.goodJson.ok && raw.goodYaml.ok && raw.goodJson.value.operations.length === raw.goodYaml.value.operations.length, 'JSON and YAML versions of the good fixture should produce the same operation count.'));
+
+        groups.mcp.push(assert('mcp-tools-simple.json scans successfully', raw.mcpSimple.ok, 'The simple MCP fixture should scan without throwing.'));
+        groups.mcp.push(assert('mcp-tools-dangerous.json scans successfully', raw.mcpDangerous.ok, 'The risky MCP fixture should scan so findings can be inspected.'));
+        groups.mcp.push(assert('invalid MCP JSON fails cleanly', !raw.badMcpJson.ok && Boolean(raw.badMcpJson.error?.code), 'Invalid MCP JSON should return a structured error code.'));
+        groups.mcp.push(assert('MCP shape without tools[] fails cleanly', !raw.badMcpShape.ok && raw.badMcpShape.error?.code === 'MISSING_TOOLS', 'MCP documents must include tools[].'));
+        groups.mcp.push(assert('MCP empty tools[] fails cleanly', !raw.emptyMcpTools.ok && raw.emptyMcpTools.error?.code === 'EMPTY_TOOLS', 'MCP tools[] should not be empty.'));
+        groups.mcp.push(assert('MCP tool without name fails cleanly', !raw.missingMcpToolName.ok && raw.missingMcpToolName.error?.code === 'MISSING_TOOL_NAME', 'Every MCP tool must have a non-empty name.'));
+        groups.mcp.push(assert('MCP dangerous fixture detects high or critical risks', hasHighOrCriticalRisks(raw.mcpDangerous.value), 'The risky MCP fixture should produce high or critical findings.'));
+        groups.mcp.push(assert('MCP simple fixture scores higher than MCP dangerous fixture', (raw.mcpSimple.value?.summary?.score || 0) > (raw.mcpDangerous.value?.summary?.score || 0), 'The healthier MCP fixture should score higher than the risky MCP fixture.'));
+        groups.mcp.push(assert('MCP tools are converted to AgentReady operations', raw.mcpSimple.ok && raw.mcpSimple.value.operations.every(operation => operation.source === 'mcp' && operation.method === 'MCP_TOOL'), 'MCP tools should become AgentReady operations with source=mcp and method=MCP_TOOL.'));
+
+        groups.exports.push(assert('OpenAPI agentready.json contains expected root fields', hasAgentReadyRootFields(raw.goodJson.value?.agentready_json), 'Expected agentready_version, source, summary, and tools.'));
+        groups.exports.push(assert('OpenAPI agentready.json contains expected tool fields', hasExpectedToolFields(raw.goodJson.value?.agentready_json), 'Expected operation_id, action_type, risk_level, detected_risks, and agent_recommendation.'));
+        groups.exports.push(assert('OpenAPI Markdown report is generated', Boolean(raw.goodJson.value?.markdown_report?.includes('TimeProofs AgentReady Report')), 'Markdown report should include the report title.'));
+        groups.exports.push(assert('MCP agentready.json contains expected root fields', hasAgentReadyRootFields(raw.mcpSimple.value?.agentready_json), 'Expected agentready_version, source, summary, and tools.'));
+        groups.exports.push(assert('MCP agentready.json contains expected tool fields', hasExpectedToolFields(raw.mcpSimple.value?.agentready_json), 'Expected operation_id, action_type, risk_level, detected_risks, and agent_recommendation.'));
+        groups.exports.push(assert('MCP Markdown report is generated', Boolean(raw.mcpSimple.value?.markdown_report?.includes('TimeProofs AgentReady Report')), 'Markdown report should include the report title.'));
+      } catch (error) {
+        groups.exports.push(assert('fixture loading does not fail', false, error.message || 'Fixture loading failed. Use HTTP server instead of file://.'));
+      }
+
+      renderResults(groups, performance.now() - started, raw);
     }
 
     async function loadFixture(url) {
@@ -159,8 +188,8 @@
       }
     }
 
-    function assert(name, condition) {
-      return { name, pass: Boolean(condition) };
+    function assert(name, condition, detail = '') {
+      return { name, pass: Boolean(condition), detail };
     }
 
     function hasHighOrCriticalRisks(result) {
@@ -168,43 +197,102 @@
       return (counts.critical || 0) + (counts.high || 0) > 0;
     }
 
-    function renderResults(results, duration, raw) {
-      const pass = results.filter(result => result.pass).length;
-      const fail = results.length - pass;
+    function hasAgentReadyRootFields(contract) {
+      return Boolean(
+        contract &&
+        contract.agentready_version &&
+        contract.source &&
+        contract.summary &&
+        Array.isArray(contract.tools)
+      );
+    }
+
+    function hasExpectedToolFields(contract) {
+      const tool = contract?.tools?.[0];
+      return Boolean(
+        tool &&
+        Object.hasOwn(tool, 'operation_id') &&
+        Object.hasOwn(tool, 'action_type') &&
+        Object.hasOwn(tool, 'risk_level') &&
+        Object.hasOwn(tool, 'detected_risks') &&
+        Object.hasOwn(tool, 'agent_recommendation')
+      );
+    }
+
+    function renderResults(groups, duration, raw) {
+      const allResults = Object.values(groups).flat();
+      const pass = allResults.filter(result => result.pass).length;
+      const fail = allResults.length - pass;
       passCount.textContent = pass;
       failCount.textContent = fail;
-      totalCount.textContent = results.length;
+      totalCount.textContent = allResults.length;
       durationEl.textContent = String(Math.round(duration));
 
-      resultsEl.innerHTML = results.map(result => `
-        <div class="test">
-          <div>
-            <strong>${escapeHtml(result.name)}</strong>
-          </div>
-          <span class="badge ${result.pass ? 'pass' : 'fail'}">${result.pass ? 'PASS' : 'FAIL'}</span>
-        </div>
-      `).join('');
+      overallStatus.className = `overall ${fail === 0 ? 'pass' : 'fail'}`;
+      overallStatus.textContent = fail === 0
+        ? `PASS — ${pass}/${allResults.length} checks passed.`
+        : `FAIL — ${fail}/${allResults.length} checks failed.`;
+
+      resultsEl.innerHTML = [
+        renderGroup('OpenAPI tests', groups.openapi),
+        renderGroup('MCP tests', groups.mcp),
+        renderGroup('Export contract tests', groups.exports)
+      ].join('');
+
+      const failures = allResults.filter(result => !result.pass);
+      failureOutput.textContent = failures.length
+        ? JSON.stringify(failures, null, 2)
+        : 'No failures.';
 
       rawOutput.textContent = JSON.stringify({
-        summary: { pass, fail, total: results.length, duration_ms: Math.round(duration) },
+        summary: { pass, fail, total: allResults.length, duration_ms: Math.round(duration) },
+        groups: Object.fromEntries(Object.entries(groups).map(([name, group]) => [name, {
+          pass: group.filter(result => result.pass).length,
+          fail: group.filter(result => !result.pass).length,
+          total: group.length
+        }])),
         scores: {
-          openapi_good_json: raw.goodJson.value?.summary?.score,
-          openapi_good_yaml: raw.goodYaml.value?.summary?.score,
-          openapi_dangerous: raw.dangerous.value?.summary?.score,
-          mcp_simple: raw.mcpSimple.value?.summary?.score,
-          mcp_dangerous: raw.mcpDangerous.value?.summary?.score
+          openapi_good_json: raw.goodJson?.value?.summary?.score,
+          openapi_good_yaml: raw.goodYaml?.value?.summary?.score,
+          openapi_dangerous: raw.dangerous?.value?.summary?.score,
+          mcp_simple: raw.mcpSimple?.value?.summary?.score,
+          mcp_dangerous: raw.mcpDangerous?.value?.summary?.score
         },
         risk_counts: {
-          openapi_dangerous: raw.dangerous.value?.summary?.risk_counts,
-          mcp_dangerous: raw.mcpDangerous.value?.summary?.risk_counts
+          openapi_dangerous: raw.dangerous?.value?.summary?.risk_counts,
+          mcp_dangerous: raw.mcpDangerous?.value?.summary?.risk_counts
         },
         errors: {
-          invalid_json: raw.badJson.error,
-          invalid_yaml: raw.badYaml.error,
-          invalid_mcp_json: raw.badMcpJson.error,
-          invalid_mcp_shape: raw.badMcpShape.error
+          invalid_json: raw.badJson?.error,
+          invalid_yaml: raw.badYaml?.error,
+          invalid_mcp_json: raw.badMcpJson?.error,
+          invalid_mcp_shape: raw.badMcpShape?.error,
+          empty_mcp_tools: raw.emptyMcpTools?.error,
+          missing_mcp_tool_name: raw.missingMcpToolName?.error
         }
       }, null, 2);
+    }
+
+    function renderGroup(title, group) {
+      const pass = group.filter(result => result.pass).length;
+      const fail = group.length - pass;
+      return `<section class="group">
+        <div class="group-header">
+          <h3>${escapeHtml(title)}</h3>
+          <span class="badge ${fail === 0 ? 'pass-badge' : 'fail-badge'}">${pass}/${group.length} PASS</span>
+        </div>
+        ${group.map(renderTest).join('')}
+      </section>`;
+    }
+
+    function renderTest(result) {
+      return `<div class="test">
+        <div>
+          <strong>${escapeHtml(result.name)}</strong>
+          ${result.detail ? `<small>${escapeHtml(result.detail)}</small>` : ''}
+        </div>
+        <span class="badge ${result.pass ? 'pass-badge' : 'fail-badge'}">${result.pass ? 'PASS' : 'FAIL'}</span>
+      </div>`;
     }
 
     function clearResults() {
@@ -212,7 +300,10 @@
       failCount.textContent = '0';
       totalCount.textContent = '0';
       durationEl.textContent = '—';
-      resultsEl.innerHTML = '<div class="test"><strong>No test run yet.</strong><span class="badge pending">PENDING</span></div>';
+      overallStatus.className = 'overall';
+      overallStatus.textContent = 'No test run yet.';
+      resultsEl.innerHTML = '<div class="test"><strong>No test run yet.</strong><span class="badge pending-badge">PENDING</span></div>';
+      failureOutput.textContent = 'No failures yet.';
       rawOutput.textContent = 'No test run yet.';
     }
 
