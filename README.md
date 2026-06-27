@@ -38,7 +38,8 @@ OpenAPI / MCP / tool schema
 ✅ Static browser test harness
 ✅ Public docs page
 ✅ Public examples page
-⬜ MCP scanner
+✅ MCP scanner exploration docs and fixtures
+⬜ MCP static core parser
 ⬜ Agent simulation
 ```
 
@@ -93,6 +94,31 @@ recommended action plan
 agentready.json
 Markdown report
 browser print / Save as PDF report
+```
+
+## MCP exploration V2
+
+The MCP scanner is not implemented yet.
+
+The V2 exploration foundation is documented in:
+
+```txt
+docs/agentready/MCP_SCANNER_EXPLORATION.md
+```
+
+MCP example fixtures:
+
+```txt
+agentready-examples/mcp-tools-simple.json
+agentready-examples/mcp-tools-dangerous.json
+```
+
+The proposed MCP flow is:
+
+```txt
+MCP tools JSON
+→ map each tool to an AgentReady operation
+→ reuse classification, risk detection, scoring, report, and agentready.json generation
 ```
 
 ## Static test harness
@@ -151,11 +177,12 @@ docs/agentready/TIMEPROOFS_AGENTREADY_MASTER_PLAN.md
 docs/agentready/AGENTREADY_IMPLEMENTATION_CHECKLIST.md
 docs/agentready/AGENTREADY_JSON_SPEC.md
 docs/agentready/LEGACY_REMOVAL_DECISION.md
+docs/agentready/MCP_SCANNER_EXPLORATION.md
 ```
 
 ## Next build step
 
-Begin MCP scanner exploration.
+Build the MCP static core parser.
 
 ## Non-negotiable rule
 
