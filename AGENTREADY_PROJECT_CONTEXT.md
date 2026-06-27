@@ -92,7 +92,7 @@ Current state:
 ✅ Executive report section
 ✅ Recommended action plan
 ✅ Browser print / Save as PDF export
-⬜ Test harness not built yet
+✅ Static browser test harness
 ⬜ MCP scanner not built yet
 ⬜ Agent simulation not built yet
 ```
@@ -120,6 +120,7 @@ OpenAPI JSON/YAML upload
 → agentready.json
 → Markdown report
 → printable executive report
+→ static fixture checks
 ```
 
 ---
@@ -170,11 +171,12 @@ printable executive report
 
 ---
 
-## 7. Current public pages
+## 7. Current public/internal pages
 
 ```txt
 index.html
 agentready.html
+agentready-test.html
 ```
 
 `agentready.html` provides:
@@ -192,6 +194,19 @@ recommended action plan
 agentready.json export
 Markdown report export
 browser print / Save as PDF export
+```
+
+`agentready-test.html` provides static browser checks:
+
+```txt
+valid JSON fixture scans successfully
+valid YAML fixture scans successfully
+dangerous fixture detects critical risks
+invalid JSON fails cleanly
+invalid YAML fails cleanly
+good fixture scores higher than dangerous fixture
+agentready.json is generated
+Markdown report is generated
 ```
 
 ---
@@ -237,20 +252,13 @@ It identifies structural risks that may cause AI agents to misuse APIs, tools or
 
 ## 10. Next PRs to complete the product
 
-### Next — Test harness
-
-```txt
-Verify JSON good fixture works.
-Verify YAML good fixture works.
-Verify dangerous fixture detects critical risks.
-Verify invalid JSON/YAML fail cleanly.
-```
-
-### Then — Public docs and examples pages
+### Next — Public docs and examples pages
 
 ```txt
 Add stable docs/examples HTML pages.
+Link them from index.html and agentready.html.
 Update sitemap only when pages exist.
+Keep markdown docs as source-of-truth.
 ```
 
 ### Then — MCP exploration
@@ -340,4 +348,4 @@ Because it can become the machine-readable contract between tools and agents.
 
 ## 13. One-line repo state
 
-> TimeProofs is now focused on AgentReady. The repo has a static OpenAPI JSON/YAML scanner page, agentready.json export, Markdown report export, and browser print / Save as PDF report. The next step is a test harness.
+> TimeProofs is now focused on AgentReady. The repo has a static OpenAPI JSON/YAML scanner page, agentready.json export, Markdown report export, browser print / Save as PDF report, and a static browser test harness. The next step is public docs/examples pages or MCP exploration.

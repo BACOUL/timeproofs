@@ -35,7 +35,7 @@ OpenAPI / MCP / tool schema
 ✅ Browser upload page for OpenAPI JSON/YAML
 ✅ Executive report section
 ✅ Browser print / Save as PDF export
-⬜ Test harness
+✅ Static browser test harness
 ⬜ MCP scanner
 ⬜ Agent simulation
 ```
@@ -45,6 +45,7 @@ OpenAPI / MCP / tool schema
 ```txt
 index.html
 agentready.html
+agentready-test.html
 agentready-core/
 agentready-examples/
 docs/agentready/
@@ -78,6 +79,27 @@ recommended action plan
 agentready.json
 Markdown report
 browser print / Save as PDF report
+```
+
+## Static test harness
+
+The static test page is:
+
+```txt
+agentready-test.html
+```
+
+It checks:
+
+```txt
+valid JSON fixture scans successfully
+valid YAML fixture scans successfully
+dangerous fixture detects critical risks
+invalid JSON fails cleanly
+invalid YAML fails cleanly
+good fixture scores higher than dangerous fixture
+agentready.json is generated
+Markdown report is generated
 ```
 
 ## AgentReady Core V1
@@ -119,9 +141,7 @@ docs/agentready/LEGACY_REMOVAL_DECISION.md
 
 ## Next build step
 
-Add a test harness to validate JSON/YAML fixtures and dangerous-risk detection.
-
-Then begin MCP scanner exploration.
+Begin MCP scanner exploration only after validating the static test harness in browser.
 
 ## Non-negotiable rule
 
