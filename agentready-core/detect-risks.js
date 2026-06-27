@@ -18,6 +18,21 @@ const VAGUE_OPERATION_NAMES = Object.freeze([
   'perform'
 ]);
 
+const VAGUE_MCP_TOOL_NAMES = Object.freeze([
+  'run',
+  'execute',
+  'process',
+  'handle',
+  'do',
+  'task',
+  'tool',
+  'action',
+  'dotask',
+  'do_task',
+  'call',
+  'invoke'
+]);
+
 const CLOSED_STRING_NAMES = Object.freeze([
   'status',
   'type',
@@ -91,6 +106,15 @@ export function detectRisks(operation, classification) {
   addIf(findings, hasNonCorrectiveErrors(operation), 'missing_error_recovery', operation);
   addIf(findings, hasImplicitContext(operation), 'agent_context_confusion', operation);
   addIf(findings, classification.action_type === 'UNKNOWN', 'unknown_action_type', operation);
+
+  if (isMcpOperation(operation)) {
+    addIf(findings, hasVagueMcpToolName(operation), 'mcp_vague_tool_name', operation);
+    addIf(findings, hasMissingMcpInputSchema(operation), 'mcp_missing_input_schema', operation);
+    addIf(findings, hasEmptyMcpInputSchema(operation), 'mcp_empty_input_schema', operation);
+    addIf(findings, hasMissingMcpRequiredFields(operation), 'mcp_missing_required_fields', operation);
+    addIf(findings, hasDangerousMcpToolWeakDescription(operation, classification), 'mcp_dangerous_tool_weak_description', operation);
+    addIf(findings, hasMissingMcpOutputSchema(operation), 'mcp_missing_output_schema', operation);
+  }
 
   const deduped = dedupeFindings(findings);
 
@@ -221,6 +245,41 @@ function needsSuccessVerification(operation, classification) {
 function hasImplicitContext(operation) {
   const text = normalizeText(`${operation.summary || ''} ${operation.description || ''} ${operation.path || ''}`);
   return /current user|current account|current tenant|active workspace|default project|selected environment|my account|me\b/.test(text);
+}
+
+function isMcpOperation(operation) {
+  return operation.source === 'mcp' || Boolean(operation.mcp);
+}
+
+function hasVagueMcpToolName(operation) {
+  const normalized = normalizeName(operation.mcp?.tool_name || operation.operationId);
+  return VAGUE_MCP_TOOL_NAMES.includes(normalized);
+}
+
+function hasMissingMcpInputSchema(operation) {
+  return operation.mcp?.has_input_schema === false;
+}
+
+function hasEmptyMcpInputSchema(operation) {
+  if (operation.mcp?.has_input_schema === false) return false;
+  return Number(operation.mcp?.input_properties_count || 0) === 0;
+}
+
+function hasMissingMcpRequiredFields(operation) {
+  const propertyCount = Number(operation.mcp?.input_properties_count || 0);
+  const required = operation.mcp?.input_required || [];
+  return propertyCount > 0 && required.length === 0;
+}
+
+function hasDangerousMcpToolWeakDescription(operation, classification) {
+  if (!HUMAN_CONFIRMATION_ACTIONS.includes(classification.action_type)) return false;
+  const text = normalizeText(`${operation.summary || ''} ${operation.description || ''}`);
+  if (text.length < 140) return true;
+  return !/human confirmation|manual approval|explicit approval|confirm before|preview|dry run|rollback|do not use|should not|must not|success|verified|completed/.test(text);
+}
+
+function hasMissingMcpOutputSchema(operation) {
+  return operation.mcp?.has_output_schema === false;
 }
 
 function getAllFields(operation) {
