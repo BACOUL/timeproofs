@@ -1,0 +1,85 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Dangerous Commerce API",
+    "version": "1.0.0",
+    "description": "Example API containing risky actions for TimeProofs AgentReady analysis."
+  },
+  "paths": {
+    "/refunds": {
+      "post": {
+        "operationId": "refundCustomer",
+        "summary": "Refund customer",
+        "description": "Refund a customer order.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["customer_id", "order_id", "amount", "reason"],
+                "properties": {
+                  "customer_id": { "type": "string" },
+                  "order_id": { "type": "string" },
+                  "amount": { "type": "number" },
+                  "reason": { "type": "string" },
+                  "status": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/customers/export": {
+      "get": {
+        "operationId": "exportCustomers",
+        "summary": "Export customers",
+        "description": "Export customer emails, phone numbers and addresses.",
+        "responses": {
+          "200": {
+            "description": "Export returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "email": { "type": "string" },
+                      "phone": { "type": "string" },
+                      "address": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/files/{id}": {
+      "delete": {
+        "operationId": "deleteFile",
+        "summary": "Delete file",
+        "description": "Delete a file.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Deleted" },
+          "404": { "description": "Not found" }
+        }
+      }
+    }
+  }
+}
