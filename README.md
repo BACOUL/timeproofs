@@ -39,7 +39,8 @@ OpenAPI / MCP / tool schema
 ✅ Public docs page
 ✅ Public examples page
 ✅ MCP scanner exploration docs and fixtures
-⬜ MCP static core parser
+✅ MCP static core parser
+⬜ MCP scanner UI
 ⬜ Agent simulation
 ```
 
@@ -60,21 +61,21 @@ docs/agentready/
 
 ```txt
 /                         Landing page
-/agentready.html          Scanner
+/agentready.html          OpenAPI scanner
 /agentready-docs.html     Public documentation
 /agentready-examples.html Public examples
 /agentready-test.html     Static test harness, noindex
 ```
 
-## AgentReady Scanner V1
+## AgentReady Scanner V1 OpenAPI
 
-The static scanner page is:
+The static OpenAPI scanner page is:
 
 ```txt
 agentready.html
 ```
 
-It currently supports local OpenAPI scanning in the browser for:
+It supports local OpenAPI scanning in the browser for:
 
 ```txt
 openapi.json
@@ -96,15 +97,9 @@ Markdown report
 browser print / Save as PDF report
 ```
 
-## MCP exploration V2
+## MCP Core V2a
 
-The MCP scanner is not implemented yet.
-
-The V2 exploration foundation is documented in:
-
-```txt
-docs/agentready/MCP_SCANNER_EXPLORATION.md
-```
+The MCP UI is not built yet, but the static MCP core parser is available.
 
 MCP example fixtures:
 
@@ -113,12 +108,27 @@ agentready-examples/mcp-tools-simple.json
 agentready-examples/mcp-tools-dangerous.json
 ```
 
-The proposed MCP flow is:
+The MCP core flow is:
 
 ```txt
 MCP tools JSON
+→ parse tools[]
 → map each tool to an AgentReady operation
 → reuse classification, risk detection, scoring, report, and agentready.json generation
+```
+
+Usage:
+
+```js
+import { scanMcpToolsText } from './agentready-core/index.js';
+
+const result = await scanMcpToolsText(mcpToolsText, {
+  filename: 'mcp-tools.json'
+});
+
+console.log(result.summary.score);
+console.log(result.agentready_json);
+console.log(result.markdown_report);
 ```
 
 ## Static test harness
@@ -134,39 +144,33 @@ It checks:
 ```txt
 valid JSON fixture scans successfully
 valid YAML fixture scans successfully
-dangerous fixture detects critical risks
-invalid JSON fails cleanly
-invalid YAML fails cleanly
-good fixture scores higher than dangerous fixture
+dangerous OpenAPI fixture detects critical risks
+invalid JSON/YAML fail cleanly
+MCP simple fixture scans successfully
+MCP dangerous fixture detects critical/high risks
+invalid MCP fails cleanly
+MCP tools map to AgentReady operations
 agentready.json is generated
 Markdown report is generated
 ```
 
-## AgentReady Core V1
+## AgentReady Core
 
-The current core can analyze OpenAPI 3.0 / 3.1 in JSON or YAML and generate:
+The current core can analyze:
 
 ```txt
-operation extraction
-action classification
-risk findings
-AgentReady Score
-agentready.json
-Markdown report
+OpenAPI 3.0 / 3.1 JSON
+OpenAPI 3.0 / 3.1 YAML
+MCP tools JSON
 ```
 
-Usage:
+Core exports:
 
 ```js
-import { scanOpenApiText } from './agentready-core/index.js';
-
-const result = await scanOpenApiText(openApiText, {
-  filename: 'openapi.yaml'
-});
-
-console.log(result.summary.score);
-console.log(result.agentready_json);
-console.log(result.markdown_report);
+scanOpenApiText(text, options)
+scanOpenApiDocument(document, options)
+scanMcpToolsText(text, options)
+scanMcpToolsDocument(document, options)
 ```
 
 ## Important files to read first
@@ -182,7 +186,13 @@ docs/agentready/MCP_SCANNER_EXPLORATION.md
 
 ## Next build step
 
-Build the MCP static core parser.
+Build the MCP scanner UI.
+
+Recommended next file:
+
+```txt
+agentready-mcp.html
+```
 
 ## Non-negotiable rule
 
