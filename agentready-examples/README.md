@@ -1,17 +1,18 @@
 # AgentReady Examples
 
-Fixtures utilisées pour vérifier le moteur AgentReady V1a.
+Fixtures utilisées pour vérifier le moteur AgentReady V1.
 
 ## Fichiers
 
 ```txt
 valid-simple-openapi.json
+valid-simple-openapi.yaml
 dangerous-actions-openapi.json
 ```
 
 ## Usage attendu
 
-`valid-simple-openapi.json` doit produire un score relativement élevé, car il contient :
+`valid-simple-openapi.json` et `valid-simple-openapi.yaml` doivent produire un score relativement élevé, car ils contiennent :
 
 - operationId explicites ;
 - descriptions avec limites ;
@@ -29,6 +30,13 @@ dangerous-actions-openapi.json
 - erreurs non correctives ;
 - absence de sécurité déclarée.
 
-## Limite V1a
+## Formats
 
-Le moteur accepte OpenAPI JSON. YAML sera ajouté en V1b avant de déclarer la V1 complète.
+Le moteur accepte maintenant :
+
+```txt
+OpenAPI JSON
+OpenAPI YAML
+```
+
+Le parseur YAML est léger et interne. Il vise les specs OpenAPI courantes, pas l'intégralité de la spécification YAML avancée.
