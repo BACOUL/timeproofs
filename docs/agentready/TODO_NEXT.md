@@ -20,6 +20,8 @@
 ✅ Browser print / Save as PDF for OpenAPI report
 ✅ MCP-specific report wording and scanner output polish
 ✅ Browser print / Save as PDF for MCP report
+✅ OpenAPI-specific report wording and scanner output polish
+✅ agentready.json metadata: generated_at, source_type, score_interpretation
 ✅ Sitemap updated
 ```
 
@@ -34,7 +36,7 @@ docs/agentready/REMAINING_WORK.md
 ## Immediate next PR
 
 ```txt
-feat(agentready): polish OpenAPI scanner report
+docs(agentready): strengthen agentready.json contract spec
 ```
 
 ## Build next
@@ -42,28 +44,27 @@ feat(agentready): polish OpenAPI scanner report
 Requirements:
 
 ```txt
-1. Fix any remaining UI inconsistency in agentready.html navigation.
-2. Improve OpenAPI executive summary language.
-3. Add score interpretation text near the score.
-4. Add clearer severity explanations.
-5. Add sample before/after fixes for common risks.
-6. Add better handling of large specs.
-7. Add warning for unsupported YAML features.
-8. Add version field to exported agentready.json if not already present.
-9. Add source type visibility: OpenAPI vs MCP.
-10. Add report timestamp.
+1. Document agentready.json fields and expected shape.
+2. Document source_type values: openapi and mcp.
+3. Document generated_at timestamp behavior.
+4. Document summary.score_interpretation.
+5. Document tools[] fields.
+6. Document detected_risks values.
+7. Document human confirmation semantics.
+8. Add minimal valid OpenAPI agentready.json example.
+9. Add minimal valid MCP agentready.json example.
+10. Add explicit V1 limitation text.
 ```
 
 ## Then
 
 ```txt
-1. docs(agentready): strengthen agentready.json contract spec
-2. docs(agentready): start agent simulation exploration
-3. feat(agentready): add CLI only after browser product is stable
-4. docs/seo: add public acquisition pages
-5. docs(agentready): define AgentReady Checked trust layer
-6. docs(product): prepare monetization path
-7. chore(deploy): prepare Vercel reconnect after 2026-07-09
+1. docs(agentready): start agent simulation exploration
+2. feat(agentready): add CLI only after browser product is stable
+3. docs/seo: add public acquisition pages
+4. docs(agentready): define AgentReady Checked trust layer
+5. docs(product): prepare monetization path
+6. chore(deploy): prepare Vercel reconnect after 2026-07-09
 ```
 
 ## Do not build yet
