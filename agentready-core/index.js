@@ -62,3 +62,7 @@ export { detectRisks } from './detect-risks.js';
 export { calculateAgentReadyScore } from './score.js';
 export { generateAgentReadyJson } from './generate-agentready-json.js';
 export { generateMarkdownReport } from './report.js';
+
+export { parseMcpToolsText, validateMcpToolsDocument } from './parse-mcp-tools.js';
+export { extractMcpTools } from './extract-mcp-tools.js';
+export { scanMcpToolsText, scanMcpToolsDocument } from './scan-mcp-tools.js';
