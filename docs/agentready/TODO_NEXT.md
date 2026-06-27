@@ -1,6 +1,6 @@
 # TODO Next — TimeProofs AgentReady
 
-## Current completed V1 base
+## Current completed V1/V2 draft base
 
 ```txt
 ✅ agentready.html exists
@@ -20,20 +20,21 @@
 ✅ agentready.json download
 ✅ markdown report download
 ✅ browser print / Save as PDF export
-✅ static fixture checks
+✅ static OpenAPI fixture checks
 ✅ public docs/examples pages
 ✅ MCP exploration document
 ✅ MCP simple/dangerous fixtures
 ✅ MCP static core parser
 ✅ MCP tools to AgentReady operations mapping
+✅ MCP checks in static test harness
 ✅ mandatory limitation text shown
-✅ submitted API endpoints are never called
+✅ submitted API endpoints / MCP tools are never called
 ```
 
 ## Immediate next PR
 
 ```txt
-test(agentready): add MCP checks to static test harness
+feat(agentready): add MCP scanner page
 ```
 
 ## Build next
@@ -41,15 +42,16 @@ test(agentready): add MCP checks to static test harness
 Requirements:
 
 ```txt
-1. Load mcp-tools-simple.json in agentready-test.html.
-2. Load mcp-tools-dangerous.json in agentready-test.html.
-3. Verify simple MCP fixture scans successfully.
-4. Verify dangerous MCP fixture scans successfully.
-5. Verify dangerous MCP fixture detects high/critical risks.
-6. Verify MCP scan generates agentready.json.
-7. Verify MCP scan generates Markdown report.
-8. Keep OpenAPI V1 checks unchanged.
-9. Do not add accounts, payment, dashboard, or runtime firewall.
+1. Add agentready-mcp.html.
+2. Support local MCP tools JSON upload.
+3. Add load simple MCP example button.
+4. Add load dangerous MCP example button.
+5. Display MCP AgentReady Score.
+6. Display MCP tool findings.
+7. Export agentready.json.
+8. Export Markdown report.
+9. Keep OpenAPI scanner page unchanged.
+10. Do not add accounts, payment, dashboard, or runtime firewall.
 ```
 
 ## Do not build yet
