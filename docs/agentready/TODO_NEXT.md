@@ -4,6 +4,7 @@
 
 ```txt
 ✅ agentready.html exists
+✅ agentready-test.html exists
 ✅ OpenAPI JSON upload works
 ✅ OpenAPI YAML upload works
 ✅ scanOpenApiText(fileText, { filename }) handles JSON/YAML
@@ -17,6 +18,7 @@
 ✅ agentready.json download
 ✅ markdown report download
 ✅ browser print / Save as PDF export
+✅ static fixture checks
 ✅ mandatory limitation text shown
 ✅ submitted API endpoints are never called
 ```
@@ -24,7 +26,7 @@
 ## Immediate next PR
 
 ```txt
-feat(agentready): add static test harness
+feat(agentready): add public docs and examples pages
 ```
 
 ## Build next
@@ -32,14 +34,12 @@ feat(agentready): add static test harness
 Requirements:
 
 ```txt
-1. Add a static fixture test page or no-dependency test script.
-2. Verify valid-simple-openapi.json scans successfully.
-3. Verify valid-simple-openapi.yaml scans successfully.
-4. Verify dangerous-actions-openapi.json detects critical risks.
-5. Verify invalid JSON fails cleanly.
-6. Verify invalid YAML fails cleanly.
-7. Verify good fixture scores higher than dangerous fixture.
-8. Keep test harness static and dependency-free.
+1. Add a public documentation HTML page.
+2. Add a public examples HTML page.
+3. Link docs/examples from index.html and agentready.html.
+4. Keep markdown docs as source-of-truth.
+5. Update sitemap only when pages exist.
+6. Do not introduce a framework.
 ```
 
 ## Do not build yet
