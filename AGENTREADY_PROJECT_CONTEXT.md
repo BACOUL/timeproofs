@@ -4,14 +4,7 @@
 
 Read this file first before modifying the repository.
 
-It explains:
-
-- what TimeProofs AgentReady is;
-- where the repo currently stands;
-- what was removed from the old TimeProofs product;
-- what remains to build;
-- what must not be reintroduced;
-- the A-to-Z roadmap for completing the product.
+It explains what TimeProofs AgentReady is, where the repo currently stands, what must not be reintroduced, and what remains to build.
 
 ---
 
@@ -37,20 +30,9 @@ The product must answer one clear question:
 
 ## 2. Strategic decision: legacy proof layer removed from active product
 
-The repository previously contained an older **TimeProofs proof-of-existence** product surface:
+The old TimeProofs proof-of-existence surface is no longer the direction of the repository.
 
-```txt
-hash locally
-signed timestamp
-.tproof.json
-verify page
-proofspec page
-regulations/security/legal/use-cases pages
-legacy OpenAPI timestamp/verify spec
-release proof manifest
-```
-
-This legacy surface is no longer the direction of the project.
+Do not rebuild the old timestamp/proof/verify product unless explicitly requested.
 
 The repository is now focused on:
 
@@ -62,8 +44,6 @@ AgentReady Score
 AgentReady Report
 agentready.json
 ```
-
-Do not rebuild the old proof-of-existence product unless explicitly requested.
 
 ---
 
@@ -97,20 +77,18 @@ Main branch:
 timeproofs
 ```
 
-Current state after AgentReady reboot:
+Current state:
 
 ```txt
 ✅ Legacy proof-of-existence direction removed from active repo surface
 ✅ AgentReady product documentation merged
 ✅ Strict methodology merged
 ✅ Repo audit merged
-✅ Static OpenAPI JSON core scanner merged
-✅ Example OpenAPI fixtures merged
+✅ Static OpenAPI JSON/YAML core scanner
+✅ Example OpenAPI JSON/YAML fixtures
 ✅ Root README repositioned around AgentReady
 ✅ Root landing page repositioned around AgentReady
-⬜ Browser upload page not built yet
-⬜ YAML support not built yet
-⬜ Human report UI not built yet
+✅ Browser upload page for OpenAPI JSON/YAML
 ⬜ PDF/print export not built yet
 ⬜ MCP scanner not built yet
 ⬜ Agent simulation not built yet
@@ -120,8 +98,6 @@ Current state after AgentReady reboot:
 
 ## 5. Core product formula
 
-The repository must continue toward this product formula:
-
 ```txt
 OpenAPI / MCP / tool schema
 → AgentReady analysis
@@ -130,33 +106,28 @@ OpenAPI / MCP / tool schema
 → agentready.json
 ```
 
-The V1 product must start with:
+Current V1 product flow:
 
 ```txt
-OpenAPI upload
+OpenAPI JSON/YAML upload
 → AgentReady analysis
 → score /100
 → endpoint findings
 → recommendations
 → agentready.json
-→ human report
+→ Markdown report
 ```
 
 ---
 
 ## 6. Current technical core
 
-The static V1a core lives in:
-
-```txt
-agentready-core/
-```
-
-Current files:
+Core files:
 
 ```txt
 agentready-core/README.md
 agentready-core/types.js
+agentready-core/parse-yaml.js
 agentready-core/parse-openapi.js
 agentready-core/extract-operations.js
 agentready-core/classify-action.js
@@ -167,19 +138,22 @@ agentready-core/report.js
 agentready-core/index.js
 ```
 
-Current examples live in:
+Example files:
 
 ```txt
-agentready-examples/
+agentready-examples/valid-simple-openapi.json
+agentready-examples/valid-simple-openapi.yaml
+agentready-examples/dangerous-actions-openapi.json
 ```
 
-Current V1a input:
+Supported current input:
 
 ```txt
 OpenAPI JSON 3.0 / 3.1
+OpenAPI YAML 3.0 / 3.1
 ```
 
-Current V1a output:
+Current output:
 
 ```txt
 summary score/status
@@ -191,9 +165,30 @@ markdown_report
 
 ---
 
-## 7. Current documentation
+## 7. Current public pages
 
-Important docs:
+```txt
+index.html
+agentready.html
+```
+
+`agentready.html` provides:
+
+```txt
+local OpenAPI JSON/YAML upload
+drag and drop
+example loading
+score/status display
+risk counts
+top risks
+endpoint findings
+agentready.json export
+Markdown report export
+```
+
+---
+
+## 8. Important documentation
 
 ```txt
 docs/agentready/README.md
@@ -210,9 +205,7 @@ docs/agentready/LEGACY_REMOVAL_DECISION.md
 
 ---
 
-## 8. Non-negotiable rules
-
-When working in this repo:
+## 9. Non-negotiable rules
 
 1. Do not turn AgentReady into a runtime firewall.
 2. Do not position it as a broad AI security platform.
@@ -234,82 +227,36 @@ It identifies structural risks that may cause AI agents to misuse APIs, tools or
 
 ---
 
-## 9. Next PRs to complete the product
+## 10. Next PRs to complete the product
 
-### PR next — Static upload UI
-
-Goal:
+### Next — Report polish and PDF/print export
 
 ```txt
-Create agentready.html
-Use agentready-core/index.js
-Allow local OpenAPI JSON upload
-Show score/status
-Show top risks
-Show endpoint findings
-Export agentready.json
-Show markdown report
-```
-
-Do not add PDF yet.
-Do not add MCP yet.
-
----
-
-### Then — YAML support
-
-Goal:
-
-```txt
-Support openapi.yaml and openapi.yml
-```
-
-Requirement before V1 complete:
-
-```txt
-OpenAPI JSON works.
-OpenAPI YAML works.
-Invalid YAML is refused cleanly.
-```
-
----
-
-### Then — Report polish and PDF/print export
-
-Goal:
-
-```txt
-Improve human report page.
-Add printable report.
+Improve human report section.
+Add print-friendly CSS.
 Add browser print-to-PDF support.
+Add clearer summary/action plan.
 ```
 
----
-
-### Then — Public docs and examples
-
-Goal:
+### Then — Test harness
 
 ```txt
-Add stable docs/examples pages.
+Verify JSON good fixture works.
+Verify YAML good fixture works.
+Verify dangerous fixture detects critical risks.
+Verify invalid JSON/YAML fail cleanly.
+```
+
+### Then — Public docs and examples pages
+
+```txt
+Add stable docs/examples HTML pages.
 Update sitemap only when pages exist.
 ```
 
 ---
 
-### Then — Test harness
-
-Goal:
-
-```txt
-Verify good fixture scores higher than dangerous fixture.
-Verify dangerous fixture detects critical risks.
-Verify invalid specs fail cleanly.
-```
-
----
-
-## 10. Future roadmap after V1
+## 11. Future roadmap after V1
 
 ### V2 — MCP scanner
 
@@ -358,32 +305,6 @@ badge
 
 ---
 
-## 11. Success definition for V1
-
-V1 is complete only when a user can:
-
-```txt
-1. Open the AgentReady upload page.
-2. Upload OpenAPI JSON or YAML.
-3. Get an AgentReady Score.
-4. Read clear risks and recommendations.
-5. Download agentready.json.
-6. Export or print a human report.
-7. Understand the product limitations.
-```
-
-The system must:
-
-```txt
-1. Reject invalid files cleanly.
-2. Never call submitted API endpoints.
-3. Avoid storing uploaded specs by default.
-4. Avoid exposing secrets unnecessarily.
-5. Produce deterministic results for the same spec.
-```
-
----
-
 ## 12. Strategic moat to build
 
 The first scanner is copyable. The long-term asset is not just the UI.
@@ -412,4 +333,4 @@ Because it can become the machine-readable contract between tools and agents.
 
 ## 13. One-line repo state
 
-> TimeProofs is now focused on AgentReady. The old proof-of-existence product surface has been removed from the active direction. The next step is a browser upload page using `agentready-core/index.js`.
+> TimeProofs is now focused on AgentReady. The old proof-of-existence product surface has been removed. The repo now has a static OpenAPI JSON/YAML scanner page and the next step is report polish plus print/PDF export.
