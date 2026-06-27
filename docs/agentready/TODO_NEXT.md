@@ -4,6 +4,8 @@
 
 ```txt
 ✅ agentready.html exists
+✅ agentready-docs.html exists
+✅ agentready-examples.html exists
 ✅ agentready-test.html exists
 ✅ OpenAPI JSON upload works
 ✅ OpenAPI YAML upload works
@@ -19,6 +21,7 @@
 ✅ markdown report download
 ✅ browser print / Save as PDF export
 ✅ static fixture checks
+✅ public docs/examples pages
 ✅ mandatory limitation text shown
 ✅ submitted API endpoints are never called
 ```
@@ -26,7 +29,7 @@
 ## Immediate next PR
 
 ```txt
-feat(agentready): add public docs and examples pages
+feat(agentready): start MCP scanner exploration
 ```
 
 ## Build next
@@ -34,18 +37,17 @@ feat(agentready): add public docs and examples pages
 Requirements:
 
 ```txt
-1. Add a public documentation HTML page.
-2. Add a public examples HTML page.
-3. Link docs/examples from index.html and agentready.html.
-4. Keep markdown docs as source-of-truth.
-5. Update sitemap only when pages exist.
-6. Do not introduce a framework.
+1. Define the MCP input shape for V2.
+2. Add an MCP example fixture.
+3. Document how MCP tools map to AgentReady operations.
+4. Identify which OpenAPI risk checks can be reused.
+5. Do not change OpenAPI V1 behavior.
+6. Do not add accounts, payment, or dashboard.
 ```
 
 ## Do not build yet
 
 ```txt
-MCP scanner
 accounts
 payments
 dashboard

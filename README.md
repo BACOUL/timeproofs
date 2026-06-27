@@ -36,6 +36,8 @@ OpenAPI / MCP / tool schema
 ✅ Executive report section
 ✅ Browser print / Save as PDF export
 ✅ Static browser test harness
+✅ Public docs page
+✅ Public examples page
 ⬜ MCP scanner
 ⬜ Agent simulation
 ```
@@ -45,10 +47,22 @@ OpenAPI / MCP / tool schema
 ```txt
 index.html
 agentready.html
+agentready-docs.html
+agentready-examples.html
 agentready-test.html
 agentready-core/
 agentready-examples/
 docs/agentready/
+```
+
+## Public pages
+
+```txt
+/                         Landing page
+/agentready.html          Scanner
+/agentready-docs.html     Public documentation
+/agentready-examples.html Public examples
+/agentready-test.html     Static test harness, noindex
 ```
 
 ## AgentReady Scanner V1
@@ -141,7 +155,7 @@ docs/agentready/LEGACY_REMOVAL_DECISION.md
 
 ## Next build step
 
-Begin MCP scanner exploration only after validating the static test harness in browser.
+Begin MCP scanner exploration.
 
 ## Non-negotiable rule
 

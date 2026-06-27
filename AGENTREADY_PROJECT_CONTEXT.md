@@ -93,6 +93,8 @@ Current state:
 ✅ Recommended action plan
 ✅ Browser print / Save as PDF export
 ✅ Static browser test harness
+✅ Public docs page
+✅ Public examples page
 ⬜ MCP scanner not built yet
 ⬜ Agent simulation not built yet
 ```
@@ -121,6 +123,7 @@ OpenAPI JSON/YAML upload
 → Markdown report
 → printable executive report
 → static fixture checks
+→ public docs/examples
 ```
 
 ---
@@ -176,6 +179,8 @@ printable executive report
 ```txt
 index.html
 agentready.html
+agentready-docs.html
+agentready-examples.html
 agentready-test.html
 ```
 
@@ -195,6 +200,10 @@ agentready.json export
 Markdown report export
 browser print / Save as PDF export
 ```
+
+`agentready-docs.html` provides public product documentation.
+
+`agentready-examples.html` provides public examples and expected scanner behavior.
 
 `agentready-test.html` provides static browser checks:
 
@@ -252,21 +261,23 @@ It identifies structural risks that may cause AI agents to misuse APIs, tools or
 
 ## 10. Next PRs to complete the product
 
-### Next — Public docs and examples pages
-
-```txt
-Add stable docs/examples HTML pages.
-Link them from index.html and agentready.html.
-Update sitemap only when pages exist.
-Keep markdown docs as source-of-truth.
-```
-
-### Then — MCP exploration
+### Next — MCP exploration
 
 ```txt
 Define MCP input shape.
 Create MCP fixture.
 Extend classifier to MCP tool schemas.
+Keep OpenAPI V1 untouched.
+Do not add accounts, payment, or dashboard.
+```
+
+### Then — MCP scanner V2
+
+```txt
+MCP tools schema
+→ tool name/description/input schema analysis
+→ MCP AgentReady Score
+→ MCP agentready.json
 ```
 
 ---
@@ -348,4 +359,4 @@ Because it can become the machine-readable contract between tools and agents.
 
 ## 13. One-line repo state
 
-> TimeProofs is now focused on AgentReady. The repo has a static OpenAPI JSON/YAML scanner page, agentready.json export, Markdown report export, browser print / Save as PDF report, and a static browser test harness. The next step is public docs/examples pages or MCP exploration.
+> TimeProofs is now focused on AgentReady. The repo has a static OpenAPI JSON/YAML scanner page, agentready.json export, Markdown report export, browser print / Save as PDF report, a static browser test harness, and public docs/examples pages. The next step is MCP exploration.
