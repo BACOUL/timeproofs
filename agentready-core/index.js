@@ -57,6 +57,9 @@ export function scanOpenApiDocument(document, options = {}) {
 
 export { parseOpenApiText } from './parse-openapi.js';
 export { extractOperations } from './extract-operations.js';
+export { parseMcpToolsText } from './parse-mcp-tools.js';
+export { extractMcpTools } from './extract-mcp-tools.js';
+export { scanMcpToolsText, scanMcpToolsDocument } from './scan-mcp-tools.js';
 export { classifyAction } from './classify-action.js';
 export { detectRisks } from './detect-risks.js';
 export { calculateAgentReadyScore } from './score.js';
