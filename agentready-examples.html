@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AgentReady Examples — TimeProofs AgentReady</title>
-  <meta name="description" content="OpenAPI examples for TimeProofs AgentReady: good JSON, good YAML, and risky API specs for scanner validation." />
+  <meta name="description" content="OpenAPI and MCP examples for TimeProofs AgentReady: good fixtures, risky fixtures, and scanner validation cases." />
   <meta name="robots" content="index,follow" />
   <meta name="theme-color" content="#0b1020" />
   <link rel="canonical" href="https://timeproofs.io/agentready-examples.html" />
@@ -26,11 +26,11 @@
     h1 { font-size:clamp(2.2rem,6vw,4.8rem); line-height:1; margin:0 0 16px; letter-spacing:-.05em; max-width:980px; }
     .subtitle { max-width:820px; color:var(--muted); font-size:1.18rem; }
     .grid { display:grid; gap:16px; }
-    @media (min-width:900px) { .grid.three { grid-template-columns:repeat(3,1fr); } }
+    @media (min-width:900px) { .grid.two { grid-template-columns:repeat(2,1fr); } .grid.three { grid-template-columns:repeat(3,1fr); } }
     .card { background:rgba(15,23,42,.82); border:1px solid var(--line); border-radius:18px; padding:22px; margin:16px 0; box-shadow:0 18px 60px rgba(0,0,0,.22); }
     .card h2, .card h3 { color:#b9e7f5; margin-top:0; }
     .muted { color:var(--muted); }
-    .cta { display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:0 16px; border-radius:12px; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#04111f; font-weight:900; margin-right:10px; }
+    .cta { display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:0 16px; border-radius:12px; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#04111f; font-weight:900; margin:6px 10px 6px 0; }
     .cta.secondary { background:#101b31; color:#dff7ff; border:1px solid #20304d; }
     code, pre { background:#020617; color:#e2f6ff; border:1px solid #1e293b; border-radius:12px; }
     code { padding:2px 6px; }
@@ -38,6 +38,7 @@
     .tag { display:inline-flex; border-radius:999px; padding:4px 9px; font-size:.82rem; font-weight:900; border:1px solid #24455a; background:#0d2330; color:#c7edf7; }
     .good { color:#bbf7d0; border-color:rgba(34,197,94,.35); background:rgba(34,197,94,.1); }
     .risky { color:#fecaca; border-color:rgba(239,68,68,.35); background:rgba(239,68,68,.1); }
+    .mcp { color:#bae6fd; border-color:rgba(56,189,248,.35); background:rgba(56,189,248,.1); }
     ul { padding-left:20px; }
     li { margin:8px 0; }
     footer { border-top:1px solid var(--line); padding:24px 0; color:#64748b; text-align:center; margin-top:40px; }
@@ -48,7 +49,8 @@
     <div class="wrap nav">
       <a class="brand" href="/" aria-label="TimeProofs AgentReady home"><img src="/assets/logo.png" alt="" /><span>TimeProofs AgentReady</span></a>
       <nav class="nav-links" aria-label="Main navigation">
-        <a href="/agentready.html">Scan</a>
+        <a href="/agentready.html">OpenAPI Scan</a>
+        <a href="/agentready-mcp.html">MCP Scan</a>
         <a href="/agentready-docs.html">Docs</a>
         <a href="/agentready-examples.html">Examples</a>
         <a href="/agentready-test.html">Tests</a>
@@ -59,66 +61,69 @@
   <main class="wrap">
     <section class="hero">
       <div class="eyebrow">Examples</div>
-      <h1>Use fixtures to understand the scanner.</h1>
-      <p class="subtitle">These examples show the difference between a more agent-ready API and a risky API. They are also used by the static test harness.</p>
-      <p><a class="cta" href="/agentready.html">Open scanner</a><a class="cta secondary" href="/agentready-test.html">Run test harness</a></p>
-    </section>
-
-    <section class="grid three">
-      <article class="card">
-        <span class="tag good">Good JSON</span>
-        <h3>valid-simple-openapi.json</h3>
-        <p class="muted">Designed to score higher. Includes explicit operation IDs, useful descriptions, enums, corrective errors, and declared security.</p>
-        <p><a href="/agentready-examples/valid-simple-openapi.json">Open fixture</a></p>
-      </article>
-      <article class="card">
-        <span class="tag good">Good YAML</span>
-        <h3>valid-simple-openapi.yaml</h3>
-        <p class="muted">Same intent as the JSON fixture, used to validate YAML parsing and the shared scanner pipeline.</p>
-        <p><a href="/agentready-examples/valid-simple-openapi.yaml">Open fixture</a></p>
-      </article>
-      <article class="card">
-        <span class="tag risky">Risky JSON</span>
-        <h3>dangerous-actions-openapi.json</h3>
-        <p class="muted">Designed to trigger critical/high findings: refund without confirmation, unbounded amount, sensitive exports, deletion, and weak errors.</p>
-        <p><a href="/agentready-examples/dangerous-actions-openapi.json">Open fixture</a></p>
-      </article>
+      <h1>Use fixtures to understand the scanners.</h1>
+      <p class="subtitle">These examples show the difference between more agent-ready definitions and risky definitions. They are also used by the static test harness.</p>
+      <p><a class="cta" href="/agentready.html">OpenAPI scanner</a><a class="cta secondary" href="/agentready-mcp.html">MCP scanner</a><a class="cta secondary" href="/agentready-test.html">Run test harness</a></p>
     </section>
 
     <section class="card">
-      <h2>Good fixture characteristics</h2>
-      <ul>
-        <li>Clear <code>operationId</code> values.</li>
-        <li>Descriptions include when to use and when not to use.</li>
-        <li>Closed string fields use <code>enum</code>.</li>
-        <li>Error responses explain how to correct the call.</li>
-        <li>Security is declared.</li>
-      </ul>
+      <h2>OpenAPI fixtures</h2>
+      <p class="muted">Use these with the OpenAPI scanner.</p>
+      <div class="grid three">
+        <article class="card"><span class="tag good">Good JSON</span><h3>valid-simple-openapi.json</h3><p class="muted">Designed to score higher. Includes explicit operation IDs, useful descriptions, enums, corrective errors, and declared security.</p><p><a href="/agentready-examples/valid-simple-openapi.json">Open fixture</a></p></article>
+        <article class="card"><span class="tag good">Good YAML</span><h3>valid-simple-openapi.yaml</h3><p class="muted">Same intent as the JSON fixture, used to validate YAML parsing and the shared scanner pipeline.</p><p><a href="/agentready-examples/valid-simple-openapi.yaml">Open fixture</a></p></article>
+        <article class="card"><span class="tag risky">Risky JSON</span><h3>dangerous-actions-openapi.json</h3><p class="muted">Designed to trigger critical/high findings: refund without confirmation, unbounded amount, sensitive exports, deletion, and weak errors.</p><p><a href="/agentready-examples/dangerous-actions-openapi.json">Open fixture</a></p></article>
+      </div>
     </section>
 
     <section class="card">
-      <h2>Risky fixture characteristics</h2>
-      <ul>
-        <li>Financial refund action lacks human confirmation guidance.</li>
-        <li><code>amount</code> is numeric but unbounded.</li>
-        <li><code>status</code> is a string without enum.</li>
-        <li>Customer export exposes sensitive data.</li>
-        <li>Delete operation can be irreversible.</li>
-        <li>Error descriptions are too generic.</li>
-      </ul>
+      <h2>MCP fixtures</h2>
+      <p class="muted">Use these with the MCP scanner.</p>
+      <div class="grid two">
+        <article class="card"><span class="tag mcp">MCP simple</span><h3>mcp-tools-simple.json</h3><p class="muted">Designed as a healthier MCP fixture. It includes support tools with clearer descriptions, bounded categories, and required input fields.</p><p><a href="/agentready-examples/mcp-tools-simple.json">Open fixture</a></p></article>
+        <article class="card"><span class="tag risky">MCP risky</span><h3>mcp-tools-dangerous.json</h3><p class="muted">Designed to trigger risks: refund, customer export, delete action, weak descriptions, missing bounds, and broad sensitive actions.</p><p><a href="/agentready-examples/mcp-tools-dangerous.json">Open fixture</a></p></article>
+      </div>
+    </section>
+
+    <section class="grid two">
+      <article class="card">
+        <h2>Good fixture characteristics</h2>
+        <ul>
+          <li>Clear operation or tool names.</li>
+          <li>Descriptions include when to use and when not to use.</li>
+          <li>Closed string fields use <code>enum</code>.</li>
+          <li>Required input fields are declared.</li>
+          <li>Error responses or tool descriptions help correction.</li>
+          <li>Security or usage boundaries are explicit where possible.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h2>Risky fixture characteristics</h2>
+        <ul>
+          <li>Financial refund action lacks human confirmation guidance.</li>
+          <li><code>amount</code> is numeric but unbounded.</li>
+          <li><code>status</code> or <code>format</code> fields are strings without enum.</li>
+          <li>Customer export exposes sensitive data.</li>
+          <li>Delete operation can be irreversible.</li>
+          <li>Error or tool descriptions are too generic.</li>
+        </ul>
+      </article>
     </section>
 
     <section class="card">
       <h2>Expected test harness behavior</h2>
-      <pre>valid-simple-openapi.json scans successfully
-valid-simple-openapi.yaml scans successfully
-dangerous-actions-openapi.json scans successfully
-invalid JSON fails cleanly
-invalid YAML fails cleanly
-agentready.json is generated
-Markdown report is generated
-dangerous fixture detects critical risks
-good fixture scores higher than dangerous fixture</pre>
+      <pre>valid OpenAPI JSON fixture scans successfully
+valid OpenAPI YAML fixture scans successfully
+dangerous OpenAPI fixture detects critical risks
+invalid OpenAPI JSON fails cleanly
+invalid OpenAPI YAML fails cleanly
+MCP simple fixture scans successfully
+MCP dangerous fixture scans successfully
+invalid MCP JSON fails cleanly
+invalid MCP shape fails cleanly
+MCP agentready.json is generated
+MCP Markdown report is generated
+MCP dangerous fixture detects high/critical risks</pre>
     </section>
   </main>
 
