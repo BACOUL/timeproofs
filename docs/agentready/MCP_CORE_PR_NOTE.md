@@ -4,7 +4,7 @@
 
 This branch now contains the first static MCP scanner core.
 
-It is still draft and should not be deployed until Vercel credits are available again.
+It is still draft and should not be deployed automatically.
 
 ## Added core files
 
@@ -20,6 +20,14 @@ agentready-core/scan-mcp-tools.js
 agentready-examples/mcp-tools-simple.json
 agentready-examples/mcp-tools-dangerous.json
 ```
+
+## Updated test harness
+
+```txt
+agentready-test.html
+```
+
+The static test harness now checks both OpenAPI and MCP fixtures.
 
 ## Public API
 
@@ -57,6 +65,5 @@ No payment/account/dashboard.
 ## Next after this draft
 
 ```txt
-Add MCP browser test harness checks.
-Then add agentready-mcp.html UI only after the core is stable.
+Add agentready-mcp.html UI only after the core is reviewed.
 ```
