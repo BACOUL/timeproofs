@@ -38,7 +38,7 @@ OpenAPI / MCP / tool schema
 ✅ MCP scanner exploration docs and fixtures
 ✅ MCP static core parser
 ✅ MCP checks in static test harness
-⬜ MCP scanner page
+✅ MCP scanner page
 ⬜ Agent simulation
 ```
 
@@ -47,6 +47,7 @@ OpenAPI / MCP / tool schema
 ```txt
 index.html
 agentready.html
+agentready-mcp.html
 agentready-docs.html
 agentready-examples.html
 agentready-test.html
@@ -59,7 +60,8 @@ docs/agentready/
 
 ```txt
 /                         Landing page
-/agentready.html          Scanner
+/agentready.html          OpenAPI scanner
+/agentready-mcp.html      MCP tools scanner
 /agentready-docs.html     Public documentation
 /agentready-examples.html Public examples
 /agentready-test.html     Static test harness, noindex
@@ -67,7 +69,7 @@ docs/agentready/
 
 ## AgentReady Scanner V1
 
-The static scanner page is:
+The static OpenAPI scanner page is:
 
 ```txt
 agentready.html
@@ -95,9 +97,15 @@ Markdown report
 browser print / Save as PDF report
 ```
 
-## MCP core V2 draft
+## MCP Scanner V2 draft
 
-The MCP UI is not built yet, but the static MCP core is present.
+The static MCP scanner page is:
+
+```txt
+agentready-mcp.html
+```
+
+It supports local MCP tools JSON scanning in the browser.
 
 Core files:
 
@@ -162,33 +170,6 @@ MCP Markdown report is generated
 MCP dangerous fixture detects high/critical risks
 ```
 
-## AgentReady Core V1
-
-The current OpenAPI core can analyze OpenAPI 3.0 / 3.1 in JSON or YAML and generate:
-
-```txt
-operation extraction
-action classification
-risk findings
-AgentReady Score
-agentready.json
-Markdown report
-```
-
-Usage:
-
-```js
-import { scanOpenApiText } from './agentready-core/index.js';
-
-const result = await scanOpenApiText(openApiText, {
-  filename: 'openapi.yaml'
-});
-
-console.log(result.summary.score);
-console.log(result.agentready_json);
-console.log(result.markdown_report);
-```
-
 ## Important files to read first
 
 ```txt
@@ -202,11 +183,7 @@ docs/agentready/MCP_SCANNER_EXPLORATION.md
 
 ## Next build step
 
-Add the MCP scanner page:
-
-```txt
-agentready-mcp.html
-```
+Improve navigation and public explanation around OpenAPI vs MCP, then begin agent simulation exploration.
 
 ## Non-negotiable rule
 
