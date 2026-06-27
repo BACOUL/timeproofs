@@ -10,8 +10,8 @@
 ✅ OpenAPI upload page: agentready.html
 ✅ MCP upload page: agentready-mcp.html
 ✅ Public landing page
-✅ Public docs page
-✅ Public examples page
+✅ Public docs page with OpenAPI/MCP split
+✅ Public examples page with OpenAPI/MCP fixtures
 ✅ Static browser test harness
 ✅ OpenAPI fixtures
 ✅ MCP fixtures
@@ -32,7 +32,7 @@ docs/agentready/REMAINING_WORK.md
 ## Immediate next PR
 
 ```txt
-feat(agentready): polish navigation and product clarity
+test(agentready): harden static test harness
 ```
 
 ## Build next
@@ -40,21 +40,22 @@ feat(agentready): polish navigation and product clarity
 Requirements:
 
 ```txt
-1. Standardize navigation across all public HTML pages.
-2. Use the same labels everywhere: OpenAPI Scan, MCP Scan, Docs, Examples, Tests.
-3. Add a clear OpenAPI vs MCP explanation section.
-4. Add a homepage section showing the two scanner paths.
-5. Update agentready-docs.html to include MCP scanner details.
-6. Update agentready-examples.html to include MCP fixtures.
-7. Add MCP scanner link to every relevant public page.
-8. Keep agentready-test.html noindex.
+1. Split results into OpenAPI tests and MCP tests visually.
+2. Add pass/fail grouping.
+3. Add a final overall status banner.
+4. Add clearer error output for failed tests.
+5. Add tests for missing tools[] in MCP.
+6. Add tests for empty tools[] in MCP.
+7. Add tests for missing MCP tool name.
+8. Add tests that exports contain expected fields.
+9. Add a note explaining that browser fetch requires serving files over HTTP, not opening file:// directly.
 ```
 
 ## Then
 
 ```txt
-1. test(agentready): harden static test harness
-2. feat(agentready): polish MCP scanner report
+1. feat(agentready): polish MCP scanner report
+2. feat(agentready): polish OpenAPI scanner report
 3. docs(agentready): strengthen agentready.json contract spec
 4. docs(agentready): start agent simulation exploration
 5. feat(agentready): add CLI only after browser product is stable
