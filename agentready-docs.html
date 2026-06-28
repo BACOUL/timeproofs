@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AgentReady Docs — TimeProofs AgentReady</title>
-  <meta name="description" content="Documentation for TimeProofs AgentReady: OpenAPI scanner, MCP scanner, AgentReady Score, risk findings, reports, and agentready.json." />
+  <meta name="description" content="Documentation for TimeProofs AgentReady: OpenAPI scanner, MCP scanner, static simulation, AgentReady Score, risk findings, reports, and agentready.json." />
   <meta name="robots" content="index,follow" />
   <meta name="theme-color" content="#0b1020" />
   <link rel="canonical" href="https://timeproofs.io/agentready-docs.html" />
@@ -50,6 +50,7 @@
       <nav class="nav-links" aria-label="Main navigation">
         <a href="/agentready.html">OpenAPI Scan</a>
         <a href="/agentready-mcp.html">MCP Scan</a>
+        <a href="/agentready-simulation.html">Simulation</a>
         <a href="/agentready-docs.html">Docs</a>
         <a href="/agentready-examples.html">Examples</a>
         <a href="/agentready-test.html">Tests</a>
@@ -61,25 +62,26 @@
     <section class="hero">
       <div class="eyebrow">Public documentation</div>
       <h1>Make APIs and MCP tools ready before AI agents use them.</h1>
-      <p class="subtitle">TimeProofs AgentReady checks tool definitions before agent exposure. It produces an AgentReady Score, findings, a human-readable report, and a machine-readable <code>agentready.json</code> contract.</p>
-      <p><a class="cta" href="/agentready.html">Scan OpenAPI</a><a class="cta secondary" href="/agentready-mcp.html">Scan MCP tools</a><a class="cta secondary" href="/agentready-examples.html">View examples</a></p>
+      <p class="subtitle">TimeProofs AgentReady checks tool definitions before agent exposure. It produces an AgentReady Score, findings, a human-readable report, a machine-readable <code>agentready.json</code> contract, and static scenario simulation outputs.</p>
+      <p><a class="cta" href="/agentready.html">Scan OpenAPI</a><a class="cta secondary" href="/agentready-mcp.html">Scan MCP tools</a><a class="cta secondary" href="/agentready-simulation.html">Run simulation</a><a class="cta secondary" href="/agentready-examples.html">View examples</a></p>
     </section>
 
     <section class="card">
-      <h2>Two scanner paths</h2>
+      <h2>Three static paths</h2>
       <table>
         <thead><tr><th>Path</th><th>Use it when</th><th>Input</th><th>Output</th></tr></thead>
         <tbody>
           <tr><td><strong>OpenAPI Scan</strong></td><td>You have a REST API spec and want to know if the API is clear and bounded enough for AI agents.</td><td><code>openapi.json</code>, <code>openapi.yaml</code>, <code>openapi.yml</code></td><td>Score, endpoint findings, report, <code>agentready.json</code></td></tr>
           <tr><td><strong>MCP Scan</strong></td><td>You have MCP tool definitions and want to know if the tools are safe and clear enough to expose to agents.</td><td><code>mcp-tools.json</code> with <code>server</code> + <code>tools[]</code></td><td>Score, tool findings, report, <code>agentready.json</code></td></tr>
+          <tr><td><strong>Static Simulation</strong></td><td>You already generated <code>agentready.json</code> and want to test scenario-level agent failure modes without executing tools.</td><td><code>agentready.json</code> + scenario JSON</td><td>Counts, scenario results, <code>agentready-simulation.json</code></td></tr>
         </tbody>
       </table>
     </section>
 
     <section class="grid three">
-      <article class="card"><h3>Input</h3><p>OpenAPI JSON/YAML or MCP tools JSON. The current product is static and browser-first.</p></article>
-      <article class="card"><h3>Analysis</h3><p>Local checks for agent-facing clarity, dangerous actions, bounded parameters, missing limits, sensitive data, and weak error guidance.</p></article>
-      <article class="card"><h3>Output</h3><p>AgentReady Score, findings, recommendations, Markdown report, printable OpenAPI report, and <code>agentready.json</code>.</p></article>
+      <article class="card"><h3>Input</h3><p>OpenAPI JSON/YAML, MCP tools JSON, or generated <code>agentready.json</code> plus simulation scenarios. The current product is static and browser-first.</p></article>
+      <article class="card"><h3>Analysis</h3><p>Local checks for agent-facing clarity, dangerous actions, bounded parameters, missing limits, sensitive data, weak error guidance, and scenario-level failure modes.</p></article>
+      <article class="card"><h3>Output</h3><p>AgentReady Score, findings, recommendations, Markdown report, printable reports, <code>agentready.json</code>, and <code>agentready-simulation.json</code>.</p></article>
     </section>
 
     <section class="card">
@@ -90,6 +92,8 @@
 → risk findings
 → recommended fixes
 → agentready.json
+→ static scenario simulation
+→ agentready-simulation.json
 → human report</pre>
     </section>
 
@@ -117,6 +121,7 @@
           <li>Not a guarantee that agents will never fail.</li>
           <li>Not a replacement for authorization or runtime controls.</li>
           <li>Not an MCP marketplace.</li>
+          <li>Not live API or MCP execution.</li>
         </ul>
       </article>
     </section>
@@ -151,11 +156,26 @@
     </section>
 
     <section class="card">
+      <h2>agentready-simulation.json</h2>
+      <p><code>agentready-simulation.json</code> is generated from <code>agentready.json</code> plus scenario JSON. It reports whether a scenario would pass, warn, fail, or be not applicable under static rules.</p>
+      <pre>{
+  "simulation_version": "0.1",
+  "scenarios_total": 1,
+  "pass": 0,
+  "warning": 0,
+  "fail": 1,
+  "not_applicable": 0,
+  "results": []
+}</pre>
+    </section>
+
+    <section class="card">
       <h2>Privacy and safety</h2>
       <ul>
         <li>The scanners run locally in the browser.</li>
         <li>Submitted API endpoints are not called.</li>
         <li>MCP tools are not executed.</li>
+        <li>Static simulation does not call LLMs.</li>
         <li>No backend is required for the current static scanners.</li>
         <li>The tool identifies structural risks, not absolute safety.</li>
       </ul>

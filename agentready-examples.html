@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AgentReady Examples — TimeProofs AgentReady</title>
-  <meta name="description" content="OpenAPI and MCP examples for TimeProofs AgentReady: good fixtures, risky fixtures, and scanner validation cases." />
+  <meta name="description" content="OpenAPI, MCP, and static simulation examples for TimeProofs AgentReady: good fixtures, risky fixtures, scenario fixtures, and scanner validation cases." />
   <meta name="robots" content="index,follow" />
   <meta name="theme-color" content="#0b1020" />
   <link rel="canonical" href="https://timeproofs.io/agentready-examples.html" />
@@ -39,6 +39,7 @@
     .good { color:#bbf7d0; border-color:rgba(34,197,94,.35); background:rgba(34,197,94,.1); }
     .risky { color:#fecaca; border-color:rgba(239,68,68,.35); background:rgba(239,68,68,.1); }
     .mcp { color:#bae6fd; border-color:rgba(56,189,248,.35); background:rgba(56,189,248,.1); }
+    .simulation { color:#fde68a; border-color:rgba(245,158,11,.35); background:rgba(245,158,11,.1); }
     ul { padding-left:20px; }
     li { margin:8px 0; }
     footer { border-top:1px solid var(--line); padding:24px 0; color:#64748b; text-align:center; margin-top:40px; }
@@ -51,6 +52,7 @@
       <nav class="nav-links" aria-label="Main navigation">
         <a href="/agentready.html">OpenAPI Scan</a>
         <a href="/agentready-mcp.html">MCP Scan</a>
+        <a href="/agentready-simulation.html">Simulation</a>
         <a href="/agentready-docs.html">Docs</a>
         <a href="/agentready-examples.html">Examples</a>
         <a href="/agentready-test.html">Tests</a>
@@ -61,9 +63,9 @@
   <main class="wrap">
     <section class="hero">
       <div class="eyebrow">Examples</div>
-      <h1>Use fixtures to understand the scanners.</h1>
-      <p class="subtitle">These examples show the difference between more agent-ready definitions and risky definitions. They are also used by the static test harness.</p>
-      <p><a class="cta" href="/agentready.html">OpenAPI scanner</a><a class="cta secondary" href="/agentready-mcp.html">MCP scanner</a><a class="cta secondary" href="/agentready-test.html">Run test harness</a></p>
+      <h1>Use fixtures to understand the scanners and simulation layer.</h1>
+      <p class="subtitle">These examples show the difference between more agent-ready definitions, risky definitions, and scenario-level simulation inputs. They are also used by the static test harness.</p>
+      <p><a class="cta" href="/agentready.html">OpenAPI scanner</a><a class="cta secondary" href="/agentready-mcp.html">MCP scanner</a><a class="cta secondary" href="/agentready-simulation.html">Simulation</a><a class="cta secondary" href="/agentready-test.html">Run test harness</a></p>
     </section>
 
     <section class="card">
@@ -82,6 +84,17 @@
       <div class="grid two">
         <article class="card"><span class="tag mcp">MCP simple</span><h3>mcp-tools-simple.json</h3><p class="muted">Designed as a healthier MCP fixture. It includes support tools with clearer descriptions, bounded categories, and required input fields.</p><p><a href="/agentready-examples/mcp-tools-simple.json">Open fixture</a></p></article>
         <article class="card"><span class="tag risky">MCP risky</span><h3>mcp-tools-dangerous.json</h3><p class="muted">Designed to trigger risks: refund, customer export, delete action, weak descriptions, missing bounds, and broad sensitive actions.</p><p><a href="/agentready-examples/mcp-tools-dangerous.json">Open fixture</a></p></article>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Static simulation fixtures</h2>
+      <p class="muted">Use these with the Static Simulation page after generating <code>agentready.json</code> from the OpenAPI or MCP scanner.</p>
+      <div class="grid two">
+        <article class="card"><span class="tag simulation">OpenAPI scenario</span><h3>simulation-openapi-refund-scenario.json</h3><p class="muted">Checks whether a refund scenario has confirmation, safe parameters, and success verification.</p><p><a href="/docs/agentready/examples/simulation-openapi-refund-scenario.json">Open scenario</a></p></article>
+        <article class="card"><span class="tag simulation">MCP scenario</span><h3>simulation-mcp-delete-file-scenario.json</h3><p class="muted">Checks whether a delete-file scenario has confirmation, identity validation, and output verification.</p><p><a href="/docs/agentready/examples/simulation-mcp-delete-file-scenario.json">Open scenario</a></p></article>
+        <article class="card"><span class="tag simulation">OpenAPI scenario</span><h3>simulation-openapi-export-customers-scenario.json</h3><p class="muted">Checks whether customer export has clear scope, permission boundaries, destination validation, and confirmation.</p><p><a href="/docs/agentready/examples/simulation-openapi-export-customers-scenario.json">Open scenario</a></p></article>
+        <article class="card"><span class="tag simulation">MCP scenario</span><h3>simulation-mcp-send-email-scenario.json</h3><p class="muted">Checks whether email sending has recipient certainty, content review, confirmation, and delivery verification.</p><p><a href="/docs/agentready/examples/simulation-mcp-send-email-scenario.json">Open scenario</a></p></article>
       </div>
     </section>
 
@@ -123,7 +136,10 @@ invalid MCP JSON fails cleanly
 invalid MCP shape fails cleanly
 MCP agentready.json is generated
 MCP Markdown report is generated
-MCP dangerous fixture detects high/critical risks</pre>
+MCP dangerous fixture detects high/critical risks
+simulation scenario JSON parses successfully
+agentready-simulation.json is generated
+unknown expected_tool returns not_applicable</pre>
     </section>
   </main>
 
