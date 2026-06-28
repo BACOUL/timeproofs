@@ -19,6 +19,7 @@
 ✅ Browser V1 QA result template
 ✅ Browser V1 release notes draft
 ✅ Browser V1 QA attempt recorded as pending
+✅ Browser V1 QA runbook
 ✅ OpenAPI fixtures
 ✅ MCP fixtures
 ✅ agentready.json export
@@ -56,7 +57,7 @@ docs/agentready/REMAINING_WORK.md
 ## Immediate next step
 
 ```txt
-Run manual Browser V1 QA in a real browser and update docs/agentready/BROWSER_V1_QA_RESULT.md
+Run manual Browser V1 QA in a real browser using docs/agentready/BROWSER_V1_QA_RUNBOOK.md, then update docs/agentready/BROWSER_V1_QA_RESULT.md
 ```
 
 ## QA next
@@ -64,7 +65,7 @@ Run manual Browser V1 QA in a real browser and update docs/agentready/BROWSER_V1
 Requirements:
 
 ```txt
-1. Run local HTTP server.
+1. Run local HTTP server or open a Vercel preview.
 2. Open the product in a real browser.
 3. Test OpenAPI scanner.
 4. Test MCP scanner.
