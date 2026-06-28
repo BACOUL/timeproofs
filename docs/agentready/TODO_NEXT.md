@@ -33,6 +33,8 @@
 ✅ Additional MCP simulation scenario fixture
 ✅ Expected static simulation result examples
 ✅ Static simulation parser scope decision
+✅ Static simulation parser core
+✅ Static simulation parser test harness checks
 ✅ Sitemap updated
 ```
 
@@ -47,7 +49,7 @@ docs/agentready/REMAINING_WORK.md
 ## Immediate next PR
 
 ```txt
-feat(agentready): add static simulation parser core
+feat(agentready): expose static simulation in browser
 ```
 
 ## Build next
@@ -55,27 +57,26 @@ feat(agentready): add static simulation parser core
 Requirements:
 
 ```txt
-1. Keep the parser static and browser/local only.
-2. Add parse-simulation-scenario.js.
-3. Add run-static-simulation.js.
-4. Add simulation-result.js if useful.
-5. Read agentready.json plus scenario JSON.
-6. Return agentready-simulation.json separately from agentready.json.
-7. Add deterministic matching rules.
-8. Add acceptance tests in the static browser test harness.
-9. Do not call APIs, MCP tools or LLMs.
+1. Keep simulation browser-only and static.
+2. Add a local upload page for agentready.json plus scenario JSON.
+3. Run runStaticSimulation in the browser.
+4. Render pass/warning/fail/not_applicable counts.
+5. Render per-scenario results.
+6. Allow export of agentready-simulation.json.
+7. Link the page from docs/examples only after it is usable.
+8. Do not call APIs, MCP tools or LLMs.
+9. Do not add backend, accounts, payments or dashboard.
 10. Keep mandatory limitation text.
 ```
 
 ## Then
 
 ```txt
-1. feat(agentready): expose static simulation in browser only after parser core works
-2. feat(agentready): add CLI only after browser product is stable
-3. docs/seo: add public acquisition pages
-4. docs(agentready): define AgentReady Checked trust layer
-5. docs(product): prepare monetization path
-6. chore(deploy): prepare Vercel reconnect after 2026-07-09
+1. feat(agentready): add CLI only after browser product is stable
+2. docs/seo: add public acquisition pages
+3. docs(agentready): define AgentReady Checked trust layer
+4. docs(product): prepare monetization path
+5. chore(deploy): prepare Vercel reconnect after 2026-07-09
 ```
 
 ## Do not build yet
