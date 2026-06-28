@@ -17,6 +17,7 @@
 ✅ Browser product QA checklist
 ✅ Browser V1 release gate
 ✅ Browser V1 QA result template
+✅ Browser V1 release notes draft
 ✅ OpenAPI fixtures
 ✅ MCP fixtures
 ✅ agentready.json export
@@ -51,35 +52,37 @@ Read this file first:
 docs/agentready/REMAINING_WORK.md
 ```
 
-## Immediate next PR
+## Immediate next step
 
 ```txt
-docs(agentready): prepare Browser V1 release notes draft
+Run manual Browser V1 QA and fill docs/agentready/BROWSER_V1_QA_RESULT.md
 ```
 
-## Build next
+## QA next
 
 Requirements:
 
 ```txt
-1. Draft Browser V1 release notes.
-2. Include scope, supported inputs, outputs, limitations, non-goals, and next phase.
-3. Keep release notes as draft until QA result is PASS.
-4. Keep CLI after browser product stability.
-5. Do not add backend, accounts, payments or dashboard.
-6. Do not add runtime firewall.
-7. Keep mandatory limitation text.
+1. Run local HTTP server.
+2. Test OpenAPI scanner.
+3. Test MCP scanner.
+4. Test static simulation page.
+5. Run static browser test harness.
+6. Confirm exports.
+7. Confirm no-execution constraints.
+8. Fill docs/agentready/BROWSER_V1_QA_RESULT.md.
+9. Only mark Browser V1 complete if QA result is PASS.
+10. Keep mandatory limitation text.
 ```
 
 ## Then
 
 ```txt
-1. Run manual Browser V1 QA and fill BROWSER_V1_QA_RESULT.md
-2. feat(agentready): add CLI only after browser product is stable
-3. docs/seo: add public acquisition pages
-4. docs(agentready): define AgentReady Checked trust layer
-5. docs(product): prepare monetization path
-6. chore(deploy): prepare Vercel reconnect after 2026-07-09
+1. feat(agentready): add CLI only after browser product is stable
+2. docs/seo: add public acquisition pages
+3. docs(agentready): define AgentReady Checked trust layer
+4. docs(product): prepare monetization path
+5. chore(deploy): prepare Vercel reconnect after 2026-07-09
 ```
 
 ## Do not build yet
