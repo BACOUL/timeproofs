@@ -32,6 +32,7 @@
 ✅ Additional OpenAPI simulation scenario fixture
 ✅ Additional MCP simulation scenario fixture
 ✅ Expected static simulation result examples
+✅ Static simulation parser scope decision
 ✅ Sitemap updated
 ```
 
@@ -46,7 +47,7 @@ docs/agentready/REMAINING_WORK.md
 ## Immediate next PR
 
 ```txt
-docs(agentready): decide static simulation parser scope
+feat(agentready): add static simulation parser core
 ```
 
 ## Build next
@@ -54,26 +55,27 @@ docs(agentready): decide static simulation parser scope
 Requirements:
 
 ```txt
-1. Decide whether the next simulation step is docs-only or code-backed.
-2. If code-backed, keep it static and browser-only.
-3. Define the parser inputs and outputs.
-4. Define whether simulation appears in agentready.json V1.1 or stays separate.
-5. Define acceptance tests before writing code.
-6. Keep CLI after browser stability.
-7. Do not call APIs.
-8. Do not call MCP tools.
-9. Do not call LLMs.
+1. Keep the parser static and browser/local only.
+2. Add parse-simulation-scenario.js.
+3. Add run-static-simulation.js.
+4. Add simulation-result.js if useful.
+5. Read agentready.json plus scenario JSON.
+6. Return agentready-simulation.json separately from agentready.json.
+7. Add deterministic matching rules.
+8. Add acceptance tests in the static browser test harness.
+9. Do not call APIs, MCP tools or LLMs.
 10. Keep mandatory limitation text.
 ```
 
 ## Then
 
 ```txt
-1. feat(agentready): add CLI only after browser product is stable
-2. docs/seo: add public acquisition pages
-3. docs(agentready): define AgentReady Checked trust layer
-4. docs(product): prepare monetization path
-5. chore(deploy): prepare Vercel reconnect after 2026-07-09
+1. feat(agentready): expose static simulation in browser only after parser core works
+2. feat(agentready): add CLI only after browser product is stable
+3. docs/seo: add public acquisition pages
+4. docs(agentready): define AgentReady Checked trust layer
+5. docs(product): prepare monetization path
+6. chore(deploy): prepare Vercel reconnect after 2026-07-09
 ```
 
 ## Do not build yet
