@@ -18,6 +18,7 @@
 ✅ Browser V1 release gate
 ✅ Browser V1 QA result template
 ✅ Browser V1 release notes draft
+✅ Browser V1 QA attempt recorded as pending
 ✅ OpenAPI fixtures
 ✅ MCP fixtures
 ✅ agentready.json export
@@ -55,7 +56,7 @@ docs/agentready/REMAINING_WORK.md
 ## Immediate next step
 
 ```txt
-Run manual Browser V1 QA and fill docs/agentready/BROWSER_V1_QA_RESULT.md
+Run manual Browser V1 QA in a real browser and update docs/agentready/BROWSER_V1_QA_RESULT.md
 ```
 
 ## QA next
@@ -64,15 +65,16 @@ Requirements:
 
 ```txt
 1. Run local HTTP server.
-2. Test OpenAPI scanner.
-3. Test MCP scanner.
-4. Test static simulation page.
-5. Run static browser test harness.
-6. Confirm exports.
-7. Confirm no-execution constraints.
-8. Fill docs/agentready/BROWSER_V1_QA_RESULT.md.
-9. Only mark Browser V1 complete if QA result is PASS.
-10. Keep mandatory limitation text.
+2. Open the product in a real browser.
+3. Test OpenAPI scanner.
+4. Test MCP scanner.
+5. Test static simulation page.
+6. Run static browser test harness.
+7. Confirm exports.
+8. Confirm no-execution constraints in browser Network tab.
+9. Update docs/agentready/BROWSER_V1_QA_RESULT.md.
+10. Only mark Browser V1 complete if QA result is PASS.
+11. Keep mandatory limitation text.
 ```
 
 ## Then
