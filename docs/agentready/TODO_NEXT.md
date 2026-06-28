@@ -9,13 +9,15 @@
 ✅ Static MCP tools JSON scanner
 ✅ OpenAPI upload page: agentready.html
 ✅ MCP upload page: agentready-mcp.html
+✅ Static simulation page: agentready-simulation.html
 ✅ Public landing page
-✅ Public docs page with OpenAPI/MCP split
-✅ Public examples page with OpenAPI/MCP fixtures
-✅ Static browser test harness with OpenAPI/MCP/export groups
+✅ Public docs page with OpenAPI/MCP/simulation split
+✅ Public examples page with OpenAPI/MCP/simulation fixtures
+✅ Static browser test harness with OpenAPI/MCP/export/simulation groups
 ✅ OpenAPI fixtures
 ✅ MCP fixtures
 ✅ agentready.json export
+✅ agentready-simulation.json export
 ✅ Markdown report export
 ✅ Browser print / Save as PDF for OpenAPI report
 ✅ MCP-specific report wording and scanner output polish
@@ -49,7 +51,7 @@ docs/agentready/REMAINING_WORK.md
 ## Immediate next PR
 
 ```txt
-feat(agentready): expose static simulation in browser
+docs(agentready): prepare browser product QA checklist
 ```
 
 ## Build next
@@ -57,14 +59,14 @@ feat(agentready): expose static simulation in browser
 Requirements:
 
 ```txt
-1. Keep simulation browser-only and static.
-2. Add a local upload page for agentready.json plus scenario JSON.
-3. Run runStaticSimulation in the browser.
-4. Render pass/warning/fail/not_applicable counts.
-5. Render per-scenario results.
-6. Allow export of agentready-simulation.json.
-7. Link the page from docs/examples only after it is usable.
-8. Do not call APIs, MCP tools or LLMs.
+1. Define manual QA steps for OpenAPI scanner.
+2. Define manual QA steps for MCP scanner.
+3. Define manual QA steps for static simulation page.
+4. Define expected local HTTP server command.
+5. Define expected exported filenames.
+6. Define no-execution checks.
+7. Define browser smoke test checklist.
+8. Keep CLI after browser product stability.
 9. Do not add backend, accounts, payments or dashboard.
 10. Keep mandatory limitation text.
 ```
