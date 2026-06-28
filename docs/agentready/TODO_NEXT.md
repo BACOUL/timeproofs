@@ -12,6 +12,8 @@
 ✅ Static simulation page: agentready-simulation.html
 ✅ Public landing page
 ✅ Homepage mobile menu foundation
+✅ Shared mobile navigation script
+✅ Mobile navigation propagation plan
 ✅ Legal notice page draft
 ✅ Privacy page draft
 ✅ Terms page draft
@@ -63,12 +65,13 @@ docs/agentready/REMAINING_WORK.md
 docs/agentready/LONG_TERM_PRODUCT_ROADMAP.md
 docs/agentready/RELEASE_DISCIPLINE.md
 docs/agentready/V2_CLI_SCOPE.md
+docs/agentready/MOBILE_NAV_PROPAGATION_PLAN.md
 ```
 
 ## Immediate next PR
 
 ```txt
-fix(agentready): propagate mobile navigation across all public pages
+fix(agentready): activate shared mobile nav on all public pages
 ```
 
 ## Build next
@@ -76,13 +79,13 @@ fix(agentready): propagate mobile navigation across all public pages
 Requirements:
 
 ```txt
-1. Add the shared mobile menu to OpenAPI scanner.
-2. Add the shared mobile menu to MCP scanner.
-3. Add the shared mobile menu to static simulation page.
-4. Add the shared mobile menu to docs page.
-5. Add the shared mobile menu to examples page.
-6. Add the shared mobile menu to test page.
-7. Add footer links to legal, privacy and terms pages where appropriate.
+1. Activate shared mobile nav on OpenAPI scanner.
+2. Activate shared mobile nav on MCP scanner.
+3. Activate shared mobile nav on static simulation page.
+4. Activate shared mobile nav on docs page.
+5. Activate shared mobile nav on examples page.
+6. Activate shared mobile nav on test page.
+7. Confirm footer links to legal, privacy and terms appear where appropriate.
 8. Confirm desktop navigation remains usable.
 9. Confirm mobile navigation does not wrap into multiple rows.
 10. Do not continue V2 implementation before Browser V1 public-site polish is acceptable.
