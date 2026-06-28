@@ -5,17 +5,19 @@ export function generateMarkdownReport(scanResult) {
   const topFindings = getTopFindings(scanResult.operations);
 
   return [
-    isMcp ? '# TimeProofs AgentReady MCP Report' : '# TimeProofs AgentReady Report',
+    isMcp ? '# TimeProofs AgentReady MCP Report' : '# TimeProofs AgentReady OpenAPI Report',
     '',
     '## Executive Summary',
     '',
     ...renderSourceSummary(scanResult, isMcp),
+    `Generated at: ${new Date().toISOString()}`,
     `Score: ${summary.score}/100`,
     `Status: ${summary.status}`,
+    `Score interpretation: ${getScoreInterpretation(summary.score, isMcp)}`,
     '',
     buildConclusion(summary, isMcp),
     '',
-    ...(isMcp ? renderMcpExecutiveSummary(scanResult) : []),
+    ...(isMcp ? renderMcpExecutiveSummary(scanResult) : renderOpenApiExecutiveSummary(scanResult)),
     '## Top Risks',
     '',
     ...renderTopFindings(topFindings, isMcp),
@@ -24,6 +26,10 @@ export function generateMarkdownReport(scanResult) {
     '',
     ...renderRecommendedFixes(topFindings),
     '',
+    '## Common Fix Examples',
+    '',
+    ...renderFixExamples(topFindings),
+    '',
     isMcp ? '## Tool Details' : '## Endpoint Details',
     '',
     ...scanResult.operations.flatMap((operation) => renderOperation(operation, isMcp)),
@@ -31,6 +37,7 @@ export function generateMarkdownReport(scanResult) {
     '## Generated AgentReady Contract',
     '',
     'A machine-readable `agentready.json` contract can be generated from this scan result.',
+    'The contract includes `agentready_version`, `generated_at`, `source_type`, source metadata, summary, detected risks, and agent recommendations.',
     '',
     '## Limitations',
     '',
@@ -52,9 +59,29 @@ function renderSourceSummary(scanResult, isMcp) {
   }
 
   return [
-    `Source: ${scanResult.source?.filename || 'OpenAPI document'}`,
+    `Source type: OpenAPI`,
+    `Source file: ${scanResult.source?.filename || 'OpenAPI document'}`,
     `OpenAPI version: ${scanResult.source?.openapi_version || 'unknown'}`,
     `Total operations: ${scanResult.operations.length}`
+  ];
+}
+
+function renderOpenApiExecutiveSummary(scanResult) {
+  const operations = scanResult.operations || [];
+  const confirmationCount = operations.filter((operation) => operation.requires_human_confirmation).length;
+  const highestRisk = getHighestRiskLevel(operations);
+  const stateChangingCount = operations.filter((operation) => ['CREATE', 'UPDATE', 'DELETE', 'SEND', 'PUBLISH', 'PAY', 'REFUND', 'TRANSFER', 'EXPORT', 'CANCEL'].includes(operation.classification?.action_type)).length;
+
+  return [
+    '## OpenAPI Executive Summary',
+    '',
+    `- Highest endpoint risk level: ${highestRisk}`,
+    `- Operations requiring human confirmation: ${confirmationCount}`,
+    `- State-changing operations detected: ${stateChangingCount}`,
+    `- Operations analyzed: ${operations.length}`,
+    '',
+    'This is a static readiness scan. It does not call submitted API endpoints, validate live authorization, or execute actions.',
+    ''
   ];
 }
 
@@ -79,8 +106,8 @@ function renderMcpExecutiveSummary(scanResult) {
 }
 
 function buildConclusion(summary, isMcp = false) {
-  const target = isMcp ? 'MCP tools' : 'API';
-  const exposure = isMcp ? 'before agent exposure through MCP' : 'before broad agent exposure';
+  const target = isMcp ? 'MCP tools' : 'OpenAPI operations';
+  const exposure = isMcp ? 'before agent exposure through MCP' : 'before broad agent exposure through API tools';
 
   if (summary.score >= 85) {
     return `Conclusion: These ${target} appear structurally ready for AI-agent use under normal authorization and validation controls.`;
@@ -106,7 +133,7 @@ function getTopFindings(operations) {
 }
 
 function renderTopFindings(findings, isMcp = false) {
-  if (findings.length === 0) return [isMcp ? 'No major MCP AgentReady risks detected by V1 static analysis.' : 'No major AgentReady risks detected by V1 static analysis.'];
+  if (findings.length === 0) return [isMcp ? 'No major MCP AgentReady risks detected by V1 static analysis.' : 'No major OpenAPI AgentReady risks detected by V1 static analysis.'];
 
   return findings.map((finding, index) => {
     const label = isMcp ? 'tool' : 'operation';
@@ -128,6 +155,34 @@ function renderRecommendedFixes(findings) {
     .map((recommendation, index) => `${index + 1}. ${recommendation}`);
 }
 
+function renderFixExamples(findings) {
+  const codes = new Set(findings.map((finding) => finding.code));
+  const examples = [];
+
+  if (codes.has('ambiguous_tool_description') || codes.has('missing_when_to_use')) {
+    examples.push('Before: “Create item.”');
+    examples.push('After: “Use this when the user has explicitly asked to create a draft invoice for an existing customer. Do not use it to charge or send the invoice.”');
+  }
+
+  if (codes.has('missing_enum')) {
+    examples.push('Before: `status: string`');
+    examples.push('After: `status: enum [draft, pending, paid, cancelled]`');
+  }
+
+  if (codes.has('unbounded_parameter')) {
+    examples.push('Before: `amount: number`');
+    examples.push('After: `amount: number` with `minimum`, `maximum`, currency, and confirmation rule.');
+  }
+
+  if (codes.has('dangerous_action_without_confirmation') || codes.has('irreversible_action')) {
+    examples.push('Before: destructive action executes immediately.');
+    examples.push('After: return a preview first, require explicit human confirmation, then return a verifiable success object.');
+  }
+
+  if (examples.length === 0) return ['No common fix examples required for the top findings.'];
+  return examples.map((example) => `- ${example}`);
+}
+
 function renderOperation(operation, isMcp = false) {
   const findings = operation.findings || [];
 
@@ -140,6 +195,10 @@ function renderOperation(operation, isMcp = false) {
     `Action type: ${operation.classification.action_type}`,
     `Risk level: ${operation.risk_level}`,
     `Requires human confirmation: ${operation.requires_human_confirmation ? 'yes' : 'no'}`,
+    `Description present: ${operation.description ? 'yes' : 'no'}`,
+    `Parameters: ${(operation.parameters || []).length}`,
+    `Request fields: ${(operation.requestFields || []).length}`,
+    `Response status codes: ${(operation.responseStatusCodes || []).join(', ') || 'none detected'}`,
     '',
     findings.length ? 'Detected risks:' : 'Detected risks: none',
     ...findings.map((finding) => `- ${finding.code}: ${finding.recommendation}`),
@@ -174,4 +233,12 @@ function getHighestRiskLevel(operations) {
   return operations.reduce((highest, operation) => {
     return (severityRank[operation.risk_level] || 0) > (severityRank[highest] || 0) ? operation.risk_level : highest;
   }, 'low');
+}
+
+function getScoreInterpretation(score, isMcp = false) {
+  const target = isMcp ? 'MCP tools' : 'OpenAPI operations';
+  if (score >= 85) return `${target} are structurally ready for agent use under normal authorization and validation controls.`;
+  if (score >= 70) return `${target} are close to AgentReady, but minor fixes should be completed before broad agent exposure.`;
+  if (score >= 50) return `${target} need fixes before being exposed to autonomous or semi-autonomous agents.`;
+  return `${target} are not AgentReady. Do not expose them to autonomous agents before structural fixes are applied.`;
 }

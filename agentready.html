@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Scan OpenAPI — TimeProofs AgentReady</title>
-  <meta name="description" content="Upload an OpenAPI JSON or YAML file locally and see where AI agents may fail before using your tools." />
+  <meta name="description" content="Upload an OpenAPI JSON or YAML file locally and see where AI agents may fail before using your API tools." />
   <meta name="robots" content="index,follow" />
   <meta name="theme-color" content="#0b1020" />
   <link rel="canonical" href="https://timeproofs.io/agentready.html" />
@@ -40,6 +40,7 @@
     .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
     .score { font-size:3.5rem; font-weight:950; letter-spacing:-.06em; margin:4px 0; }
     .status { display:inline-flex; padding:5px 10px; border-radius:999px; font-weight:900; background:#101b31; border:1px solid #20304d; color:#dff7ff; }
+    .score-note { margin:12px 0 0; border:1px solid #1e293b; border-radius:12px; background:#07111f; padding:12px; color:#dff7ff; }
     .counts { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:14px; }
     .count { background:#020617; border:1px solid #1e293b; border-radius:12px; padding:10px; text-align:center; }
     .count strong { display:block; font-size:1.45rem; }
@@ -57,10 +58,12 @@
     .report-box h3 { margin:0 0 8px; color:#dff7ff; }
     .action-list { margin:0; padding-left:20px; }
     .action-list li { margin:8px 0; }
+    .compact-list { margin:8px 0 0; padding-left:20px; color:var(--muted); }
     pre { background:#020617; color:#e2f6ff; border:1px solid #1e293b; border-radius:14px; padding:16px; overflow:auto; white-space:pre-wrap; word-break:break-word; }
     .hidden { display:none !important; }
     .error { border-color:rgba(239,68,68,.45); background:rgba(239,68,68,.08); color:#fecaca; }
     .okbox { border-color:rgba(34,197,94,.45); background:rgba(34,197,94,.08); color:#bbf7d0; }
+    .warnbox { border-color:rgba(245,158,11,.45); background:rgba(245,158,11,.08); color:#fde68a; }
     details { border:1px solid #1e293b; border-radius:14px; padding:12px; background:#07111f; margin:10px 0; }
     summary { cursor:pointer; font-weight:900; color:#dff7ff; }
     footer { border-top:1px solid var(--line); padding:24px 0; color:#64748b; text-align:center; margin-top:40px; }
@@ -85,25 +88,32 @@
     <div class="wrap nav">
       <a class="brand" href="/" aria-label="TimeProofs AgentReady home"><img src="/assets/logo.png" alt="" /><span>TimeProofs AgentReady</span></a>
       <nav class="nav-links" aria-label="Main navigation">
-        <a href="/agentready.html">Scan</a>
-        <a href="/docs/agentready/README.md">Docs</a>
-        <a href="/agentready-core/README.md">Core</a>
-        <a href="/agentready-examples/README.md">Examples</a>
+        <a href="/agentready.html">OpenAPI Scan</a>
+        <a href="/agentready-mcp.html">MCP Scan</a>
+        <a href="/agentready-docs.html">Docs</a>
+        <a href="/agentready-examples.html">Examples</a>
+        <a href="/agentready-test.html">Tests</a>
       </nav>
     </div>
   </header>
 
   <main class="wrap">
     <section class="hero no-print">
-      <div class="eyebrow">AgentReady Scanner V1</div>
+      <div class="eyebrow">AgentReady OpenAPI Scanner V1</div>
       <h1>Scan an OpenAPI spec before giving it to AI agents.</h1>
-      <p class="subtitle">Upload an OpenAPI JSON or YAML file. The scan runs locally in your browser and generates an AgentReady Score, endpoint findings, a Markdown report, and <code>agentready.json</code>.</p>
+      <p class="subtitle">Upload an OpenAPI JSON or YAML file. The scan runs locally in your browser and generates an OpenAPI AgentReady Score, endpoint findings, a Markdown report, a printable report, and <code>agentready.json</code>.</p>
     </section>
 
     <section class="grid two no-print">
       <div class="card">
         <h2>Upload OpenAPI JSON or YAML</h2>
         <p class="muted">Supports OpenAPI 3.0 / 3.1 in <code>.json</code>, <code>.yaml</code>, and <code>.yml</code>.</p>
+        <div class="finding warnbox">
+          <strong>YAML note:</strong> YAML support is static and best-effort. Complex anchors, merge keys, or vendor-specific YAML constructs may need conversion to JSON before scanning.
+        </div>
+        <div class="finding warnbox">
+          <strong>Large spec note:</strong> local V1 analysis rejects files above the configured browser safety limit. Split very large OpenAPI specs by domain or export a reduced public-agent surface.
+        </div>
         <div id="dropzone" class="dropzone">
           <p><strong>Drop your OpenAPI file here</strong></p>
           <input id="fileInput" type="file" accept=".json,.yaml,.yml,application/json,text/yaml,application/yaml" />
@@ -119,9 +129,11 @@
       </div>
 
       <div id="summaryCard" class="card hidden">
-        <h2>AgentReady Score</h2>
+        <h2>OpenAPI AgentReady Score</h2>
         <div id="score" class="score">—</div>
         <span id="status" class="status">—</span>
+        <div id="scoreInterpretation" class="score-note"></div>
+        <div id="openApiSummary" class="finding"></div>
         <div class="counts">
           <div class="count"><strong id="criticalCount" class="critical">0</strong>Critical</div>
           <div class="count"><strong id="highCount" class="high">0</strong>High</div>
@@ -137,15 +149,15 @@
     </section>
 
     <section id="results" class="grid two hidden no-print" style="margin-top:16px;">
-      <div class="card"><h2>Top risks</h2><div id="topRisks"></div></div>
+      <div class="card"><h2>Top OpenAPI risks</h2><div id="topRisks"></div></div>
       <div class="card"><h2>Endpoint findings</h2><div id="endpointFindings"></div></div>
     </section>
 
     <section id="reportSection" class="card hidden" style="margin-top:16px;">
       <div class="report-header">
         <div>
-          <div class="eyebrow">Printable AgentReady Report</div>
-          <h2>TimeProofs AgentReady Report</h2>
+          <div class="eyebrow">Printable OpenAPI AgentReady Report</div>
+          <h2>TimeProofs AgentReady OpenAPI Report</h2>
           <p id="reportSubtitle" class="muted"></p>
         </div>
         <div class="actions no-print">
@@ -171,8 +183,19 @@
           <div id="riskSummary"></div>
         </div>
         <div class="report-box">
+          <h3>Common fix examples</h3>
+          <ul id="fixExamples" class="action-list"></ul>
+        </div>
+      </div>
+
+      <div class="report-grid">
+        <div class="report-box">
+          <h3>Severity guide</h3>
+          <div id="severityGuide"></div>
+        </div>
+        <div class="report-box">
           <h3>AgentReady contract</h3>
-          <p>This scan generated a machine-readable <code>agentready.json</code> contract containing operation risk levels, detected risks, and agent recommendations.</p>
+          <p>This scan generated a machine-readable <code>agentready.json</code> contract containing <code>agentready_version</code>, <code>generated_at</code>, <code>source_type</code>, source metadata, operation risk levels, detected risks, and agent recommendations.</p>
         </div>
       </div>
 
@@ -186,7 +209,7 @@
     </section>
   </main>
 
-  <footer class="no-print"><div class="wrap">TimeProofs AgentReady — tool readiness before agent execution.</div></footer>
+  <footer class="no-print"><div class="wrap">TimeProofs AgentReady — API and MCP tool readiness before agent execution.</div></footer>
 
   <script type="module">
     import { scanOpenApiText } from './agentready-core/index.js';
@@ -203,6 +226,8 @@
     const reportSection = document.getElementById('reportSection');
     const scoreEl = document.getElementById('score');
     const statusEl = document.getElementById('status');
+    const scoreInterpretation = document.getElementById('scoreInterpretation');
+    const openApiSummary = document.getElementById('openApiSummary');
     const criticalCount = document.getElementById('criticalCount');
     const highCount = document.getElementById('highCount');
     const mediumCount = document.getElementById('mediumCount');
@@ -214,6 +239,8 @@
     const executiveSummary = document.getElementById('executiveSummary');
     const actionPlan = document.getElementById('actionPlan');
     const riskSummary = document.getElementById('riskSummary');
+    const fixExamples = document.getElementById('fixExamples');
+    const severityGuide = document.getElementById('severityGuide');
     const downloadJsonButton = document.getElementById('downloadJsonButton');
     const downloadReportButton = document.getElementById('downloadReportButton');
     const downloadReportButton2 = document.getElementById('downloadReportButton2');
@@ -262,11 +289,14 @@
 
     async function scanText(text, filename) {
       try {
-        showMessage('Scanning locally…', 'ok');
+        showMessage('Scanning OpenAPI locally…', 'ok');
+        if (new TextEncoder().encode(text).length > 1024 * 1024) {
+          showMessage('Large OpenAPI file detected. V1 local scan may be slower or reject files above the safety limit.', 'error');
+        }
         const result = await scanOpenApiText(text, { filename });
         lastResult = result;
         renderResult(result);
-        showMessage(`Scan complete for ${filename}.`, 'ok');
+        showMessage(`OpenAPI scan complete for ${filename}.`, 'ok');
       } catch (error) {
         lastResult = null;
         renderEmpty();
@@ -278,19 +308,23 @@
       const counts = result.summary.risk_counts || {};
       scoreEl.textContent = `${result.summary.score}/100`;
       statusEl.textContent = result.summary.status;
+      scoreInterpretation.textContent = getScoreInterpretation(result.summary.score);
       criticalCount.textContent = counts.critical || 0;
       highCount.textContent = counts.high || 0;
       mediumCount.textContent = counts.medium || 0;
       lowCount.textContent = counts.low || 0;
+      openApiSummary.innerHTML = renderOpenApiSummary(result);
 
       const findings = result.operations.flatMap(operation => (operation.findings || []).map(finding => ({ ...finding, operation })));
-      topRisks.innerHTML = findings.sort((a, b) => severityRank(b.severity) - severityRank(a.severity)).slice(0, 8).map(renderFinding).join('') || '<p class="muted">No major AgentReady risks detected by static analysis.</p>';
+      topRisks.innerHTML = findings.sort((a, b) => severityRank(b.severity) - severityRank(a.severity)).slice(0, 8).map(renderFinding).join('') || '<p class="muted">No major OpenAPI AgentReady risks detected by static analysis.</p>';
       endpointFindings.innerHTML = result.operations.map(renderOperation).join('');
       markdownReport.textContent = result.markdown_report;
-      reportSubtitle.textContent = `${result.source.filename} · ${result.operations.length} operations · Score ${result.summary.score}/100 · ${result.summary.status}`;
+      reportSubtitle.textContent = `${result.source.filename} · OpenAPI ${result.source.openapi_version || 'unknown'} · ${result.operations.length} operations · Score ${result.summary.score}/100 · ${result.summary.status}`;
       executiveSummary.innerHTML = buildExecutiveSummary(result);
       actionPlan.innerHTML = buildActionPlan(result).map(item => `<li>${escapeHtml(item)}</li>`).join('');
       riskSummary.innerHTML = buildRiskSummary(result);
+      fixExamples.innerHTML = buildFixExamples(result).map(item => `<li>${escapeHtml(item)}</li>`).join('');
+      severityGuide.innerHTML = buildSeverityGuide();
 
       summaryCard.classList.remove('hidden');
       results.classList.remove('hidden');
@@ -304,6 +338,22 @@
       topRisks.innerHTML = '';
       endpointFindings.innerHTML = '';
       markdownReport.textContent = '';
+      scoreInterpretation.textContent = '';
+      openApiSummary.innerHTML = '';
+      fixExamples.innerHTML = '';
+      severityGuide.innerHTML = '';
+    }
+
+    function renderOpenApiSummary(result) {
+      const confirmationCount = result.operations.filter(operation => operation.requires_human_confirmation).length;
+      const stateChangingCount = result.operations.filter(operation => ['CREATE', 'UPDATE', 'DELETE', 'SEND', 'PUBLISH', 'PAY', 'REFUND', 'TRANSFER', 'EXPORT', 'CANCEL'].includes(operation.classification?.action_type)).length;
+      return `<strong>OpenAPI executive summary</strong>
+        <ul class="compact-list">
+          <li>${escapeHtml(result.operations.length)} operations analyzed from ${escapeHtml(result.source?.filename || 'OpenAPI document')}.</li>
+          <li>${escapeHtml(stateChangingCount)} state-changing operations detected.</li>
+          <li>${escapeHtml(confirmationCount)} operations require human confirmation guidance.</li>
+          <li>Source type: ${escapeHtml(result.source?.type || 'openapi')} · OpenAPI version: ${escapeHtml(result.source?.openapi_version || 'unknown')}.</li>
+        </ul>`;
     }
 
     function buildExecutiveSummary(result) {
@@ -311,18 +361,11 @@
       const status = result.summary.status;
       const counts = result.summary.risk_counts || {};
       const totalRisk = (counts.critical || 0) + (counts.high || 0) + (counts.medium || 0) + (counts.low || 0);
-      const conclusion = score >= 85
-        ? 'This API appears structurally ready for AI-agent use under normal authorization and validation controls.'
-        : score >= 70
-          ? 'This API is close to AgentReady but should receive fixes before broad agent exposure.'
-          : score >= 50
-            ? 'This API needs fixes before being exposed to autonomous or semi-autonomous agents.'
-            : 'This API should not be exposed to autonomous agents before structural fixes are applied.';
 
       return `<p><strong>Status:</strong> ${escapeHtml(status)}</p>
         <p><strong>Score:</strong> ${score}/100</p>
+        <p><strong>Score interpretation:</strong> ${escapeHtml(getScoreInterpretation(score))}</p>
         <p><strong>Total findings:</strong> ${totalRisk}</p>
-        <p>${escapeHtml(conclusion)}</p>
         <p class="muted">This report identifies structural risks. It does not guarantee that an AI agent will never fail.</p>`;
     }
 
@@ -344,11 +387,29 @@
 
     function buildRiskSummary(result) {
       const counts = result.summary.risk_counts || {};
-      return `<p><strong class="critical">Critical:</strong> ${counts.critical || 0}</p>
-        <p><strong class="high">High:</strong> ${counts.high || 0}</p>
-        <p><strong class="medium">Medium:</strong> ${counts.medium || 0}</p>
-        <p><strong class="low">Low:</strong> ${counts.low || 0}</p>
+      return `<p><strong class="critical">Critical:</strong> ${counts.critical || 0} — do not allow autonomous execution before fixing.</p>
+        <p><strong class="high">High:</strong> ${counts.high || 0} — require strict controls, permissions, or human review.</p>
+        <p><strong class="medium">Medium:</strong> ${counts.medium || 0} — fix before broad exposure to agents.</p>
+        <p><strong class="low">Low:</strong> ${counts.low || 0} — review during normal hardening.</p>
         <p><strong>Operations analyzed:</strong> ${result.operations.length}</p>`;
+    }
+
+    function buildFixExamples(result) {
+      const codes = new Set(result.operations.flatMap(operation => operation.findings || []).map(finding => finding.code));
+      const examples = [];
+      if (codes.has('ambiguous_tool_description') || codes.has('missing_when_to_use')) examples.push('Before: “Create item.” → After: explain when to use, when not to use, expected result, and safety boundary.');
+      if (codes.has('missing_enum')) examples.push('Before: status:string → After: status enum [draft, pending, paid, cancelled].');
+      if (codes.has('unbounded_parameter')) examples.push('Before: amount:number → After: amount with minimum, maximum, currency, and confirmation rules.');
+      if (codes.has('dangerous_action_without_confirmation') || codes.has('irreversible_action')) examples.push('Before: execute immediately → After: preview, explicit confirmation, then verifiable success object.');
+      if (examples.length === 0) examples.push('No common fix examples required for the current top findings.');
+      return examples;
+    }
+
+    function buildSeverityGuide() {
+      return `<p><strong class="critical">Critical:</strong> block autonomous use until fixed.</p>
+        <p><strong class="high">High:</strong> use only with strict guardrails and review.</p>
+        <p><strong class="medium">Medium:</strong> fix before broad agent exposure.</p>
+        <p><strong class="low">Low:</strong> improve during hardening.</p>`;
     }
 
     function renderFinding(finding) {
@@ -365,6 +426,7 @@
       return `<details>
         <summary>${escapeHtml(operation.method)} ${escapeHtml(operation.path)} — ${escapeHtml(operation.classification.action_type)} · ${escapeHtml(operation.risk_level)}</summary>
         <p class="muted">Operation ID: ${escapeHtml(operation.operationId)}</p>
+        <p class="muted">Parameters: ${escapeHtml((operation.parameters || []).length)} · Request fields: ${escapeHtml((operation.requestFields || []).length)} · Responses: ${escapeHtml((operation.responseStatusCodes || []).join(', ') || 'none detected')}</p>
         <p class="muted">Requires human confirmation: ${operation.requires_human_confirmation ? 'yes' : 'no'}</p>
         ${findings.length ? findings.map(renderFinding).join('') : '<p class="muted">No findings detected by static analysis.</p>'}
       </details>`;
@@ -372,7 +434,7 @@
 
     function downloadMarkdownReport() {
       if (!lastResult) return;
-      downloadFile('agentready-report.md', lastResult.markdown_report, 'text/markdown');
+      downloadFile('agentready-openapi-report.md', lastResult.markdown_report, 'text/markdown');
     }
 
     function printReport() {
@@ -382,7 +444,7 @@
 
     function showMessage(text, type) {
       message.textContent = text;
-      message.className = `finding ${type === 'error' ? 'error' : 'okbox'}`;
+      message.className = `finding ${type === 'error' ? 'error' : type === 'warn' ? 'warnbox' : 'okbox'}`;
     }
 
     function downloadFile(filename, content, type) {
@@ -399,6 +461,13 @@
 
     function severityRank(severity) {
       return { critical: 4, high: 3, medium: 2, low: 1 }[severity] || 0;
+    }
+
+    function getScoreInterpretation(score) {
+      if (score >= 85) return 'Structurally ready for agent use under normal authorization and validation controls.';
+      if (score >= 70) return 'Close to AgentReady, but minor fixes should be completed before broad agent exposure.';
+      if (score >= 50) return 'Needs fixes before being exposed to autonomous or semi-autonomous agents.';
+      return 'Not AgentReady. Do not expose to autonomous agents before structural fixes are applied.';
     }
 
     function escapeHtml(value) {
