@@ -13,6 +13,8 @@
 ✅ Public landing page
 ✅ Homepage mobile menu foundation
 ✅ Shared mobile navigation script
+✅ Mobile navigation active on docs page
+✅ Mobile navigation active on examples page
 ✅ Mobile navigation propagation plan
 ✅ Legal notice page draft
 ✅ Privacy page draft
@@ -71,7 +73,7 @@ docs/agentready/MOBILE_NAV_PROPAGATION_PLAN.md
 ## Immediate next PR
 
 ```txt
-fix(agentready): activate shared mobile nav on all public pages
+fix(agentready): activate shared mobile nav on scanner and test pages
 ```
 
 ## Build next
@@ -82,13 +84,11 @@ Requirements:
 1. Activate shared mobile nav on OpenAPI scanner.
 2. Activate shared mobile nav on MCP scanner.
 3. Activate shared mobile nav on static simulation page.
-4. Activate shared mobile nav on docs page.
-5. Activate shared mobile nav on examples page.
-6. Activate shared mobile nav on test page.
-7. Confirm footer links to legal, privacy and terms appear where appropriate.
-8. Confirm desktop navigation remains usable.
-9. Confirm mobile navigation does not wrap into multiple rows.
-10. Do not continue V2 implementation before Browser V1 public-site polish is acceptable.
+4. Activate shared mobile nav on test page.
+5. Confirm footer links to legal, privacy and terms appear where appropriate.
+6. Confirm desktop navigation remains usable.
+7. Confirm mobile navigation does not wrap into multiple rows.
+8. Do not continue V2 implementation before Browser V1 public-site polish is acceptable.
 ```
 
 ## Parallel pending tasks
