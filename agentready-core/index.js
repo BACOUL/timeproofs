@@ -65,3 +65,10 @@ export { detectRisks } from './detect-risks.js';
 export { calculateAgentReadyScore } from './score.js';
 export { generateAgentReadyJson } from './generate-agentready-json.js';
 export { generateMarkdownReport } from './report.js';
+export {
+  parseSimulationScenarioText,
+  parseSimulationScenarioDocument,
+  AgentReadySimulationScenarioError
+} from './simulation/parse-simulation-scenario.js';
+export { runStaticSimulation, AgentReadyStaticSimulationError } from './simulation/run-static-simulation.js';
+export { SIMULATION_VERSION, SIMULATION_STATUSES } from './simulation/simulation-result.js';
