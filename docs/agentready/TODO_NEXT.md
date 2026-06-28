@@ -14,6 +14,7 @@
 ✅ Public docs page with OpenAPI/MCP/simulation split
 ✅ Public examples page with OpenAPI/MCP/simulation fixtures
 ✅ Static browser test harness with OpenAPI/MCP/export/simulation groups
+✅ Browser product QA checklist
 ✅ OpenAPI fixtures
 ✅ MCP fixtures
 ✅ agentready.json export
@@ -51,7 +52,7 @@ docs/agentready/REMAINING_WORK.md
 ## Immediate next PR
 
 ```txt
-docs(agentready): prepare browser product QA checklist
+docs(agentready): define browser V1 release gate
 ```
 
 ## Build next
@@ -59,15 +60,15 @@ docs(agentready): prepare browser product QA checklist
 Requirements:
 
 ```txt
-1. Define manual QA steps for OpenAPI scanner.
-2. Define manual QA steps for MCP scanner.
-3. Define manual QA steps for static simulation page.
-4. Define expected local HTTP server command.
-5. Define expected exported filenames.
-6. Define no-execution checks.
-7. Define browser smoke test checklist.
-8. Keep CLI after browser product stability.
-9. Do not add backend, accounts, payments or dashboard.
+1. Define what must be true before calling browser V1 complete.
+2. Define which pages must be manually checked.
+3. Define required exports.
+4. Define blocking vs non-blocking issues.
+5. Define release notes contents.
+6. Define what remains after browser V1.
+7. Keep CLI after browser product stability.
+8. Do not add backend, accounts, payments or dashboard.
+9. Do not add runtime firewall.
 10. Keep mandatory limitation text.
 ```
 
