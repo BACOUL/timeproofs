@@ -23,6 +23,7 @@
 ✅ Long-term product roadmap
 ✅ Release discipline
 ✅ V2 CLI scope
+✅ AgentReady Checked trust layer draft
 ✅ README alignment note
 ✅ OpenAPI fixtures
 ✅ MCP fixtures
@@ -59,12 +60,13 @@ docs/agentready/REMAINING_WORK.md
 docs/agentready/LONG_TERM_PRODUCT_ROADMAP.md
 docs/agentready/RELEASE_DISCIPLINE.md
 docs/agentready/V2_CLI_SCOPE.md
+docs/agentready/AGENTREADY_CHECKED_TRUST_LAYER.md
 ```
 
 ## Immediate next PR
 
 ```txt
-docs(agentready): define AgentReady Checked trust layer
+docs/seo: add public acquisition pages draft
 ```
 
 ## Build next
@@ -72,16 +74,15 @@ docs(agentready): define AgentReady Checked trust layer
 Requirements:
 
 ```txt
-1. Define what AgentReady Checked means.
-2. Define minimum score policy.
-3. Define risk severity policy.
-4. Define confirmation requirement policy.
-5. Define scenario coverage policy.
-6. Define what artifact is checked.
-7. Keep it as a trust layer draft.
-8. Do not claim certification or safety guarantee.
-9. Do not add backend, accounts, payments, dashboard or runtime firewall.
-10. Keep mandatory limitation text.
+1. Define SEO page clusters.
+2. Define target search intents.
+3. Define page titles and slugs.
+4. Define internal linking strategy.
+5. Define careful non-overpromising copy rules.
+6. Keep pages as drafts until Browser V1 QA is PASS.
+7. Do not publish public release claims.
+8. Do not add backend, accounts, payments, dashboard or runtime firewall.
+9. Keep mandatory limitation text.
 ```
 
 ## Parallel pending tasks
@@ -94,9 +95,8 @@ Requirements:
 ## Then
 
 ```txt
-1. docs/seo: add public acquisition pages draft
-2. docs(product): prepare monetization path
-3. chore(deploy): prepare Vercel reconnect after 2026-07-09
+1. docs(product): prepare monetization path
+2. chore(deploy): prepare Vercel reconnect after 2026-07-09
 ```
 
 ## Do not build yet
