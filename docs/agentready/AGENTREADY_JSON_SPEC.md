@@ -1,27 +1,28 @@
 # TimeProofs AgentReady — agentready.json Specification V1
 
-## Objectif
+## Purpose
 
-`agentready.json` est la sortie stratégique de TimeProofs AgentReady.
+`agentready.json` is the machine-readable output of TimeProofs AgentReady.
 
-Le PDF parle aux humains.  
-`agentready.json` parle aux plateformes, agents, runtimes, CI/CD et futurs systèmes de contrôle.
+The human report explains the scan to people. `agentready.json` explains the same readiness result to platforms, agent runtimes, MCP marketplaces, CI/CD checks, future CLIs, and internal governance tools.
 
-Objectif :
+Its purpose is:
 
-> Décrire comment un outil peut être utilisé par un agent IA, avec quels risques, quelles limites et quelles validations.
+> Describe whether an API operation or MCP tool is structurally ready for AI-agent use, which risks were detected, when it may be used, when it must not be used, and whether human confirmation is required.
 
-## Rôle dans le produit
+## Product flow
 
 ```txt
-OpenAPI / MCP / tool schema
+OpenAPI / MCP tools JSON / future tool schema
 → AgentReady analysis
 → AgentReady Score
 → AgentReady Report
 → agentready.json
 ```
 
-## Version V1
+## V1 status
+
+`agentready.json` V1 is a static readiness contract. It is generated locally from the uploaded file and does not require a backend.
 
 ```json
 {
@@ -29,32 +30,69 @@ OpenAPI / MCP / tool schema
 }
 ```
 
-## Structure minimale
+## Required root shape
 
 ```json
 {
   "agentready_version": "1.0",
-  "source": {
-    "type": "openapi",
-    "filename": "openapi.yaml",
-    "openapi_version": "3.1.0"
-  },
-  "summary": {
-    "score": 72,
-    "status": "Needs fixes",
-    "total_operations": 24,
-    "critical_risks": 3,
-    "high_risks": 7,
-    "medium_risks": 12,
-    "low_risks": 5
-  },
+  "generated_at": "2026-06-27T23:00:00.000Z",
+  "source_type": "openapi",
+  "source": {},
+  "summary": {},
   "tools": []
 }
 ```
 
-## Champ `source`
+## Root fields
 
-Décrit le document analysé.
+| Field | Type | Required | Description |
+|---|---:|---:|---|
+| `agentready_version` | string | yes | Contract version. V1 uses `1.0`. |
+| `generated_at` | string | yes | ISO 8601 timestamp generated when the scan result is exported. |
+| `source_type` | string | yes | Top-level source type. V1 values: `openapi`, `mcp`. |
+| `source` | object | yes | Source metadata from the uploaded file. |
+| `summary` | object | yes | Global score, status and risk counts. |
+| `tools` | array | yes | One entry per analyzed OpenAPI operation or MCP tool. |
+
+## `source_type`
+
+Allowed V1 values:
+
+```txt
+openapi
+mcp
+```
+
+Future possible values, not active V1 contract values:
+
+```txt
+tool_schema
+function_calling
+```
+
+## `generated_at`
+
+`generated_at` must be an ISO 8601 UTC timestamp.
+
+Example:
+
+```json
+{
+  "generated_at": "2026-06-27T23:00:00.000Z"
+}
+```
+
+Generation rule:
+
+```txt
+new Date().toISOString()
+```
+
+Important: this value makes the exported contract non-deterministic across two exports of the same file. The structural analysis can be the same, but the export timestamp changes.
+
+## `source`
+
+### OpenAPI source
 
 ```json
 {
@@ -64,30 +102,41 @@ Décrit le document analysé.
 }
 ```
 
-### `source.type`
+Fields:
 
-Valeurs V1 :
+| Field | Type | Required | Description |
+|---|---:|---:|---|
+| `type` | string | yes | Must be `openapi`. |
+| `filename` | string | yes | Uploaded filename or fallback name. |
+| `openapi_version` | string | yes | Version read from the OpenAPI document. |
 
-```txt
-openapi
+### MCP source
+
+```json
+{
+  "type": "mcp",
+  "filename": "mcp-tools.json",
+  "mcp_version": "",
+  "server_name": "Example MCP Server"
+}
 ```
 
-Valeurs futures :
+Fields:
 
-```txt
-mcp
-tool_schema
-function_calling
-```
+| Field | Type | Required | Description |
+|---|---:|---:|---|
+| `type` | string | yes | Must be `mcp`. |
+| `filename` | string | yes | Uploaded filename or fallback name. |
+| `mcp_version` | string | yes | MCP version if provided by the source file. Empty string if absent. |
+| `server_name` | string | yes | MCP server name if provided. Empty string if absent. |
 
-## Champ `summary`
-
-Résumé global.
+## `summary`
 
 ```json
 {
   "score": 72,
   "status": "Needs fixes",
+  "score_interpretation": "Needs fixes before being exposed to autonomous or semi-autonomous agents.",
   "total_operations": 24,
   "critical_risks": 3,
   "high_risks": 7,
@@ -96,7 +145,20 @@ Résumé global.
 }
 ```
 
-### Statuts autorisés
+Fields:
+
+| Field | Type | Required | Description |
+|---|---:|---:|---|
+| `score` | number | yes | AgentReady score from 0 to 100. |
+| `status` | string | yes | Human-readable status derived from the score. |
+| `score_interpretation` | string | yes | Plain-language meaning of the score. |
+| `total_operations` | number | yes | Number of analyzed operations/tools. |
+| `critical_risks` | number | yes | Count of critical findings. |
+| `high_risks` | number | yes | Count of high findings. |
+| `medium_risks` | number | yes | Count of medium findings. |
+| `low_risks` | number | yes | Count of low findings. |
+
+### Allowed `status` values
 
 ```txt
 AgentReady
@@ -105,11 +167,18 @@ Needs fixes
 Not AgentReady
 ```
 
-## Champ `tools`
+### Score interpretation rules
 
-Chaque opération OpenAPI est représentée comme un outil potentiel.
+```txt
+85–100 → Structurally ready for agent use under normal authorization and validation controls.
+70–84  → Close to AgentReady, but minor fixes should be completed before broad agent exposure.
+50–69  → Needs fixes before being exposed to autonomous or semi-autonomous agents.
+0–49   → Not AgentReady. Do not expose to autonomous agents before structural fixes are applied.
+```
 
-Structure :
+## `tools[]`
+
+Each analyzed OpenAPI operation or MCP tool becomes one `tools[]` entry.
 
 ```json
 {
@@ -123,37 +192,29 @@ Structure :
   "forbidden_when": [],
   "failure_modes": [],
   "detected_risks": [],
-  "agent_recommendation": "Do not allow autonomous execution without human confirmation."
+  "agent_recommendation": "Do not allow autonomous execution before fixing critical risks."
 }
 ```
 
-## Champs d'un tool
+## `tools[]` fields
 
-### `operation_id`
+| Field | Type | Required | Description |
+|---|---:|---:|---|
+| `operation_id` | string | yes | OpenAPI operationId, generated fallback ID, or MCP tool name. |
+| `path` | string | yes | OpenAPI path or synthetic MCP path such as `mcp://tools/search_docs`. |
+| `method` | string | yes | HTTP method or `MCP_TOOL`. |
+| `action_type` | string | yes | Classified action type. |
+| `risk_level` | string | yes | Highest risk level for the operation/tool. |
+| `requires_human_confirmation` | boolean | yes | Whether a human must confirm before execution. |
+| `allowed_when` | array[string] | yes | Conditions where an agent may use the tool. |
+| `forbidden_when` | array[string] | yes | Conditions where an agent must not use the tool. |
+| `failure_modes` | array[string] | yes | Likely ways an agent could fail with this tool. |
+| `detected_risks` | array[string] | yes | Risk codes detected by the scan. |
+| `agent_recommendation` | string | yes | Plain-language recommendation for agents or runtimes. |
 
-Identifiant de l'opération.
+## `method`
 
-Si absent dans OpenAPI, TimeProofs peut générer un identifiant stable à partir de :
-
-```txt
-method + path
-```
-
-### `path`
-
-Chemin OpenAPI.
-
-Exemple :
-
-```txt
-/refunds
-```
-
-### `method`
-
-Méthode HTTP.
-
-Valeurs attendues :
+Allowed OpenAPI method values:
 
 ```txt
 GET
@@ -161,13 +222,19 @@ POST
 PUT
 PATCH
 DELETE
+OPTIONS
+HEAD
 ```
 
-### `action_type`
+Allowed MCP method value:
 
-Type d'action selon la taxonomie TimeProofs.
+```txt
+MCP_TOOL
+```
 
-Valeurs V1 :
+## `action_type`
+
+Allowed V1 values:
 
 ```txt
 READ
@@ -191,11 +258,9 @@ SENSITIVE_DATA
 UNKNOWN
 ```
 
-### `risk_level`
+## `risk_level`
 
-Niveau de risque.
-
-Valeurs :
+Allowed values:
 
 ```txt
 low
@@ -204,158 +269,249 @@ high
 critical
 ```
 
-### `requires_human_confirmation`
-
-Booléen.
-
-`true` si l'opération ne doit pas être exécutée de manière autonome sans validation humaine.
-
-### `allowed_when`
-
-Conditions dans lesquelles l'agent peut utiliser l'outil.
-
-Exemple :
-
-```json
-[
-  "customer identity is verified",
-  "order is paid",
-  "refund amount is below original payment"
-]
-```
-
-### `forbidden_when`
-
-Conditions dans lesquelles l'agent ne doit pas utiliser l'outil.
-
-Exemple :
-
-```json
-[
-  "customer identity is uncertain",
-  "refund amount exceeds original payment",
-  "order is already refunded"
-]
-```
-
-### `failure_modes`
-
-Modes d'échec possibles.
-
-Exemple :
-
-```json
-[
-  "wrong customer",
-  "wrong amount",
-  "duplicate refund"
-]
-```
-
-### `detected_risks`
-
-Risques détectés par TimeProofs.
-
-Exemple :
-
-```json
-[
-  "dangerous_action_without_confirmation",
-  "unbounded_parameter"
-]
-```
-
-### `agent_recommendation`
-
-Recommandation lisible par agent ou runtime.
-
-Exemples :
+Meaning:
 
 ```txt
-Allow autonomous execution.
-Allow only with strict parameter validation.
-Require human confirmation before execution.
-Do not allow autonomous execution.
-Do not expose this tool to agents before fixing critical risks.
+critical → block autonomous execution until fixed
+high     → allow only with strict guardrails, permissions, or review
+medium   → fix before broad agent exposure
+low      → review during normal hardening
 ```
 
-## Exemple complet
+## Human confirmation semantics
+
+`requires_human_confirmation: true` means:
+
+> An agent or runtime should not execute the tool autonomously. A human should review and approve the action before execution.
+
+It is automatically recommended for risky action types such as:
+
+```txt
+DELETE
+SEND
+PUBLISH
+PAY
+REFUND
+TRANSFER
+EXPORT
+CANCEL
+SENSITIVE_DATA
+```
+
+It should also be true when the scan detects risks such as:
+
+```txt
+dangerous_action_without_confirmation
+irreversible_action
+mcp_dangerous_tool_weak_description
+```
+
+## `allowed_when`
+
+`allowed_when` gives positive execution conditions.
+
+Example:
+
+```json
+[
+  "the target resource is clearly identified",
+  "all required parameters are validated"
+]
+```
+
+## `forbidden_when`
+
+`forbidden_when` gives negative execution conditions.
+
+Example:
+
+```json
+[
+  "human confirmation is missing",
+  "numeric limits such as amount, quantity, price, discount or duration are not bounded"
+]
+```
+
+## `failure_modes`
+
+`failure_modes` describes likely agent failure patterns.
+
+Examples:
+
+```txt
+wrong tool selection
+wrong or unsafe parameter value
+unsafe autonomous execution
+agent cannot recover from error
+sensitive data exposure
+agent cannot verify action success
+```
+
+## `detected_risks`
+
+OpenAPI and shared V1 risk codes:
+
+```txt
+unclear_operation_name
+ambiguous_tool_description
+missing_when_to_use
+missing_when_not_to_use
+unbounded_parameter
+missing_enum
+dangerous_action_without_confirmation
+irreversible_action
+non_corrective_error
+missing_error_recovery
+sensitive_data_exposure
+overbroad_permission
+large_unstructured_response
+missing_success_verification
+agent_context_confusion
+unknown_action_type
+```
+
+MCP-specific V1 risk codes:
+
+```txt
+mcp_vague_tool_name
+mcp_missing_input_schema
+mcp_empty_input_schema
+mcp_missing_required_fields
+mcp_dangerous_tool_weak_description
+mcp_missing_output_schema
+```
+
+## Minimal valid OpenAPI example
 
 ```json
 {
   "agentready_version": "1.0",
+  "generated_at": "2026-06-27T23:00:00.000Z",
+  "source_type": "openapi",
   "source": {
     "type": "openapi",
-    "filename": "openapi.yaml",
+    "filename": "valid-simple-openapi.json",
     "openapi_version": "3.1.0"
   },
   "summary": {
-    "score": 72,
-    "status": "Needs fixes",
-    "total_operations": 24,
-    "critical_risks": 3,
-    "high_risks": 7,
-    "medium_risks": 12,
-    "low_risks": 5
+    "score": 88,
+    "status": "AgentReady",
+    "score_interpretation": "Structurally ready for agent use under normal authorization and validation controls.",
+    "total_operations": 1,
+    "critical_risks": 0,
+    "high_risks": 0,
+    "medium_risks": 0,
+    "low_risks": 0
   },
   "tools": [
     {
-      "operation_id": "refundCustomer",
-      "path": "/refunds",
-      "method": "POST",
-      "action_type": "REFUND",
-      "risk_level": "critical",
-      "requires_human_confirmation": true,
+      "operation_id": "listInvoices",
+      "path": "/invoices",
+      "method": "GET",
+      "action_type": "LIST",
+      "risk_level": "low",
+      "requires_human_confirmation": false,
       "allowed_when": [
-        "customer identity is verified",
-        "order is paid",
-        "refund amount is below original payment"
+        "the agent has a clear user request for this data",
+        "the requested data is within the user authorization scope"
       ],
       "forbidden_when": [
-        "customer identity is uncertain",
-        "refund amount exceeds original payment",
-        "order is already refunded"
+        "required parameters or authorization context are missing"
       ],
       "failure_modes": [
-        "wrong customer",
-        "wrong amount",
-        "duplicate refund"
+        "no major failure mode detected by V1 static analysis"
       ],
-      "detected_risks": [
-        "dangerous_action_without_confirmation",
-        "unbounded_parameter"
-      ],
-      "agent_recommendation": "Do not allow autonomous execution without human confirmation."
+      "detected_risks": [],
+      "agent_recommendation": "Allow autonomous execution under normal authorization and validation controls."
     }
   ]
 }
 ```
 
-## Règles V1 de génération
+## Minimal valid MCP example
 
-1. Le JSON doit être valide.
-2. Le JSON doit être déterministe pour une même spec.
-3. Chaque opération analysable doit créer une entrée `tools`.
-4. Les actions dangereuses doivent avoir `requires_human_confirmation: true` si aucune limite claire n'est détectée.
-5. Si le type d'action est incertain, utiliser `UNKNOWN` et `risk_level: medium`.
-6. Si un risque critique existe, le statut global ne peut pas être `AgentReady`.
-7. Si `detected_risks` contient `dangerous_action_without_confirmation`, la recommandation doit interdire l'exécution autonome.
+```json
+{
+  "agentready_version": "1.0",
+  "generated_at": "2026-06-27T23:00:00.000Z",
+  "source_type": "mcp",
+  "source": {
+    "type": "mcp",
+    "filename": "mcp-tools-simple.json",
+    "mcp_version": "",
+    "server_name": "Example MCP Server"
+  },
+  "summary": {
+    "score": 76,
+    "status": "Minor fixes",
+    "score_interpretation": "Close to AgentReady, but minor fixes should be completed before broad agent exposure.",
+    "total_operations": 1,
+    "critical_risks": 0,
+    "high_risks": 0,
+    "medium_risks": 1,
+    "low_risks": 0
+  },
+  "tools": [
+    {
+      "operation_id": "search_docs",
+      "path": "mcp://tools/search_docs",
+      "method": "MCP_TOOL",
+      "action_type": "SEARCH",
+      "risk_level": "medium",
+      "requires_human_confirmation": false,
+      "allowed_when": [
+        "the agent has a clear user request for this data",
+        "the requested data is within the user authorization scope"
+      ],
+      "forbidden_when": [
+        "required parameters or authorization context are missing"
+      ],
+      "failure_modes": [
+        "wrong tool selection"
+      ],
+      "detected_risks": [
+        "mcp_missing_output_schema"
+      ],
+      "agent_recommendation": "Allow only after reviewing and applying the recommended fixes."
+    }
+  ]
+}
+```
 
-## Rôle futur
+## V1 generation rules
 
-À long terme, `agentready.json` doit pouvoir être utilisé par :
+1. The JSON must be valid.
+2. `agentready_version` must be present.
+3. `generated_at` must be present and ISO 8601.
+4. `source_type` must be either `openapi` or `mcp`.
+5. `source.type` must match `source_type`.
+6. Each analyzable OpenAPI operation or MCP tool must create one `tools[]` entry.
+7. Dangerous action types should set `requires_human_confirmation: true` unless strong safety evidence exists.
+8. If the action type is uncertain, use `UNKNOWN` and at least `risk_level: medium`.
+9. If a critical risk exists, the global status should not be `AgentReady`.
+10. If `detected_risks` contains `dangerous_action_without_confirmation`, the recommendation should block autonomous execution.
+11. If `detected_risks` contains MCP-specific schema risks, the recommendation should require review before broad agent exposure.
 
-- plateformes agents ;
-- runtimes ;
-- marketplaces MCP ;
-- CI/CD ;
-- GitHub Actions ;
-- outils de sécurité ;
-- audits internes ;
-- systèmes de validation humaine.
+## V1 limitations
 
-## Principe stratégique
+TimeProofs AgentReady does not guarantee that an AI agent will never fail.
 
-Le rapport humain est utile au départ.
+It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.
 
-Mais `agentready.json` est l'actif qui peut rendre TimeProofs plus difficile à copier.
+V1 does not:
+
+```txt
+execute API endpoints
+execute MCP tools
+connect to live MCP servers
+validate runtime permissions
+verify authentication scopes
+prove security compliance
+replace human review for high-risk actions
+```
+
+## Strategic role
+
+At the start, the human report makes the product understandable.
+
+Long term, `agentready.json` is the asset that can make TimeProofs harder to copy, because it can become the portable readiness contract for APIs, MCP tools, CI/CD checks, agent runtimes and future marketplaces.
