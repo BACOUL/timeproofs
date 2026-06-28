@@ -47,7 +47,7 @@
     <header>
       <div>
         <h1>AgentReady Test Harness</h1>
-        <p class="muted">Static dependency-free checks for the OpenAPI JSON/YAML scanner and MCP tools scanner core.</p>
+        <p class="muted">Static dependency-free checks for the OpenAPI JSON/YAML scanner, MCP tools scanner, and static simulation parser core.</p>
       </div>
       <div class="actions">
         <a href="/agentready.html">OpenAPI Scan</a>
@@ -57,7 +57,7 @@
 
     <section class="card">
       <h2>Run AgentReady checks</h2>
-      <p class="muted">This page loads local fixtures, runs <code>scanOpenApiText</code> and <code>scanMcpToolsText</code>, and validates expected behavior. It does not call submitted API endpoints or MCP tools.</p>
+      <p class="muted">This page loads local fixtures, runs <code>scanOpenApiText</code>, <code>scanMcpToolsText</code>, and <code>runStaticSimulation</code>, then validates expected behavior. It does not call submitted API endpoints, MCP tools, or LLMs.</p>
       <p class="note"><strong>Manual QA note:</strong> open this page through a local or hosted HTTP server. Browser <code>fetch()</code> may fail if this file is opened directly with <code>file://</code>.</p>
       <div class="actions">
         <button id="runButton">Run tests</button>
@@ -89,7 +89,7 @@
   </main>
 
   <script type="module">
-    import { scanOpenApiText, scanMcpToolsText } from './agentready-core/index.js';
+    import { scanOpenApiText, scanMcpToolsText, parseSimulationScenarioText, runStaticSimulation } from './agentready-core/index.js';
 
     const runButton = document.getElementById('runButton');
     const clearButton = document.getElementById('clearButton');
@@ -108,6 +108,9 @@
     const invalidMcpShape = JSON.stringify({ server: { name: 'Broken' }, not_tools: [] });
     const emptyMcpTools = JSON.stringify({ server: { name: 'Empty MCP Server' }, tools: [] });
     const missingMcpToolName = JSON.stringify({ server: { name: 'Broken MCP Server' }, tools: [{ description: 'Missing tool name.', inputSchema: { type: 'object' } }] });
+    const invalidSimulationJson = '{ "scenario_id": ';
+    const missingSimulationScenarioId = JSON.stringify({ source_type: 'openapi', user_task: 'Broken scenario.', expected_action_type: 'READ', must_require_confirmation: false, expected_failure_modes: [] });
+    const unknownToolScenario = JSON.stringify({ scenario_id: 'unknown_tool', source_type: 'openapi', user_task: 'Use a missing tool.', expected_action_type: 'REFUND', expected_tool: 'missingTool', must_require_confirmation: true, expected_failure_modes: [] });
 
     runButton.addEventListener('click', runTests);
     clearButton.addEventListener('click', clearResults);
@@ -118,7 +121,8 @@
       const groups = {
         openapi: [],
         mcp: [],
-        exports: []
+        exports: [],
+        simulation: []
       };
 
       const raw = {};
@@ -129,6 +133,8 @@
         const dangerousText = await loadFixture('/agentready-examples/dangerous-actions-openapi.json');
         const mcpSimpleText = await loadFixture('/agentready-examples/mcp-tools-simple.json');
         const mcpDangerousText = await loadFixture('/agentready-examples/mcp-tools-dangerous.json');
+        const openApiRefundScenarioText = await loadFixture('/docs/agentready/examples/simulation-openapi-refund-scenario.json');
+        const mcpDeleteScenarioText = await loadFixture('/docs/agentready/examples/simulation-mcp-delete-file-scenario.json');
 
         raw.goodJson = await capture(() => scanOpenApiText(goodJsonText, { filename: 'valid-simple-openapi.json' }));
         raw.goodYaml = await capture(() => scanOpenApiText(goodYamlText, { filename: 'valid-simple-openapi.yaml' }));
@@ -141,6 +147,13 @@
         raw.badMcpShape = await capture(() => scanMcpToolsText(invalidMcpShape, { filename: 'invalid-mcp-shape.json' }));
         raw.emptyMcpTools = await capture(() => scanMcpToolsText(emptyMcpTools, { filename: 'empty-mcp-tools.json' }));
         raw.missingMcpToolName = await capture(() => scanMcpToolsText(missingMcpToolName, { filename: 'missing-mcp-tool-name.json' }));
+        raw.openApiRefundScenario = await capture(() => parseSimulationScenarioText(openApiRefundScenarioText, { filename: 'simulation-openapi-refund-scenario.json' }));
+        raw.mcpDeleteScenario = await capture(() => parseSimulationScenarioText(mcpDeleteScenarioText, { filename: 'simulation-mcp-delete-file-scenario.json' }));
+        raw.badSimulationJson = await capture(() => parseSimulationScenarioText(invalidSimulationJson, { filename: 'invalid-simulation.json' }));
+        raw.missingSimulationScenarioId = await capture(() => parseSimulationScenarioText(missingSimulationScenarioId, { filename: 'missing-simulation-scenario-id.json' }));
+        raw.openapiRefundSimulation = await capture(() => runStaticSimulation(raw.dangerous.value?.agentready_json, raw.openApiRefundScenario.value));
+        raw.mcpDeleteSimulation = await capture(() => runStaticSimulation(raw.mcpDangerous.value?.agentready_json, raw.mcpDeleteScenario.value));
+        raw.unknownToolSimulation = await capture(() => runStaticSimulation(raw.dangerous.value?.agentready_json, JSON.parse(unknownToolScenario)));
 
         groups.openapi.push(assert('valid-simple-openapi.json scans successfully', raw.goodJson.ok, 'The good JSON OpenAPI fixture should scan without throwing.'));
         groups.openapi.push(assert('valid-simple-openapi.yaml scans successfully', raw.goodYaml.ok, 'The good YAML OpenAPI fixture should scan without throwing.'));
@@ -163,10 +176,19 @@
 
         groups.exports.push(assert('OpenAPI agentready.json contains expected root fields', hasAgentReadyRootFields(raw.goodJson.value?.agentready_json), 'Expected agentready_version, source, summary, and tools.'));
         groups.exports.push(assert('OpenAPI agentready.json contains expected tool fields', hasExpectedToolFields(raw.goodJson.value?.agentready_json), 'Expected operation_id, action_type, risk_level, detected_risks, and agent_recommendation.'));
-        groups.exports.push(assert('OpenAPI Markdown report is generated', Boolean(raw.goodJson.value?.markdown_report?.includes('TimeProofs AgentReady Report')), 'Markdown report should include the report title.'));
+        groups.exports.push(assert('OpenAPI Markdown report is generated', Boolean(raw.goodJson.value?.markdown_report?.includes('TimeProofs AgentReady')), 'Markdown report should include the report title.'));
         groups.exports.push(assert('MCP agentready.json contains expected root fields', hasAgentReadyRootFields(raw.mcpSimple.value?.agentready_json), 'Expected agentready_version, source, summary, and tools.'));
         groups.exports.push(assert('MCP agentready.json contains expected tool fields', hasExpectedToolFields(raw.mcpSimple.value?.agentready_json), 'Expected operation_id, action_type, risk_level, detected_risks, and agent_recommendation.'));
-        groups.exports.push(assert('MCP Markdown report is generated', Boolean(raw.mcpSimple.value?.markdown_report?.includes('TimeProofs AgentReady Report')), 'Markdown report should include the report title.'));
+        groups.exports.push(assert('MCP Markdown report is generated', Boolean(raw.mcpSimple.value?.markdown_report?.includes('TimeProofs AgentReady')), 'Markdown report should include the report title.'));
+
+        groups.simulation.push(assert('OpenAPI simulation scenario parses successfully', raw.openApiRefundScenario.ok && raw.openApiRefundScenario.value.scenarios.length === 1, 'The OpenAPI refund scenario should parse into one scenario.'));
+        groups.simulation.push(assert('MCP simulation scenario parses successfully', raw.mcpDeleteScenario.ok && raw.mcpDeleteScenario.value.scenarios.length === 1, 'The MCP delete-file scenario should parse into one scenario.'));
+        groups.simulation.push(assert('invalid simulation JSON fails cleanly', !raw.badSimulationJson.ok && raw.badSimulationJson.error?.code === 'INVALID_SIMULATION_JSON', 'Invalid simulation JSON should return a structured parser error.'));
+        groups.simulation.push(assert('missing scenario_id fails cleanly', !raw.missingSimulationScenarioId.ok && raw.missingSimulationScenarioId.error?.code === 'MISSING_SCENARIO_ID', 'Scenario validation should require scenario_id.'));
+        groups.simulation.push(assert('OpenAPI refund simulation returns agentready-simulation shape', hasSimulationRootFields(raw.openapiRefundSimulation.value), 'Simulation should return simulation_version, generated_at, counts, and results[].'));
+        groups.simulation.push(assert('OpenAPI refund simulation fails unsafe scenario', raw.openapiRefundSimulation.value?.fail === 1 && raw.openapiRefundSimulation.value?.results?.[0]?.result === 'fail', 'Refund scenario should fail against the dangerous OpenAPI fixture.'));
+        groups.simulation.push(assert('MCP delete-file simulation returns fail or not_applicable deterministically', raw.mcpDeleteSimulation.ok && ['fail', 'not_applicable'].includes(raw.mcpDeleteSimulation.value?.results?.[0]?.result), 'MCP delete-file scenario should produce a deterministic static result.'));
+        groups.simulation.push(assert('unknown expected_tool returns not_applicable', raw.unknownToolSimulation.value?.results?.[0]?.result === 'not_applicable', 'Unknown expected_tool should not match any tool.'));
       } catch (error) {
         groups.exports.push(assert('fixture loading does not fail', false, error.message || 'Fixture loading failed. Use HTTP server instead of file://.'));
       }
@@ -201,6 +223,8 @@
       return Boolean(
         contract &&
         contract.agentready_version &&
+        contract.source_type &&
+        contract.generated_at &&
         contract.source &&
         contract.summary &&
         Array.isArray(contract.tools)
@@ -216,6 +240,20 @@
         Object.hasOwn(tool, 'risk_level') &&
         Object.hasOwn(tool, 'detected_risks') &&
         Object.hasOwn(tool, 'agent_recommendation')
+      );
+    }
+
+    function hasSimulationRootFields(simulation) {
+      return Boolean(
+        simulation &&
+        simulation.simulation_version &&
+        simulation.generated_at &&
+        Object.hasOwn(simulation, 'scenarios_total') &&
+        Object.hasOwn(simulation, 'pass') &&
+        Object.hasOwn(simulation, 'warning') &&
+        Object.hasOwn(simulation, 'fail') &&
+        Object.hasOwn(simulation, 'not_applicable') &&
+        Array.isArray(simulation.results)
       );
     }
 
@@ -236,7 +274,8 @@
       resultsEl.innerHTML = [
         renderGroup('OpenAPI tests', groups.openapi),
         renderGroup('MCP tests', groups.mcp),
-        renderGroup('Export contract tests', groups.exports)
+        renderGroup('Export contract tests', groups.exports),
+        renderGroup('Static simulation tests', groups.simulation)
       ].join('');
 
       const failures = allResults.filter(result => !result.pass);
@@ -262,13 +301,20 @@
           openapi_dangerous: raw.dangerous?.value?.summary?.risk_counts,
           mcp_dangerous: raw.mcpDangerous?.value?.summary?.risk_counts
         },
+        simulation: {
+          openapi_refund: raw.openapiRefundSimulation?.value,
+          mcp_delete_file: raw.mcpDeleteSimulation?.value,
+          unknown_tool: raw.unknownToolSimulation?.value
+        },
         errors: {
           invalid_json: raw.badJson?.error,
           invalid_yaml: raw.badYaml?.error,
           invalid_mcp_json: raw.badMcpJson?.error,
           invalid_mcp_shape: raw.badMcpShape?.error,
           empty_mcp_tools: raw.emptyMcpTools?.error,
-          missing_mcp_tool_name: raw.missingMcpToolName?.error
+          missing_mcp_tool_name: raw.missingMcpToolName?.error,
+          invalid_simulation_json: raw.badSimulationJson?.error,
+          missing_simulation_scenario_id: raw.missingSimulationScenarioId?.error
         }
       }, null, 2);
     }
