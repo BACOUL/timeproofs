@@ -28,6 +28,10 @@
 ✅ Agent simulation exploration document
 ✅ Minimal OpenAPI simulation scenario fixture
 ✅ Minimal MCP simulation scenario fixture
+✅ Static simulation scenario examples index
+✅ Additional OpenAPI simulation scenario fixture
+✅ Additional MCP simulation scenario fixture
+✅ Expected static simulation result examples
 ✅ Sitemap updated
 ```
 
@@ -42,7 +46,7 @@ docs/agentready/REMAINING_WORK.md
 ## Immediate next PR
 
 ```txt
-feat(agentready): add static simulation fixtures
+docs(agentready): decide static simulation parser scope
 ```
 
 ## Build next
@@ -50,15 +54,15 @@ feat(agentready): add static simulation fixtures
 Requirements:
 
 ```txt
-1. Keep simulation static and non-executing.
-2. Add a shared simulation scenario examples index.
-3. Add one additional OpenAPI risky scenario.
-4. Add one additional MCP risky scenario.
-5. Add expected simulation result examples.
-6. Define result statuses: pass, warning, fail, not_applicable.
-7. Decide where future simulation output would appear in agentready.json.
-8. Do not call APIs.
-9. Do not call MCP tools.
+1. Decide whether the next simulation step is docs-only or code-backed.
+2. If code-backed, keep it static and browser-only.
+3. Define the parser inputs and outputs.
+4. Define whether simulation appears in agentready.json V1.1 or stays separate.
+5. Define acceptance tests before writing code.
+6. Keep CLI after browser stability.
+7. Do not call APIs.
+8. Do not call MCP tools.
+9. Do not call LLMs.
 10. Keep mandatory limitation text.
 ```
 
