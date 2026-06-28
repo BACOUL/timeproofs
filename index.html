@@ -9,8 +9,9 @@
   <meta name="theme-color" content="#0b1020" />
   <link rel="canonical" href="https://timeproofs.io/" />
   <link rel="icon" href="/assets/favicon.ico" />
+  <link rel="stylesheet" href="/assets/site-nav.css" />
   <style>
-    :root { --bg:#0b1020; --panel:#0f172a; --line:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --accent2:#38bdf8; --ok:#22c55e; }
+    :root { --bg:#0b1020; --panel:#0f172a; --line:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --accent2:#38bdf8; --ok:#22c55e; --warn:#f59e0b; }
     * { box-sizing:border-box; }
     html, body { margin:0; min-height:100%; }
     body { font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:radial-gradient(1100px 420px at 75% -10%,rgba(34,211,238,.16),transparent 60%),radial-gradient(900px 320px at 10% 0%,rgba(56,189,248,.08),transparent 60%),var(--bg); color:var(--text); line-height:1.55; }
@@ -41,6 +42,7 @@
     code { padding:2px 6px; }
     pre { padding:16px; overflow:auto; text-align:left; }
     .status { color:var(--ok); font-weight:900; }
+    .pending { color:var(--warn); font-weight:900; }
     footer { border-top:1px solid var(--line); padding:24px 0; color:#64748b; text-align:center; margin-top:40px; }
   </style>
 </head>
@@ -51,10 +53,25 @@
       <nav class="nav-links" aria-label="Main navigation">
         <a href="/agentready.html">OpenAPI</a>
         <a href="/agentready-mcp.html">MCP</a>
+        <a href="/agentready-simulation.html">Simulation</a>
         <a href="/agentready-docs.html">Docs</a>
         <a href="/agentready-examples.html">Examples</a>
         <a href="/agentready-test.html">Tests</a>
       </nav>
+      <details class="site-menu-toggle">
+        <summary class="site-menu-button" aria-label="Open navigation menu"><span></span>Menu</summary>
+        <nav class="site-menu-panel" aria-label="Mobile navigation">
+          <a href="/agentready.html">OpenAPI scanner</a>
+          <a href="/agentready-mcp.html">MCP scanner</a>
+          <a href="/agentready-simulation.html">Static simulation</a>
+          <a href="/agentready-docs.html">Docs</a>
+          <a href="/agentready-examples.html">Examples</a>
+          <a href="/agentready-test.html">Tests</a>
+          <a href="/legal.html">Legal notice</a>
+          <a href="/privacy.html">Privacy</a>
+          <a href="/terms.html">Terms</a>
+        </nav>
+      </details>
     </div>
   </header>
 
@@ -62,15 +79,16 @@
     <section class="hero wrap">
       <div class="eyebrow">Pre-deployment readiness for AI-agent tools</div>
       <h1>See where AI agents will fail before they use your API or MCP tools.</h1>
-      <p class="subtitle">TimeProofs AgentReady analyzes APIs and MCP tool schemas before they are exposed to AI agents. It produces an AgentReady Score, a human report, and a machine-readable <code>agentready.json</code> contract.</p>
+      <p class="subtitle">TimeProofs AgentReady analyzes APIs and MCP tool schemas before they are exposed to AI agents. It produces an AgentReady Score, a human report, a machine-readable <code>agentready.json</code> contract, and static simulation output.</p>
       <div class="cta-row">
         <a class="cta" href="/agentready.html">Scan OpenAPI JSON/YAML</a>
         <a class="cta secondary" href="/agentready-mcp.html">Scan MCP tools JSON</a>
-        <a class="cta secondary" href="/agentready-docs.html">Read docs</a>
+        <a class="cta secondary" href="/agentready-simulation.html">Run simulation</a>
       </div>
       <div class="chips">
         <span class="chip">OpenAPI JSON/YAML scanner</span>
         <span class="chip">MCP tools scanner</span>
+        <span class="chip">Static simulation</span>
         <span class="chip">Local browser analysis</span>
         <span class="chip">No endpoint or tool execution</span>
         <span class="chip">AgentReady Score + JSON</span>
@@ -81,7 +99,7 @@
       <div class="grid three">
         <article class="card"><h3>OpenAPI readiness</h3><p>Upload an OpenAPI JSON or YAML spec and detect operation, parameter, response, security, and dangerous-action risks before agent exposure.</p></article>
         <article class="card"><h3>MCP tool readiness</h3><p>Upload an MCP tools JSON file and detect whether tools are clear, bounded, and safe enough to expose to AI agents.</p></article>
-        <article class="card"><h3>AgentReady output</h3><p>Generate an AgentReady Score, findings, recommendations, Markdown report, printable report, and <code>agentready.json</code>.</p></article>
+        <article class="card"><h3>Static simulation</h3><p>Run scenario-based checks against <code>agentready.json</code> to identify risky agent tasks before live execution.</p></article>
       </div>
     </section>
 
@@ -92,19 +110,31 @@
 → AgentReady analysis
 → AgentReady Score
 → AgentReady Report
-→ agentready.json</pre>
+→ agentready.json
+→ static simulation scenario
+→ agentready-simulation.json</pre>
         <p>The old proof-of-existence product surface has been removed from the active direction. The repository now focuses on Agent Tool Readiness.</p>
       </div>
     </section>
 
     <section class="section wrap">
       <div class="grid two">
-        <article class="card"><h3>Current status</h3><p><span class="status">Live in repo:</span> OpenAPI scanner, MCP scanner, docs, examples, test harness, exports, and printable report.</p><p><span class="status">Next:</span> navigation polish, public explanation, then agent simulation exploration.</p></article>
+        <article class="card"><h3>Current status</h3><p><span class="status">Built in repo:</span> OpenAPI scanner, MCP scanner, static simulation, docs, examples, test harness, exports, and printable reports.</p><p><span class="pending">Pending before public release:</span> real browser QA, mobile polish, legal pages review, and final release gate.</p></article>
         <article class="card"><h3>Limitation</h3><p>TimeProofs AgentReady does not guarantee that an AI agent will never fail. It identifies structural risks that may cause AI agents to misuse APIs, tools, or MCP servers.</p></article>
       </div>
     </section>
   </main>
 
-  <footer><div class="wrap">TimeProofs AgentReady — tool readiness before agent execution.</div></footer>
+  <footer>
+    <div class="wrap">
+      <div>TimeProofs AgentReady — tool readiness before agent execution.</div>
+      <div class="footer-links">
+        <a href="/legal.html">Legal notice</a>
+        <a href="/privacy.html">Privacy</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/agentready-docs.html">Docs</a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
