@@ -1,0 +1,45 @@
+{
+  "agentready_version": "1.0",
+  "generated_at": "2026-06-27T23:00:00.000Z",
+  "source_type": "mcp",
+  "source": {
+    "type": "mcp",
+    "filename": "mcp-tools-simple.json",
+    "mcp_version": "",
+    "server_name": "Example MCP Server"
+  },
+  "summary": {
+    "score": 76,
+    "status": "Minor fixes",
+    "score_interpretation": "Close to AgentReady, but minor fixes should be completed before broad agent exposure.",
+    "total_operations": 1,
+    "critical_risks": 0,
+    "high_risks": 0,
+    "medium_risks": 1,
+    "low_risks": 0
+  },
+  "tools": [
+    {
+      "operation_id": "search_docs",
+      "path": "mcp://tools/search_docs",
+      "method": "MCP_TOOL",
+      "action_type": "SEARCH",
+      "risk_level": "medium",
+      "requires_human_confirmation": false,
+      "allowed_when": [
+        "the agent has a clear user request for this data",
+        "the requested data is within the user authorization scope"
+      ],
+      "forbidden_when": [
+        "required parameters or authorization context are missing"
+      ],
+      "failure_modes": [
+        "wrong tool selection"
+      ],
+      "detected_risks": [
+        "mcp_missing_output_schema"
+      ],
+      "agent_recommendation": "Allow only after reviewing and applying the recommended fixes."
+    }
+  ]
+}
