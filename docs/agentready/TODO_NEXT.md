@@ -22,6 +22,8 @@
 ✅ Browser V1 QA runbook
 ✅ Long-term product roadmap
 ✅ Release discipline
+✅ V2 CLI scope
+✅ README alignment note
 ✅ OpenAPI fixtures
 ✅ MCP fixtures
 ✅ agentready.json export
@@ -56,12 +58,13 @@ Read this file first:
 docs/agentready/REMAINING_WORK.md
 docs/agentready/LONG_TERM_PRODUCT_ROADMAP.md
 docs/agentready/RELEASE_DISCIPLINE.md
+docs/agentready/V2_CLI_SCOPE.md
 ```
 
 ## Immediate next PR
 
 ```txt
-docs(agentready): define V2 CLI scope
+docs(agentready): define AgentReady Checked trust layer
 ```
 
 ## Build next
@@ -69,31 +72,31 @@ docs(agentready): define V2 CLI scope
 Requirements:
 
 ```txt
-1. Define CLI purpose.
-2. Define CLI commands.
-3. Define CLI inputs and outputs.
-4. Define exit code behavior.
-5. Define CI usage.
-6. Define reuse of existing browser scanner core.
-7. Keep V2 as scope only unless implementation is explicitly requested.
-8. Do not claim Browser V1 is complete until QA result is PASS.
+1. Define what AgentReady Checked means.
+2. Define minimum score policy.
+3. Define risk severity policy.
+4. Define confirmation requirement policy.
+5. Define scenario coverage policy.
+6. Define what artifact is checked.
+7. Keep it as a trust layer draft.
+8. Do not claim certification or safety guarantee.
 9. Do not add backend, accounts, payments, dashboard or runtime firewall.
 10. Keep mandatory limitation text.
 ```
 
-## Parallel pending task
+## Parallel pending tasks
 
 ```txt
-Run manual Browser V1 QA in a real browser using docs/agentready/BROWSER_V1_QA_RUNBOOK.md, then update docs/agentready/BROWSER_V1_QA_RESULT.md
+1. Run manual Browser V1 QA in a real browser using docs/agentready/BROWSER_V1_QA_RUNBOOK.md, then update docs/agentready/BROWSER_V1_QA_RESULT.md.
+2. Update root README.md directly when tool execution allows it, then remove docs/agentready/README_ALIGNMENT_NOTE.md if redundant.
 ```
 
 ## Then
 
 ```txt
-1. docs(agentready): define AgentReady Checked trust layer
-2. docs/seo: add public acquisition pages draft
-3. docs(product): prepare monetization path
-4. chore(deploy): prepare Vercel reconnect after 2026-07-09
+1. docs/seo: add public acquisition pages draft
+2. docs(product): prepare monetization path
+3. chore(deploy): prepare Vercel reconnect after 2026-07-09
 ```
 
 ## Do not build yet
