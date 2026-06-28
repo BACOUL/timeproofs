@@ -20,6 +20,8 @@
 ✅ Browser V1 release notes draft
 ✅ Browser V1 QA attempt recorded as pending
 ✅ Browser V1 QA runbook
+✅ Long-term product roadmap
+✅ Release discipline
 ✅ OpenAPI fixtures
 ✅ MCP fixtures
 ✅ agentready.json export
@@ -52,40 +54,46 @@ Read this file first:
 
 ```txt
 docs/agentready/REMAINING_WORK.md
+docs/agentready/LONG_TERM_PRODUCT_ROADMAP.md
+docs/agentready/RELEASE_DISCIPLINE.md
 ```
 
-## Immediate next step
+## Immediate next PR
+
+```txt
+docs(agentready): define V2 CLI scope
+```
+
+## Build next
+
+Requirements:
+
+```txt
+1. Define CLI purpose.
+2. Define CLI commands.
+3. Define CLI inputs and outputs.
+4. Define exit code behavior.
+5. Define CI usage.
+6. Define reuse of existing browser scanner core.
+7. Keep V2 as scope only unless implementation is explicitly requested.
+8. Do not claim Browser V1 is complete until QA result is PASS.
+9. Do not add backend, accounts, payments, dashboard or runtime firewall.
+10. Keep mandatory limitation text.
+```
+
+## Parallel pending task
 
 ```txt
 Run manual Browser V1 QA in a real browser using docs/agentready/BROWSER_V1_QA_RUNBOOK.md, then update docs/agentready/BROWSER_V1_QA_RESULT.md
 ```
 
-## QA next
-
-Requirements:
-
-```txt
-1. Run local HTTP server or open a Vercel preview.
-2. Open the product in a real browser.
-3. Test OpenAPI scanner.
-4. Test MCP scanner.
-5. Test static simulation page.
-6. Run static browser test harness.
-7. Confirm exports.
-8. Confirm no-execution constraints in browser Network tab.
-9. Update docs/agentready/BROWSER_V1_QA_RESULT.md.
-10. Only mark Browser V1 complete if QA result is PASS.
-11. Keep mandatory limitation text.
-```
-
 ## Then
 
 ```txt
-1. feat(agentready): add CLI only after browser product is stable
-2. docs/seo: add public acquisition pages
-3. docs(agentready): define AgentReady Checked trust layer
-4. docs(product): prepare monetization path
-5. chore(deploy): prepare Vercel reconnect after 2026-07-09
+1. docs(agentready): define AgentReady Checked trust layer
+2. docs/seo: add public acquisition pages draft
+3. docs(product): prepare monetization path
+4. chore(deploy): prepare Vercel reconnect after 2026-07-09
 ```
 
 ## Do not build yet
@@ -97,6 +105,7 @@ dashboard
 database
 runtime firewall
 old proof-of-existence product
+public release claim before QA PASS
 ```
 
 ## Mandatory limitation text
