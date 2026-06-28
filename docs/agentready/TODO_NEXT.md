@@ -15,6 +15,7 @@
 ✅ Public examples page with OpenAPI/MCP/simulation fixtures
 ✅ Static browser test harness with OpenAPI/MCP/export/simulation groups
 ✅ Browser product QA checklist
+✅ Browser V1 release gate
 ✅ OpenAPI fixtures
 ✅ MCP fixtures
 ✅ agentready.json export
@@ -52,7 +53,7 @@ docs/agentready/REMAINING_WORK.md
 ## Immediate next PR
 
 ```txt
-docs(agentready): define browser V1 release gate
+docs(agentready): add browser V1 QA result template
 ```
 
 ## Build next
@@ -60,16 +61,13 @@ docs(agentready): define browser V1 release gate
 Requirements:
 
 ```txt
-1. Define what must be true before calling browser V1 complete.
-2. Define which pages must be manually checked.
-3. Define required exports.
-4. Define blocking vs non-blocking issues.
-5. Define release notes contents.
-6. Define what remains after browser V1.
-7. Keep CLI after browser product stability.
-8. Do not add backend, accounts, payments or dashboard.
-9. Do not add runtime firewall.
-10. Keep mandatory limitation text.
+1. Create docs/agentready/BROWSER_V1_QA_RESULT.md.
+2. Include fields for date, commit, browser, local URL, fixtures tested, exports confirmed, no-execution confirmation, known issues, and final decision.
+3. Keep it as a template if QA has not been manually run yet.
+4. Keep CLI after browser product stability.
+5. Do not add backend, accounts, payments or dashboard.
+6. Do not add runtime firewall.
+7. Keep mandatory limitation text.
 ```
 
 ## Then
