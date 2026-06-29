@@ -3,47 +3,84 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TimeProofs AgentReady — Pre-deployment readiness for AI-agent tools</title>
-  <meta name="description" content="See where AI agents will fail before they use your API or MCP tools. TimeProofs AgentReady scans OpenAPI and MCP tool schemas before agent exposure." />
+  <title>TimeProofs AgentReady - Check APIs and MCP tools before AI agents use them</title>
+  <meta name="description" content="Scan OpenAPI and MCP tool definitions before exposing them to AI agents. Get an AgentReady Score, risk findings, reports, agentready.json, and static simulation output." />
   <meta name="robots" content="index,follow" />
-  <meta name="theme-color" content="#0b1020" />
+  <meta name="theme-color" content="#08111f" />
   <link rel="canonical" href="https://timeproofs.io/" />
   <link rel="icon" href="/assets/favicon.ico" />
   <link rel="stylesheet" href="/assets/site-nav.css" />
   <style>
-    :root { --bg:#0b1020; --panel:#0f172a; --line:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --accent2:#38bdf8; --ok:#22c55e; --warn:#f59e0b; }
+    :root { --bg:#08111f; --panel:#0f172a; --panel2:#101827; --line:#1e293b; --text:#f8fafc; --muted:#94a3b8; --soft:#cbd5e1; --accent:#22d3ee; --accent2:#38bdf8; --ok:#22c55e; --warn:#f59e0b; --bad:#ef4444; }
     * { box-sizing:border-box; }
     html, body { margin:0; min-height:100%; }
-    body { font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:radial-gradient(1100px 420px at 75% -10%,rgba(34,211,238,.16),transparent 60%),radial-gradient(900px 320px at 10% 0%,rgba(56,189,248,.08),transparent 60%),var(--bg); color:var(--text); line-height:1.55; }
+    body { font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:linear-gradient(180deg,#08111f 0%,#0b1020 42%,#08111f 100%); color:var(--text); line-height:1.55; }
     a { color:var(--accent); text-decoration:none; }
     a:hover { text-decoration:underline; }
-    .wrap { width:min(1120px,calc(100% - 32px)); margin:0 auto; }
-    header { position:sticky; top:0; backdrop-filter:blur(12px); background:rgba(11,16,32,.72); border-bottom:1px solid var(--line); z-index:10; }
+    .wrap { width:min(1160px,calc(100% - 32px)); margin:0 auto; }
+    header { position:sticky; top:0; backdrop-filter:blur(12px); background:rgba(8,17,31,.76); border-bottom:1px solid var(--line); z-index:10; }
     .nav { display:flex; justify-content:space-between; align-items:center; gap:16px; min-height:68px; }
     .brand { display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; }
     .brand img { width:38px; height:38px; border-radius:10px; }
     .nav-links { display:flex; gap:18px; flex-wrap:wrap; font-size:.94rem; font-weight:700; }
-    .hero { padding:82px 0 58px; text-align:center; }
-    .eyebrow { display:inline-flex; border:1px solid rgba(34,211,238,.35); color:#b9e7f5; background:rgba(34,211,238,.08); border-radius:999px; padding:6px 12px; font-weight:800; font-size:.84rem; margin-bottom:18px; }
-    h1 { font-size:clamp(2.2rem,6vw,5rem); line-height:.98; margin:0 auto 20px; max-width:980px; letter-spacing:-.05em; }
-    .subtitle { max-width:820px; margin:0 auto 24px; color:var(--muted); font-size:clamp(1.08rem,2vw,1.35rem); }
-    .cta-row { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:26px; }
-    .cta { display:inline-flex; align-items:center; justify-content:center; min-height:46px; padding:0 18px; border-radius:12px; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#04111f; font-weight:900; border:1px solid rgba(255,255,255,.08); }
+    .hero { padding:58px 0 34px; }
+    .hero-grid { display:grid; gap:28px; align-items:center; }
+    @media (min-width:940px) { .hero-grid { grid-template-columns:1.02fr .98fr; } }
+    .eyebrow { display:inline-flex; border:1px solid rgba(34,211,238,.35); color:#b9e7f5; background:rgba(34,211,238,.08); border-radius:999px; padding:6px 12px; font-weight:850; font-size:.84rem; margin-bottom:14px; }
+    h1 { font-size:clamp(2.45rem,6vw,5rem); line-height:.98; margin:0 0 18px; max-width:920px; letter-spacing:-.045em; }
+    .subtitle { max-width:780px; color:var(--soft); font-size:clamp(1.06rem,2vw,1.28rem); margin:0; }
+    .cta-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:24px; }
+    .cta { display:inline-flex; align-items:center; justify-content:center; min-height:46px; padding:0 18px; border-radius:12px; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#04111f; font-weight:900; border:1px solid rgba(255,255,255,.08); text-decoration:none; }
+    .cta:hover { text-decoration:none; }
     .cta.secondary { background:#101b31; color:#dff7ff; border-color:#20304d; }
-    .chips { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:22px; color:#cbd5e1; }
-    .chip { border:1px solid #214a57; background:#0d2330; padding:6px 10px; border-radius:999px; font-size:.9rem; }
-    .section { padding:38px 0; }
+    .trust-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; color:#d8eef6; }
+    .trust { border:1px solid #214a57; background:#0d2330; padding:6px 10px; border-radius:999px; font-size:.9rem; }
+    .preview { background:linear-gradient(180deg,#111c30,#07111f); border:1px solid #24344d; border-radius:18px; box-shadow:0 24px 80px rgba(0,0,0,.34); overflow:hidden; }
+    .preview-top { display:flex; justify-content:space-between; gap:12px; align-items:center; border-bottom:1px solid #24344d; padding:12px 14px; color:#cbd5e1; font-size:.88rem; }
+    .dots { display:flex; gap:6px; }
+    .dot { width:10px; height:10px; border-radius:999px; background:#334155; }
+    .preview-body { padding:18px; }
+    .score-line { display:flex; justify-content:space-between; gap:12px; align-items:flex-end; border-bottom:1px solid #1e293b; padding-bottom:16px; margin-bottom:16px; }
+    .score { font-size:3.2rem; line-height:1; font-weight:950; letter-spacing:-.06em; }
+    .status { display:inline-flex; border:1px solid rgba(245,158,11,.45); background:rgba(245,158,11,.1); color:#fde68a; border-radius:999px; padding:5px 10px; font-weight:900; }
+    .risk-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px; }
+    .risk { background:#020617; border:1px solid #1e293b; border-radius:10px; padding:10px; text-align:center; }
+    .risk strong { display:block; font-size:1.2rem; }
+    .critical { color:#fb7185; }
+    .high { color:#ef4444; }
+    .medium { color:#f59e0b; }
+    .low { color:#22c55e; }
+    .finding { border:1px solid #1e293b; background:#07111f; border-radius:12px; padding:12px; margin-top:10px; }
+    .finding strong { color:#e2f6ff; }
+    .muted { color:var(--muted); }
+    .section { padding:32px 0; }
+    .section-head { max-width:760px; margin-bottom:18px; }
+    .section-head h2 { font-size:clamp(1.65rem,3vw,2.35rem); line-height:1.08; margin:0 0 10px; letter-spacing:-.025em; }
+    .section-head p { color:var(--muted); margin:0; font-size:1.04rem; }
     .grid { display:grid; gap:16px; }
     @media (min-width:860px) { .grid.three { grid-template-columns:repeat(3,1fr); } .grid.two { grid-template-columns:repeat(2,1fr); } }
-    .card { background:rgba(15,23,42,.78); border:1px solid var(--line); border-radius:18px; padding:22px; box-shadow:0 18px 60px rgba(0,0,0,.22); }
-    .card h2, .card h3 { margin-top:0; color:#b9e7f5; }
-    .card p { color:#cbd5e1; }
+    .card { background:rgba(15,23,42,.78); border:1px solid var(--line); border-radius:14px; padding:20px; box-shadow:0 18px 60px rgba(0,0,0,.18); }
+    .card h2, .card h3 { margin:0 0 10px; color:#dff7ff; }
+    .card p { margin:0; color:#cbd5e1; }
+    .card p + p { margin-top:10px; }
+    .step { display:flex; gap:12px; align-items:flex-start; }
+    .num { flex:0 0 auto; width:32px; height:32px; border-radius:10px; background:#0d2330; border:1px solid #245269; display:grid; place-items:center; color:#b9e7f5; font-weight:950; }
     code, pre { background:#020617; color:#e2f6ff; border:1px solid #1e293b; border-radius:12px; }
     code { padding:2px 6px; }
-    pre { padding:16px; overflow:auto; text-align:left; }
-    .status { color:var(--ok); font-weight:900; }
-    .pending { color:var(--warn); font-weight:900; }
+    pre { padding:16px; overflow:auto; white-space:pre-wrap; margin:0; }
+    .split { display:grid; gap:16px; align-items:stretch; }
+    @media (min-width:940px) { .split { grid-template-columns:.88fr 1.12fr; } }
+    .check-list { margin:0; padding-left:20px; color:#cbd5e1; }
+    .check-list li { margin:8px 0; }
+    .banner { border:1px solid rgba(34,211,238,.28); background:rgba(34,211,238,.06); border-radius:16px; padding:20px; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; }
+    .banner h2 { margin:0 0 6px; }
+    .banner p { margin:0; color:#cbd5e1; }
     footer { border-top:1px solid var(--line); padding:24px 0; color:#64748b; text-align:center; margin-top:40px; }
+    @media (max-width:760px) {
+      .hero { padding-top:44px; }
+      .risk-grid { grid-template-columns:repeat(2,1fr); }
+      .score-line { align-items:flex-start; flex-direction:column; }
+    }
   </style>
 </head>
 <body>
@@ -51,90 +88,147 @@
     <div class="wrap nav">
       <a class="brand" href="/" aria-label="TimeProofs AgentReady home"><img src="/assets/logo.png" alt="" /><span>TimeProofs AgentReady</span></a>
       <nav class="nav-links" aria-label="Main navigation">
-        <a href="/agentready.html">OpenAPI</a>
-        <a href="/agentready-mcp.html">MCP</a>
+        <a href="/agentready.html">OpenAPI Scan</a>
+        <a href="/agentready-mcp.html">MCP Scan</a>
         <a href="/agentready-simulation.html">Simulation</a>
         <a href="/agentready-docs.html">Docs</a>
         <a href="/agentready-examples.html">Examples</a>
         <a href="/agentready-test.html">Tests</a>
       </nav>
-      <details class="site-menu-toggle">
-        <summary class="site-menu-button" aria-label="Open navigation menu"><span></span>Menu</summary>
-        <nav class="site-menu-panel" aria-label="Mobile navigation">
-          <a href="/agentready.html">OpenAPI scanner</a>
-          <a href="/agentready-mcp.html">MCP scanner</a>
-          <a href="/agentready-simulation.html">Static simulation</a>
-          <a href="/agentready-docs.html">Docs</a>
-          <a href="/agentready-examples.html">Examples</a>
-          <a href="/agentready-test.html">Tests</a>
-          <a href="/legal.html">Legal notice</a>
-          <a href="/privacy.html">Privacy</a>
-          <a href="/terms.html">Terms</a>
-        </nav>
-      </details>
     </div>
   </header>
 
   <main>
     <section class="hero wrap">
-      <div class="eyebrow">Pre-deployment readiness for AI-agent tools</div>
-      <h1>See where AI agents will fail before they use your API or MCP tools.</h1>
-      <p class="subtitle">TimeProofs AgentReady analyzes APIs and MCP tool schemas before they are exposed to AI agents. It produces an AgentReady Score, a human report, a machine-readable <code>agentready.json</code> contract, and static simulation output.</p>
-      <div class="cta-row">
-        <a class="cta" href="/agentready.html">Scan OpenAPI JSON/YAML</a>
-        <a class="cta secondary" href="/agentready-mcp.html">Scan MCP tools JSON</a>
-        <a class="cta secondary" href="/agentready-simulation.html">Run simulation</a>
-      </div>
-      <div class="chips">
-        <span class="chip">OpenAPI JSON/YAML scanner</span>
-        <span class="chip">MCP tools scanner</span>
-        <span class="chip">Static simulation</span>
-        <span class="chip">Local browser analysis</span>
-        <span class="chip">No endpoint or tool execution</span>
-        <span class="chip">AgentReady Score + JSON</span>
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">Pre-deployment checks for agent-facing tools</div>
+          <h1>Know if your API is safe enough for AI agents before they use it.</h1>
+          <p class="subtitle">TimeProofs AgentReady scans OpenAPI specs and MCP tool definitions locally in the browser. It returns a score, risk findings, a human report, <code>agentready.json</code>, and static scenario simulation output.</p>
+          <div class="cta-row">
+            <a class="cta" href="/agentready.html">Scan OpenAPI</a>
+            <a class="cta secondary" href="/agentready-mcp.html">Scan MCP tools</a>
+            <a class="cta secondary" href="/agentready-examples.html">View examples</a>
+          </div>
+          <div class="trust-row">
+            <span class="trust">Runs locally</span>
+            <span class="trust">No API calls</span>
+            <span class="trust">No MCP execution</span>
+            <span class="trust">No account required</span>
+            <span class="trust">Exports reports</span>
+          </div>
+        </div>
+
+        <aside class="preview" aria-label="Example AgentReady report preview">
+          <div class="preview-top">
+            <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+            <strong>agentready-report.md</strong>
+          </div>
+          <div class="preview-body">
+            <div class="score-line">
+              <div><div class="muted">AgentReady Score</div><div class="score">68/100</div></div>
+              <span class="status">Needs fixes</span>
+            </div>
+            <div class="risk-grid">
+              <div class="risk"><strong class="critical">1</strong>Critical</div>
+              <div class="risk"><strong class="high">3</strong>High</div>
+              <div class="risk"><strong class="medium">7</strong>Medium</div>
+              <div class="risk"><strong class="low">5</strong>Low</div>
+            </div>
+            <div class="finding"><strong>Risk:</strong> refundOrder can move money without explicit human confirmation.</div>
+            <div class="finding"><strong>Fix:</strong> add preview, confirmation text, max amount, and success verification.</div>
+            <div class="finding"><strong>Export:</strong> <code>agentready.json</code> + static simulation scenarios.</div>
+          </div>
+        </aside>
       </div>
     </section>
 
     <section class="section wrap">
+      <div class="section-head">
+        <h2>The problem is not only whether your API works. It is whether an agent can use it safely.</h2>
+        <p>Human documentation often leaves too much unsaid for autonomous tools: when to use an endpoint, when not to use it, which values are allowed, what requires confirmation, and how to recover from errors.</p>
+      </div>
       <div class="grid three">
-        <article class="card"><h3>OpenAPI readiness</h3><p>Upload an OpenAPI JSON or YAML spec and detect operation, parameter, response, security, and dangerous-action risks before agent exposure.</p></article>
-        <article class="card"><h3>MCP tool readiness</h3><p>Upload an MCP tools JSON file and detect whether tools are clear, bounded, and safe enough to expose to AI agents.</p></article>
-        <article class="card"><h3>Static simulation</h3><p>Run scenario-based checks against <code>agentready.json</code> to identify risky agent tasks before live execution.</p></article>
+        <article class="card"><h3>Ambiguous tools</h3><p>Agents may pick the wrong operation when names and descriptions are too vague.</p></article>
+        <article class="card"><h3>Unbounded actions</h3><p>Money, deletes, emails, exports, and publishing flows need limits and confirmation rules.</p></article>
+        <article class="card"><h3>Weak recovery</h3><p>Generic errors leave agents guessing instead of correcting parameters or stopping safely.</p></article>
       </div>
     </section>
 
     <section class="section wrap">
-      <div class="card">
-        <h2>Current product formula</h2>
-        <pre>OpenAPI / MCP / tool schema
-→ AgentReady analysis
-→ AgentReady Score
-→ AgentReady Report
-→ agentready.json
-→ static simulation scenario
-→ agentready-simulation.json</pre>
-        <p>The old proof-of-existence product surface has been removed from the active direction. The repository now focuses on Agent Tool Readiness.</p>
+      <div class="section-head">
+        <h2>One static flow for OpenAPI, MCP, and scenarios.</h2>
+        <p>Start with the artifact you already have. Get a readiness contract that humans can read and future automation can consume.</p>
+      </div>
+      <div class="grid three">
+        <article class="card step"><span class="num">1</span><div><h3>Upload</h3><p>Choose an OpenAPI JSON/YAML file or an MCP tools JSON file. The current V1 scanner runs in the browser.</p></div></article>
+        <article class="card step"><span class="num">2</span><div><h3>Review</h3><p>Read the AgentReady Score, severity counts, tool findings, recommended fixes, and printable report.</p></div></article>
+        <article class="card step"><span class="num">3</span><div><h3>Simulate</h3><p>Use <code>agentready.json</code> with static scenarios to check risky task patterns before live execution.</p></div></article>
+      </div>
+    </section>
+
+    <section class="section wrap">
+      <div class="split">
+        <div class="card">
+          <h2>What AgentReady checks</h2>
+          <ul class="check-list">
+            <li>Unclear operation and tool names.</li>
+            <li>Missing when-to-use and when-not-to-use guidance.</li>
+            <li>Dangerous actions without human confirmation.</li>
+            <li>Irreversible operations and missing success verification.</li>
+            <li>Unbounded numeric parameters.</li>
+            <li>Missing enums for closed fields.</li>
+            <li>Weak error recovery for agents.</li>
+            <li>Sensitive data and broad permission risks.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h2>Output</h2>
+          <pre>OpenAPI or MCP tools JSON
+-&gt; AgentReady analysis
+-&gt; AgentReady Score
+-&gt; risk findings
+-&gt; recommended fixes
+-&gt; human report
+-&gt; agentready.json
+-&gt; static scenario simulation
+-&gt; agentready-simulation.json</pre>
+        </div>
       </div>
     </section>
 
     <section class="section wrap">
       <div class="grid two">
-        <article class="card"><h3>Current status</h3><p><span class="status">Built in repo:</span> OpenAPI scanner, MCP scanner, static simulation, docs, examples, test harness, exports, and printable reports.</p><p><span class="pending">Pending before public release:</span> real browser QA, mobile polish, legal pages review, and final release gate.</p></article>
-        <article class="card"><h3>Limitation</h3><p>TimeProofs AgentReady does not guarantee that an AI agent will never fail. It identifies structural risks that may cause AI agents to misuse APIs, tools, or MCP servers.</p></article>
+        <article class="card">
+          <h2>Built for builders exposing tools to agents</h2>
+          <p>Useful before you publish an MCP server, expose internal APIs to an AI agent, prepare agent-facing documentation, or review a tool surface before production.</p>
+        </article>
+        <article class="card">
+          <h2>Clear boundaries</h2>
+          <p>TimeProofs AgentReady is not a runtime firewall and does not guarantee that an AI agent will never fail. It identifies structural risks that may cause AI agents to misuse APIs, tools, or MCP servers.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section wrap">
+      <div class="banner">
+        <div>
+          <h2>Start with one file.</h2>
+          <p>Scan an OpenAPI spec or MCP tools JSON and see the risk profile before building more automation around it.</p>
+        </div>
+        <div class="cta-row">
+          <a class="cta" href="/agentready.html">Scan OpenAPI</a>
+          <a class="cta secondary" href="/agentready-mcp.html">Scan MCP</a>
+        </div>
       </div>
     </section>
   </main>
 
   <footer>
     <div class="wrap">
-      <div>TimeProofs AgentReady — tool readiness before agent execution.</div>
-      <div class="footer-links">
-        <a href="/legal.html">Legal notice</a>
-        <a href="/privacy.html">Privacy</a>
-        <a href="/terms.html">Terms</a>
-        <a href="/agentready-docs.html">Docs</a>
-      </div>
+      <div>TimeProofs AgentReady - tool readiness before agent execution.</div>
     </div>
   </footer>
+  <script src="/assets/site-nav.js" defer></script>
 </body>
 </html>
