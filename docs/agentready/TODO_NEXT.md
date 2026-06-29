@@ -13,6 +13,8 @@
 ✅ Public landing page
 ✅ Homepage mobile menu foundation
 ✅ Homepage commercial 9/10 draft
+✅ Sample report preview page
+✅ Homepage links to sample report preview
 ✅ Shared mobile navigation script
 ✅ Mobile navigation active on docs page
 ✅ Mobile navigation active on examples page
@@ -88,13 +90,14 @@ Requirements:
 1. Run manual Browser V1 QA in a real browser using docs/agentready/BROWSER_V1_QA_RUNBOOK.md.
 2. Update docs/agentready/BROWSER_V1_QA_RESULT.md with PASS/FAIL evidence.
 3. Confirm the commercial homepage renders correctly on desktop and mobile.
-4. Confirm footer links to legal, privacy and terms appear where appropriate.
-5. Confirm desktop navigation remains usable.
-6. Confirm mobile navigation does not wrap into multiple rows.
-7. Confirm OpenAPI scanner still scans JSON/YAML examples.
-8. Confirm MCP scanner still scans MCP examples.
-9. Confirm static simulation still exports agentready-simulation.json.
-10. Do not continue V2 implementation before Browser V1 public-site polish is acceptable.
+4. Confirm the sample report preview renders correctly on desktop and mobile.
+5. Confirm footer links to legal, privacy and terms appear where appropriate.
+6. Confirm desktop navigation remains usable.
+7. Confirm mobile navigation does not wrap into multiple rows.
+8. Confirm OpenAPI scanner still scans JSON/YAML examples.
+9. Confirm MCP scanner still scans MCP examples.
+10. Confirm static simulation still exports agentready-simulation.json.
+11. Do not continue V2 implementation before Browser V1 public-site polish is acceptable.
 ```
 
 ## Parallel pending tasks
