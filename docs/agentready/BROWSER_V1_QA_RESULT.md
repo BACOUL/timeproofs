@@ -6,7 +6,7 @@
 PENDING — manual browser QA not completed.
 ```
 
-This file records the Browser V1 QA gate after public V1 mobile navigation propagation, homepage commercial polish, and sample report preview were completed.
+This file records the Browser V1 QA gate after public V1 mobile navigation propagation, homepage commercial polish, sample report preview, and public acquisition SEO pages were completed.
 
 Important: Browser V1 is **not** declared complete by this file.
 
@@ -16,7 +16,7 @@ Important: Browser V1 is **not** declared complete by this file.
 QA date: 2026-06-29
 Tester: ChatGPT via GitHub connector
 Branch tested: timeproofs
-Commit tested: 4e119c47932ffc164d155b7b5b354f3c05d4e8d2
+Commit tested: 87d201e515774c789a86307fac0ae272012a2f6f
 Browser: NOT AVAILABLE IN THIS EXECUTION ENVIRONMENT
 Device / viewport: NOT TESTED
 Local server command required: python3 -m http.server 8080
@@ -34,6 +34,13 @@ Sample report preview page present                 : PASS
 Sample report linked from homepage                 : PASS
 Sample report listed in sitemap                    : PASS
 Sample report included in shared nav/footer        : PASS
+Public resources hub present                       : PASS
+OpenAPI AI agent readiness page present            : PASS
+MCP server readiness page present                  : PASS
+AI agent tool risk checklist page present          : PASS
+agentready.json explainer page present             : PASS
+Public acquisition pages listed in sitemap         : PASS
+Resources link present in shared nav/footer        : PASS
 Shared mobile navigation script present            : PASS
 Shared mobile navigation CSS present               : PASS
 OpenAPI scanner includes shared nav assets         : PASS
@@ -43,7 +50,7 @@ Docs page includes shared nav assets               : PASS
 Examples page includes shared nav assets           : PASS
 Test page includes shared nav assets               : PASS
 Legal/privacy/terms pages exist as drafts          : PASS
-TODO_NEXT reflects mobile nav completion           : PASS
+TODO_NEXT reflects SEO foundation completion       : PASS
 ```
 
 ## QA attempt notes
@@ -65,6 +72,11 @@ Mark each page as pass / fail / not tested.
 /agentready-mcp.html               : STATIC CHECK ONLY — browser not available
 /agentready-simulation.html        : STATIC CHECK ONLY — browser not available
 /agentready-sample-report.html     : STATIC CHECK ONLY — browser not available
+/agentready-resources.html         : STATIC CHECK ONLY — browser not available
+/openapi-ai-agent-readiness.html   : STATIC CHECK ONLY — browser not available
+/mcp-server-readiness.html         : STATIC CHECK ONLY — browser not available
+/ai-agent-tool-risk-checklist.html : STATIC CHECK ONLY — browser not available
+/agentready-json.html              : STATIC CHECK ONLY — browser not available
 /agentready-docs.html              : STATIC CHECK ONLY — browser not available
 /agentready-examples.html          : STATIC CHECK ONLY — browser not available
 /agentready-test.html              : STATIC CHECK ONLY — browser not available
@@ -100,6 +112,22 @@ Sample report top findings render             : NOT TESTED IN BROWSER
 Sample report action plan renders             : NOT TESTED IN BROWSER
 Sample report code block remains readable     : NOT TESTED IN BROWSER
 Sample report limitation text visible         : NOT TESTED IN BROWSER
+```
+
+## Public acquisition page checks
+
+```txt
+Resources hub renders                         : NOT TESTED IN BROWSER
+OpenAPI readiness page renders                : NOT TESTED IN BROWSER
+MCP readiness page renders                    : NOT TESTED IN BROWSER
+Risk checklist page renders                   : NOT TESTED IN BROWSER
+agentready.json explainer renders             : NOT TESTED IN BROWSER
+Resources hub links to acquisition pages      : NOT TESTED IN BROWSER
+SEO pages have specific titles/H1             : NOT TESTED IN BROWSER
+SEO pages CTAs route correctly                : NOT TESTED IN BROWSER
+SEO pages boundary text remains visible       : NOT TESTED IN BROWSER
+SEO pages do not claim Browser V1 PASS        : NOT TESTED IN BROWSER
+agentready-json code block remains readable   : NOT TESTED IN BROWSER
 ```
 
 ## Fixtures tested
@@ -236,6 +264,7 @@ NOT TESTED — real browser Network tab access is required.
 ```txt
 Navigation wraps safely              : NOT TESTED IN BROWSER
 Sample report remains readable       : NOT TESTED IN BROWSER
+Public acquisition pages readable    : NOT TESTED IN BROWSER
 Upload inputs remain usable          : NOT TESTED IN BROWSER
 Result cards remain readable         : NOT TESTED IN BROWSER
 JSON/pre blocks remain readable      : NOT TESTED IN BROWSER
@@ -258,7 +287,7 @@ List any release-blocking issues.
 ```txt
 BLOCKING: Browser V1 manual QA not completed.
 BLOCKING: Browser test harness not run.
-BLOCKING: Homepage and sample report not checked in browser.
+BLOCKING: Homepage, sample report and public acquisition pages not checked in browser.
 BLOCKING: Exports not manually verified.
 BLOCKING: Browser Network tab no-execution checks not completed.
 ```
@@ -292,7 +321,7 @@ PENDING — manual browser QA not completed.
 Browser V1 can be considered complete only if this statement is true:
 
 ```txt
-A developer can open TimeProofs AgentReady in the browser, understand the sample report, scan OpenAPI or MCP tool definitions locally, export agentready.json, run a static simulation scenario, export agentready-simulation.json, and understand the main risks without any backend, account, payment, live API execution, MCP execution, or LLM call.
+A developer can open TimeProofs AgentReady in the browser, understand the homepage, sample report and public acquisition pages, scan OpenAPI or MCP tool definitions locally, export agentready.json, run a static simulation scenario, export agentready-simulation.json, and understand the main risks without any backend, account, payment, live API execution, MCP execution, or LLM call.
 ```
 
 Current status against this statement:
