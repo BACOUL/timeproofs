@@ -18,7 +18,8 @@
 ✅ Mobile navigation active on static simulation page
 ✅ Mobile navigation active on test page
 ✅ Mobile navigation active on OpenAPI scanner page
-✅ Mobile navigation propagation plan
+✅ Mobile navigation active on MCP scanner page
+✅ Mobile navigation propagation completed on public V1 pages
 ✅ Legal notice page draft
 ✅ Privacy page draft
 ✅ Terms page draft
@@ -76,7 +77,7 @@ docs/agentready/MOBILE_NAV_PROPAGATION_PLAN.md
 ## Immediate next PR
 
 ```txt
-fix(agentready): activate shared mobile nav on MCP scanner page
+qa(agentready): run Browser V1 public-site QA
 ```
 
 ## Build next
@@ -84,19 +85,22 @@ fix(agentready): activate shared mobile nav on MCP scanner page
 Requirements:
 
 ```txt
-1. Activate shared mobile nav on MCP scanner.
-2. Confirm footer links to legal, privacy and terms appear where appropriate.
-3. Confirm desktop navigation remains usable.
-4. Confirm mobile navigation does not wrap into multiple rows.
-5. Do not continue V2 implementation before Browser V1 public-site polish is acceptable.
+1. Run manual Browser V1 QA in a real browser using docs/agentready/BROWSER_V1_QA_RUNBOOK.md.
+2. Update docs/agentready/BROWSER_V1_QA_RESULT.md with PASS/FAIL evidence.
+3. Confirm footer links to legal, privacy and terms appear where appropriate.
+4. Confirm desktop navigation remains usable.
+5. Confirm mobile navigation does not wrap into multiple rows.
+6. Confirm OpenAPI scanner still scans JSON/YAML examples.
+7. Confirm MCP scanner still scans MCP examples.
+8. Confirm static simulation still exports agentready-simulation.json.
+9. Do not continue V2 implementation before Browser V1 public-site polish is acceptable.
 ```
 
 ## Parallel pending tasks
 
 ```txt
-1. Run manual Browser V1 QA in a real browser using docs/agentready/BROWSER_V1_QA_RUNBOOK.md, then update docs/agentready/BROWSER_V1_QA_RESULT.md.
-2. Update root README.md directly when tool execution allows it, then remove docs/agentready/README_ALIGNMENT_NOTE.md if redundant.
-3. Review legal/privacy/terms drafts before public production launch.
+1. Update root README.md directly when tool execution allows it, then remove docs/agentready/README_ALIGNMENT_NOTE.md if redundant.
+2. Review legal/privacy/terms drafts before public production launch.
 ```
 
 ## Then
