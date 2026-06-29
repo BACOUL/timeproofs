@@ -15,6 +15,11 @@
 ✅ Homepage commercial 9/10 draft
 ✅ Sample report preview page
 ✅ Homepage links to sample report preview
+✅ Public acquisition resources hub
+✅ OpenAPI AI agent readiness SEO page
+✅ MCP server readiness SEO page
+✅ AI agent tool risk checklist SEO page
+✅ agentready.json explainer SEO page
 ✅ Shared mobile navigation script
 ✅ Mobile navigation active on docs page
 ✅ Mobile navigation active on examples page
@@ -91,13 +96,14 @@ Requirements:
 2. Update docs/agentready/BROWSER_V1_QA_RESULT.md with PASS/FAIL evidence.
 3. Confirm the commercial homepage renders correctly on desktop and mobile.
 4. Confirm the sample report preview renders correctly on desktop and mobile.
-5. Confirm footer links to legal, privacy and terms appear where appropriate.
-6. Confirm desktop navigation remains usable.
-7. Confirm mobile navigation does not wrap into multiple rows.
-8. Confirm OpenAPI scanner still scans JSON/YAML examples.
-9. Confirm MCP scanner still scans MCP examples.
-10. Confirm static simulation still exports agentready-simulation.json.
-11. Do not continue V2 implementation before Browser V1 public-site polish is acceptable.
+5. Confirm the public acquisition pages render correctly on desktop and mobile.
+6. Confirm footer links to legal, privacy and terms appear where appropriate.
+7. Confirm desktop navigation remains usable.
+8. Confirm mobile navigation does not wrap into multiple rows.
+9. Confirm OpenAPI scanner still scans JSON/YAML examples.
+10. Confirm MCP scanner still scans MCP examples.
+11. Confirm static simulation still exports agentready-simulation.json.
+12. Do not continue V2 implementation before Browser V1 public-site polish is acceptable.
 ```
 
 ## Parallel pending tasks
@@ -110,9 +116,8 @@ Requirements:
 
 ```txt
 1. docs(agentready): define AgentReady Checked trust layer
-2. docs/seo: add public acquisition pages draft
-3. docs(product): prepare monetization path
-4. chore(deploy): prepare Vercel reconnect after 2026-07-09
+2. docs(product): prepare monetization path
+3. chore(deploy): prepare Vercel reconnect after 2026-07-09
 ```
 
 ## Do not build yet
