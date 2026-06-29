@@ -36,7 +36,7 @@
 ✅ Long-term product roadmap
 ✅ Release discipline
 ✅ V2 CLI scope
-✅ README alignment note
+✅ README and remaining roadmap aligned with current V1
 ✅ OpenAPI fixtures
 ✅ MCP fixtures
 ✅ agentready.json export
@@ -72,7 +72,6 @@ docs/agentready/REMAINING_WORK.md
 docs/agentready/LONG_TERM_PRODUCT_ROADMAP.md
 docs/agentready/RELEASE_DISCIPLINE.md
 docs/agentready/V2_CLI_SCOPE.md
-docs/agentready/MOBILE_NAV_PROPAGATION_PLAN.md
 ```
 
 ## Immediate next PR
@@ -101,8 +100,7 @@ Requirements:
 ## Parallel pending tasks
 
 ```txt
-1. Update root README.md directly when tool execution allows it, then remove docs/agentready/README_ALIGNMENT_NOTE.md if redundant.
-2. Review legal/privacy/terms drafts before public production launch.
+1. Review legal/privacy/terms drafts before public production launch.
 ```
 
 ## Then

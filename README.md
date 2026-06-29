@@ -2,44 +2,77 @@
 
 **TimeProofs AgentReady** is a pre-deployment readiness layer for AI-agent tools.
 
-It checks whether an API, MCP server, or tool schema is ready to be safely and clearly exposed to AI agents.
+It checks whether an API, MCP server, or tool schema is clear and bounded enough to be exposed to AI agents.
 
 ## Product sentence
 
 > See where AI agents will fail before they use your API or MCP tools.
 
-## What this repository is now
+## Current product direction
 
 This repository is now focused on **Agent Tool Readiness**.
 
 The previous TimeProofs proof-of-existence website and timestamp/verify pages have been removed from the active product surface.
 
-The current product direction is:
+The current product flow is:
 
 ```txt
 OpenAPI / MCP / tool schema
-→ AgentReady analysis
-→ AgentReady Score
-→ AgentReady Report
-→ agentready.json
+-> AgentReady analysis
+-> AgentReady Score
+-> AgentReady Report
+-> agentready.json
+-> static scenario simulation
+-> agentready-simulation.json
 ```
 
 ## Current state
 
 ```txt
-✅ Product vision documented
-✅ Static OpenAPI JSON/YAML core scanner
-✅ Browser upload page for OpenAPI JSON/YAML
-✅ Executive report section
-✅ Browser print / Save as PDF export
-✅ Static browser test harness
+✅ Product positioning documented
+✅ Legacy proof-of-existence surface removed
+✅ Commercial AgentReady homepage draft
+✅ Shared mobile navigation across public V1 pages
+✅ Static OpenAPI JSON/YAML scanner
+✅ Static MCP tools JSON scanner
+✅ Static simulation page
+✅ OpenAPI and MCP fixtures
+✅ Simulation scenario fixtures
+✅ agentready.json export
+✅ agentready-simulation.json export
+✅ Markdown report export
+✅ Browser print / Save as PDF for scanner reports
 ✅ Public docs page
 ✅ Public examples page
-✅ MCP scanner exploration docs and fixtures
-✅ MCP static core parser
-✅ MCP checks in static test harness
-✅ MCP scanner page
-⬜ Agent simulation
+✅ Static browser test harness
+✅ Legal / privacy / terms draft pages
+✅ Browser V1 QA runbook and QA gate
+⚠️ Browser V1 QA remains PENDING
+```
+
+## Release status
+
+Browser V1 is structurally built, but it is **not declared complete**.
+
+Browser V1 can be called complete only after a real browser QA pass verifies:
+
+```txt
+page rendering
+mobile navigation
+OpenAPI scanner examples
+MCP scanner examples
+static simulation export
+export downloads
+print / Save as PDF
+Network tab no-execution checks
+```
+
+See:
+
+```txt
+docs/agentready/BROWSER_V1_QA_RUNBOOK.md
+docs/agentready/BROWSER_V1_QA_RESULT.md
+docs/agentready/RELEASE_DISCIPLINE.md
 ```
 
 ## Main files and folders
@@ -48,9 +81,15 @@ OpenAPI / MCP / tool schema
 index.html
 agentready.html
 agentready-mcp.html
+agentready-simulation.html
 agentready-docs.html
 agentready-examples.html
 agentready-test.html
+legal.html
+privacy.html
+terms.html
+assets/site-nav.css
+assets/site-nav.js
 agentready-core/
 agentready-examples/
 docs/agentready/
@@ -59,23 +98,62 @@ docs/agentready/
 ## Public pages
 
 ```txt
-/                         Landing page
-/agentready.html          OpenAPI scanner
-/agentready-mcp.html      MCP tools scanner
-/agentready-docs.html     Public documentation
-/agentready-examples.html Public examples
-/agentready-test.html     Static test harness, noindex
+/                              Commercial landing page
+/agentready.html               OpenAPI scanner
+/agentready-mcp.html           MCP tools scanner
+/agentready-simulation.html    Static scenario simulation
+/agentready-docs.html          Public documentation
+/agentready-examples.html      Public examples
+/agentready-test.html          Static browser test harness, noindex
+/legal.html                    Legal notice draft
+/privacy.html                  Privacy draft
+/terms.html                    Terms draft
 ```
 
-## AgentReady Scanner V1
+## Browser V1
 
-The static OpenAPI scanner page is:
+Browser V1 is the static, local-first product foundation.
+
+It supports:
+
+```txt
+OpenAPI JSON/YAML local scanning
+MCP tools JSON local scanning
+AgentReady Score /100
+risk counts
+operation/tool findings
+human-readable recommendations
+Markdown reports
+browser print / Save as PDF
+agentready.json
+static scenario simulation
+agentready-simulation.json
+browser test harness
+```
+
+It does not require:
+
+```txt
+backend
+account
+payment
+dashboard
+database
+live API execution
+live MCP execution
+LLM call
+runtime firewall
+```
+
+## OpenAPI scanner
+
+Page:
 
 ```txt
 agentready.html
 ```
 
-It currently supports local OpenAPI scanning in the browser for:
+Supported inputs:
 
 ```txt
 openapi.json
@@ -83,7 +161,7 @@ openapi.yaml
 openapi.yml
 ```
 
-It can generate:
+Outputs:
 
 ```txt
 AgentReady Score
@@ -97,15 +175,33 @@ Markdown report
 browser print / Save as PDF report
 ```
 
-## MCP Scanner V2 draft
+## MCP scanner
 
-The static MCP scanner page is:
+Page:
 
 ```txt
 agentready-mcp.html
 ```
 
-It supports local MCP tools JSON scanning in the browser.
+Supported input shape:
+
+```json
+{
+  "server": {},
+  "tools": []
+}
+```
+
+Core flow:
+
+```txt
+MCP tools JSON
+-> parse server/tools[]
+-> map each tool to an AgentReady operation
+-> classify action type
+-> detect risk findings
+-> generate score/report/agentready.json
+```
 
 Core files:
 
@@ -115,39 +211,38 @@ agentready-core/extract-mcp-tools.js
 agentready-core/scan-mcp-tools.js
 ```
 
-MCP example fixtures:
+Example fixtures:
 
 ```txt
 agentready-examples/mcp-tools-simple.json
 agentready-examples/mcp-tools-dangerous.json
 ```
 
-The MCP flow is:
+## Static simulation
+
+Page:
 
 ```txt
-MCP tools JSON
-→ parse server/tools[]
-→ map each tool to an AgentReady operation
-→ reuse classification, risk detection, scoring, report, and agentready.json generation
+agentready-simulation.html
 ```
 
-Usage:
+Purpose:
 
-```js
-import { scanMcpToolsText } from './agentready-core/index.js';
+```txt
+Use generated agentready.json plus scenario JSON to check risky agent task patterns without executing APIs, MCP tools, or LLMs.
+```
 
-const result = await scanMcpToolsText(text, {
-  filename: 'mcp-tools.json'
-});
+Outputs:
 
-console.log(result.summary.score);
-console.log(result.agentready_json);
-console.log(result.markdown_report);
+```txt
+scenario result counts
+scenario-level pass/warning/fail/not_applicable
+agentready-simulation.json
 ```
 
 ## Static test harness
 
-The static test page is:
+Page:
 
 ```txt
 agentready-test.html
@@ -156,55 +251,49 @@ agentready-test.html
 It checks:
 
 ```txt
-valid OpenAPI JSON fixture scans successfully
-valid OpenAPI YAML fixture scans successfully
-dangerous OpenAPI fixture detects critical risks
-invalid OpenAPI JSON fails cleanly
-invalid OpenAPI YAML fails cleanly
-MCP simple fixture scans successfully
-MCP dangerous fixture scans successfully
-invalid MCP JSON fails cleanly
-invalid MCP shape fails cleanly
-MCP agentready.json is generated
-MCP Markdown report is generated
-MCP dangerous fixture detects high/critical risks
+OpenAPI JSON/YAML scanning
+OpenAPI invalid input errors
+MCP scanning
+MCP invalid shape errors
+agentready.json root fields
+agentready.json tool fields
+Markdown report generation
+static simulation parser
+static simulation result shape
 ```
 
-## Remaining work
-
-The full execution roadmap is here:
-
-```txt
-docs/agentready/REMAINING_WORK.md
-```
-
-Immediate next step:
-
-```txt
-feat(agentready): polish navigation and product clarity
-```
+Open the test harness through an HTTP server, not `file://`, because browser fixture loading uses `fetch()`.
 
 ## Important files to read first
 
 ```txt
-AGENTREADY_PROJECT_CONTEXT.md
-docs/agentready/REMAINING_WORK.md
 docs/agentready/TODO_NEXT.md
-docs/agentready/TIMEPROOFS_AGENTREADY_MASTER_PLAN.md
-docs/agentready/AGENTREADY_IMPLEMENTATION_CHECKLIST.md
+docs/agentready/REMAINING_WORK.md
+docs/agentready/LONG_TERM_PRODUCT_ROADMAP.md
+docs/agentready/RELEASE_DISCIPLINE.md
+docs/agentready/BROWSER_V1_QA_RUNBOOK.md
+docs/agentready/BROWSER_V1_QA_RESULT.md
 docs/agentready/AGENTREADY_JSON_SPEC.md
-docs/agentready/LEGACY_REMOVAL_DECISION.md
-docs/agentready/MCP_SCANNER_EXPLORATION.md
+docs/agentready/V2_CLI_SCOPE.md
 ```
 
-## Next build step
+## Immediate next step
 
-Improve navigation and public explanation around OpenAPI vs MCP, then begin agent simulation exploration.
+```txt
+qa(agentready): run Browser V1 public-site QA
+```
+
+Do not start V2 implementation before Browser V1 public-site polish is acceptable.
 
 ## Non-negotiable rule
 
 Do not rebuild the legacy proof-of-existence product in this repo unless explicitly requested.
 
-The repo direction is now:
+Do not claim AgentReady guarantees that an AI agent will never fail.
 
-> TimeProofs AgentReady — pre-deployment readiness for AI-agent tools.
+Mandatory limitation text:
+
+```txt
+TimeProofs AgentReady does not guarantee that an AI agent will never fail.
+It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.
+```
