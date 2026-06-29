@@ -18,6 +18,7 @@ Mode B — Vercel preview QA
 ```
 
 Mode A is enough for product QA.
+
 Mode B is useful when the project is reconnected to Vercel and credits/usage limits allow safe preview testing.
 
 ## Mode A — Local browser QA
@@ -102,9 +103,13 @@ Open each page and record pass/fail in `BROWSER_V1_QA_RESULT.md`:
 /agentready.html
 /agentready-mcp.html
 /agentready-simulation.html
+/agentready-sample-report.html
 /agentready-docs.html
 /agentready-examples.html
 /agentready-test.html
+/legal.html
+/privacy.html
+/terms.html
 ```
 
 Expected for each page:
@@ -114,7 +119,64 @@ Page loads.
 No blank screen.
 No obvious broken layout.
 Navigation works.
+Footer links work where present.
 No uncaught console error after normal page load.
+```
+
+## Homepage QA
+
+Page:
+
+```txt
+/
+```
+
+Steps:
+
+```txt
+1. Confirm the hero explains AgentReady in less than 10 seconds.
+2. Confirm the OpenAPI CTA points to /agentready.html.
+3. Confirm the MCP CTA points to /agentready-mcp.html.
+4. Confirm the sample report CTA points to /agentready-sample-report.html.
+5. Confirm the preview card is readable on desktop and mobile.
+6. Confirm trust pills remain readable.
+```
+
+Expected result:
+
+```txt
+A developer can understand the product, see what output looks like, and reach scanners or the sample report without hunting.
+```
+
+## Sample report preview QA
+
+Page:
+
+```txt
+/agentready-sample-report.html
+```
+
+Steps:
+
+```txt
+1. Open /agentready-sample-report.html.
+2. Confirm the sample score renders.
+3. Confirm risk counts render.
+4. Confirm executive summary renders.
+5. Confirm top findings render.
+6. Confirm recommended action plan renders.
+7. Confirm sample agentready.json renders in a readable code block.
+8. Confirm CTAs route to OpenAPI, MCP, and examples.
+9. Confirm the limitation text is visible.
+10. Confirm the page is indexed in sitemap.xml.
+```
+
+Expected result:
+
+```txt
+The page makes the product outcome understandable before upload.
+It does not claim to be a real scan of the visitor's API.
+It does not claim Browser V1 PASS or public production readiness.
 ```
 
 ## OpenAPI scanner QA
@@ -342,6 +404,7 @@ Check:
 
 ```txt
 Navigation remains usable.
+Sample report remains readable.
 Upload controls remain usable.
 Score cards remain readable.
 Risk findings remain readable.
@@ -368,6 +431,8 @@ PENDING — if QA is incomplete.
 Do not mark PASS if:
 
 ```txt
+Homepage was not checked.
+Sample report page was not checked.
 Exports were not tested.
 Network tab was not checked.
 Test harness was not run.
