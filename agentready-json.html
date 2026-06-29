@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>agentready.json Explained — TimeProofs AgentReady</title>
+  <meta name="description" content="Understand agentready.json, a machine-readable readiness contract for OpenAPI and MCP tool scans." />
+  <meta name="robots" content="index,follow" />
+  <meta name="theme-color" content="#0b1020" />
+  <link rel="canonical" href="https://timeproofs.io/agentready-json.html" />
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link rel="stylesheet" href="/assets/site-nav.css" />
+  <style>
+    :root { --bg:#0b1020; --line:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --accent2:#38bdf8; }
+    * { box-sizing:border-box; } html, body { margin:0; min-height:100%; } body { font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:radial-gradient(900px 360px at 80% -10%,rgba(34,211,238,.16),transparent 60%),var(--bg); color:var(--text); line-height:1.65; }
+    a { color:var(--accent); text-decoration:none; } a:hover { text-decoration:underline; } .wrap { width:min(1100px,calc(100% - 32px)); margin:0 auto; } header { position:sticky; top:0; backdrop-filter:blur(12px); background:rgba(11,16,32,.72); border-bottom:1px solid var(--line); z-index:10; } .nav { display:flex; justify-content:space-between; align-items:center; gap:16px; min-height:68px; } .brand { display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; } .brand img { width:38px; height:38px; border-radius:10px; } .nav-links { display:flex; gap:18px; flex-wrap:wrap; font-size:.94rem; font-weight:700; }
+    .hero { padding:64px 0 26px; } .eyebrow { display:inline-flex; border:1px solid rgba(34,211,238,.35); color:#b9e7f5; background:rgba(34,211,238,.08); border-radius:999px; padding:6px 12px; font-weight:850; font-size:.84rem; margin-bottom:14px; }
+    h1 { font-size:clamp(2.25rem,6vw,4.7rem); line-height:1; margin:0 0 16px; letter-spacing:-.05em; max-width:960px; } h2, h3 { color:#dff7ff; } .subtitle, .muted { color:var(--muted); } .subtitle { max-width:840px; font-size:1.16rem; }
+    .card { background:rgba(15,23,42,.82); border:1px solid var(--line); border-radius:18px; padding:22px; margin:16px 0; box-shadow:0 18px 60px rgba(0,0,0,.22); } .grid { display:grid; gap:16px; } @media (min-width:860px) { .grid.two { grid-template-columns:repeat(2,1fr); } }
+    .cta-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:22px; } .cta { display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:0 16px; border-radius:12px; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#04111f; font-weight:900; } .cta.secondary { background:#101b31; color:#dff7ff; border:1px solid #20304d; }
+    ul { padding-left:20px; color:#cbd5e1; } li { margin:8px 0; } pre { background:#020617; border:1px solid #1e293b; border-radius:14px; padding:16px; color:#e2f6ff; overflow:auto; white-space:pre-wrap; } code { background:#020617; border:1px solid #1e293b; border-radius:8px; padding:2px 6px; color:#e2f6ff; } footer { border-top:1px solid var(--line); padding:24px 0; color:#64748b; text-align:center; margin-top:40px; }
+  </style>
+</head>
+<body>
+  <header><div class="wrap nav"><a class="brand" href="/"><img src="/assets/logo.png" alt="" /><span>TimeProofs AgentReady</span></a><nav class="nav-links"><a href="/agentready.html">OpenAPI</a><a href="/agentready-mcp.html">MCP</a><a href="/agentready-sample-report.html">Sample report</a><a href="/agentready-resources.html">Resources</a><a href="/agentready-docs.html">Docs</a></nav></div></header>
+  <main>
+    <section class="hero wrap"><div class="eyebrow">Machine-readable readiness</div><h1>agentready.json turns a scan into a reusable readiness contract.</h1><p class="subtitle">The AgentReady report is for humans. <code>agentready.json</code> is for tools, reviews, CI pipelines and future automation that need structured risk data.</p><div class="cta-row"><a class="cta" href="/agentready.html">Generate from OpenAPI</a><a class="cta secondary" href="/agentready-mcp.html">Generate from MCP</a></div></section>
+    <section class="wrap grid two"><article class="card"><h2>What it contains</h2><ul><li>Source type: OpenAPI or MCP.</li><li>Generated timestamp.</li><li>Score and interpretation.</li><li>Severity counts.</li><li>Tool or endpoint findings.</li><li>Risk categories and recommendations.</li></ul></article><article class="card"><h2>Why it matters</h2><ul><li>It makes readiness portable.</li><li>It can support review workflows.</li><li>It can feed static simulations.</li><li>It can become the base for future CLI or CI checks.</li><li>It separates human report text from machine-readable findings.</li></ul></article></section>
+    <section class="wrap card"><h2>Minimal example</h2><pre>{
+  "agentready_version": "1.0",
+  "source_type": "openapi",
+  "summary": {
+    "score": 62,
+    "status": "Needs fixes",
+    "risk_counts": {
+      "critical": 2,
+      "high": 4,
+      "medium": 7,
+      "low": 9
+    }
+  },
+  "tools": [
+    {
+      "operation_id": "refundCustomer",
+      "risk_level": "critical",
+      "requires_human_confirmation": true
+    }
+  ]
+}</pre></section>
+    <section class="wrap card"><h2>Limit</h2><p class="muted">TimeProofs AgentReady does not guarantee that an AI agent will never fail. It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.</p></section>
+  </main>
+  <footer><div class="wrap">agentready.json explained.</div></footer>
+  <script src="/assets/site-nav.js" defer></script>
+</body>
+</html>
