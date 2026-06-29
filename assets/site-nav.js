@@ -4,6 +4,7 @@
     ['/agentready.html', 'OpenAPI scanner'],
     ['/agentready-mcp.html', 'MCP scanner'],
     ['/agentready-simulation.html', 'Static simulation'],
+    ['/agentready-sample-report.html', 'Sample report'],
     ['/agentready-docs.html', 'Docs'],
     ['/agentready-examples.html', 'Examples'],
     ['/agentready-test.html', 'Tests'],
@@ -60,6 +61,7 @@
     const links = document.createElement('div');
     links.className = 'footer-links';
     [
+      ['/agentready-sample-report.html', 'Sample report'],
       ['/legal.html', 'Legal notice'],
       ['/privacy.html', 'Privacy'],
       ['/terms.html', 'Terms'],
