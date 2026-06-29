@@ -6,7 +6,7 @@
 PENDING — manual browser QA not completed.
 ```
 
-This file records the Browser V1 QA gate after public V1 mobile navigation propagation was completed.
+This file records the Browser V1 QA gate after public V1 mobile navigation propagation, homepage commercial polish, and sample report preview were completed.
 
 Important: Browser V1 is **not** declared complete by this file.
 
@@ -16,7 +16,7 @@ Important: Browser V1 is **not** declared complete by this file.
 QA date: 2026-06-29
 Tester: ChatGPT via GitHub connector
 Branch tested: timeproofs
-Commit tested: c7023140f7b3e47b078582a9162f4cdf434369e8
+Commit tested: 4e119c47932ffc164d155b7b5b354f3c05d4e8d2
 Browser: NOT AVAILABLE IN THIS EXECUTION ENVIRONMENT
 Device / viewport: NOT TESTED
 Local server command required: python3 -m http.server 8080
@@ -29,6 +29,11 @@ This check was completed through repository inspection only. It does not replace
 
 ```txt
 Homepage navigation foundation present             : PASS
+Commercial homepage present                        : PASS
+Sample report preview page present                 : PASS
+Sample report linked from homepage                 : PASS
+Sample report listed in sitemap                    : PASS
+Sample report included in shared nav/footer        : PASS
 Shared mobile navigation script present            : PASS
 Shared mobile navigation CSS present               : PASS
 OpenAPI scanner includes shared nav assets         : PASS
@@ -38,7 +43,6 @@ Docs page includes shared nav assets               : PASS
 Examples page includes shared nav assets           : PASS
 Test page includes shared nav assets               : PASS
 Legal/privacy/terms pages exist as drafts          : PASS
-Sitemap includes public product/legal pages         : PASS
 TODO_NEXT reflects mobile nav completion           : PASS
 ```
 
@@ -60,6 +64,7 @@ Mark each page as pass / fail / not tested.
 /agentready.html                   : STATIC CHECK ONLY — browser not available
 /agentready-mcp.html               : STATIC CHECK ONLY — browser not available
 /agentready-simulation.html        : STATIC CHECK ONLY — browser not available
+/agentready-sample-report.html     : STATIC CHECK ONLY — browser not available
 /agentready-docs.html              : STATIC CHECK ONLY — browser not available
 /agentready-examples.html          : STATIC CHECK ONLY — browser not available
 /agentready-test.html              : STATIC CHECK ONLY — browser not available
@@ -78,6 +83,23 @@ Navigation works.
 No uncaught console error after normal page load.
 Footer legal/privacy/terms links appear where appropriate.
 Mobile menu does not wrap into multiple rows.
+```
+
+## Homepage and sample report checks
+
+```txt
+Homepage commercial hero readability          : NOT TESTED IN BROWSER
+Homepage OpenAPI CTA                          : NOT TESTED IN BROWSER
+Homepage MCP CTA                              : NOT TESTED IN BROWSER
+Homepage sample report CTA                    : NOT TESTED IN BROWSER
+Homepage preview card readability             : NOT TESTED IN BROWSER
+Sample report score renders                   : NOT TESTED IN BROWSER
+Sample report risk counts render              : NOT TESTED IN BROWSER
+Sample report executive summary renders       : NOT TESTED IN BROWSER
+Sample report top findings render             : NOT TESTED IN BROWSER
+Sample report action plan renders             : NOT TESTED IN BROWSER
+Sample report code block remains readable     : NOT TESTED IN BROWSER
+Sample report limitation text visible         : NOT TESTED IN BROWSER
 ```
 
 ## Fixtures tested
@@ -213,6 +235,7 @@ NOT TESTED — real browser Network tab access is required.
 
 ```txt
 Navigation wraps safely              : NOT TESTED IN BROWSER
+Sample report remains readable       : NOT TESTED IN BROWSER
 Upload inputs remain usable          : NOT TESTED IN BROWSER
 Result cards remain readable         : NOT TESTED IN BROWSER
 JSON/pre blocks remain readable      : NOT TESTED IN BROWSER
@@ -235,6 +258,7 @@ List any release-blocking issues.
 ```txt
 BLOCKING: Browser V1 manual QA not completed.
 BLOCKING: Browser test harness not run.
+BLOCKING: Homepage and sample report not checked in browser.
 BLOCKING: Exports not manually verified.
 BLOCKING: Browser Network tab no-execution checks not completed.
 ```
@@ -268,7 +292,7 @@ PENDING — manual browser QA not completed.
 Browser V1 can be considered complete only if this statement is true:
 
 ```txt
-A developer can open TimeProofs AgentReady in the browser, scan OpenAPI or MCP tool definitions locally, export agentready.json, run a static simulation scenario, export agentready-simulation.json, and understand the main risks without any backend, account, payment, live API execution, MCP execution, or LLM call.
+A developer can open TimeProofs AgentReady in the browser, understand the sample report, scan OpenAPI or MCP tool definitions locally, export agentready.json, run a static simulation scenario, export agentready-simulation.json, and understand the main risks without any backend, account, payment, live API execution, MCP execution, or LLM call.
 ```
 
 Current status against this statement:
