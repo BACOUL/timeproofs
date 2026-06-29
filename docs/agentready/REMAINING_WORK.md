@@ -2,299 +2,298 @@
 
 ## Purpose
 
-This document lists what remains to build after the current OpenAPI + MCP static scanner foundation.
+This document lists what remains after the current Browser V1 foundation.
 
 It should be used as the main execution checklist before starting new branches or PRs.
 
----
+## Product principle
+
+```txt
+Browser V1 is structurally built.
+Browser V1 is not complete until real browser QA is PASS.
+Do not start V2 implementation before Browser V1 public-site polish is acceptable.
+Do not claim production readiness before the release gate is satisfied.
+```
 
 ## Current completed base
 
 ```txt
 ✅ AgentReady positioning
 ✅ Legacy proof-of-existence surface removed
+✅ Commercial homepage draft
+✅ Shared mobile navigation across public V1 pages
 ✅ Static OpenAPI JSON/YAML scanner
 ✅ Static MCP tools JSON scanner
+✅ Static simulation page
 ✅ OpenAPI upload page: agentready.html
 ✅ MCP upload page: agentready-mcp.html
-✅ Public landing page
+✅ Static simulation page: agentready-simulation.html
 ✅ Public docs page
 ✅ Public examples page
 ✅ Static browser test harness
+✅ Legal notice page draft
+✅ Privacy page draft
+✅ Terms page draft
 ✅ OpenAPI fixtures
 ✅ MCP fixtures
+✅ Simulation scenario fixtures
 ✅ agentready.json export
+✅ agentready-simulation.json export
 ✅ Markdown report export
 ✅ Browser print / Save as PDF for OpenAPI report
+✅ Browser print / Save as PDF for MCP report
+✅ OpenAPI-specific report wording and scanner output polish
+✅ MCP-specific report wording and scanner output polish
+✅ agentready.json contract spec strengthened
+✅ Static simulation parser core
+✅ Static simulation parser test harness checks
+✅ Browser V1 QA runbook
+✅ Browser V1 QA result file
+✅ Browser V1 release discipline
+✅ Long-term roadmap
+✅ V2 CLI scope document
 ✅ Sitemap updated
 ```
 
----
+## Current release status
 
-## Priority 1 — Public navigation and product clarity
+```txt
+Browser V1 structural status: BUILT
+Browser V1 release status: QA PENDING
+Public completion claim: NOT ALLOWED
+```
 
-Goal: make the current site understandable in less than 10 seconds.
+Blocking release gate:
+
+```txt
+Manual browser QA has not been completed.
+Browser test harness has not been run in a real browser.
+Exports have not been manually verified in a real browser.
+Network tab no-execution checks have not been completed.
+Mobile/narrow viewport has not been manually verified.
+```
+
+## Priority 1 — Browser V1 public-site QA
+
+Goal: verify the current product in a real browser before claiming V1 completion.
 
 ### Tasks
 
 ```txt
-1. Standardize navigation across all public HTML pages.
-2. Use the same labels everywhere: OpenAPI Scan, MCP Scan, Docs, Examples, Tests.
-3. Add a clear OpenAPI vs MCP explanation section.
-4. Add a homepage section showing the two scanner paths.
-5. Update agentready-docs.html to include MCP scanner details.
-6. Update agentready-examples.html to include MCP fixtures.
-7. Add MCP scanner link to every relevant public page.
-8. Keep agentready-test.html noindex.
+1. Run docs/agentready/BROWSER_V1_QA_RUNBOOK.md.
+2. Start local static server with python3 -m http.server 8080, or use a controlled preview.
+3. Open and verify all public pages.
+4. Confirm the commercial homepage renders correctly on desktop and mobile.
+5. Confirm desktop navigation remains usable.
+6. Confirm mobile menu works and does not wrap into multiple rows.
+7. Confirm legal/privacy/terms links appear where appropriate.
+8. Run /agentready-test.html and record PASS/FAIL.
+9. Scan OpenAPI JSON fixture.
+10. Scan OpenAPI YAML fixture.
+11. Scan dangerous OpenAPI fixture.
+12. Scan simple MCP fixture.
+13. Scan dangerous MCP fixture.
+14. Export agentready.json.
+15. Export agentready-mcp.json.
+16. Export Markdown reports.
+17. Test Print / Save as PDF.
+18. Run static simulation with OpenAPI scenario.
+19. Run static simulation with MCP scenario.
+20. Export agentready-simulation.json.
+21. Use browser Network tab to confirm no live API, MCP, backend or LLM calls are made during scanner/simulation flows.
+22. Update docs/agentready/BROWSER_V1_QA_RESULT.md with PASS/FAIL evidence.
 ```
 
 ### Acceptance criteria
 
 ```txt
-A visitor can immediately understand:
-- what OpenAPI scanning is for;
-- what MCP scanning is for;
-- that files are analyzed locally;
-- that no endpoints or MCP tools are executed;
-- what agentready.json is.
+Browser V1 QA Result is PASS.
+No blocking issue remains.
+The product can be used locally in a browser from upload to export.
+No misleading public release claim is made before QA PASS.
 ```
 
----
+## Priority 2 — Browser V1 hardening after QA
 
-## Priority 2 — Test harness hardening
+Goal: fix only issues discovered by real browser QA.
 
-Goal: make the static test page more reliable before future features.
-
-### Tasks
+### Possible tasks
 
 ```txt
-1. Split results into OpenAPI tests and MCP tests visually.
-2. Add pass/fail grouping.
-3. Add a final overall status banner.
-4. Add clearer error output for failed tests.
-5. Add tests for missing tools[] in MCP.
-6. Add tests for empty tools[] in MCP.
-7. Add tests for missing MCP tool name.
-8. Add tests that exports contain expected fields.
-9. Add a note explaining that browser fetch requires serving files over HTTP, not opening file:// directly.
+1. Fix homepage desktop/mobile layout issues.
+2. Fix mobile navigation issues.
+3. Fix file upload usability issues.
+4. Fix scanner rendering issues.
+5. Fix export/download issues.
+6. Fix print / Save as PDF issues.
+7. Fix console errors.
+8. Fix Network tab surprises.
+9. Fix unclear empty/error states.
+10. Re-run QA after fixes.
 ```
 
 ### Acceptance criteria
 
 ```txt
-The test page is useful for manual QA before merging or deploying.
+The QA result remains PASS after fixes.
+The product feels stable enough to show to early technical users.
 ```
 
----
+## Priority 3 — Documentation alignment
 
-## Priority 3 — MCP scanner polish
-
-Goal: make MCP scanner output more useful and less generic.
+Goal: keep docs consistent with the product state.
 
 ### Tasks
 
 ```txt
-1. Add MCP-specific risk wording in findings where possible.
-2. Improve action classification for MCP tool names.
-3. Detect missing inputSchema more explicitly.
-4. Detect empty inputSchema properties.
-5. Detect missing required fields.
-6. Detect tools with vague names like run, execute, process, handle, do_task.
-7. Detect dangerous tool names with weak descriptions.
-8. Detect missing outputSchema / output contract.
-9. Add a small MCP executive summary section.
-10. Add browser print / Save as PDF to MCP report.
+1. Keep README.md aligned with current product state.
+2. Keep TODO_NEXT.md aligned with the immediate next PR.
+3. Keep BROWSER_V1_QA_RESULT.md strict and truthful.
+4. Update release notes only after QA evidence exists.
+5. Remove or retire redundant alignment notes if no longer useful.
+6. Ensure all docs use the same product sentence.
+7. Ensure all docs include the mandatory limitation where needed.
 ```
 
 ### Acceptance criteria
 
 ```txt
-The MCP report feels purpose-built for MCP tools, not only reused from OpenAPI.
+A developer can read README.md, TODO_NEXT.md and this roadmap without seeing contradictory status information.
 ```
 
----
+## Priority 4 — Trust layer concept: AgentReady Checked
 
-## Priority 4 — OpenAPI scanner polish
-
-Goal: improve current V1 quality without changing the product scope.
+Goal: define the future trust layer without rebuilding the old proof-of-existence product.
 
 ### Tasks
 
 ```txt
-1. Fix any remaining UI inconsistency in agentready.html navigation.
-2. Improve executive summary language.
-3. Add score interpretation text near the score.
-4. Add clearer severity explanations.
-5. Add sample before/after fixes for common risks.
-6. Add better handling of large specs.
-7. Add warning for unsupported YAML features.
-8. Add version field to exported agentready.json if not already present.
-9. Add source type visibility: OpenAPI vs MCP.
-10. Add report timestamp.
+1. Define what AgentReady Checked means.
+2. Define what it does not mean.
+3. Define minimum score policy.
+4. Define critical risk policy.
+5. Define scenario coverage policy.
+6. Define report hash / artifact hash concept.
+7. Define validity duration draft.
+8. Define verification page concept later.
+9. Keep proof as a trust layer, not the main product.
+10. Do not create public badge claims before Browser V1 QA PASS.
 ```
 
 ### Acceptance criteria
 
 ```txt
-The OpenAPI scan page is credible enough to show to early users.
+AgentReady Checked is a careful trust concept, not a safety guarantee.
 ```
 
----
+## Priority 5 — SEO / public acquisition draft pages
 
-## Priority 5 — agentready.json contract strengthening
+Goal: prepare search visibility around precise agent readiness problems.
 
-Goal: make agentready.json the strategic asset, not just a scan artifact.
-
-### Tasks
+### Draft page clusters
 
 ```txt
-1. Review current agentready.json shape.
-2. Define stable contract versioning.
-3. Add source_type: openapi | mcp.
-4. Add generated_at timestamp.
-5. Add input filename/source metadata.
-6. Add per-tool allowed_when / forbidden_when placeholders.
-7. Add requires_human_confirmation consistently.
-8. Add recommended_agent_policy field.
-9. Add risk summary per operation/tool.
-10. Document the full schema in AGENTREADY_JSON_SPEC.md.
+AI agent API readiness checker
+MCP tool safety checker
+OpenAPI agent readiness scanner
+agentready.json contract
+agentready-simulation.json examples
+AI agent confirmation risks
+MCP dangerous tools checklist
+Agentic API safety checklist
+AI tool schema risk scanner
+```
+
+### Rules
+
+```txt
+SEO pages may be drafted before public launch.
+Do not claim Browser V1 is complete before QA PASS.
+Do not overpromise agent safety.
+Add internal links to scanner pages.
+Add sitemap entries when pages exist.
 ```
 
 ### Acceptance criteria
 
 ```txt
-agentready.json can be presented as a machine-readable readiness contract.
+The site starts targeting precise search terms without making false release claims.
 ```
 
----
+## Priority 6 — Monetization exploration
 
-## Priority 6 — Agent simulation exploration
+Goal: prepare a simple paid path without building unnecessary SaaS complexity too early.
 
-Goal: move beyond static scanning toward a stronger moat.
-
-### Tasks
+### Possible paid values
 
 ```txt
-1. Create docs/agentready/AGENT_SIMULATION_EXPLORATION.md.
-2. Define scenario format.
-3. Define what a simulated agent task means.
-4. Define success/failure criteria.
-5. Define wrong_tool_selection metric.
-6. Define wrong_parameter metric.
-7. Define unsafe_action_without_confirmation metric.
-8. Create simple scenarios for OpenAPI examples.
-9. Create simple scenarios for MCP examples.
-10. Keep it documentation-first before adding runtime code.
+Premium PDF/report export
+CLI Pro
+CI policy packs
+AgentReady Checked report
+Private readiness review
+Agency/API audit pack
+Team reports later
+```
+
+### Avoid too early
+
+```txt
+account system
+dashboard
+database
+Stripe/payment flow
+runtime gateway
+agent firewall
+heavy subscription product before demand exists
 ```
 
 ### Acceptance criteria
 
 ```txt
-The repo has a clear plan for simulation before any complex implementation begins.
+The monetization path is clear, but not implemented before product usefulness is validated.
 ```
 
----
+## Priority 7 — V2 CLI after Browser V1 QA
 
-## Priority 7 — CLI / developer workflow
+Goal: make AgentReady usable from terminal and CI.
 
-Goal: make AgentReady usable by technical users outside the browser.
-
-### Tasks
+### Do not start before
 
 ```txt
-1. Decide whether to keep zero-build static-only or add npm package structure.
-2. If npm is accepted, add package.json.
-3. Add CLI command: agentready scan openapi.yaml.
-4. Add CLI command: agentready scan-mcp mcp-tools.json.
-5. Output report.md and agentready.json.
-6. Add examples in README.
-7. Add local test script.
-8. Add GitHub Action later only after CLI is stable.
+Browser V1 QA is understood.
+Core contract fields are stable enough.
+Simulation output shape is stable enough.
+```
+
+### Target commands
+
+```bash
+agentready scan openapi ./openapi.yaml
+agentready scan mcp ./mcp-tools.json
+agentready simulate ./agentready.json ./scenario.json
+agentready report ./agentready.json
+```
+
+### Expected outputs
+
+```txt
+agentready.json
+agentready-mcp.json
+agentready-simulation.json
+agentready-report.md
+terminal score summary
+CI exit codes
 ```
 
 ### Acceptance criteria
 
 ```txt
-A developer can run a scan locally without the browser.
+A developer can run AgentReady locally without the browser.
+The CLI output remains compatible with Browser V1 outputs.
 ```
 
----
-
-## Priority 8 — SEO / public acquisition
-
-Goal: start building search visibility around the new category.
-
-### Tasks
-
-```txt
-1. Create SEO page: AI agent API readiness.
-2. Create SEO page: MCP tool readiness.
-3. Create SEO page: OpenAPI agent readiness.
-4. Create SEO page: agentready.json contract.
-5. Create SEO page: AI agent tool risk checklist.
-6. Add internal links to scanner pages.
-7. Add meta descriptions.
-8. Add sitemap entries.
-9. Keep claims careful and non-overpromising.
-```
-
-### Acceptance criteria
-
-```txt
-The site starts targeting precise low-competition search terms around agent tool readiness.
-```
-
----
-
-## Priority 9 — Trust layer / certification later
-
-Goal: prepare the future proof/certification layer without rebuilding the old product.
-
-### Tasks
-
-```txt
-1. Define what an AgentReady Checked badge means.
-2. Define minimum score threshold.
-3. Define validity duration.
-4. Define report hash / proof hash concept.
-5. Define verification page later.
-6. Do not rebuild old TimeProofs proof-of-existence pages yet.
-7. Keep proof as a trust layer, not the main product.
-```
-
-### Acceptance criteria
-
-```txt
-Certification is a future option, not a distraction from scanner usefulness.
-```
-
----
-
-## Priority 10 — Monetization / productization
-
-Goal: avoid building payments too early, but prepare the path.
-
-### Tasks
-
-```txt
-1. Define free scan limitations.
-2. Define paid report value.
-3. Define possible one-shot price.
-4. Define agency/team plan later.
-5. Define what users would pay for: PDF, history, CI, badge, team reports.
-6. Add pricing only after user validation.
-7. Do not add Stripe until the scanner is useful and tested.
-```
-
-### Acceptance criteria
-
-```txt
-Monetization path is clear but not implemented prematurely.
-```
-
----
-
-## Priority 11 — Deployment and Vercel recovery
+## Priority 8 — Deployment and Vercel recovery
 
 Goal: avoid accidental deployment costs and prepare for controlled redeploy.
 
@@ -310,53 +309,32 @@ Credits are expected to return on 2026-07-09.
 ```txt
 1. Ensure timeproofs branch is clean.
 2. Review merged PRs since Vercel disconnection.
-3. Run static pages locally if possible.
-4. Check OpenAPI scanner page.
-5. Check MCP scanner page.
-6. Check test harness.
-7. Check sitemap.
-8. Reconnect Vercel only when ready to deploy.
+3. Run Browser V1 QA locally if possible.
+4. Check homepage.
+5. Check OpenAPI scanner page.
+6. Check MCP scanner page.
+7. Check static simulation page.
+8. Check test harness.
+9. Check sitemap.
+10. Reconnect Vercel only when ready to deploy.
 ```
 
-### Acceptance criteria
+## Do not build yet
 
 ```txt
-Reconnect/deploy only when the repo is in a state worth building.
+accounts
+payments
+dashboard
+database
+runtime firewall
+old proof-of-existence product
+public release claim before QA PASS
+V2 implementation before Browser V1 public-site polish
 ```
 
----
-
-## Recommended next execution order
+## Mandatory limitation text
 
 ```txt
-1. polish public navigation and OpenAPI vs MCP explanation
-2. harden test harness
-3. polish MCP scanner report
-4. strengthen agentready.json contract
-5. document agent simulation exploration
-6. start CLI only if the browser product is stable
-7. create SEO pages
-8. prepare certification/trust layer
-9. prepare monetization
-10. reconnect Vercel after July 9 when ready
+TimeProofs AgentReady does not guarantee that an AI agent will never fail.
+It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.
 ```
-
----
-
-## Do not do yet
-
-```txt
-Do not add accounts.
-Do not add Stripe.
-Do not add dashboard.
-Do not add database.
-Do not add runtime firewall positioning.
-Do not rebuild the old proof-of-existence product.
-Do not claim AgentReady guarantees safe agent behavior.
-```
-
----
-
-## One-line summary
-
-> The scanners now exist. The next work is to make the product clearer, the reports stronger, the contract more strategic, and then build toward simulation, CLI, SEO, certification, and monetization.
