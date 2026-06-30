@@ -28,16 +28,16 @@
 ✅ Mobile navigation active on OpenAPI scanner page
 ✅ Mobile navigation active on MCP scanner page
 ✅ Mobile navigation propagation completed on public V1 pages
-✅ Legal notice page draft
-✅ Privacy page draft
-✅ Terms page draft
+✅ Legal notice page strengthened as pre-release draft
+✅ Privacy page strengthened as local-first pre-release draft
+✅ Terms page strengthened as pre-release draft
+✅ Browser V1 release candidate notes prepared as draft
 ✅ Public docs page with OpenAPI/MCP/simulation split
 ✅ Public examples page with OpenAPI/MCP/simulation fixtures
 ✅ Static browser test harness with OpenAPI/MCP/export/simulation groups
 ✅ Browser product QA checklist
 ✅ Browser V1 release gate
 ✅ Browser V1 QA result template
-✅ Browser V1 release notes draft
 ✅ Browser V1 QA attempt recorded as pending
 ✅ Browser V1 QA runbook
 ✅ Long-term product roadmap
@@ -97,19 +97,20 @@ Requirements:
 3. Confirm the commercial homepage renders correctly on desktop and mobile.
 4. Confirm the sample report preview renders correctly on desktop and mobile.
 5. Confirm the public acquisition pages render correctly on desktop and mobile.
-6. Confirm footer links to legal, privacy and terms appear where appropriate.
-7. Confirm desktop navigation remains usable.
-8. Confirm mobile navigation does not wrap into multiple rows.
-9. Confirm OpenAPI scanner still scans JSON/YAML examples.
-10. Confirm MCP scanner still scans MCP examples.
-11. Confirm static simulation still exports agentready-simulation.json.
-12. Do not continue V2 implementation before Browser V1 public-site polish is acceptable.
+6. Confirm legal/privacy/terms render correctly and remain truthful.
+7. Confirm footer links to legal, privacy and terms appear where appropriate.
+8. Confirm desktop navigation remains usable.
+9. Confirm mobile navigation does not wrap into multiple rows.
+10. Confirm OpenAPI scanner still scans JSON/YAML examples.
+11. Confirm MCP scanner still scans MCP examples.
+12. Confirm static simulation still exports agentready-simulation.json.
+13. Do not continue V2 implementation before Browser V1 public-site polish is acceptable.
 ```
 
 ## Parallel pending tasks
 
 ```txt
-1. Review legal/privacy/terms drafts before public production launch.
+None — Browser V1 QA is the next gate.
 ```
 
 ## Then
