@@ -46,6 +46,7 @@ OpenAPI / MCP / tool schema
 ✅ Public examples page
 ✅ Static browser test harness
 ✅ Legal / privacy / terms draft pages
+✅ AgentReady Checked trust layer draft
 ✅ Browser V1 QA runbook and QA gate
 ⚠️ Browser V1 QA remains PENDING
 ```
@@ -240,6 +241,16 @@ scenario-level pass/warning/fail/not_applicable
 agentready-simulation.json
 ```
 
+## AgentReady Checked
+
+AgentReady Checked is a future trust layer draft. It is not a safety guarantee and must not be displayed as a public badge before Browser V1 QA is PASS and the criteria are stable.
+
+Reference:
+
+```txt
+docs/agentready/AGENTREADY_CHECKED_TRUST_LAYER.md
+```
+
 ## Static test harness
 
 Page:
@@ -274,6 +285,7 @@ docs/agentready/RELEASE_DISCIPLINE.md
 docs/agentready/BROWSER_V1_QA_RUNBOOK.md
 docs/agentready/BROWSER_V1_QA_RESULT.md
 docs/agentready/AGENTREADY_JSON_SPEC.md
+docs/agentready/AGENTREADY_CHECKED_TRUST_LAYER.md
 docs/agentready/V2_CLI_SCOPE.md
 ```
 
