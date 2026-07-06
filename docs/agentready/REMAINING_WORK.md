@@ -50,6 +50,7 @@ Do not claim production readiness before the release gate is satisfied.
 ✅ Browser V1 QA runbook
 ✅ Browser V1 QA result file
 ✅ Browser V1 release discipline
+✅ AgentReady Checked trust layer draft
 ✅ Long-term roadmap
 ✅ V2 CLI scope document
 ✅ Sitemap updated
@@ -163,21 +164,24 @@ A developer can read README.md, TODO_NEXT.md and this roadmap without seeing con
 
 ## Priority 4 — Trust layer concept: AgentReady Checked
 
-Goal: define the future trust layer without rebuilding the old proof-of-existence product.
+Goal: refine the future trust layer without rebuilding the old proof-of-existence product.
 
-### Tasks
+Source document:
 
 ```txt
-1. Define what AgentReady Checked means.
-2. Define what it does not mean.
-3. Define minimum score policy.
-4. Define critical risk policy.
-5. Define scenario coverage policy.
-6. Define report hash / artifact hash concept.
-7. Define validity duration draft.
-8. Define verification page concept later.
-9. Keep proof as a trust layer, not the main product.
-10. Do not create public badge claims before Browser V1 QA PASS.
+docs/agentready/AGENTREADY_CHECKED_TRUST_LAYER.md
+```
+
+### Remaining tasks
+
+```txt
+1. Validate the score threshold against real Browser V1 examples.
+2. Validate the critical risk policy against real OpenAPI and MCP fixtures.
+3. Validate scenario coverage after Browser V1 QA is PASS.
+4. Decide whether report hashes and artifact hashes belong in Browser V1 or a later paid layer.
+5. Keep AgentReady Checked private/draft until the criteria are stable.
+6. Keep proof as a trust layer, not the main product.
+7. Do not create public badge claims before Browser V1 QA PASS.
 ```
 
 ### Acceptance criteria
