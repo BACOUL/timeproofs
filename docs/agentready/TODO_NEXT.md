@@ -43,6 +43,7 @@
 ✅ Long-term product roadmap
 ✅ Release discipline
 ✅ V2 CLI scope
+✅ AgentReady Checked trust layer draft
 ✅ README and remaining roadmap aligned with current V1
 ✅ OpenAPI fixtures
 ✅ MCP fixtures
@@ -79,6 +80,7 @@ docs/agentready/REMAINING_WORK.md
 docs/agentready/LONG_TERM_PRODUCT_ROADMAP.md
 docs/agentready/RELEASE_DISCIPLINE.md
 docs/agentready/V2_CLI_SCOPE.md
+docs/agentready/AGENTREADY_CHECKED_TRUST_LAYER.md
 ```
 
 ## Immediate next PR
@@ -116,9 +118,8 @@ None — Browser V1 QA is the next gate.
 ## Then
 
 ```txt
-1. docs(agentready): define AgentReady Checked trust layer
-2. docs(product): prepare monetization path
-3. chore(deploy): prepare Vercel reconnect after 2026-07-09
+1. docs(product): prepare monetization path
+2. chore(deploy): prepare Vercel reconnect after 2026-07-09
 ```
 
 ## Do not build yet
