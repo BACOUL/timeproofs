@@ -1,212 +1,72 @@
-# 🕓 TimeProofs — Changelog
+# TimeProofs AgentReady Changelog
 
-> The open, privacy-first, edge-native proof-of-existence protocol.  
-> Built to become the universal standard for digital truth and authenticity.
+This changelog tracks the active AgentReady direction.
 
-All notable changes to **TimeProofs** are documented here.  
-This project follows **Semantic Versioning**.
+Current direction:
 
----
+```txt
+TimeProofs AgentReady = pre-deployment CI gate for agent-facing OpenAPI and MCP tools.
+```
 
-## 🟢 v0.1 — Public Beta (Final) — 2025  
-**Status:** ✅ Live  
-**Tag:** `v0.1-final`  
-**Goal:** Deliver a stable, verifiable, public MVP available to everyone.
+## Unreleased
 
-### ✨ Features
-- `/timestamp` — create proof of existence for any SHA-256 hash  
-- `/verify` — independent public verification endpoint  
-- Edge-native global infrastructure: **Cloudflare Workers + KV**  
-- Frontend static site (Vercel): **Verify UI**, **Docs**, **Privacy**, **Legal**, **Regulations**, **Security**, **Human.txt**, **RSS**  
-- SEO setup: sitemap, robots, canonical links  
-- MIT License + public open-source repository  
-- API base URL: `https://api.timeproofs.io/api`
+### Documentation
 
-### 🔐 Principles
-- Privacy-first — only hashes, never raw content  
-- Open verification — proofs readable & independently checkable  
-- Minimalism — deterministic, transparent, no blockchain  
-- Predictable cost — no gas, no tokens, no friction  
+- Repositioned public repo metadata around AgentReady CI Gate.
+- Marked the old proof/timestamp/verify/ProofSpec direction as legacy.
+- Kept cleanup documentation separate from scanner behavior.
 
----
+## 2026-07-09 - Commercial AgentReady pages
 
-## 🔖 Cryptographic Release Proof — v0.1-final
+### Changed
 
-All pages of the site and the API worker are sealed with TimeProofs.
+- Improved the AgentReady homepage messaging around concrete agent-facing risks.
+- Updated pricing to keep the paid path manual and static.
+- Improved the sample report page around customer deliverables.
 
-- **Release:** v0.1-final  
-- **Homepage SHA-256:**  
-  `b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3`  
-- **Manifest:** `/releases/v0.1.json`  
-- **Verify URL:**  
-  `https://timeproofs.io/verify.html?hash=b67b94aef97040f0e56c73ec6e6c07e42807a55a390c26fe2fbefc8a0e6bcec3`
+### Tests
 
-Every hash can be verified via the public Verify tool or `/api/verify`.
+```txt
+AgentReady core tests: 18/18 passed
+```
 
----
+## 2026-07-09 - AgentReady release flow
 
-## ✅ v0.1 Completion Checklist (SST Gates)
+### Added
 
-### 1. Product
-- API stable (`/timestamp`, `/verify`)  
-- Verify UI operational  
-- Docs updated and consistent  
-- OpenAPI exposed  
-- 100% hash-only, privacy-first  
+- Root `package.json` script for AgentReady core tests.
+- Core regression fixtures for OpenAPI classification and MCP scanning.
+- Browser engine gate page.
 
-### 2. Publication
-- Domain active + HTTPS + DNSSEC  
-- Sitemap + robots + canonical  
-- Search Console validated  
-- Plausible analytics (no cookies)  
+### Tests
 
-### 3. Branding
-- Logo, favicon, OG images, social previews  
-- Unified header/footer across all pages  
-- “Status: Public Beta v0.1” visible  
-- Cohesive typography & tokens  
+```txt
+AgentReady core tests: 18/18 passed
+Static page check passed for 8 pages
+```
 
-### 4. Legal & Compliance
-- `privacy.html`, `legal.html`, `security.txt`, `humans.txt`  
-- MIT License in repo  
-- No personal data stored  
+## 2026-07-09 - Controlled risk detection
 
-### 5. Communication
-- Public website complete  
-- README professional  
-- Changelog + roadmap aligned  
-- Cryptographic release proof added  
+### Changed
 
-### 6. Infrastructure
-- Cloudflare Workers + KV stable  
-- Static site on Vercel  
-- Anti-lock-in minimal (API contract stable)  
-- Release manifest `/releases/v0.1.json`  
+- Improved AgentReady core handling of controlled dangerous actions.
+- Distinguished uncontrolled dangerous actions from dangerous actions with confirmation, limits, schemas, blocked reasons, manual review, or guardrails.
+- Kept real dangerous actions risky instead of hiding them.
 
-### 7. Tests & Sign-off
-- Lighthouse mobile/desktop ≥ 96  
-- Real tests on 4G + desktop  
-- API consistency checked  
-- All hashes verified  
-- GitHub release created  
+### Tests
 
-**→ v0.1 is officially DONE.**
+```txt
+AgentReady core tests: 18/18 passed
+```
 
----
+## Legacy history
 
-## 🟠 v0.2 — Developer Experience (Planned Q4 2025)  
-**Status:** 🚧 In progress  
-**Goal:** Make TimeProofs frictionless for developers and AI systems.
+Older TimeProofs proof-of-existence, timestamp, verify, ProofSpec, and `.tproof.json` release notes are legacy context. They are not the active product roadmap for this repository.
 
-### Planned Features
-- JavaScript / TypeScript SDK  
-  - `createFromText`  
-  - `createFromFile`  
-  - `createFromHash`  
-  - `verify`  
-- PDF certificate generation  
-- `.tproof.json` bundle format  
-- Verify UI improvements:  
-  - “Copy as cURL”  
-  - “Copy JSON”  
-  - Proof modal  
-- Docs refresh + FAQ  
-- Mobile layout polish  
+Do not use old changelog entries to reintroduce a timestamp API, verify UI, proof bundle, dashboard, Stripe billing, or backend into the current AgentReady direction.
 
----
+## Mandatory limitation
 
-## 🟡 v1.0 — Productization (2026)  
-**Status:** 🔜 Planned  
-**Goal:** Professional infrastructure, billing, and reliability.
+TimeProofs AgentReady does not guarantee that an AI agent will never fail.
 
-### Planned Features
-- API keys (Free / Pro / Team)  
-- Dashboard (usage, CSV export, key rotation)  
-- Stripe billing  
-- Webhooks  
-- `/api/status` endpoint  
-
----
-
-## 🔵 v2.0 — Validation Layer (2026–2027)  
-**Status:** 🧪 Research  
-**Goal:** Distributed validation + offline proofs.
-
-### Planned Features
-- ProofChain (Merkle-based verification)  
-- SDKs for Python & Go  
-- Offline verification mode  
-- CLI for CI/CD timestamping  
-- Attestations (RFC 3161 exploration)  
-
----
-
-## 💡 Backlog / Ideas
-- Role-based API keys  
-- Hash-on-upload for S3 / GCS  
-- Global SIEM / audit exports  
-- Proof feeds  
-- Advanced trust scores  
-
----
-
-## 🧭 Version Principles
-
-| Version | Scope | Stability |
-|--------|--------|-----------|
-| v0.1 | Public MVP | Stable |
-| v0.2 | Developer Experience | Beta |
-| v1.0 | Product Ready | Stable |
-| v2.0 | Validation Layer | Experimental |
-
----
-
-## 🧱 Architecture Summary
-
-| Layer | Stack |
-|-------|--------|
-| Edge API | Cloudflare Workers + KV |
-| Frontend | Vercel (static HTML) |
-| Storage | KV `{ hash, timestamp, signature }` |
-| Security | HMAC-SHA256 over `hash + timestamp` |
-| Docs | `timeproofs.io/docs.html` |
-
----
-
-## 🔒 Security & Privacy Highlights
-- Only SHA-256 hashes stored  
-- HTTPS/TLS 1.3 enforced  
-- No cookies, no tracking  
-- Independent verification possible  
-
----
-
-## 🧠 Governance & Transparency
-- Open-source under MIT  
-- Public roadmap  
-- Public changelog  
-- Cryptographically verified releases  
-- Canonical spec hosted on the site  
-
----
-
-## 🗓️ Release Timeline
-
-| Version | ETA | Theme |
-|---------|------|-----------|
-| v0.1 | ✔ Live | Public Beta |
-| v0.2 | Q4 2025 | SDK + DX |
-| v1.0 | 2026 | API Keys + Billing |
-| v2.0 | 2026–2027 | Validation Network |
-
----
-
-## 📬 Contact
-Email: **hello@timeproofs.io**  
-Security: **security@timeproofs.io**  
-Website: **https://timeproofs.io**  
-Maintainer: **@BACOUL**
-
----
-
-**TimeProofs — Proof of Existence. For Everything.**
+It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.

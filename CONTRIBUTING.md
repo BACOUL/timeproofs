@@ -1,204 +1,174 @@
-# Contributing to TimeProofs
+# Contributing to TimeProofs AgentReady
 
-Thank you for your interest in contributing to **TimeProofs** — the open, privacy-first, edge-native standard for digital proof of existence. Every contribution helps strengthen the foundation of a global, verifiable and trustworthy internet.
+Thank you for contributing to **TimeProofs AgentReady**.
 
-This document explains how to report issues, request new features, and submit high-quality contributions aligned with the TimeProofs philosophy.
+The active project direction is:
 
----
-
-## Philosophy
-
-TimeProofs follows five core principles:
-
-- **Privacy-first** — only SHA-256 hashes are processed; original content never leaves the device.
-- **Open verification** — every proof must be independently verifiable.
-- **Edge-native** — global, deterministic, low-latency infrastructure.
-- **Predictable cost** — no blockchain, no gas, no tokens, no hidden fees.
-- **Minimalism** — clarity, transparency and auditability above complexity.
-
-All contributions must respect these principles.
-
----
-
-## Repository Structure
-
+```txt
+TimeProofs AgentReady = pre-deployment CI gate for agent-facing OpenAPI and MCP tools.
 ```
+
+AgentReady helps teams inspect OpenAPI specs and MCP tool definitions before exposing them to AI agents.
+
+## Product boundaries
+
+Contributions must stay aligned with the current product:
+
+```txt
+Static scanner
+OpenAPI readiness
+MCP tool readiness
+AgentReady Score
+AgentReady Report
+agentready.json
+agentready-simulation.json
+Future CLI / CI gate outputs
+```
+
+Do not introduce these without explicit approval:
+
+```txt
+runtime firewall
+dashboard
+Stripe or billing
+accounts
+database
+hosted file storage
+backend scanner
+live API execution
+live MCP execution
+LLM calls
+GitHub Action
+legacy proof/timestamp/verify product
+```
+
+## Repository structure
+
+```txt
 timeproofs/
-├── api/           # Cloudflare Worker (timestamp + verify)
-├── public/        # Static site (Verify UI, Docs, ProofSpec, Privacy, Legal)
-├── assets/        # Logos, icons, images
-├── releases/      # Version manifests and proof hashes
+├── agentready-core/          # Static OpenAPI/MCP scanner engine
+├── agentready-examples/      # OpenAPI, MCP, and commercial fixtures
+├── docs/agentready/          # Product, QA, roadmap, and contract docs
+├── assets/                   # Shared public assets
+├── *.html                    # Static public pages and scanner UI
+├── package.json              # AgentReady core test script
 ├── README.md
+├── ROADMAP.md
 ├── CHANGELOG.md
-├── LICENSE
-├── vercel.json
-└── package.json
+└── SECURITY.md
 ```
 
----
+Legacy folders such as `selfhost/` and `sdk/` may still exist for historical reasons. Do not remove or rebuild them unless a cleanup PR explicitly approves it.
 
-## Branching Model
+## Branching model
 
-- `main` — stable production
-- `timeproofsv01` — archived v0.1
-- `timeproofsv02` — development for v0.2
-- `feature/*` — new features
-- `fix/*` — bug fixes
-- `docs/*` — documentation updates
+Use short, scoped branch names:
 
-Pull Requests must target the correct branch (usually `timeproofsv02`).
+```txt
+docs-agentready-...
+chore-agentready-...
+fix-agentready-...
+```
 
----
+Pull requests should target:
 
-## Reporting a Bug
+```txt
+timeproofs
+```
 
-Before opening a bug report, ensure that:
+## Before changing code
 
-- The issue persists after refresh
-- No similar issue already exists
-- The console has no unrelated errors
-- The API responds consistently
+Read these first when relevant:
 
-Your report must include:
+```txt
+README.md
+AGENTREADY_PROJECT_CONTEXT.md
+docs/agentready/REMAINING_WORK.md
+docs/agentready/RELEASE_DISCIPLINE.md
+docs/agentready/AGENTREADY_JSON_SPEC.md
+docs/agentready/AGENTREADY_RISK_TAXONOMY.md
+docs/agentready/V2_CLI_SCOPE.md
+```
 
-- Steps to reproduce  
-- Expected result  
-- Actual result  
-- Browser, OS, environment  
-- API request example (if applicable)  
-- Screenshots or logs  
+## Scanner changes
 
-Create an issue:  
-https://github.com/BACOUL/timeproofs/issues/new
+Changes to scanner behavior are higher risk.
 
----
+If a PR touches `agentready-core/`, it should explain:
 
-## Requesting a Feature
+```txt
+what classification or risk behavior changes
+why the change is needed
+which fixtures cover it
+whether score thresholds changed
+whether agentready.json output changed
+```
 
-A valid feature request must include:
+Do not change score thresholds, risk severity, CLI behavior, or exported contract shape as part of a documentation or metadata cleanup PR.
 
-- The problem you want to solve
-- The proposed solution
-- A real usage example
-- Impact on ProofSpec or API behavior
+## Documentation changes
 
----
+Documentation should use the active positioning:
 
-## Improving Documentation
+```txt
+pre-deployment CI gate for agent-facing OpenAPI and MCP tools
+```
 
-Documentation lives in:
+Use legacy wording only when marking historical context:
 
-- `/public/docs.html`
-- `/public/proofspec.html`
-- `/public/verify.html`
-- `/README.md`
-- `/CHANGELOG.md`
+```txt
+legacy proof/timestamp/verify/ProofSpec direction
+```
 
-You may contribute by fixing typos, improving clarity, updating examples or correcting outdated sections.
+## Testing
 
----
+For scanner-related work, run:
 
-## Code Contributions
+```bash
+npm run test:agentready-core
+```
 
-### Steps
+If `npm` is unavailable in the local runtime, run the equivalent Node command:
 
-1. Fork the repository  
-2. Create a branch  
-3. Implement your changes  
-4. Test locally  
-5. Submit a clean Pull Request  
+```bash
+node agentready-core/tests/run-agentready-core-tests.mjs
+```
 
-### Guidelines
+Expected current result:
 
-- Use ES Modules or TypeScript
-- Ensure Cloudflare Worker compatibility (no Node-only APIs)
-- Prefer clear, readable logic
-- Follow ProofSpec for all protocol-related logic
-- Never handle raw content (hash-only architecture)
+```txt
+AgentReady core tests: 18/18 passed
+```
 
-### Commit Style (Conventional Commits)
+For static page work, use the repo's existing page checks or browser QA runbooks when applicable.
 
-- `feat:` new feature  
-- `fix:` bug fix  
-- `docs:` documentation  
-- `refactor:` non-breaking change  
-- `chore:` maintenance  
-- `perf:` performance improvement  
+## Pull request checklist
 
-Examples:  
-`feat: add tproof.json bundle support`  
-`fix: correct HMAC timestamp normalization`  
-`docs: update verification examples`
+Before opening a PR, confirm:
 
----
+```txt
+The PR target is timeproofs.
+The change fits AgentReady CI Gate direction.
+The scope is narrow and named clearly.
+No unrelated files were touched.
+No legacy proof/timestamp/verify feature was reintroduced.
+No dashboard, Stripe, backend, or GitHub Action was added.
+Scanner behavior and tests are unchanged unless the PR is explicitly a scanner PR.
+```
 
-## Local Setup
+## Security disclosure
 
-Make sure you have environment variables configured for:
+Do not open a public issue for security vulnerabilities.
 
-- `TP_SECRET_KEY` (HMAC key)
-- `KV_NAMESPACE` (Cloudflare KV binding)
+Contact:
 
----
+```txt
+security@timeproofs.io
+https://timeproofs.io/.well-known/security.txt
+```
 
-## Testing Checklist (Required Before PR)
+## Mandatory limitation
 
-Every contribution must pass the following:
+TimeProofs AgentReady does not guarantee that an AI agent will never fail.
 
-### Functional
-
-- `/api/timestamp` returns a valid timestamp + signature
-- `/api/verify` returns correct verification states
-- Verify UI works with text, file, and `.tproof.json`
-
-### Frontend
-
-- Header + footer identical to site
-- No overflow on mobile
-- TOC links functional
-- Lighthouse score ≥ 95 (mobile + desktop)
-
-### Security
-
-- No console errors
-- No personal data logged
-- CSP respected
-- HTTPS enforced
-
-### Release Integrity
-
-- No change to release manifest without justification
-- Hash behavior consistent with ProofSpec
-
----
-
-## Security Disclosure
-
-Do **not** open a public issue for vulnerabilities.  
-Contact privately:
-
-security@timeproofs.io  
-PGP: https://timeproofs.io/pgp.txt  
-Security policy: https://timeproofs.io/.well-known/security.txt
-
----
-
-## Code of Conduct
-
-TimeProofs follows the Contributor Covenant.  
-Contributors must act respectfully, inclusively and professionally.
-
----
-
-## License
-
-All contributions are licensed under:
-
-**MIT License © 2025 TimeProofs**
-
----
-
-## Maintainers
-
-**@BACOUL** — Founder & Lead Maintainer  
-Community contributions are welcome from developers, researchers, institutions and creators worldwide.
+It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.

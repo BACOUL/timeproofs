@@ -1,74 +1,94 @@
-# Security Policy — TimeProofs
+# Security Policy - TimeProofs AgentReady
 
-TimeProofs is an open, privacy-first protocol for digital proof of existence.  
-This document defines how to responsibly report and coordinate security vulnerabilities.
+TimeProofs AgentReady is a static readiness scanner and future CI gate for agent-facing OpenAPI and MCP tools.
 
----
+It helps identify structural risks before tools are exposed to AI agents.
 
-## Supported Versions
-
-| Version | Status        | Security Fixes |
-|----------|----------------|----------------|
-| v0.1     | Public Beta    | ✅ Active (monitored) |
-| < v0.1   | Experimental   | ❌ Not supported |
-
----
-
-## Reporting a Vulnerability
-
-If you believe you’ve discovered a security or privacy vulnerability, please report it privately and responsibly.
-
-**Contact:**
-- 📧 Email: [security@timeproofs.io](mailto:security@timeproofs.io)
-- 🔑 PGP Key: [https://timeproofs.io/pgp.txt](https://timeproofs.io/pgp.txt)
-
-**Do not** publicly disclose issues before coordinated remediation and acknowledgment.
-
-We commit to:
-1. Acknowledge your report within **72 hours**.
-2. Provide an initial assessment within **7 days**.
-3. Publish a security advisory once mitigations are live.
-
----
-
-## Scope
+## Current security scope
 
 This policy covers:
-- API endpoints (`/api/timestamp`, `/api/verify`)
-- Frontend site (https://timeproofs.io)
-- Cloudflare Workers backend & KV storage
-- Open-source repositories under `github.com/timeproofs`
 
-Out of scope:
-- Third-party dependencies (handled via Dependabot)
-- Local integrations or forks not maintained by TimeProofs
+```txt
+Public static website at https://timeproofs.io
+Browser OpenAPI scanner
+Browser MCP tools scanner
+Static simulation page
+agentready-core scanner engine
+agentready.json and agentready-simulation.json exports
+Repository documentation and fixtures
+```
 
----
+The current Browser V1 scanner is designed to run locally in the browser and not call submitted API endpoints, MCP servers, LLM providers, or a TimeProofs backend during scanning.
 
-## Disclosure Process
+## Out of scope for the active product
 
-1. Submit your report to [security@timeproofs.io](mailto:security@timeproofs.io)
-2. Include:
-   - Description and steps to reproduce
-   - Affected endpoint or component
-   - Potential impact and severity
-3. Optionally encrypt with our [PGP key](https://timeproofs.io/pgp.txt)
+The following are not active AgentReady product surfaces:
 
----
+```txt
+legacy timestamp API
+legacy verify API
+legacy ProofSpec pages
+legacy .tproof.json proof bundles
+legacy self-hosted proof server
+legacy proof SDK
+```
 
-## Hall of Thanks
+These may still appear in historical files or legacy folders until cleanup is complete.
 
-Researchers who help secure TimeProofs will be acknowledged on:
-🔗 [https://timeproofs.io/security](https://timeproofs.io/security)
+## Reporting a vulnerability
 
----
+If you believe you have discovered a security or privacy issue, report it privately.
 
-## Policy References
+Contact:
 
-- Canonical: [https://timeproofs.io/.well-known/security.txt](https://timeproofs.io/.well-known/security.txt)  
-- Legal terms: [https://timeproofs.io/legal.html](https://timeproofs.io/legal.html)  
-- Privacy policy: [https://timeproofs.io/privacy.html](https://timeproofs.io/privacy.html)
+```txt
+security@timeproofs.io
+https://timeproofs.io/pgp.txt
+```
 
----
+Please include:
 
-© 2025 TimeProofs — Proof of Existence. For Everything.
+```txt
+Affected page, file, or component
+Steps to reproduce
+Expected result
+Actual result
+Potential impact
+Screenshots, logs, or payloads if useful
+```
+
+Do not publicly disclose issues before coordinated remediation and acknowledgment.
+
+## Scanner-specific issues
+
+Security reports are especially useful when they show that:
+
+```txt
+uploaded specs are sent somewhere unexpectedly
+scanner pages call submitted API endpoints
+MCP tools are executed instead of statically inspected
+secrets from specs are exposed in UI or logs
+exports contain unintended sensitive data
+score/report output creates misleading safety claims
+```
+
+## Expected boundaries
+
+AgentReady should not:
+
+```txt
+execute submitted APIs
+execute MCP tools
+call LLMs
+store user specs by default
+require accounts
+require payments
+act as a runtime firewall
+claim absolute safety
+```
+
+## Mandatory limitation
+
+TimeProofs AgentReady does not guarantee that an AI agent will never fail.
+
+It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.
