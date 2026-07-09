@@ -76,6 +76,12 @@
 ✅ CI/CD strategy documented
 ✅ Commercial demos plan documented
 ✅ Go-to-market plan documented
+✅ Commercial OpenAPI refund/payment risky fixture added
+✅ Commercial OpenAPI refund/payment fixed fixture added
+✅ Commercial MCP email risky fixture added
+✅ Commercial MCP email fixed fixture added
+✅ Commercial MCP files risky fixture added
+✅ Commercial MCP files fixed fixture added
 ```
 
 ## Main remaining roadmap
@@ -100,7 +106,7 @@ docs/agentready/GO_TO_MARKET_PLAN.md
 ## Immediate next PR
 
 ```txt
-examples(agentready): add commercial demo fixtures
+qa(agentready): run commercial demo fixtures through scanners
 ```
 
 ## Build next
@@ -108,13 +114,16 @@ examples(agentready): add commercial demo fixtures
 Requirements:
 
 ```txt
-1. Create three commercial demo fixture pairs:
-   - OpenAPI refund/payment risk;
-   - MCP email sending risk;
-   - MCP file deletion/export risk.
-2. Each demo should include a risky version and a corrected version.
-3. Each demo should support before/after score contrast.
-4. Each demo should support sample report and acquisition pages later.
+1. Run the OpenAPI scanner against:
+   - agentready-examples/commercial/openapi-refund-risk.bad.json
+   - agentready-examples/commercial/openapi-refund-risk.fixed.json
+2. Run the MCP scanner against:
+   - agentready-examples/commercial/mcp-email-risk.bad.json
+   - agentready-examples/commercial/mcp-email-risk.fixed.json
+   - agentready-examples/commercial/mcp-files-risk.bad.json
+   - agentready-examples/commercial/mcp-files-risk.fixed.json
+3. Confirm risky fixtures produce meaningfully lower scores than fixed fixtures.
+4. If contrast is weak, improve risk rules or fixture wording before creating public demo pages.
 5. Keep all demos static; do not call live APIs, MCP servers, or LLMs.
 6. Do not reconnect Vercel until a public page/release batch is ready.
 ```
@@ -132,16 +141,18 @@ Missing strict checks: desktop Network tab, manual export downloads, desktop Pri
 
 ```txt
 1. Complete strict desktop Browser V1 QA when a desktop browser is available.
-2. Prepare commercial demo fixtures without triggering Vercel deployment.
+2. Validate commercial demo fixture score contrast.
+3. Prepare sample report improvements around commercial demos after score contrast is confirmed.
 ```
 
 ## Then
 
 ```txt
-1. examples(agentready): add commercial demo fixtures
-2. docs/product: improve sample report around commercial demos
-3. docs(product): prepare monetization path after usage signals
-4. chore(deploy): reconnect Vercel only for a public release batch
+1. qa(agentready): run commercial demo fixtures through scanners
+2. fix(agentready): improve risk rules if commercial demo contrast is weak
+3. docs(product): improve sample report around commercial demos
+4. docs(product): prepare monetization path after usage signals
+5. chore(deploy): reconnect Vercel only for a public release batch
 ```
 
 ## Do not build yet
@@ -155,6 +166,7 @@ runtime firewall
 old proof-of-existence product
 public release claim before strict QA PASS
 V2 implementation before Browser V1 strict QA is understood or explicitly waived
+public demo pages before commercial fixture score contrast is checked
 ```
 
 ## Mandatory limitation text
