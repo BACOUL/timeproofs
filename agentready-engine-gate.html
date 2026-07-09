@@ -60,7 +60,8 @@
     <section class="card">
       <h1>AgentReady Engine Gate</h1>
       <p class="muted">Release gate for the scanner engine. This page must pass before changing copy, pricing, SEO, or selling the product.</p>
-      <p class="muted">It locks expected classifications, risk behavior, score thresholds, and export recommendations on a commercial OpenAPI fixture.</p>
+      <p class="muted">It locks expected classifications, risk behavior, score thresholds, and export recommendations on the same OpenAPI fixture used by the Node suite.</p>
+      <p class="muted">This is an internal browser convenience gate. The source of truth for release is <code>npm run test:agentready-core</code>.</p>
       <div class="actions"><button id="runButton">Run engine gate</button></div>
       <div class="summary">
         <div class="metric"><strong id="passCount">0</strong>Pass</div>
@@ -113,8 +114,8 @@
       const checks = [];
 
       try {
-        const text = await loadFixture('/agentready-examples/openapi-engine-regression.json');
-        const result = await scanOpenApiText(text, { filename: 'openapi-engine-regression.json' });
+        const text = await loadFixture('/agentready-core/tests/fixtures/openapi-classification.json');
+        const result = await scanOpenApiText(text, { filename: 'openapi-classification.json' });
         const tools = result.agentready_json.tools || [];
         const byId = new Map(tools.map(tool => [tool.operation_id, tool]));
 

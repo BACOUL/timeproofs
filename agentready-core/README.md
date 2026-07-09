@@ -104,6 +104,7 @@ missing_when_to_use
 missing_when_not_to_use
 unbounded_parameter
 missing_enum
+missing_human_confirmation_flow
 dangerous_action_without_confirmation
 irreversible_action
 non_corrective_error

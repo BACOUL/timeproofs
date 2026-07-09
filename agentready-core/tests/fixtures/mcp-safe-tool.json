@@ -1,0 +1,35 @@
+{
+  "mcp_version": "2025-06",
+  "server": {
+    "name": "Safe Catalog MCP Server",
+    "description": "Fixture MCP server with a read-only catalog lookup tool."
+  },
+  "permissions": ["catalog:read"],
+  "tools": [
+    {
+      "name": "read_catalog_item",
+      "description": "Use this when the user asks to inspect one public catalog item by id. Do not use this for customer data, private files, payments, exports, deletion, or writes.",
+      "inputSchema": {
+        "type": "object",
+        "required": ["item_id"],
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 64,
+            "description": "Public catalog item identifier."
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "required": ["item_id", "status"],
+        "properties": {
+          "item_id": { "type": "string" },
+          "status": { "type": "string", "enum": ["found", "not_found"] },
+          "name": { "type": "string" }
+        }
+      }
+    }
+  ]
+}

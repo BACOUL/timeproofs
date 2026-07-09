@@ -1,0 +1,254 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "AgentReady Core Classification Fixture",
+    "version": "1.0.0",
+    "description": "Node regression fixture for core OpenAPI classification, risk, scoring, and export contract tests."
+  },
+  "servers": [
+    {
+      "url": "https://api.example.com/v1",
+      "description": "Static fixture server. This endpoint is never called."
+    }
+  ],
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "checkHealth",
+        "summary": "Health check",
+        "description": "Returns a basic API availability status for monitoring. This endpoint does not return customer, user, payment, authentication, or internal diagnostic data.",
+        "responses": {
+          "200": {
+            "description": "API is available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": ["ok"]
+                    }
+                  },
+                  "required": ["status"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customers/search": {
+      "post": {
+        "operationId": "searchCustomers",
+        "summary": "Search customers",
+        "description": "Use this when the user explicitly asks to find customers by name or email within their authorized account. Do not use this when the user has not requested customer lookup, when authorization scope is unclear, or when bulk export is requested.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 120,
+                    "description": "Customer name or email fragment to search for."
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 25,
+                    "description": "Maximum number of customers returned."
+                  }
+                },
+                "required": ["query"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Customer search results returned with redacted fields when required by permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "string" },
+                          "name": { "type": "string" },
+                          "email": { "type": "string" }
+                        },
+                        "required": ["id", "name"]
+                      }
+                    }
+                  },
+                  "required": ["results"]
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid query. Provide at least 2 characters and a limit between 1 and 25." },
+          "403": { "description": "Permission denied. Request access to the customer search scope before retrying." }
+        }
+      }
+    },
+    "/orders/{orderId}/refund": {
+      "post": {
+        "operationId": "refundOrderWithApproval",
+        "summary": "Refund order after human approval",
+        "description": "Use this when the user has explicitly requested a refund for a specific order and the amount has been validated. Do not use this when order identity, customer identity, refund amount, or policy eligibility is unclear. This operation requires a preview before execution and explicit human confirmation before the refund is submitted.",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "minLength": 6, "maxLength": 64 },
+            "description": "The order identifier to refund."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "amount": { "type": "number", "minimum": 0.01, "maximum": 500, "description": "Refund amount in EUR." },
+                  "reason": { "type": "string", "enum": ["customer_request", "duplicate_charge", "damaged_item", "merchant_error"] },
+                  "humanConfirmationId": { "type": "string", "description": "Identifier proving explicit human confirmation." }
+                },
+                "required": ["amount", "reason", "humanConfirmationId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Refund completed successfully. Response includes refund id, status, and amount for verification." },
+          "400": { "description": "Invalid refund request. Correct amount, reason, or confirmation id before retrying." },
+          "403": { "description": "Permission denied. User must have refund permission scope." },
+          "404": { "description": "Order not found. Verify orderId before retrying." },
+          "409": { "description": "Refund conflict. The order may already be refunded; verify current order status first." }
+        }
+      }
+    },
+    "/admin/users/{userId}/delete": {
+      "post": {
+        "operationId": "deleteUserAfterApproval",
+        "summary": "Delete user after human approval",
+        "description": "Use this only when an administrator explicitly requests permanent deletion of a specific user account. Do not use this for suspension, password reset, access review, or when the target user is ambiguous. This operation requires preview, explicit human confirmation, and post-action verification.",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "minLength": 6, "maxLength": 64 },
+            "description": "The user identifier to permanently delete."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "humanConfirmationId": { "type": "string", "description": "Identifier proving explicit human confirmation." }
+                },
+                "required": ["humanConfirmationId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "User deleted successfully. Response includes deleted user id and deletion status for verification." },
+          "400": { "description": "Invalid request. Provide a valid userId and humanConfirmationId." },
+          "403": { "description": "Permission denied. Administrator delete-user scope is required." },
+          "404": { "description": "User not found. Verify userId before retrying." },
+          "409": { "description": "Deletion conflict. The user may be protected or already deleted; verify current status." }
+        }
+      }
+    },
+    "/invoices/{invoiceId}/send": {
+      "post": {
+        "operationId": "sendInvoiceEmail",
+        "summary": "Send invoice email",
+        "description": "Use this when the user explicitly asks to send an existing invoice to a verified recipient. Do not use this when the recipient, invoice id, or message content is unclear. External sending requires human confirmation when the recipient has not already been verified.",
+        "parameters": [
+          {
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "minLength": 6, "maxLength": 64 },
+            "description": "Invoice identifier to send."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string", "format": "email", "description": "Verified destination email address." },
+                  "message": { "type": "string", "maxLength": 500, "description": "Optional message to include with the invoice email." },
+                  "humanConfirmationId": { "type": "string", "description": "Required when the recipient has not already been verified." }
+                },
+                "required": ["email"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Invoice sent successfully. Response includes delivery status and recipient email for verification." },
+          "400": { "description": "Invalid request. Correct invoiceId, recipient email, or message before retrying." },
+          "403": { "description": "Permission denied. Invoice-send scope is required." },
+          "404": { "description": "Invoice not found. Verify invoiceId before retrying." }
+        }
+      }
+    },
+    "/webhooks/stripe": {
+      "post": {
+        "operationId": "receiveStripeWebhook",
+        "summary": "Receive Stripe webhook events",
+        "description": "Incoming webhook endpoint used by Stripe to deliver payment events to the server. This endpoint is not intended to be called by autonomous agents. Webhook signature verification and event idempotency must be enforced by the server.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "description": "Stripe event payload."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Webhook event accepted after signature verification and idempotency check." },
+          "400": { "description": "Invalid webhook payload or signature. Do not retry without a valid Stripe signature." }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
+      }
+    }
+  }
+}

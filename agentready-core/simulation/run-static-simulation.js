@@ -11,6 +11,7 @@ export class AgentReadyStaticSimulationError extends Error {
 }
 
 const RISK_TO_SIMULATION_FINDING = Object.freeze({
+  missing_human_confirmation_flow: 'confirmation_required_but_not_documented',
   dangerous_action_without_confirmation: 'confirmation_required_but_not_documented',
   irreversible_action: 'irreversible_action_not_safely_guarded',
   unbounded_parameter: 'unsafe_parameter_bounds_missing',

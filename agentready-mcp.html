@@ -111,6 +111,7 @@
         <h2>MCP AgentReady Score</h2>
         <div id="score" class="score">—</div>
         <span id="status" class="status">—</span>
+        <p id="sourceLabel" class="muted"></p>
         <div id="mcpSummary" class="finding"></div>
         <div class="counts">
           <div class="count"><strong id="criticalCount" class="critical">0</strong>Critical</div>
@@ -158,6 +159,7 @@
     const reportSection = document.getElementById('reportSection');
     const scoreEl = document.getElementById('score');
     const statusEl = document.getElementById('status');
+    const sourceLabel = document.getElementById('sourceLabel');
     const mcpSummary = document.getElementById('mcpSummary');
     const criticalCount = document.getElementById('criticalCount');
     const highCount = document.getElementById('highCount');
@@ -178,7 +180,7 @@
         showMessage('Choose an MCP tools JSON file first.', 'error');
         return;
       }
-      await scanText(await file.text(), file.name);
+      await scanText(await file.text(), file.name, 'uploaded file');
     });
 
     loadSimpleExample.addEventListener('click', async () => loadExample('/agentready-examples/mcp-tools-simple.json', 'mcp-tools-simple.json'));
@@ -201,19 +203,19 @@
       try {
         const response = await fetch(url, { cache: 'no-store' });
         if (!response.ok) throw new Error(`Unable to load example: ${response.status}`);
-        await scanText(await response.text(), filename);
+        await scanText(await response.text(), filename, 'example fixture');
       } catch (error) {
         showMessage(error.message || 'Unable to load example.', 'error');
       }
     }
 
-    async function scanText(text, filename) {
+    async function scanText(text, filename, sourceKind = 'uploaded file') {
       try {
         showMessage('Scanning MCP tools locally…', 'ok');
         const result = await scanMcpToolsText(text, { filename });
         lastResult = result;
-        renderResult(result);
-        showMessage(`MCP scan complete for ${filename}.`, 'ok');
+        renderResult(result, sourceKind);
+        showMessage(`MCP scan complete for ${sourceKind}: ${filename}.`, 'ok');
       } catch (error) {
         lastResult = null;
         renderEmpty();
@@ -221,10 +223,11 @@
       }
     }
 
-    function renderResult(result) {
+    function renderResult(result, sourceKind) {
       const counts = result.summary.risk_counts || {};
       scoreEl.textContent = `${result.summary.score}/100`;
       statusEl.textContent = result.summary.status;
+      sourceLabel.textContent = `Source: ${sourceKind} - ${result.source?.filename || 'MCP tools JSON'}`;
       criticalCount.textContent = counts.critical || 0;
       highCount.textContent = counts.high || 0;
       mediumCount.textContent = counts.medium || 0;
@@ -248,6 +251,7 @@
       topRisks.innerHTML = '';
       toolFindings.innerHTML = '';
       markdownReport.textContent = '';
+      sourceLabel.textContent = '';
       mcpSummary.innerHTML = '';
     }
 

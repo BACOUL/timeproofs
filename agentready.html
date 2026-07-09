@@ -135,6 +135,7 @@
         <div id="score" class="score">—</div>
         <span id="status" class="status">—</span>
         <div id="scoreInterpretation" class="score-note"></div>
+        <p id="sourceLabel" class="muted"></p>
         <div id="openApiSummary" class="finding"></div>
         <div class="counts">
           <div class="count"><strong id="criticalCount" class="critical">0</strong>Critical</div>
@@ -229,6 +230,7 @@
     const scoreEl = document.getElementById('score');
     const statusEl = document.getElementById('status');
     const scoreInterpretation = document.getElementById('scoreInterpretation');
+    const sourceLabel = document.getElementById('sourceLabel');
     const openApiSummary = document.getElementById('openApiSummary');
     const criticalCount = document.getElementById('criticalCount');
     const highCount = document.getElementById('highCount');
@@ -257,7 +259,7 @@
         showMessage('Choose an OpenAPI JSON or YAML file first.', 'error');
         return;
       }
-      await scanText(await file.text(), file.name);
+      await scanText(await file.text(), file.name, 'uploaded file');
     });
 
     loadGoodExample.addEventListener('click', async () => loadExample('/agentready-examples/valid-simple-openapi.json', 'valid-simple-openapi.json'));
@@ -283,13 +285,13 @@
       try {
         const response = await fetch(url, { cache: 'no-store' });
         if (!response.ok) throw new Error(`Unable to load example: ${response.status}`);
-        await scanText(await response.text(), filename);
+        await scanText(await response.text(), filename, 'example fixture');
       } catch (error) {
         showMessage(error.message || 'Unable to load example.', 'error');
       }
     }
 
-    async function scanText(text, filename) {
+    async function scanText(text, filename, sourceKind = 'uploaded file') {
       try {
         showMessage('Scanning OpenAPI locally…', 'ok');
         if (new TextEncoder().encode(text).length > 1024 * 1024) {
@@ -297,8 +299,8 @@
         }
         const result = await scanOpenApiText(text, { filename });
         lastResult = result;
-        renderResult(result);
-        showMessage(`OpenAPI scan complete for ${filename}.`, 'ok');
+        renderResult(result, sourceKind);
+        showMessage(`OpenAPI scan complete for ${sourceKind}: ${filename}.`, 'ok');
       } catch (error) {
         lastResult = null;
         renderEmpty();
@@ -306,11 +308,12 @@
       }
     }
 
-    function renderResult(result) {
+    function renderResult(result, sourceKind) {
       const counts = result.summary.risk_counts || {};
       scoreEl.textContent = `${result.summary.score}/100`;
       statusEl.textContent = result.summary.status;
       scoreInterpretation.textContent = getScoreInterpretation(result.summary.score);
+      sourceLabel.textContent = `Source: ${sourceKind} - ${result.source?.filename || 'OpenAPI document'}`;
       criticalCount.textContent = counts.critical || 0;
       highCount.textContent = counts.high || 0;
       mediumCount.textContent = counts.medium || 0;
@@ -341,6 +344,7 @@
       endpointFindings.innerHTML = '';
       markdownReport.textContent = '';
       scoreInterpretation.textContent = '';
+      sourceLabel.textContent = '';
       openApiSummary.innerHTML = '';
       fixExamples.innerHTML = '';
       severityGuide.innerHTML = '';
@@ -402,7 +406,7 @@
       if (codes.has('ambiguous_tool_description') || codes.has('missing_when_to_use')) examples.push('Before: “Create item.” → After: explain when to use, when not to use, expected result, and safety boundary.');
       if (codes.has('missing_enum')) examples.push('Before: status:string → After: status enum [draft, pending, paid, cancelled].');
       if (codes.has('unbounded_parameter')) examples.push('Before: amount:number → After: amount with minimum, maximum, currency, and confirmation rules.');
-      if (codes.has('dangerous_action_without_confirmation') || codes.has('irreversible_action')) examples.push('Before: execute immediately → After: preview, explicit confirmation, then verifiable success object.');
+      if (codes.has('missing_human_confirmation_flow') || codes.has('dangerous_action_without_confirmation') || codes.has('irreversible_action')) examples.push('Before: execute immediately → After: preview, explicit confirmation, then verifiable success object.');
       if (examples.length === 0) examples.push('No common fix examples required for the current top findings.');
       return examples;
     }

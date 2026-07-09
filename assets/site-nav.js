@@ -5,6 +5,7 @@
     ['/agentready-mcp.html', 'MCP scanner'],
     ['/agentready-simulation.html', 'Static simulation'],
     ['/agentready-sample-report.html', 'Sample report'],
+    ['/pricing.html', 'Pricing'],
     ['/agentready-resources.html', 'Resources'],
     ['/agentready-docs.html', 'Docs'],
     ['/agentready-examples.html', 'Examples'],
@@ -63,6 +64,7 @@
     links.className = 'footer-links';
     [
       ['/agentready-sample-report.html', 'Sample report'],
+      ['/pricing.html', 'Pricing'],
       ['/agentready-resources.html', 'Resources'],
       ['/legal.html', 'Legal notice'],
       ['/privacy.html', 'Privacy'],

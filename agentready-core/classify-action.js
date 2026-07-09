@@ -145,7 +145,7 @@ function isWebhookPath(path) {
 
 function matchKeywordRule(haystack, signals, signalPrefix) {
   for (const rule of KEYWORD_RULES) {
-    const matched = rule.keywords.filter((keyword) => haystack.includes(keyword));
+    const matched = rule.keywords.filter((keyword) => hasKeyword(haystack, keyword));
     if (matched.length > 0) {
       signals.push(...matched.map((keyword) => `${signalPrefix}:${keyword}`));
       return rule.action_type;
@@ -155,12 +155,21 @@ function matchKeywordRule(haystack, signals, signalPrefix) {
   return '';
 }
 
+function hasKeyword(haystack, keyword) {
+  const normalizedKeyword = keyword.replace(/[_-]+/g, ' ').trim().toLowerCase();
+  if (normalizedKeyword.includes(' ')) return haystack.includes(normalizedKeyword);
+  return new RegExp(`(^|[^a-z0-9])${escapeRegExp(normalizedKeyword)}([^a-z0-9]|$)`).test(haystack);
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 function buildPrimaryHaystack(operation) {
   return [
     operation.method,
     operation.path,
     operation.operationId,
-    operation.summary,
     ...(operation.tags || [])
   ]
     .join(' ')
