@@ -9,6 +9,8 @@ export const ACTION_TYPES = Object.freeze([
   'READ',
   'SEARCH',
   'LIST',
+  'HEALTH_CHECK',
+  'WEBHOOK',
   'CREATE',
   'UPDATE',
   'DELETE',
@@ -33,6 +35,8 @@ export const ACTION_RISK_LEVEL = Object.freeze({
   READ: 'low',
   SEARCH: 'low',
   LIST: 'low',
+  HEALTH_CHECK: 'low',
+  WEBHOOK: 'medium',
   CREATE: 'medium',
   UPDATE: 'medium',
   DELETE: 'high',
@@ -118,6 +122,12 @@ export const RISK_DEFINITIONS = Object.freeze({
     category: 'strict_parameters',
     explanation: 'A parameter appears to represent a closed set but is defined as a free string.',
     recommendation: 'Add an enum for status, type, category, role, currency, language, or country fields.'
+  },
+  missing_human_confirmation_flow: {
+    severity: 'critical',
+    category: 'dangerous_actions',
+    explanation: 'A human confirmation is required for this action type, but the operation contract does not document the confirmation flow.',
+    recommendation: 'Document the preview, explicit human confirmation step, execution step, and post-action verification.'
   },
   dangerous_action_without_confirmation: {
     severity: 'critical',
