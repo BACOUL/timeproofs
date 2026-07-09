@@ -23,7 +23,7 @@ const SCAN_TYPES = new Set(['openapi', 'mcp']);
 main(process.argv.slice(2)).catch((error) => {
   printError(error?.message || 'Unexpected AgentReady CLI error.');
   if (process.env.AGENTREADY_DEBUG) console.error(error);
-  process.exit(EXIT.INTERNAL_ERROR);
+  process.exit(error?.usage ? EXIT.USAGE_OR_INPUT_ERROR : EXIT.INTERNAL_ERROR);
 });
 
 async function main(argv) {
