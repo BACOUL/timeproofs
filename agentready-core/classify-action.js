@@ -3,11 +3,11 @@ import { ACTION_RISK_LEVEL } from './types.js';
 const KEYWORD_RULES = Object.freeze([
   { action_type: 'REFUND', keywords: ['refund', 'reimburse', 'repay'] },
   { action_type: 'TRANSFER', keywords: ['transfer', 'wire', 'payout'] },
-  { action_type: 'PAY', keywords: ['pay', 'payment', 'charge', 'checkout', 'invoice', 'billing'] },
   { action_type: 'DELETE', keywords: ['delete', 'remove', 'erase', 'destroy', 'purge'] },
   { action_type: 'CANCEL', keywords: ['cancel', 'terminate', 'disable', 'deactivate', 'revoke'] },
   { action_type: 'SEND', keywords: ['send', 'email', 'message', 'notify', 'sms'] },
-  { action_type: 'PUBLISH', keywords: ['publish', 'post', 'share', 'release', 'deploy'] },
+  { action_type: 'PAY', keywords: ['pay', 'payment', 'charge', 'checkout'] },
+  { action_type: 'PUBLISH', keywords: ['publish', 'share', 'release', 'deploy'] },
   { action_type: 'EXPORT', keywords: ['export', 'download', 'dump', 'extract'] },
   { action_type: 'IMPORT', keywords: ['import', 'upload', 'ingest'] },
   { action_type: 'AUTH', keywords: ['auth', 'token', 'secret', 'api key', 'apikey', 'login', 'permission', 'role', 'scope'] },
@@ -35,17 +35,25 @@ const SENSITIVE_KEYWORDS = Object.freeze([
   'iban',
   'card',
   'ssn',
-  'health',
   'personal',
   'private'
 ]);
 
 export function classifyAction(operation) {
   const haystack = buildHaystack(operation);
+  const keywordHaystack = buildKeywordHaystack(operation);
   const signals = [];
 
+  if (isHealthCheckOperation(operation)) {
+    return withRisk('HEALTH_CHECK', ['pattern:health-check'], haystack);
+  }
+
+  if (isWebhookReceiverOperation(operation)) {
+    return withRisk('WEBHOOK', ['pattern:webhook-receiver'], haystack);
+  }
+
   for (const rule of KEYWORD_RULES) {
-    const matched = rule.keywords.filter((keyword) => haystack.includes(keyword));
+    const matched = rule.keywords.filter((keyword) => keywordHaystack.includes(keyword));
     if (matched.length > 0) {
       signals.push(...matched.map((keyword) => `keyword:${keyword}`));
       return withRisk(rule.action_type, signals, haystack);
@@ -82,16 +90,57 @@ function classifyByMethod(method, path = '') {
   const normalizedPath = String(path).toLowerCase();
 
   if (method === 'GET') {
+    if (isHealthPath(normalizedPath)) return 'HEALTH_CHECK';
     if (normalizedPath.includes('search') || normalizedPath.includes('query')) return 'SEARCH';
     if (/\{[^}]+\}/.test(normalizedPath)) return 'READ';
     return 'LIST';
   }
 
-  if (method === 'POST') return 'CREATE';
+  if (method === 'POST') {
+    if (isWebhookPath(normalizedPath)) return 'WEBHOOK';
+    if (normalizedPath.includes('search') || normalizedPath.includes('query') || normalizedPath.includes('lookup')) return 'SEARCH';
+    return 'CREATE';
+  }
+
   if (method === 'PUT' || method === 'PATCH') return 'UPDATE';
   if (method === 'DELETE') return 'DELETE';
 
   return 'UNKNOWN';
+}
+
+function isHealthCheckOperation(operation) {
+  if (operation.method !== 'GET') return false;
+  const text = buildHaystack(operation);
+  return isHealthPath(String(operation.path || '').toLowerCase()) || /\b(health check|readiness probe|liveness probe|status check)\b/.test(text);
+}
+
+function isWebhookReceiverOperation(operation) {
+  if (operation.method !== 'POST') return false;
+  const text = buildHaystack(operation);
+  return isWebhookPath(String(operation.path || '').toLowerCase()) || /\b(webhook|callback|event receiver|receives .* events?)\b/.test(text);
+}
+
+function isHealthPath(path) {
+  return /(^|\/)health$|(^|\/)healthz$|(^|\/)live$|(^|\/)liveness$|(^|\/)ready$|(^|\/)readiness$|(^|\/)status$/.test(path);
+}
+
+function isWebhookPath(path) {
+  return /(^|\/)webhooks?(\/|$)|(^|\/)callbacks?(\/|$)/.test(path);
+}
+
+function buildKeywordHaystack(operation) {
+  return [
+    operation.path,
+    operation.operationId,
+    operation.summary,
+    operation.description,
+    ...(operation.tags || []),
+    ...(operation.parameters || []).map((field) => `${field.name} ${field.description}`),
+    ...(operation.requestFields || []).map((field) => `${field.name} ${field.description}`)
+  ]
+    .join(' ')
+    .replace(/[_-]+/g, ' ')
+    .toLowerCase();
 }
 
 function buildHaystack(operation) {
