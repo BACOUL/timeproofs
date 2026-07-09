@@ -44,12 +44,9 @@ export function classifyAction(operation) {
   const keywordHaystack = buildKeywordHaystack(operation);
   const signals = [];
 
-  if (isHealthCheckOperation(operation)) {
-    return withRisk('HEALTH_CHECK', ['pattern:health-check'], haystack);
-  }
-
-  if (isWebhookReceiverOperation(operation)) {
-    return withRisk('WEBHOOK', ['pattern:webhook-receiver'], haystack);
+  const structuralType = classifyByStructure(operation);
+  if (structuralType !== 'UNKNOWN') {
+    return withRisk(structuralType, [`structure:${structuralType.toLowerCase()}`], haystack);
   }
 
   for (const rule of KEYWORD_RULES) {
@@ -86,6 +83,13 @@ function withRisk(action_type, signals, haystack) {
   return { action_type, risk_level, signals };
 }
 
+function classifyByStructure(operation) {
+  if (isHealthCheckOperation(operation)) return 'HEALTH_CHECK';
+  if (isWebhookReceiverOperation(operation)) return 'WEBHOOK';
+  if (isSearchOperation(operation)) return 'SEARCH';
+  return 'UNKNOWN';
+}
+
 function classifyByMethod(method, path = '') {
   const normalizedPath = String(path).toLowerCase();
 
@@ -118,6 +122,13 @@ function isWebhookReceiverOperation(operation) {
   if (operation.method !== 'POST') return false;
   const text = buildHaystack(operation);
   return isWebhookPath(String(operation.path || '').toLowerCase()) || /\b(webhook|callback|event receiver|receives .* events?)\b/.test(text);
+}
+
+function isSearchOperation(operation) {
+  if (!['GET', 'POST'].includes(operation.method)) return false;
+  const path = String(operation.path || '').toLowerCase();
+  const text = buildKeywordHaystack(operation);
+  return /(^|\/)(search|query|lookup)(\/|$)/.test(path) || /\b(search|lookup|query)\b/.test(`${operation.operationId || ''} ${operation.summary || ''}`.toLowerCase()) || /\buse this when .*\b(find|search|lookup)\b/.test(text);
 }
 
 function isHealthPath(path) {
