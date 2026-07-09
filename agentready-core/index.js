@@ -29,7 +29,7 @@ export function scanOpenApiDocument(document, options = {}) {
     const risk_level = maxRiskLevel([classification.risk_level, ...findingLevels]);
     const requires_human_confirmation =
       HUMAN_CONFIRMATION_ACTIONS.includes(classification.action_type) ||
-      riskResult.findings.some((finding) => finding.code === 'dangerous_action_without_confirmation');
+      riskResult.findings.some((finding) => ['missing_human_confirmation_flow', 'dangerous_action_without_confirmation'].includes(finding.code));
 
     return {
       ...operation,
