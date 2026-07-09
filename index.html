@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>TimeProofs AgentReady - Check APIs and MCP tools before AI agents use them</title>
-  <meta name="description" content="Scan OpenAPI and MCP tool definitions before exposing them to AI agents. Get an AgentReady Score, risk findings, reports, agentready.json, and static simulation output." />
+  <meta name="description" content="Find risky OpenAPI and MCP tools before AI agents use them. Scan locally for wrong tools, missing confirmation, unsafe parameters, and weak error recovery." />
   <meta name="robots" content="index,follow" />
   <meta name="theme-color" content="#08111f" />
   <link rel="canonical" href="https://timeproofs.io/" />
@@ -100,13 +100,11 @@
       <div class="hero-grid">
         <div>
           <div class="eyebrow">Pre-deployment checks for agent-facing tools</div>
-          <h1>Know if your API is safe enough for AI agents before they use it.</h1>
-          <p class="subtitle">TimeProofs AgentReady helps API builders, SaaS teams, and MCP tool builders find risky agent-facing tool contracts before rollout. The V1 scanner runs locally in the browser and exports a human report plus <code>agentready.json</code>.</p>
+          <h1>Find risky OpenAPI and MCP tools before AI agents use them.</h1>
+          <p class="subtitle">Spot wrong-tool risks, missing confirmation, unsafe parameters, and weak error recovery before rollout. TimeProofs AgentReady stays local and browser-first, then exports a human report plus <code>agentready.json</code>.</p>
           <div class="cta-row">
-            <a class="cta" href="/agentready.html">Scan your OpenAPI file</a>
-            <a class="cta secondary" href="/agentready-mcp.html">Scan MCP tools</a>
-            <a class="cta secondary" href="/agentready-examples.html">Try example</a>
-            <a class="cta secondary" href="/pricing.html">Request review</a>
+            <a class="cta" href="/agentready.html">Scan OpenAPI</a>
+            <a class="cta secondary" href="/agentready-sample-report.html">View sample report</a>
           </div>
           <div class="trust-row">
             <span class="trust">Runs locally</span>
@@ -142,6 +140,18 @@
       </div>
     </section>
 
+    <section class="section wrap" aria-label="AgentReady engine proof">
+      <div class="banner">
+        <div>
+          <h2>Engine gate: 18/18 core tests passed</h2>
+          <p>OpenAPI + MCP + export contract + scoring regression tests. Static scan only, no API calls, no file upload.</p>
+        </div>
+        <div class="cta-row">
+          <a class="cta secondary" href="/agentready-test.html">View engine gate</a>
+        </div>
+      </div>
+    </section>
+
     <section class="section wrap">
       <div class="section-head">
         <h2>The problem is not only whether your API works. It is whether an agent can use it safely.</h2>
@@ -151,6 +161,20 @@
         <article class="card"><h3>Ambiguous tools</h3><p>Agents may pick the wrong operation when names and descriptions are too vague.</p></article>
         <article class="card"><h3>Unbounded actions</h3><p>Money, deletes, emails, exports, and publishing flows need limits and confirmation rules.</p></article>
         <article class="card"><h3>Weak recovery</h3><p>Generic errors leave agents guessing instead of correcting parameters or stopping safely.</p></article>
+      </div>
+    </section>
+
+    <section class="section wrap">
+      <div class="section-head">
+        <h2>What can go wrong?</h2>
+        <p>Agent-facing contracts can look valid while still giving autonomous tools the wrong path, missing guardrails, or too much reach.</p>
+      </div>
+      <div class="grid three">
+        <article class="card"><h3>Refund without confirmation</h3><p>Money movement should show intent, amount, customer, and explicit approval before execution.</p></article>
+        <article class="card"><h3>Delete user without explicit approval</h3><p>Destructive account actions need clear confirmation, blocked states, and recovery behavior.</p></article>
+        <article class="card"><h3>Send invoice to wrong recipient</h3><p>Outbound messaging needs recipient validation, preview, and a bounded sending flow.</p></article>
+        <article class="card"><h3>Webhook exposed as agent-callable tool</h3><p>Internal callbacks should not become general tools without purpose, scope, and safety notes.</p></article>
+        <article class="card"><h3>Search endpoint leaking customer data</h3><p>Broad read tools need scoped parameters, output limits, and sensitive-data boundaries.</p></article>
       </div>
     </section>
 
@@ -204,7 +228,7 @@
         </article>
         <article class="card">
           <h2>Clear boundaries</h2>
-          <p>TimeProofs AgentReady is not a runtime firewall and does not guarantee that an AI agent will never fail. It identifies structural risks that may cause AI agents to misuse APIs, tools, or MCP servers.</p>
+          <p>AgentReady is not a penetration test and does not guarantee absolute safety. It is a static readiness scanner for agent-facing contracts.</p>
         </article>
       </div>
     </section>
@@ -217,7 +241,7 @@
         </div>
         <div class="cta-row">
           <a class="cta" href="/agentready.html">Scan OpenAPI</a>
-          <a class="cta secondary" href="/agentready-mcp.html">Scan MCP</a>
+          <a class="cta secondary" href="/agentready-mcp.html">Scan MCP tools</a>
           <a class="cta secondary" href="/agentready-examples.html">Try example</a>
           <a class="cta secondary" href="/pricing.html">Request review</a>
         </div>
