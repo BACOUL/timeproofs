@@ -174,7 +174,7 @@ function renderFixExamples(findings) {
     examples.push('After: `amount: number` with `minimum`, `maximum`, currency, and confirmation rule.');
   }
 
-  if (codes.has('dangerous_action_without_confirmation') || codes.has('irreversible_action')) {
+  if (codes.has('missing_human_confirmation_flow') || codes.has('dangerous_action_without_confirmation') || codes.has('irreversible_action')) {
     examples.push('Before: destructive action executes immediately.');
     examples.push('After: return a preview first, require explicit human confirmation, then return a verifiable success object.');
   }
