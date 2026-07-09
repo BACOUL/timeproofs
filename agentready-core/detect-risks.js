@@ -160,7 +160,7 @@ function isAmbiguousDescription(operation) {
 
 function hasWhenToUse(operation) {
   const text = normalizeText(`${operation.summary || ''} ${operation.description || ''}`);
-  return /use this when|when to use|only use|should be used|intended for|use when/.test(text);
+  return /use this when|use this only when|when to use|only use|should be used|intended for|use when/.test(text);
 }
 
 function hasWhenNotToUse(operation) {
@@ -216,6 +216,7 @@ function hasNonCorrectiveErrors(operation, classification) {
 
 function hasSensitiveDataExposure(operation, classification) {
   if (classification.action_type === 'HEALTH_CHECK') return false;
+  if (classification.action_type === 'WEBHOOK' && hasWebhookSafetyBoundary(operation)) return false;
 
   if (containsSensitiveTerms(operation)) return true;
 
@@ -257,7 +258,12 @@ function needsSuccessVerification(operation, classification) {
 
 function hasImplicitContext(operation) {
   const text = normalizeText(`${operation.summary || ''} ${operation.description || ''} ${operation.path || ''}`);
-  return /current user|current account|current tenant|active workspace|default project|selected environment|my account|me\b/.test(text);
+  return /current user|current account|current tenant|active workspace|default project|selected environment|my account|\bme\b/.test(text);
+}
+
+function hasWebhookSafetyBoundary(operation) {
+  const text = normalizeText(`${operation.summary || ''} ${operation.description || ''} ${(operation.responses || []).map((response) => response.description || '').join(' ')}`);
+  return /signature verification|valid signature|idempotency|idempotent|event provider|not intended to be called by autonomous agents|not called autonomously/.test(text);
 }
 
 function isMcpOperation(operation) {
