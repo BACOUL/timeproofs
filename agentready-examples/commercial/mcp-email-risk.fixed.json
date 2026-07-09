@@ -1,0 +1,62 @@
+{
+  "mcp_version": "2025-06",
+  "server": {
+    "name": "AgentReady Demo — Fixed Email MCP Server",
+    "description": "Commercial demo fixture showing an MCP email tool with explicit AI-agent use boundaries and confirmation requirements."
+  },
+  "tools": [
+    {
+      "name": "send_confirmed_external_email",
+      "description": "Send an external email only after the human user has explicitly confirmed the recipient, subject, body, attachments, and sensitive-data warning. Use this tool only for final sending, not for drafting. Do not use it when the user has not approved the exact message content or when sensitive data is detected without an explicit override.",
+      "inputSchema": {
+        "type": "object",
+        "required": ["to", "subject", "body", "human_confirmation", "sensitive_data_reviewed"],
+        "properties": {
+          "to": {
+            "type": "string",
+            "description": "One confirmed external recipient email address. The human user must approve this exact recipient before sending."
+          },
+          "cc": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Optional confirmed CC recipients."
+          },
+          "subject": {
+            "type": "string",
+            "minLength": 3,
+            "description": "Subject approved by the human user."
+          },
+          "body": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Final body approved by the human user. Do not include secrets, credentials, health data, payment data, or private customer data unless explicitly reviewed."
+          },
+          "attachments": {
+            "type": "array",
+            "items": { "type": "string" },
+            "maxItems": 3,
+            "description": "Optional attachment ids approved by the human user."
+          },
+          "human_confirmation": {
+            "type": "boolean",
+            "const": true,
+            "description": "Must be true only after explicit human confirmation of the final message."
+          },
+          "sensitive_data_reviewed": {
+            "type": "boolean",
+            "description": "Confirms that sensitive data risk was reviewed before sending."
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "required": ["message_id", "delivery_status"],
+        "properties": {
+          "message_id": { "type": "string" },
+          "delivery_status": { "type": "string", "enum": ["queued", "sent", "blocked", "failed"] },
+          "blocked_reason": { "type": "string" }
+        }
+      }
+    }
+  ]
+}
