@@ -86,6 +86,11 @@ function buildAllowedWhen(operation) {
 
 function buildForbiddenWhen(operation, findingCodes) {
   const forbidden = [];
+  const action = operation.classification.action_type;
+
+  if (action === 'WEBHOOK') {
+    forbidden.push('an autonomous agent attempts to call this inbound provider endpoint as a normal tool');
+  }
 
   if (findingCodes.includes('missing_human_confirmation_flow') || findingCodes.includes('dangerous_action_without_confirmation')) {
     forbidden.push('the required confirmation flow is missing or unclear');
@@ -116,6 +121,11 @@ function buildForbiddenWhen(operation, findingCodes) {
 
 function buildFailureModes(operation, findingCodes) {
   const modes = [];
+  const action = operation.classification.action_type;
+
+  if (action === 'WEBHOOK') {
+    modes.push('inbound provider endpoint exposed as an agent-callable tool');
+  }
 
   if (findingCodes.includes('unclear_operation_name') || findingCodes.includes('ambiguous_tool_description')) {
     modes.push('wrong tool selection');
@@ -145,6 +155,12 @@ function buildFailureModes(operation, findingCodes) {
 }
 
 function buildAgentRecommendation(operation, findingCodes, requiresHumanConfirmation) {
+  const action = operation.classification.action_type;
+
+  if (action === 'WEBHOOK') {
+    return 'Do not expose this inbound webhook as an autonomous agent-callable tool. Validate provider signatures and idempotency server-side.';
+  }
+
   if (operation.risk_level === 'critical') {
     return 'Do not allow autonomous execution before fixing critical risks.';
   }
