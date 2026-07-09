@@ -1,74 +1,96 @@
-# Security Policy — TimeProofs
+# Security Policy - TimeProofs AgentReady
 
-TimeProofs is an open, privacy-first protocol for digital proof of existence.  
-This document defines how to responsibly report and coordinate security vulnerabilities.
+TimeProofs AgentReady is a static readiness scanner for agent-facing OpenAPI and MCP tools.
 
----
+It is not a penetration test, runtime firewall, or guarantee that agents will never fail.
 
-## Supported Versions
+## Supported Scope
 
-| Version | Status        | Security Fixes |
-|----------|----------------|----------------|
-| v0.1     | Public Beta    | ✅ Active (monitored) |
-| < v0.1   | Experimental   | ❌ Not supported |
+This policy covers the active AgentReady repository surface:
 
----
+```txt
+agentready-core/
+bin/agentready.js
+cli/tests/
+agentready-examples/
+static public AgentReady pages
+docs/agentready/
+```
+
+The old proof-of-existence timestamp/verify product is not the active product direction.
+
+## Execution Sequence
+
+```txt
+1. CLI alpha merged.
+2. Validate commercial bad/fixed CI gate behavior.
+3. Stabilize AgentReady rule codes.
+4. Add GitHub Action wrapper.
+5. Publish agentready.json spec v0.1.
+6. Add /agentready-ci public page.
+7. Then run public site QA/polish.
+```
 
 ## Reporting a Vulnerability
 
-If you believe you’ve discovered a security or privacy vulnerability, please report it privately and responsibly.
+Please report vulnerabilities privately:
 
-**Contact:**
-- 📧 Email: [security@timeproofs.io](mailto:security@timeproofs.io)
-- 🔑 PGP Key: [https://timeproofs.io/pgp.txt](https://timeproofs.io/pgp.txt)
+```txt
+security@timeproofs.io
+https://timeproofs.io/pgp.txt
+```
 
-**Do not** publicly disclose issues before coordinated remediation and acknowledgment.
+Do not disclose security issues publicly before coordinated remediation.
 
-We commit to:
-1. Acknowledge your report within **72 hours**.
-2. Provide an initial assessment within **7 days**.
-3. Publish a security advisory once mitigations are live.
+Useful report details:
 
----
+```txt
+affected file or page
+steps to reproduce
+expected result
+actual result
+security or privacy impact
+minimal proof of concept, if safe
+```
 
-## Scope
+## Security Principles
 
-This policy covers:
-- API endpoints (`/api/timestamp`, `/api/verify`)
-- Frontend site (https://timeproofs.io)
-- Cloudflare Workers backend & KV storage
-- Open-source repositories under `github.com/timeproofs`
+AgentReady should remain:
 
-Out of scope:
-- Third-party dependencies (handled via Dependabot)
-- Local integrations or forks not maintained by TimeProofs
+```txt
+static by default
+local-first in browser flows
+no live API execution during scanning
+no live MCP execution during scanning
+no LLM calls during scanning
+no submitted spec storage by default
+no secret/token exposure in reports
+```
 
----
+## Out of Scope
 
-## Disclosure Process
+```txt
+old timestamp API
+old verify API
+old self-hosted proof runtime
+old proof SDK
+third-party forks
+issues requiring live execution of customer APIs
+```
 
-1. Submit your report to [security@timeproofs.io](mailto:security@timeproofs.io)
-2. Include:
-   - Description and steps to reproduce
-   - Affected endpoint or component
-   - Potential impact and severity
-3. Optionally encrypt with our [PGP key](https://timeproofs.io/pgp.txt)
+## Vulnerability Classes of Interest
 
----
+```txt
+scanner executing a submitted API or MCP tool
+uploaded spec data leaving the browser unexpectedly
+CLI reading or writing outside requested paths
+report output exposing secrets from input specs
+malformed input causing unsafe behavior
+cross-site scripting in static report rendering
+```
 
-## Hall of Thanks
+## Mandatory Limitation
 
-Researchers who help secure TimeProofs will be acknowledged on:
-🔗 [https://timeproofs.io/security](https://timeproofs.io/security)
+TimeProofs AgentReady does not guarantee that an AI agent will never fail.
 
----
-
-## Policy References
-
-- Canonical: [https://timeproofs.io/.well-known/security.txt](https://timeproofs.io/.well-known/security.txt)  
-- Legal terms: [https://timeproofs.io/legal.html](https://timeproofs.io/legal.html)  
-- Privacy policy: [https://timeproofs.io/privacy.html](https://timeproofs.io/privacy.html)
-
----
-
-© 2025 TimeProofs — Proof of Existence. For Everything.
+It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.
