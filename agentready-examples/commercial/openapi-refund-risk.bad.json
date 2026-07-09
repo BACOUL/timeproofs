@@ -1,0 +1,45 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AgentReady Demo — Risky Refund API",
+    "version": "1.0.0",
+    "description": "Commercial demo fixture showing a valid OpenAPI operation that is risky for AI-agent use."
+  },
+  "paths": {
+    "/orders/{order_id}/refund": {
+      "post": {
+        "operationId": "refundOrder",
+        "summary": "Refund order",
+        "description": "Refund an order.",
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["amount", "reason"],
+                "properties": {
+                  "amount": { "type": "number" },
+                  "reason": { "type": "string" },
+                  "notify_customer": { "type": "boolean" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    }
+  }
+}
