@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AgentReady Engine Gate — TimeProofs</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="theme-color" content="#0b1020" />
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link rel="stylesheet" href="/assets/site-nav.css" />
+  <style>
+    :root { --bg:#0b1020; --panel:#0f172a; --line:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --ok:#22c55e; --bad:#ef4444; --warn:#f59e0b; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:radial-gradient(900px 320px at 70% -10%,rgba(34,211,238,.16),transparent 60%),var(--bg); color:var(--text); line-height:1.55; }
+    a { color:var(--accent); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    .wrap { width:min(1120px,calc(100% - 32px)); margin:0 auto; }
+    .page { padding:34px 0; }
+    header.site-header { position:sticky; top:0; backdrop-filter:blur(12px); background:rgba(11,16,32,.72); border-bottom:1px solid var(--line); z-index:10; }
+    .nav { display:flex; justify-content:space-between; align-items:center; gap:16px; min-height:68px; }
+    .brand { display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; }
+    .brand img { width:38px; height:38px; border-radius:10px; }
+    .nav-links { display:flex; gap:18px; flex-wrap:wrap; font-size:.94rem; font-weight:700; }
+    h1 { margin:0 0 10px; font-size:clamp(2rem,5vw,4rem); line-height:1; letter-spacing:-.05em; }
+    h2 { margin-top:0; color:#b9e7f5; }
+    .muted { color:var(--muted); }
+    .card { background:rgba(15,23,42,.82); border:1px solid var(--line); border-radius:18px; padding:20px; margin:16px 0; box-shadow:0 18px 60px rgba(0,0,0,.22); }
+    button { cursor:pointer; display:inline-flex; align-items:center; justify-content:center; min-height:42px; padding:0 14px; border-radius:12px; border:1px solid rgba(255,255,255,.08); background:linear-gradient(135deg,var(--accent),#38bdf8); color:#04111f; font-weight:900; }
+    .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+    .summary { display:grid; gap:12px; grid-template-columns:repeat(4,1fr); margin-top:14px; }
+    @media (max-width:760px) { .summary { grid-template-columns:repeat(2,1fr); } }
+    .metric { background:#020617; border:1px solid #1e293b; border-radius:12px; padding:12px; text-align:center; }
+    .metric strong { display:block; font-size:1.8rem; }
+    .overall { border:1px solid #1e293b; border-radius:16px; padding:16px; background:#07111f; margin-top:14px; }
+    .overall.pass { color:#bbf7d0; border-color:rgba(34,197,94,.35); background:rgba(34,197,94,.1); }
+    .overall.fail { color:#fecaca; border-color:rgba(239,68,68,.35); background:rgba(239,68,68,.1); }
+    .test { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; border:1px solid #1e293b; border-radius:14px; background:#07111f; padding:14px; margin:10px 0; }
+    .test small { display:block; color:var(--muted); margin-top:4px; }
+    .badge { border-radius:999px; padding:4px 10px; font-size:.82rem; font-weight:900; white-space:nowrap; }
+    .pass-badge { color:#bbf7d0; background:rgba(34,197,94,.12); border:1px solid rgba(34,197,94,.35); }
+    .fail-badge { color:#fecaca; background:rgba(239,68,68,.12); border:1px solid rgba(239,68,68,.35); }
+    pre { background:#020617; border:1px solid #1e293b; border-radius:14px; padding:14px; overflow:auto; color:#e2f6ff; white-space:pre-wrap; word-break:break-word; }
+    code { background:#020617; color:#e2f6ff; border:1px solid #1e293b; border-radius:8px; padding:2px 6px; }
+    footer { border-top:1px solid var(--line); padding:24px 0; color:#64748b; text-align:center; margin-top:40px; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="brand" href="/" aria-label="TimeProofs AgentReady home"><img src="/assets/logo.png" alt="" /><span>TimeProofs AgentReady</span></a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="/agentready.html">OpenAPI Scan</a>
+        <a href="/agentready-mcp.html">MCP Scan</a>
+        <a href="/agentready-test.html">Tests</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap page">
+    <section class="card">
+      <h1>AgentReady Engine Gate</h1>
+      <p class="muted">Release gate for the scanner engine. This page must pass before changing copy, pricing, SEO, or selling the product.</p>
+      <p class="muted">It locks expected classifications, risk behavior, score thresholds, and export recommendations on a commercial OpenAPI fixture.</p>
+      <div class="actions"><button id="runButton">Run engine gate</button></div>
+      <div class="summary">
+        <div class="metric"><strong id="passCount">0</strong>Pass</div>
+        <div class="metric"><strong id="failCount">0</strong>Fail</div>
+        <div class="metric"><strong id="totalCount">0</strong>Total</div>
+        <div class="metric"><strong id="score">—</strong>Score</div>
+      </div>
+      <div id="overallStatus" class="overall">No gate run yet.</div>
+    </section>
+
+    <section class="card">
+      <h2>Gate checks</h2>
+      <div id="results"></div>
+    </section>
+
+    <section class="card">
+      <h2>Raw scan output</h2>
+      <pre id="rawOutput">No output yet.</pre>
+    </section>
+  </main>
+
+  <footer><div class="wrap">TimeProofs AgentReady — engine release gate.</div></footer>
+
+  <script type="module">
+    import { scanOpenApiText } from './agentready-core/index.js';
+
+    const runButton = document.getElementById('runButton');
+    const resultsEl = document.getElementById('results');
+    const rawOutput = document.getElementById('rawOutput');
+    const overallStatus = document.getElementById('overallStatus');
+    const passCount = document.getElementById('passCount');
+    const failCount = document.getElementById('failCount');
+    const totalCount = document.getElementById('totalCount');
+    const scoreEl = document.getElementById('score');
+
+    const expectedActions = new Map([
+      ['checkHealth', { action_type: 'HEALTH_CHECK', risk_level: 'low', confirmation: false }],
+      ['searchCustomers', { action_type: 'SEARCH', confirmation: false }],
+      ['refundOrderWithApproval', { action_type: 'REFUND', confirmation: true }],
+      ['deleteUserAfterApproval', { action_type: 'DELETE', confirmation: true }],
+      ['sendInvoiceEmail', { action_type: 'SEND', confirmation: true }],
+      ['receiveStripeWebhook', { action_type: 'WEBHOOK', confirmation: false }]
+    ]);
+
+    runButton.addEventListener('click', runGate);
+
+    async function runGate() {
+      resultsEl.innerHTML = '';
+      rawOutput.textContent = 'Running…';
+      const checks = [];
+
+      try {
+        const text = await loadFixture('/agentready-examples/openapi-engine-regression.json');
+        const result = await scanOpenApiText(text, { filename: 'openapi-engine-regression.json' });
+        const tools = result.agentready_json.tools || [];
+        const byId = new Map(tools.map(tool => [tool.operation_id, tool]));
+
+        checks.push(assert('fixture scans successfully', true, 'The commercial regression fixture parsed and scanned.'));
+        checks.push(assert('operation count is stable', result.operations.length === 6, `Expected 6 operations, got ${result.operations.length}.`));
+        checks.push(assert('score is at least Minor fixes', result.summary.score >= 70, `Expected score >= 70, got ${result.summary.score}.`));
+        checks.push(assert('no critical summary findings', (result.summary.risk_counts?.critical || 0) === 0, `Critical risks: ${result.summary.risk_counts?.critical || 0}.`));
+        checks.push(assert('no dangerous_action_without_confirmation regression', !allRiskCodes(tools).includes('dangerous_action_without_confirmation'), 'Old contradictory risk code must not reappear.'));
+
+        for (const [operationId, expected] of expectedActions.entries()) {
+          const tool = byId.get(operationId);
+          checks.push(assert(`${operationId} exists`, Boolean(tool), 'Expected operation is present in agentready.json.'));
+          if (!tool) continue;
+          checks.push(assert(`${operationId} action type`, tool.action_type === expected.action_type, `Expected ${expected.action_type}, got ${tool.action_type}.`));
+          checks.push(assert(`${operationId} confirmation flag`, tool.requires_human_confirmation === expected.confirmation, `Expected confirmation=${expected.confirmation}, got ${tool.requires_human_confirmation}.`));
+          if (expected.risk_level) {
+            checks.push(assert(`${operationId} risk level`, tool.risk_level === expected.risk_level, `Expected ${expected.risk_level}, got ${tool.risk_level}.`));
+          }
+        }
+
+        const webhook = byId.get('receiveStripeWebhook');
+        checks.push(assert('webhook recommendation blocks agent-callable exposure', webhook?.agent_recommendation?.includes('Do not expose this inbound webhook'), webhook?.agent_recommendation || 'Missing webhook recommendation.'));
+
+        const health = byId.get('checkHealth');
+        checks.push(assert('health check has no detected risks', (health?.detected_risks || []).length === 0, `Health risks: ${(health?.detected_risks || []).join(', ')}`));
+
+        const search = byId.get('searchCustomers');
+        checks.push(assert('search is not misclassified as SEND or PUBLISH', !['SEND', 'PUBLISH', 'PAY'].includes(search?.action_type), `searchCustomers action=${search?.action_type}.`));
+
+        rawOutput.textContent = JSON.stringify({
+          summary: result.summary,
+          tools
+        }, null, 2);
+      } catch (error) {
+        checks.push(assert('engine gate execution', false, error.message || String(error)));
+        rawOutput.textContent = error.stack || error.message || String(error);
+      }
+
+      renderChecks(checks);
+    }
+
+    async function loadFixture(url) {
+      const response = await fetch(url, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`Unable to load fixture ${url}: ${response.status}`);
+      return response.text();
+    }
+
+    function assert(name, pass, detail = '') {
+      return { name, pass: Boolean(pass), detail };
+    }
+
+    function allRiskCodes(tools) {
+      return tools.flatMap(tool => tool.detected_risks || []);
+    }
+
+    function renderChecks(checks) {
+      const pass = checks.filter(check => check.pass).length;
+      const fail = checks.length - pass;
+      passCount.textContent = pass;
+      failCount.textContent = fail;
+      totalCount.textContent = checks.length;
+      scoreEl.textContent = extractScore(rawOutput.textContent) || '—';
+      overallStatus.className = `overall ${fail === 0 ? 'pass' : 'fail'}`;
+      overallStatus.textContent = fail === 0 ? `PASS — ${pass}/${checks.length} gate checks passed.` : `FAIL — ${fail}/${checks.length} gate checks failed.`;
+      resultsEl.innerHTML = checks.map(renderCheck).join('');
+    }
+
+    function renderCheck(check) {
+      return `<div class="test">
+        <div><strong>${escapeHtml(check.name)}</strong><small>${escapeHtml(check.detail || '')}</small></div>
+        <span class="badge ${check.pass ? 'pass-badge' : 'fail-badge'}">${check.pass ? 'PASS' : 'FAIL'}</span>
+      </div>`;
+    }
+
+    function extractScore(raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        return parsed.summary?.score ? `${parsed.summary.score}/100` : '';
+      } catch {
+        return '';
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>'"]/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#039;', '"':'&quot;' }[char]));
+    }
+  </script>
+</body>
+</html>
