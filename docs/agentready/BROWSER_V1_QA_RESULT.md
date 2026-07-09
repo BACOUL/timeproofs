@@ -3,89 +3,77 @@
 ## Status
 
 ```txt
-PENDING — manual browser QA not completed.
+PARTIAL PASS — production mobile QA and production test harness passed.
+STRICT BROWSER V1 QA: PENDING — desktop Network tab, desktop exports and Print / Save as PDF still need verification.
 ```
 
-This file records the Browser V1 QA gate after public V1 mobile navigation propagation, homepage commercial polish, sample report preview, and public acquisition SEO pages were completed.
+This file records the Browser V1 QA gate after the public production deployment on `timeproofs.io` was checked from a real mobile browser with ChatGPT-guided review.
 
-Important: Browser V1 is **not** declared complete by this file.
+Important: Browser V1 is **not** declared complete by this file. The production mobile evidence is strong enough to continue product planning and documentation, but not enough to claim the full strict Browser V1 release gate as PASS.
 
 ## QA metadata
 
 ```txt
-QA date: 2026-06-29
-Tester: ChatGPT via GitHub connector
-Branch tested: timeproofs
-Commit tested: 87d201e515774c789a86307fac0ae272012a2f6f
-Browser: NOT AVAILABLE IN THIS EXECUTION ENVIRONMENT
-Device / viewport: NOT TESTED
-Local server command required: python3 -m http.server 8080
-Local base URL required: http://localhost:8080/
+QA date: 2026-07-09
+Tester: Jeason Bacoul, with ChatGPT-guided checklist review
+Production URL tested: https://timeproofs.io/
+Branch expected in production: timeproofs
+Production commit observed in Vercel UI: d2adc71
+Browser: mobile browser, Android device
+Device / viewport: mobile viewport
+Strict desktop browser QA: NOT COMPLETED
+Desktop Network tab access: NOT COMPLETED
+Desktop export download verification: NOT COMPLETED
+Desktop Print / Save as PDF verification: NOT COMPLETED
 ```
 
-## Static repository consistency check
-
-This check was completed through repository inspection only. It does not replace browser QA.
+## Production mobile evidence
 
 ```txt
-Homepage navigation foundation present             : PASS
-Commercial homepage present                        : PASS
-Sample report preview page present                 : PASS
-Sample report linked from homepage                 : PASS
-Sample report listed in sitemap                    : PASS
-Sample report included in shared nav/footer        : PASS
-Public resources hub present                       : PASS
-OpenAPI AI agent readiness page present            : PASS
-MCP server readiness page present                  : PASS
-AI agent tool risk checklist page present          : PASS
-agentready.json explainer page present             : PASS
-Public acquisition pages listed in sitemap         : PASS
-Resources link present in shared nav/footer        : PASS
-Shared mobile navigation script present            : PASS
-Shared mobile navigation CSS present               : PASS
-OpenAPI scanner includes shared nav assets         : PASS
-MCP scanner includes shared nav assets             : PASS
-Static simulation page includes shared nav assets  : PASS
-Docs page includes shared nav assets               : PASS
-Examples page includes shared nav assets           : PASS
-Test page includes shared nav assets               : PASS
-Legal/privacy/terms pages exist as drafts          : PASS
-TODO_NEXT reflects SEO foundation completion       : PASS
+Homepage loads on timeproofs.io                         : PASS
+Correct AgentReady homepage visible                     : PASS
+Mobile menu opens                                       : PASS
+Mobile navigation links visible                         : PASS
+Mobile navigation layout not obviously broken           : PASS
+/agentready-test.html loads in production               : PASS
+Static browser test harness executed in production      : PASS
+Test harness result                                     : PASS — 31/31 checks passed
+User-reported public page smoke check                   : PASS — pages checked on mobile, no blocking issue reported
 ```
 
-## QA attempt notes
+## Release interpretation
 
 ```txt
-Manual Browser V1 QA is still required.
-The repository is now ready for the Browser V1 QA runbook.
-A real browser session must confirm page rendering, mobile navigation, scanner execution, exports, print dialogs, and Network tab no-execution behavior.
-This execution environment cannot honestly mark the Browser V1 release gate as PASS because no real browser session was available.
+Production deployment is usable for internal review and product planning.
+Production mobile smoke QA is acceptable.
+The technical test harness passes in production.
+Browser V1 must still remain marked as strict-QA pending until desktop checks are completed.
 ```
 
 ## Pages checked
 
-Mark each page as pass / fail / not tested.
+The following pages were included in the mobile/public smoke-check scope.
 
 ```txt
-/                                  : STATIC CHECK ONLY — browser not available
-/agentready.html                   : STATIC CHECK ONLY — browser not available
-/agentready-mcp.html               : STATIC CHECK ONLY — browser not available
-/agentready-simulation.html        : STATIC CHECK ONLY — browser not available
-/agentready-sample-report.html     : STATIC CHECK ONLY — browser not available
-/agentready-resources.html         : STATIC CHECK ONLY — browser not available
-/openapi-ai-agent-readiness.html   : STATIC CHECK ONLY — browser not available
-/mcp-server-readiness.html         : STATIC CHECK ONLY — browser not available
-/ai-agent-tool-risk-checklist.html : STATIC CHECK ONLY — browser not available
-/agentready-json.html              : STATIC CHECK ONLY — browser not available
-/agentready-docs.html              : STATIC CHECK ONLY — browser not available
-/agentready-examples.html          : STATIC CHECK ONLY — browser not available
-/agentready-test.html              : STATIC CHECK ONLY — browser not available
-/legal.html                        : STATIC CHECK ONLY — browser not available
-/privacy.html                      : STATIC CHECK ONLY — browser not available
-/terms.html                        : STATIC CHECK ONLY — browser not available
+/                                  : MOBILE SMOKE CHECK — PASS reported
+/agentready.html                   : MOBILE SMOKE CHECK — PASS reported
+/agentready-mcp.html               : MOBILE SMOKE CHECK — PASS reported
+/agentready-simulation.html        : MOBILE SMOKE CHECK — PASS reported
+/agentready-sample-report.html     : MOBILE SMOKE CHECK — PASS reported
+/agentready-resources.html         : MOBILE SMOKE CHECK — PASS reported
+/openapi-ai-agent-readiness.html   : MOBILE SMOKE CHECK — PASS reported
+/mcp-server-readiness.html         : MOBILE SMOKE CHECK — PASS reported
+/ai-agent-tool-risk-checklist.html : MOBILE SMOKE CHECK — PASS reported
+/agentready-json.html              : MOBILE SMOKE CHECK — PASS reported
+/agentready-docs.html              : MOBILE SMOKE CHECK — PASS reported
+/agentready-examples.html          : MOBILE SMOKE CHECK — PASS reported
+/agentready-test.html              : PRODUCTION TEST HARNESS — PASS 31/31
+/legal.html                        : MOBILE SMOKE CHECK — PASS reported
+/privacy.html                      : MOBILE SMOKE CHECK — PASS reported
+/terms.html                        : MOBILE SMOKE CHECK — PASS reported
 ```
 
-Expected for each page during real browser QA:
+Expected for each page during final strict browser QA:
 
 ```txt
 Page loads.
@@ -95,120 +83,7 @@ Navigation works.
 No uncaught console error after normal page load.
 Footer legal/privacy/terms links appear where appropriate.
 Mobile menu does not wrap into multiple rows.
-```
-
-## Homepage and sample report checks
-
-```txt
-Homepage commercial hero readability          : NOT TESTED IN BROWSER
-Homepage OpenAPI CTA                          : NOT TESTED IN BROWSER
-Homepage MCP CTA                              : NOT TESTED IN BROWSER
-Homepage sample report CTA                    : NOT TESTED IN BROWSER
-Homepage preview card readability             : NOT TESTED IN BROWSER
-Sample report score renders                   : NOT TESTED IN BROWSER
-Sample report risk counts render              : NOT TESTED IN BROWSER
-Sample report executive summary renders       : NOT TESTED IN BROWSER
-Sample report top findings render             : NOT TESTED IN BROWSER
-Sample report action plan renders             : NOT TESTED IN BROWSER
-Sample report code block remains readable     : NOT TESTED IN BROWSER
-Sample report limitation text visible         : NOT TESTED IN BROWSER
-```
-
-## Public acquisition page checks
-
-```txt
-Resources hub renders                         : NOT TESTED IN BROWSER
-OpenAPI readiness page renders                : NOT TESTED IN BROWSER
-MCP readiness page renders                    : NOT TESTED IN BROWSER
-Risk checklist page renders                   : NOT TESTED IN BROWSER
-agentready.json explainer renders             : NOT TESTED IN BROWSER
-Resources hub links to acquisition pages      : NOT TESTED IN BROWSER
-SEO pages have specific titles/H1             : NOT TESTED IN BROWSER
-SEO pages CTAs route correctly                : NOT TESTED IN BROWSER
-SEO pages boundary text remains visible       : NOT TESTED IN BROWSER
-SEO pages do not claim Browser V1 PASS        : NOT TESTED IN BROWSER
-agentready-json code block remains readable   : NOT TESTED IN BROWSER
-```
-
-## Fixtures tested
-
-### OpenAPI fixtures
-
-```txt
-valid-simple-openapi.json          : NOT TESTED IN BROWSER
-valid-simple-openapi.yaml          : NOT TESTED IN BROWSER
-dangerous-actions-openapi.json     : NOT TESTED IN BROWSER
-invalid JSON behavior              : NOT TESTED IN BROWSER
-invalid YAML behavior              : NOT TESTED IN BROWSER
-```
-
-### MCP fixtures
-
-```txt
-mcp-tools-simple.json              : NOT TESTED IN BROWSER
-mcp-tools-dangerous.json           : NOT TESTED IN BROWSER
-invalid MCP JSON behavior          : NOT TESTED IN BROWSER
-missing tools[] behavior           : NOT TESTED IN BROWSER
-empty tools[] behavior             : NOT TESTED IN BROWSER
-missing tool name behavior         : NOT TESTED IN BROWSER
-```
-
-### Static simulation scenarios
-
-```txt
-simulation-openapi-refund-scenario.json           : NOT TESTED IN BROWSER
-simulation-mcp-delete-file-scenario.json          : NOT TESTED IN BROWSER
-simulation-openapi-export-customers-scenario.json : NOT TESTED IN BROWSER
-simulation-mcp-send-email-scenario.json           : NOT TESTED IN BROWSER
-unknown expected_tool behavior                    : NOT TESTED IN BROWSER
-source_type mismatch behavior                     : NOT TESTED IN BROWSER
-invalid scenario JSON behavior                    : NOT TESTED IN BROWSER
-missing scenario_id behavior                      : NOT TESTED IN BROWSER
-```
-
-## Export checks
-
-Mark each export as pass / fail / not tested.
-
-```txt
-agentready.json                    : NOT TESTED IN BROWSER
-agentready-mcp.json                : NOT TESTED IN BROWSER
-agentready-report.md               : NOT TESTED IN BROWSER
-agentready-mcp-report.md           : NOT TESTED IN BROWSER
-agentready-simulation.json         : NOT TESTED IN BROWSER
-OpenAPI Print / Save as PDF        : NOT TESTED IN BROWSER
-MCP Print / Save as PDF            : NOT TESTED IN BROWSER
-```
-
-## Contract checks
-
-### agentready.json
-
-```txt
-agentready_version present         : NOT TESTED — export not generated in browser
-generated_at present               : NOT TESTED — export not generated in browser
-source_type present                : NOT TESTED — export not generated in browser
-source present                     : NOT TESTED — export not generated in browser
-summary present                    : NOT TESTED — export not generated in browser
-tools[] present                    : NOT TESTED — export not generated in browser
-tools[].operation_id present       : NOT TESTED — export not generated in browser
-tools[].action_type present        : NOT TESTED — export not generated in browser
-tools[].risk_level present         : NOT TESTED — export not generated in browser
-tools[].detected_risks present     : NOT TESTED — export not generated in browser
-```
-
-### agentready-simulation.json
-
-```txt
-simulation_version present         : NOT TESTED — export not generated in browser
-generated_at present               : NOT TESTED — export not generated in browser
-source_type present                : NOT TESTED — export not generated in browser
-scenarios_total present            : NOT TESTED — export not generated in browser
-pass count present                 : NOT TESTED — export not generated in browser
-warning count present              : NOT TESTED — export not generated in browser
-fail count present                 : NOT TESTED — export not generated in browser
-not_applicable count present       : NOT TESTED — export not generated in browser
-results[] present                  : NOT TESTED — export not generated in browser
+Desktop navigation remains usable.
 ```
 
 ## Test harness result
@@ -216,23 +91,54 @@ results[] present                  : NOT TESTED — export not generated in brow
 Page:
 
 ```txt
-/agentready-test.html
+https://timeproofs.io/agentready-test.html
 ```
 
-Result:
+Result observed from production mobile screenshot:
 
 ```txt
-OpenAPI tests                      : NOT TESTED IN BROWSER
-MCP tests                          : NOT TESTED IN BROWSER
-Export contract tests              : NOT TESTED IN BROWSER
-Static simulation tests            : NOT TESTED IN BROWSER
-Overall PASS / FAIL                : PENDING
+OpenAPI tests                      : PASS
+MCP tests                          : PASS
+Export contract tests              : PASS
+Static simulation tests            : PASS
+Overall                            : PASS — 31/31 checks passed
+Failures                           : 0
 ```
 
-Failure details, if any:
+## Export checks
+
+Mark each export as pass / fail / not tested.
 
 ```txt
-Manual test harness execution was not possible in this environment.
+agentready.json                    : CONTRACT COVERED BY TEST HARNESS — manual download still pending
+agentready-mcp.json                : CONTRACT COVERED BY TEST HARNESS — manual download still pending
+agentready-report.md               : NOT TESTED BY MANUAL DOWNLOAD
+agentready-mcp-report.md           : NOT TESTED BY MANUAL DOWNLOAD
+agentready-simulation.json         : CONTRACT COVERED BY TEST HARNESS — manual download still pending
+OpenAPI Print / Save as PDF        : NOT TESTED ON DESKTOP
+MCP Print / Save as PDF            : NOT TESTED ON DESKTOP
+```
+
+## Contract checks
+
+### agentready.json
+
+```txt
+agentready_version present         : PASS via production test harness
+source_type present                : PASS via production test harness
+summary present                    : PASS via production test harness
+tools[] present                    : PASS via production test harness
+OpenAPI contract checks            : PASS via production test harness
+MCP contract checks                : PASS via production test harness
+Manual exported file inspection    : PENDING
+```
+
+### agentready-simulation.json
+
+```txt
+simulation output contract         : PASS via production test harness
+static simulation checks           : PASS via production test harness
+Manual exported file inspection    : PENDING
 ```
 
 ## No-execution confirmation
@@ -240,94 +146,49 @@ Manual test harness execution was not possible in this environment.
 Confirm each item as pass / fail / not tested.
 
 ```txt
-OpenAPI scanner did not call uploaded API endpoints       : NOT TESTED IN BROWSER
-MCP scanner did not contact a live MCP server             : NOT TESTED IN BROWSER
-MCP scanner did not execute MCP tools                     : NOT TESTED IN BROWSER
-Static simulation did not call APIs                       : NOT TESTED IN BROWSER
-Static simulation did not execute MCP tools               : NOT TESTED IN BROWSER
-Static simulation did not call LLMs                       : NOT TESTED IN BROWSER
-No backend required for scanner/simulation flows          : NOT TESTED IN BROWSER
-No account required                                       : NOT TESTED IN BROWSER
-No payment required                                       : NOT TESTED IN BROWSER
-No dashboard state required                               : NOT TESTED IN BROWSER
-No runtime firewall behavior introduced                   : NOT TESTED IN BROWSER
+OpenAPI scanner did not call uploaded API endpoints       : PENDING — desktop Network tab required
+MCP scanner did not contact a live MCP server             : PENDING — desktop Network tab required
+MCP scanner did not execute MCP tools                     : PENDING — desktop Network tab required
+Static simulation did not call APIs                       : PENDING — desktop Network tab required
+Static simulation did not execute MCP tools               : PENDING — desktop Network tab required
+Static simulation did not call LLMs                       : PENDING — desktop Network tab required
+No backend required for scanner/simulation flows          : STRUCTURALLY EXPECTED, desktop Network tab still required
+No account required                                       : PASS — production mobile smoke check
+No payment required                                       : PASS — production mobile smoke check
+No dashboard state required                               : PASS — production mobile smoke check
+No runtime firewall behavior introduced                   : PASS — product boundary unchanged
 ```
 
 Browser Network tab notes:
 
 ```txt
-NOT TESTED — real browser Network tab access is required.
+PENDING — strict desktop browser Network tab access is still required.
+Expected final evidence: only static HTML/CSS/JS/assets/fixture JSON requests during scan and simulation flows.
 ```
 
-## Mobile / narrow viewport smoke check
+## Remaining strict QA blockers
 
 ```txt
-Navigation wraps safely              : NOT TESTED IN BROWSER
-Sample report remains readable       : NOT TESTED IN BROWSER
-Public acquisition pages readable    : NOT TESTED IN BROWSER
-Upload inputs remain usable          : NOT TESTED IN BROWSER
-Result cards remain readable         : NOT TESTED IN BROWSER
-JSON/pre blocks remain readable      : NOT TESTED IN BROWSER
-Buttons remain tappable              : NOT TESTED IN BROWSER
+1. Desktop browser page rendering check.
+2. Desktop DevTools Console check.
+3. Desktop DevTools Network tab check.
+4. Manual agentready.json download and file inspection.
+5. Manual agentready-mcp.json download and file inspection.
+6. Manual Markdown report download and file inspection.
+7. Manual agentready-simulation.json download and file inspection.
+8. OpenAPI Print / Save as PDF verification.
+9. MCP Print / Save as PDF verification.
 ```
 
-## Known issues
-
-List any known issues found during QA.
+## Decision
 
 ```txt
-Manual Browser V1 QA has not been completed.
-The release gate cannot be satisfied until a real browser session tests the product locally or on a hosted static deployment.
-```
-
-## Blocking issues
-
-List any release-blocking issues.
-
-```txt
-BLOCKING: Browser V1 manual QA not completed.
-BLOCKING: Browser test harness not run.
-BLOCKING: Homepage, sample report and public acquisition pages not checked in browser.
-BLOCKING: Exports not manually verified.
-BLOCKING: Browser Network tab no-execution checks not completed.
-```
-
-## Non-blocking issues
-
-List any non-blocking issues.
-
-```txt
-None recorded in this QA attempt.
-```
-
-## Final decision
-
-Choose one:
-
-```txt
-PASS — Browser V1 release gate satisfied.
-FAIL — Browser V1 release gate not satisfied.
-PENDING — QA not yet complete.
-```
-
-Current decision:
-
-```txt
-PENDING — manual browser QA not completed.
-```
-
-## Browser V1 acceptance statement
-
-Browser V1 can be considered complete only if this statement is true:
-
-```txt
-A developer can open TimeProofs AgentReady in the browser, understand the homepage, sample report and public acquisition pages, scan OpenAPI or MCP tool definitions locally, export agentready.json, run a static simulation scenario, export agentready-simulation.json, and understand the main risks without any backend, account, payment, live API execution, MCP execution, or LLM call.
-```
-
-Current status against this statement:
-
-```txt
-NOT VERIFIED — browser QA not completed.
+Production mobile QA: PASS
+Production test harness: PASS — 31/31
+Strict Browser V1 release gate: PENDING
+Public completion claim: NOT ALLOWED
+Continue strategic docs and demo planning: ALLOWED
+Continue V2 CLI implementation: NOT YET — wait until Browser V1 strict QA is understood or explicitly waived
 ```
 
 ## Mandatory limitation text
