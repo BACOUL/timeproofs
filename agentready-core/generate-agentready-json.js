@@ -44,6 +44,7 @@ function toAgentReadyTool(operation) {
 function requiresConfirmation(operation, findingCodes) {
   return (
     HUMAN_CONFIRMATION_ACTIONS.includes(operation.classification.action_type) ||
+    findingCodes.includes('missing_human_confirmation_flow') ||
     findingCodes.includes('dangerous_action_without_confirmation') ||
     findingCodes.includes('irreversible_action')
   );
@@ -54,6 +55,14 @@ function buildAllowedWhen(operation) {
 
   if (['READ', 'SEARCH', 'LIST'].includes(action)) {
     return ['the agent has a clear user request for this data', 'the requested data is within the user authorization scope'];
+  }
+
+  if (action === 'HEALTH_CHECK') {
+    return ['the agent or monitoring workflow needs to verify basic API availability'];
+  }
+
+  if (action === 'WEBHOOK') {
+    return ['the endpoint is used by the external event provider, not called autonomously by the agent'];
   }
 
   if (['CREATE', 'UPDATE'].includes(action)) {
@@ -78,8 +87,8 @@ function buildAllowedWhen(operation) {
 function buildForbiddenWhen(operation, findingCodes) {
   const forbidden = [];
 
-  if (findingCodes.includes('dangerous_action_without_confirmation')) {
-    forbidden.push('human confirmation is missing');
+  if (findingCodes.includes('missing_human_confirmation_flow') || findingCodes.includes('dangerous_action_without_confirmation')) {
+    forbidden.push('the required confirmation flow is missing or unclear');
   }
 
   if (findingCodes.includes('unbounded_parameter')) {
@@ -116,7 +125,7 @@ function buildFailureModes(operation, findingCodes) {
     modes.push('wrong or unsafe parameter value');
   }
 
-  if (findingCodes.includes('dangerous_action_without_confirmation') || findingCodes.includes('irreversible_action')) {
+  if (findingCodes.includes('missing_human_confirmation_flow') || findingCodes.includes('dangerous_action_without_confirmation') || findingCodes.includes('irreversible_action')) {
     modes.push('unsafe autonomous execution');
   }
 
@@ -138,6 +147,10 @@ function buildFailureModes(operation, findingCodes) {
 function buildAgentRecommendation(operation, findingCodes, requiresHumanConfirmation) {
   if (operation.risk_level === 'critical') {
     return 'Do not allow autonomous execution before fixing critical risks.';
+  }
+
+  if (findingCodes.includes('missing_human_confirmation_flow')) {
+    return 'Document the confirmation flow before allowing this action through agents.';
   }
 
   if (requiresHumanConfirmation) {
