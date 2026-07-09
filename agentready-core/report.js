@@ -37,7 +37,7 @@ export function generateMarkdownReport(scanResult) {
     '## Generated AgentReady Contract',
     '',
     'A machine-readable `agentready.json` contract can be generated from this scan result.',
-    'The contract includes `agentready_version`, `generated_at`, `source_type`, source metadata, summary, detected risks, and agent recommendations.',
+    'The contract includes `agentready_version`, `generated_at`, `source_type`, source metadata, summary, detected risks, stable rule codes, and agent recommendations.',
     '',
     '## Limitations',
     '',
@@ -137,7 +137,7 @@ function renderTopFindings(findings, isMcp = false) {
 
   return findings.map((finding, index) => {
     const label = isMcp ? 'tool' : 'operation';
-    return `${index + 1}. **${finding.severity.toUpperCase()}** — ${finding.code} on ${finding.method} ${finding.path}: ${finding.explanation} Fix the ${label} contract before exposing it to agents.`;
+    return `${index + 1}. **${finding.severity.toUpperCase()}** - ${formatFindingCode(finding)} on ${finding.method} ${finding.path}: ${finding.explanation} Fix the ${label} contract before exposing it to agents.`;
   });
 }
 
@@ -201,7 +201,7 @@ function renderOperation(operation, isMcp = false) {
     `Response status codes: ${(operation.responseStatusCodes || []).join(', ') || 'none detected'}`,
     '',
     findings.length ? 'Detected risks:' : 'Detected risks: none',
-    ...findings.map((finding) => `- ${finding.code}: ${finding.recommendation}`),
+    ...findings.map((finding) => `- ${formatFindingCode(finding)}: ${finding.recommendation}`),
     ''
   ];
 }
@@ -223,7 +223,7 @@ function renderMcpTool(operation, findings) {
     `Output schema: ${operation.mcp?.has_output_schema ? `present (${operation.mcp?.output_type || 'object'})` : 'missing'}`,
     '',
     findings.length ? 'Detected MCP risks:' : 'Detected MCP risks: none',
-    ...findings.map((finding) => `- ${finding.code}: ${finding.recommendation}`),
+    ...findings.map((finding) => `- ${formatFindingCode(finding)}: ${finding.recommendation}`),
     ''
   ];
 }
@@ -241,4 +241,8 @@ function getScoreInterpretation(score, isMcp = false) {
   if (score >= 70) return `${target} are close to AgentReady, but minor fixes should be completed before broad agent exposure.`;
   if (score >= 50) return `${target} need fixes before being exposed to autonomous or semi-autonomous agents.`;
   return `${target} are not AgentReady. Do not expose them to autonomous agents before structural fixes are applied.`;
+}
+
+function formatFindingCode(finding) {
+  return finding.rule_code ? `${finding.rule_code} (${finding.code})` : finding.code;
 }

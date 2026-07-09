@@ -1,4 +1,5 @@
 import {
+  getRuleCodeForFinding,
   HUMAN_CONFIRMATION_ACTIONS,
   RISK_DEFINITIONS,
   maxRiskLevel
@@ -148,6 +149,7 @@ function addIf(findings, condition, riskCode, operation) {
   const definition = RISK_DEFINITIONS[riskCode];
   findings.push({
     code: riskCode,
+    rule_code: getRuleCodeForFinding(riskCode),
     severity: definition?.severity || 'medium',
     category: definition?.category || 'agent_descriptions',
     explanation: definition?.explanation || 'AgentReady risk detected.',

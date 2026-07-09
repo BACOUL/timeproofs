@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { runStaticSimulation, scanMcpToolsText, scanOpenApiText } from '../index.js';
+import { FINDING_RULE_CODE_MAP, RISK_DEFINITIONS, RULE_CODES } from '../types.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '../..');
@@ -29,6 +30,8 @@ const REQUIRED_CONTRACT_TOOL_FIELDS = [
   'forbidden_when',
   'failure_modes',
   'detected_risks',
+  'rule_codes',
+  'detected_rules',
   'agent_recommendation'
 ];
 
@@ -133,6 +136,34 @@ test('SCORING: controlled commercial fixtures improve without hiding real risk',
 test('EXPORT CONTRACT: every generated agentready.json has required root and tool fields', () => {
   for (const result of [classification, safeOpenApi, dangerousOpenApi, safeMcp, dangerousMcp, refundFixed, emailFixed, filesFixed]) {
     assertContractShape(result.agentready_json);
+  }
+});
+
+test('RULE CODES: every finding maps to a stable AgentReady rule code', () => {
+  for (const findingCode of Object.keys(RISK_DEFINITIONS)) {
+    const ruleCode = FINDING_RULE_CODE_MAP[findingCode];
+    assert.ok(ruleCode, `${findingCode} is missing a rule code`);
+    assert.match(ruleCode, /^AR\d{3}_[A-Z0-9_]+$/, `${findingCode} has unstable rule code ${ruleCode}`);
+    assert.ok(Object.hasOwn(RULE_CODES, ruleCode), `${findingCode} maps to unknown rule code ${ruleCode}`);
+  }
+});
+
+test('RULE CODES: generated contracts preserve findings and expose stable detected rules', () => {
+  const refund = toolById(dangerousOpenApi, 'refundCustomer');
+  assert.ok(refund.detected_risks.includes('missing_human_confirmation_flow'));
+  assert.ok(refund.rule_codes.includes('AR002_MISSING_CONFIRMATION_BOUNDARY'));
+  assert.ok(refund.detected_rules.some((rule) => (
+    rule.rule_code === 'AR002_MISSING_CONFIRMATION_BOUNDARY' &&
+    rule.finding_code === 'missing_human_confirmation_flow'
+  )));
+
+  for (const result of [dangerousOpenApi, refundBad, emailBad, filesBad, refundFixed, emailFixed, filesFixed]) {
+    for (const operation of result.operations) {
+      for (const finding of operation.findings || []) {
+        assert.ok(finding.rule_code, `${operation.operationId}:${finding.code} is missing rule_code`);
+        assert.ok(Object.hasOwn(RULE_CODES, finding.rule_code), `${finding.rule_code} is not registered`);
+      }
+    }
   }
 });
 
@@ -247,6 +278,16 @@ function assertContractShape(contract) {
   for (const tool of contract.tools) {
     for (const field of REQUIRED_CONTRACT_TOOL_FIELDS) {
       assert.ok(Object.hasOwn(tool, field), `missing tool field ${field}`);
+    }
+    assert.ok(Array.isArray(tool.detected_risks), `${tool.operation_id} detected_risks must be an array`);
+    assert.ok(Array.isArray(tool.rule_codes), `${tool.operation_id} rule_codes must be an array`);
+    assert.ok(Array.isArray(tool.detected_rules), `${tool.operation_id} detected_rules must be an array`);
+    for (const rule of tool.detected_rules) {
+      assert.ok(Object.hasOwn(rule, 'rule_code'), `${tool.operation_id} detected_rule missing rule_code`);
+      assert.ok(Object.hasOwn(rule, 'finding_code'), `${tool.operation_id} detected_rule missing finding_code`);
+      assert.ok(Object.hasOwn(rule, 'severity'), `${tool.operation_id} detected_rule missing severity`);
+      assert.ok(Object.hasOwn(rule, 'category'), `${tool.operation_id} detected_rule missing category`);
+      assert.ok(Object.hasOwn(rule, 'recommendation'), `${tool.operation_id} detected_rule missing recommendation`);
     }
   }
 }

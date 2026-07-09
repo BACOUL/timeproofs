@@ -24,6 +24,7 @@ export function generateAgentReadyJson(scanResult) {
 
 function toAgentReadyTool(operation) {
   const findingCodes = (operation.findings || []).map((finding) => finding.code);
+  const ruleCodes = unique((operation.findings || []).map((finding) => finding.rule_code).filter(Boolean));
   const requiresHumanConfirmation = requiresConfirmation(operation, findingCodes);
 
   return {
@@ -39,7 +40,19 @@ function toAgentReadyTool(operation) {
     forbidden_when: buildForbiddenWhen(operation, findingCodes),
     failure_modes: buildFailureModes(operation, findingCodes),
     detected_risks: findingCodes,
+    rule_codes: ruleCodes,
+    detected_rules: (operation.findings || []).map(toDetectedRule),
     agent_recommendation: buildAgentRecommendation(operation, findingCodes, requiresHumanConfirmation)
+  };
+}
+
+function toDetectedRule(finding) {
+  return {
+    rule_code: finding.rule_code,
+    finding_code: finding.code,
+    severity: finding.severity,
+    category: finding.category,
+    recommendation: finding.recommendation
   };
 }
 
@@ -191,4 +204,8 @@ function getScoreInterpretation(score) {
   if (score >= 70) return 'Close to AgentReady, but minor fixes should be completed before broad agent exposure.';
   if (score >= 50) return 'Needs fixes before being exposed to autonomous or semi-autonomous agents.';
   return 'Not AgentReady. Do not expose to autonomous agents before structural fixes are applied.';
+}
+
+function unique(values) {
+  return [...new Set(values)];
 }

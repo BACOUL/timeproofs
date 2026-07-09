@@ -40,8 +40,10 @@ async function testOpenApiScanWritesOutputs() {
 
   assert.equal(result.code, 0, result.stderr || result.stdout);
   assert.match(result.stdout, /Policy: PASS/);
-  await assertFileExists(path.join(outDir, 'agentready.json'));
+  const contractPath = path.join(outDir, 'agentready.json');
+  await assertFileExists(contractPath);
   await assertFileExists(path.join(outDir, 'agentready-report.md'));
+  assertAgentReadyRuleCodeContract(JSON.parse(await fs.readFile(contractPath, 'utf8')));
 }
 
 async function testMcpScanWritesOutputs() {
@@ -60,8 +62,10 @@ async function testMcpScanWritesOutputs() {
 
   assert.equal(result.code, 0, result.stderr || result.stdout);
   assert.match(result.stdout, /Policy: PASS/);
-  await assertFileExists(path.join(outDir, 'agentready-mcp.json'));
+  const contractPath = path.join(outDir, 'agentready-mcp.json');
+  await assertFileExists(contractPath);
   await assertFileExists(path.join(outDir, 'agentready-mcp-report.md'));
+  assertAgentReadyRuleCodeContract(JSON.parse(await fs.readFile(contractPath, 'utf8')));
 }
 
 async function testPolicyFailureExitCode() {
@@ -75,11 +79,22 @@ async function testPolicyFailureExitCode() {
 
   assert.equal(result.code, 1, result.stderr || result.stdout);
   assert.match(result.stdout, /Policy: FAIL/);
+  assert.match(result.stdout, /AR002_MISSING_CONFIRMATION_BOUNDARY/);
+  assert.match(result.stdout, /missing_human_confirmation_flow/);
 }
 
 async function assertFileExists(filePath) {
   const stat = await fs.stat(filePath);
   assert.equal(stat.isFile(), true, `${filePath} should exist`);
+}
+
+function assertAgentReadyRuleCodeContract(contract) {
+  assert.ok(Array.isArray(contract.tools), 'agentready contract should include tools');
+  for (const tool of contract.tools) {
+    assert.ok(Array.isArray(tool.detected_risks), `${tool.operation_id} should include detected_risks`);
+    assert.ok(Array.isArray(tool.rule_codes), `${tool.operation_id} should include rule_codes`);
+    assert.ok(Array.isArray(tool.detected_rules), `${tool.operation_id} should include detected_rules`);
+  }
 }
 
 function runCli(args) {

@@ -86,6 +86,75 @@ export const SCORE_STATUSES = Object.freeze([
   { min: 0, status: 'Not AgentReady' }
 ]);
 
+export const RULE_CODES = Object.freeze({
+  AR001_UNBOUNDED_WRITE_ACTION: {
+    title: 'Unbounded write action',
+    description: 'A write, money movement, or externally visible action lacks bounded parameters.'
+  },
+  AR002_MISSING_CONFIRMATION_BOUNDARY: {
+    title: 'Missing confirmation boundary',
+    description: 'A dangerous action lacks a documented human confirmation boundary.'
+  },
+  AR003_DESTRUCTIVE_OPERATION_AMBIGUOUS: {
+    title: 'Destructive operation ambiguous',
+    description: 'A destructive or risky action is not described clearly enough for agent use.'
+  },
+  AR004_BULK_ACTION_WITHOUT_LIMIT: {
+    title: 'Bulk action without limit',
+    description: 'A collection, bulk, or large response operation lacks limits or structure.'
+  },
+  AR005_SENSITIVE_DATA_EXPOSURE: {
+    title: 'Sensitive data exposure',
+    description: 'The tool may expose personal, financial, authentication, or customer data.'
+  },
+  AR006_MISSING_DRY_RUN_OR_PREVIEW: {
+    title: 'Missing dry run or preview',
+    description: 'A state-changing action lacks preview, success verification, or an equivalent safe check.'
+  },
+  AR007_OVERBROAD_TOOL_SCOPE: {
+    title: 'Overbroad tool scope',
+    description: 'The tool scope or permission boundary is broader than an agent should receive.'
+  },
+  AR008_MISSING_IDEMPOTENCY_OR_ROLLBACK: {
+    title: 'Missing idempotency or rollback',
+    description: 'The tool does not document corrective errors, retries, rollback, or recovery behavior.'
+  },
+  AR009_UNCLEAR_AGENT_INSTRUCTIONS: {
+    title: 'Unclear agent instructions',
+    description: 'The tool name, description, action type, or usage instructions are unclear for agents.'
+  },
+  AR010_MISSING_RATE_OR_SCOPE_LIMIT: {
+    title: 'Missing rate or scope limit',
+    description: 'The tool contract lacks required fields, closed sets, schema constraints, or scope limits.'
+  }
+});
+
+export const FINDING_RULE_CODE_MAP = Object.freeze({
+  unclear_operation_name: 'AR009_UNCLEAR_AGENT_INSTRUCTIONS',
+  ambiguous_tool_description: 'AR009_UNCLEAR_AGENT_INSTRUCTIONS',
+  missing_when_to_use: 'AR009_UNCLEAR_AGENT_INSTRUCTIONS',
+  missing_when_not_to_use: 'AR009_UNCLEAR_AGENT_INSTRUCTIONS',
+  unbounded_parameter: 'AR001_UNBOUNDED_WRITE_ACTION',
+  missing_enum: 'AR010_MISSING_RATE_OR_SCOPE_LIMIT',
+  missing_human_confirmation_flow: 'AR002_MISSING_CONFIRMATION_BOUNDARY',
+  dangerous_action_without_confirmation: 'AR002_MISSING_CONFIRMATION_BOUNDARY',
+  irreversible_action: 'AR006_MISSING_DRY_RUN_OR_PREVIEW',
+  non_corrective_error: 'AR008_MISSING_IDEMPOTENCY_OR_ROLLBACK',
+  sensitive_data_exposure: 'AR005_SENSITIVE_DATA_EXPOSURE',
+  overbroad_permission: 'AR007_OVERBROAD_TOOL_SCOPE',
+  large_unstructured_response: 'AR004_BULK_ACTION_WITHOUT_LIMIT',
+  missing_success_verification: 'AR006_MISSING_DRY_RUN_OR_PREVIEW',
+  missing_error_recovery: 'AR008_MISSING_IDEMPOTENCY_OR_ROLLBACK',
+  agent_context_confusion: 'AR007_OVERBROAD_TOOL_SCOPE',
+  unknown_action_type: 'AR009_UNCLEAR_AGENT_INSTRUCTIONS',
+  mcp_vague_tool_name: 'AR009_UNCLEAR_AGENT_INSTRUCTIONS',
+  mcp_missing_input_schema: 'AR010_MISSING_RATE_OR_SCOPE_LIMIT',
+  mcp_empty_input_schema: 'AR010_MISSING_RATE_OR_SCOPE_LIMIT',
+  mcp_missing_required_fields: 'AR010_MISSING_RATE_OR_SCOPE_LIMIT',
+  mcp_dangerous_tool_weak_description: 'AR003_DESTRUCTIVE_OPERATION_AMBIGUOUS',
+  mcp_missing_output_schema: 'AR009_UNCLEAR_AGENT_INSTRUCTIONS'
+});
+
 export const RISK_DEFINITIONS = Object.freeze({
   unclear_operation_name: {
     severity: 'medium',
@@ -239,4 +308,8 @@ export function maxRiskLevel(levels) {
     if ((order[level] || 0) > order[max]) max = level;
   }
   return max;
+}
+
+export function getRuleCodeForFinding(findingCode) {
+  return FINDING_RULE_CODE_MAP[findingCode] || 'AR009_UNCLEAR_AGENT_INSTRUCTIONS';
 }
