@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OpenAPI Upload Test — TimeProofs AgentReady</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <style>
+    :root { --bg:#0b1020; --panel:#0f172a; --line:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#22d3ee; --bad:#ef4444; --warn:#f59e0b; --ok:#22c55e; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--bg); color:var(--text); line-height:1.55; }
+    main { width:min(980px,calc(100% - 28px)); margin:0 auto; padding:32px 0; }
+    h1 { margin:0 0 10px; font-size:clamp(1.8rem,5vw,3.2rem); line-height:1; letter-spacing:-.04em; }
+    p { color:var(--muted); }
+    .card { border:1px solid var(--line); background:rgba(15,23,42,.86); border-radius:18px; padding:20px; margin:16px 0; }
+    input[type="file"] { width:100%; border:1px solid var(--line); background:#020617; color:var(--text); border-radius:12px; padding:14px; }
+    button { cursor:pointer; min-height:42px; padding:0 14px; border:0; border-radius:12px; background:linear-gradient(135deg,var(--accent),#38bdf8); color:#04111f; font-weight:900; }
+    button.secondary { background:#101b31; color:#dff7ff; border:1px solid #20304d; }
+    button:disabled { opacity:.45; cursor:not-allowed; }
+    .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+    .message { border:1px solid var(--line); border-radius:12px; padding:12px; margin-top:14px; }
+    .ok { border-color:rgba(34,197,94,.45); background:rgba(34,197,94,.08); color:#bbf7d0; }
+    .error { border-color:rgba(239,68,68,.45); background:rgba(239,68,68,.08); color:#fecaca; }
+    .warn { border-color:rgba(245,158,11,.45); background:rgba(245,158,11,.08); color:#fde68a; }
+    .grid { display:grid; gap:12px; grid-template-columns:repeat(4,1fr); }
+    @media (max-width:720px) { .grid { grid-template-columns:repeat(2,1fr); } }
+    .metric { border:1px solid var(--line); background:#020617; border-radius:12px; padding:12px; text-align:center; }
+    .metric strong { display:block; font-size:1.7rem; }
+    pre { border:1px solid var(--line); background:#020617; color:#e2f6ff; border-radius:14px; padding:14px; overflow:auto; white-space:pre-wrap; word-break:break-word; }
+    details { border:1px solid var(--line); background:#07111f; border-radius:12px; padding:12px; margin:10px 0; }
+    summary { cursor:pointer; font-weight:900; }
+    code { color:#b9e7f5; }
+    .hidden { display:none !important; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>OpenAPI upload test</h1>
+    <p>This page has no example buttons. Select an OpenAPI JSON/YAML file and the scan starts automatically. The exported <code>agentready.json</code> must show the same filename.</p>
+
+    <section class="card">
+      <h2>1. Choose your OpenAPI file</h2>
+      <input id="fileInput" type="file" accept=".json,.yaml,.yml,application/json,text/yaml,application/yaml" />
+      <div id="message" class="message warn">No file selected yet.</div>
+    </section>
+
+    <section id="summary" class="card hidden">
+      <h2>2. Scan result</h2>
+      <p><strong>Source file:</strong> <span id="sourceFilename">—</span></p>
+      <p><strong>OpenAPI version:</strong> <span id="openapiVersion">—</span></p>
+      <div class="grid">
+        <div class="metric"><strong id="score">—</strong>Score</div>
+        <div class="metric"><strong id="operations">—</strong>Operations</div>
+        <div class="metric"><strong id="critical">—</strong>Critical</div>
+        <div class="metric"><strong id="high">—</strong>High</div>
+      </div>
+      <div class="actions">
+        <button id="downloadJsonButton" disabled>Download agentready.json</button>
+        <button id="downloadReportButton" class="secondary" disabled>Download report.md</button>
+      </div>
+    </section>
+
+    <section id="operationsSection" class="card hidden">
+      <h2>3. Operations detected</h2>
+      <div id="operationList"></div>
+    </section>
+
+    <section id="rawSection" class="card hidden">
+      <h2>4. Markdown report preview</h2>
+      <pre id="markdownReport"></pre>
+    </section>
+  </main>
+
+  <script type="module">
+    import { scanOpenApiText } from './agentready-core/index.js';
+
+    const fileInput = document.getElementById('fileInput');
+    const message = document.getElementById('message');
+    const summary = document.getElementById('summary');
+    const operationsSection = document.getElementById('operationsSection');
+    const rawSection = document.getElementById('rawSection');
+    const sourceFilename = document.getElementById('sourceFilename');
+    const openapiVersion = document.getElementById('openapiVersion');
+    const score = document.getElementById('score');
+    const operations = document.getElementById('operations');
+    const critical = document.getElementById('critical');
+    const high = document.getElementById('high');
+    const operationList = document.getElementById('operationList');
+    const markdownReport = document.getElementById('markdownReport');
+    const downloadJsonButton = document.getElementById('downloadJsonButton');
+    const downloadReportButton = document.getElementById('downloadReportButton');
+
+    let lastResult = null;
+
+    fileInput.addEventListener('change', async () => {
+      const file = fileInput.files?.[0];
+      if (!file) return;
+      await runScan(file);
+    });
+
+    downloadJsonButton.addEventListener('click', () => {
+      if (!lastResult) return;
+      downloadFile('agentready.json', JSON.stringify(lastResult.agentready_json, null, 2), 'application/json');
+    });
+
+    downloadReportButton.addEventListener('click', () => {
+      if (!lastResult) return;
+      downloadFile('agentready-openapi-report.md', lastResult.markdown_report, 'text/markdown');
+    });
+
+    async function runScan(file) {
+      try {
+        setMessage(`Scanning ${file.name} locally…`, 'warn');
+        hideResults();
+        const text = await file.text();
+        const result = await scanOpenApiText(text, { filename: file.name });
+        lastResult = result;
+        renderResult(result);
+        setMessage(`Scan complete for ${file.name}.`, 'ok');
+      } catch (error) {
+        lastResult = null;
+        hideResults();
+        setMessage(`${error.code || 'ERROR'}: ${error.message}`, 'error');
+      }
+    }
+
+    function renderResult(result) {
+      const counts = result.summary?.risk_counts || {};
+      sourceFilename.textContent = result.source?.filename || 'unknown';
+      openapiVersion.textContent = result.source?.openapi_version || 'unknown';
+      score.textContent = `${result.summary?.score ?? '—'}/100`;
+      operations.textContent = result.operations?.length ?? 0;
+      critical.textContent = counts.critical || 0;
+      high.textContent = counts.high || 0;
+      operationList.innerHTML = (result.operations || []).map(renderOperation).join('') || '<p>No operations detected.</p>';
+      markdownReport.textContent = result.markdown_report || '';
+      downloadJsonButton.disabled = false;
+      downloadReportButton.disabled = false;
+      summary.classList.remove('hidden');
+      operationsSection.classList.remove('hidden');
+      rawSection.classList.remove('hidden');
+    }
+
+    function renderOperation(operation) {
+      const findings = operation.findings || [];
+      return `<details>
+        <summary>${escapeHtml(operation.method)} ${escapeHtml(operation.path)} — ${escapeHtml(operation.risk_level)}</summary>
+        <p><strong>Operation ID:</strong> ${escapeHtml(operation.operationId)}</p>
+        <p><strong>Action type:</strong> ${escapeHtml(operation.classification?.action_type || 'unknown')}</p>
+        <p><strong>Requires human confirmation:</strong> ${operation.requires_human_confirmation ? 'yes' : 'no'}</p>
+        ${findings.length ? `<ul>${findings.map(finding => `<li><strong>${escapeHtml(finding.severity)}</strong> — ${escapeHtml(finding.code)}: ${escapeHtml(finding.recommendation)}</li>`).join('')}</ul>` : '<p>No findings detected.</p>'}
+      </details>`;
+    }
+
+    function hideResults() {
+      downloadJsonButton.disabled = true;
+      downloadReportButton.disabled = true;
+      summary.classList.add('hidden');
+      operationsSection.classList.add('hidden');
+      rawSection.classList.add('hidden');
+      operationList.innerHTML = '';
+      markdownReport.textContent = '';
+    }
+
+    function setMessage(text, type) {
+      message.textContent = text;
+      message.className = `message ${type}`;
+    }
+
+    function downloadFile(filename, content, type) {
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>'"]/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#039;', '"':'&quot;' }[char]));
+    }
+  </script>
+</body>
+</html>
