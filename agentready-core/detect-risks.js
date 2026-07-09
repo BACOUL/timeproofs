@@ -82,11 +82,23 @@ const SENSITIVE_FIELD_NAMES = Object.freeze([
 const ERROR_STATUS_CODES = Object.freeze(['400', '401', '403', '404', '409', '422', '500']);
 const READ_ONLY_ACTIONS = Object.freeze(['READ', 'SEARCH', 'LIST', 'HEALTH_CHECK']);
 const STATE_CHANGING_ACTIONS = Object.freeze(['CREATE', 'UPDATE', 'DELETE', 'SEND', 'PUBLISH', 'PAY', 'REFUND', 'TRANSFER', 'EXPORT', 'CANCEL']);
+const DANGEROUS_ACTION_TYPES = Object.freeze([
+  'DELETE',
+  'SEND',
+  'PUBLISH',
+  'PAY',
+  'REFUND',
+  'TRANSFER',
+  'EXPORT',
+  'CANCEL',
+  'SENSITIVE_DATA'
+]);
 
 export function detectRisks(operation, classification) {
   const findings = [];
   const lowRiskUtility = isLowRiskUtilityOperation(classification);
   const webhookReceiver = classification.action_type === 'WEBHOOK';
+  const riskControls = assessRiskControls(operation, classification);
 
   addIf(findings, isUnclearOperationName(operation) && !lowRiskUtility, 'unclear_operation_name', operation);
   addIf(findings, isAmbiguousDescription(operation) && !lowRiskUtility, 'ambiguous_tool_description', operation);
@@ -96,14 +108,14 @@ export function detectRisks(operation, classification) {
   addIf(findings, hasUnboundedNumericParameter(operation), 'unbounded_parameter', operation);
   addIf(
     findings,
-    HUMAN_CONFIRMATION_ACTIONS.includes(classification.action_type) && !hasHumanConfirmationGuidance(operation),
+    HUMAN_CONFIRMATION_ACTIONS.includes(classification.action_type) && !riskControls.has_human_confirmation,
     'missing_human_confirmation_flow',
     operation
   );
   addIf(findings, isIrreversibleAction(classification.action_type), 'irreversible_action', operation);
   addIf(findings, hasNonCorrectiveErrors(operation, classification), 'non_corrective_error', operation);
   addIf(findings, hasSensitiveDataExposure(operation, classification), 'sensitive_data_exposure', operation);
-  addIf(findings, hasOverbroadPermission(operation, classification), 'overbroad_permission', operation);
+  addIf(findings, hasOverbroadPermission(operation, classification, riskControls), 'overbroad_permission', operation);
   addIf(findings, hasLargeUnstructuredResponse(operation), 'large_unstructured_response', operation);
   addIf(findings, needsSuccessVerification(operation, classification), 'missing_success_verification', operation);
   addIf(findings, hasNonCorrectiveErrors(operation, classification), 'missing_error_recovery', operation);
@@ -120,10 +132,14 @@ export function detectRisks(operation, classification) {
   }
 
   const deduped = dedupeFindings(findings);
+  const actionRiskLevel = getControlledActionRiskLevel(classification, riskControls);
 
   return {
     findings: deduped,
-    risk_level: maxRiskLevel(deduped.map((finding) => finding.severity))
+    risk_level: maxRiskLevel([actionRiskLevel, ...deduped.map((finding) => finding.severity)]),
+    action_risk_level: actionRiskLevel,
+    controlled_risk: riskControls.controlled_risk,
+    risk_controls: riskControls
   };
 }
 
@@ -146,6 +162,55 @@ function isLowRiskUtilityOperation(classification) {
   return classification.action_type === 'HEALTH_CHECK';
 }
 
+function assessRiskControls(operation, classification) {
+  const hasHumanConfirmation = hasHumanConfirmationGuidance(operation);
+  const controls = {
+    has_human_confirmation: hasHumanConfirmation,
+    has_parameter_limits: hasParameterLimits(operation),
+    has_structured_output: hasStructuredOutput(operation),
+    has_clear_status: hasClearStatusOutput(operation),
+    has_blocked_reason: hasBlockedReasonOutput(operation),
+    has_manual_review: hasManualReviewSignal(operation),
+    has_guardrail: hasGuardrailSignal(operation),
+    has_scoped_access: hasScopedAccessControls(operation),
+    has_corrective_errors: !hasNonCorrectiveErrors(operation, classification),
+    has_success_verification: !needsSuccessVerification(operation, classification)
+  };
+
+  const supportSignals = [
+    controls.has_parameter_limits,
+    controls.has_structured_output,
+    controls.has_clear_status,
+    controls.has_blocked_reason,
+    controls.has_manual_review,
+    controls.has_guardrail,
+    controls.has_scoped_access,
+    controls.has_corrective_errors,
+    controls.has_success_verification
+  ].filter(Boolean).length;
+
+  return {
+    ...controls,
+    control_signal_count: supportSignals,
+    controlled_risk:
+      DANGEROUS_ACTION_TYPES.includes(classification.action_type) &&
+      hasHumanConfirmation &&
+      supportSignals > 0
+  };
+}
+
+function getControlledActionRiskLevel(classification, riskControls) {
+  const actionType = classification.action_type;
+  const baseRisk = classification.risk_level || 'medium';
+
+  if (!DANGEROUS_ACTION_TYPES.includes(actionType)) return baseRisk;
+  if (!riskControls.controlled_risk) return baseRisk;
+
+  if (['PAY', 'REFUND', 'TRANSFER', 'DELETE', 'CANCEL'].includes(actionType)) return 'high';
+  if (riskControls.control_signal_count >= 3) return 'medium';
+  return 'high';
+}
+
 function isUnclearOperationName(operation) {
   if (!operation.hasExplicitOperationId) return true;
   const normalized = String(operation.operationId || '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
@@ -160,7 +225,7 @@ function isAmbiguousDescription(operation) {
 
 function hasWhenToUse(operation) {
   const text = normalizeText(`${operation.summary || ''} ${operation.description || ''}`);
-  return /use this when|use this only when|when to use|only use|should be used|intended for|use when/.test(text);
+  return /use this when|use this only when|use only when|use this tool only|when to use|only use|only after|only when|should be used|intended for|use when/.test(text);
 }
 
 function hasWhenNotToUse(operation) {
@@ -169,8 +234,8 @@ function hasWhenNotToUse(operation) {
 }
 
 function hasHumanConfirmationGuidance(operation) {
-  const text = normalizeText(`${operation.summary || ''} ${operation.description || ''}`);
-  return /human confirmation|manual approval|explicit approval|requires approval|confirm before|approval required|review before|preview before|dry run/.test(text);
+  const text = getOperationText(operation);
+  return /human confirmation|human approval|manual approval|explicit approval|explicit confirmation|explicitly confirm|explicitly confirmed|requires approval|confirm before|approval required|approval token|confirmation token|human approval token|human_confirmation|human_approval|review before|preview before|dry run/.test(text);
 }
 
 function hasMissingEnum(operation) {
@@ -226,12 +291,15 @@ function hasSensitiveDataExposure(operation, classification) {
   });
 }
 
-function hasOverbroadPermission(operation, classification) {
+function hasOverbroadPermission(operation, classification, riskControls) {
+  if (operation.hasSecurity) return false;
+  if (riskControls.has_scoped_access && ['READ', 'DELETE', 'EXPORT', 'SENSITIVE_DATA'].includes(classification.action_type)) return false;
+
   const sensitive = hasSensitiveDataExposure(operation, classification);
   const highRiskAction = ['DELETE', 'SEND', 'PUBLISH', 'PAY', 'REFUND', 'TRANSFER', 'EXPORT', 'AUTH', 'SENSITIVE_DATA'].includes(
     classification.action_type
   );
-  return (sensitive || highRiskAction) && !operation.hasSecurity;
+  return sensitive || highRiskAction;
 }
 
 function hasLargeUnstructuredResponse(operation) {
@@ -301,8 +369,89 @@ function hasMissingMcpOutputSchema(operation) {
   return operation.mcp?.has_output_schema === false;
 }
 
+function hasParameterLimits(operation) {
+  const fields = getAllFields(operation);
+  if (fields.some((field) => hasFieldBound(field))) return true;
+  if (fields.some((field) => Array.isArray(field.enum) && field.enum.length > 0)) return true;
+
+  const text = getOperationText(operation);
+  return /minimum|maximum|minlength|maxitems|max items|limit|bounded|cap|exact|confirmed/.test(text);
+}
+
+function hasFieldBound(field) {
+  return (
+    field.minimum !== undefined ||
+    field.maximum !== undefined ||
+    field.schema?.minimum !== undefined ||
+    field.schema?.maximum !== undefined ||
+    field.schema?.minLength !== undefined ||
+    field.schema?.maxLength !== undefined ||
+    field.schema?.minItems !== undefined ||
+    field.schema?.maxItems !== undefined ||
+    field.schema?.const !== undefined
+  );
+}
+
+function hasStructuredOutput(operation) {
+  if (operation.mcp?.has_output_schema) return true;
+  return (operation.responses || []).some((response) => response.hasContent && response.schemaTypes.length > 0);
+}
+
+function hasClearStatusOutput(operation) {
+  return /\bstatus\b|delivery status|delivery_status|blocked|failed|queued|sent|deleted|accepted|completed|rejected/.test(getOperationText(operation));
+}
+
+function hasBlockedReasonOutput(operation) {
+  return /blocked reason|blocked_reason|block reason/.test(getOperationText(operation));
+}
+
+function hasManualReviewSignal(operation) {
+  return /manual review|manual finance review|requires manual review|requires_manual_review|human review/.test(getOperationText(operation));
+}
+
+function hasGuardrailSignal(operation) {
+  return /guardrail|runtime approval|approval guardrail|approval step|approval token|human_approval_token|human_confirmation|const true|preview|dry run|rollback/.test(
+    getOperationText(operation)
+  );
+}
+
+function hasScopedAccessControls(operation) {
+  const text = getOperationText(operation);
+  const fieldNames = getAllFields(operation).map((field) => normalizeName(field.name));
+  const hasWorkspaceScope = fieldNames.includes('workspaceid') || /workspace id|workspace_id|approved workspace|inside the approved workspace/.test(text);
+  const hasRelativePath = fieldNames.includes('relativepath') || /relative path|relative_path/.test(text);
+  const hasExactPath = /exact relative path|exact path|confirmed.*path|path confirmed/.test(text);
+  const blocksAbsolutePath = /absolute paths?.*(not allowed|blocked)|no absolute paths?|paths outside the workspace|outside the workspace/.test(text);
+  const blocksParentTraversal = /parent directory traversal|parent traversal|\.\./.test(text);
+  const blocksRecursive = /no recursive|recursive deletion|do not use for folders|not use for folders/.test(text);
+  const hasDeletionConfirmation = hasHumanConfirmationGuidance(operation) && /delete|deletion|deleted/.test(text);
+
+  return Boolean(
+    hasWorkspaceScope &&
+      hasRelativePath &&
+      (hasExactPath || blocksAbsolutePath || blocksParentTraversal || blocksRecursive || hasDeletionConfirmation)
+  );
+}
+
 function getAllFields(operation) {
   return [...(operation.parameters || []), ...(operation.requestFields || [])];
+}
+
+function getOperationText(operation) {
+  return normalizeText(
+    [
+      operation.summary,
+      operation.description,
+      operation.path,
+      ...(operation.tags || []),
+      ...(operation.parameters || []).map((field) => `${field.name} ${field.description} ${JSON.stringify(field.schema || {})}`),
+      ...(operation.requestFields || []).map((field) => `${field.name} ${field.description} ${JSON.stringify(field.schema || {})}`),
+      ...(operation.responses || []).map((response) => `${response.statusCode} ${response.description} ${response.schemaTypes?.join(' ') || ''}`),
+      operation.mcp?.server_name,
+      operation.mcp?.tool_name,
+      JSON.stringify(operation.raw || {})
+    ].join(' ')
+  );
 }
 
 function normalizeText(value) {

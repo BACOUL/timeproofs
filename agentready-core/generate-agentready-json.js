@@ -32,6 +32,8 @@ function toAgentReadyTool(operation) {
     method: operation.method,
     action_type: operation.classification.action_type,
     risk_level: operation.risk_level,
+    controlled_risk: Boolean(operation.controlled_risk),
+    risk_controls: operation.risk_controls || {},
     requires_human_confirmation: requiresHumanConfirmation,
     allowed_when: buildAllowedWhen(operation),
     forbidden_when: buildForbiddenWhen(operation, findingCodes),

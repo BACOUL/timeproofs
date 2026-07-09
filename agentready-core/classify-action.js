@@ -41,22 +41,26 @@ const SENSITIVE_KEYWORDS = Object.freeze([
 
 export function classifyAction(operation) {
   const haystack = buildHaystack(operation);
-  const keywordHaystack = buildKeywordHaystack(operation);
-  const signals = [];
-
   const structuralType = classifyByStructure(operation);
   if (structuralType !== 'UNKNOWN') {
     return withRisk(structuralType, [`structure:${structuralType.toLowerCase()}`], haystack);
   }
 
-  for (const rule of KEYWORD_RULES) {
-    const matched = rule.keywords.filter((keyword) => keywordHaystack.includes(keyword));
-    if (matched.length > 0) {
-      signals.push(...matched.map((keyword) => `keyword:${keyword}`));
-      return withRisk(rule.action_type, signals, haystack);
-    }
+  const primaryHaystack = buildPrimaryHaystack(operation);
+  const primarySignals = [];
+  const primaryAction = matchKeywordRule(primaryHaystack, primarySignals, 'primary');
+  if (primaryAction) {
+    return withRisk(primaryAction, primarySignals, haystack);
   }
 
+  const keywordHaystack = buildKeywordHaystack(operation);
+  const keywordSignals = [];
+  const contextualAction = matchKeywordRule(keywordHaystack, keywordSignals, 'keyword');
+  if (contextualAction) {
+    return withRisk(contextualAction, keywordSignals, haystack);
+  }
+
+  const signals = [];
   const byMethod = classifyByMethod(operation.method, operation.path);
   if (byMethod !== 'UNKNOWN') {
     signals.push(`method:${operation.method}`);
@@ -137,6 +141,31 @@ function isHealthPath(path) {
 
 function isWebhookPath(path) {
   return /(^|\/)webhooks?(\/|$)|(^|\/)callbacks?(\/|$)/.test(path);
+}
+
+function matchKeywordRule(haystack, signals, signalPrefix) {
+  for (const rule of KEYWORD_RULES) {
+    const matched = rule.keywords.filter((keyword) => haystack.includes(keyword));
+    if (matched.length > 0) {
+      signals.push(...matched.map((keyword) => `${signalPrefix}:${keyword}`));
+      return rule.action_type;
+    }
+  }
+
+  return '';
+}
+
+function buildPrimaryHaystack(operation) {
+  return [
+    operation.method,
+    operation.path,
+    operation.operationId,
+    operation.summary,
+    ...(operation.tags || [])
+  ]
+    .join(' ')
+    .replace(/[_-]+/g, ' ')
+    .toLowerCase();
 }
 
 function buildKeywordHaystack(operation) {

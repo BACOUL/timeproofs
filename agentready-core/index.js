@@ -26,7 +26,8 @@ export function scanOpenApiDocument(document, options = {}) {
     const classification = classifyAction(operation);
     const riskResult = detectRisks(operation, classification);
     const findingLevels = riskResult.findings.map((finding) => finding.severity);
-    const risk_level = maxRiskLevel([classification.risk_level, ...findingLevels]);
+    const actionRiskLevel = riskResult.action_risk_level || classification.risk_level;
+    const risk_level = maxRiskLevel([actionRiskLevel, ...findingLevels]);
     const requires_human_confirmation =
       HUMAN_CONFIRMATION_ACTIONS.includes(classification.action_type) ||
       riskResult.findings.some((finding) => ['missing_human_confirmation_flow', 'dangerous_action_without_confirmation'].includes(finding.code));
@@ -36,6 +37,9 @@ export function scanOpenApiDocument(document, options = {}) {
       classification,
       findings: riskResult.findings,
       risk_level,
+      action_risk_level: actionRiskLevel,
+      controlled_risk: riskResult.controlled_risk,
+      risk_controls: riskResult.risk_controls,
       requires_human_confirmation
     };
   });
