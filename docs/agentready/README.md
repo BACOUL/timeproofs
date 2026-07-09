@@ -37,6 +37,16 @@ TimeProofs doit être positionné comme :
 | `AGENTREADY_REPORT_TEMPLATE.md` | Structure du rapport humain |
 | `AGENTREADY_IMPLEMENTATION_CHECKLIST.md` | Checklist fonctionnelle et critères d'acceptation |
 
+## Archive legacy
+
+Les notes historiques, anciennes explorations et références proof/timestamp/verify/tproof sont regroupées sous :
+
+```txt
+docs/agentready/legacy/
+```
+
+Ce contenu est conservé comme historique uniquement. Il ne définit pas la direction produit active.
+
 ## Formule officielle V1
 
 ```txt

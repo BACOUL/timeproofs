@@ -251,10 +251,12 @@ docs/agentready/AGENTREADY_RISK_TAXONOMY.md
 docs/agentready/AGENTREADY_JSON_SPEC.md
 docs/agentready/AGENTREADY_REPORT_TEMPLATE.md
 docs/agentready/AGENTREADY_IMPLEMENTATION_CHECKLIST.md
-docs/agentready/REPO_AUDIT_INITIAL.md
+docs/agentready/legacy/proof-of-existence/REPO_AUDIT_INITIAL.md
 docs/agentready/LEGACY_REMOVAL_DECISION.md
-docs/agentready/MCP_SCANNER_EXPLORATION.md
+docs/agentready/legacy/planning-notes/MCP_SCANNER_EXPLORATION.md
 ```
+
+The `docs/agentready/legacy/` folder is historical material only. It is not the active product direction.
 
 ---
 
