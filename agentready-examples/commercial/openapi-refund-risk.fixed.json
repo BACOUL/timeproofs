@@ -1,0 +1,83 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AgentReady Demo — Fixed Refund API",
+    "version": "1.0.0",
+    "description": "Commercial demo fixture showing a refund operation rewritten with clearer AI-agent safety boundaries."
+  },
+  "paths": {
+    "/orders/{order_id}/refund": {
+      "post": {
+        "operationId": "requestOrderRefundWithApproval",
+        "summary": "Request an approved order refund",
+        "description": "Request a refund for an order only after explicit human approval. AI agents must not call this operation unless the user has confirmed the order id, refund amount, reason, and customer notification choice. The operation should be guarded by a runtime approval step before money is moved.",
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "description": "Exact order id confirmed by the human user before the refund request.",
+            "schema": { "type": "string", "minLength": 6 }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["amount", "currency", "reason", "human_approval_token"],
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "minimum": 0.01,
+                    "maximum": 500,
+                    "description": "Refund amount approved by the human user. Amounts above 500 require manual finance review."
+                  },
+                  "currency": {
+                    "type": "string",
+                    "enum": ["EUR", "USD", "GBP"],
+                    "description": "Currency explicitly confirmed by the user."
+                  },
+                  "reason": {
+                    "type": "string",
+                    "minLength": 10,
+                    "description": "Human-readable reason confirmed by the user."
+                  },
+                  "notify_customer": {
+                    "type": "boolean",
+                    "description": "Whether the customer should receive a notification."
+                  },
+                  "human_approval_token": {
+                    "type": "string",
+                    "description": "Token proving the refund was approved through a human-in-the-loop confirmation step."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Refund request accepted for processing after human approval.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["refund_request_id", "status", "requires_manual_review"],
+                  "properties": {
+                    "refund_request_id": { "type": "string" },
+                    "status": { "type": "string", "enum": ["queued", "manual_review", "rejected"] },
+                    "requires_manual_review": { "type": "boolean" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Correct the missing or invalid field named in the error response, then ask for human confirmation again before retrying." },
+          "409": { "description": "Refund already exists or order state does not allow refund. Do not retry automatically." }
+        }
+      }
+    }
+  }
+}
