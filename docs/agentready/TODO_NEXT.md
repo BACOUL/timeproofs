@@ -39,6 +39,8 @@
 ✅ Browser V1 release gate
 ✅ Browser V1 QA result template
 ✅ Browser V1 QA attempt recorded as pending
+✅ Browser V1 production mobile QA evidence recorded
+✅ Production test harness observed PASS — 31/31 checks passed
 ✅ Browser V1 QA runbook
 ✅ Long-term product roadmap
 ✅ Release discipline
@@ -69,24 +71,36 @@
 ✅ Static simulation parser core
 ✅ Static simulation parser test harness checks
 ✅ Sitemap updated
+✅ Competitive positioning documented
+✅ Automated product strategy documented
+✅ CI/CD strategy documented
+✅ Commercial demos plan documented
+✅ Go-to-market plan documented
 ```
 
 ## Main remaining roadmap
 
-Read this file first:
+Read these files first:
 
 ```txt
+docs/agentready/BROWSER_V1_QA_RESULT.md
+docs/agentready/BROWSER_V1_QA_RUNBOOK.md
 docs/agentready/REMAINING_WORK.md
 docs/agentready/LONG_TERM_PRODUCT_ROADMAP.md
 docs/agentready/RELEASE_DISCIPLINE.md
 docs/agentready/V2_CLI_SCOPE.md
 docs/agentready/AGENTREADY_CHECKED_TRUST_LAYER.md
+docs/agentready/COMPETITIVE_POSITIONING.md
+docs/agentready/AUTOMATED_PRODUCT_STRATEGY.md
+docs/agentready/CI_CD_STRATEGY.md
+docs/agentready/COMMERCIAL_DEMOS_PLAN.md
+docs/agentready/GO_TO_MARKET_PLAN.md
 ```
 
 ## Immediate next PR
 
 ```txt
-qa(agentready): run Browser V1 public-site QA
+examples(agentready): add commercial demo fixtures
 ```
 
 ## Build next
@@ -94,32 +108,40 @@ qa(agentready): run Browser V1 public-site QA
 Requirements:
 
 ```txt
-1. Run manual Browser V1 QA in a real browser using docs/agentready/BROWSER_V1_QA_RUNBOOK.md.
-2. Update docs/agentready/BROWSER_V1_QA_RESULT.md with PASS/FAIL evidence.
-3. Confirm the commercial homepage renders correctly on desktop and mobile.
-4. Confirm the sample report preview renders correctly on desktop and mobile.
-5. Confirm the public acquisition pages render correctly on desktop and mobile.
-6. Confirm legal/privacy/terms render correctly and remain truthful.
-7. Confirm footer links to legal, privacy and terms appear where appropriate.
-8. Confirm desktop navigation remains usable.
-9. Confirm mobile navigation does not wrap into multiple rows.
-10. Confirm OpenAPI scanner still scans JSON/YAML examples.
-11. Confirm MCP scanner still scans MCP examples.
-12. Confirm static simulation still exports agentready-simulation.json.
-13. Do not continue V2 implementation before Browser V1 public-site polish is acceptable.
+1. Create three commercial demo fixture pairs:
+   - OpenAPI refund/payment risk;
+   - MCP email sending risk;
+   - MCP file deletion/export risk.
+2. Each demo should include a risky version and a corrected version.
+3. Each demo should support before/after score contrast.
+4. Each demo should support sample report and acquisition pages later.
+5. Keep all demos static; do not call live APIs, MCP servers, or LLMs.
+6. Do not reconnect Vercel until a public page/release batch is ready.
+```
+
+## Browser V1 strict QA still pending
+
+```txt
+Production mobile QA: PASS
+Production test harness: PASS — 31/31 checks passed
+Strict Browser V1 release gate: PENDING
+Missing strict checks: desktop Network tab, manual export downloads, desktop Print / Save as PDF.
 ```
 
 ## Parallel pending tasks
 
 ```txt
-None — Browser V1 QA is the next gate.
+1. Complete strict desktop Browser V1 QA when a desktop browser is available.
+2. Prepare commercial demo fixtures without triggering Vercel deployment.
 ```
 
 ## Then
 
 ```txt
-1. docs(product): prepare monetization path
-2. chore(deploy): prepare Vercel reconnect after 2026-07-09
+1. examples(agentready): add commercial demo fixtures
+2. docs/product: improve sample report around commercial demos
+3. docs(product): prepare monetization path after usage signals
+4. chore(deploy): reconnect Vercel only for a public release batch
 ```
 
 ## Do not build yet
@@ -131,8 +153,8 @@ dashboard
 database
 runtime firewall
 old proof-of-existence product
-public release claim before QA PASS
-V2 implementation before Browser V1 public-site polish
+public release claim before strict QA PASS
+V2 implementation before Browser V1 strict QA is understood or explicitly waived
 ```
 
 ## Mandatory limitation text
