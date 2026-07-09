@@ -1,0 +1,68 @@
+{
+  "mcp_version": "2025-06",
+  "server": {
+    "name": "AgentReady Demo — Fixed Files MCP Server",
+    "description": "Commercial demo fixture showing safer MCP file tools with separated read/export/delete operations and explicit confirmation for destructive actions."
+  },
+  "tools": [
+    {
+      "name": "read_file_within_workspace",
+      "description": "Read a single file inside the approved workspace. Use only when the user asks to inspect file content. Do not use for deletion, export, recursive reads, secrets, credentials, or paths outside the workspace.",
+      "inputSchema": {
+        "type": "object",
+        "required": ["workspace_id", "relative_path"],
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "description": "Approved workspace identifier."
+          },
+          "relative_path": {
+            "type": "string",
+            "description": "Relative file path inside the approved workspace. Absolute paths and parent directory traversal are not allowed."
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "required": ["file_id", "status"],
+        "properties": {
+          "file_id": { "type": "string" },
+          "status": { "type": "string", "enum": ["read", "blocked", "not_found"] },
+          "blocked_reason": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "delete_file_after_confirmation",
+      "description": "Delete one file inside the approved workspace only after explicit human confirmation of the exact relative path. Do not use for folders, recursive deletion, secrets, credentials, or paths outside the workspace. A runtime approval guardrail should require the user to confirm the final path before execution.",
+      "inputSchema": {
+        "type": "object",
+        "required": ["workspace_id", "relative_path", "human_confirmation"],
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "description": "Approved workspace identifier."
+          },
+          "relative_path": {
+            "type": "string",
+            "description": "Exact relative file path confirmed by the human user."
+          },
+          "human_confirmation": {
+            "type": "boolean",
+            "const": true,
+            "description": "Must be true only after explicit human confirmation of the exact file path."
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "required": ["deleted_file", "status"],
+        "properties": {
+          "deleted_file": { "type": "string" },
+          "status": { "type": "string", "enum": ["deleted", "blocked", "not_found"] },
+          "blocked_reason": { "type": "string" }
+        }
+      }
+    }
+  ]
+}
