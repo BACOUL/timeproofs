@@ -74,36 +74,39 @@ const SENSITIVE_FIELD_NAMES = Object.freeze([
   'credit_card',
   'card',
   'ssn',
-  'health',
   'customer_data',
   'personal_data',
   'private'
 ]);
 
 const ERROR_STATUS_CODES = Object.freeze(['400', '401', '403', '404', '409', '422', '500']);
+const READ_ONLY_ACTIONS = Object.freeze(['READ', 'SEARCH', 'LIST', 'HEALTH_CHECK']);
+const STATE_CHANGING_ACTIONS = Object.freeze(['CREATE', 'UPDATE', 'DELETE', 'SEND', 'PUBLISH', 'PAY', 'REFUND', 'TRANSFER', 'EXPORT', 'CANCEL']);
 
 export function detectRisks(operation, classification) {
   const findings = [];
+  const lowRiskUtility = isLowRiskUtilityOperation(classification);
+  const webhookReceiver = classification.action_type === 'WEBHOOK';
 
-  addIf(findings, isUnclearOperationName(operation), 'unclear_operation_name', operation);
-  addIf(findings, isAmbiguousDescription(operation), 'ambiguous_tool_description', operation);
-  addIf(findings, !hasWhenToUse(operation), 'missing_when_to_use', operation);
-  addIf(findings, !hasWhenNotToUse(operation), 'missing_when_not_to_use', operation);
+  addIf(findings, isUnclearOperationName(operation) && !lowRiskUtility, 'unclear_operation_name', operation);
+  addIf(findings, isAmbiguousDescription(operation) && !lowRiskUtility, 'ambiguous_tool_description', operation);
+  addIf(findings, !hasWhenToUse(operation) && !lowRiskUtility && !webhookReceiver, 'missing_when_to_use', operation);
+  addIf(findings, !hasWhenNotToUse(operation) && !lowRiskUtility && !webhookReceiver, 'missing_when_not_to_use', operation);
   addIf(findings, hasMissingEnum(operation), 'missing_enum', operation);
   addIf(findings, hasUnboundedNumericParameter(operation), 'unbounded_parameter', operation);
   addIf(
     findings,
     HUMAN_CONFIRMATION_ACTIONS.includes(classification.action_type) && !hasHumanConfirmationGuidance(operation),
-    'dangerous_action_without_confirmation',
+    'missing_human_confirmation_flow',
     operation
   );
   addIf(findings, isIrreversibleAction(classification.action_type), 'irreversible_action', operation);
-  addIf(findings, hasNonCorrectiveErrors(operation), 'non_corrective_error', operation);
-  addIf(findings, hasSensitiveDataExposure(operation), 'sensitive_data_exposure', operation);
+  addIf(findings, hasNonCorrectiveErrors(operation, classification), 'non_corrective_error', operation);
+  addIf(findings, hasSensitiveDataExposure(operation, classification), 'sensitive_data_exposure', operation);
   addIf(findings, hasOverbroadPermission(operation, classification), 'overbroad_permission', operation);
   addIf(findings, hasLargeUnstructuredResponse(operation), 'large_unstructured_response', operation);
   addIf(findings, needsSuccessVerification(operation, classification), 'missing_success_verification', operation);
-  addIf(findings, hasNonCorrectiveErrors(operation), 'missing_error_recovery', operation);
+  addIf(findings, hasNonCorrectiveErrors(operation, classification), 'missing_error_recovery', operation);
   addIf(findings, hasImplicitContext(operation), 'agent_context_confusion', operation);
   addIf(findings, classification.action_type === 'UNKNOWN', 'unknown_action_type', operation);
 
@@ -139,6 +142,10 @@ function addIf(findings, condition, riskCode, operation) {
   });
 }
 
+function isLowRiskUtilityOperation(classification) {
+  return classification.action_type === 'HEALTH_CHECK';
+}
+
 function isUnclearOperationName(operation) {
   if (!operation.hasExplicitOperationId) return true;
   const normalized = String(operation.operationId || '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
@@ -163,7 +170,7 @@ function hasWhenNotToUse(operation) {
 
 function hasHumanConfirmationGuidance(operation) {
   const text = normalizeText(`${operation.summary || ''} ${operation.description || ''}`);
-  return /human confirmation|manual approval|explicit approval|requires approval|confirm before|approval required|review before/.test(text);
+  return /human confirmation|manual approval|explicit approval|requires approval|confirm before|approval required|review before|preview before|dry run/.test(text);
 }
 
 function hasMissingEnum(operation) {
@@ -190,11 +197,15 @@ function isIrreversibleAction(actionType) {
   return ['DELETE', 'PAY', 'REFUND', 'TRANSFER', 'PUBLISH', 'CANCEL'].includes(actionType);
 }
 
-function hasNonCorrectiveErrors(operation) {
+function hasNonCorrectiveErrors(operation, classification) {
+  if (classification.action_type === 'HEALTH_CHECK') return false;
+
   const responses = operation.responses || [];
   const availableErrorResponses = responses.filter((response) => ERROR_STATUS_CODES.includes(String(response.statusCode)));
 
-  if (availableErrorResponses.length === 0) return true;
+  if (availableErrorResponses.length === 0) {
+    return !READ_ONLY_ACTIONS.includes(classification.action_type);
+  }
 
   return availableErrorResponses.some((response) => {
     const description = normalizeText(response.description || '');
@@ -203,7 +214,9 @@ function hasNonCorrectiveErrors(operation) {
   });
 }
 
-function hasSensitiveDataExposure(operation) {
+function hasSensitiveDataExposure(operation, classification) {
+  if (classification.action_type === 'HEALTH_CHECK') return false;
+
   if (containsSensitiveTerms(operation)) return true;
 
   return getAllFields(operation).some((field) => {
@@ -213,7 +226,7 @@ function hasSensitiveDataExposure(operation) {
 }
 
 function hasOverbroadPermission(operation, classification) {
-  const sensitive = hasSensitiveDataExposure(operation);
+  const sensitive = hasSensitiveDataExposure(operation, classification);
   const highRiskAction = ['DELETE', 'SEND', 'PUBLISH', 'PAY', 'REFUND', 'TRANSFER', 'EXPORT', 'AUTH', 'SENSITIVE_DATA'].includes(
     classification.action_type
   );
@@ -231,7 +244,7 @@ function hasLargeUnstructuredResponse(operation) {
 }
 
 function needsSuccessVerification(operation, classification) {
-  if (!['CREATE', 'UPDATE', 'DELETE', 'SEND', 'PUBLISH', 'PAY', 'REFUND', 'TRANSFER', 'EXPORT', 'CANCEL'].includes(classification.action_type)) {
+  if (!STATE_CHANGING_ACTIONS.includes(classification.action_type)) {
     return false;
   }
 
