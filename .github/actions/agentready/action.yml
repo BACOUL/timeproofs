@@ -1,0 +1,84 @@
+name: TimeProofs AgentReady CI Gate
+description: Scan an OpenAPI document or MCP tools file and fail the job when the AgentReady policy fails.
+
+inputs:
+  file:
+    description: Path to the OpenAPI document or MCP tools JSON file to scan.
+    required: true
+  type:
+    description: Scan type. Must be openapi or mcp.
+    required: true
+  min-score:
+    description: Minimum AgentReady score required for the gate to pass.
+    required: false
+    default: '75'
+  fail-on:
+    description: Fail when risks at or above this severity are detected. Use critical, high, medium, low, or none.
+    required: false
+    default: critical
+  out:
+    description: Directory where AgentReady report and contract files are written.
+    required: false
+    default: agentready-output
+
+outputs:
+  score:
+    description: AgentReady score returned by the scan.
+    value: ${{ steps.agentready.outputs.score }}
+  status:
+    description: AgentReady status returned by the scan.
+    value: ${{ steps.agentready.outputs.status }}
+  report-path:
+    description: Path to the generated Markdown report.
+    value: ${{ steps.agentready.outputs.report-path }}
+  contract-path:
+    description: Path to the generated agentready.json contract.
+    value: ${{ steps.agentready.outputs.contract-path }}
+
+runs:
+  using: composite
+  steps:
+    - id: agentready
+      shell: bash
+      run: |
+        set +e
+
+        scan_type="${{ inputs.type }}"
+        scan_file="${{ inputs.file }}"
+        min_score="${{ inputs.min-score }}"
+        fail_on="${{ inputs.fail-on }}"
+        out_dir="${{ inputs.out }}"
+
+        action_repo_root="$(cd "$GITHUB_ACTION_PATH/../../.." && pwd)"
+        result_json="$RUNNER_TEMP/agentready-result.json"
+
+        cd "$GITHUB_WORKSPACE"
+
+        node "$action_repo_root/bin/agentready.js" scan "$scan_type" "$scan_file" \
+          --out "$out_dir" \
+          --min-score "$min_score" \
+          --fail-on "$fail_on" \
+          --json > "$result_json"
+        exit_code=$?
+
+        cat "$result_json"
+
+        score="$(node -e "const fs=require('fs'); try { const j=JSON.parse(fs.readFileSync(process.argv[1],'utf8')); process.stdout.write(String(j.score ?? '')); } catch { process.stdout.write(''); }" "$result_json")"
+        status="$(node -e "const fs=require('fs'); try { const j=JSON.parse(fs.readFileSync(process.argv[1],'utf8')); process.stdout.write(String(j.status ?? '')); } catch { process.stdout.write(''); }" "$result_json")"
+
+        if [ "$scan_type" = "mcp" ]; then
+          report_path="$out_dir/agentready-mcp-report.md"
+          contract_path="$out_dir/agentready-mcp.json"
+        else
+          report_path="$out_dir/agentready-report.md"
+          contract_path="$out_dir/agentready.json"
+        fi
+
+        {
+          echo "score=$score"
+          echo "status=$status"
+          echo "report-path=$report_path"
+          echo "contract-path=$contract_path"
+        } >> "$GITHUB_OUTPUT"
+
+        exit "$exit_code"

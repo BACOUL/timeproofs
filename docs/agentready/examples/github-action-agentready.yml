@@ -1,0 +1,54 @@
+name: AgentReady CI Gate
+
+on:
+  pull_request:
+    paths:
+      - openapi.json
+      - mcp-tools.json
+      - .github/workflows/agentready.yml
+  workflow_dispatch:
+
+jobs:
+  agentready:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: AgentReady OpenAPI gate
+        id: openapi_gate
+        uses: BACOUL/timeproofs/.github/actions/agentready@timeproofs
+        with:
+          type: openapi
+          file: ./openapi.json
+          min-score: '75'
+          fail-on: critical
+          out: agentready-output/openapi
+
+      - name: AgentReady MCP gate
+        id: mcp_gate
+        uses: BACOUL/timeproofs/.github/actions/agentready@timeproofs
+        with:
+          type: mcp
+          file: ./mcp-tools.json
+          min-score: '75'
+          fail-on: critical
+          out: agentready-output/mcp
+
+      - name: Print AgentReady summary
+        if: always()
+        run: |
+          echo "OpenAPI: ${{ steps.openapi_gate.outputs.score }} - ${{ steps.openapi_gate.outputs.status }}"
+          echo "OpenAPI report: ${{ steps.openapi_gate.outputs.report-path }}"
+          echo "MCP: ${{ steps.mcp_gate.outputs.score }} - ${{ steps.mcp_gate.outputs.status }}"
+          echo "MCP report: ${{ steps.mcp_gate.outputs.report-path }}"
+
+      - name: Upload AgentReady reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agentready-output
+          path: agentready-output
