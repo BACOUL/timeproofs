@@ -18,15 +18,31 @@ Done:
 - Stable rule codes AR001-AR010 added to findings and `agentready.json`.
 - GitHub Action wrapper added.
 - `agentready.json` spec v0.1 published and aligned with code.
+- `/agentready-ci` public page added.
+- Homepage repositioned around AgentReady CI Gate.
 - Legacy `selfhost/`, `sdk/`, `manifest.json`, and `manifest.webmanifest` removed.
 
-## Current Product Sequence
+## Current Product Sequence - Self-Service Commercial Architecture
 
-1. Add `/agentready-ci` public page explaining CI Gate usage.
-2. Run public site QA/polish.
-3. Keep rule codes and `agentready.json` v0.1 stable.
-4. Improve docs/examples only when they help users adopt the CI Gate.
-5. Consider AgentReady Checked only after the contract and QA evidence are stable.
+1. Finalize the self-service commercial architecture.
+2. Stabilize Community features.
+3. Build Pro features.
+4. Define and implement entitlements.
+5. Build the minimal license service.
+6. Integrate Stripe Checkout in test mode.
+7. Process webhooks.
+8. Build the customer portal.
+9. Create transactional emails.
+10. Test renewal, upgrade, downgrade, cancellation, and failed payment.
+11. Build Team.
+12. Build Agency.
+13. Rebuild `pricing.html`.
+14. Finalize company, legal, privacy, and cookies.
+15. Complete SEO, structured data, and AI discovery.
+16. Execute the global launch audit.
+17. Open Stripe in production.
+
+No paid plan should be displayed as available until its features and entitlements are implemented.
 
 ## CI Gate Contract
 
@@ -50,13 +66,29 @@ Recommended V1 policy:
 
 ## Do Not Build Yet
 
-- dashboard
-- Stripe or payment flow
-- backend
+- production Stripe payments
+- billing backend
 - account system
+- license service
+- dashboard or customer portal
 - runtime firewall
 - new proof-of-existence product surface
 - public safety guarantees
+
+These items are planned future implementation work, not part of docs-only PRs. They must be built in the order above with tests, legal readiness, privacy readiness, and launch QA.
+
+## Self-Service Commercial Direction
+
+AgentReady launch plans:
+
+- Community: 0 EUR.
+- Pro: 24 EUR HT/month or 240 EUR HT/year.
+- Team: 79 EUR HT/month or 790 EUR HT/year.
+- Agency: 199 EUR HT/month or 1,990 EUR HT/year.
+
+The prices are an initial product decision and may evolve before real Stripe activation.
+
+There is no manual review offer, mandatory contact-sales step, manual payment path, or Enterprise plan at launch.
 
 ## Mandatory Limitation
 

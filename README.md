@@ -1,111 +1,84 @@
 # TimeProofs AgentReady
 
-**TimeProofs AgentReady** is a pre-deployment readiness layer for AI-agent tools.
+**TimeProofs AgentReady** is a pre-deployment CI gate for agent-facing OpenAPI and MCP tools.
 
-It checks whether an API, MCP server, or tool schema is clear and bounded enough to be exposed to AI agents.
-
-## Product sentence
-
-> See where AI agents will fail before they use your API or MCP tools.
-
-## Current product direction
-
-This repository is now focused on **Agent Tool Readiness**.
-
-The previous TimeProofs proof-of-existence website and timestamp/verify pages have been removed from the active product surface.
-
-The current product flow is:
+Core promise:
 
 ```txt
-OpenAPI / MCP / tool schema
--> AgentReady analysis
--> AgentReady Score
--> AgentReady CI Gate
--> AgentReady Report
+Fail the build before unsafe agent-facing APIs or MCP tools are deployed.
+```
+
+AgentReady checks whether APIs and MCP tools are clear, bounded, and documented enough before AI agents can use them. It is local-first and designed for CI workflows.
+
+## Product Direction
+
+This repository is focused on:
+
+```txt
+OpenAPI / MCP contract
+-> AgentReady CLI or GitHub Action
+-> score + status + risk counts
+-> AR001-AR010 rule codes
 -> agentready.json
--> static scenario simulation
--> agentready-simulation.json
+-> CI policy PASS / FAIL
 ```
 
-## Current state
+The previous TimeProofs proof-of-existence website and timestamp/verify pages are historical only and no longer drive the active product surface.
+
+## Current Foundation
+
+Done:
+
+- static OpenAPI scanner;
+- static MCP tools scanner;
+- AgentReady CLI alpha;
+- commercial bad/fixed CI Gate validation;
+- stable rule codes AR001-AR010;
+- GitHub Action wrapper;
+- `agentready.json` spec v0.1;
+- `/agentready-ci` public page;
+- homepage positioning around AgentReady CI Gate;
+- Markdown report export;
+- local `agentready.json` export;
+- public docs and examples;
+- legal, privacy, and terms draft pages;
+- legacy proof runtime artifacts removed.
+
+## Community Capabilities
+
+Community is the free standard-adoption layer:
+
+- CLI;
+- GitHub Action;
+- OpenAPI and MCP scans;
+- score and status;
+- `--min-score` and `--fail-on` policies;
+- AR001-AR010;
+- Markdown report;
+- `agentready.json`;
+- bad/fixed examples;
+- local analysis.
+
+## Self-Service Commercial Direction
+
+AgentReady is planned as a zero-touch B2B software product.
+
+Launch model:
+
+- AgentReady Community: 0 EUR.
+- AgentReady Pro: 24 EUR excl. VAT/month or 240 EUR excl. VAT/year.
+- AgentReady Team: 79 EUR excl. VAT/month or 790 EUR excl. VAT/year.
+- AgentReady Agency: 199 EUR excl. VAT/month or 1,990 EUR excl. VAT/year.
+
+These prices are an initial product decision and may evolve before real Stripe activation. Paid plans must not be displayed as available until their features, entitlements, billing flow, support model, legal pages, and launch QA are ready.
+
+There is no manual review offer, mandatory contact-sales step, quote workflow, manual payment path, or Enterprise plan at launch.
+
+## Public Pages
 
 ```txt
-✅ Product positioning documented
-✅ Legacy proof-of-existence surface removed
-✅ Commercial AgentReady homepage draft
-✅ Shared mobile navigation across public V1 pages
-✅ Static OpenAPI JSON/YAML scanner
-✅ Static MCP tools JSON scanner
-✅ AgentReady CLI alpha
-✅ Commercial bad/fixed CI Gate validation
-✅ Stable rule codes AR001-AR010
-✅ GitHub Action wrapper
-✅ agentready.json spec v0.1 aligned with code
-✅ Static simulation page
-✅ OpenAPI and MCP fixtures
-✅ Simulation scenario fixtures
-✅ agentready.json export
-✅ agentready-simulation.json export
-✅ Markdown report export
-✅ Browser print / Save as PDF for scanner reports
-✅ Public docs page
-✅ Public examples page
-✅ Static browser test harness
-✅ Legal / privacy / terms draft pages
-✅ AgentReady Checked trust layer draft
-✅ Browser V1 QA runbook and QA gate
-⚠️ Browser V1 QA remains PENDING
-```
-
-## Release status
-
-Browser V1 is structurally built, but it is **not declared complete**.
-
-Browser V1 can be called complete only after a real browser QA pass verifies:
-
-```txt
-page rendering
-mobile navigation
-OpenAPI scanner examples
-MCP scanner examples
-static simulation export
-export downloads
-print / Save as PDF
-Network tab no-execution checks
-```
-
-See:
-
-```txt
-docs/agentready/BROWSER_V1_QA_RUNBOOK.md
-docs/agentready/BROWSER_V1_QA_RESULT.md
-docs/agentready/RELEASE_DISCIPLINE.md
-```
-
-## Main files and folders
-
-```txt
-index.html
-agentready.html
-agentready-mcp.html
-agentready-simulation.html
-agentready-docs.html
-agentready-examples.html
-agentready-test.html
-legal.html
-privacy.html
-terms.html
-assets/site-nav.css
-assets/site-nav.js
-agentready-core/
-agentready-examples/
-docs/agentready/
-```
-
-## Public pages
-
-```txt
-/                              Commercial landing page
+/                              Homepage
+/agentready-ci.html            AgentReady CI Gate page
 /agentready.html               OpenAPI scanner
 /agentready-mcp.html           MCP tools scanner
 /agentready-simulation.html    Static scenario simulation
@@ -117,204 +90,59 @@ docs/agentready/
 /terms.html                    Terms draft
 ```
 
-## Browser V1
+## Local-First Trust Model
 
-Browser V1 is the static, local-first product foundation.
+AgentReady should not require:
 
-It supports:
+- backend for Community scans;
+- account for Community scans;
+- payment for Community scans;
+- live API execution;
+- live MCP execution;
+- LLM calls;
+- runtime firewall.
 
-```txt
-OpenAPI JSON/YAML local scanning
-MCP tools JSON local scanning
-AgentReady Score /100
-risk counts
-operation/tool findings
-human-readable recommendations
-Markdown reports
-browser print / Save as PDF
-agentready.json
-static scenario simulation
-agentready-simulation.json
-browser test harness
-```
+Future paid licensing must remain privacy-first: OpenAPI files, MCP definitions, full reports, and production secrets should not be sent to the license service by default.
 
-It does not require:
+## Important Files To Read First
 
 ```txt
-backend
-account
-payment
-dashboard
-database
-live API execution
-live MCP execution
-LLM call
-runtime firewall
-```
-
-## OpenAPI scanner
-
-Page:
-
-```txt
-agentready.html
-```
-
-Supported inputs:
-
-```txt
-openapi.json
-openapi.yaml
-openapi.yml
-```
-
-Outputs:
-
-```txt
-AgentReady Score
-risk counts
-top risks
-endpoint-by-endpoint findings
-executive summary
-recommended action plan
-agentready.json
-Markdown report
-browser print / Save as PDF report
-```
-
-## MCP scanner
-
-Page:
-
-```txt
-agentready-mcp.html
-```
-
-Supported input shape:
-
-```json
-{
-  "server": {},
-  "tools": []
-}
-```
-
-Core flow:
-
-```txt
-MCP tools JSON
--> parse server/tools[]
--> map each tool to an AgentReady operation
--> classify action type
--> detect risk findings
--> generate score/report/agentready.json
-```
-
-Core files:
-
-```txt
-agentready-core/parse-mcp-tools.js
-agentready-core/extract-mcp-tools.js
-agentready-core/scan-mcp-tools.js
-```
-
-Example fixtures:
-
-```txt
-agentready-examples/mcp-tools-simple.json
-agentready-examples/mcp-tools-dangerous.json
-```
-
-## Static simulation
-
-Page:
-
-```txt
-agentready-simulation.html
-```
-
-Purpose:
-
-```txt
-Use generated agentready.json plus scenario JSON to check risky agent task patterns without executing APIs, MCP tools, or LLMs.
-```
-
-Outputs:
-
-```txt
-scenario result counts
-scenario-level pass/warning/fail/not_applicable
-agentready-simulation.json
-```
-
-## AgentReady Checked
-
-AgentReady Checked is a future trust layer draft. It is not a safety guarantee and must not be displayed as a public badge before Browser V1 QA is PASS and the criteria are stable.
-
-Reference:
-
-```txt
-docs/agentready/AGENTREADY_CHECKED_TRUST_LAYER.md
-```
-
-## Static test harness
-
-Page:
-
-```txt
-agentready-test.html
-```
-
-It checks:
-
-```txt
-OpenAPI JSON/YAML scanning
-OpenAPI invalid input errors
-MCP scanning
-MCP invalid shape errors
-agentready.json root fields
-agentready.json tool fields
-Markdown report generation
-static simulation parser
-static simulation result shape
-```
-
-Open the test harness through an HTTP server, not `file://`, because browser fixture loading uses `fetch()`.
-
-## Important files to read first
-
-```txt
+AGENTREADY_PROJECT_CONTEXT.md
+ROADMAP.md
+docs/agentready/README.md
 docs/agentready/TODO_NEXT.md
 docs/agentready/REMAINING_WORK.md
 docs/agentready/LONG_TERM_PRODUCT_ROADMAP.md
-docs/agentready/RELEASE_DISCIPLINE.md
-docs/agentready/BROWSER_V1_QA_RUNBOOK.md
-docs/agentready/BROWSER_V1_QA_RESULT.md
+docs/agentready/SELF_SERVICE_BUSINESS_MODEL.md
+docs/agentready/PRICING_AND_ENTITLEMENTS_V0_1.md
+docs/agentready/AUTOMATED_PURCHASE_AND_BILLING_FLOW.md
+docs/agentready/LICENSE_AND_ENTITLEMENT_ARCHITECTURE.md
+docs/agentready/LEGAL_PRIVACY_AND_COOKIE_REQUIREMENTS.md
+docs/agentready/SEO_GEO_AI_FIRST_REQUIREMENTS.md
+docs/agentready/GLOBAL_LAUNCH_READINESS_MATRIX.md
 docs/agentready/AGENTREADY_JSON_SPEC.md
 docs/agentready/GITHUB_ACTION_USAGE.md
 docs/agentready/AGENTREADY_RULE_CODES.md
 docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md
-docs/agentready/AGENTREADY_CHECKED_TRUST_LAYER.md
-docs/agentready/V2_CLI_SCOPE.md
 ```
 
-## Immediate next step
+## Immediate Next Step
 
 ```txt
-feat(site): add AgentReady CI public page
+docs(product): define AgentReady self-service commercial and launch architecture
 ```
 
-Then run public AgentReady site QA/polish.
+This step is docs-only. It must not add Stripe, backend, accounts, license code, dashboard, cookies, or public HTML changes.
 
-## Non-negotiable rule
-
-Do not rebuild the legacy proof-of-existence product in this repo unless explicitly requested.
-
-Do not claim AgentReady guarantees that an AI agent will never fail.
-
-Mandatory limitation text:
+## Validation Commands
 
 ```txt
+node agentready-core/tests/run-agentready-core-tests.mjs
+node cli/tests/run-agentready-cli-tests.mjs
+node cli/tests/run-agentready-action-smoke-test.mjs
+```
+
+## Mandatory Limitation
+
 TimeProofs AgentReady does not guarantee that an AI agent will never fail.
 It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.
-```

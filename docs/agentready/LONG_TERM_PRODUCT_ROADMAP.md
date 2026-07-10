@@ -6,9 +6,15 @@
 TimeProofs AgentReady = pre-deployment CI gate for agent-facing OpenAPI and MCP tools.
 ```
 
+Core promise:
+
+```txt
+Fail the build before unsafe agent-facing APIs or MCP tools are deployed.
+```
+
 ## Product Thesis
 
-AgentReady should become a portable readiness standard for APIs and MCP tools before AI agents use them.
+AgentReady should become a portable readiness standard and self-service CI Gate for APIs and MCP tools before AI agents use them.
 
 The durable assets are:
 
@@ -17,7 +23,9 @@ The durable assets are:
 - commercial bad/fixed fixture evidence;
 - CLI and GitHub Action workflows;
 - human-readable reports;
-- future policy packs and trust layers.
+- self-service pricing and entitlements;
+- license activation that preserves local-first scanning;
+- trust, privacy, and launch-readiness documentation.
 
 ## Phase 1 - CI Gate Foundation
 
@@ -31,44 +39,95 @@ Includes:
 - GitHub Action wrapper;
 - commercial CI Gate validation;
 - rule codes AR001-AR010;
-- `agentready.json` v0.1 spec and export compatibility.
+- `agentready.json` v0.1 spec and export compatibility;
+- `/agentready-ci` public page;
+- homepage CI Gate positioning.
 
-## Phase 2 - Public CI Adoption
+## Phase 2 - Self-Service Architecture
 
-Next.
-
-Work:
-
-- add `/agentready-ci` public page;
-- explain recommended policy;
-- document workflow copy/paste examples;
-- show sample reports and `agentready.json`;
-- run public site QA/polish after page addition.
-
-## Phase 3 - Contract Stability
+Status: current.
 
 Work:
 
-- keep scoring stable unless fixture evidence proves a bug;
-- keep AR001-AR010 stable;
-- keep `agentready.json` v0.1 backwards compatible;
-- expand examples without changing core semantics.
+- define Community, Pro, Team, and Agency;
+- document pricing and entitlement limits;
+- document automated purchase and billing flow;
+- document license and entitlement architecture;
+- document legal, privacy, cookie, SEO, GEO, and AI-first requirements;
+- create launch readiness matrix.
 
-## Phase 4 - Trust Layer
+## Phase 3 - Community Stabilization
 
-Possible later work:
+Work:
 
-- AgentReady Checked;
-- signed or hashable report artifact;
-- rule-code waivers;
-- policy packs;
-- private readiness review.
+- keep CLI and GitHub Action reliable;
+- keep local-first scanning clear;
+- keep `agentready.json` compatible;
+- keep bad/fixed examples reproducible;
+- improve docs and examples without changing core scoring unless fixture evidence proves a bug.
 
-Boundaries:
+## Phase 4 - Pro
+
+Work:
+
+- versioned policies;
+- pull request annotations;
+- branch / pull request comparison;
+- new-risks-only behavior;
+- SARIF export;
+- documented expirable exceptions;
+- premium reports;
+- entitlement enforcement.
+
+## Phase 5 - Licensing, Billing, and Customer Portal
+
+Work:
+
+- minimal privacy-first license service;
+- Stripe Checkout in test mode;
+- idempotent webhook handling;
+- Customer Portal;
+- transactional emails;
+- invoices;
+- renewal, upgrade, downgrade, cancellation, and payment-failure tests.
+
+## Phase 6 - Team and Agency
+
+Team:
+
+- shared policies;
+- organization members;
+- history;
+- centralized exceptions;
+- dated evidence;
+- team reports.
+
+Agency:
+
+- client workspaces;
+- distinct policies;
+- branded reports;
+- read-only client access;
+- consolidated overview.
+
+## Phase 7 - Launch Readiness
+
+Work:
+
+- rebuild `pricing.html` only after paid features exist;
+- finalize company, legal, privacy, cookie, refund, tax, and support requirements;
+- complete SEO, structured data, and AI discovery;
+- complete accessibility, mobile, performance, and launch QA;
+- open Stripe in production only when the launch matrix has no blocking items.
+
+## Boundaries
 
 - no absolute safety claims;
-- no runtime firewall until demand is proven;
-- no heavy SaaS before the CI Gate proves useful.
+- no manual consulting model as the primary business;
+- no mandatory Contact Sales for launch plans;
+- no Enterprise plan at launch;
+- no runtime firewall unless explicitly scoped after CI Gate adoption;
+- no public display of unavailable paid plans.
 
 ## Mandatory Limitation
 
