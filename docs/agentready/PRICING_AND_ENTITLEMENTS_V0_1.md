@@ -36,7 +36,7 @@ No Enterprise plan is part of launch v0.1.
 | `agentready.json` | yes | yes | yes | yes |
 | Bad/fixed examples | yes | yes | yes | yes |
 | Local analysis | yes | yes | yes | yes |
-| Repository limit | none tracked by service | 5 | 25 | 100 |
+| Repository limit | local use unmetered; no hosted repositories | 5 registered repositories | 25 registered repositories | 100 registered repositories |
 | Member limit | 1 local user | 1 | multiple | multiple |
 | Organizations | no hosted organization | 1 personal org | 1 team org | multiple client orgs/workspaces |
 | Versioned policies | no | yes | yes | yes |
@@ -77,10 +77,32 @@ Proposed fields:
 | `report_branding` | string | `none` | `premium` | `team` | `agency_custom` |
 | `read_only_client_access` | boolean | false | false | false | true |
 
+## Repository Limit Semantics
+
+Community:
+
+- local use is not measured;
+- no repository is registered in a TimeProofs hosted service;
+- no Pro, Team, or Agency function is included;
+- `repository_limit: null` means "no hosted service and no measurement", not unlimited access to paid hosted features.
+
+Pro:
+
+- Pro functions apply to up to 5 registered repositories.
+
+Team:
+
+- Team functions apply to up to 25 registered repositories.
+
+Agency:
+
+- Agency functions apply to up to 100 registered repositories.
+
 ## Entitlement Principles
 
 - Community must remain useful enough to grow the standard.
 - Paid plans should unlock workflow, collaboration, history, and reporting depth.
+- Upgrade reasons are versioned policies, pull request annotations, SARIF, baseline / pull request comparison, new-risks-only behavior, exceptions, premium reports, history, collaboration, and client workspaces.
 - Entitlements must not require OpenAPI files or MCP definitions to be uploaded.
 - Entitlements should be validated with minimal metadata.
 - A cached entitlement should allow reasonable offline behavior.

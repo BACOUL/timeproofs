@@ -113,6 +113,7 @@ docs/agentready/README.md
 docs/agentready/TODO_NEXT.md
 docs/agentready/REMAINING_WORK.md
 docs/agentready/LONG_TERM_PRODUCT_ROADMAP.md
+docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
 docs/agentready/SELF_SERVICE_BUSINESS_MODEL.md
 docs/agentready/PRICING_AND_ENTITLEMENTS_V0_1.md
 docs/agentready/AUTOMATED_PURCHASE_AND_BILLING_FLOW.md
@@ -129,10 +130,22 @@ docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md
 ## Immediate Next Step
 
 ```txt
-docs(product): define AgentReady self-service commercial and launch architecture
+feat(distribution): package AgentReady CLI for public installation
 ```
 
-This step is docs-only. It must not add Stripe, backend, accounts, license code, dashboard, cookies, or public HTML changes.
+Planned branch:
+
+```txt
+feat-agentready-cli-public-distribution
+```
+
+This step prepares public CLI installation, package identity, public command, version/help behavior, and clean-environment installation testing. It must not publish the package without separate validation.
+
+The locked execution order is documented in:
+
+```txt
+docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
+```
 
 ## Validation Commands
 

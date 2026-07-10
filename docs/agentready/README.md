@@ -75,6 +75,7 @@ There is no manual review offer, mandatory contact-sales step, quote workflow, m
 | `LEGAL_PRIVACY_AND_COOKIE_REQUIREMENTS.md` | France-based B2B legal/privacy/cookie checklist |
 | `SEO_GEO_AI_FIRST_REQUIREMENTS.md` | SEO, structured data, and AI discovery requirements |
 | `GLOBAL_LAUNCH_READINESS_MATRIX.md` | Launch readiness matrix |
+| `SELF_SERVICE_EXECUTION_PLAN.md` | Locked operational PR order from Community distribution to launch |
 | `AGENTREADY_JSON_SPEC.md` | `agentready.json` v0.1 contract |
 | `AGENTREADY_RULE_CODES.md` | Stable AR001-AR010 rule codes |
 | `COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md` | Bad/fixed CI Gate validation |
@@ -94,6 +95,18 @@ docs/agentready/legacy/
 This content is historical only and does not define the active product direction.
 
 ## No-Drift Rule
+
+The locked future PR order is defined in:
+
+```txt
+docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
+```
+
+After #109, the immediate next PR is:
+
+```txt
+feat(distribution): package AgentReady CLI for public installation
+```
 
 Every new task must answer yes to these questions:
 

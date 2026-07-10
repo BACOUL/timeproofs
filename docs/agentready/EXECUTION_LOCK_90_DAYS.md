@@ -2,9 +2,9 @@
 
 ## Status
 
-This lock replaces the earlier CLI-alpha execution lock. CLI alpha, CI Gate validation, rule codes, GitHub Action wrapper, `agentready.json` v0.1, `/agentready-ci`, and homepage CI Gate positioning are now merged.
+This lock replaces the earlier CLI-alpha execution lock. CLI alpha, CI Gate validation, rule codes, GitHub Action wrapper, `agentready.json` v0.1, `/agentready-ci`, homepage CI Gate positioning, and self-service commercial architecture are now merged or in the final review path.
 
-The active lock is self-service launch readiness.
+The active lock after merge of #109 is Community public distribution.
 
 ## Locked Product Statement
 
@@ -21,57 +21,61 @@ Fail the build before unsafe agent-facing APIs or MCP tools are deployed.
 ## Current Execution Phase
 
 ```txt
-Phase: self-service commercial and launch architecture
-Active PR: docs(product): define AgentReady self-service commercial and launch architecture
+Phase after merge of #109: Community public distribution
+Next PR: feat(distribution): package AgentReady CLI for public installation
 Base branch: timeproofs
 ```
 
-## Current PR Objective
+## Next PR Objective
 
-The current PR must only create and align documentation for:
+The next PR must only prepare public CLI distribution:
 
-- zero-touch commercial model;
-- Community, Pro, Team, and Agency plans;
-- pricing and entitlement matrix;
-- automated purchase and billing flow;
-- license and entitlement architecture;
-- legal, privacy, and cookie requirements;
-- SEO, GEO, and AI-first requirements;
-- global launch readiness matrix;
-- roadmap sequence for self-service launch.
+- prepare a public CLI installation path;
+- define the package and public command;
+- add version and help behavior;
+- test installation in a clean environment;
+- avoid actual package publication without separate validation.
 
-## Current PR Acceptance Criteria
+Planned branch:
 
-1. The PR is docs-only.
-2. No public HTML page changes.
-3. No scanner, CLI, GitHub Action, scoring, or rule-code changes.
-4. No Stripe, backend, account, database, license, dashboard, or cookie implementation.
-5. No manual review, quote, request-by-email, manual payment, consulting-first, or Enterprise launch direction remains active.
-6. The active roadmap contains the self-service build sequence.
-7. Legal/privacy/cookie docs use `TO_BE_COMPLETED` for unknown real company data.
-8. The mandatory limitation text appears in the core docs.
+```txt
+feat-agentready-cli-public-distribution
+```
+
+## Current Lock Acceptance Criteria
+
+1. The self-service architecture PR is merged before #110 begins.
+2. Community distribution work is limited to CLI packaging and installation readiness.
+3. No public HTML page changes are included in #110.
+4. No scanner scoring, rule-code, or hosted commercial behavior changes are included in #110.
+5. No Stripe, backend, account, database, license, dashboard, or cookie implementation is included in #110.
+6. No manual review, quote, request-by-email, manual payment, consulting-first, or Enterprise launch direction is reintroduced.
+7. The mandatory limitation text remains present in core docs.
+
+## Locked Execution Plan
+
+The operational source of truth for future PR order is:
+
+```txt
+docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
+```
+
+The PR numbers in that document are expected numbers. If GitHub assigns a different number, the title and order remain the authority.
 
 ## Build Order
 
 Do not reorder without an explicit recorded decision.
 
-1. Finalize the self-service commercial architecture.
-2. Stabilize Community features.
-3. Build Pro features.
-4. Define and implement entitlements.
-5. Build the minimal license service.
-6. Integrate Stripe Checkout in test mode.
-7. Process webhooks.
-8. Build the customer portal.
-9. Create transactional emails.
-10. Test renewal, upgrade, downgrade, cancellation, and failed payment.
-11. Build Team.
-12. Build Agency.
-13. Rebuild `pricing.html`.
-14. Finalize company, legal, privacy, and cookies.
-15. Complete SEO, structured data, and AI discovery.
-16. Execute the global launch audit.
-17. Open Stripe in production.
+1. Community distribution.
+2. Pro.
+3. Entitlements and licensing.
+4. Billing and automation.
+5. Team.
+6. Agency.
+7. Commercial site.
+8. Company, legal, and privacy.
+9. SEO, documentation, and AI discovery.
+10. Launch.
 
 ## Do Not Build During This Lock
 

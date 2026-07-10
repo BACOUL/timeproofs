@@ -76,7 +76,6 @@ Community should make these assets widely usable:
 
 Commercial plans should not sell the existence of the standard. They sell workflow depth:
 
-- repository limits;
 - versioned policies;
 - pull request annotations;
 - branch and pull request comparison;
@@ -117,6 +116,13 @@ Includes:
 - local analysis;
 - features required to adopt the AgentReady standard.
 
+Repository scope:
+
+- local use is not measured;
+- no repository is registered in a TimeProofs hosted service;
+- no Pro, Team, or Agency function is included;
+- `repository_limit: null` means "no hosted service and no measurement", not unlimited access to paid hosted features.
+
 ### AgentReady Pro
 
 Price:
@@ -134,7 +140,7 @@ Target:
 
 Includes:
 
-- up to 5 repositories;
+- Pro functions on up to 5 registered repositories;
 - versioned policies;
 - pull request annotations;
 - branch / pull request comparison;
@@ -161,7 +167,7 @@ Target:
 
 Includes:
 
-- up to 25 repositories;
+- Team functions on up to 25 registered repositories;
 - multiple members;
 - organization;
 - shared policies;
@@ -190,7 +196,7 @@ Target:
 
 Includes:
 
-- up to 100 repositories;
+- Agency functions on up to 100 registered repositories;
 - multiple organizations or clients;
 - separate client workspaces;
 - distinct policies;
@@ -218,14 +224,16 @@ Community remains free enough to make the standard adoptable.
 
 Upgrade triggers:
 
-- user needs more than local CLI/GitHub Action output;
+- user needs versioned policies;
 - user wants pull request annotations;
 - user wants SARIF export;
-- user needs versioned policies;
-- user needs repository limits above Community;
+- user needs baseline / pull request comparison;
+- user needs new-risks-only behavior;
 - user needs exception management;
-- user needs history, organization, members, or client workspaces;
-- user needs premium reports.
+- user needs premium reports;
+- user needs result history;
+- user needs collaboration;
+- user needs client workspaces.
 
 Downgrade rules:
 
@@ -268,7 +276,7 @@ Risks to manage before sales open:
 - unclear legal identity;
 - support overload from self-service onboarding failures;
 - privacy concerns if users think API/MCP files are uploaded;
-- abuse of Community as unlimited commercial automation;
+- confusion that local unmetered Community usage means paid hosted features are unlimited;
 - agency plan complexity before Team is stable.
 
 ## Criteria Before Opening Sales

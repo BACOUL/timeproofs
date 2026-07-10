@@ -14,23 +14,42 @@ GitHub Action wrapper: merged
 agentready.json spec v0.1: merged and aligned with code
 /agentready-ci public page: merged
 Homepage CI Gate positioning: merged
+Self-service commercial and launch architecture: documented
 ```
 
-## Priority 1 - Self-Service Commercial Architecture
+## Priority 1 - Community Public Distribution
 
-Create the official docs-only source of truth for a zero-touch B2B product:
+Next PR:
 
-- Community, Pro, Team, and Agency plans;
-- pricing and entitlement matrix;
-- automated purchase and billing flow;
-- license and entitlement architecture;
-- legal, privacy, and cookie requirements;
-- SEO, GEO, and AI-first requirements;
-- global launch readiness matrix.
+```txt
+feat(distribution): package AgentReady CLI for public installation
+```
 
-No code, runtime, Stripe, backend, account, license, dashboard, cookie, or public HTML implementation belongs in this PR.
+Planned branch:
 
-## Priority 2 - Stabilize Community
+```txt
+feat-agentready-cli-public-distribution
+```
+
+Work:
+
+- prepare public CLI installation;
+- define the package and public command;
+- add version and help behavior;
+- test installation in a clean environment;
+- do not publish the package without separate validation.
+
+## Locked Execution Plan
+
+The operational PR sequence is defined in:
+
+```txt
+docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
+```
+
+Expected PR numbers are guidance. If GitHub assigns another number, the title and order remain the authority.
+
+## Priority 2 - Community Release Workflow
 
 Community is the free standard-adoption layer:
 
@@ -45,13 +64,13 @@ Community is the free standard-adoption layer:
 - bad/fixed examples;
 - local analysis.
 
-The goal is adoption of the AgentReady standard before paid features are exposed.
+The goal is adoption of the AgentReady standard before paid features are exposed. Community local use is not measured and no repository is registered in a TimeProofs hosted service.
 
 ## Priority 3 - Build Pro
 
 Pro should add individual developer value:
 
-- up to 5 repositories;
+- Pro functions on up to 5 registered repositories;
 - versioned policies;
 - pull request annotations;
 - branch / pull request comparison;
@@ -82,7 +101,7 @@ Team and Agency should be built only after Pro is stable.
 
 Team target:
 
-- up to 25 repositories;
+- Team functions on up to 25 registered repositories;
 - several members;
 - organization;
 - shared policies;
@@ -95,7 +114,7 @@ Team target:
 
 Agency target:
 
-- up to 100 repositories;
+- Agency functions on up to 100 registered repositories;
 - several organizations or clients;
 - separated client workspaces;
 - distinct policies;

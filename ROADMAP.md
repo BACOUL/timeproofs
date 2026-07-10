@@ -20,27 +20,51 @@ Done:
 - `agentready.json` spec v0.1 published and aligned with code.
 - `/agentready-ci` public page added.
 - Homepage repositioned around AgentReady CI Gate.
+- Self-service commercial and launch architecture documented.
 - Legacy `selfhost/`, `sdk/`, `manifest.json`, and `manifest.webmanifest` removed.
 
-## Current Product Sequence - Self-Service Commercial Architecture
+## Locked Execution Plan
 
-1. Finalize the self-service commercial architecture.
-2. Stabilize Community features.
-3. Build Pro features.
-4. Define and implement entitlements.
-5. Build the minimal license service.
-6. Integrate Stripe Checkout in test mode.
-7. Process webhooks.
-8. Build the customer portal.
-9. Create transactional emails.
-10. Test renewal, upgrade, downgrade, cancellation, and failed payment.
-11. Build Team.
-12. Build Agency.
-13. Rebuild `pricing.html`.
-14. Finalize company, legal, privacy, and cookies.
-15. Complete SEO, structured data, and AI discovery.
-16. Execute the global launch audit.
-17. Open Stripe in production.
+The operational source of truth for expected PR order is:
+
+```txt
+docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
+```
+
+The PR numbers in that document are expected numbers. If GitHub assigns another number, the title and order remain the authority.
+
+## Immediate Next PR
+
+```txt
+feat(distribution): package AgentReady CLI for public installation
+```
+
+Planned branch:
+
+```txt
+feat-agentready-cli-public-distribution
+```
+
+Purpose:
+
+- prepare public CLI installation;
+- define the package and public command;
+- add version and help behavior;
+- test installation in a clean environment;
+- do not actually publish the package without separate validation.
+
+## Current Product Sequence - Self-Service Launch
+
+1. Community distribution.
+2. Pro.
+3. Entitlements and licensing.
+4. Billing and automation.
+5. Team.
+6. Agency.
+7. Commercial site.
+8. Company, legal, and privacy.
+9. SEO, documentation, and AI discovery.
+10. Launch.
 
 No paid plan should be displayed as available until its features and entitlements are implemented.
 
