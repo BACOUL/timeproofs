@@ -20,6 +20,7 @@ The current product flow is:
 OpenAPI / MCP / tool schema
 -> AgentReady analysis
 -> AgentReady Score
+-> AgentReady CI Gate
 -> AgentReady Report
 -> agentready.json
 -> static scenario simulation
@@ -285,6 +286,7 @@ docs/agentready/RELEASE_DISCIPLINE.md
 docs/agentready/BROWSER_V1_QA_RUNBOOK.md
 docs/agentready/BROWSER_V1_QA_RESULT.md
 docs/agentready/AGENTREADY_JSON_SPEC.md
+docs/agentready/GITHUB_ACTION_USAGE.md
 docs/agentready/AGENTREADY_CHECKED_TRUST_LAYER.md
 docs/agentready/V2_CLI_SCOPE.md
 ```
