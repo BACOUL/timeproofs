@@ -21,7 +21,12 @@ Done:
 - `/agentready-ci` public page added.
 - Homepage repositioned around AgentReady CI Gate.
 - Self-service commercial and launch architecture documented.
+- CLI public distribution package preparation completed.
+- Versioned GitHub Action preparation completed.
+- Community release workflow prepared.
 - Legacy `selfhost/`, `sdk/`, `manifest.json`, and `manifest.webmanifest` removed.
+
+Community public publication remains blocked and has not occurred.
 
 ## Locked Execution Plan
 
@@ -36,22 +41,20 @@ The PR numbers in that document are expected numbers. If GitHub assigns another 
 ## Immediate Next PR
 
 ```txt
-feat(distribution): package AgentReady CLI for public installation
+feat(pro): add versioned AgentReady policy configuration
 ```
 
 Planned branch:
 
 ```txt
-feat-agentready-cli-public-distribution
+feat-agentready-versioned-policy-configuration
 ```
 
 Purpose:
 
-- prepare public CLI installation;
-- define the package and public command;
-- add version and help behavior;
-- test installation in a clean environment;
-- do not actually publish the package without separate validation.
+- add versioned AgentReady policy configuration;
+- preserve existing Community CLI, GitHub Action, scoring, rule codes, and `agentready.json` behavior;
+- keep Community publication blocked until separate release approval.
 
 ## Current Product Sequence - Self-Service Launch
 

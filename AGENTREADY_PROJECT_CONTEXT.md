@@ -27,7 +27,10 @@ Built and merged:
 - homepage repositioned around AgentReady CI Gate;
 - CLI public distribution package preparation;
 - versioned GitHub Action preparation;
+- Community release workflow preparation;
 - legacy proof runtime artifacts removed.
+
+Community public publication remains blocked and has not occurred.
 
 ## Current Execution Sequence
 
@@ -43,10 +46,11 @@ Completed:
 8. Self-service commercial and launch architecture documented.
 9. CLI public distribution package preparation validated.
 10. Versioned GitHub Action preparation validated.
+11. Community release workflow prepared.
 
 Next:
 
-1. `release(agentready): establish Community release workflow`
+1. `feat(pro): add versioned AgentReady policy configuration`
 2. Pro features.
 3. Entitlements and licensing.
 4. Billing and automation.
@@ -74,6 +78,9 @@ docs/agentready/AGENTREADY_RULE_CODES.md
 docs/agentready/AGENTREADY_JSON_SPEC.md
 docs/agentready/GITHUB_ACTION_USAGE.md
 docs/agentready/GITHUB_ACTION_VERSIONING.md
+docs/agentready/COMMUNITY_RELEASE_WORKFLOW.md
+docs/agentready/COMMUNITY_RELEASE_CHECKLIST.md
+docs/agentready/COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_0_DRAFT.md
 docs/agentready/SELF_SERVICE_BUSINESS_MODEL.md
 docs/agentready/PRICING_AND_ENTITLEMENTS_V0_1.md
 docs/agentready/AUTOMATED_PURCHASE_AND_BILLING_FLOW.md
@@ -122,6 +129,7 @@ node agentready-core/tests/run-agentready-core-tests.mjs
 node cli/tests/run-agentready-cli-tests.mjs
 node cli/tests/run-agentready-action-smoke-test.mjs
 node cli/tests/run-agentready-package-smoke-test.mjs
+node cli/tests/run-agentready-community-release-workflow-test.mjs
 ```
 
 Commercial policy:

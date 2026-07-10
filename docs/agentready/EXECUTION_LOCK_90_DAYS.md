@@ -2,9 +2,11 @@
 
 ## Status
 
-This lock replaces the earlier CLI-alpha execution lock. CLI alpha, CI Gate validation, rule codes, GitHub Action wrapper, `agentready.json` v0.1, `/agentready-ci`, homepage CI Gate positioning, self-service commercial architecture, CLI public distribution preparation, and versioned GitHub Action preparation are now merged or in the final review path.
+This lock replaces the earlier CLI-alpha execution lock. CLI alpha, CI Gate validation, rule codes, GitHub Action wrapper, `agentready.json` v0.1, `/agentready-ci`, homepage CI Gate positioning, self-service commercial architecture, CLI public distribution preparation, versioned GitHub Action preparation, and Community release workflow preparation are now merged or in the final review path.
 
-The active lock after merge of #111 is Community release workflow preparation.
+Community public publication remains blocked and has not occurred.
+
+The active lock after merge of #112 is Pro policy configuration.
 
 ## Locked Product Statement
 
@@ -21,34 +23,33 @@ Fail the build before unsafe agent-facing APIs or MCP tools are deployed.
 ## Current Execution Phase
 
 ```txt
-Phase after merge of #111: Community release workflow
-Next PR: release(agentready): establish Community release workflow
+Phase after merge of #112: Pro
+Next PR: feat(pro): add versioned AgentReady policy configuration
 Base branch: timeproofs
 ```
 
 ## Next PR Objective
 
-The next PR must only define the Community release workflow:
+The next PR must only add versioned AgentReady policy configuration:
 
-- define release validation gates;
-- define when tags may be created;
-- define package and Action provenance expectations;
+- define policy configuration format and loading behavior;
+- keep existing CLI policy behavior compatible;
 - keep scan, scoring, rule codes, and `agentready.json` behavior unchanged;
 - avoid npm publication, release creation, or tag creation without separate validation.
 
 Planned branch:
 
 ```txt
-release-agentready-community-workflow
+feat-agentready-versioned-policy-configuration
 ```
 
 ## Current Lock Acceptance Criteria
 
-1. The versioned GitHub Action preparation PR is merged before #112 begins.
-2. Community release workflow work is limited to release process and release gates.
-3. No public HTML page changes are included in #112.
-4. No scanner scoring, rule-code, or hosted commercial behavior changes are included in #112.
-5. No Stripe, backend, account, database, license, dashboard, or cookie implementation is included in #112.
+1. The Community release workflow PR is merged before Pro work begins.
+2. Pro policy configuration work is limited to versioned policy configuration.
+3. No public HTML page changes are included in the next PR.
+4. No scanner scoring, rule-code, or hosted commercial behavior changes are included in the next PR.
+5. No Stripe, backend, account, database, license, dashboard, or cookie implementation is included in the next PR.
 6. No manual review, quote, request-by-email, manual payment, consulting-first, or Enterprise launch direction is reintroduced.
 7. The mandatory limitation text remains present in core docs.
 
