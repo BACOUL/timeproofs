@@ -11,6 +11,12 @@ linked to dependencies and inserted into the canonical execution ledger.
 
 The ledger represents all known approved work, not unknowable future work.
 
+Granularity is part of change control. A new or changed `CODEX_PR` task must
+have one concrete result, coherent paths or surfaces, precise dependencies,
+its own test plan, its own evidence, an independent rollback boundary and a
+scope justification. If separate deliverables can reasonably be implemented,
+tested, reviewed, reverted or released independently, they must be split.
+
 ## Required Decision Fields
 
 - identifier;

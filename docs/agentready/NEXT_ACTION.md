@@ -11,7 +11,7 @@ Action owner: JEASON
 Action type: REVIEW_OR_MERGE
 Status: IN_REVIEW
 Objective:
-Create the canonical ledger, generated views, prompt counts, reconciliation scripts, validators and change control.
+Add canonical AgentReady execution system.
 
 Required evidence:
   - draft PR #115

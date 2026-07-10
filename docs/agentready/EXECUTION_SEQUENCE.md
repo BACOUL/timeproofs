@@ -14,6 +14,11 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 Generated Markdown views are read-only projections of that ledger.
 
+Task granularity is mandatory. One executable `CODEX_PR` task must equal one
+coherent, realistically reviewable pull request. It must not combine multiple
+independently testable systems, unrelated public page families or lifecycle
+stages merely to reduce prompt count.
+
 Future discoveries must pass through:
 
 ```txt

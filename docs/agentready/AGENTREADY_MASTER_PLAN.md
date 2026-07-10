@@ -26,6 +26,21 @@ Every approved known task must exist in the canonical ledger.
 
 Every new implementation prompt must be generated from the ledger.
 
+## Execution Granularity
+
+One executable `CODEX_PR` task equals one coherent and realistically reviewable pull request.
+
+A `CODEX_PR` task must not combine multiple independently testable systems,
+multiple unrelated public page families or multiple lifecycle stages merely
+to reduce the planned prompt count.
+
+A task must be split when its deliverables could reasonably be implemented,
+tested, reviewed, reverted or released independently.
+
+Each executable task needs one concrete outcome, a coherent file or surface
+scope, precise dependencies, its own test plan, its own evidence, an
+independent rollback boundary and a short scope justification.
+
 The execution system represents all work known and approved as of the current Decision Log.
 
 Unknown future events, external changes and newly discovered work are handled through the mandatory change-control process before implementation.
