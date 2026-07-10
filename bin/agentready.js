@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import fs from 'node:fs/promises';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 import process from 'node:process';
 import {
@@ -9,7 +10,8 @@ import {
   runStaticSimulation
 } from '../agentready-core/index.js';
 
-const VERSION = '0.1.0-alpha.0';
+const require = createRequire(import.meta.url);
+const { version: VERSION } = require('../package.json');
 const EXIT = Object.freeze({
   PASS: 0,
   POLICY_FAILED: 1,

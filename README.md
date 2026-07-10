@@ -125,26 +125,44 @@ docs/agentready/AGENTREADY_JSON_SPEC.md
 docs/agentready/GITHUB_ACTION_USAGE.md
 docs/agentready/AGENTREADY_RULE_CODES.md
 docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md
+docs/agentready/CLI_PUBLIC_DISTRIBUTION.md
 ```
 
 ## Immediate Next Step
 
 ```txt
-feat(distribution): package AgentReady CLI for public installation
+feat(distribution): prepare versioned AgentReady GitHub Action
 ```
 
 Planned branch:
 
 ```txt
-feat-agentready-cli-public-distribution
+feat-agentready-versioned-github-action
 ```
 
-This step prepares public CLI installation, package identity, public command, version/help behavior, and clean-environment installation testing. It must not publish the package without separate validation.
+This step prepares the existing GitHub Action for versioned public use. It must not publish marketplace/release artifacts without separate validation.
 
 The locked execution order is documented in:
 
 ```txt
 docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
+```
+
+## Prepared Local Package Test
+
+The CLI package is prepared for local tarball validation, but it is not published.
+
+```txt
+npm pack
+npm install ./timeproofs-agentready-0.1.0-alpha.0.tgz
+npx --no-install agentready --help
+npx --no-install agentready --version
+```
+
+See:
+
+```txt
+docs/agentready/CLI_PUBLIC_DISTRIBUTION.md
 ```
 
 ## Validation Commands

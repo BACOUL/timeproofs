@@ -15,29 +15,30 @@ agentready.json spec v0.1: merged and aligned with code
 /agentready-ci public page: merged
 Homepage CI Gate positioning: merged
 Self-service commercial and launch architecture: documented
+CLI public distribution package preparation: in review
 ```
 
-## Priority 1 - Community Public Distribution
+## Priority 1 - Versioned GitHub Action
 
 Next PR:
 
 ```txt
-feat(distribution): package AgentReady CLI for public installation
+feat(distribution): prepare versioned AgentReady GitHub Action
 ```
 
 Planned branch:
 
 ```txt
-feat-agentready-cli-public-distribution
+feat-agentready-versioned-github-action
 ```
 
 Work:
 
-- prepare public CLI installation;
-- define the package and public command;
-- add version and help behavior;
-- test installation in a clean environment;
-- do not publish the package without separate validation.
+- prepare the existing GitHub Action for versioned public use;
+- align it with the packaged CLI;
+- define versioned action distribution shape;
+- keep scan/scoring/rule-code behavior stable;
+- do not publish marketplace or release artifacts without separate validation.
 
 ## Locked Execution Plan
 

@@ -76,6 +76,7 @@ There is no manual review offer, mandatory contact-sales step, quote workflow, m
 | `SEO_GEO_AI_FIRST_REQUIREMENTS.md` | SEO, structured data, and AI discovery requirements |
 | `GLOBAL_LAUNCH_READINESS_MATRIX.md` | Launch readiness matrix |
 | `SELF_SERVICE_EXECUTION_PLAN.md` | Locked operational PR order from Community distribution to launch |
+| `CLI_PUBLIC_DISTRIBUTION.md` | Prepared CLI package distribution and publication blockers |
 | `AGENTREADY_JSON_SPEC.md` | `agentready.json` v0.1 contract |
 | `AGENTREADY_RULE_CODES.md` | Stable AR001-AR010 rule codes |
 | `COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md` | Bad/fixed CI Gate validation |
@@ -102,10 +103,10 @@ The locked future PR order is defined in:
 docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
 ```
 
-After #109, the immediate next PR is:
+After #110, the immediate next PR is:
 
 ```txt
-feat(distribution): package AgentReady CLI for public installation
+feat(distribution): prepare versioned AgentReady GitHub Action
 ```
 
 Every new task must answer yes to these questions:

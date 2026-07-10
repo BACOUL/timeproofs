@@ -23,27 +23,27 @@ Fail the build before unsafe agent-facing APIs or MCP tools are deployed.
 6. /agentready-ci public page added.
 7. Homepage repositioned around AgentReady CI Gate.
 8. Self-service commercial and launch architecture documented.
+9. CLI public distribution package preparation validated.
 ```
 
 ## Immediate Next PR
 
 ```txt
-feat(distribution): package AgentReady CLI for public installation
+feat(distribution): prepare versioned AgentReady GitHub Action
 ```
 
 Planned branch:
 
 ```txt
-feat-agentready-cli-public-distribution
+feat-agentready-versioned-github-action
 ```
 
 Purpose:
 
-- prepare public CLI installation;
-- define the package and public command;
-- add version and help behavior;
-- test installation in a clean environment;
-- do not actually publish the package without separate validation.
+- prepare the existing GitHub Action for versioned public use;
+- define the versioning and release shape;
+- keep the action aligned with the packaged CLI;
+- do not publish marketplace/release artifacts without separate validation.
 
 ## Execution Plan
 
@@ -53,7 +53,7 @@ The locked execution plan is:
 docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
 ```
 
-That document is the authority for the expected PR order after #109. If GitHub assigns a different PR number than expected, the title and order remain the authority.
+That document is the authority for the expected PR order. If GitHub assigns a different PR number than expected, the title and order remain the authority.
 
 ## Keep Stable
 
@@ -79,6 +79,7 @@ That document is the authority for the expected PR order after #109. If GitHub a
 - old proof-of-existence product
 - public HTML changes
 - paid feature claims
+- npm package publication
 
 ## Commercial Guardrails
 
