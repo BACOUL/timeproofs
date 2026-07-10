@@ -8,7 +8,7 @@ It is documentation only. It does not add Stripe, backend, database, accounts, l
 
 If this document conflicts with `AGENTREADY_MASTER_PLAN.md`, the master plan prevails.
 
-The initial paid launch target is Pro only. Community remains free and accountless. Team and Agency are `POST_REVENUE`.
+The initial paid launch target is Pro only. Community remains free and accountless. Team and Agency are `POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT`.
 
 ## Target Customer Flow
 
@@ -22,7 +22,7 @@ Stripe payment
 -> transactional email
 ```
 
-Pro V0.1 creates no organization. Organizations, members, workspaces, and shared governance are reserved for Team and are `POST_REVENUE`.
+Pro V0.1 creates no organization. Organizations, members, workspaces, and shared governance are reserved for Team and are `POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT`.
 
 ## Future Pages
 

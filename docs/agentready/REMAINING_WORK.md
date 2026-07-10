@@ -25,7 +25,7 @@ Community public publication remains blocked and has not occurred.
 
 ## Priority 1 - Resolve Community Publication Blockers
 
-Next PR:
+Current PR:
 
 ```txt
 release(agentready): resolve Community publication blockers
@@ -47,7 +47,9 @@ Work:
 - keep scan/scoring/rule-code behavior stable;
 - do not publish npm packages, create tags, create releases, or list in Marketplace without separate explicit authorization.
 
-The versioned policy configuration PR remains planned later in the execution sequence.
+Publication may proceed only after every blocker is `RESOLVED` and `COMMUNITY_PUBLICATION_APPROVAL_CHECKLIST.md` is explicitly approved.
+
+If any blocker remains open, the next authorized action is the owner or legal action named in `COMMUNITY_PUBLICATION_BLOCKERS.md`, not publication.
 
 ## Locked Execution Plan
 

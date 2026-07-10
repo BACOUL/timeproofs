@@ -36,6 +36,13 @@ Scope:
 
 This PR must not publish the package.
 
+Phase gate:
+
+- `COMMUNITY_PUBLICATION_BLOCKERS.md` has no open blocker;
+- `COMMUNITY_PUBLICATION_APPROVAL_CHECKLIST.md` is explicitly approved;
+- final tarball SHA-256 is recorded;
+- source commit is approved.
+
 ## Phase 3 - Publish Community
 
 ```txt
@@ -129,12 +136,14 @@ release(agentready): launch Community and Pro
 
 ## Only Next PR
 
+If and only if all Community publication blockers are `RESOLVED`, the next release PR may be:
+
 ```txt
-release(agentready): resolve Community publication blockers
+release(agentready): publish Community CLI and immutable release
 ```
 
-Planned branch:
+If any blocker remains open, the next authorized action is the owner or legal action named in:
 
 ```txt
-release-agentready-community-publication-blockers
+docs/agentready/COMMUNITY_PUBLICATION_BLOCKERS.md
 ```

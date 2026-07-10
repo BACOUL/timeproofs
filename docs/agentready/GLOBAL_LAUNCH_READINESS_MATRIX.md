@@ -6,7 +6,7 @@ This matrix tracks what must be true before AgentReady can launch as a global, p
 
 If this matrix conflicts with `AGENTREADY_MASTER_PLAN.md`, the master plan prevails.
 
-The launch tracked here is Community + Pro. Team and Agency are `POST_REVENUE`.
+The launch tracked here is Community + Pro. Team and Agency are `POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT`.
 
 Statuses:
 
@@ -34,7 +34,7 @@ Statuses:
 | Cookies | Cookie strategy | No paid launch cookie policy | No non-essential cookies by default or consent UI | yes | Owner/Legal/Engineering | Cookie requirements doc | PLANNED |
 | Security | Disclosure and incident process | Basic security docs | Responsible disclosure and incident procedure | yes | Engineering/Ops | `SECURITY.md`, future policy | PLANNED |
 | Company information | Publisher identity | Missing verified details | Completed legal identity fields | yes | Owner | `TO_BE_COMPLETED` fields | BLOCKED |
-| Pricing | Community + Pro launch model | Rebaselined in master plan | Display only implemented Community + Pro plans; Team/Agency `POST_REVENUE` | yes | Product | `AGENTREADY_MASTER_PLAN.md`, entitlements docs | IN_PROGRESS |
+| Pricing | Community + Pro launch model | Rebaselined in master plan | Display only implemented Community + Pro plans; Team/Agency `POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT` | yes | Product | `AGENTREADY_MASTER_PLAN.md`, entitlements docs | IN_PROGRESS |
 | Documentation | Product and standard docs | Strong CI docs exist | Public self-service docs complete | no | Product | `docs/agentready/` | IN_PROGRESS |
 | SEO | Technical SEO | Sitemap and pages exist | Complete metadata, schema, Search Console | no | Product/Engineering | `SEO_GEO_AI_FIRST_REQUIREMENTS.md` | PLANNED |
 | GEO / AI discovery | LLM-readable docs | Some docs exist | HTML docs, glossary, examples, versioning | no | Product | SEO/GEO requirements doc | PLANNED |

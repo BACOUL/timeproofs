@@ -84,7 +84,7 @@ Launch model:
 - AgentReady Community: 0 EUR.
 - AgentReady Pro: 24 EUR excl. VAT/month or 240 EUR excl. VAT/year.
 
-Team and Agency are `POST_REVENUE`. They remain long-term vision items, but they must not be displayed as available or purchasable at initial launch.
+Team and Agency are `POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT`. They must not be displayed as available or purchasable at initial launch.
 
 These prices are an initial product decision and may evolve before real Stripe activation. Pro must not be displayed as available until its features, entitlements, billing flow, support model, legal pages, and launch QA are ready.
 
@@ -150,7 +150,7 @@ docs/agentready/COMMUNITY_RELEASE_WORKFLOW.md
 docs/agentready/COMMUNITY_RELEASE_CHECKLIST.md
 ```
 
-## Immediate Next Step
+## Current Publication Blocker Step
 
 ```txt
 release(agentready): resolve Community publication blockers
@@ -163,6 +163,14 @@ release-agentready-community-publication-blockers
 ```
 
 This next step resolves publication blockers only. It must not publish npm packages, create tags, create releases, list in Marketplace, or start Pro policy implementation.
+
+If every blocker is `RESOLVED`, the next release PR may be:
+
+```txt
+release(agentready): publish Community CLI and immutable release
+```
+
+If any blocker remains open, the next authorized action is the owner or legal action named in `docs/agentready/COMMUNITY_PUBLICATION_BLOCKERS.md`.
 
 The locked execution order is documented in:
 
