@@ -33,7 +33,8 @@ TimeProofs doit être positionné comme :
 | `AGENTREADY_ROADMAP.md` | Roadmap V1 à V6 |
 | `AGENTREADY_SCORE_MODEL.md` | Modèle de score /100 |
 | `AGENTREADY_RISK_TAXONOMY.md` | Taxonomie des actions et risques |
-| `AGENTREADY_JSON_SPEC.md` | Spécification du fichier `agentready.json` |
+| `AGENTREADY_JSON_SPEC.md` | Spécification v0.1 du contrat `agentready.json` |
+| `GITHUB_ACTION_USAGE.md` | Utilisation d'AgentReady comme CI Gate dans GitHub Actions |
 | `AGENTREADY_REPORT_TEMPLATE.md` | Structure du rapport humain |
 | `AGENTREADY_IMPLEMENTATION_CHECKLIST.md` | Checklist fonctionnelle et critères d'acceptation |
 
