@@ -34,6 +34,8 @@ TimeProofs doit être positionné comme :
 | `AGENTREADY_SCORE_MODEL.md` | Modèle de score /100 |
 | `AGENTREADY_RISK_TAXONOMY.md` | Taxonomie des actions et risques |
 | `AGENTREADY_JSON_SPEC.md` | Spécification v0.1 du contrat `agentready.json` |
+| `AGENTREADY_RULE_CODES.md` | Codes stables AR001-AR010 pour CI Gate |
+| `COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md` | Validation bad/fixed du comportement CI Gate |
 | `GITHUB_ACTION_USAGE.md` | Utilisation d'AgentReady comme CI Gate dans GitHub Actions |
 | `AGENTREADY_REPORT_TEMPLATE.md` | Structure du rapport humain |
 | `AGENTREADY_IMPLEMENTATION_CHECKLIST.md` | Checklist fonctionnelle et critères d'acceptation |

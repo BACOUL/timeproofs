@@ -36,6 +36,11 @@ OpenAPI / MCP / tool schema
 ✅ Shared mobile navigation across public V1 pages
 ✅ Static OpenAPI JSON/YAML scanner
 ✅ Static MCP tools JSON scanner
+✅ AgentReady CLI alpha
+✅ Commercial bad/fixed CI Gate validation
+✅ Stable rule codes AR001-AR010
+✅ GitHub Action wrapper
+✅ agentready.json spec v0.1 aligned with code
 ✅ Static simulation page
 ✅ OpenAPI and MCP fixtures
 ✅ Simulation scenario fixtures
@@ -287,6 +292,8 @@ docs/agentready/BROWSER_V1_QA_RUNBOOK.md
 docs/agentready/BROWSER_V1_QA_RESULT.md
 docs/agentready/AGENTREADY_JSON_SPEC.md
 docs/agentready/GITHUB_ACTION_USAGE.md
+docs/agentready/AGENTREADY_RULE_CODES.md
+docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md
 docs/agentready/AGENTREADY_CHECKED_TRUST_LAYER.md
 docs/agentready/V2_CLI_SCOPE.md
 ```
@@ -294,10 +301,10 @@ docs/agentready/V2_CLI_SCOPE.md
 ## Immediate next step
 
 ```txt
-qa(agentready): run Browser V1 public-site QA
+feat(site): add AgentReady CI public page
 ```
 
-Do not start V2 implementation before Browser V1 public-site polish is acceptable.
+Then run public AgentReady site QA/polish.
 
 ## Non-negotiable rule
 

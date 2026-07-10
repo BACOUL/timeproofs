@@ -1,74 +1,55 @@
-# Security Policy — TimeProofs
+# Security Policy
 
-TimeProofs is an open, privacy-first protocol for digital proof of existence.  
-This document defines how to responsibly report and coordinate security vulnerabilities.
+TimeProofs AgentReady is a static readiness scanner for agent-facing OpenAPI and MCP tools.
 
----
-
-## Supported Versions
-
-| Version | Status        | Security Fixes |
-|----------|----------------|----------------|
-| v0.1     | Public Beta    | ✅ Active (monitored) |
-| < v0.1   | Experimental   | ❌ Not supported |
-
----
-
-## Reporting a Vulnerability
-
-If you believe you’ve discovered a security or privacy vulnerability, please report it privately and responsibly.
-
-**Contact:**
-- 📧 Email: [security@timeproofs.io](mailto:security@timeproofs.io)
-- 🔑 PGP Key: [https://timeproofs.io/pgp.txt](https://timeproofs.io/pgp.txt)
-
-**Do not** publicly disclose issues before coordinated remediation and acknowledgment.
-
-We commit to:
-1. Acknowledge your report within **72 hours**.
-2. Provide an initial assessment within **7 days**.
-3. Publish a security advisory once mitigations are live.
-
----
+It is designed to run before deployment as a CI Gate. It reads local contract files and should not execute submitted APIs, MCP tools, LLM calls, or customer systems.
 
 ## Scope
 
 This policy covers:
-- API endpoints (`/api/timestamp`, `/api/verify`)
-- Frontend site (https://timeproofs.io)
-- Cloudflare Workers backend & KV storage
-- Open-source repositories under `github.com/timeproofs`
 
-Out of scope:
-- Third-party dependencies (handled via Dependabot)
-- Local integrations or forks not maintained by TimeProofs
+- browser scanner pages;
+- `agentready-core/`;
+- AgentReady CLI;
+- GitHub Action wrapper;
+- `agentready.json` v0.1 output;
+- documentation and examples in this repository.
 
----
+## Security Expectations
 
-## Disclosure Process
+AgentReady must remain:
 
-1. Submit your report to [security@timeproofs.io](mailto:security@timeproofs.io)
-2. Include:
-   - Description and steps to reproduce
-   - Affected endpoint or component
-   - Potential impact and severity
-3. Optionally encrypt with our [PGP key](https://timeproofs.io/pgp.txt)
+- static by default;
+- local/browser-first where applicable;
+- free of live API execution during scans;
+- free of live MCP execution during scans;
+- free of LLM calls during scans;
+- careful with uploaded or scanned contracts;
+- honest about limitations.
 
----
+## Reporting
 
-## Hall of Thanks
+Please report security or privacy issues privately:
 
-Researchers who help secure TimeProofs will be acknowledged on:
-🔗 [https://timeproofs.io/security](https://timeproofs.io/security)
+```txt
+security@timeproofs.io
+```
 
----
+Include:
 
-## Policy References
+- affected file, page, CLI command, or action workflow;
+- steps to reproduce;
+- expected behavior;
+- actual behavior;
+- possible impact.
 
-- Canonical: [https://timeproofs.io/.well-known/security.txt](https://timeproofs.io/.well-known/security.txt)  
-- Legal terms: [https://timeproofs.io/legal.html](https://timeproofs.io/legal.html)  
-- Privacy policy: [https://timeproofs.io/privacy.html](https://timeproofs.io/privacy.html)
+## Out Of Scope
 
----
+- Claims that AgentReady should guarantee absolute AI-agent safety.
+- Issues in forks or modified deployments not maintained here.
+- Requests to build a runtime firewall, backend, dashboard, or payment flow.
 
-© 2025 TimeProofs — Proof of Existence. For Everything.
+## Mandatory Limitation
+
+TimeProofs AgentReady does not guarantee that an AI agent will never fail.
+It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.
