@@ -10,6 +10,7 @@ Source of truth:
 
 ```txt
 docs/agentready/AGENTREADY_MASTER_PLAN.md
+docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 ```
 
 Core promise:
@@ -37,7 +38,28 @@ Fail the build before unsafe agent-facing APIs or MCP tools are deployed.
 
 Community public publication remains blocked and has not occurred.
 
-## Current Publication Blocker PR
+## Current Governance PR
+
+```txt
+docs(project): add canonical AgentReady execution system
+```
+
+Planned branch:
+
+```txt
+docs-agentready-canonical-execution-system
+```
+
+Purpose:
+
+- create the canonical detailed execution ledger;
+- generate status, next action, next Codex prompt and prompt counts;
+- separate Codex tasks from Jeason, legal and external actions;
+- keep publication blocked until the ledger is reconciled.
+
+HUMAN LEDGER REVIEW REQUIRED BEFORE MERGE.
+
+## Publication Blocker Work After Governance Reconciliation
 
 ```txt
 release(agentready): resolve Community publication blockers

@@ -16,9 +16,12 @@ AgentReady analyzes OpenAPI specifications and MCP tools before deployment to id
 docs/agentready/AGENTREADY_MASTER_PLAN.md
 docs/agentready/EXECUTION_SEQUENCE.md
 docs/agentready/DECISION_LOG.md
+docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 ```
 
 If another document conflicts with `AGENTREADY_MASTER_PLAN.md`, the master plan prevails.
+
+`AGENTREADY_EXECUTION_LEDGER.json` is the canonical detailed execution register. Generated Markdown views must not be edited manually. Every approved known task must exist in the canonical ledger. Every new implementation prompt must be generated from the ledger.
 
 ## Current Baseline On `timeproofs`
 
@@ -59,7 +62,25 @@ Completed:
 11. Community release workflow prepared.
 12. Community + Pro strategy rebaselined.
 
-Next:
+Current inserted governance step:
+
+```txt
+docs(project): add canonical AgentReady execution system
+```
+
+Branch:
+
+```txt
+docs-agentready-canonical-execution-system
+```
+
+Next after merge and reconciliation is selected by:
+
+```txt
+docs/agentready/NEXT_ACTION.md
+```
+
+Sequence after governance:
 
 1. Resolve documented owner/legal Community publication blockers.
 2. Community publication only after every blocker is `RESOLVED` and explicit approval exists.
@@ -95,6 +116,11 @@ docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md
 docs/agentready/AGENTREADY_MASTER_PLAN.md
 docs/agentready/EXECUTION_SEQUENCE.md
 docs/agentready/DECISION_LOG.md
+docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
+docs/agentready/AGENTREADY_STATUS.md
+docs/agentready/NEXT_ACTION.md
+docs/agentready/NEXT_CODEX_PROMPT.md
+docs/agentready/PROJECT_CHANGE_CONTROL.md
 docs/agentready/AGENTREADY_RULE_CODES.md
 docs/agentready/AGENTREADY_JSON_SPEC.md
 docs/agentready/GITHUB_ACTION_USAGE.md

@@ -1,12 +1,26 @@
 # TimeProofs AgentReady Execution Lock
 
+Current inserted governance PR:
+
+```txt
+docs(project): add canonical AgentReady execution system
+```
+
+Canonical detailed execution register:
+
+```txt
+docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
+```
+
+Generated Markdown views must not be edited manually. After the governance PR is merged and reconciled, the next action must be read from `docs/agentready/NEXT_ACTION.md`.
+
 ## Status
 
 This lock replaces the earlier CLI-alpha execution lock. CLI alpha, CI Gate validation, rule codes, GitHub Action wrapper, `agentready.json` v0.1, `/agentready-ci`, homepage CI Gate positioning, self-service commercial architecture, CLI public distribution preparation, versioned GitHub Action preparation, and Community release workflow preparation are now merged or in the final review path.
 
 Community public publication remains blocked and has not occurred.
 
-The active lock after this rebaseline is Community publication blocker resolution.
+The active lock after this rebaseline is the canonical execution system, then Community publication blocker resolution through the ledger.
 
 ## Locked Product Statement
 

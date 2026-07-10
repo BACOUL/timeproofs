@@ -6,6 +6,20 @@ Authority: `AGENTREADY_MASTER_PLAN.md`.
 
 PR numbers are provisional. Titles and order are authoritative.
 
+Detailed execution register:
+
+```txt
+docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
+```
+
+Generated Markdown views are read-only projections of that ledger.
+
+Future discoveries must pass through:
+
+```txt
+docs/agentready/PROJECT_CHANGE_CONTROL.md
+```
+
 ## Phase 0 - Completed Foundation
 
 - CLI packaging candidate;
@@ -19,6 +33,14 @@ docs(product): rebaseline AgentReady Community and Pro strategy
 ```
 
 ## Phase 2 - Resolve Community Blockers
+
+Inserted governance PR before further blocker resolution:
+
+```txt
+docs(project): add canonical AgentReady execution system
+```
+
+This insertion prevents project drift, omissions and improvised execution prompts. It does not change product strategy, Community/Pro scope or publication blockers.
 
 ```txt
 release(agentready): resolve Community publication blockers

@@ -23,9 +23,30 @@ Community + Pro strategy rebaseline: prepared
 
 Community public publication remains blocked and has not occurred.
 
-## Priority 1 - Resolve Community Publication Blockers
+## Priority 1 - Canonical Execution System
 
 Current PR:
+
+```txt
+docs(project): add canonical AgentReady execution system
+```
+
+Planned branch:
+
+```txt
+docs-agentready-canonical-execution-system
+```
+
+Work:
+
+- create `AGENTREADY_EXECUTION_LEDGER.json`;
+- generate status, next action, next Codex prompt and prompt counts;
+- require human ledger review before merge;
+- prevent implementation prompts outside the ledger.
+
+## Priority 2 - Resolve Community Publication Blockers
+
+After governance merge and reconciliation:
 
 ```txt
 release(agentready): resolve Community publication blockers
@@ -61,7 +82,7 @@ docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
 
 Expected PR numbers are guidance. If GitHub assigns another number, the title and order remain the authority.
 
-## Priority 2 - Community Publication Blockers
+## Priority 3 - Community Publication Blockers
 
 Community is the free standard-adoption layer:
 
@@ -80,7 +101,7 @@ The goal is adoption of the AgentReady standard before paid features are exposed
 
 Community publication remains blocked until npm scope ownership, license decisions, publication security, immutable tag approval, release notes, and explicit release approval are complete.
 
-## Priority 3 - Build Pro MVP
+## Priority 4 - Build Pro MVP
 
 Pro should add individual developer value:
 
@@ -97,7 +118,7 @@ Do not display Pro as available until these features and their entitlements are 
 
 Team and Agency are post-revenue and must not block Community + Pro launch.
 
-## Priority 4 - Entitlements, License, Billing, and Portal
+## Priority 5 - Entitlements, License, Billing, and Portal
 
 Build in this order:
 
@@ -111,7 +132,7 @@ Build in this order:
 
 Privacy-first rule: OpenAPI files, MCP definitions, full reports, and production secrets must not be sent to the license service by default.
 
-## Priority 5 - Team and Agency
+## Priority 6 - Team and Agency
 
 Team and Agency are post-revenue. They should be built only after Community + Pro are launched and real revenue or customer requests prove the need.
 
@@ -139,7 +160,7 @@ Agency target:
 - consolidated overview;
 - client-specific history and exceptions.
 
-## Priority 6 - Public Launch Readiness
+## Priority 7 - Public Launch Readiness
 
 Before opening real Stripe sales:
 

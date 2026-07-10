@@ -4,6 +4,17 @@ Status: ACTIVE DECISION RECORD
 
 Authority: `AGENTREADY_MASTER_PLAN.md`.
 
+## 2026-07-10 - Canonical execution system
+
+Decision ID: DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM
+Decision: Insert the canonical execution-system PR before further publication-blocker resolution.
+Reason: The canonical execution-system PR is inserted before further publication-blocker resolution in order to prevent project drift, omissions and improvised execution prompts.
+Impact: `AGENTREADY_EXECUTION_LEDGER.json` becomes the canonical detailed execution register, generated Markdown views become read-only, and future implementation prompts must be generated from the ledger.
+Supersedes: ad hoc prompt sequencing after #114.
+Status: ACTIVE
+
+This does not change the AgentReady product strategy, Community/Pro scope or publication blockers.
+
 ## 2026-07-10 - Shift-left contract security
 
 Decision: AgentReady is the shift-left CI gate for agent-facing contracts.

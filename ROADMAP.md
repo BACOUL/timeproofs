@@ -4,9 +4,12 @@ Active source of truth:
 
 ```txt
 docs/agentready/AGENTREADY_MASTER_PLAN.md
+docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 ```
 
 If this roadmap conflicts with `AGENTREADY_MASTER_PLAN.md`, the master plan prevails.
+
+`AGENTREADY_EXECUTION_LEDGER.json` is the canonical detailed execution register. Generated Markdown views must not be edited manually.
 
 Active direction:
 
@@ -47,7 +50,26 @@ docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
 
 The PR numbers in that document are expected numbers. If GitHub assigns another number, the title and order remain the authority.
 
-## Current Publication Blocker PR
+## Current Governance PR
+
+```txt
+docs(project): add canonical AgentReady execution system
+```
+
+Planned branch:
+
+```txt
+docs-agentready-canonical-execution-system
+```
+
+Purpose:
+
+- represent all known approved work;
+- generate status, next action, next Codex prompt and prompt counts;
+- separate Codex tasks from Jeason, legal and external actions;
+- prevent silent strategy changes.
+
+## Publication Blocker PR After Governance Reconciliation
 
 ```txt
 release(agentready): resolve Community publication blockers

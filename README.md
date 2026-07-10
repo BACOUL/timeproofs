@@ -18,9 +18,12 @@ The active product authority is:
 
 ```txt
 docs/agentready/AGENTREADY_MASTER_PLAN.md
+docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 ```
 
 If another document conflicts with the master plan, the master plan prevails.
+
+`AGENTREADY_EXECUTION_LEDGER.json` is the canonical detailed execution register. Generated Markdown views must not be edited manually. Every approved known task must exist in the canonical ledger.
 
 ## Product Direction
 
@@ -129,6 +132,11 @@ docs/agentready/README.md
 docs/agentready/AGENTREADY_MASTER_PLAN.md
 docs/agentready/EXECUTION_SEQUENCE.md
 docs/agentready/DECISION_LOG.md
+docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
+docs/agentready/AGENTREADY_STATUS.md
+docs/agentready/NEXT_ACTION.md
+docs/agentready/NEXT_CODEX_PROMPT.md
+docs/agentready/PROJECT_CHANGE_CONTROL.md
 docs/agentready/TODO_NEXT.md
 docs/agentready/REMAINING_WORK.md
 docs/agentready/LONG_TERM_PRODUCT_ROADMAP.md
@@ -150,19 +158,25 @@ docs/agentready/COMMUNITY_RELEASE_WORKFLOW.md
 docs/agentready/COMMUNITY_RELEASE_CHECKLIST.md
 ```
 
-## Current Publication Blocker Step
+## Current Governance Step
 
 ```txt
-release(agentready): resolve Community publication blockers
+docs(project): add canonical AgentReady execution system
 ```
 
 Planned branch:
 
 ```txt
-release-agentready-community-publication-blockers
+docs-agentready-canonical-execution-system
 ```
 
-This next step resolves publication blockers only. It must not publish npm packages, create tags, create releases, list in Marketplace, or start Pro policy implementation.
+This inserted governance PR creates the canonical ledger, generated status, next action, next Codex prompt, prompt counts, reconciliation scripts and change control.
+
+After this PR is merged and reconciled, the next action is selected by:
+
+```txt
+docs/agentready/NEXT_ACTION.md
+```
 
 If every blocker is `RESOLVED`, the next release PR may be:
 

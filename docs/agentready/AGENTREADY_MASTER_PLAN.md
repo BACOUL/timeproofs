@@ -11,10 +11,24 @@ If another document conflicts with AGENTREADY_MASTER_PLAN.md, the master plan pr
 1. `AGENTREADY_MASTER_PLAN.md`
 2. `EXECUTION_SEQUENCE.md`
 3. `DECISION_LOG.md`
-4. specialized specifications
-5. historical documents
+4. `AGENTREADY_EXECUTION_LEDGER.json`
+5. specialized active specifications
+6. generated Markdown views
+7. historical documents
 
 Historical documents may remain useful context, but they do not define current product direction.
+
+`AGENTREADY_EXECUTION_LEDGER.json` is the canonical detailed execution register.
+
+Generated Markdown views must not be edited manually.
+
+Every approved known task must exist in the canonical ledger.
+
+Every new implementation prompt must be generated from the ledger.
+
+The execution system represents all work known and approved as of the current Decision Log.
+
+Unknown future events, external changes and newly discovered work are handled through the mandatory change-control process before implementation.
 
 ## Official Positioning
 
