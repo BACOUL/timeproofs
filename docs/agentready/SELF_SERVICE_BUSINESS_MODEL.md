@@ -7,8 +7,10 @@ This document is the commercial source of truth for turning TimeProofs AgentRead
 Active product direction:
 
 ```txt
-TimeProofs AgentReady = pre-deployment CI gate for agent-facing OpenAPI and MCP tools.
+AgentReady is the shift-left CI gate for agent-facing contracts.
 ```
+
+This document is specialized commercial guidance. If it conflicts with `AGENTREADY_MASTER_PLAN.md`, the master plan prevails.
 
 Primary promise:
 
@@ -74,7 +76,7 @@ Community should make these assets widely usable:
 - bad/fixed examples;
 - local analysis.
 
-Commercial plans should not sell the existence of the standard. They sell workflow depth:
+Commercial plans should not sell the existence of the standard or CI blocking. They sell workflow depth:
 
 - versioned policies;
 - pull request annotations;
@@ -83,15 +85,22 @@ Commercial plans should not sell the existence of the standard. They sell workfl
 - SARIF export;
 - documented expiring exceptions;
 - premium reports;
-- team/agency organization features;
-- history and evidence retention;
-- client workspaces and read-only access.
+- future collaboration features;
+- future history and evidence retention;
+- future client workspaces and read-only access after revenue validates the need.
 
-## Official Plans
+## Official Launch Plans
 
 Prices are an initial product decision and may evolve before real Stripe activation.
 
 All paid prices are excluding tax. Taxes must be calculated according to the applicable customer situation.
+
+The initial launch includes only:
+
+- AgentReady Community;
+- AgentReady Pro.
+
+Team and Agency are `POST_REVENUE`. They remain long-term vision items, but they must not be presented as purchasable launch plans.
 
 ### AgentReady Community
 
@@ -150,22 +159,23 @@ Includes:
 - premium reports;
 - advanced individual developer features.
 
-### AgentReady Team
+### AgentReady Team - POST_REVENUE
 
-Price:
+Initial launch status:
 
 ```txt
-79 EUR HT / month
-790 EUR HT / year
+POST_REVENUE
 ```
 
-Target:
+Team is not part of the initial Community + Pro launch. It should be revisited after real Pro revenue, usage, or customer requests prove the need.
+
+Future target:
 
 - engineering team;
 - platform team;
 - product/security team managing multiple repositories.
 
-Includes:
+Future scope:
 
 - Team functions on up to 25 registered repositories;
 - multiple members;
@@ -179,22 +189,23 @@ Includes:
 - team reports;
 - automatic notifications.
 
-### AgentReady Agency
+### AgentReady Agency - POST_REVENUE
 
-Price:
+Initial launch status:
 
 ```txt
-199 EUR HT / month
-1,990 EUR HT / year
+POST_REVENUE
 ```
 
-Target:
+Agency is not part of the initial Community + Pro launch. It should not block Community or Pro and must not be shown as purchasable at launch.
+
+Future target:
 
 - AI agency;
 - consultancy;
 - studio managing multiple client tool surfaces.
 
-Includes:
+Future scope:
 
 - Agency functions on up to 100 registered repositories;
 - multiple organizations or clients;
@@ -212,8 +223,9 @@ The active self-service direction forbids:
 - manual services at 299 EUR, 499 EUR, 990 EUR, or any other manual package price;
 - "Request review by email" as the main purchase path;
 - manual payment as the main purchase path;
-- mandatory "Contact sales" for Community, Pro, Team, or Agency at launch;
-- quotes for Community, Pro, Team, or Agency;
+- mandatory "Contact sales" for Community or Pro at launch;
+- quotes for Community or Pro;
+- presenting Team or Agency as launch offers;
 - Enterprise plan at launch;
 - displaying a plan as available before its functions are actually implemented;
 - claiming certification or guaranteed safety.
@@ -234,6 +246,8 @@ Upgrade triggers:
 - user needs result history;
 - user needs collaboration;
 - user needs client workspaces.
+
+Community local repository count alone is not an upgrade trigger. Community local and CI use remains unmetered.
 
 Downgrade rules:
 

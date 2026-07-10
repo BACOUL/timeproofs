@@ -1,5 +1,9 @@
 # Long-Term Product Roadmap
 
+SUPERSEDED BY `AGENTREADY_MASTER_PLAN.md` and `EXECUTION_SEQUENCE.md` where this file conflicts with them.
+
+This document is retained as long-term context. The active launch scope is Community + Pro; Team and Agency are post-revenue.
+
 ## Direction
 
 ```txt

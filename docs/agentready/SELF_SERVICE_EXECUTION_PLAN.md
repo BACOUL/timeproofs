@@ -1,5 +1,13 @@
 # AgentReady Self-Service Execution Plan
 
+SUPERSEDED BY AGENTREADY_MASTER_PLAN.md where this file conflicts with the master plan.
+
+Current execution authority:
+
+```txt
+docs/agentready/EXECUTION_SEQUENCE.md
+```
+
 ## Purpose
 
 This document is the operational source of truth for the future PR order after the self-service commercial architecture PR is merged.
@@ -70,6 +78,20 @@ docs-agentready-community-pro-rebaseline
 No Pro implementation may begin until this docs-only rebaseline PR is merged.
 
 The previous expected PR numbers from the Pro phase onward are provisional and will be reissued by the rebaseline PR.
+
+## Current Next PR After Rebaseline
+
+```txt
+release(agentready): resolve Community publication blockers
+```
+
+Planned branch:
+
+```txt
+release-agentready-community-publication-blockers
+```
+
+This PR resolves blockers only and must not publish without separate explicit authorization.
 
 ## Pro
 

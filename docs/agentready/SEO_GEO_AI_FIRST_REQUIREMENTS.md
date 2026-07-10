@@ -7,8 +7,10 @@ This document defines the public discovery requirements for making TimeProofs Ag
 Active product direction:
 
 ```txt
-TimeProofs AgentReady = pre-deployment CI gate for agent-facing OpenAPI and MCP tools.
+AgentReady is the shift-left CI gate for agent-facing contracts.
 ```
+
+If this document conflicts with `AGENTREADY_MASTER_PLAN.md`, the master plan prevails.
 
 ## SEO Technical Requirements
 

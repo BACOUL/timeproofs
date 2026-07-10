@@ -5,8 +5,22 @@ This folder contains the active product, technical, commercial, and launch archi
 ## Active Direction
 
 ```txt
-TimeProofs AgentReady is a pre-deployment CI gate for agent-facing OpenAPI and MCP tools.
+AgentReady is the shift-left CI gate for agent-facing contracts.
 ```
+
+AgentReady analyzes OpenAPI specifications and MCP tools before deployment to identify ambiguous, unbounded or insufficiently controlled agent actions.
+
+## Source Of Truth
+
+| Priority | Document |
+|---:|---|
+| 1 | `AGENTREADY_MASTER_PLAN.md` |
+| 2 | `EXECUTION_SEQUENCE.md` |
+| 3 | `DECISION_LOG.md` |
+| 4 | Specialized specifications |
+| 5 | Historical documents |
+
+If another document conflicts with `AGENTREADY_MASTER_PLAN.md`, the master plan prevails.
 
 Core promise:
 
@@ -37,6 +51,7 @@ The merged foundation now includes:
 - CLI public distribution preparation;
 - versioned GitHub Action preparation;
 - Community release workflow preparation.
+- Community + Pro strategy rebaseline.
 
 Community public publication remains blocked and has not occurred.
 
@@ -62,8 +77,8 @@ Active launch model:
 
 - AgentReady Community: 0 EUR.
 - AgentReady Pro: 24 EUR excl. VAT/month or 240 EUR excl. VAT/year.
-- AgentReady Team: 79 EUR excl. VAT/month or 790 EUR excl. VAT/year.
-- AgentReady Agency: 199 EUR excl. VAT/month or 1,990 EUR excl. VAT/year.
+- AgentReady Team: POST_REVENUE.
+- AgentReady Agency: POST_REVENUE.
 
 These prices are an initial product decision and may evolve before real Stripe activation. No paid plan should be displayed as available until its features, entitlements, billing flow, support model, legal pages, and launch QA are ready.
 
@@ -73,6 +88,19 @@ There is no manual review offer, mandatory contact-sales step, quote workflow, m
 
 | File | Role |
 |---|---|
+| `AGENTREADY_MASTER_PLAN.md` | Active source of truth |
+| `EXECUTION_SEQUENCE.md` | Active execution order |
+| `DECISION_LOG.md` | Active decision record |
+| `PRODUCT_SCOPE_AND_NON_GOALS.md` | Scope and non-goals |
+| `COMMUNITY_PRO_ENTITLEMENTS.md` | Community and Pro launch boundaries |
+| `ENGINE_QUALITY_AND_BENCHMARK_PLAN.md` | Benchmark and quality gates |
+| `DISTRIBUTION_ADOPTION_AND_STANDARDIZATION_STRATEGY.md` | Distribution and standardization |
+| `THREE_MINUTE_ONBOARDING_SPEC.md` | Community onboarding target |
+| `RULE_FORMAT_AND_GOVERNANCE.md` | Rule namespace and governance |
+| `MCP_VERSION_COMPATIBILITY_POLICY.md` | Protocol compatibility policy |
+| `LEGAL_IP_AND_LIABILITY_STRATEGY.md` | Legal/IP/liability strategy |
+| `PRIVACY_TELEMETRY_SUPPORT_AND_TRUST_MODEL.md` | Privacy, telemetry, support, trust |
+| `DUE_DILIGENCE_AND_TRANSFERABILITY.md` | Auditable and transferable operations |
 | `SELF_SERVICE_BUSINESS_MODEL.md` | Official zero-touch commercial model |
 | `PRICING_AND_ENTITLEMENTS_V0_1.md` | Plan matrix and proposed entitlement fields |
 | `AUTOMATED_PURCHASE_AND_BILLING_FLOW.md` | Future Stripe Checkout and subscription flow |
@@ -106,25 +134,25 @@ This content is historical only and does not define the active product direction
 
 ## No-Drift Rule
 
-The locked future PR order is defined in:
+The active future PR order is defined in:
 
 ```txt
-docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
+docs/agentready/EXECUTION_SEQUENCE.md
 ```
 
-After #112, the immediate next PR is:
+After the rebaseline PR, the immediate next PR is:
 
 ```txt
-docs(product): rebaseline AgentReady Community and Pro strategy
+release(agentready): resolve Community publication blockers
 ```
 
 Planned branch:
 
 ```txt
-docs-agentready-community-pro-rebaseline
+release-agentready-community-publication-blockers
 ```
 
-No Pro implementation may begin until this docs-only rebaseline PR is merged.
+This next PR resolves blockers only and must not publish without separate explicit authorization.
 
 Every new task must answer yes to these questions:
 

@@ -6,11 +6,15 @@ This document describes the target zero-touch purchase, billing, subscription, a
 
 It is documentation only. It does not add Stripe, backend, database, accounts, licenses, cookies, or billing code.
 
+If this document conflicts with `AGENTREADY_MASTER_PLAN.md`, the master plan prevails.
+
+The initial paid launch target is Pro only. Community remains free and accountless. Team and Agency are `POST_REVENUE`.
+
 ## Target Customer Flow
 
 ```txt
 /pricing.html
--> choose plan
+-> choose Pro plan
 -> Stripe Checkout
 -> enter company and billing information
 -> VAT/tax handling
@@ -48,11 +52,12 @@ Do not create these pages in this PR.
 
 The pricing page should:
 
-- show Community, Pro, Team, and Agency only when each is actually available or clearly labelled as planned;
+- show Community and Pro for the initial launch when Pro is implemented;
+- keep Team and Agency post-revenue and not purchasable at launch;
 - state that paid prices are HT / excluding tax;
 - state that taxes are calculated according to the applicable customer situation;
 - link to terms, privacy, refund policy, and cookie policy;
-- avoid mandatory contact sales for Community, Pro, Team, or Agency;
+- avoid mandatory contact sales for Community or Pro;
 - avoid request-by-email purchase flows;
 - make Community self-service and free.
 
@@ -107,11 +112,13 @@ After a successful checkout:
 6. Generate license.
 7. Send transactional email.
 
-For Team and Agency:
+For future Team and Agency:
 
 - organization should be created automatically;
 - owner should be assigned automatically;
 - repository and member limits should be derived from entitlements.
+
+These Team and Agency flows are post-revenue and must not block the Community + Pro launch.
 
 ## License Generation
 

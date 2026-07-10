@@ -1,5 +1,9 @@
 # TimeProofs AgentReady — Roadmap Produit
 
+SUPERSEDED BY `AGENTREADY_MASTER_PLAN.md` and `EXECUTION_SEQUENCE.md`.
+
+This older roadmap draft is retained as historical context. It is not the active source of truth.
+
 ## Principe de roadmap
 
 La roadmap doit construire progressivement un actif difficile à copier.

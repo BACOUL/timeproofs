@@ -6,6 +6,8 @@ This document defines the proposed commercial plan matrix and entitlement model 
 
 It is documentation only. It does not implement licensing, billing, accounts, Stripe, backend, or entitlement checks.
 
+If this document conflicts with `AGENTREADY_MASTER_PLAN.md`, the master plan prevails.
+
 ## Pricing
 
 Prices are initial product decisions and may evolve before real Stripe activation.
@@ -16,10 +18,10 @@ All paid prices are excluding tax. Taxes must be calculated according to the app
 | --- | ---: | ---: | --- |
 | Community | 0 EUR | 0 EUR | Standard adoption and local CI usage |
 | Pro | 24 EUR HT | 240 EUR HT | Individual advanced developer workflow |
-| Team | 79 EUR HT | 790 EUR HT | Shared team policies and history |
-| Agency | 199 EUR HT | 1,990 EUR HT | Multi-client agency operations |
+| Team | POST_REVENUE | POST_REVENUE | Future shared team policies and history |
+| Agency | POST_REVENUE | POST_REVENUE | Future multi-client agency operations |
 
-No Enterprise plan is part of launch v0.1.
+Initial launch v0.1 includes only Community and Pro. Team and Agency are post-revenue vision items, not purchasable launch plans. No Enterprise plan is part of launch v0.1.
 
 ## Feature Matrix
 
@@ -49,11 +51,11 @@ No Enterprise plan is part of launch v0.1.
 | Exception owners and justifications | no | basic | yes | per client |
 | Result history | local artifacts only | limited | team history | client-separated history |
 | Premium reports | no | yes | yes | yes |
-| Team reports | no | no | yes | yes |
-| Agency branding | no | no | no | yes |
-| Client read-only access | no | no | no | yes |
-| Consolidated agency view | no | no | no | yes |
-| Notifications | no | basic | automatic | automatic per client |
+| Team reports | no | no | post-revenue | post-revenue |
+| Agency branding | no | no | no | post-revenue |
+| Client read-only access | no | no | no | post-revenue |
+| Consolidated agency view | no | no | no | post-revenue |
+| Notifications | no | basic | post-revenue | post-revenue |
 | Support | public docs / issues | self-service help | self-service help + technical support | self-service help + technical support |
 
 ## Proposed Technical Entitlements
@@ -92,17 +94,20 @@ Pro:
 
 Team:
 
-- Team functions apply to up to 25 registered repositories.
+- Team is post-revenue and not a launch plan.
+- If built later, Team functions may apply to up to 25 registered repositories.
 
 Agency:
 
-- Agency functions apply to up to 100 registered repositories.
+- Agency is post-revenue and not a launch plan.
+- If built later, Agency functions may apply to up to 100 registered repositories.
 
 ## Entitlement Principles
 
 - Community must remain useful enough to grow the standard.
 - Paid plans should unlock workflow, collaboration, history, and reporting depth.
 - Upgrade reasons are versioned policies, pull request annotations, SARIF, baseline / pull request comparison, new-risks-only behavior, exceptions, premium reports, history, collaboration, and client workspaces.
+- Community local repository count alone is not an upgrade reason.
 - Entitlements must not require OpenAPI files or MCP definitions to be uploaded.
 - Entitlements should be validated with minimal metadata.
 - A cached entitlement should allow reasonable offline behavior.

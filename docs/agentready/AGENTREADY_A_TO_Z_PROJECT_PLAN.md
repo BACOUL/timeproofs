@@ -1,5 +1,9 @@
 # TimeProofs AgentReady A to Z Project Plan
 
+SUPERSEDED BY `AGENTREADY_MASTER_PLAN.md` where this file conflicts with the master plan.
+
+This document is retained as historical planning context. It is not the active execution authority.
+
 ## Purpose
 
 This document defines the coherent project path for TimeProofs AgentReady from CI Gate foundation to self-service B2B software product.

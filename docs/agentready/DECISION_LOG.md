@@ -1,0 +1,165 @@
+# AgentReady Decision Log
+
+Status: ACTIVE DECISION RECORD
+
+Authority: `AGENTREADY_MASTER_PLAN.md`.
+
+## 2026-07-10 - Shift-left contract security
+
+Decision: AgentReady is the shift-left CI gate for agent-facing contracts.
+Reason: The product should prevent unsafe agent-facing contracts before deployment.
+Impact: Runtime firewall, gateway, IAM, and monitoring products are out of scope.
+Supersedes: earlier browser-scanner-first and generic AI security wording.
+Status: ACTIVE
+
+## 2026-07-10 - Community and Pro at launch
+
+Decision: Initial launch includes Community and Pro only.
+Reason: Team and Agency add complexity before revenue proof.
+Impact: Team and Agency are post-revenue.
+Supersedes: four-plan launch direction.
+Status: ACTIVE
+
+## 2026-07-10 - Community CI blocking remains free
+
+Decision: Community includes free CI blocking.
+Reason: CI blocking is required for standard adoption.
+Impact: Pro cannot sell CI blocking itself.
+Supersedes: any paywall framing around CI blocking.
+Status: ACTIVE
+
+## 2026-07-10 - Unlimited runs
+
+Decision: Community and Pro runs are unlimited.
+Reason: Monetization should be workflow depth, not scan count.
+Impact: Do not charge by number of scans.
+Supersedes: scan-volume monetization.
+Status: ACTIVE
+
+## 2026-07-10 - Pro repository limit
+
+Decision: Pro V0.1 covers 5 registered repositories.
+Reason: Simple individual developer pricing.
+Impact: Entitlements can remain small and understandable.
+Supersedes: broader hosted plan assumptions.
+Status: ACTIVE
+
+## 2026-07-10 - Pro MVP essentials
+
+Decision: Pro MVP is versioned policy, baseline/new-risk comparison, SARIF/PR annotations, and local expiring exceptions.
+Reason: These directly improve CI value.
+Impact: Heavy dashboards, multi-user, Team, and Agency wait.
+Supersedes: premium-report-first plans.
+Status: ACTIVE
+
+## 2026-07-10 - Local exceptions in MVP
+
+Decision: Local structured exceptions are part of first Pro.
+Reason: Exceptions are survival tooling against false positives.
+Impact: Exception format must be portable and Git-friendly.
+Supersedes: centralized-only exception plans.
+Status: ACTIVE
+
+## 2026-07-10 - Stripe Customer Portal
+
+Decision: Use Stripe Customer Portal where possible.
+Reason: Avoid rebuilding commodity billing flows.
+Impact: Initial account area stays minimal.
+Supersedes: heavy billing dashboard assumptions.
+Status: ACTIVE
+
+## 2026-07-10 - License design
+
+Decision: Future Pro licensing uses random license key, server-side key hash, signed entitlement token, local verification, cache, and grace period.
+Reason: Privacy-first licensing without network dependency on every scan.
+Impact: Community has no license requirement.
+Supersedes: Stripe identifier as secret.
+Status: ACTIVE
+
+## 2026-07-10 - Benchmark required
+
+Decision: Engine quality must be measured before paid launch claims.
+Reason: Functional maturity is not the same as measured detection quality.
+Impact: Benchmark and quality gates are mandatory.
+Supersedes: unmeasured rule-confidence claims.
+Status: ACTIVE
+
+## 2026-07-10 - No certification
+
+Decision: AgentReady does not sell certification.
+Reason: Static analysis cannot guarantee safety.
+Impact: Use reports, assessment results, and CI evidence terminology.
+Supersedes: certification wording.
+Status: ACTIVE
+
+## 2026-07-10 - No silent Community telemetry
+
+Decision: Community has no silent telemetry.
+Reason: Trust and local-first adoption.
+Impact: Private runs/results are not counted unless voluntarily shared.
+Supersedes: implicit adoption analytics.
+Status: ACTIVE
+
+## 2026-07-10 - Controlled open core
+
+Decision: Community layers and formats can be open/auditable while advanced assets may remain protected.
+Reason: Adoption and defensibility both matter.
+Impact: License decision remains blocked until legal review.
+Supersedes: all-open or all-closed assumptions.
+Status: ACTIVE
+
+## 2026-07-10 - Open rule format
+
+Decision: Future rule format can be open with official AR namespace controlled by AgentReady.
+Reason: Community extension should not dilute official rule governance.
+Impact: Community namespaces are separate.
+Supersedes: ungoverned rule-code expansion.
+Status: ACTIVE
+
+## 2026-07-10 - Three-minute onboarding
+
+Decision: Community onboarding targets under three minutes.
+Reason: Adoption depends on fast CI proof.
+Impact: `init` and `demo` are planned but not implemented here.
+Supersedes: account-first onboarding.
+Status: ACTIVE
+
+## 2026-07-10 - Marketplace as distribution
+
+Decision: Marketplace is a channel, not validation.
+Reason: Marketplace listing does not certify security quality.
+Impact: Do not imply GitHub validates AgentReady results.
+Supersedes: Marketplace-as-trust framing.
+Status: ACTIVE
+
+## 2026-07-10 - Targeted OSS contributions
+
+Decision: Contributions should be targeted and manual, not spam.
+Reason: Trust requires relevance.
+Impact: No bulk automated PR campaigns.
+Supersedes: scale-first outreach.
+Status: ACTIVE
+
+## 2026-07-10 - Public observatory after benchmark
+
+Decision: The State of Agent-Facing Contract Security can exist only after benchmark methodology.
+Reason: Public claims need reproducible evidence.
+Impact: No silent private contract collection.
+Supersedes: premature observatory plans.
+Status: ACTIVE
+
+## 2026-07-10 - Trust Center before payments
+
+Decision: Trust Center is required before real payments.
+Reason: B2B buyers need clear data, subprocessors, support, and limitations.
+Impact: Trust Center is in pre-launch sequence.
+Supersedes: payments-before-trust flow.
+Status: ACTIVE
+
+## 2026-07-10 - Transferable and auditable architecture
+
+Decision: Architecture, releases, dependencies, incidents, and operations must be documented.
+Reason: The product must not depend only on founder memory.
+Impact: Due diligence discipline is permanent.
+Supersedes: informal operations.
+Status: ACTIVE

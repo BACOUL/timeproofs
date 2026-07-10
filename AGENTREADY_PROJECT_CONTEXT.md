@@ -5,10 +5,20 @@ Read this file before changing the repository.
 ## Active Direction
 
 ```txt
-TimeProofs AgentReady = pre-deployment CI gate for agent-facing OpenAPI and MCP tools.
+AgentReady is the shift-left CI gate for agent-facing contracts.
 ```
 
-AgentReady checks whether OpenAPI operations and MCP tools are clear, bounded, and documented enough before AI agents can use them.
+AgentReady analyzes OpenAPI specifications and MCP tools before deployment to identify ambiguous, unbounded or insufficiently controlled agent actions.
+
+## Source Of Truth
+
+```txt
+docs/agentready/AGENTREADY_MASTER_PLAN.md
+docs/agentready/EXECUTION_SEQUENCE.md
+docs/agentready/DECISION_LOG.md
+```
+
+If another document conflicts with `AGENTREADY_MASTER_PLAN.md`, the master plan prevails.
 
 ## Current Baseline On `timeproofs`
 
@@ -47,19 +57,27 @@ Completed:
 9. CLI public distribution package preparation validated.
 10. Versioned GitHub Action preparation validated.
 11. Community release workflow prepared.
+12. Community + Pro strategy rebaselined.
 
 Next:
 
-1. `docs(product): rebaseline AgentReady Community and Pro strategy`
-2. Pro features, starting with versioned policy configuration after the rebaseline PR is merged.
-3. Entitlements and licensing.
-4. Billing and automation.
-5. Team.
-6. Agency.
-7. Commercial site.
-8. Company, legal, privacy.
-9. SEO, documentation, AI discovery.
-10. Launch.
+1. `release(agentready): resolve Community publication blockers`
+2. Community publication.
+3. Marketplace and three-minute onboarding.
+4. Engine benchmark.
+5. Pro MVP features.
+6. Engine quality alignment.
+7. Licensing, Stripe, and automation.
+8. Site, legal, and Trust Center.
+9. Standardization and discovery.
+10. Community + Pro launch.
+11. Post-revenue Team and Agency.
+
+Planned next branch:
+
+```txt
+release-agentready-community-publication-blockers
+```
 
 Locked operational sequence:
 
@@ -74,6 +92,9 @@ agentready-core/
 bin/agentready.js
 .github/actions/agentready/action.yml
 docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md
+docs/agentready/AGENTREADY_MASTER_PLAN.md
+docs/agentready/EXECUTION_SEQUENCE.md
+docs/agentready/DECISION_LOG.md
 docs/agentready/AGENTREADY_RULE_CODES.md
 docs/agentready/AGENTREADY_JSON_SPEC.md
 docs/agentready/GITHUB_ACTION_USAGE.md
@@ -110,7 +131,8 @@ Do not create in implementation PRs without explicit approval and a dedicated sc
 
 Commercial direction:
 
-- Community, Pro, Team, and Agency are intended to be self-service.
+- Community and Pro are the only initial launch plans.
+- Team and Agency are `POST_REVENUE`.
 - No manual review package, manual quote, or request-by-email sales motion is the active model.
 - No plan should be shown as available until its features are implemented.
 - Real Stripe production payments remain blocked until legal, privacy, tax, entitlement, license, support, and launch QA requirements are ready.

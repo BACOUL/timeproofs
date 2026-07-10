@@ -1,9 +1,17 @@
 # TimeProofs AgentReady Roadmap
 
+Active source of truth:
+
+```txt
+docs/agentready/AGENTREADY_MASTER_PLAN.md
+```
+
+If this roadmap conflicts with `AGENTREADY_MASTER_PLAN.md`, the master plan prevails.
+
 Active direction:
 
 ```txt
-TimeProofs AgentReady = pre-deployment CI gate for agent-facing OpenAPI and MCP tools.
+AgentReady is the shift-left CI gate for agent-facing contracts.
 ```
 
 The legacy proof-of-existence product is historical material only. It must not drive new roadmap work in this repository unless explicitly requested.
@@ -24,6 +32,7 @@ Done:
 - CLI public distribution package preparation completed.
 - Versioned GitHub Action preparation completed.
 - Community release workflow prepared.
+- Community + Pro strategy rebaselined.
 - Legacy `selfhost/`, `sdk/`, `manifest.json`, and `manifest.webmanifest` removed.
 
 Community public publication remains blocked and has not occurred.
@@ -41,36 +50,37 @@ The PR numbers in that document are expected numbers. If GitHub assigns another 
 ## Immediate Next PR
 
 ```txt
-docs(product): rebaseline AgentReady Community and Pro strategy
+release(agentready): resolve Community publication blockers
 ```
 
 Planned branch:
 
 ```txt
-docs-agentready-community-pro-rebaseline
+release-agentready-community-publication-blockers
 ```
 
 Purpose:
 
-- rebaseline Community and Pro strategy in docs before Pro implementation begins;
+- resolve Community publication blockers: npm scope, license, ProofSpec references, publication policy, 2FA/trusted publishing, provenance, approval path;
 - preserve existing Community CLI, GitHub Action, scoring, rule codes, and `agentready.json` behavior;
-- keep Community publication blocked until separate release approval.
+- do not publish the package without separate explicit authorization.
 
-The versioned policy configuration PR remains planned, but only after the rebaseline PR is merged.
+The versioned policy configuration PR remains planned after Community publication blockers are resolved and the execution sequence allows it.
 
 ## Current Product Sequence - Self-Service Launch
 
-1. Community distribution.
-2. Mandatory strategic rebaseline.
-3. Pro.
-4. Entitlements and licensing.
-5. Billing and automation.
-6. Team.
-7. Agency.
-8. Commercial site.
-9. Company, legal, and privacy.
-10. SEO, documentation, and AI discovery.
-11. Launch.
+1. Strategic rebaseline.
+2. Resolve Community publication blockers.
+3. Publish Community.
+4. GitHub Marketplace and onboarding.
+5. Engine benchmark.
+6. MVP Pro.
+7. Engine quality alignment.
+8. Licensing, Stripe, and automation.
+9. Site, legal, and Trust Center.
+10. Rule dictionary, badges, and integrations.
+11. Launch Community + Pro.
+12. Post-revenue Team and Agency.
 
 No paid plan should be displayed as available until its features and entitlements are implemented.
 
@@ -113,12 +123,12 @@ AgentReady launch plans:
 
 - Community: 0 EUR.
 - Pro: 24 EUR HT/month or 240 EUR HT/year.
-- Team: 79 EUR HT/month or 790 EUR HT/year.
-- Agency: 199 EUR HT/month or 1,990 EUR HT/year.
+- Team: POST_REVENUE.
+- Agency: POST_REVENUE.
 
 The prices are an initial product decision and may evolve before real Stripe activation.
 
-There is no manual review offer, mandatory contact-sales step, manual payment path, or Enterprise plan at launch.
+There is no manual review offer, mandatory contact-sales step, manual payment path, Team/Agency offer, or Enterprise plan at launch.
 
 ## Mandatory Limitation
 

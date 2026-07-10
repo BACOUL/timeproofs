@@ -1,6 +1,8 @@
 # TimeProofs AgentReady
 
-**TimeProofs AgentReady** is a pre-deployment CI gate for agent-facing OpenAPI and MCP tools.
+**TimeProofs AgentReady** is the shift-left CI gate for agent-facing contracts.
+
+AgentReady analyzes OpenAPI specifications and MCP tools before deployment to identify ambiguous, unbounded or insufficiently controlled agent actions.
 
 Core promise:
 
@@ -9,6 +11,16 @@ Fail the build before unsafe agent-facing APIs or MCP tools are deployed.
 ```
 
 AgentReady checks whether APIs and MCP tools are clear, bounded, and documented enough before AI agents can use them. It is local-first and designed for CI workflows.
+
+## Source Of Truth
+
+The active product authority is:
+
+```txt
+docs/agentready/AGENTREADY_MASTER_PLAN.md
+```
+
+If another document conflicts with the master plan, the master plan prevails.
 
 ## Product Direction
 
@@ -71,10 +83,10 @@ Launch model:
 
 - AgentReady Community: 0 EUR.
 - AgentReady Pro: 24 EUR excl. VAT/month or 240 EUR excl. VAT/year.
-- AgentReady Team: 79 EUR excl. VAT/month or 790 EUR excl. VAT/year.
-- AgentReady Agency: 199 EUR excl. VAT/month or 1,990 EUR excl. VAT/year.
 
-These prices are an initial product decision and may evolve before real Stripe activation. Paid plans must not be displayed as available until their features, entitlements, billing flow, support model, legal pages, and launch QA are ready.
+Team and Agency are `POST_REVENUE`. They remain long-term vision items, but they must not be displayed as available or purchasable at initial launch.
+
+These prices are an initial product decision and may evolve before real Stripe activation. Pro must not be displayed as available until its features, entitlements, billing flow, support model, legal pages, and launch QA are ready.
 
 There is no manual review offer, mandatory contact-sales step, quote workflow, manual payment path, or Enterprise plan at launch.
 
@@ -114,6 +126,9 @@ Future paid licensing must remain privacy-first: OpenAPI files, MCP definitions,
 AGENTREADY_PROJECT_CONTEXT.md
 ROADMAP.md
 docs/agentready/README.md
+docs/agentready/AGENTREADY_MASTER_PLAN.md
+docs/agentready/EXECUTION_SEQUENCE.md
+docs/agentready/DECISION_LOG.md
 docs/agentready/TODO_NEXT.md
 docs/agentready/REMAINING_WORK.md
 docs/agentready/LONG_TERM_PRODUCT_ROADMAP.md
@@ -138,16 +153,16 @@ docs/agentready/COMMUNITY_RELEASE_CHECKLIST.md
 ## Immediate Next Step
 
 ```txt
-docs(product): rebaseline AgentReady Community and Pro strategy
+release(agentready): resolve Community publication blockers
 ```
 
 Planned branch:
 
 ```txt
-docs-agentready-community-pro-rebaseline
+release-agentready-community-publication-blockers
 ```
 
-This docs-only step rebaselines the Community and Pro strategy before any Pro implementation begins. It must not publish npm packages, create tags, create releases, list in Marketplace, or start Pro policy implementation.
+This next step resolves publication blockers only. It must not publish npm packages, create tags, create releases, list in Marketplace, or start Pro policy implementation.
 
 The locked execution order is documented in:
 
