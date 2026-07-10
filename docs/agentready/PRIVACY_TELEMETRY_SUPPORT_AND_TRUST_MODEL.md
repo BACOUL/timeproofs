@@ -28,6 +28,31 @@ Accepted signals:
 
 Never claim to know total private run count, private vulnerability count, or private CI results without voluntary collection.
 
+## License Privacy Model
+
+Target Pro license architecture:
+
+```txt
+Stripe payment
+-> cryptographically random AgentReady license key
+-> only the key hash stored server-side
+-> signed entitlement token
+-> local signature verification
+-> bounded local cache
+-> documented grace period
+```
+
+License rules:
+
+- never use a Stripe identifier as a secret;
+- never store a raw license key server-side;
+- no network call is mandatory on every scan;
+- no OpenAPI/MCP contract is sent to the license service;
+- Community works without account, license, or server;
+- minimal token contents are plan, expiration, features, repository limit, and pseudonymized identifier.
+
+Data sent to the license service must be limited to license and entitlement metadata. OpenAPI contracts, MCP definitions, full reports, private CI results, and secrets are not required for license validation.
+
 ## False Positives
 
 Future command:

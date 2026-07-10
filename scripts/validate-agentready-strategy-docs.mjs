@@ -18,6 +18,7 @@ const requiredDocs = [
   "docs/agentready/DUE_DILIGENCE_AND_TRANSFERABILITY.md",
   "docs/agentready/EXECUTION_SEQUENCE.md",
   "docs/agentready/DECISION_LOG.md",
+  "docs/agentready/history/SELF_SERVICE_EXECUTION_PLAN_PRE_REBASELINE.md",
 ];
 
 const keyDocs = [
@@ -60,6 +61,13 @@ function assertIncludes(file, expected) {
   assert(content.includes(expected), `${file} must include: ${expected}`);
 }
 
+function section(content, start, end) {
+  const startIndex = content.indexOf(start);
+  assert(startIndex >= 0, `Missing section start: ${start}`);
+  const endIndex = end ? content.indexOf(end, startIndex + start.length) : -1;
+  return content.slice(startIndex, endIndex >= 0 ? endIndex : undefined);
+}
+
 function listMarkdownFiles(dir) {
   const root = path.join(repoRoot, dir);
   const out = [];
@@ -96,13 +104,15 @@ assert(master.includes(limitation), "Mandatory limitation is missing from Master
 assert(master.includes("No risk covered by the selected AgentReady engine version, ruleset version and policy configuration was detected in the analyzed input."), "PASS/score definition is missing");
 assert(master.includes("Initial launch includes only:"), "Initial launch scope is missing");
 assert(master.includes("- Community;\n- Pro."), "Initial launch must be Community + Pro");
-assert(master.includes("Team and Agency are `POST_REVENUE`."), "Team/Agency post-revenue rule is missing");
+assert(master.includes("POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT"), "Team/Agency exact post-revenue marker is missing");
 assert(master.includes("Community keeps CI blocking free."), "Community free CI blocking is missing");
 assert(master.includes("Never put CI blocking behind Pro."), "CI blocking anti-paywall rule is missing");
 assert(master.includes("Never monetize by number of Community scans."), "Community scan monetization ban is missing");
 assert(master.includes("5 registered repositories"), "Pro repository limit must be five registered repositories");
 assert(master.includes("Runs:\n\n```txt\nunlimited\n```"), "Pro runs must be unlimited");
 assert(master.includes("No silent telemetry in Community."), "Silent Community telemetry ban is missing");
+assert(master.includes("Stripe payment\n-> cryptographically random AgentReady license key\n-> only the key hash stored server-side\n-> signed entitlement token\n-> local signature verification\n-> bounded local cache\n-> documented grace period"), "Master Plan license architecture is incomplete");
+assert(master.includes("An old PASS must never be shown as the current state."), "Master Plan badge freshness rule is missing");
 assert(master.includes(nextPrTitle), "Master Plan must name the only next PR");
 assert(master.includes(nextBranch), "Master Plan must name the only next branch");
 
@@ -142,6 +152,124 @@ for (const file of [
   "docs/agentready/GLOBAL_LAUNCH_READINESS_MATRIX.md",
 ]) {
   assertIncludes(file, "POST_REVENUE");
+}
+
+assertIncludes("docs/agentready/history/SELF_SERVICE_EXECUTION_PLAN_PRE_REBASELINE.md", "Status: HISTORICAL — DO NOT EXECUTE");
+assertIncludes("docs/agentready/history/SELF_SERVICE_EXECUTION_PLAN_PRE_REBASELINE.md", "It must not be used to select the next PR or product scope.");
+
+const activeExecutionPlan = read("docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md");
+for (const forbidden of [
+  "feat(pro): add versioned AgentReady policy configuration",
+  "feat(team):",
+  "feat(agency):",
+  "Expected #113",
+  "Expected #125",
+  "Expected #129",
+  "## Pro",
+  "## Team",
+  "## Agency",
+]) {
+  assert(!activeExecutionPlan.includes(forbidden), `Active SELF_SERVICE_EXECUTION_PLAN.md must not contain old execution item: ${forbidden}`);
+}
+assert(activeExecutionPlan.includes(nextPrTitle), "Active SELF_SERVICE_EXECUTION_PLAN.md must contain the only next PR");
+assert(activeExecutionPlan.includes(nextBranch), "Active SELF_SERVICE_EXECUTION_PLAN.md must contain the only next branch");
+
+const licenseFiles = [
+  "docs/agentready/AGENTREADY_MASTER_PLAN.md",
+  "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+  "docs/agentready/AUTOMATED_PURCHASE_AND_BILLING_FLOW.md",
+  "docs/agentready/PRIVACY_TELEMETRY_SUPPORT_AND_TRUST_MODEL.md",
+];
+for (const file of licenseFiles) {
+  assertIncludes(file, "cryptographically random AgentReady license key");
+  assertIncludes(file, "only the key hash stored server-side");
+  assertIncludes(file, "signed entitlement token");
+  assertIncludes(file, "local signature verification");
+  assertIncludes(file, "bounded local cache");
+  assertIncludes(file, "documented grace period");
+  assertIncludes(file, "never use a Stripe identifier as a secret");
+  assertIncludes(file, "never store a raw license key server-side");
+  assertIncludes(file, "no network call is mandatory on every scan");
+  assertIncludes(file, "no OpenAPI/MCP contract is sent to the license service");
+  assertIncludes(file, "Community works without account, license, or server");
+}
+
+const business = read("docs/agentready/SELF_SERVICE_BUSINESS_MODEL.md");
+const businessPro = section(business, "### AgentReady Pro", "### AgentReady Team");
+const businessInitialPro = section(businessPro, "Includes:", "Explicitly `POST_MVP`");
+for (const forbidden of [
+  "premium reports",
+  "hosted result history",
+  "notifications",
+  "collaboration",
+  "organizations",
+  "advanced individual developer features",
+  "client workspaces",
+]) {
+  assert(!businessInitialPro.includes(forbidden), `Initial Pro must not include ${forbidden}`);
+}
+assert(businessPro.includes("Explicitly `POST_MVP`, not initial Pro entitlement"), "Business model must mark post-MVP Pro backlog");
+
+const entitlements = read("docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md");
+const entitlementMvp = section(entitlements, "MVP functions:", "Not in Pro MVP:");
+for (const forbidden of [
+  "premium reports",
+  "hosted result history",
+  "notifications",
+  "collaboration",
+  "organizations",
+  "advanced individual developer features",
+  "client workspaces",
+]) {
+  assert(!entitlementMvp.includes(forbidden), `Initial Pro entitlement list must not include ${forbidden}`);
+}
+assert(entitlements.includes("`POST_MVP`, not initial Pro entitlement"), "Entitlements must mark post-MVP Pro backlog");
+
+const pricing = read("docs/agentready/PRICING_AND_ENTITLEMENTS_V0_1.md");
+assert(pricing.includes("| Organizations | no hosted organization | no organization |"), "Pro must not create an organization in the entitlement matrix");
+assert(pricing.includes("| Premium reports | no | POST_MVP |"), "Premium reports must be POST_MVP for Pro");
+assert(pricing.includes("| Result history | local artifacts only | POST_MVP hosted history |"), "Hosted history must be POST_MVP for Pro");
+assert(pricing.includes("| Notifications | no | POST_MVP |"), "Notifications must be POST_MVP for Pro");
+
+const billingFlow = read("docs/agentready/AUTOMATED_PURCHASE_AND_BILLING_FLOW.md");
+const targetFlow = section(billingFlow, "```txt\nStripe payment", "```\n\nPro V0.1 creates no organization.");
+assert(!targetFlow.toLowerCase().includes("organization"), "Initial Pro target flow must not create an organization");
+assert(targetFlow.includes("customer/account record"), "Initial Pro flow must create customer/account record");
+assert(targetFlow.includes("subscription record"), "Initial Pro flow must create subscription record");
+assert(targetFlow.includes("Community/Pro entitlement"), "Initial Pro flow must create Community/Pro entitlement");
+assert(targetFlow.includes("repository registration"), "Initial Pro flow must register repositories");
+assert(billingFlow.includes("Pro V0.1 creates no organization."), "Billing flow must explicitly state Pro creates no organization");
+
+const distribution = read("docs/agentready/DISTRIBUTION_ADOPTION_AND_STANDARDIZATION_STRATEGY.md");
+for (const expected of [
+  "Framework Integration Roadmap",
+  "MCP TypeScript SDK",
+  "MCP Python SDK",
+  "FastMCP",
+  "LangChain MCP",
+  "OpenAPI Generator",
+  "about ten relevant repositories",
+  "Do not run 100 automated pull requests",
+  "Public Observatory Policy",
+  "benchmark foundation exists",
+  "Adoption Metrics",
+  "public npm downloads",
+  "Do not claim to know private runs or findings",
+]) {
+  assertIncludes("docs/agentready/DISTRIBUTION_ADOPTION_AND_STANDARDIZATION_STRATEGY.md", expected);
+}
+
+for (const file of [
+  "docs/agentready/AGENTREADY_MASTER_PLAN.md",
+  "docs/agentready/DISTRIBUTION_ADOPTION_AND_STANDARDIZATION_STRATEGY.md",
+]) {
+  assertIncludes(file, "engine version");
+  assertIncludes(file, "ruleset version");
+  assertIncludes(file, "policy configuration/version");
+  assertIncludes(file, "commit");
+  assertIncludes(file, "input hash");
+  assertIncludes(file, "scan date");
+  assertIncludes(file, "old PASS");
 }
 
 for (const file of [

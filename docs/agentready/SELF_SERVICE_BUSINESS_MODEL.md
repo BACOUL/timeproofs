@@ -26,7 +26,7 @@ The target customer journey is:
 discovery
 -> plan selection
 -> payment
--> automatic account or organization creation
+-> automatic account creation for Pro
 -> automatic license activation
 -> installation
 -> usage
@@ -84,10 +84,15 @@ Commercial plans should not sell the existence of the standard or CI blocking. T
 - new-risk-only behavior;
 - SARIF export;
 - documented expiring exceptions;
+`POST_MVP` commercial backlog:
+
 - premium reports;
-- future collaboration features;
-- future history and evidence retention;
-- future client workspaces and read-only access after revenue validates the need.
+- hosted result history;
+- notifications;
+- collaboration;
+- organizations;
+- advanced individual developer features;
+- client workspaces.
 
 ## Official Launch Plans
 
@@ -100,7 +105,13 @@ The initial launch includes only:
 - AgentReady Community;
 - AgentReady Pro.
 
-Team and Agency are `POST_REVENUE`. They remain long-term vision items, but they must not be presented as purchasable launch plans.
+Team and Agency are:
+
+```txt
+POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT
+```
+
+They remain long-term vision items, but they must not be presented as purchasable launch plans.
 
 ### AgentReady Community
 
@@ -150,71 +161,45 @@ Target:
 Includes:
 
 - Pro functions on up to 5 registered repositories;
-- versioned policies;
+- versioned policy configuration;
 - pull request annotations;
 - branch / pull request comparison;
-- new risks only;
+- new-risks-only mode;
 - SARIF export;
-- documented expiring exceptions;
+- local structured and expiring exceptions;
+- mandatory reason;
+- exception owner;
+- mandatory expiration.
+
+Explicitly `POST_MVP`, not initial Pro entitlement:
+
 - premium reports;
-- advanced individual developer features.
+- hosted result history;
+- notifications;
+- collaboration;
+- organizations;
+- advanced individual developer features;
+- client workspaces.
 
-### AgentReady Team - POST_REVENUE
+### AgentReady Team
 
-Initial launch status:
-
-```txt
-POST_REVENUE
-```
-
-Team is not part of the initial Community + Pro launch. It should be revisited after real Pro revenue, usage, or customer requests prove the need.
-
-Future target:
-
-- engineering team;
-- platform team;
-- product/security team managing multiple repositories.
-
-Future scope:
-
-- Team functions on up to 25 registered repositories;
-- multiple members;
-- organization;
-- shared policies;
-- CI result history;
-- centralized exception management;
-- owners and justifications;
-- comparison between versions;
-- dated control evidence;
-- team reports;
-- automatic notifications.
-
-### AgentReady Agency - POST_REVENUE
-
-Initial launch status:
+Status:
 
 ```txt
-POST_REVENUE
+POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT
 ```
 
-Agency is not part of the initial Community + Pro launch. It should not block Community or Pro and must not be shown as purchasable at launch.
+Team is not part of the initial Community + Pro launch and is not an initial entitlement.
 
-Future target:
+### AgentReady Agency
 
-- AI agency;
-- consultancy;
-- studio managing multiple client tool surfaces.
+Status:
 
-Future scope:
+```txt
+POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT
+```
 
-- Agency functions on up to 100 registered repositories;
-- multiple organizations or clients;
-- separate client workspaces;
-- distinct policies;
-- customizable reports with agency identity;
-- client read-only access;
-- consolidated dashboard;
-- history and exceptions per client.
+Agency is not part of the initial Community + Pro launch and is not an initial entitlement.
 
 ## Commercial Constraints
 
@@ -241,11 +226,9 @@ Upgrade triggers:
 - user wants SARIF export;
 - user needs baseline / pull request comparison;
 - user needs new-risks-only behavior;
-- user needs exception management;
-- user needs premium reports;
-- user needs result history;
-- user needs collaboration;
-- user needs client workspaces.
+- user needs local structured and expiring exceptions with mandatory reason, owner, and expiration.
+
+`POST_MVP` upgrade reasons must not be advertised as initial Pro availability.
 
 Community local repository count alone is not an upgrade trigger. Community local and CI use remains unmetered.
 

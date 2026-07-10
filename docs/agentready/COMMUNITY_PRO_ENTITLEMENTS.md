@@ -11,7 +11,11 @@ Initial launch contains only:
 - Community;
 - Pro.
 
-Team and Agency are `POST_REVENUE`.
+Team and Agency are:
+
+```txt
+POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT
+```
 
 ## Community
 
@@ -66,26 +70,63 @@ unlimited
 
 MVP functions:
 
-1. versioned policy;
+1. versioned policy configuration;
 2. baseline comparison;
-3. new risks only;
-4. SARIF;
+3. new-risks-only mode;
+4. SARIF export;
 5. pull request annotations;
-6. local structured exceptions;
-7. required exception justification;
+6. local structured and expiring exceptions;
+7. mandatory reason;
 8. exception owner;
-9. required exception expiration.
+9. mandatory expiration.
 
 Not in Pro MVP:
 
 - multi-user;
-- complex organizations;
-- full cloud history;
+- organizations;
+- collaboration;
+- hosted result history;
+- notifications;
 - heavy dashboard;
 - client workspaces;
 - Agency branding;
+- advanced individual developer features;
+- premium reports;
 - certification;
 - Enterprise.
+
+`POST_MVP`, not initial Pro entitlement:
+
+- premium reports;
+- hosted result history;
+- notifications;
+- collaboration;
+- organizations;
+- advanced individual developer features;
+- client workspaces.
+
+## License Architecture
+
+Target Pro license architecture:
+
+```txt
+Stripe payment
+-> cryptographically random AgentReady license key
+-> only the key hash stored server-side
+-> signed entitlement token
+-> local signature verification
+-> bounded local cache
+-> documented grace period
+```
+
+Rules:
+
+- never use a Stripe identifier as a secret;
+- never store a raw license key server-side;
+- no network call is mandatory on every scan;
+- no OpenAPI/MCP contract is sent to the license service;
+- Community works without account, license, or server;
+- minimal token contents are plan, expiration, features, repository limit, and pseudonymized identifier.
 
 ## Exceptions
 

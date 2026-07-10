@@ -63,10 +63,12 @@ Every result should be traceable to:
 - AgentReady schema version;
 - source type;
 - source protocol version when known;
-- policy configuration;
+- policy configuration/version;
 - input file hash;
 - commit;
 - scan date.
+
+A badge or previous PASS must never be presented as current state unless it still points to the exact engine version, ruleset version, policy configuration/version, source protocol and version when known, commit, input hash, and scan date that produced it.
 
 Forbidden product and communication terms:
 
@@ -93,7 +95,11 @@ Initial launch includes only:
 - Community;
 - Pro.
 
-Team and Agency are `POST_REVENUE`.
+Team and Agency are:
+
+```txt
+POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT
+```
 
 Team and Agency remain long-term vision items, but they must not:
 
@@ -167,28 +173,32 @@ unlimited
 
 MVP Pro functions:
 
-1. versioned policy;
+1. versioned policy configuration;
 2. baseline comparison;
-3. new risks only;
-4. SARIF;
+3. new-risks-only mode;
+4. SARIF export;
 5. pull request annotations;
-6. local structured exceptions;
-7. required exception justification;
+6. local structured and expiring exceptions;
+7. mandatory reason;
 8. exception owner;
-9. required exception expiration.
+9. mandatory expiration.
 
 Not in initial Pro MVP:
 
 - multi-user;
-- complex organizations;
-- full cloud history;
+- organizations;
+- collaboration;
+- hosted result history;
+- notifications;
 - heavy analytics dashboard;
 - client workspaces;
 - Agency branding;
+- advanced individual developer features;
+- premium reports, which are `POST_MVP`;
 - certification;
 - Enterprise.
 
-Advanced premium reports may remain post-MVP backlog.
+Premium reports, hosted result history, notifications, collaboration, organizations, advanced individual developer features, and client workspaces are `POST_MVP` or `POST_REVENUE`, not initial Pro entitlements.
 
 ## Exceptions And Portability
 
@@ -268,6 +278,29 @@ GitHub Marketplace is a distribution channel, not a security validation.
 
 Stripe remains the initial payment channel.
 
+## License Architecture
+
+Target Pro license architecture:
+
+```txt
+Stripe payment
+-> cryptographically random AgentReady license key
+-> only the key hash stored server-side
+-> signed entitlement token
+-> local signature verification
+-> bounded local cache
+-> documented grace period
+```
+
+Rules:
+
+- never use a Stripe identifier as a secret;
+- never store a raw license key server-side;
+- no network call is mandatory on every scan;
+- no OpenAPI/MCP contract is sent to the license service;
+- Community works without account, license, or server;
+- the minimal token contains only plan, expiration, features, repository limit, and a pseudonymized identifier.
+
 Target onboarding:
 
 ```txt
@@ -309,6 +342,18 @@ Allowed badges:
 - AgentReady CI enabled;
 - AgentReady scan: PASS;
 - AgentReady score: 92.
+
+Every badge must be tied to:
+
+- engine version;
+- ruleset version;
+- policy configuration/version;
+- source protocol and version when known;
+- commit;
+- input hash;
+- scan date.
+
+An old PASS must never be shown as the current state.
 
 Forbidden badges:
 
