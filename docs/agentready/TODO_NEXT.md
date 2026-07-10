@@ -24,26 +24,27 @@ Fail the build before unsafe agent-facing APIs or MCP tools are deployed.
 7. Homepage repositioned around AgentReady CI Gate.
 8. Self-service commercial and launch architecture documented.
 9. CLI public distribution package preparation validated.
+10. Versioned GitHub Action preparation validated.
 ```
 
 ## Immediate Next PR
 
 ```txt
-feat(distribution): prepare versioned AgentReady GitHub Action
+release(agentready): establish Community release workflow
 ```
 
 Planned branch:
 
 ```txt
-feat-agentready-versioned-github-action
+release-agentready-community-workflow
 ```
 
 Purpose:
 
-- prepare the existing GitHub Action for versioned public use;
-- define the versioning and release shape;
-- keep the action aligned with the packaged CLI;
-- do not publish marketplace/release artifacts without separate validation.
+- define the Community release workflow;
+- decide when tags may be created;
+- define release validation gates;
+- keep npm publication and GitHub Action tag creation blocked until explicit release approval.
 
 ## Execution Plan
 
@@ -80,6 +81,8 @@ That document is the authority for the expected PR order. If GitHub assigns a di
 - public HTML changes
 - paid feature claims
 - npm package publication
+- GitHub release tag creation
+- Marketplace listing
 
 ## Commercial Guardrails
 

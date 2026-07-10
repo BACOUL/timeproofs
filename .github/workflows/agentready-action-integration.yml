@@ -1,0 +1,116 @@
+name: AgentReady Action Integration
+
+on:
+  pull_request:
+    paths:
+      - ".github/actions/agentready/action.yml"
+      - ".github/workflows/agentready-action-integration.yml"
+      - "agentready-core/**"
+      - "agentready-examples/**"
+      - "bin/agentready.js"
+      - "cli/tests/run-agentready-action-smoke-test.mjs"
+      - "package.json"
+      - "docs/agentready/GITHUB_ACTION_USAGE.md"
+      - "docs/agentready/GITHUB_ACTION_VERSIONING.md"
+      - "docs/agentready/examples/github-action-agentready.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  agentready-action-integration:
+    name: AgentReady Action integration
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout consumer repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Prepare fixtures with spaces
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "agentready fixture space"
+          cp "agentready-examples/valid-simple-openapi.json" "agentready fixture space/valid simple openapi.json"
+
+      - name: AgentReady OpenAPI PASS
+        id: openapi_pass
+        uses: ./.github/actions/agentready
+        with:
+          type: openapi
+          file: "./agentready fixture space/valid simple openapi.json"
+          min-score: "75"
+          fail-on: critical
+          out: "agentready-output/openapi pass"
+
+      - name: Verify OpenAPI PASS outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${{ steps.openapi_pass.outputs.score }}"
+          test -n "${{ steps.openapi_pass.outputs.status }}"
+          test -f "${{ steps.openapi_pass.outputs.report-path }}"
+          test -f "${{ steps.openapi_pass.outputs.contract-path }}"
+
+      - name: AgentReady MCP PASS
+        id: mcp_pass
+        uses: ./.github/actions/agentready
+        with:
+          type: mcp
+          file: "./agentready-examples/mcp-tools-simple.json"
+          min-score: "75"
+          fail-on: critical
+          out: "agentready-output/mcp"
+
+      - name: Verify MCP PASS outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${{ steps.mcp_pass.outputs.score }}"
+          test -n "${{ steps.mcp_pass.outputs.status }}"
+          test -f "${{ steps.mcp_pass.outputs.report-path }}"
+          test -f "${{ steps.mcp_pass.outputs.contract-path }}"
+
+      - name: AgentReady OpenAPI policy FAIL expected
+        id: openapi_policy_fail
+        uses: ./.github/actions/agentready
+        continue-on-error: true
+        with:
+          type: openapi
+          file: "./agentready-examples/dangerous-actions-openapi.json"
+          min-score: "80"
+          fail-on: critical
+          out: "agentready-output/openapi-fail"
+
+      - name: Verify policy FAIL preserves outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${{ steps.openapi_policy_fail.outcome }}" = "failure"
+          test -n "${{ steps.openapi_policy_fail.outputs.score }}"
+          test -n "${{ steps.openapi_policy_fail.outputs.status }}"
+          test -f "${{ steps.openapi_policy_fail.outputs.report-path }}"
+          test -f "${{ steps.openapi_policy_fail.outputs.contract-path }}"
+
+      - name: AgentReady usage error expected
+        id: usage_error
+        uses: ./.github/actions/agentready
+        continue-on-error: true
+        with:
+          type: invalid
+          file: "./agentready-examples/valid-simple-openapi.json"
+          min-score: "75"
+          fail-on: critical
+          out: "agentready-output/usage-error"
+
+      - name: Verify usage error fails
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${{ steps.usage_error.outcome }}" = "failure"

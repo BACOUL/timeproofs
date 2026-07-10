@@ -26,6 +26,7 @@ Built and merged:
 - `/agentready-ci` public page;
 - homepage repositioned around AgentReady CI Gate;
 - CLI public distribution package preparation;
+- versioned GitHub Action preparation;
 - legacy proof runtime artifacts removed.
 
 ## Current Execution Sequence
@@ -41,20 +42,20 @@ Completed:
 7. Homepage repositioned around CI Gate.
 8. Self-service commercial and launch architecture documented.
 9. CLI public distribution package preparation validated.
+10. Versioned GitHub Action preparation validated.
 
 Next:
 
-1. `feat(distribution): prepare versioned AgentReady GitHub Action`
-2. `release(agentready): establish Community release workflow`
-3. Pro features.
-4. Entitlements and licensing.
-5. Billing and automation.
-6. Team.
-7. Agency.
-8. Commercial site.
-9. Company, legal, privacy.
-10. SEO, documentation, AI discovery.
-11. Launch.
+1. `release(agentready): establish Community release workflow`
+2. Pro features.
+3. Entitlements and licensing.
+4. Billing and automation.
+5. Team.
+6. Agency.
+7. Commercial site.
+8. Company, legal, privacy.
+9. SEO, documentation, AI discovery.
+10. Launch.
 
 Locked operational sequence:
 
@@ -72,6 +73,7 @@ docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md
 docs/agentready/AGENTREADY_RULE_CODES.md
 docs/agentready/AGENTREADY_JSON_SPEC.md
 docs/agentready/GITHUB_ACTION_USAGE.md
+docs/agentready/GITHUB_ACTION_VERSIONING.md
 docs/agentready/SELF_SERVICE_BUSINESS_MODEL.md
 docs/agentready/PRICING_AND_ENTITLEMENTS_V0_1.md
 docs/agentready/AUTOMATED_PURCHASE_AND_BILLING_FLOW.md

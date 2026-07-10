@@ -57,13 +57,21 @@ The GitHub Action is the fastest adoption layer for GitHub users.
 It should be simple:
 
 ```yaml
-- uses: timeproofs/agentready-action@v1
+- uses: ./.github/actions/agentready
   with:
-    source: openapi.yaml
-    source_type: openapi
-    min_score: 80
-    fail_on: critical
+    file: openapi.yaml
+    type: openapi
+    min-score: '80'
+    fail-on: critical
 ```
+
+For future versioned public use, the planned reference is:
+
+```yaml
+uses: BACOUL/timeproofs/.github/actions/agentready@v0.1.0-alpha.0
+```
+
+Planned versioned reference - tag not created yet.
 
 ## CLI target commands
 
@@ -122,12 +130,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: timeproofs/agentready-action@v1
+      - uses: ./.github/actions/agentready
         with:
-          source: openapi.yaml
-          source_type: openapi
-          min_score: 80
-          fail_on: critical
+          file: openapi.yaml
+          type: openapi
+          min-score: '80'
+          fail-on: critical
 ```
 
 ## Example GitLab CI

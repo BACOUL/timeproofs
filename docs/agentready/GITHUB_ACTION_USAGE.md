@@ -6,9 +6,11 @@ The action wraps the AgentReady CLI and fails the job when the configured policy
 
 The generated contract path points to an `agentready.json` file following the published v0.1 contract described in [AGENTREADY_JSON_SPEC.md](AGENTREADY_JSON_SPEC.md).
 
-## Action
+Versioning rules are described in [GITHUB_ACTION_VERSIONING.md](GITHUB_ACTION_VERSIONING.md).
 
-Use the repository action after checking out your code and installing Node.js 20 or newer:
+## Current Local Usage
+
+For a consumer repository that vendors or checks out the action locally:
 
 ```yaml
 - uses: actions/checkout@v4
@@ -19,7 +21,7 @@ Use the repository action after checking out your code and installing Node.js 20
 
 - name: AgentReady OpenAPI CI gate
   id: agentready
-  uses: BACOUL/timeproofs/.github/actions/agentready@timeproofs
+  uses: ./.github/actions/agentready
   with:
     type: openapi
     file: ./openapi.json
@@ -28,11 +30,36 @@ Use the repository action after checking out your code and installing Node.js 20
     out: agentready-output
 ```
 
-For a local vendored copy inside the same repository, use:
+This is the currently testable mode in this repository's integration workflow.
+
+## Development Branch Reference - Not A Stable Release
+
+This can be used only for temporary development testing:
 
 ```yaml
-uses: ./.github/actions/agentready
+uses: BACOUL/timeproofs/.github/actions/agentready@timeproofs
 ```
+
+Do not treat the `timeproofs` branch as a stable production reference.
+
+## Planned Versioned Reference - Tag Not Created Yet
+
+Future planned reference:
+
+```yaml
+uses: BACOUL/timeproofs/.github/actions/agentready@v0.1.0-alpha.0
+```
+
+This tag does not exist yet. It must not be documented as available until the Community release workflow creates it.
+
+## Runner Support
+
+Currently validated target:
+
+- `ubuntu-latest`;
+- Node.js 20.
+
+Windows and macOS are not claimed as supported until those runners are executed successfully.
 
 ## Inputs
 
@@ -40,7 +67,7 @@ uses: ./.github/actions/agentready
 | --- | --- | --- | --- |
 | `file` | yes | none | Path to the OpenAPI document or MCP tools JSON file. |
 | `type` | yes | none | `openapi` or `mcp`. |
-| `min-score` | no | `75` | Minimum score required for the gate to pass. |
+| `min-score` | no | `75` | Minimum score required for the gate to pass. Must be between 0 and 100. |
 | `fail-on` | no | `critical` | Fails when risks at or above this severity are detected. Use `critical`, `high`, `medium`, `low`, or `none`. |
 | `out` | no | `agentready-output` | Directory for the generated report and contract files. |
 
@@ -48,10 +75,10 @@ uses: ./.github/actions/agentready
 
 | Output | Description |
 | --- | --- |
-| `score` | AgentReady score returned by the scan. |
-| `status` | AgentReady status returned by the scan. |
-| `report-path` | Path to the generated Markdown report. |
-| `contract-path` | Path to the generated `agentready.json` contract. |
+| `score` | AgentReady score returned by the scan when valid JSON output exists. |
+| `status` | AgentReady status returned by the scan when valid JSON output exists. |
+| `report-path` | Path to the generated Markdown report when it exists. |
+| `contract-path` | Path to the generated `agentready.json` contract when it exists. |
 
 ## Gate Behavior
 
@@ -69,12 +96,14 @@ With that policy, the job fails when the score is below 75 or any critical risk 
 - `2` means invalid input or CLI usage error.
 - `3` means an unexpected internal error.
 
+A valid policy failure still produces outputs, reports, and contracts when the CLI completed the scan.
+
 ## MCP Example
 
 ```yaml
 - name: AgentReady MCP CI gate
   id: agentready_mcp
-  uses: BACOUL/timeproofs/.github/actions/agentready@timeproofs
+  uses: ./.github/actions/agentready
   with:
     type: mcp
     file: ./mcp-tools.json
@@ -82,6 +111,14 @@ With that policy, the job fails when the score is below 75 or any critical risk 
     fail-on: critical
     out: agentready-output/mcp
 ```
+
+## What The Action Does Not Do
+
+- It does not publish to GitHub Marketplace.
+- It does not require a TimeProofs account.
+- It does not call TimeProofs services.
+- It does not upload OpenAPI files, MCP definitions, reports, or secrets.
+- It does not install `@timeproofs/agentready` from npm while the package is unpublished.
 
 ## Limitation
 
