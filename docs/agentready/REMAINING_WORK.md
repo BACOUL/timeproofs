@@ -15,31 +15,36 @@ agentready.json spec v0.1: merged and aligned with code
 /agentready-ci public page: merged
 Homepage CI Gate positioning: merged
 Self-service commercial and launch architecture: documented
-CLI public distribution package preparation: in review
-Versioned GitHub Action preparation: in review
+CLI public distribution package preparation: prepared
+Versioned GitHub Action preparation: prepared
+Community release workflow: prepared
 ```
 
-## Priority 1 - Community Release Workflow
+Community public publication remains blocked and has not occurred.
+
+## Priority 1 - Strategic Rebaseline
 
 Next PR:
 
 ```txt
-release(agentready): establish Community release workflow
+docs(product): rebaseline AgentReady Community and Pro strategy
 ```
 
 Planned branch:
 
 ```txt
-release-agentready-community-workflow
+docs-agentready-community-pro-rebaseline
 ```
 
 Work:
 
-- define release validation gates;
-- define package and Action provenance expectations;
-- decide when immutable tags may be created;
+- rebaseline AgentReady Community and Pro strategy;
+- keep the rebaseline docs-only;
+- prevent Pro implementation from starting before strategy is locked;
 - keep scan/scoring/rule-code behavior stable;
 - do not publish npm packages, create tags, create releases, or list in Marketplace without separate validation.
+
+The versioned policy configuration PR remains planned after the rebaseline PR is merged.
 
 ## Locked Execution Plan
 
@@ -51,7 +56,7 @@ docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
 
 Expected PR numbers are guidance. If GitHub assigns another number, the title and order remain the authority.
 
-## Priority 2 - Community Release Workflow
+## Priority 2 - Community Publication Blockers
 
 Community is the free standard-adoption layer:
 
@@ -67,6 +72,8 @@ Community is the free standard-adoption layer:
 - local analysis.
 
 The goal is adoption of the AgentReady standard before paid features are exposed. Community local use is not measured and no repository is registered in a TimeProofs hosted service.
+
+Community publication remains blocked until npm scope ownership, license decisions, publication security, immutable tag approval, release notes, and explicit release approval are complete.
 
 ## Priority 3 - Build Pro
 

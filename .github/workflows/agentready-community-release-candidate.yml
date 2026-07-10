@@ -1,0 +1,176 @@
+name: AgentReady Community Release Candidate
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/agentready-community-release-candidate.yml"
+      - ".github/actions/agentready/action.yml"
+      - "agentready-core/**"
+      - "agentready-examples/**"
+      - "bin/agentready.js"
+      - "cli/tests/**"
+      - "scripts/create-agentready-community-release-candidate.mjs"
+      - "package.json"
+      - "README.md"
+      - "docs/agentready/COMMUNITY_RELEASE_WORKFLOW.md"
+      - "docs/agentready/COMMUNITY_RELEASE_CHECKLIST.md"
+      - "docs/agentready/COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_0_DRAFT.md"
+      - "docs/agentready/GITHUB_ACTION_VERSIONING.md"
+      - "docs/agentready/CLI_PUBLIC_DISTRIBUTION.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  community-release-candidate:
+    name: Community release candidate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout reviewed source commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Verify package metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+
+          const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+          assert.equal(pkg.name, '@timeproofs/agentready');
+          assert.equal(pkg.version, '0.1.0-alpha.0');
+          assert.equal(pkg.private, true);
+          assert.equal(pkg.engines?.node, '>=20');
+          assert.equal(pkg.bin?.agentready, './bin/agentready.js');
+          assert.equal(pkg.license, 'SEE LICENSE IN LICENSE');
+          assert.deepEqual(Object.keys(pkg.dependencies || {}), []);
+          NODE
+          test ! -f timeproofs-agentready-0.1.0-alpha.0.tgz
+
+      - name: Core tests
+        run: node agentready-core/tests/run-agentready-core-tests.mjs
+
+      - name: CLI tests
+        run: node cli/tests/run-agentready-cli-tests.mjs
+
+      - name: Action metadata smoke test
+        run: node cli/tests/run-agentready-action-smoke-test.mjs
+
+      - name: Package clean-install smoke test
+        run: node cli/tests/run-agentready-package-smoke-test.mjs
+
+      - name: Community release workflow guard test
+        run: node cli/tests/run-agentready-community-release-workflow-test.mjs
+
+      - name: AgentReady OpenAPI PASS
+        id: openapi_pass
+        uses: ./.github/actions/agentready
+        with:
+          type: openapi
+          file: "./agentready-examples/valid-simple-openapi.json"
+          min-score: "75"
+          fail-on: critical
+          out: "agentready-output/openapi-pass"
+
+      - name: Verify OpenAPI PASS outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${{ steps.openapi_pass.outputs.score }}"
+          test -n "${{ steps.openapi_pass.outputs.status }}"
+          test -f "${{ steps.openapi_pass.outputs.report-path }}"
+          test -f "${{ steps.openapi_pass.outputs.contract-path }}"
+
+      - name: AgentReady MCP PASS
+        id: mcp_pass
+        uses: ./.github/actions/agentready
+        with:
+          type: mcp
+          file: "./agentready-examples/mcp-tools-simple.json"
+          min-score: "75"
+          fail-on: critical
+          out: "agentready-output/mcp-pass"
+
+      - name: Verify MCP PASS outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${{ steps.mcp_pass.outputs.score }}"
+          test -n "${{ steps.mcp_pass.outputs.status }}"
+          test -f "${{ steps.mcp_pass.outputs.report-path }}"
+          test -f "${{ steps.mcp_pass.outputs.contract-path }}"
+
+      - name: AgentReady OpenAPI policy FAIL expected
+        id: openapi_policy_fail
+        uses: ./.github/actions/agentready
+        continue-on-error: true
+        with:
+          type: openapi
+          file: "./agentready-examples/dangerous-actions-openapi.json"
+          min-score: "80"
+          fail-on: critical
+          out: "agentready-output/openapi-fail"
+
+      - name: Verify policy FAIL preserves outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${{ steps.openapi_policy_fail.outcome }}" = "failure"
+          test -n "${{ steps.openapi_policy_fail.outputs.score }}"
+          test -n "${{ steps.openapi_policy_fail.outputs.status }}"
+          test -f "${{ steps.openapi_policy_fail.outputs.report-path }}"
+          test -f "${{ steps.openapi_policy_fail.outputs.contract-path }}"
+
+      - name: Build Community release candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          candidate_dir="$RUNNER_TEMP/agentready-community-release-candidate"
+          npm run release:community:candidate -- --out "$candidate_dir"
+
+      - name: Verify release candidate artifact contents
+        shell: bash
+        run: |
+          set -euo pipefail
+          candidate_dir="$RUNNER_TEMP/agentready-community-release-candidate"
+          test -f "$candidate_dir/timeproofs-agentready-0.1.0-alpha.0.tgz"
+          test -f "$candidate_dir/timeproofs-agentready-0.1.0-alpha.0.tgz.sha256"
+          test -f "$candidate_dir/agentready-community-release-candidate-manifest.json"
+          test -f "$candidate_dir/COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_0_DRAFT.md"
+          file_count="$(find "$candidate_dir" -type f | wc -l | tr -d ' ')"
+          test "$file_count" = "4"
+          EXPECTED_COMMIT_SHA="$(git rev-parse HEAD)" node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+
+          const dir = process.env.RUNNER_TEMP + '/agentready-community-release-candidate';
+          const manifest = JSON.parse(fs.readFileSync(path.join(dir, 'agentready-community-release-candidate-manifest.json'), 'utf8'));
+          assert.equal(manifest.status, 'candidate_only');
+          assert.equal(manifest.publication_ready, false);
+          assert.equal(manifest.publication.npm, false);
+          assert.equal(manifest.publication.github_release, false);
+          assert.equal(manifest.publication.github_tag, false);
+          assert.equal(manifest.github_action.versioned_tag_created, false);
+          assert.equal(manifest.package_private, true);
+          assert.equal(manifest.planned_tag, 'v0.1.0-alpha.0');
+          assert.equal(manifest.tarball.entry_count, 20);
+          assert.equal(manifest.commit_sha, process.env.EXPECTED_COMMIT_SHA);
+          NODE
+
+      - name: Upload temporary release candidate artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: agentready-community-release-candidate-0.1.0-alpha.0
+          path: ${{ runner.temp }}/agentready-community-release-candidate/*
+          retention-days: 7

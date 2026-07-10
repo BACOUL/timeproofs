@@ -6,6 +6,9 @@ Prepared, but not published.
 
 This document describes the package distribution shape for the AgentReady CLI. It does not mean the package is available from the public npm registry yet.
 
+Community release workflow prepared.
+Community public publication remains blocked and has not occurred.
+
 Active direction:
 
 ```txt
@@ -299,8 +302,9 @@ If installed from a local tarball, npm still records the package under the packa
 3. The `LICENSE` file is still marked by legacy references to ProofSpec and the old protocol.
 4. The legal license decision for AgentReady must be validated before publication.
 5. npm publication policy and 2FA requirements must be defined.
-6. Package provenance and release workflow must be handled in the Community release PR.
+6. Package provenance and release workflow are prepared as a candidate-only Community workflow.
 7. No package may be published from this PR.
+8. Explicit release approval is still required before publication.
 
 ## Mandatory Limitation
 

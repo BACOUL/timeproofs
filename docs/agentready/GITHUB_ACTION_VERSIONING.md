@@ -26,7 +26,15 @@ The first future tag candidate is:
 v0.1.0-alpha.0
 ```
 
-That tag is not created here. Tag creation is reserved for the Community release workflow PR.
+That tag is not created here.
+
+The Community release workflow prepares and validates the release candidate. Actual tag creation remains blocked until all publication requirements and explicit release approval are satisfied.
+
+Current tag status:
+
+```txt
+v0.1.0-alpha.0: not created
+```
 
 ## Immutable References
 
@@ -120,7 +128,8 @@ The Action must not install `@timeproofs/agentready` from npm until the package 
 - no public stable tag exists yet;
 - no Marketplace listing exists;
 - package publication is still blocked by npm scope and legal license checks;
-- the Community release workflow is not established yet.
+- the Community release workflow is candidate-only and does not create tags;
+- explicit release approval has not been granted.
 
 ## Mandatory Limitation
 

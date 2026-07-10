@@ -12,6 +12,16 @@ TimeProofs AgentReady = pre-deployment CI gate for agent-facing OpenAPI and MCP 
 
 ### Added
 
+- Community release candidate workflow, manifest, checksum, and temporary CI artifact validation.
+
+### Blocked
+
+- Public npm publication, GitHub Release creation, immutable tag creation, and Marketplace listing remain blocked until explicit release approval.
+
+## 0.1.0-alpha.0 - candidate, not released
+
+### Added
+
 - AgentReady CLI alpha for OpenAPI and MCP scans.
 - CI policy support with `--min-score` and `--fail-on`.
 - Commercial bad/fixed fixture CI Gate validation report.
@@ -23,6 +33,8 @@ TimeProofs AgentReady = pre-deployment CI gate for agent-facing OpenAPI and MCP 
   - v0.1 root aliases such as `source_name`, `score`, `status`, and `risk_counts`
 - GitHub Action wrapper for AgentReady CI Gate usage.
 - `agentready.json` spec v0.1 documentation.
+- Prepared CLI package tarball validation.
+- Prepared versioned GitHub Action usage model.
 
 ### Changed
 

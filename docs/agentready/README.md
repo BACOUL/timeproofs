@@ -34,6 +34,11 @@ The merged foundation now includes:
 - `agentready.json` spec v0.1;
 - `/agentready-ci` public page;
 - homepage positioning around AgentReady CI Gate.
+- CLI public distribution preparation;
+- versioned GitHub Action preparation;
+- Community release workflow preparation.
+
+Community public publication remains blocked and has not occurred.
 
 ## Self-Service Commercial Direction
 
@@ -78,6 +83,9 @@ There is no manual review offer, mandatory contact-sales step, quote workflow, m
 | `SELF_SERVICE_EXECUTION_PLAN.md` | Locked operational PR order from Community distribution to launch |
 | `CLI_PUBLIC_DISTRIBUTION.md` | Prepared CLI package distribution and publication blockers |
 | `GITHUB_ACTION_VERSIONING.md` | Planned GitHub Action tag and versioning model |
+| `COMMUNITY_RELEASE_WORKFLOW.md` | Community release candidate workflow |
+| `COMMUNITY_RELEASE_CHECKLIST.md` | Community release readiness and publication blockers |
+| `COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_0_DRAFT.md` | Draft notes for the unpublished Community candidate |
 | `AGENTREADY_JSON_SPEC.md` | `agentready.json` v0.1 contract |
 | `AGENTREADY_RULE_CODES.md` | Stable AR001-AR010 rule codes |
 | `COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md` | Bad/fixed CI Gate validation |
@@ -104,11 +112,19 @@ The locked future PR order is defined in:
 docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
 ```
 
-After #111, the immediate next PR is:
+After #112, the immediate next PR is:
 
 ```txt
-release(agentready): establish Community release workflow
+docs(product): rebaseline AgentReady Community and Pro strategy
 ```
+
+Planned branch:
+
+```txt
+docs-agentready-community-pro-rebaseline
+```
+
+No Pro implementation may begin until this docs-only rebaseline PR is merged.
 
 Every new task must answer yes to these questions:
 

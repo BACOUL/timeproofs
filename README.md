@@ -44,6 +44,9 @@ Done:
 - public docs and examples;
 - legal, privacy, and terms draft pages;
 - legacy proof runtime artifacts removed.
+- Community release workflow prepared.
+
+Community public publication remains blocked and has not occurred.
 
 ## Community Capabilities
 
@@ -128,21 +131,23 @@ docs/agentready/GITHUB_ACTION_VERSIONING.md
 docs/agentready/AGENTREADY_RULE_CODES.md
 docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md
 docs/agentready/CLI_PUBLIC_DISTRIBUTION.md
+docs/agentready/COMMUNITY_RELEASE_WORKFLOW.md
+docs/agentready/COMMUNITY_RELEASE_CHECKLIST.md
 ```
 
 ## Immediate Next Step
 
 ```txt
-release(agentready): establish Community release workflow
+docs(product): rebaseline AgentReady Community and Pro strategy
 ```
 
 Planned branch:
 
 ```txt
-release-agentready-community-workflow
+docs-agentready-community-pro-rebaseline
 ```
 
-This step defines the release workflow and validation gates. It must not publish npm packages, create tags, create releases, or list in Marketplace without separate validation.
+This docs-only step rebaselines the Community and Pro strategy before any Pro implementation begins. It must not publish npm packages, create tags, create releases, list in Marketplace, or start Pro policy implementation.
 
 The locked execution order is documented in:
 
@@ -173,6 +178,8 @@ docs/agentready/CLI_PUBLIC_DISTRIBUTION.md
 node agentready-core/tests/run-agentready-core-tests.mjs
 node cli/tests/run-agentready-cli-tests.mjs
 node cli/tests/run-agentready-action-smoke-test.mjs
+node cli/tests/run-agentready-package-smoke-test.mjs
+node cli/tests/run-agentready-community-release-workflow-test.mjs
 ```
 
 ## Mandatory Limitation

@@ -21,7 +21,12 @@ Done:
 - `/agentready-ci` public page added.
 - Homepage repositioned around AgentReady CI Gate.
 - Self-service commercial and launch architecture documented.
+- CLI public distribution package preparation completed.
+- Versioned GitHub Action preparation completed.
+- Community release workflow prepared.
 - Legacy `selfhost/`, `sdk/`, `manifest.json`, and `manifest.webmanifest` removed.
+
+Community public publication remains blocked and has not occurred.
 
 ## Locked Execution Plan
 
@@ -36,35 +41,36 @@ The PR numbers in that document are expected numbers. If GitHub assigns another 
 ## Immediate Next PR
 
 ```txt
-feat(distribution): package AgentReady CLI for public installation
+docs(product): rebaseline AgentReady Community and Pro strategy
 ```
 
 Planned branch:
 
 ```txt
-feat-agentready-cli-public-distribution
+docs-agentready-community-pro-rebaseline
 ```
 
 Purpose:
 
-- prepare public CLI installation;
-- define the package and public command;
-- add version and help behavior;
-- test installation in a clean environment;
-- do not actually publish the package without separate validation.
+- rebaseline Community and Pro strategy in docs before Pro implementation begins;
+- preserve existing Community CLI, GitHub Action, scoring, rule codes, and `agentready.json` behavior;
+- keep Community publication blocked until separate release approval.
+
+The versioned policy configuration PR remains planned, but only after the rebaseline PR is merged.
 
 ## Current Product Sequence - Self-Service Launch
 
 1. Community distribution.
-2. Pro.
-3. Entitlements and licensing.
-4. Billing and automation.
-5. Team.
-6. Agency.
-7. Commercial site.
-8. Company, legal, and privacy.
-9. SEO, documentation, and AI discovery.
-10. Launch.
+2. Mandatory strategic rebaseline.
+3. Pro.
+4. Entitlements and licensing.
+5. Billing and automation.
+6. Team.
+7. Agency.
+8. Commercial site.
+9. Company, legal, and privacy.
+10. SEO, documentation, and AI discovery.
+11. Launch.
 
 No paid plan should be displayed as available until its features and entitlements are implemented.
 

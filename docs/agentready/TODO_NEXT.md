@@ -25,26 +25,31 @@ Fail the build before unsafe agent-facing APIs or MCP tools are deployed.
 8. Self-service commercial and launch architecture documented.
 9. CLI public distribution package preparation validated.
 10. Versioned GitHub Action preparation validated.
+11. Community release workflow prepared.
 ```
+
+Community public publication remains blocked and has not occurred.
 
 ## Immediate Next PR
 
 ```txt
-release(agentready): establish Community release workflow
+docs(product): rebaseline AgentReady Community and Pro strategy
 ```
 
 Planned branch:
 
 ```txt
-release-agentready-community-workflow
+docs-agentready-community-pro-rebaseline
 ```
 
 Purpose:
 
-- define the Community release workflow;
-- decide when tags may be created;
-- define release validation gates;
-- keep npm publication and GitHub Action tag creation blocked until explicit release approval.
+- rebaseline AgentReady Community and Pro strategy before Pro implementation begins;
+- keep the rebaseline docs-only;
+- keep Community publication, tag creation, GitHub Release creation, and Marketplace listing blocked;
+- preserve current scoring, rule codes, CLI exits, GitHub Action outputs, and `agentready.json` v0.1 compatibility.
+
+The versioned policy configuration PR remains planned, but only after this rebaseline PR is merged.
 
 ## Execution Plan
 
@@ -80,6 +85,7 @@ That document is the authority for the expected PR order. If GitHub assigns a di
 - old proof-of-existence product
 - public HTML changes
 - paid feature claims
+- Pro implementation
 - npm package publication
 - GitHub release tag creation
 - Marketplace listing
