@@ -1,6 +1,7 @@
 (() => {
   const menuLinks = [
     ['/', 'Home'],
+    ['/agentready-ci.html', 'CI Gate'],
     ['/agentready.html', 'OpenAPI scanner'],
     ['/agentready-mcp.html', 'MCP scanner'],
     ['/agentready-simulation.html', 'Static simulation'],
@@ -63,6 +64,7 @@
     const links = document.createElement('div');
     links.className = 'footer-links';
     [
+      ['/agentready-ci.html', 'CI Gate'],
       ['/agentready-sample-report.html', 'Sample report'],
       ['/pricing.html', 'Pricing'],
       ['/agentready-resources.html', 'Resources'],

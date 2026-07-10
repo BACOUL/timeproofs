@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AgentReady CI Gate for AI-facing APIs and MCP tools</title>
+  <meta name="description" content="Fail the build before unsafe agent-facing OpenAPI or MCP tools are deployed. AgentReady checks structural risks, rule codes and CI policy before release." />
+  <meta name="robots" content="index,follow" />
+  <meta name="theme-color" content="#07111f" />
+  <link rel="canonical" href="https://timeproofs.io/agentready-ci.html" />
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link rel="stylesheet" href="/assets/site-nav.css" />
+  <style>
+    :root {
+      --bg:#07111f;
+      --panel:#0d1828;
+      --panel2:#101827;
+      --line:#243247;
+      --text:#f8fafc;
+      --soft:#d6e2ea;
+      --muted:#96a7b8;
+      --accent:#22d3ee;
+      --accent2:#38bdf8;
+      --green:#35d07f;
+      --red:#fb7185;
+      --amber:#fbbf24;
+      --ink:#04111f;
+    }
+    * { box-sizing:border-box; }
+    html, body { margin:0; min-height:100%; }
+    body {
+      background:
+        radial-gradient(900px 360px at 82% -12%,rgba(34,211,238,.16),transparent 60%),
+        linear-gradient(180deg,#07111f 0%,#0b1020 48%,#08111f 100%);
+      color:var(--text);
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      line-height:1.58;
+    }
+    a { color:var(--accent); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    .wrap { width:min(1160px,calc(100% - 32px)); margin:0 auto; }
+    header {
+      position:sticky;
+      top:0;
+      z-index:10;
+      border-bottom:1px solid var(--line);
+      background:rgba(7,17,31,.78);
+      backdrop-filter:blur(12px);
+    }
+    .nav { display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:68px; }
+    .brand { display:flex; align-items:center; gap:10px; color:var(--text); font-weight:900; }
+    .brand img { width:38px; height:38px; border-radius:10px; }
+    .nav-links { display:flex; flex-wrap:wrap; gap:18px; font-size:.94rem; font-weight:750; }
+    .hero { padding:58px 0 30px; }
+    .hero-grid { display:grid; gap:24px; align-items:center; }
+    @media (min-width:940px) { .hero-grid { grid-template-columns:1.02fr .98fr; } }
+    .eyebrow {
+      display:inline-flex;
+      align-items:center;
+      border:1px solid rgba(34,211,238,.35);
+      border-radius:999px;
+      background:rgba(34,211,238,.08);
+      color:#b9e7f5;
+      font-size:.84rem;
+      font-weight:850;
+      margin-bottom:14px;
+      padding:6px 12px;
+    }
+    h1 {
+      font-size:clamp(2.35rem,5.6vw,4.85rem);
+      letter-spacing:0;
+      line-height:.98;
+      margin:0 0 18px;
+      max-width:960px;
+    }
+    h2 { color:#e6fbff; font-size:clamp(1.5rem,3vw,2.25rem); line-height:1.1; margin:0 0 10px; }
+    h3 { color:#dff7ff; margin:0 0 8px; }
+    p { margin:0; }
+    .subtitle {
+      color:var(--soft);
+      font-size:clamp(1.08rem,2vw,1.28rem);
+      max-width:780px;
+    }
+    .muted { color:var(--muted); }
+    .cta-row { display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; }
+    .cta {
+      align-items:center;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:10px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:var(--ink);
+      display:inline-flex;
+      font-weight:900;
+      justify-content:center;
+      min-height:46px;
+      padding:0 18px;
+      text-decoration:none;
+    }
+    .cta:hover { text-decoration:none; }
+    .cta.secondary {
+      background:#101b31;
+      border-color:#263955;
+      color:#dff7ff;
+    }
+    .signal-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; }
+    .signal {
+      border:1px solid #214a57;
+      border-radius:999px;
+      background:#0d2330;
+      color:#d8eef6;
+      font-size:.9rem;
+      padding:6px 10px;
+    }
+    .panel {
+      background:linear-gradient(180deg,#111c30,#07111f);
+      border:1px solid #26344a;
+      border-radius:8px;
+      box-shadow:0 24px 80px rgba(0,0,0,.34);
+      overflow:hidden;
+    }
+    .panel-top {
+      align-items:center;
+      border-bottom:1px solid #26344a;
+      color:#cbd5e1;
+      display:flex;
+      font-size:.88rem;
+      gap:12px;
+      justify-content:space-between;
+      padding:12px 14px;
+    }
+    .dots { display:flex; gap:6px; }
+    .dot { background:#334155; border-radius:999px; height:10px; width:10px; }
+    .panel-body { padding:18px; }
+    .gate-row {
+      align-items:center;
+      border:1px solid #243247;
+      border-radius:8px;
+      background:#081524;
+      display:grid;
+      gap:12px;
+      grid-template-columns:1fr auto 1fr;
+      margin-top:12px;
+      padding:14px;
+    }
+    .score { font-size:2rem; font-weight:950; line-height:1; }
+    .label { color:var(--muted); font-size:.82rem; font-weight:800; text-transform:uppercase; }
+    .arrow { color:#7890a8; font-weight:950; text-align:center; }
+    .badge {
+      border-radius:999px;
+      display:inline-flex;
+      font-size:.82rem;
+      font-weight:950;
+      padding:4px 9px;
+      white-space:nowrap;
+    }
+    .fail { background:rgba(251,113,133,.12); border:1px solid rgba(251,113,133,.38); color:#fecdd3; }
+    .pass { background:rgba(53,208,127,.12); border:1px solid rgba(53,208,127,.38); color:#bbf7d0; }
+    .section { padding:34px 0; }
+    .section-head { margin-bottom:18px; max-width:790px; }
+    .section-head p { color:var(--muted); font-size:1.04rem; }
+    .grid { display:grid; gap:16px; }
+    @media (min-width:860px) {
+      .grid.two { grid-template-columns:repeat(2,1fr); }
+      .grid.three { grid-template-columns:repeat(3,1fr); }
+      .grid.four { grid-template-columns:repeat(4,1fr); }
+    }
+    .card {
+      background:rgba(13,24,40,.84);
+      border:1px solid var(--line);
+      border-radius:8px;
+      box-shadow:0 18px 60px rgba(0,0,0,.18);
+      padding:20px;
+    }
+    .card p, .card li { color:#cbd5e1; }
+    .card p + p { margin-top:10px; }
+    .list { margin:0; padding-left:20px; }
+    .list li { margin:8px 0; }
+    .proof-table {
+      border:1px solid var(--line);
+      border-radius:8px;
+      overflow:auto;
+      background:rgba(13,24,40,.84);
+    }
+    table { border-collapse:collapse; min-width:760px; width:100%; }
+    th, td { border-bottom:1px solid var(--line); padding:13px 14px; text-align:left; vertical-align:top; }
+    th { background:#07111f; color:#b9e7f5; font-size:.86rem; text-transform:uppercase; }
+    tr:last-child td { border-bottom:0; }
+    .delta { color:#b9e7f5; font-weight:850; }
+    code, pre {
+      background:#020617;
+      border:1px solid #1e293b;
+      border-radius:8px;
+      color:#e2f6ff;
+    }
+    code { padding:2px 6px; }
+    pre {
+      margin:0;
+      overflow:auto;
+      padding:16px;
+      white-space:pre;
+    }
+    .code-card { padding:0; overflow:hidden; }
+    .code-title {
+      border-bottom:1px solid #1e293b;
+      color:#b9e7f5;
+      font-size:.9rem;
+      font-weight:850;
+      padding:12px 16px;
+    }
+    .rule-list {
+      display:grid;
+      gap:10px;
+      grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+      margin-top:14px;
+    }
+    .rule {
+      border:1px solid #25344b;
+      border-radius:8px;
+      background:#081524;
+      color:#dbeafe;
+      font-size:.92rem;
+      font-weight:850;
+      padding:10px;
+    }
+    .trust {
+      align-items:flex-start;
+      display:flex;
+      gap:10px;
+    }
+    .mark {
+      background:rgba(34,211,238,.08);
+      border:1px solid rgba(34,211,238,.35);
+      border-radius:8px;
+      color:#b9e7f5;
+      display:grid;
+      flex:0 0 auto;
+      font-weight:950;
+      height:28px;
+      place-items:center;
+      width:28px;
+    }
+    .banner {
+      align-items:center;
+      background:rgba(34,211,238,.06);
+      border:1px solid rgba(34,211,238,.28);
+      border-radius:8px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:18px;
+      justify-content:space-between;
+      padding:22px;
+    }
+    footer {
+      border-top:1px solid var(--line);
+      color:#64748b;
+      margin-top:40px;
+      padding:24px 0;
+      text-align:center;
+    }
+    @media (max-width:760px) {
+      .hero { padding-top:44px; }
+      .gate-row { grid-template-columns:1fr; }
+      .arrow { text-align:left; }
+      .card { padding:18px; }
+      pre { font-size:.86rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="/" aria-label="TimeProofs AgentReady home"><img src="/assets/logo.png" alt="" /><span>TimeProofs AgentReady</span></a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="/agentready-ci.html">CI Gate</a>
+        <a href="/agentready.html">OpenAPI Scan</a>
+        <a href="/agentready-mcp.html">MCP Scan</a>
+        <a href="/agentready-sample-report.html">Sample report</a>
+        <a href="/agentready-docs.html">Docs</a>
+        <a href="/agentready-examples.html">Examples</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">Pre-deployment CI gate</div>
+          <h1>AgentReady CI Gate for AI-facing APIs and MCP tools</h1>
+          <p class="subtitle">Fail the build before unsafe agent-facing APIs or MCP tools are deployed.</p>
+          <div class="cta-row">
+            <a class="cta" href="/docs/agentready/GITHUB_ACTION_USAGE.md">View GitHub Action</a>
+            <a class="cta secondary" href="/docs/agentready/AGENTREADY_JSON_SPEC.md">Read agentready.json spec</a>
+          </div>
+          <div class="signal-row" aria-label="AgentReady foundation">
+            <span class="signal">CLI alpha</span>
+            <span class="signal">GitHub Action wrapper</span>
+            <span class="signal">AR001-AR010</span>
+            <span class="signal">agentready.json v0.1</span>
+          </div>
+        </div>
+
+        <aside class="panel" aria-label="AgentReady CI gate proof">
+          <div class="panel-top">
+            <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+            <strong>Policy: --min-score 75 --fail-on critical</strong>
+          </div>
+          <div class="panel-body">
+            <div class="gate-row">
+              <div>
+                <div class="label">Bad fixture</div>
+                <div class="score">54</div>
+                <span class="badge fail">FAIL</span>
+              </div>
+              <div class="arrow">-&gt;</div>
+              <div>
+                <div class="label">Fixed fixture</div>
+                <div class="score">84</div>
+                <span class="badge pass">PASS</span>
+              </div>
+            </div>
+            <p class="muted" style="margin-top:14px;">Bad/fixed commercial fixtures prove the gate can block uncontrolled danger while allowing controlled high-risk tools to pass with visible findings.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section wrap">
+      <div class="section-head">
+        <h2>The problem</h2>
+        <p>AI agents increasingly call OpenAPI operations and MCP tools. Many of those surfaces are valid for humans but too vague, too broad, or too dangerous to expose without a pre-deployment check.</p>
+      </div>
+      <div class="grid three">
+        <article class="card"><h3>Vague tool choice</h3><p>Agents can select the wrong tool when names, descriptions, and usage boundaries are unclear.</p></article>
+        <article class="card"><h3>Uncontrolled side effects</h3><p>Refunds, emails, deletes, exports, and publishing flows need confirmation and limits before deployment.</p></article>
+        <article class="card"><h3>Weak recovery</h3><p>Without clear output, status, and error behavior, agents guess instead of stopping or correcting safely.</p></article>
+      </div>
+    </section>
+
+    <section class="section wrap">
+      <div class="section-head">
+        <h2>What AgentReady checks</h2>
+        <p>The scanner looks for structural risks in the contract before an agent can use it.</p>
+      </div>
+      <div class="grid three">
+        <article class="card"><h3>Destructive actions</h3><p>Delete, refund, send, export, publish, and other high-impact operations.</p></article>
+        <article class="card"><h3>Missing confirmation boundaries</h3><p>Dangerous actions without explicit human review, preview, or approval flow.</p></article>
+        <article class="card"><h3>Unbounded write actions</h3><p>Amounts, quantities, limits, paths, recipients, or filters without safe constraints.</p></article>
+        <article class="card"><h3>Broad file, email, and refund tools</h3><p>Tools that combine too much capability or expose a scope wider than agents need.</p></article>
+        <article class="card"><h3>Missing dry-run or preview</h3><p>State-changing actions without a safe way to inspect the planned result first.</p></article>
+        <article class="card"><h3>Sensitive data exposure</h3><p>Customer, payment, authentication, or file data exposed without tight boundaries.</p></article>
+        <article class="card"><h3>Unclear agent instructions</h3><p>Missing when-to-use, when-not-to-use, output schema, or corrective error guidance.</p></article>
+      </div>
+    </section>
+
+    <section class="section wrap">
+      <div class="section-head">
+        <h2>CI Gate behavior</h2>
+        <p>The same realistic policy was applied to each commercial bad/fixed pair: <code>--min-score 75 --fail-on critical</code>.</p>
+      </div>
+      <div class="proof-table" role="region" aria-label="Commercial fixture CI gate results" tabindex="0">
+        <table>
+          <thead>
+            <tr>
+              <th>Pair</th>
+              <th>Bad</th>
+              <th>Fixed</th>
+              <th>Delta</th>
+              <th>Gate result</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Refund OpenAPI</td>
+              <td><strong>54</strong> <span class="badge fail">FAIL</span></td>
+              <td><strong>84</strong> <span class="badge pass">PASS</span></td>
+              <td class="delta">+30</td>
+              <td>Bad blocks a money-moving action without sufficient control. Fixed passes with critical risk removed.</td>
+            </tr>
+            <tr>
+              <td>Email MCP</td>
+              <td><strong>63</strong> <span class="badge fail">FAIL</span></td>
+              <td><strong>90</strong> <span class="badge pass">PASS</span></td>
+              <td class="delta">+27</td>
+              <td>Bad blocks external sending without a safe boundary. Fixed passes with explicit confirmed sending behavior.</td>
+            </tr>
+            <tr>
+              <td>Files MCP</td>
+              <td><strong>67</strong> <span class="badge fail">FAIL</span></td>
+              <td><strong>84</strong> <span class="badge pass">PASS</span></td>
+              <td class="delta">+17</td>
+              <td>Bad blocks broad file management. Fixed passes after scoped read and confirmed delete behavior are separated.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted" style="margin-top:12px;">See the full validation report in <a href="/docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md">Commercial Fixture CI Gate Behavior</a>.</p>
+    </section>
+
+    <section class="section wrap">
+      <div class="grid two">
+        <article class="card code-card">
+          <div class="code-title">CLI example</div>
+          <pre><code>node bin/agentready.js scan openapi ./openapi.json --min-score 75 --fail-on critical</code></pre>
+        </article>
+        <article class="card code-card">
+          <div class="code-title">GitHub Action example</div>
+          <pre><code>name: AgentReady
+
+on:
+  pull_request:
+    paths:
+      - "openapi.json"
+      - "mcp-tools.json"
+
+jobs:
+  agentready:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: AgentReady OpenAPI CI gate
+        uses: BACOUL/timeproofs/.github/actions/agentready@timeproofs
+        with:
+          type: openapi
+          file: ./openapi.json
+          min-score: "75"
+          fail-on: critical
+          out: agentready-output</code></pre>
+        </article>
+      </div>
+      <p class="muted" style="margin-top:12px;">The action is a repository action wrapper around the AgentReady CLI, not a Marketplace listing. For a vendored local copy inside the same repository, use <code>uses: ./.github/actions/agentready</code>.</p>
+    </section>
+
+    <section class="section wrap">
+      <div class="section-head">
+        <h2>agentready.json output</h2>
+        <p>Each scan can produce a machine-readable readiness contract for CI, reports, and future automation.</p>
+      </div>
+      <div class="grid two">
+        <article class="card">
+          <h3>Core fields</h3>
+          <ul class="list">
+            <li><code>agentready_version</code></li>
+            <li><code>score</code></li>
+            <li><code>status</code></li>
+            <li><code>risk_counts</code></li>
+            <li><code>tools[]</code></li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Finding fields</h3>
+          <ul class="list">
+            <li><code>detected_risks</code></li>
+            <li><code>rule_codes</code></li>
+            <li><code>detected_rules</code></li>
+            <li><code>recommendations</code></li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section wrap">
+      <div class="section-head">
+        <h2>Rule codes</h2>
+        <p>AR001-AR010 give teams stable vocabulary for recurring agent-readiness failures. They make findings easier to discuss in pull requests, reports, and policy reviews.</p>
+      </div>
+      <div class="rule-list" aria-label="AgentReady rule code examples">
+        <div class="rule">AR001 Unbounded write action</div>
+        <div class="rule">AR002 Missing confirmation boundary</div>
+        <div class="rule">AR005 Sensitive data exposure</div>
+        <div class="rule">AR007 Overbroad tool scope</div>
+        <div class="rule">AR009 Unclear agent instructions</div>
+        <div class="rule">AR010 Missing rate or scope limit</div>
+      </div>
+      <p class="muted" style="margin-top:14px;">Read the full reference in <a href="/docs/agentready/AGENTREADY_RULE_CODES.md">AgentReady Rule Codes</a>.</p>
+    </section>
+
+    <section class="section wrap">
+      <div class="section-head">
+        <h2>Security and trust model</h2>
+        <p>AgentReady is designed for pre-deployment checks and CI-friendly artifacts, not live production interception.</p>
+      </div>
+      <div class="grid three">
+        <article class="card trust"><span class="mark">1</span><div><h3>Local-first</h3><p>Scan files locally in the browser, CLI, or CI runner.</p></div></article>
+        <article class="card trust"><span class="mark">2</span><div><h3>No live API execution</h3><p>AgentReady reads contracts. It does not call production endpoints.</p></div></article>
+        <article class="card trust"><span class="mark">3</span><div><h3>No live MCP execution</h3><p>MCP tools are inspected as definitions, not invoked as live tools.</p></div></article>
+        <article class="card trust"><span class="mark">4</span><div><h3>No LLM call required</h3><p>The current checks are static and deterministic.</p></div></article>
+        <article class="card trust"><span class="mark">5</span><div><h3>No dashboard required</h3><p>Use the scanner, CLI, reports, and CI outputs without an account flow.</p></div></article>
+        <article class="card trust"><span class="mark">6</span><div><h3>CI-friendly output</h3><p>Score, status, report path, and <code>agentready.json</code> can be used in automation.</p></div></article>
+      </div>
+    </section>
+
+    <section class="section wrap">
+      <div class="card">
+        <h2>Limitations</h2>
+        <p>TimeProofs AgentReady does not guarantee that an AI agent will never fail.</p>
+        <p>It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.</p>
+      </div>
+    </section>
+
+    <section class="section wrap">
+      <div class="banner">
+        <div>
+          <h2>Add AgentReady before release.</h2>
+          <p class="muted">Start with one OpenAPI or MCP tools file, apply a policy, and keep the report as a deployment artifact.</p>
+        </div>
+        <div class="cta-row" style="margin-top:0;">
+          <a class="cta" href="/docs/agentready/GITHUB_ACTION_USAGE.md">Add AgentReady to CI</a>
+          <a class="cta secondary" href="/docs/agentready/AGENTREADY_JSON_SPEC.md">Read the spec</a>
+          <a class="cta secondary" href="/docs/agentready/AGENTREADY_RULE_CODES.md">View rule codes</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div>TimeProofs AgentReady - pre-deployment CI gate for agent-facing OpenAPI and MCP tools.</div>
+    </div>
+  </footer>
+  <script src="/assets/site-nav.js" defer></script>
+</body>
+</html>
