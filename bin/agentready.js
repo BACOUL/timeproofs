@@ -233,12 +233,15 @@ async function writeScanOutputs(outDir, scanType, result) {
 }
 
 function buildScanCliJson(scanType, result, policy) {
+  const ruleCodes = collectRuleCodes(result.operations || []);
+
   return {
     source_type: scanType,
     score: result.summary?.score,
     status: result.summary?.status,
     risk_counts: result.summary?.risk_counts,
     total_findings: result.summary?.total_findings,
+    rule_codes: ruleCodes,
     policy,
     operations: (result.operations || []).length
   };
@@ -286,10 +289,26 @@ function collectTopFindings(operations) {
   return operations
     .flatMap((operation) => (operation.findings || []).map((finding) => ({
       ...finding,
+      code: formatFindingCode(finding),
       operationId: operation.operationId,
       path: operation.path
     })))
     .sort((a, b) => (severityOrder[b.severity] || 0) - (severityOrder[a.severity] || 0));
+}
+
+function collectRuleCodes(operations) {
+  return [
+    ...new Set(
+      operations
+        .flatMap((operation) => operation.findings || [])
+        .map((finding) => finding.rule_code)
+        .filter(Boolean)
+    )
+  ];
+}
+
+function formatFindingCode(finding) {
+  return finding.rule_code ? `${finding.rule_code} (${finding.code})` : finding.code;
 }
 
 function formatRiskCounts(counts) {
