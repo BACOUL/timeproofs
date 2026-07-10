@@ -23,6 +23,8 @@ Built and merged:
 - `agentready.json` spec v0.1;
 - `agentready.json` export with `detected_risks`, `rule_codes`, and `detected_rules`;
 - docs/examples for CLI, GitHub Action, rule codes, and v0.1 spec;
+- `/agentready-ci` public page;
+- homepage repositioned around AgentReady CI Gate;
 - legacy proof runtime artifacts removed.
 
 ## Current Execution Sequence
@@ -34,11 +36,30 @@ Completed:
 3. AgentReady rule codes stabilized.
 4. GitHub Action wrapper added.
 5. `agentready.json` spec v0.1 published and aligned with code.
+6. `/agentready-ci` public page added.
+7. Homepage repositioned around CI Gate.
+8. Self-service commercial and launch architecture documented.
 
 Next:
 
-1. Add `/agentready-ci` public page.
-2. Then run public site QA/polish.
+1. `feat(distribution): package AgentReady CLI for public installation`
+2. `feat(distribution): prepare versioned AgentReady GitHub Action`
+3. `release(agentready): establish Community release workflow`
+4. Pro features.
+5. Entitlements and licensing.
+6. Billing and automation.
+7. Team.
+8. Agency.
+9. Commercial site.
+10. Company, legal, privacy.
+11. SEO, documentation, AI discovery.
+12. Launch.
+
+Locked operational sequence:
+
+```txt
+docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
+```
 
 ## Important Files
 
@@ -50,13 +71,21 @@ docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md
 docs/agentready/AGENTREADY_RULE_CODES.md
 docs/agentready/AGENTREADY_JSON_SPEC.md
 docs/agentready/GITHUB_ACTION_USAGE.md
+docs/agentready/SELF_SERVICE_BUSINESS_MODEL.md
+docs/agentready/PRICING_AND_ENTITLEMENTS_V0_1.md
+docs/agentready/AUTOMATED_PURCHASE_AND_BILLING_FLOW.md
+docs/agentready/LICENSE_AND_ENTITLEMENT_ARCHITECTURE.md
+docs/agentready/LEGAL_PRIVACY_AND_COOKIE_REQUIREMENTS.md
+docs/agentready/SEO_GEO_AI_FIRST_REQUIREMENTS.md
+docs/agentready/GLOBAL_LAUNCH_READINESS_MATRIX.md
+docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
 docs/agentready/TODO_NEXT.md
 docs/agentready/REMAINING_WORK.md
 ```
 
 ## Guardrails
 
-Do not create without explicit approval:
+Do not create in implementation PRs without explicit approval and a dedicated scope:
 
 - dashboard
 - Stripe/payment flow
@@ -67,6 +96,13 @@ Do not create without explicit approval:
 - live MCP execution during scans
 - LLM calls during scans
 - new proof-of-existence product surface
+
+Commercial direction:
+
+- Community, Pro, Team, and Agency are intended to be self-service.
+- No manual review package, manual quote, or request-by-email sales motion is the active model.
+- No plan should be shown as available until its features are implemented.
+- Real Stripe production payments remain blocked until legal, privacy, tax, entitlement, license, support, and launch QA requirements are ready.
 
 Do not reintroduce:
 

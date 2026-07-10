@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This is the execution checklist after CLI, CI Gate validation, rule codes, GitHub Action, and `agentready.json` spec v0.1 have landed.
+This checklist defines the remaining path after the CI Gate foundation has landed.
 
 ## Current Status
 
@@ -12,45 +12,129 @@ Commercial CI Gate validation: merged
 Rule codes AR001-AR010: merged
 GitHub Action wrapper: merged
 agentready.json spec v0.1: merged and aligned with code
+/agentready-ci public page: merged
+Homepage CI Gate positioning: merged
+Self-service commercial and launch architecture: documented
 ```
 
-## Priority 1 - Public CI Gate Page
+## Priority 1 - Community Public Distribution
 
-Add a static `/agentready-ci` public page.
+Next PR:
 
-It should show:
+```txt
+feat(distribution): package AgentReady CLI for public installation
+```
 
-- what AgentReady blocks in CI;
-- CLI examples;
-- GitHub Action examples;
-- recommended policy: `--min-score 75 --fail-on critical`;
-- outputs: score, status, report, `agentready.json`;
-- links to rule codes and the v0.1 spec.
+Planned branch:
 
-It must not add:
+```txt
+feat-agentready-cli-public-distribution
+```
 
-- backend;
-- dashboard;
-- Stripe/payment;
-- account flow;
-- runtime firewall.
+Work:
 
-## Priority 2 - Public Site QA/Polish
+- prepare public CLI installation;
+- define the package and public command;
+- add version and help behavior;
+- test installation in a clean environment;
+- do not publish the package without separate validation.
 
-After `/agentready-ci`, run public site QA/polish.
+## Locked Execution Plan
 
-Check:
+The operational PR sequence is defined in:
 
-- homepage;
-- `/agentready-ci`;
-- OpenAPI scanner;
-- MCP scanner;
-- sample report;
-- docs/examples navigation;
-- mobile layout;
-- no unexpected network calls from scanner flows.
+```txt
+docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
+```
 
-## Priority 3 - Keep Contracts Stable
+Expected PR numbers are guidance. If GitHub assigns another number, the title and order remain the authority.
+
+## Priority 2 - Community Release Workflow
+
+Community is the free standard-adoption layer:
+
+- CLI;
+- GitHub Action;
+- OpenAPI and MCP scans;
+- score and status;
+- `--min-score` and `--fail-on` policies;
+- AR001-AR010 rule codes;
+- Markdown report;
+- `agentready.json`;
+- bad/fixed examples;
+- local analysis.
+
+The goal is adoption of the AgentReady standard before paid features are exposed. Community local use is not measured and no repository is registered in a TimeProofs hosted service.
+
+## Priority 3 - Build Pro
+
+Pro should add individual developer value:
+
+- Pro functions on up to 5 registered repositories;
+- versioned policies;
+- pull request annotations;
+- branch / pull request comparison;
+- new-risks-only mode;
+- SARIF export;
+- documented expirable exceptions;
+- premium reports.
+
+Do not display Pro as available until these features and their entitlements are implemented and tested.
+
+## Priority 4 - Entitlements, License, Billing, and Portal
+
+Build in this order:
+
+1. Define and implement entitlements.
+2. Build the minimal license service.
+3. Integrate Stripe Checkout in test mode.
+4. Process webhooks.
+5. Build the customer portal.
+6. Create transactional emails.
+7. Test renewal, upgrade, downgrade, cancellation, and failed payment.
+
+Privacy-first rule: OpenAPI files, MCP definitions, full reports, and production secrets must not be sent to the license service by default.
+
+## Priority 5 - Team and Agency
+
+Team and Agency should be built only after Pro is stable.
+
+Team target:
+
+- Team functions on up to 25 registered repositories;
+- several members;
+- organization;
+- shared policies;
+- CI result history;
+- centralized exceptions;
+- owners and justifications;
+- dated control evidence;
+- team reports;
+- notifications.
+
+Agency target:
+
+- Agency functions on up to 100 registered repositories;
+- several organizations or clients;
+- separated client workspaces;
+- distinct policies;
+- agency-branded reports;
+- read-only client access;
+- consolidated overview;
+- client-specific history and exceptions.
+
+## Priority 6 - Public Launch Readiness
+
+Before opening real Stripe sales:
+
+- rebuild `pricing.html` only when plans are implemented;
+- finalize company, legal, privacy, and cookie pages;
+- complete SEO, structured data, and AI discovery;
+- complete mobile, accessibility, and performance QA;
+- complete incident, support, refund, tax, and billing checks;
+- execute the global launch audit.
+
+## Keep Contracts Stable
 
 Do not casually change:
 
@@ -58,19 +142,15 @@ Do not casually change:
 - AR001-AR010 meanings;
 - `agentready.json` v0.1 field names;
 - CLI exit behavior;
-- GitHub Action inputs/outputs.
+- GitHub Action inputs and outputs.
 
 Any change here needs fixture-backed evidence.
 
-## Priority 4 - Later Product Ideas
+## Commercial Guardrails
 
-Only after CI Gate adoption evidence:
+Do not use manual reviews, quote requests, request-by-email purchases, manual payment, consulting packs, or Enterprise sales as the launch model.
 
-- AgentReady Checked;
-- policy packs;
-- paid review workflow;
-- report packaging;
-- team-oriented docs.
+Human intervention should be limited to bugs, incidents, exceptional payment cases, and real technical support.
 
 ## Mandatory Limitation
 

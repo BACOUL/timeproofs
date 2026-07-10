@@ -1,188 +1,125 @@
-# TimeProofs AgentReady — 90-Day Execution Lock
+# TimeProofs AgentReady Execution Lock
 
-## Purpose
+## Status
 
-This file prevents product drift.
+This lock replaces the earlier CLI-alpha execution lock. CLI alpha, CI Gate validation, rule codes, GitHub Action wrapper, `agentready.json` v0.1, `/agentready-ci`, homepage CI Gate positioning, and self-service commercial architecture are now merged or in the final review path.
 
-For the next 90 days, TimeProofs AgentReady has one execution direction:
+The active lock after merge of #109 is Community public distribution.
+
+## Locked Product Statement
 
 ```txt
-AgentReady CI Gate
+TimeProofs AgentReady is a pre-deployment CI gate for agent-facing OpenAPI and MCP tools.
 ```
 
-Meaning:
+Core promise:
 
 ```txt
-Block unsafe or unclear agent-facing OpenAPI and MCP tool surfaces before merge or deployment.
+Fail the build before unsafe agent-facing APIs or MCP tools are deployed.
 ```
 
-## Locked product statement
+## Current Execution Phase
 
 ```txt
-TimeProofs AgentReady is a pre-deployment CI gate for agent-facing APIs and MCP tools.
-```
-
-The product is not a general AI security platform, not a runtime firewall, not an old proof-of-existence product, and not a dashboard SaaS.
-
-## North Star
-
-```txt
-No agent-facing API or MCP server should be merged without an AgentReady check.
-```
-
-## Current execution phase
-
-```txt
-Phase: CLI alpha foundation
-Active PR: feat(agentready): add CLI CI gate alpha
-Active branch: feat-agentready-cli-ci
+Phase after merge of #109: Community public distribution
+Next PR: feat(distribution): package AgentReady CLI for public installation
 Base branch: timeproofs
 ```
 
-## Current PR objective
+## Next PR Objective
 
-The current PR must only establish a local-first CLI foundation:
+The next PR must only prepare public CLI distribution:
 
-```txt
-agentready scan openapi <file>
-agentready scan mcp <file>
---min-score
---fail-on
---out
-CI exit codes
-basic CLI tests
-alpha usage docs
-```
+- prepare a public CLI installation path;
+- define the package and public command;
+- add version and help behavior;
+- test installation in a clean environment;
+- avoid actual package publication without separate validation.
 
-## Current PR acceptance criteria
+Planned branch:
 
 ```txt
-1. npm run test:agentready-cli passes.
-2. npm run test:agentready-core passes.
-3. CLI scans an OpenAPI fixture locally.
-4. CLI scans an MCP fixture locally.
-5. --min-score can fail with exit code 1.
-6. --fail-on critical can fail with exit code 1.
-7. --out writes agentready.json or agentready-mcp.json plus Markdown report.
-8. No backend, account, dashboard, payment, live API call, live MCP execution, or LLM call is introduced.
+feat-agentready-cli-public-distribution
 ```
 
-## Immediate next PR after CLI alpha
+## Current Lock Acceptance Criteria
+
+1. The self-service architecture PR is merged before #110 begins.
+2. Community distribution work is limited to CLI packaging and installation readiness.
+3. No public HTML page changes are included in #110.
+4. No scanner scoring, rule-code, or hosted commercial behavior changes are included in #110.
+5. No Stripe, backend, account, database, license, dashboard, or cookie implementation is included in #110.
+6. No manual review, quote, request-by-email, manual payment, consulting-first, or Enterprise launch direction is reintroduced.
+7. The mandatory limitation text remains present in core docs.
+
+## Locked Execution Plan
+
+The operational source of truth for future PR order is:
 
 ```txt
-qa(agentready): validate commercial fixture score contrast
+docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
 ```
 
-Goal:
+The PR numbers in that document are expected numbers. If GitHub assigns a different number, the title and order remain the authority.
 
-```txt
-Confirm that bad fixtures score meaningfully lower than fixed fixtures.
-```
-
-Required fixtures:
-
-```txt
-agentready-examples/commercial/openapi-refund-risk.bad.json
-agentready-examples/commercial/openapi-refund-risk.fixed.json
-agentready-examples/commercial/mcp-email-risk.bad.json
-agentready-examples/commercial/mcp-email-risk.fixed.json
-agentready-examples/commercial/mcp-files-risk.bad.json
-agentready-examples/commercial/mcp-files-risk.fixed.json
-```
-
-Acceptance criteria:
-
-```txt
-1. Every bad fixture produces clearly visible findings.
-2. Every fixed fixture reduces critical/high risk compared with its bad version.
-3. Score contrast is strong enough for a public demo.
-4. If contrast is weak, do not build GitHub Action yet; improve rules or fixtures first.
-```
-
-## Roadmap order
+## Build Order
 
 Do not reorder without an explicit recorded decision.
 
-```txt
-1. Merge CLI alpha after tests pass.
-2. Validate commercial bad/fixed fixture contrast.
-3. Stabilize AgentReady rule codes.
-4. Add GitHub Action wrapper.
-5. Publish agentready.json spec v0.1.
-6. Add /agentready-ci public page.
-7. Publish public bad/fixed examples and sample reports.
-8. Run external feedback with MCP builders, API developers and AI agencies.
-9. Test paid AgentReady Review / Agency Pack only after usage signals.
-```
+1. Community distribution.
+2. Pro.
+3. Entitlements and licensing.
+4. Billing and automation.
+5. Team.
+6. Agency.
+7. Commercial site.
+8. Company, legal, and privacy.
+9. SEO, documentation, and AI discovery.
+10. Launch.
 
-## Do not build during this lock
+## Do Not Build During This Lock
 
-```txt
-- new pivot
-- old proof-of-existence product
-- timestamp product
-- public certification claim
-- runtime firewall
-- live MCP execution
-- LLM evaluation product
-- dashboard
-- account system
-- Stripe Checkout
-- database
-- hosted scan storage
-- marketplace
-- broad AI security platform
-```
+- new product pivot;
+- old proof-of-existence product;
+- timestamp product;
+- public certification claim;
+- runtime firewall;
+- live MCP execution;
+- LLM evaluation product;
+- dashboard;
+- account system;
+- Stripe Checkout implementation;
+- database;
+- hosted scan storage;
+- marketplace;
+- broad AI security platform.
 
-## Decision rule before any new task
+These can only move forward in the documented sequence and in dedicated implementation PRs.
+
+## Commercial Guardrails
+
+Launch plans:
+
+- Community: 0 EUR.
+- Pro: 24 EUR excl. VAT/month or 240 EUR excl. VAT/year.
+- Team: 79 EUR excl. VAT/month or 790 EUR excl. VAT/year.
+- Agency: 199 EUR excl. VAT/month or 1,990 EUR excl. VAT/year.
+
+No paid plan should be displayed as available until its features are implemented and entitlements are enforceable.
+
+There is no manual review offer, mandatory contact-sales step, quote workflow, manual payment path, or Enterprise plan at launch.
+
+## Decision Rule Before Any New Task
 
 Before starting any task, ask:
 
 ```txt
-Does this directly move TimeProofs toward AgentReady CI Gate adoption?
+Does this directly move TimeProofs toward AgentReady CI Gate adoption or self-service launch readiness?
 ```
 
-If the answer is no:
+If the answer is no, do not do it in this execution lock.
 
-```txt
-Do not do it in the current 90-day lock.
-```
-
-## Standard assets to build
-
-TimeProofs must become more than a scanner by owning these assets:
-
-```txt
-1. agentready.json
-2. AgentReady Score
-3. AgentReady rule codes
-4. bad/fixed benchmark fixtures
-5. GitHub Action workflow examples
-6. public sample reports
-7. AgentReady CI documentation
-```
-
-## Target users during this lock
-
-```txt
-1. MCP builders
-2. API developers exposing OpenAPI to agents
-3. AI agencies building agents for clients
-4. startups building agent-facing tools
-5. security-minded engineering teams
-```
-
-## Visibility strategy
-
-```txt
-GitHub first.
-npm second.
-GitHub Actions Marketplace third.
-SEO pages only after CLI/GitHub Action behavior is stable.
-```
-
-## Mandatory limitation
+## Mandatory Limitation
 
 TimeProofs AgentReady does not guarantee that an AI agent will never fail.
-
 It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.

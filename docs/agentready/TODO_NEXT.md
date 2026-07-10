@@ -3,10 +3,16 @@
 Active direction:
 
 ```txt
-TimeProofs AgentReady = pre-deployment CI gate for agent-facing OpenAPI and MCP tools.
+TimeProofs AgentReady is a pre-deployment CI gate for agent-facing OpenAPI and MCP tools.
 ```
 
-## Completed CI Gate Sequence
+Core promise:
+
+```txt
+Fail the build before unsafe agent-facing APIs or MCP tools are deployed.
+```
+
+## Completed Foundation
 
 ```txt
 1. CLI alpha merged.
@@ -14,57 +20,71 @@ TimeProofs AgentReady = pre-deployment CI gate for agent-facing OpenAPI and MCP 
 3. Rule codes AR001-AR010 stabilized.
 4. GitHub Action wrapper added.
 5. agentready.json spec v0.1 published and aligned with code.
+6. /agentready-ci public page added.
+7. Homepage repositioned around AgentReady CI Gate.
+8. Self-service commercial and launch architecture documented.
 ```
 
 ## Immediate Next PR
 
 ```txt
-feat(site): add AgentReady CI public page
+feat(distribution): package AgentReady CLI for public installation
+```
+
+Planned branch:
+
+```txt
+feat-agentready-cli-public-distribution
 ```
 
 Purpose:
 
-- explain AgentReady as a CI Gate;
-- show CLI usage;
-- show GitHub Action usage;
-- link to `agentready.json` v0.1 and AR rule codes;
-- keep the page static and local-first;
-- do not add backend, dashboard, Stripe, or account flows.
+- prepare public CLI installation;
+- define the package and public command;
+- add version and help behavior;
+- test installation in a clean environment;
+- do not actually publish the package without separate validation.
 
-## Then
+## Execution Plan
+
+The locked execution plan is:
 
 ```txt
-qa(site): run public AgentReady site QA/polish
+docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
 ```
 
-QA should verify:
-
-- homepage messaging;
-- `/agentready-ci` page;
-- OpenAPI scanner;
-- MCP scanner;
-- sample report;
-- docs/examples links;
-- no unintended backend/API/MCP/LLM calls.
+That document is the authority for the expected PR order after #109. If GitHub assigns a different PR number than expected, the title and order remain the authority.
 
 ## Keep Stable
 
 - scoring thresholds unless a fixture-backed bug is proven;
 - rule codes AR001-AR010;
 - `agentready.json` v0.1 compatibility;
+- CLI exit behavior;
+- GitHub Action inputs and outputs;
 - bad/fixed commercial CI Gate decisions:
   - Refund bad FAIL / fixed PASS
   - Email bad FAIL / fixed PASS
   - Files bad FAIL / fixed PASS
 
-## Do Not Build Yet
+## Do Not Build In The Next PR
 
 - dashboard
-- Stripe/payment flow
+- production Stripe/payment flow
 - backend
 - account system
+- license service
+- database
 - runtime firewall
 - old proof-of-existence product
+- public HTML changes
+- paid feature claims
+
+## Commercial Guardrails
+
+No manual review offer, request-by-email purchase flow, quote workflow, manual payment path, consulting-first model, mandatory Contact Sales path, or Enterprise plan should be presented as the active launch direction.
+
+No paid plan should be displayed as available until its features, entitlements, billing flow, support model, legal pages, and launch QA are ready.
 
 ## Mandatory Limitation
 
