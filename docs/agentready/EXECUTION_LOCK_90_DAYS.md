@@ -24,7 +24,7 @@ Fail the build before unsafe agent-facing APIs or MCP tools are deployed.
 
 ```txt
 Phase after rebaseline: Resolve Community publication blockers
-Next PR: release(agentready): resolve Community publication blockers
+Current PR: release(agentready): resolve Community publication blockers
 Base branch: timeproofs
 ```
 
@@ -72,6 +72,8 @@ The PR numbers in that document are expected numbers. If GitHub assigns a differ
 
 Do not reorder without an explicit recorded decision.
 
+If blockers remain open after the blocker PR, the next authorized action is the owner or legal action named in `COMMUNITY_PUBLICATION_BLOCKERS.md`, not publication.
+
 1. Strategic rebaseline.
 2. Resolve Community blockers.
 3. Publish Community.
@@ -110,8 +112,8 @@ Launch plans:
 
 - Community: 0 EUR.
 - Pro: 24 EUR excl. VAT/month or 240 EUR excl. VAT/year.
-- Team: POST_REVENUE.
-- Agency: POST_REVENUE.
+- Team: POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT.
+- Agency: POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT.
 
 No paid plan should be displayed as available until its features are implemented and entitlements are enforceable.
 

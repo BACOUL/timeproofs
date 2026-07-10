@@ -47,7 +47,7 @@ docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
 
 The PR numbers in that document are expected numbers. If GitHub assigns another number, the title and order remain the authority.
 
-## Immediate Next PR
+## Current Publication Blocker PR
 
 ```txt
 release(agentready): resolve Community publication blockers
@@ -65,7 +65,11 @@ Purpose:
 - preserve existing Community CLI, GitHub Action, scoring, rule codes, and `agentready.json` behavior;
 - do not publish the package without separate explicit authorization.
 
-The versioned policy configuration PR remains planned after Community publication blockers are resolved and the execution sequence allows it.
+If every blocker is `RESOLVED`, the next release PR may be `release(agentready): publish Community CLI and immutable release`.
+
+If any blocker remains open, the next authorized action is the owner or legal action named in `docs/agentready/COMMUNITY_PUBLICATION_BLOCKERS.md`.
+
+The versioned policy configuration PR remains planned after Community publication and engine quality gates allow it.
 
 ## Current Product Sequence - Self-Service Launch
 
@@ -123,8 +127,8 @@ AgentReady launch plans:
 
 - Community: 0 EUR.
 - Pro: 24 EUR HT/month or 240 EUR HT/year.
-- Team: POST_REVENUE.
-- Agency: POST_REVENUE.
+- Team: POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT.
+- Agency: POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT.
 
 The prices are an initial product decision and may evolve before real Stripe activation.
 

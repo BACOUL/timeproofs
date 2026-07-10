@@ -61,8 +61,8 @@ Completed:
 
 Next:
 
-1. `release(agentready): resolve Community publication blockers`
-2. Community publication.
+1. Resolve documented owner/legal Community publication blockers.
+2. Community publication only after every blocker is `RESOLVED` and explicit approval exists.
 3. Marketplace and three-minute onboarding.
 4. Engine benchmark.
 5. Pro MVP features.
@@ -132,7 +132,7 @@ Do not create in implementation PRs without explicit approval and a dedicated sc
 Commercial direction:
 
 - Community and Pro are the only initial launch plans.
-- Team and Agency are `POST_REVENUE`.
+- Team and Agency are `POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT`.
 - No manual review package, manual quote, or request-by-email sales motion is the active model.
 - No plan should be shown as available until its features are implemented.
 - Real Stripe production payments remain blocked until legal, privacy, tax, entitlement, license, support, and launch QA requirements are ready.

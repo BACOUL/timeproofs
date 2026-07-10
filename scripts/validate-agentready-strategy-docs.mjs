@@ -37,8 +37,9 @@ const keyDocs = [
   "docs/agentready/GLOBAL_LAUNCH_READINESS_MATRIX.md",
 ];
 
-const nextPrTitle = "release(agentready): resolve Community publication blockers";
-const nextBranch = "release-agentready-community-publication-blockers";
+const blockerPrTitle = "release(agentready): resolve Community publication blockers";
+const blockerBranch = "release-agentready-community-publication-blockers";
+const publishPrTitle = "release(agentready): publish Community CLI and immutable release";
 const limitation =
   "TimeProofs AgentReady does not guarantee that an AI agent will never fail.\n" +
   "It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.";
@@ -113,15 +114,16 @@ assert(master.includes("Runs:\n\n```txt\nunlimited\n```"), "Pro runs must be unl
 assert(master.includes("No silent telemetry in Community."), "Silent Community telemetry ban is missing");
 assert(master.includes("Stripe payment\n-> cryptographically random AgentReady license key\n-> only the key hash stored server-side\n-> signed entitlement token\n-> local signature verification\n-> bounded local cache\n-> documented grace period"), "Master Plan license architecture is incomplete");
 assert(master.includes("An old PASS must never be shown as the current state."), "Master Plan badge freshness rule is missing");
-assert(master.includes(nextPrTitle), "Master Plan must name the only next PR");
-assert(master.includes(nextBranch), "Master Plan must name the only next branch");
+assert(master.includes("COMMUNITY_PUBLICATION_BLOCKERS.md"), "Master Plan must point to publication blockers");
+assert(master.includes(publishPrTitle), "Master Plan must name the gated publish PR");
+assert(master.includes("If any blocker remains open"), "Master Plan must block publication while blockers remain open");
 
 assertIncludes("docs/agentready/EXECUTION_SEQUENCE.md", "Status: ACTIVE SOURCE OF EXECUTION ORDER");
 assertIncludes("docs/agentready/EXECUTION_SEQUENCE.md", "Phase 2 - Resolve Community Blockers");
 assertIncludes("docs/agentready/EXECUTION_SEQUENCE.md", "Phase 6 - MVP Pro");
 assertIncludes("docs/agentready/EXECUTION_SEQUENCE.md", "## Post-Revenue");
-assertIncludes("docs/agentready/EXECUTION_SEQUENCE.md", nextPrTitle);
-assertIncludes("docs/agentready/EXECUTION_SEQUENCE.md", nextBranch);
+assertIncludes("docs/agentready/EXECUTION_SEQUENCE.md", blockerPrTitle);
+assertIncludes("docs/agentready/EXECUTION_SEQUENCE.md", publishPrTitle);
 
 assertIncludes("docs/agentready/DECISION_LOG.md", "Community and Pro at launch");
 assertIncludes("docs/agentready/DECISION_LOG.md", "Team and Agency are post-revenue");
@@ -137,8 +139,7 @@ for (const file of [
   "docs/agentready/EXECUTION_LOCK_90_DAYS.md",
   "docs/agentready/REMAINING_WORK.md",
 ]) {
-  assertIncludes(file, nextPrTitle);
-  assertIncludes(file, nextBranch);
+  assert(read(file).includes(blockerPrTitle) || read(file).includes("COMMUNITY_PUBLICATION_BLOCKERS.md") || read(file).includes("Resolve documented owner/legal Community publication blockers"), `${file} must point to the blocker flow`);
 }
 
 for (const file of [
@@ -171,8 +172,7 @@ for (const forbidden of [
 ]) {
   assert(!activeExecutionPlan.includes(forbidden), `Active SELF_SERVICE_EXECUTION_PLAN.md must not contain old execution item: ${forbidden}`);
 }
-assert(activeExecutionPlan.includes(nextPrTitle), "Active SELF_SERVICE_EXECUTION_PLAN.md must contain the only next PR");
-assert(activeExecutionPlan.includes(nextBranch), "Active SELF_SERVICE_EXECUTION_PLAN.md must contain the only next branch");
+assert(activeExecutionPlan.includes("COMMUNITY_PUBLICATION_BLOCKERS.md") || activeExecutionPlan.includes("release(agentready): resolve Community publication blockers"), "Active SELF_SERVICE_EXECUTION_PLAN.md must point to blockers or the blocker PR");
 
 const licenseFiles = [
   "docs/agentready/AGENTREADY_MASTER_PLAN.md",

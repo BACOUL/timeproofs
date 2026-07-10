@@ -489,18 +489,20 @@ Before every PR, answer:
 4. Which tests prove completion?
 5. What is the only next PR allowed?
 
-## Only Next PR
+## Current Publication Gate
 
-After this rebaseline PR, the only authorized next PR is:
-
-```txt
-release(agentready): resolve Community publication blockers
-```
-
-Planned branch:
+The Community publication blockers are tracked in:
 
 ```txt
-release-agentready-community-publication-blockers
+docs/agentready/COMMUNITY_PUBLICATION_BLOCKERS.md
 ```
 
-That PR must resolve blockers. It must not publish the package without a separate explicit authorization.
+If every blocker is `RESOLVED`, the next release PR may be:
+
+```txt
+release(agentready): publish Community CLI and immutable release
+```
+
+If any blocker remains open, the next authorized action is the owner or legal action named in `COMMUNITY_PUBLICATION_BLOCKERS.md`, not a publication PR.
+
+No package may be published without explicit approval in `COMMUNITY_PUBLICATION_APPROVAL_CHECKLIST.md`.

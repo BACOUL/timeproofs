@@ -77,8 +77,8 @@ Active launch model:
 
 - AgentReady Community: 0 EUR.
 - AgentReady Pro: 24 EUR excl. VAT/month or 240 EUR excl. VAT/year.
-- AgentReady Team: POST_REVENUE.
-- AgentReady Agency: POST_REVENUE.
+- AgentReady Team: POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT.
+- AgentReady Agency: POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT.
 
 These prices are an initial product decision and may evolve before real Stripe activation. No paid plan should be displayed as available until its features, entitlements, billing flow, support model, legal pages, and launch QA are ready.
 
@@ -108,7 +108,14 @@ There is no manual review offer, mandatory contact-sales step, quote workflow, m
 | `LEGAL_PRIVACY_AND_COOKIE_REQUIREMENTS.md` | France-based B2B legal/privacy/cookie checklist |
 | `SEO_GEO_AI_FIRST_REQUIREMENTS.md` | SEO, structured data, and AI discovery requirements |
 | `GLOBAL_LAUNCH_READINESS_MATRIX.md` | Launch readiness matrix |
-| `SELF_SERVICE_EXECUTION_PLAN.md` | Locked operational PR order from Community distribution to launch |
+| `SELF_SERVICE_EXECUTION_PLAN.md` | Short execution pointer to the active source of truth |
+| `COMMUNITY_NPM_SCOPE_AUDIT.md` | npm scope and package availability evidence |
+| `COMMUNITY_LICENSE_DECISION.md` | Community license decision blocker |
+| `COMMUNITY_PROOFSPEC_REFERENCE_AUDIT.md` | Legacy ProofSpec reference classification |
+| `COMMUNITY_PUBLICATION_POLICY.md` | Publication policy and publication bans |
+| `COMMUNITY_PUBLICATION_APPROVAL_CHECKLIST.md` | Explicit approval gate, currently NO |
+| `COMMUNITY_PUBLICATION_BLOCKERS.md` | Active blocker tracker |
+| `COMMUNITY_TARBALL_PUBLIC_CONTENT_AUDIT.md` | Planned public package content audit |
 | `CLI_PUBLIC_DISTRIBUTION.md` | Prepared CLI package distribution and publication blockers |
 | `GITHUB_ACTION_VERSIONING.md` | Planned GitHub Action tag and versioning model |
 | `COMMUNITY_RELEASE_WORKFLOW.md` | Community release candidate workflow |
@@ -140,7 +147,7 @@ The active future PR order is defined in:
 docs/agentready/EXECUTION_SEQUENCE.md
 ```
 
-After the rebaseline PR, the immediate next PR is:
+The current publication blocker PR is:
 
 ```txt
 release(agentready): resolve Community publication blockers
@@ -153,6 +160,14 @@ release-agentready-community-publication-blockers
 ```
 
 This next PR resolves blockers only and must not publish without separate explicit authorization.
+
+If every blocker is `RESOLVED`, the next release PR may be:
+
+```txt
+release(agentready): publish Community CLI and immutable release
+```
+
+If any blocker remains open, the next authorized action is the owner or legal action named in `COMMUNITY_PUBLICATION_BLOCKERS.md`.
 
 Every new task must answer yes to these questions:
 

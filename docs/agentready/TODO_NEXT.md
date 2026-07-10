@@ -37,7 +37,7 @@ Fail the build before unsafe agent-facing APIs or MCP tools are deployed.
 
 Community public publication remains blocked and has not occurred.
 
-## Immediate Next PR
+## Current Publication Blocker PR
 
 ```txt
 release(agentready): resolve Community publication blockers
@@ -56,6 +56,16 @@ Purpose:
 - preserve current scoring, rule codes, CLI exits, GitHub Action outputs, and `agentready.json` v0.1 compatibility.
 
 The next PR must not publish the package without separate explicit authorization.
+
+## Next Authorized Action After This PR
+
+If every blocker in `docs/agentready/COMMUNITY_PUBLICATION_BLOCKERS.md` is `RESOLVED`, the next release PR may be:
+
+```txt
+release(agentready): publish Community CLI and immutable release
+```
+
+If any blocker remains open, the next authorized action is the owner or legal action named in the blocker table, not publication.
 
 ## Execution Plan
 

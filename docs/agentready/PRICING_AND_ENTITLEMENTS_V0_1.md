@@ -21,7 +21,7 @@ All paid prices are excluding tax. Taxes must be calculated according to the app
 | Team | POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT | POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT | Future shared team policies and history |
 | Agency | POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT | POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT | Future multi-client agency operations |
 
-Initial launch v0.1 includes only Community and Pro. Team and Agency are post-revenue vision items, not purchasable launch plans. No Enterprise plan is part of launch v0.1.
+Initial launch v0.1 includes only Community and Pro. Team and Agency are `POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT`, not purchasable launch plans. No Enterprise plan is part of launch v0.1.
 
 ## Feature Matrix
 
