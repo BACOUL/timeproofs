@@ -1,5 +1,9 @@
 # TimeProofs AgentReady Automated Product Strategy
 
+SUPERSEDED BY `AGENTREADY_MASTER_PLAN.md` where this file conflicts with the master plan.
+
+This document is retained as historical planning context. The active launch scope is Community + Pro; Team and Agency are post-revenue.
+
 ## Purpose
 
 This document defines how TimeProofs AgentReady becomes a zero-touch B2B software product without turning into a manual service business.

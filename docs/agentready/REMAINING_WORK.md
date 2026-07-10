@@ -18,33 +18,36 @@ Self-service commercial and launch architecture: documented
 CLI public distribution package preparation: prepared
 Versioned GitHub Action preparation: prepared
 Community release workflow: prepared
+Community + Pro strategy rebaseline: prepared
 ```
 
 Community public publication remains blocked and has not occurred.
 
-## Priority 1 - Strategic Rebaseline
+## Priority 1 - Resolve Community Publication Blockers
 
 Next PR:
 
 ```txt
-docs(product): rebaseline AgentReady Community and Pro strategy
+release(agentready): resolve Community publication blockers
 ```
 
 Planned branch:
 
 ```txt
-docs-agentready-community-pro-rebaseline
+release-agentready-community-publication-blockers
 ```
 
 Work:
 
-- rebaseline AgentReady Community and Pro strategy;
-- keep the rebaseline docs-only;
-- prevent Pro implementation from starting before strategy is locked;
+- resolve npm scope;
+- resolve license and legacy ProofSpec references;
+- define publication policy and 2FA/trusted publishing;
+- validate provenance;
+- define explicit approval path;
 - keep scan/scoring/rule-code behavior stable;
-- do not publish npm packages, create tags, create releases, or list in Marketplace without separate validation.
+- do not publish npm packages, create tags, create releases, or list in Marketplace without separate explicit authorization.
 
-The versioned policy configuration PR remains planned after the rebaseline PR is merged.
+The versioned policy configuration PR remains planned later in the execution sequence.
 
 ## Locked Execution Plan
 
@@ -75,7 +78,7 @@ The goal is adoption of the AgentReady standard before paid features are exposed
 
 Community publication remains blocked until npm scope ownership, license decisions, publication security, immutable tag approval, release notes, and explicit release approval are complete.
 
-## Priority 3 - Build Pro
+## Priority 3 - Build Pro MVP
 
 Pro should add individual developer value:
 
@@ -89,6 +92,8 @@ Pro should add individual developer value:
 - premium reports.
 
 Do not display Pro as available until these features and their entitlements are implemented and tested.
+
+Team and Agency are post-revenue and must not block Community + Pro launch.
 
 ## Priority 4 - Entitlements, License, Billing, and Portal
 
@@ -106,7 +111,7 @@ Privacy-first rule: OpenAPI files, MCP definitions, full reports, and production
 
 ## Priority 5 - Team and Agency
 
-Team and Agency should be built only after Pro is stable.
+Team and Agency are post-revenue. They should be built only after Community + Pro are launched and real revenue or customer requests prove the need.
 
 Team target:
 

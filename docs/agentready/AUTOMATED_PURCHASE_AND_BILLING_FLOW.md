@@ -6,29 +6,23 @@ This document describes the target zero-touch purchase, billing, subscription, a
 
 It is documentation only. It does not add Stripe, backend, database, accounts, licenses, cookies, or billing code.
 
+If this document conflicts with `AGENTREADY_MASTER_PLAN.md`, the master plan prevails.
+
+The initial paid launch target is Pro only. Community remains free and accountless. Team and Agency are `POST_REVENUE`.
+
 ## Target Customer Flow
 
 ```txt
-/pricing.html
--> choose plan
--> Stripe Checkout
--> enter company and billing information
--> VAT/tax handling
--> accept terms
--> payment
--> webhook processing
--> customer creation
--> organization creation
--> subscription creation
--> license generation
+Stripe payment
+-> customer/account record
+-> subscription record
+-> Community/Pro entitlement
+-> cryptographically random AgentReady license key
+-> repository registration
 -> transactional email
--> success page
--> installation
--> CLI activation
--> GitHub secret setup
--> usage
--> renewal / upgrade / downgrade / cancellation
 ```
+
+Pro V0.1 creates no organization. Organizations, members, workspaces, and shared governance are reserved for Team and are `POST_REVENUE`.
 
 ## Future Pages
 
@@ -48,11 +42,12 @@ Do not create these pages in this PR.
 
 The pricing page should:
 
-- show Community, Pro, Team, and Agency only when each is actually available or clearly labelled as planned;
+- show Community and Pro for the initial launch when Pro is implemented;
+- keep Team and Agency post-revenue and not purchasable at launch;
 - state that paid prices are HT / excluding tax;
 - state that taxes are calculated according to the applicable customer situation;
 - link to terms, privacy, refund policy, and cookie policy;
-- avoid mandatory contact sales for Community, Pro, Team, or Agency;
+- avoid mandatory contact sales for Community or Pro;
 - avoid request-by-email purchase flows;
 - make Community self-service and free.
 
@@ -95,30 +90,59 @@ Webhook handling requirements:
 - handle out-of-order subscription updates;
 - log failures without exposing secrets.
 
-## Account And Organization Creation
+## Account, Subscription, And Repository Registration
 
 After a successful checkout:
 
 1. Create or find the customer.
 2. Create the account identity.
-3. Create the organization.
-4. Attach subscription and plan.
-5. Create entitlement record.
-6. Generate license.
+3. Create the subscription record.
+4. Create the Community/Pro entitlement.
+5. Generate a cryptographically random AgentReady license key.
+6. Register allowed repositories after explicit customer action.
 7. Send transactional email.
 
-For Team and Agency:
+Pro V0.1 does not create an organization.
+
+For future Team and Agency:
 
 - organization should be created automatically;
 - owner should be assigned automatically;
 - repository and member limits should be derived from entitlements.
 
+These Team and Agency flows are post-revenue and must not block the Community + Pro launch.
+
+## License Architecture
+
+Target Pro license architecture:
+
+```txt
+Stripe payment
+-> cryptographically random AgentReady license key
+-> only the key hash stored server-side
+-> signed entitlement token
+-> local signature verification
+-> bounded local cache
+-> documented grace period
+```
+
+Rules:
+
+- never use a Stripe identifier as a secret;
+- never store a raw license key server-side;
+- no network call is mandatory on every scan;
+- no OpenAPI/MCP contract is sent to the license service;
+- Community works without account, license, or server;
+- minimal token contents are plan, expiration, features, repository limit, and pseudonymized identifier.
+
 ## License Generation
 
 After payment:
 
-- generate a license id and secret;
-- associate license with customer, organization, subscription, plan, and entitlements;
+- generate a license id and cryptographically random secret;
+- store only the key hash server-side;
+- associate the hashed license with customer, account, subscription, plan, entitlements, and registered repositories;
+- issue a signed entitlement token;
 - expose activation instructions;
 - send email with safe activation guidance;
 - never email long-lived secrets in a way that violates security requirements if a safer token exchange exists.
@@ -140,7 +164,7 @@ GitHub Actions setup should show:
 AGENTREADY_LICENSE_KEY
 ```
 
-as a repository or organization secret.
+as a repository secret for Pro V0.1.
 
 The exact command names must match the implemented CLI before being published.
 

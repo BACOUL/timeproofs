@@ -1,5 +1,9 @@
 # TimeProofs AgentReady — Document Maître V1
 
+SUPERSEDED BY `AGENTREADY_MASTER_PLAN.md`.
+
+This older French master-plan draft is retained as historical context. It is not the active source of truth.
+
 ## 1. Définition du projet
 
 **TimeProofs AgentReady** est une couche pré-déploiement qui vérifie, score et prépare les APIs, serveurs MCP et outils avant qu'ils soient donnés à des agents IA.

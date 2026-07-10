@@ -3,7 +3,13 @@
 Active direction:
 
 ```txt
-TimeProofs AgentReady is a pre-deployment CI gate for agent-facing OpenAPI and MCP tools.
+AgentReady is the shift-left CI gate for agent-facing contracts.
+```
+
+Source of truth:
+
+```txt
+docs/agentready/AGENTREADY_MASTER_PLAN.md
 ```
 
 Core promise:
@@ -26,6 +32,7 @@ Fail the build before unsafe agent-facing APIs or MCP tools are deployed.
 9. CLI public distribution package preparation validated.
 10. Versioned GitHub Action preparation validated.
 11. Community release workflow prepared.
+12. Community + Pro strategy rebaselined.
 ```
 
 Community public publication remains blocked and has not occurred.
@@ -33,23 +40,22 @@ Community public publication remains blocked and has not occurred.
 ## Immediate Next PR
 
 ```txt
-docs(product): rebaseline AgentReady Community and Pro strategy
+release(agentready): resolve Community publication blockers
 ```
 
 Planned branch:
 
 ```txt
-docs-agentready-community-pro-rebaseline
+release-agentready-community-publication-blockers
 ```
 
 Purpose:
 
-- rebaseline AgentReady Community and Pro strategy before Pro implementation begins;
-- keep the rebaseline docs-only;
+- resolve npm scope, license, legacy ProofSpec references, publication policy, 2FA/trusted publishing, provenance, and approval path;
 - keep Community publication, tag creation, GitHub Release creation, and Marketplace listing blocked;
 - preserve current scoring, rule codes, CLI exits, GitHub Action outputs, and `agentready.json` v0.1 compatibility.
 
-The versioned policy configuration PR remains planned, but only after this rebaseline PR is merged.
+The next PR must not publish the package without separate explicit authorization.
 
 ## Execution Plan
 

@@ -2,7 +2,9 @@
 
 ## Status
 
-This document has been updated for the self-service commercial direction.
+SUPERSEDED BY `AGENTREADY_MASTER_PLAN.md` where this file conflicts with the master plan.
+
+This document is retained as go-to-market context. The active launch scope is Community + Pro; Team and Agency are post-revenue.
 
 Active direction:
 

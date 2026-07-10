@@ -6,7 +6,7 @@ This lock replaces the earlier CLI-alpha execution lock. CLI alpha, CI Gate vali
 
 Community public publication remains blocked and has not occurred.
 
-The active lock after merge of #112 is Community and Pro strategy rebaselining.
+The active lock after this rebaseline is Community publication blocker resolution.
 
 ## Locked Product Statement
 
@@ -23,31 +23,35 @@ Fail the build before unsafe agent-facing APIs or MCP tools are deployed.
 ## Current Execution Phase
 
 ```txt
-Phase after merge of #112: Strategic rebaseline
-Next PR: docs(product): rebaseline AgentReady Community and Pro strategy
+Phase after rebaseline: Resolve Community publication blockers
+Next PR: release(agentready): resolve Community publication blockers
 Base branch: timeproofs
 ```
 
 ## Next PR Objective
 
-The next PR must only rebaseline the Community and Pro strategy in docs:
+The next PR must only resolve Community publication blockers:
 
-- make Community and Pro direction explicit before implementation;
-- keep the rebaseline docs-only;
-- do not begin Pro policy implementation;
+- npm scope;
+- license;
+- legacy ProofSpec references;
+- publication policy;
+- 2FA or trusted publishing;
+- provenance;
+- explicit approval path;
 - keep scan, scoring, rule codes, and `agentready.json` behavior unchanged;
-- avoid npm publication, release creation, or tag creation without separate validation.
+- avoid npm publication, release creation, or tag creation without separate explicit authorization.
 
 Planned branch:
 
 ```txt
-docs-agentready-community-pro-rebaseline
+release-agentready-community-publication-blockers
 ```
 
 ## Current Lock Acceptance Criteria
 
-1. The Community release workflow PR is merged before Pro work begins.
-2. The strategic rebaseline PR is merged before Pro implementation begins.
+1. The strategic rebaseline PR is merged before Pro work begins.
+2. Community publication blockers are resolved before publication.
 3. No public HTML page changes are included in the next PR.
 4. No scanner scoring, rule-code, or hosted commercial behavior changes are included in the next PR.
 5. No Stripe, backend, account, database, license, dashboard, or cookie implementation is included in the next PR.
@@ -68,17 +72,18 @@ The PR numbers in that document are expected numbers. If GitHub assigns a differ
 
 Do not reorder without an explicit recorded decision.
 
-1. Community distribution.
-2. Mandatory strategic rebaseline.
-3. Pro.
-4. Entitlements and licensing.
-5. Billing and automation.
-6. Team.
-7. Agency.
-8. Commercial site.
-9. Company, legal, and privacy.
-10. SEO, documentation, and AI discovery.
-11. Launch.
+1. Strategic rebaseline.
+2. Resolve Community blockers.
+3. Publish Community.
+4. Marketplace and onboarding.
+5. Engine benchmark.
+6. MVP Pro.
+7. Engine quality alignment.
+8. Licensing, Stripe, and automation.
+9. Site, legal, and Trust Center.
+10. Rule dictionary, badges, and integrations.
+11. Launch Community + Pro.
+12. Post-revenue Team and Agency.
 
 ## Do Not Build During This Lock
 
@@ -105,8 +110,8 @@ Launch plans:
 
 - Community: 0 EUR.
 - Pro: 24 EUR excl. VAT/month or 240 EUR excl. VAT/year.
-- Team: 79 EUR excl. VAT/month or 790 EUR excl. VAT/year.
-- Agency: 199 EUR excl. VAT/month or 1,990 EUR excl. VAT/year.
+- Team: POST_REVENUE.
+- Agency: POST_REVENUE.
 
 No paid plan should be displayed as available until its features are implemented and entitlements are enforceable.
 

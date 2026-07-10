@@ -1,5 +1,9 @@
 # TimeProofs AgentReady — AgentReady Checked Trust Layer
 
+SUPERSEDED BY `AGENTREADY_MASTER_PLAN.md` where this file conflicts with the master plan.
+
+This document is retained as future trust-layer exploration. It must not be read as an active certification plan.
+
 ## Purpose
 
 AgentReady Checked is a future trust layer for API and MCP tool surfaces that have been scanned against the AgentReady contract and static simulation scenarios.
