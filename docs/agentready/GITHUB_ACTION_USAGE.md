@@ -4,6 +4,8 @@ TimeProofs AgentReady can run as a pre-deployment CI gate for agent-facing OpenA
 
 The action wraps the AgentReady CLI and fails the job when the configured policy fails. It is a static scan: it reads the contract file in the GitHub Actions workspace and does not call live APIs, MCP servers, LLMs, or a hosted TimeProofs backend.
 
+The generated contract path points to an `agentready.json` file following the published v0.1 contract described in [AGENTREADY_JSON_SPEC.md](AGENTREADY_JSON_SPEC.md).
+
 ## Action
 
 Use the repository action after checking out your code and installing Node.js 20 or newer:
