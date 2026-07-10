@@ -89,11 +89,17 @@ async function assertFileExists(filePath) {
 }
 
 function assertAgentReadyRuleCodeContract(contract) {
+  assert.equal(contract.agentready_version, '0.1');
+  assert.ok(contract.source_name, 'agentready contract should include source_name');
+  assert.equal(typeof contract.score, 'number');
+  assert.ok(contract.status, 'agentready contract should include status');
+  assert.ok(contract.risk_counts, 'agentready contract should include risk_counts');
   assert.ok(Array.isArray(contract.tools), 'agentready contract should include tools');
   for (const tool of contract.tools) {
     assert.ok(Array.isArray(tool.detected_risks), `${tool.operation_id} should include detected_risks`);
     assert.ok(Array.isArray(tool.rule_codes), `${tool.operation_id} should include rule_codes`);
     assert.ok(Array.isArray(tool.detected_rules), `${tool.operation_id} should include detected_rules`);
+    assert.ok(Array.isArray(tool.recommendations), `${tool.operation_id} should include recommendations`);
   }
 }
 

@@ -2,21 +2,27 @@ import { AGENTREADY_VERSION, HUMAN_CONFIRMATION_ACTIONS } from './types.js';
 
 export function generateAgentReadyJson(scanResult) {
   const summary = scanResult.summary || {};
+  const riskCounts = normalizeRiskCounts(summary.risk_counts || {});
+  const sourceName = getSourceName(scanResult.source);
 
   return {
     agentready_version: AGENTREADY_VERSION,
-    generated_at: new Date().toISOString(),
     source_type: scanResult.source?.type || 'openapi',
+    source_name: sourceName,
+    generated_at: new Date().toISOString(),
+    score: summary.score,
+    status: summary.status,
+    risk_counts: riskCounts,
     source: scanResult.source,
     summary: {
       score: summary.score,
       status: summary.status,
       score_interpretation: getScoreInterpretation(summary.score),
       total_operations: scanResult.operations.length,
-      critical_risks: summary.risk_counts?.critical || 0,
-      high_risks: summary.risk_counts?.high || 0,
-      medium_risks: summary.risk_counts?.medium || 0,
-      low_risks: summary.risk_counts?.low || 0
+      critical_risks: riskCounts.critical,
+      high_risks: riskCounts.high,
+      medium_risks: riskCounts.medium,
+      low_risks: riskCounts.low
     },
     tools: scanResult.operations.map(toAgentReadyTool)
   };
@@ -26,12 +32,17 @@ function toAgentReadyTool(operation) {
   const findingCodes = (operation.findings || []).map((finding) => finding.code);
   const ruleCodes = unique((operation.findings || []).map((finding) => finding.rule_code).filter(Boolean));
   const requiresHumanConfirmation = requiresConfirmation(operation, findingCodes);
+  const agentRecommendation = buildAgentRecommendation(operation, findingCodes, requiresHumanConfirmation);
+  const recommendations = buildRecommendations(operation.findings || [], agentRecommendation);
 
   return {
+    id: operation.operationId,
+    name: operation.operationId,
     operation_id: operation.operationId,
     path: operation.path,
     method: operation.method,
     action_type: operation.classification.action_type,
+    severity: operation.risk_level,
     risk_level: operation.risk_level,
     controlled_risk: Boolean(operation.controlled_risk),
     risk_controls: operation.risk_controls || {},
@@ -42,7 +53,8 @@ function toAgentReadyTool(operation) {
     detected_risks: findingCodes,
     rule_codes: ruleCodes,
     detected_rules: (operation.findings || []).map(toDetectedRule),
-    agent_recommendation: buildAgentRecommendation(operation, findingCodes, requiresHumanConfirmation)
+    recommendations,
+    agent_recommendation: agentRecommendation
   };
 }
 
@@ -204,6 +216,26 @@ function getScoreInterpretation(score) {
   if (score >= 70) return 'Close to AgentReady, but minor fixes should be completed before broad agent exposure.';
   if (score >= 50) return 'Needs fixes before being exposed to autonomous or semi-autonomous agents.';
   return 'Not AgentReady. Do not expose to autonomous agents before structural fixes are applied.';
+}
+
+function normalizeRiskCounts(riskCounts) {
+  return {
+    critical: riskCounts.critical || 0,
+    high: riskCounts.high || 0,
+    medium: riskCounts.medium || 0,
+    low: riskCounts.low || 0
+  };
+}
+
+function getSourceName(source = {}) {
+  return source.filename || source.server_name || source.name || 'unknown';
+}
+
+function buildRecommendations(findings, agentRecommendation) {
+  return unique([
+    agentRecommendation,
+    ...findings.map((finding) => finding.recommendation).filter(Boolean)
+  ]);
 }
 
 function unique(values) {

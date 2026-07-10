@@ -12,18 +12,25 @@ const fixturesRoot = path.join(__dirname, 'fixtures');
 
 const REQUIRED_CONTRACT_ROOT_FIELDS = [
   'agentready_version',
-  'generated_at',
   'source_type',
+  'source_name',
+  'generated_at',
+  'score',
+  'status',
+  'risk_counts',
   'source',
   'summary',
   'tools'
 ];
 
 const REQUIRED_CONTRACT_TOOL_FIELDS = [
+  'id',
+  'name',
   'operation_id',
   'path',
   'method',
   'action_type',
+  'severity',
   'risk_level',
   'requires_human_confirmation',
   'allowed_when',
@@ -32,6 +39,7 @@ const REQUIRED_CONTRACT_TOOL_FIELDS = [
   'detected_risks',
   'rule_codes',
   'detected_rules',
+  'recommendations',
   'agent_recommendation'
 ];
 
@@ -137,6 +145,23 @@ test('EXPORT CONTRACT: every generated agentready.json has required root and too
   for (const result of [classification, safeOpenApi, dangerousOpenApi, safeMcp, dangerousMcp, refundFixed, emailFixed, filesFixed]) {
     assertContractShape(result.agentready_json);
   }
+});
+
+test('EXPORT CONTRACT: agentready.json uses the v0.1 canonical contract plus compatibility fields', () => {
+  const contract = dangerousOpenApi.agentready_json;
+  assert.equal(contract.agentready_version, '0.1');
+  assert.equal(contract.source_type, 'openapi');
+  assert.equal(contract.source_name, 'agentready-examples/dangerous-actions-openapi.json');
+  assert.equal(contract.score, contract.summary.score);
+  assert.equal(contract.status, contract.summary.status);
+  assert.deepEqual(contract.risk_counts, dangerousOpenApi.summary.risk_counts);
+
+  const refund = toolById(dangerousOpenApi, 'refundCustomer');
+  assert.equal(refund.id, refund.operation_id);
+  assert.equal(refund.name, refund.operation_id);
+  assert.equal(refund.severity, refund.risk_level);
+  assert.ok(Array.isArray(refund.recommendations));
+  assert.ok(refund.recommendations.includes(refund.agent_recommendation));
 });
 
 test('RULE CODES: every finding maps to a stable AgentReady rule code', () => {
@@ -282,6 +307,7 @@ function assertContractShape(contract) {
     assert.ok(Array.isArray(tool.detected_risks), `${tool.operation_id} detected_risks must be an array`);
     assert.ok(Array.isArray(tool.rule_codes), `${tool.operation_id} rule_codes must be an array`);
     assert.ok(Array.isArray(tool.detected_rules), `${tool.operation_id} detected_rules must be an array`);
+    assert.ok(Array.isArray(tool.recommendations), `${tool.operation_id} recommendations must be an array`);
     for (const rule of tool.detected_rules) {
       assert.ok(Object.hasOwn(rule, 'rule_code'), `${tool.operation_id} detected_rule missing rule_code`);
       assert.ok(Object.hasOwn(rule, 'finding_code'), `${tool.operation_id} detected_rule missing finding_code`);
