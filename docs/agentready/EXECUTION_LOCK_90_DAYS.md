@@ -2,9 +2,9 @@
 
 ## Status
 
-This lock replaces the earlier CLI-alpha execution lock. CLI alpha, CI Gate validation, rule codes, GitHub Action wrapper, `agentready.json` v0.1, `/agentready-ci`, homepage CI Gate positioning, and self-service commercial architecture are now merged or in the final review path.
+This lock replaces the earlier CLI-alpha execution lock. CLI alpha, CI Gate validation, rule codes, GitHub Action wrapper, `agentready.json` v0.1, `/agentready-ci`, homepage CI Gate positioning, self-service commercial architecture, and CLI public distribution preparation are now merged or in the final review path.
 
-The active lock after merge of #109 is Community public distribution.
+The active lock after merge of #110 is versioned GitHub Action preparation.
 
 ## Locked Product Statement
 
@@ -21,34 +21,34 @@ Fail the build before unsafe agent-facing APIs or MCP tools are deployed.
 ## Current Execution Phase
 
 ```txt
-Phase after merge of #109: Community public distribution
-Next PR: feat(distribution): package AgentReady CLI for public installation
+Phase after merge of #110: Community versioned distribution
+Next PR: feat(distribution): prepare versioned AgentReady GitHub Action
 Base branch: timeproofs
 ```
 
 ## Next PR Objective
 
-The next PR must only prepare public CLI distribution:
+The next PR must only prepare the GitHub Action for versioned public use:
 
-- prepare a public CLI installation path;
-- define the package and public command;
-- add version and help behavior;
-- test installation in a clean environment;
-- avoid actual package publication without separate validation.
+- align action usage with the packaged CLI;
+- define versioned action distribution shape;
+- document release constraints;
+- keep scan, scoring, rule codes, and `agentready.json` behavior unchanged;
+- avoid marketplace/release publication without separate validation.
 
 Planned branch:
 
 ```txt
-feat-agentready-cli-public-distribution
+feat-agentready-versioned-github-action
 ```
 
 ## Current Lock Acceptance Criteria
 
-1. The self-service architecture PR is merged before #110 begins.
-2. Community distribution work is limited to CLI packaging and installation readiness.
-3. No public HTML page changes are included in #110.
-4. No scanner scoring, rule-code, or hosted commercial behavior changes are included in #110.
-5. No Stripe, backend, account, database, license, dashboard, or cookie implementation is included in #110.
+1. The CLI public distribution preparation PR is merged before #111 begins.
+2. Versioned Action work is limited to GitHub Action distribution readiness.
+3. No public HTML page changes are included in #111.
+4. No scanner scoring, rule-code, or hosted commercial behavior changes are included in #111.
+5. No Stripe, backend, account, database, license, dashboard, or cookie implementation is included in #111.
 6. No manual review, quote, request-by-email, manual payment, consulting-first, or Enterprise launch direction is reintroduced.
 7. The mandatory limitation text remains present in core docs.
 

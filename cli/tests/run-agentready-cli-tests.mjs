@@ -9,6 +9,7 @@ const cliPath = path.join(repoRoot, 'bin', 'agentready.js');
 const tmpRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'agentready-cli-'));
 
 try {
+  await testVersionMatchesPackageJson();
   await testHelp();
   await testOpenApiScanWritesOutputs();
   await testMcpScanWritesOutputs();
@@ -16,6 +17,13 @@ try {
   console.log('AgentReady CLI tests: PASS');
 } finally {
   await fs.rm(tmpRoot, { recursive: true, force: true });
+}
+
+async function testVersionMatchesPackageJson() {
+  const packageJson = JSON.parse(await fs.readFile(path.join(repoRoot, 'package.json'), 'utf8'));
+  const result = await runCli(['--version']);
+  assert.equal(result.code, 0);
+  assert.equal(result.stdout.trim(), packageJson.version);
 }
 
 async function testHelp() {

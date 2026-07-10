@@ -25,6 +25,7 @@ Built and merged:
 - docs/examples for CLI, GitHub Action, rule codes, and v0.1 spec;
 - `/agentready-ci` public page;
 - homepage repositioned around AgentReady CI Gate;
+- CLI public distribution package preparation;
 - legacy proof runtime artifacts removed.
 
 ## Current Execution Sequence
@@ -39,21 +40,21 @@ Completed:
 6. `/agentready-ci` public page added.
 7. Homepage repositioned around CI Gate.
 8. Self-service commercial and launch architecture documented.
+9. CLI public distribution package preparation validated.
 
 Next:
 
-1. `feat(distribution): package AgentReady CLI for public installation`
-2. `feat(distribution): prepare versioned AgentReady GitHub Action`
-3. `release(agentready): establish Community release workflow`
-4. Pro features.
-5. Entitlements and licensing.
-6. Billing and automation.
-7. Team.
-8. Agency.
-9. Commercial site.
-10. Company, legal, privacy.
-11. SEO, documentation, AI discovery.
-12. Launch.
+1. `feat(distribution): prepare versioned AgentReady GitHub Action`
+2. `release(agentready): establish Community release workflow`
+3. Pro features.
+4. Entitlements and licensing.
+5. Billing and automation.
+6. Team.
+7. Agency.
+8. Commercial site.
+9. Company, legal, privacy.
+10. SEO, documentation, AI discovery.
+11. Launch.
 
 Locked operational sequence:
 
@@ -79,6 +80,7 @@ docs/agentready/LEGAL_PRIVACY_AND_COOKIE_REQUIREMENTS.md
 docs/agentready/SEO_GEO_AI_FIRST_REQUIREMENTS.md
 docs/agentready/GLOBAL_LAUNCH_READINESS_MATRIX.md
 docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
+docs/agentready/CLI_PUBLIC_DISTRIBUTION.md
 docs/agentready/TODO_NEXT.md
 docs/agentready/REMAINING_WORK.md
 ```
@@ -117,6 +119,7 @@ Do not reintroduce:
 node agentready-core/tests/run-agentready-core-tests.mjs
 node cli/tests/run-agentready-cli-tests.mjs
 node cli/tests/run-agentready-action-smoke-test.mjs
+node cli/tests/run-agentready-package-smoke-test.mjs
 ```
 
 Commercial policy:
