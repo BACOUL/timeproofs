@@ -16,29 +16,30 @@ agentready.json spec v0.1: merged and aligned with code
 Homepage CI Gate positioning: merged
 Self-service commercial and launch architecture: documented
 CLI public distribution package preparation: in review
+Versioned GitHub Action preparation: in review
 ```
 
-## Priority 1 - Versioned GitHub Action
+## Priority 1 - Community Release Workflow
 
 Next PR:
 
 ```txt
-feat(distribution): prepare versioned AgentReady GitHub Action
+release(agentready): establish Community release workflow
 ```
 
 Planned branch:
 
 ```txt
-feat-agentready-versioned-github-action
+release-agentready-community-workflow
 ```
 
 Work:
 
-- prepare the existing GitHub Action for versioned public use;
-- align it with the packaged CLI;
-- define versioned action distribution shape;
+- define release validation gates;
+- define package and Action provenance expectations;
+- decide when immutable tags may be created;
 - keep scan/scoring/rule-code behavior stable;
-- do not publish marketplace or release artifacts without separate validation.
+- do not publish npm packages, create tags, create releases, or list in Marketplace without separate validation.
 
 ## Locked Execution Plan
 

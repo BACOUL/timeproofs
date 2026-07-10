@@ -35,6 +35,7 @@ Done:
 - commercial bad/fixed CI Gate validation;
 - stable rule codes AR001-AR010;
 - GitHub Action wrapper;
+- versioned GitHub Action preparation;
 - `agentready.json` spec v0.1;
 - `/agentready-ci` public page;
 - homepage positioning around AgentReady CI Gate;
@@ -123,6 +124,7 @@ docs/agentready/SEO_GEO_AI_FIRST_REQUIREMENTS.md
 docs/agentready/GLOBAL_LAUNCH_READINESS_MATRIX.md
 docs/agentready/AGENTREADY_JSON_SPEC.md
 docs/agentready/GITHUB_ACTION_USAGE.md
+docs/agentready/GITHUB_ACTION_VERSIONING.md
 docs/agentready/AGENTREADY_RULE_CODES.md
 docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md
 docs/agentready/CLI_PUBLIC_DISTRIBUTION.md
@@ -131,16 +133,16 @@ docs/agentready/CLI_PUBLIC_DISTRIBUTION.md
 ## Immediate Next Step
 
 ```txt
-feat(distribution): prepare versioned AgentReady GitHub Action
+release(agentready): establish Community release workflow
 ```
 
 Planned branch:
 
 ```txt
-feat-agentready-versioned-github-action
+release-agentready-community-workflow
 ```
 
-This step prepares the existing GitHub Action for versioned public use. It must not publish marketplace/release artifacts without separate validation.
+This step defines the release workflow and validation gates. It must not publish npm packages, create tags, create releases, or list in Marketplace without separate validation.
 
 The locked execution order is documented in:
 

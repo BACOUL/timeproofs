@@ -6,11 +6,15 @@ import path from 'node:path';
 
 const repoRoot = process.cwd();
 const actionPath = path.join(repoRoot, '.github', 'actions', 'agentready', 'action.yml');
+const workflowPath = path.join(repoRoot, '.github', 'workflows', 'agentready-action-integration.yml');
+const versioningDocPath = path.join(repoRoot, 'docs', 'agentready', 'GITHUB_ACTION_VERSIONING.md');
 const cliPath = path.join(repoRoot, 'bin', 'agentready.js');
 const tmpRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'agentready-action-'));
 
 try {
   await testActionMetadata();
+  await testActionIntegrationWorkflowMetadata();
+  await testVersioningDocumentation();
   await testActionEquivalentOpenApiScan();
   await testActionEquivalentMcpScan();
   console.log('AgentReady GitHub Action smoke test: PASS');
@@ -20,6 +24,7 @@ try {
 
 async function testActionMetadata() {
   const action = await fs.readFile(actionPath, 'utf8');
+  const runBlock = extractRunBlock(action);
 
   assert.match(action, /name: TimeProofs AgentReady CI Gate/);
   assert.match(action, /file:/);
@@ -31,9 +36,62 @@ async function testActionMetadata() {
   assert.match(action, /status:/);
   assert.match(action, /report-path:/);
   assert.match(action, /contract-path:/);
+  assert.match(action, /AGENTREADY_INPUT_TYPE:\s*\$\{\{ inputs\.type \}\}/);
+  assert.match(action, /AGENTREADY_INPUT_FILE:\s*\$\{\{ inputs\.file \}\}/);
+  assert.match(action, /AGENTREADY_INPUT_MIN_SCORE:\s*\$\{\{ inputs\.min-score \}\}/);
+  assert.match(action, /AGENTREADY_INPUT_FAIL_ON:\s*\$\{\{ inputs\.fail-on \}\}/);
+  assert.match(action, /AGENTREADY_INPUT_OUT:\s*\$\{\{ inputs\.out \}\}/);
+  assert.doesNotMatch(runBlock, /\$\{\{ inputs\./);
+  assert.doesNotMatch(runBlock, /\beval\b/);
+  assert.match(runBlock, /scan_type="\$AGENTREADY_INPUT_TYPE"/);
+  assert.match(runBlock, /scan_file="\$AGENTREADY_INPUT_FILE"/);
+  assert.match(runBlock, /min_score="\$AGENTREADY_INPUT_MIN_SCORE"/);
+  assert.match(runBlock, /fail_on="\$AGENTREADY_INPUT_FAIL_ON"/);
+  assert.match(runBlock, /out_dir="\$AGENTREADY_INPUT_OUT"/);
+  assert.match(runBlock, /GITHUB_ACTION_PATH\/\.\.\/\.\.\/\.\./);
+  assert.match(runBlock, /cd "\$GITHUB_WORKSPACE"/);
   assert.match(action, /bin\/agentready\.js/);
   assert.match(action, /--min-score/);
   assert.match(action, /--fail-on/);
+  assert.match(runBlock, /exit_code=\$\?/);
+  assert.match(runBlock, /exit "\$exit_code"/);
+  assert.match(runBlock, /agentready-report\.md/);
+  assert.match(runBlock, /agentready\.json/);
+  assert.match(runBlock, /agentready-mcp-report\.md/);
+  assert.match(runBlock, /agentready-mcp\.json/);
+  assert.doesNotMatch(action, /npm install @timeproofs\/agentready/);
+}
+
+async function testActionIntegrationWorkflowMetadata() {
+  const workflow = await fs.readFile(workflowPath, 'utf8');
+
+  assert.match(workflow, /runs-on: ubuntu-latest/);
+  assert.match(workflow, /node-version: "20"/);
+  assert.match(workflow, /uses: \.\/\.github\/actions\/agentready/);
+  assert.match(workflow, /id: openapi_pass/);
+  assert.match(workflow, /id: mcp_pass/);
+  assert.match(workflow, /id: openapi_policy_fail/);
+  assert.match(workflow, /id: usage_error/);
+  assert.match(workflow, /continue-on-error: true/);
+  assert.match(workflow, /steps\.openapi_policy_fail\.outcome/);
+  assert.match(workflow, /steps\.usage_error\.outcome/);
+  assert.match(workflow, /agentready fixture space/);
+  assert.doesNotMatch(workflow, /BACOUL\/timeproofs\/\.github\/actions\/agentready@timeproofs/);
+  assert.doesNotMatch(workflow, /upload-artifact/);
+}
+
+async function testVersioningDocumentation() {
+  const doc = await fs.readFile(versioningDocPath, 'utf8');
+
+  assert.match(doc, /Immutable References/);
+  assert.match(doc, /Moving Major References/);
+  assert.match(doc, /Development Branches/);
+  assert.match(doc, /Development branch reference - not a stable release/);
+  assert.match(doc, /Planned versioned reference - tag not created yet/);
+  assert.match(doc, /v0\.1\.0-alpha\.0/);
+  assert.match(doc, /No public stable action tag is created in this PR/);
+  assert.match(doc, /ubuntu-latest/);
+  assert.match(doc, /Node\.js 20/);
 }
 
 async function testActionEquivalentOpenApiScan() {
@@ -85,6 +143,13 @@ async function testActionEquivalentMcpScan() {
 async function assertFileExists(filePath) {
   const stat = await fs.stat(filePath);
   assert.equal(stat.isFile(), true, `${filePath} should exist`);
+}
+
+function extractRunBlock(action) {
+  const marker = '      run: |';
+  const start = action.indexOf(marker);
+  assert.notEqual(start, -1, 'action should include a composite run block');
+  return action.slice(start + marker.length);
 }
 
 function runCli(args) {

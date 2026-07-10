@@ -18,9 +18,10 @@ jobs:
         with:
           node-version: '20'
 
+      # Current local usage for a vendored or checked-out action copy.
       - name: AgentReady OpenAPI gate
         id: openapi_gate
-        uses: BACOUL/timeproofs/.github/actions/agentready@timeproofs
+        uses: ./.github/actions/agentready
         with:
           type: openapi
           file: ./openapi.json
@@ -30,7 +31,7 @@ jobs:
 
       - name: AgentReady MCP gate
         id: mcp_gate
-        uses: BACOUL/timeproofs/.github/actions/agentready@timeproofs
+        uses: ./.github/actions/agentready
         with:
           type: mcp
           file: ./mcp-tools.json
@@ -46,9 +47,10 @@ jobs:
           echo "MCP: ${{ steps.mcp_gate.outputs.score }} - ${{ steps.mcp_gate.outputs.status }}"
           echo "MCP report: ${{ steps.mcp_gate.outputs.report-path }}"
 
-      - name: Upload AgentReady reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: agentready-output
-          path: agentready-output
+# Development branch reference - not a stable release:
+#
+# uses: BACOUL/timeproofs/.github/actions/agentready@timeproofs
+#
+# Planned versioned reference - tag not created yet:
+#
+# uses: BACOUL/timeproofs/.github/actions/agentready@v0.1.0-alpha.0

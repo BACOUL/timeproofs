@@ -159,8 +159,10 @@ timeproofs generate-contract openapi.yaml
 
 ```yaml
 - name: TimeProofs AgentReady Scan
-  uses: timeproofs/agentready-action@v1
+  uses: BACOUL/timeproofs/.github/actions/agentready@v0.1.0-alpha.0
 ```
+
+Planned versioned reference - tag not created yet.
 
 ### Pourquoi cette phase est essentielle
 
