@@ -28,8 +28,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout reviewed commit
+      - name: Checkout reviewed source commit
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Setup Node.js 20
         uses: actions/setup-node@v4
@@ -147,7 +149,7 @@ jobs:
           test -f "$candidate_dir/COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_0_DRAFT.md"
           file_count="$(find "$candidate_dir" -type f | wc -l | tr -d ' ')"
           test "$file_count" = "4"
-          node --input-type=module <<'NODE'
+          EXPECTED_COMMIT_SHA="$(git rev-parse HEAD)" node --input-type=module <<'NODE'
           import assert from 'node:assert/strict';
           import fs from 'node:fs';
           import path from 'node:path';
@@ -163,6 +165,7 @@ jobs:
           assert.equal(manifest.package_private, true);
           assert.equal(manifest.planned_tag, 'v0.1.0-alpha.0');
           assert.equal(manifest.tarball.entry_count, 20);
+          assert.equal(manifest.commit_sha, process.env.EXPECTED_COMMIT_SHA);
           NODE
 
       - name: Upload temporary release candidate artifact

@@ -6,7 +6,7 @@ This lock replaces the earlier CLI-alpha execution lock. CLI alpha, CI Gate vali
 
 Community public publication remains blocked and has not occurred.
 
-The active lock after merge of #112 is Pro policy configuration.
+The active lock after merge of #112 is Community and Pro strategy rebaselining.
 
 ## Locked Product Statement
 
@@ -23,30 +23,31 @@ Fail the build before unsafe agent-facing APIs or MCP tools are deployed.
 ## Current Execution Phase
 
 ```txt
-Phase after merge of #112: Pro
-Next PR: feat(pro): add versioned AgentReady policy configuration
+Phase after merge of #112: Strategic rebaseline
+Next PR: docs(product): rebaseline AgentReady Community and Pro strategy
 Base branch: timeproofs
 ```
 
 ## Next PR Objective
 
-The next PR must only add versioned AgentReady policy configuration:
+The next PR must only rebaseline the Community and Pro strategy in docs:
 
-- define policy configuration format and loading behavior;
-- keep existing CLI policy behavior compatible;
+- make Community and Pro direction explicit before implementation;
+- keep the rebaseline docs-only;
+- do not begin Pro policy implementation;
 - keep scan, scoring, rule codes, and `agentready.json` behavior unchanged;
 - avoid npm publication, release creation, or tag creation without separate validation.
 
 Planned branch:
 
 ```txt
-feat-agentready-versioned-policy-configuration
+docs-agentready-community-pro-rebaseline
 ```
 
 ## Current Lock Acceptance Criteria
 
 1. The Community release workflow PR is merged before Pro work begins.
-2. Pro policy configuration work is limited to versioned policy configuration.
+2. The strategic rebaseline PR is merged before Pro implementation begins.
 3. No public HTML page changes are included in the next PR.
 4. No scanner scoring, rule-code, or hosted commercial behavior changes are included in the next PR.
 5. No Stripe, backend, account, database, license, dashboard, or cookie implementation is included in the next PR.
@@ -68,15 +69,16 @@ The PR numbers in that document are expected numbers. If GitHub assigns a differ
 Do not reorder without an explicit recorded decision.
 
 1. Community distribution.
-2. Pro.
-3. Entitlements and licensing.
-4. Billing and automation.
-5. Team.
-6. Agency.
-7. Commercial site.
-8. Company, legal, and privacy.
-9. SEO, documentation, and AI discovery.
-10. Launch.
+2. Mandatory strategic rebaseline.
+3. Pro.
+4. Entitlements and licensing.
+5. Billing and automation.
+6. Team.
+7. Agency.
+8. Commercial site.
+9. Company, legal, and privacy.
+10. SEO, documentation, and AI discovery.
+11. Launch.
 
 ## Do Not Build During This Lock
 

@@ -33,20 +33,23 @@ Community public publication remains blocked and has not occurred.
 ## Immediate Next PR
 
 ```txt
-feat(pro): add versioned AgentReady policy configuration
+docs(product): rebaseline AgentReady Community and Pro strategy
 ```
 
 Planned branch:
 
 ```txt
-feat-agentready-versioned-policy-configuration
+docs-agentready-community-pro-rebaseline
 ```
 
 Purpose:
 
-- add versioned AgentReady policy configuration;
+- rebaseline AgentReady Community and Pro strategy before Pro implementation begins;
+- keep the rebaseline docs-only;
 - keep Community publication, tag creation, GitHub Release creation, and Marketplace listing blocked;
 - preserve current scoring, rule codes, CLI exits, GitHub Action outputs, and `agentready.json` v0.1 compatibility.
+
+The versioned policy configuration PR remains planned, but only after this rebaseline PR is merged.
 
 ## Execution Plan
 
@@ -82,6 +85,7 @@ That document is the authority for the expected PR order. If GitHub assigns a di
 - old proof-of-existence product
 - public HTML changes
 - paid feature claims
+- Pro implementation
 - npm package publication
 - GitHub release tag creation
 - Marketplace listing

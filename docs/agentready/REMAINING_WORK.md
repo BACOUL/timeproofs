@@ -22,27 +22,29 @@ Community release workflow: prepared
 
 Community public publication remains blocked and has not occurred.
 
-## Priority 1 - Versioned Policy Configuration
+## Priority 1 - Strategic Rebaseline
 
 Next PR:
 
 ```txt
-feat(pro): add versioned AgentReady policy configuration
+docs(product): rebaseline AgentReady Community and Pro strategy
 ```
 
 Planned branch:
 
 ```txt
-feat-agentready-versioned-policy-configuration
+docs-agentready-community-pro-rebaseline
 ```
 
 Work:
 
-- define versioned AgentReady policy configuration;
-- preserve current CLI policy behavior;
-- keep `--min-score` and `--fail-on` compatible;
+- rebaseline AgentReady Community and Pro strategy;
+- keep the rebaseline docs-only;
+- prevent Pro implementation from starting before strategy is locked;
 - keep scan/scoring/rule-code behavior stable;
 - do not publish npm packages, create tags, create releases, or list in Marketplace without separate validation.
+
+The versioned policy configuration PR remains planned after the rebaseline PR is merged.
 
 ## Locked Execution Plan
 

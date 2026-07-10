@@ -138,16 +138,16 @@ docs/agentready/COMMUNITY_RELEASE_CHECKLIST.md
 ## Immediate Next Step
 
 ```txt
-feat(pro): add versioned AgentReady policy configuration
+docs(product): rebaseline AgentReady Community and Pro strategy
 ```
 
 Planned branch:
 
 ```txt
-feat-agentready-versioned-policy-configuration
+docs-agentready-community-pro-rebaseline
 ```
 
-This step starts Pro feature construction with versioned AgentReady policy configuration. It must not publish npm packages, create tags, create releases, or list in Marketplace without separate validation.
+This docs-only step rebaselines the Community and Pro strategy before any Pro implementation begins. It must not publish npm packages, create tags, create releases, list in Marketplace, or start Pro policy implementation.
 
 The locked execution order is documented in:
 

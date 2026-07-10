@@ -56,6 +56,7 @@ if (!args.out) {
 }
 
 const outputDir = path.resolve(repoRoot, args.out);
+await assertSafeOutputDir(outputDir);
 await fs.mkdir(outputDir, { recursive: true });
 
 const packageJson = JSON.parse(await fs.readFile(path.join(repoRoot, 'package.json'), 'utf8'));
@@ -200,12 +201,43 @@ function assertNoSensitiveManifestData(manifest) {
 }
 
 async function resolveCommitSha() {
-  if (process.env.GITHUB_SHA) return process.env.GITHUB_SHA;
   const result = await run('git', ['rev-parse', 'HEAD'], { cwd: repoRoot });
   if (result.code !== 0) {
     throw new Error(`Unable to resolve commit SHA:\n${result.stderr || result.stdout}`);
   }
   return result.stdout.trim();
+}
+
+async function assertSafeOutputDir(outputDirToCheck) {
+  if (samePath(outputDirToCheck, repoRoot)) {
+    throw new Error('Release candidate output directory must not be the repository root.');
+  }
+
+  let stat;
+  try {
+    stat = await fs.stat(outputDirToCheck);
+  } catch (error) {
+    if (error?.code === 'ENOENT') return;
+    throw error;
+  }
+
+  if (!stat.isDirectory()) {
+    throw new Error('Release candidate output directory must be empty.');
+  }
+
+  const entries = await fs.readdir(outputDirToCheck);
+  if (entries.length > 0) {
+    throw new Error('Release candidate output directory must be empty.');
+  }
+}
+
+function samePath(left, right) {
+  const normalizedLeft = path.resolve(left);
+  const normalizedRight = path.resolve(right);
+  if (process.platform === 'win32') {
+    return normalizedLeft.toLowerCase() === normalizedRight.toLowerCase();
+  }
+  return normalizedLeft === normalizedRight;
 }
 
 function npm(argsToRun) {

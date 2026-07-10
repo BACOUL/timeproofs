@@ -50,8 +50,8 @@ Completed:
 
 Next:
 
-1. `feat(pro): add versioned AgentReady policy configuration`
-2. Pro features.
+1. `docs(product): rebaseline AgentReady Community and Pro strategy`
+2. Pro features, starting with versioned policy configuration after the rebaseline PR is merged.
 3. Entitlements and licensing.
 4. Billing and automation.
 5. Team.

@@ -114,6 +114,28 @@ It also validates:
 - absence of runtime dependencies;
 - absence of tracked tarball at repository root.
 
+## Source Commit Traceability
+
+Pull-request runs check out the exact source commit from the PR branch, not GitHub's temporary merge commit.
+
+The release candidate manifest records that exact checked-out commit in:
+
+```json
+{
+  "commit_sha": "..."
+}
+```
+
+The workflow verifies that `manifest.commit_sha` equals:
+
+```txt
+git rev-parse HEAD
+```
+
+After #112 is merged, a future `workflow_dispatch` run on `timeproofs` must validate the exact merged commit before any publication decision.
+
+No candidate generated from a temporary pull-request merge commit may serve as a publication reference.
+
 ## GitHub Action Validation
 
 The workflow executes the local composite action:
@@ -163,6 +185,8 @@ The script:
 - writes a release candidate manifest;
 - copies draft release notes;
 - writes only to the explicit output directory.
+
+The output directory must not be the repository root and must be empty if it already exists. The script must not recursively delete or silently overwrite user-provided output directories.
 
 ## Manifest
 

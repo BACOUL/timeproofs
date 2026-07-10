@@ -115,8 +115,16 @@ docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
 After #112, the immediate next PR is:
 
 ```txt
-feat(pro): add versioned AgentReady policy configuration
+docs(product): rebaseline AgentReady Community and Pro strategy
 ```
+
+Planned branch:
+
+```txt
+docs-agentready-community-pro-rebaseline
+```
+
+No Pro implementation may begin until this docs-only rebaseline PR is merged.
 
 Every new task must answer yes to these questions:
 

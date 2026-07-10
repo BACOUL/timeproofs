@@ -53,6 +53,24 @@ Phase gate:
 - Community release workflow is documented and reproducible.
 - No package is published without separate validation.
 
+## Mandatory Strategic Rebaseline Gate
+
+Next PR:
+
+```txt
+docs(product): rebaseline AgentReady Community and Pro strategy
+```
+
+Planned branch:
+
+```txt
+docs-agentready-community-pro-rebaseline
+```
+
+No Pro implementation may begin until this docs-only rebaseline PR is merged.
+
+The previous expected PR numbers from the Pro phase onward are provisional and will be reissued by the rebaseline PR.
+
 ## Pro
 
 Expected #113:
