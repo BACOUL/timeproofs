@@ -1,76 +1,51 @@
-# 🚀 Pull Request — TimeProofs
+# Pull Request
 
-Thank you for contributing to **TimeProofs**, the open and privacy-first proof-of-existence protocol.  
-Please complete the sections below so the maintainers can review efficiently.
+## Summary
 
----
+Describe what changed and why.
 
-## 🔍 Summary
+## AgentReady Scope
 
-Describe the purpose of this PR and the problem it solves.
+- [ ] OpenAPI scanner
+- [ ] MCP scanner
+- [ ] CLI
+- [ ] GitHub Action wrapper
+- [ ] `agentready.json` v0.1
+- [ ] Rule codes AR001-AR010
+- [ ] Docs only
+- [ ] Other
 
----
+## Guardrails
 
-## 🔄 Type of Change
+Confirm where applicable:
 
-Select all that apply:
+- [ ] No scoring change, or scoring change is explained.
+- [ ] No rule code change, or rule code change is explained.
+- [ ] No public HTML page change, or page change is intentional.
+- [ ] No dashboard, Stripe, backend, account system, or runtime firewall.
+- [ ] No live API, MCP, or LLM execution added to scanner flows.
+- [ ] No legacy `selfhost/`, `sdk/timeproof.js`, `manifest.json`, or `manifest.webmanifest` reintroduced.
 
-- [ ] `feat` — New feature  
-- [ ] `fix` — Bug fix  
-- [ ] `docs` — Documentation update  
-- [ ] `refactor` — Code restructure  
-- [ ] `chore` — Minor maintenance  
-- [ ] `test` — Test updates  
+## Tests
 
----
+List commands or manual checks run:
 
-## 🧪 How to Test
-
-Describe how reviewers can reproduce and validate your changes.
-
-Commands, steps, or URLs:
-
+```txt
+node agentready-core/tests/run-agentready-core-tests.mjs
+node cli/tests/run-agentready-cli-tests.mjs
+node cli/tests/run-agentready-action-smoke-test.mjs
 ```
-<testing steps>
+
+## Commercial CI Gate Check
+
+If this touches scanner behavior, CLI policy, rule codes, or scoring, confirm bad/fixed fixtures were checked with:
+
+```txt
+--min-score 75
+--fail-on critical
 ```
 
----
+## Limitation
 
-## 📸 Screenshots / Logs (optional)
-
-Add visuals or logs if helpful.
-
----
-
-## 🔒 Security & Privacy Checklist
-
-Before submitting, confirm:
-
-- [ ] No personal data added or logged  
-- [ ] No raw content stored — hash-only remains intact  
-- [ ] API endpoints still respect privacy-first principles  
-- [ ] Error messages contain no sensitive leakage  
-- [ ] CSP / security headers unchanged or improved  
-
----
-
-## 🧩 ProofSpec & API Compatibility
-
-- [ ] Changes align with ProofSpec v0.1  
-- [ ] Public verification remains intact (`/api/verify`)  
-- [ ] Backward compatible with existing clients  
-
----
-
-## 📦 Additional Notes
-
-Anything else reviewers should know?
-
----
-
-### 🛡️ Security Disclosure Reminder
-Security issues must **not** be submitted via Pull Request.  
-Use the official disclosure channel:
-
-security@timeproofs.io  
-https://timeproofs.io/.well-known/security.txt
+TimeProofs AgentReady does not guarantee that an AI agent will never fail.
+It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.

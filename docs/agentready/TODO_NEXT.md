@@ -1,177 +1,72 @@
-# TODO Next — TimeProofs AgentReady
+# TODO Next - TimeProofs AgentReady
 
-## Current completed base
-
-```txt
-✅ AgentReady positioning
-✅ Legacy proof-of-existence surface removed
-✅ Static OpenAPI JSON/YAML scanner
-✅ Static MCP tools JSON scanner
-✅ OpenAPI upload page: agentready.html
-✅ MCP upload page: agentready-mcp.html
-✅ Static simulation page: agentready-simulation.html
-✅ Public landing page
-✅ Homepage mobile menu foundation
-✅ Homepage commercial 9/10 draft
-✅ Sample report preview page
-✅ Homepage links to sample report preview
-✅ Public acquisition resources hub
-✅ OpenAPI AI agent readiness SEO page
-✅ MCP server readiness SEO page
-✅ AI agent tool risk checklist SEO page
-✅ agentready.json explainer SEO page
-✅ Shared mobile navigation script
-✅ Mobile navigation active on docs page
-✅ Mobile navigation active on examples page
-✅ Mobile navigation active on static simulation page
-✅ Mobile navigation active on test page
-✅ Mobile navigation active on OpenAPI scanner page
-✅ Mobile navigation active on MCP scanner page
-✅ Mobile navigation propagation completed on public V1 pages
-✅ Legal notice page strengthened as pre-release draft
-✅ Privacy page strengthened as local-first pre-release draft
-✅ Terms page strengthened as pre-release draft
-✅ Browser V1 release candidate notes prepared as draft
-✅ Public docs page with OpenAPI/MCP/simulation split
-✅ Public examples page with OpenAPI/MCP/simulation fixtures
-✅ Static browser test harness with OpenAPI/MCP/export/simulation groups
-✅ Browser product QA checklist
-✅ Browser V1 release gate
-✅ Browser V1 QA result template
-✅ Browser V1 QA attempt recorded as pending
-✅ Browser V1 production mobile QA evidence recorded
-✅ Production test harness observed PASS — 31/31 checks passed
-✅ Browser V1 QA runbook
-✅ Long-term product roadmap
-✅ Release discipline
-✅ V2 CLI scope
-✅ AgentReady Checked trust layer draft
-✅ README and remaining roadmap aligned with current V1
-✅ OpenAPI fixtures
-✅ MCP fixtures
-✅ agentready.json export
-✅ agentready-simulation.json export
-✅ Markdown report export
-✅ Browser print / Save as PDF for OpenAPI report
-✅ MCP-specific report wording and scanner output polish
-✅ Browser print / Save as PDF for MCP report
-✅ OpenAPI-specific report wording and scanner output polish
-✅ agentready.json metadata: generated_at, source_type, score_interpretation
-✅ agentready.json contract spec strengthened
-✅ Minimal OpenAPI agentready.json example
-✅ Minimal MCP agentready.json example
-✅ Agent simulation exploration document
-✅ Minimal OpenAPI simulation scenario fixture
-✅ Minimal MCP simulation scenario fixture
-✅ Static simulation scenario examples index
-✅ Additional OpenAPI simulation scenario fixture
-✅ Additional MCP simulation scenario fixture
-✅ Expected static simulation result examples
-✅ Static simulation parser scope decision
-✅ Static simulation parser core
-✅ Static simulation parser test harness checks
-✅ Sitemap updated
-✅ Competitive positioning documented
-✅ Automated product strategy documented
-✅ CI/CD strategy documented
-✅ Commercial demos plan documented
-✅ Go-to-market plan documented
-✅ Commercial OpenAPI refund/payment risky fixture added
-✅ Commercial OpenAPI refund/payment fixed fixture added
-✅ Commercial MCP email risky fixture added
-✅ Commercial MCP email fixed fixture added
-✅ Commercial MCP files risky fixture added
-✅ Commercial MCP files fixed fixture added
-```
-
-## Main remaining roadmap
-
-Read these files first:
+Active direction:
 
 ```txt
-docs/agentready/BROWSER_V1_QA_RESULT.md
-docs/agentready/BROWSER_V1_QA_RUNBOOK.md
-docs/agentready/REMAINING_WORK.md
-docs/agentready/LONG_TERM_PRODUCT_ROADMAP.md
-docs/agentready/RELEASE_DISCIPLINE.md
-docs/agentready/V2_CLI_SCOPE.md
-docs/agentready/AGENTREADY_CHECKED_TRUST_LAYER.md
-docs/agentready/COMPETITIVE_POSITIONING.md
-docs/agentready/AUTOMATED_PRODUCT_STRATEGY.md
-docs/agentready/CI_CD_STRATEGY.md
-docs/agentready/COMMERCIAL_DEMOS_PLAN.md
-docs/agentready/GO_TO_MARKET_PLAN.md
+TimeProofs AgentReady = pre-deployment CI gate for agent-facing OpenAPI and MCP tools.
 ```
 
-## Immediate next PR
+## Completed CI Gate Sequence
 
 ```txt
-qa(agentready): run commercial demo fixtures through scanners
+1. CLI alpha merged.
+2. Commercial bad/fixed fixture CI Gate behavior validated.
+3. Rule codes AR001-AR010 stabilized.
+4. GitHub Action wrapper added.
+5. agentready.json spec v0.1 published and aligned with code.
 ```
 
-## Build next
-
-Requirements:
+## Immediate Next PR
 
 ```txt
-1. Run the OpenAPI scanner against:
-   - agentready-examples/commercial/openapi-refund-risk.bad.json
-   - agentready-examples/commercial/openapi-refund-risk.fixed.json
-2. Run the MCP scanner against:
-   - agentready-examples/commercial/mcp-email-risk.bad.json
-   - agentready-examples/commercial/mcp-email-risk.fixed.json
-   - agentready-examples/commercial/mcp-files-risk.bad.json
-   - agentready-examples/commercial/mcp-files-risk.fixed.json
-3. Confirm risky fixtures produce meaningfully lower scores than fixed fixtures.
-4. If contrast is weak, improve risk rules or fixture wording before creating public demo pages.
-5. Keep all demos static; do not call live APIs, MCP servers, or LLMs.
-6. Do not reconnect Vercel until a public page/release batch is ready.
+feat(site): add AgentReady CI public page
 ```
 
-## Browser V1 strict QA still pending
+Purpose:
 
-```txt
-Production mobile QA: PASS
-Production test harness: PASS — 31/31 checks passed
-Strict Browser V1 release gate: PENDING
-Missing strict checks: desktop Network tab, manual export downloads, desktop Print / Save as PDF.
-```
-
-## Parallel pending tasks
-
-```txt
-1. Complete strict desktop Browser V1 QA when a desktop browser is available.
-2. Validate commercial demo fixture score contrast.
-3. Prepare sample report improvements around commercial demos after score contrast is confirmed.
-```
+- explain AgentReady as a CI Gate;
+- show CLI usage;
+- show GitHub Action usage;
+- link to `agentready.json` v0.1 and AR rule codes;
+- keep the page static and local-first;
+- do not add backend, dashboard, Stripe, or account flows.
 
 ## Then
 
 ```txt
-1. qa(agentready): run commercial demo fixtures through scanners
-2. fix(agentready): improve risk rules if commercial demo contrast is weak
-3. docs(product): improve sample report around commercial demos
-4. docs(product): prepare monetization path after usage signals
-5. chore(deploy): reconnect Vercel only for a public release batch
+qa(site): run public AgentReady site QA/polish
 ```
 
-## Do not build yet
+QA should verify:
 
-```txt
-accounts
-payments
-dashboard
-database
-runtime firewall
-old proof-of-existence product
-public release claim before strict QA PASS
-V2 implementation before Browser V1 strict QA is understood or explicitly waived
-public demo pages before commercial fixture score contrast is checked
-```
+- homepage messaging;
+- `/agentready-ci` page;
+- OpenAPI scanner;
+- MCP scanner;
+- sample report;
+- docs/examples links;
+- no unintended backend/API/MCP/LLM calls.
 
-## Mandatory limitation text
+## Keep Stable
 
-```txt
+- scoring thresholds unless a fixture-backed bug is proven;
+- rule codes AR001-AR010;
+- `agentready.json` v0.1 compatibility;
+- bad/fixed commercial CI Gate decisions:
+  - Refund bad FAIL / fixed PASS
+  - Email bad FAIL / fixed PASS
+  - Files bad FAIL / fixed PASS
+
+## Do Not Build Yet
+
+- dashboard
+- Stripe/payment flow
+- backend
+- account system
+- runtime firewall
+- old proof-of-existence product
+
+## Mandatory Limitation
+
 TimeProofs AgentReady does not guarantee that an AI agent will never fail.
 It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.
-```
