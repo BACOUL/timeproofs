@@ -84,7 +84,7 @@ PUBLICATION APPROVED: NO
 | npm scope controlled | READY | Owner attestation dated 2026-07-11 |
 | npm 2FA or trusted publishing policy validated | READY | npm 2FA enabled; trusted publishing preferred for future dedicated setup |
 | Package made publishable after approval | READY | staged Community tarball package omits `private: true` and sets public npm publish config |
-| Final tarball content approved | BLOCKED | Previous JEASON approval dated 2026-07-11 is retained as historical evidence but superseded because the release channel was corrected to `alpha`, changing package README and `package.json`; a new approval is required for the new commit and tarball SHA-256 |
+| Final tarball content approved | READY | JEASON approval dated 2026-07-11 for commit `150da23932c1fb9433cb3d546904f03c18c909e9`, version `0.1.0-alpha.0`, tarball SHA-256 `602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe`, npm dist-tag `alpha` |
 | Tag created on reviewed commit | BLOCKED | No tag created |
 | Release notes verified | READY | Draft notes exist |
 | GitHub Release created | BLOCKED | No GitHub Release exists |

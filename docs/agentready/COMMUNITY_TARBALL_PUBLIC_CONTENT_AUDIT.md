@@ -1,9 +1,9 @@
 # AgentReady Community Tarball Public Content Audit
 
-Status: CONTENT APPROVAL SUPERSEDED - PUBLICATION NOT APPROVED
+Status: APPROVED CONTENT — PUBLICATION NOT APPROVED
 
 ```txt
-TARBALL CONTENT APPROVED: NO
+TARBALL CONTENT APPROVED: YES
 PUBLICATION APPROVED: NO
 VERSION: 0.1.0-alpha.0
 NPM DIST-TAG: alpha
@@ -115,6 +115,127 @@ The public package must not include:
 - GitHub workflow internals not required at runtime;
 - Pro, Team or Agency implementation;
 - package-public historical ProofSpec or timestamp language.
+
+## Final Approved Alpha Artifact
+
+```txt
+TARBALL CONTENT APPROVED: YES
+PUBLICATION APPROVED: NO
+PUBLICATION AUTHORIZED BY THIS APPROVAL: NO
+```
+
+Approver:
+
+```txt
+JEASON
+```
+
+Approval date:
+
+```txt
+2026-07-11
+```
+
+Approved package:
+
+```txt
+@timeproofs/agentready
+```
+
+Approved version:
+
+```txt
+0.1.0-alpha.0
+```
+
+Approved source commit:
+
+```txt
+150da23932c1fb9433cb3d546904f03c18c909e9
+```
+
+Approved tarball SHA-256:
+
+```txt
+602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe
+```
+
+Controlled GitHub Actions ZIP SHA-256:
+
+```txt
+1a318eab6a7af3a313da820546b36c4392b58502a025e8bd0a8a06ba45a3c248
+```
+
+Approved npm dist-tag:
+
+```txt
+alpha
+```
+
+Controlled file count:
+
+```txt
+21
+```
+
+Controlled files:
+
+```txt
+LICENSE
+NOTICE
+README.md
+agentready-core/classify-action.js
+agentready-core/detect-risks.js
+agentready-core/extract-mcp-tools.js
+agentready-core/extract-operations.js
+agentready-core/generate-agentready-json.js
+agentready-core/index.js
+agentready-core/parse-mcp-tools.js
+agentready-core/parse-openapi.js
+agentready-core/parse-yaml.js
+agentready-core/report.js
+agentready-core/scan-mcp-tools.js
+agentready-core/score.js
+agentready-core/simulation/parse-simulation-scenario.js
+agentready-core/simulation/run-static-simulation.js
+agentready-core/simulation/simulation-result.js
+agentready-core/types.js
+bin/agentready.js
+package.json
+```
+
+Controlled results:
+
+- manifest references the approved source commit;
+- real tarball SHA-256 matches the manifest and `.sha256` file;
+- GitHub Actions ZIP SHA-256 matches the controlled ZIP;
+- package_name is `@timeproofs/agentready`;
+- version is `0.1.0-alpha.0`;
+- package_publish_access is `public`;
+- package_publish_registry is `https://registry.npmjs.org/`;
+- package_publish_tag is `alpha`;
+- publication_ready is `false`;
+- package contains exactly 21 files;
+- Community package does not contain `private: true`;
+- root repository package remains private;
+- license is `Apache-2.0`;
+- `NOTICE` is present;
+- dependencies are empty;
+- README commands explicitly use `@alpha`;
+- no forbidden historical ProofSpec reference is present;
+- no secret or token is present;
+- no Pro, Stripe, backend or dashboard component is present;
+- no dangerous path or symlink is present;
+- `npm publish --dry-run --access public --tag alpha` passed;
+- no real publication was performed.
+
+Owner approval statement:
+
+```txt
+«J’approuve le contenu final corrigé du tarball AgentReady Community 0.1.0-alpha.0, lié au commit 150da23932c1fb9433cb3d546904f03c18c909e9 et au SHA-256 602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe, destiné au dist-tag npm alpha. Cette approbation n’autorise pas encore sa publication.»
+```
+
+This content approval is not a publication authorization.
 
 ## Superseded Approved Artifact
 
@@ -236,14 +357,11 @@ tarball contents.
 
 ## Current Blockers
 
-- a new tarball content approval is required for the corrected `alpha` channel artifact;
 - publication approval must remain `NO` until a dedicated approval flow changes it.
 
 ## Publication Impact
 
-The previously approved artifact contents have been inspected but are now
-superseded.
+The corrected alpha artifact contents have been inspected and approved.
 
-Publication remains blocked until the corrected `alpha` artifact receives a
-new owner content approval and explicit publication approval is recorded in a
-dedicated approval flow.
+Publication remains blocked until explicit publication approval is recorded in
+a dedicated approval flow.
