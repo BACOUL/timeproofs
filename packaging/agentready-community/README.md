@@ -21,16 +21,21 @@ The Community package includes:
 This package is prepared for a future npm publication, but it is not yet
 published.
 
+Version `0.1.0-alpha.0` is an alpha release candidate. When publication is
+explicitly approved, this version is planned for the npm `alpha` dist-tag only.
+It is not distributed under `latest`, and users must explicitly request
+`@alpha`.
+
 Planned public installation command - not yet available:
 
 ```sh
-npm install @timeproofs/agentready
+npm install @timeproofs/agentready@alpha
 ```
 
 Planned one-off usage command - not yet available:
 
 ```sh
-npx @timeproofs/agentready --help
+npx @timeproofs/agentready@alpha --help
 ```
 
 Until publication is explicitly approved, AgentReady Community can be tested

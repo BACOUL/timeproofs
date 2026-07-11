@@ -63,7 +63,8 @@ package boundary and is technically publishable after approval:
   "license": "Apache-2.0",
   "publishConfig": {
     "access": "public",
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "tag": "alpha"
   }
 }
 ```
@@ -71,6 +72,22 @@ package boundary and is technically publishable after approval:
 That staged tarball package must not contain `private: true`, but publication
 remains blocked until the final artifact, commit and approval checklist are
 explicitly approved.
+
+## Alpha Release Channel
+
+```txt
+VERSION: 0.1.0-alpha.0
+NPM DIST-TAG: alpha
+LATEST TAG MODIFIED: NO
+FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
+NPM TOKEN: none
+FUTURE AUTH: Trusted Publishing OIDC after initial package creation
+PUBLICATION APPROVED: NO
+```
+
+The `0.1.0-alpha.0` candidate must be installed with the explicit npm
+`alpha` dist-tag after publication. It must not be documented as available
+through the implicit `latest` channel.
 
 ## NPM Name Check
 
@@ -207,10 +224,17 @@ Expected version:
 This command is planned for a future release only:
 
 ```txt
-npm install @timeproofs/agentready
+npm install @timeproofs/agentready@alpha
 ```
 
-Do not document this as currently available until the package is actually published.
+One-off usage after publication is planned as:
+
+```txt
+npx @timeproofs/agentready@alpha --help
+```
+
+Do not document an untagged `npm install @timeproofs/agentready` command as
+available for version `0.1.0-alpha.0`.
 
 ## OpenAPI Example
 

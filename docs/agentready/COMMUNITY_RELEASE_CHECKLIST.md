@@ -11,6 +11,16 @@ Use only:
 
 Publication status: BLOCKED
 
+```txt
+VERSION: 0.1.0-alpha.0
+NPM DIST-TAG: alpha
+LATEST TAG MODIFIED: NO
+FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
+NPM TOKEN: none
+FUTURE AUTH: Trusted Publishing OIDC after initial package creation
+PUBLICATION APPROVED: NO
+```
+
 ## Product
 
 | Requirement | Status | Evidence |
@@ -34,7 +44,7 @@ Publication status: BLOCKED
 | Package name is `@timeproofs/agentready` | READY | `package.json` |
 | Version is `0.1.0-alpha.0` | READY | `package.json` |
 | Root repository package remains private | READY | root `package.json` keeps `private: true` |
-| Community tarball package is technically publishable | READY | staged tarball `package.json` omits `private: true` and sets `publishConfig.access: public` |
+| Community tarball package is technically publishable | READY | staged tarball `package.json` omits `private: true` and sets `publishConfig.access: public`, registry `https://registry.npmjs.org/`, and tag `alpha` |
 | Tarball can be built | READY | `npm pack --json` through release candidate script |
 | Tarball content is exact | READY | Release candidate script file-list assertion |
 | Checksum is generated | READY | SHA-256 file |
@@ -74,7 +84,7 @@ Publication status: BLOCKED
 | npm scope controlled | READY | Owner attestation dated 2026-07-11 |
 | npm 2FA or trusted publishing policy validated | READY | npm 2FA enabled; trusted publishing preferred for future dedicated setup |
 | Package made publishable after approval | READY | staged Community tarball package omits `private: true` and sets public npm publish config |
-| Final tarball content approved | READY | JEASON approval dated 2026-07-11 for commit `61a5dab90afe6363f7ea386712bb8cdc48e9f665`, version `0.1.0-alpha.0`, tarball SHA-256 `f1381d16277707cfc5d1005ed5e865139aa5a1ed0fcc1fb7de35c2f1a5eab77d` |
+| Final tarball content approved | BLOCKED | Previous JEASON approval dated 2026-07-11 is retained as historical evidence but superseded because the release channel was corrected to `alpha`, changing package README and `package.json`; a new approval is required for the new commit and tarball SHA-256 |
 | Tag created on reviewed commit | BLOCKED | No tag created |
 | Release notes verified | READY | Draft notes exist |
 | GitHub Release created | BLOCKED | No GitHub Release exists |

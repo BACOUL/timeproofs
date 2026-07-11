@@ -11,7 +11,27 @@ This is a Community release candidate note for review only.
 - GitHub tag: not created.
 - Marketplace listing: not created.
 - Root repository package: still protected by `private: true`.
-- Staged Community tarball package: technically publishable after approval, but not approved and not published.
+- Staged Community tarball package: technically publishable after approval under npm dist-tag `alpha`, but not approved and not published.
+
+```txt
+VERSION: 0.1.0-alpha.0
+NPM DIST-TAG: alpha
+LATEST TAG MODIFIED: NO
+FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
+NPM TOKEN: none
+FUTURE AUTH: Trusted Publishing OIDC after initial package creation
+PUBLICATION APPROVED: NO
+```
+
+Planned public commands after publication:
+
+```sh
+npm install @timeproofs/agentready@alpha
+npx @timeproofs/agentready@alpha --help
+```
+
+This alpha candidate must not be presented as available through the implicit
+`latest` npm channel.
 
 ## What This Candidate Contains
 
@@ -68,7 +88,7 @@ It identifies structural risks that may cause AI agents to misuse APIs, tools or
 
 ## Publication Blockers
 
-- final Community tarball content not approved.
+- corrected `alpha` Community tarball content not approved.
 - explicit release approval not granted.
 - no public tag exists.
 - no GitHub Release exists.
