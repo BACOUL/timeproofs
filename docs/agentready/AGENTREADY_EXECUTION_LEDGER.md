@@ -226,7 +226,7 @@ Required evidence:
   - PR #114 merge SHA
 
 ### ARB-GOV-003 - Add canonical AgentReady execution system
-- Status: IN_REVIEW
+- Status: DONE
 - Spec status: EXECUTION_READY
 - Owner: CODEX_AND_JEASON
 - Milestone: M1
@@ -1838,7 +1838,7 @@ Required evidence:
 
 ### AR-GOV-003 - Add canonical AgentReady execution system
 - Type: CODEX_PR
-- Status: IN_REVIEW
+- Status: DONE
 - Owner: CODEX_AND_JEASON
 - Milestone: M1
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
