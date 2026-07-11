@@ -19,11 +19,25 @@ Expected version:
 0.1.0-alpha.0
 ```
 
-Package must remain private until explicit publication approval:
+The root repository package must remain private:
 
 ```json
 "private": true
 ```
+
+The staged Community tarball package must be technically publishable after approval:
+
+```json
+{
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}
+```
+
+The staged Community tarball package must not contain `private: true`.
 
 Staged Community package license field:
 

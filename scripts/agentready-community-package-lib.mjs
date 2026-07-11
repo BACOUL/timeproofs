@@ -13,6 +13,10 @@ export const EXPECTED_PACKAGE_NAME = '@timeproofs/agentready';
 export const EXPECTED_VERSION = '0.1.0-alpha.0';
 export const EXPECTED_ROOT_LICENSE = 'SEE LICENSE IN LICENSE';
 export const COMMUNITY_LICENSE = 'Apache-2.0';
+export const COMMUNITY_PUBLISH_CONFIG = Object.freeze({
+  access: 'public',
+  registry: 'https://registry.npmjs.org/'
+});
 export const MANIFEST_NAME = 'agentready-community-release-candidate-manifest.json';
 export const RELEASE_NOTES_RELATIVE_PATH = 'docs/agentready/COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_0_DRAFT.md';
 
@@ -61,7 +65,6 @@ const COMMUNITY_SOURCE_FILES = [
 ];
 
 export const PUBLICATION_BLOCKERS = [
-  'package remains private',
   'final Community tarball content not approved',
   'explicit release approval not granted',
   'no public tag exists',
@@ -146,7 +149,9 @@ export async function createCommunityReleaseCandidate({ repoRoot, outputDir }) {
       planned_tag: plannedTag,
       commit_sha: commitSha,
       node_version: process.version,
-      package_private: true,
+      package_private: false,
+      package_publish_access: COMMUNITY_PUBLISH_CONFIG.access,
+      package_publish_registry: COMMUNITY_PUBLISH_CONFIG.registry,
       community_license: COMMUNITY_LICENSE,
       package_boundary: 'staged AgentReady Community package only',
       tarball: {
@@ -216,7 +221,6 @@ export async function createCommunityPackageStaging({ repoRoot, stagingRoot, roo
     name: rootPackageJson.name,
     version: rootPackageJson.version,
     description: rootPackageJson.description,
-    private: true,
     type: rootPackageJson.type,
     bin: rootPackageJson.bin,
     keywords: rootPackageJson.keywords,
@@ -225,6 +229,7 @@ export async function createCommunityPackageStaging({ repoRoot, stagingRoot, roo
     bugs: rootPackageJson.bugs,
     license: COMMUNITY_LICENSE,
     engines: rootPackageJson.engines,
+    publishConfig: COMMUNITY_PUBLISH_CONFIG,
     dependencies: {}
   };
 
@@ -259,7 +264,9 @@ export async function validateCommunityTarball(tarballPath) {
 
   const packageJson = JSON.parse(await readTarballText(entries, 'package.json'));
   assert.equal(packageJson.license, COMMUNITY_LICENSE);
-  assert.equal(packageJson.private, true);
+  assert.notEqual(packageJson.private, true);
+  assert.equal(packageJson.publishConfig?.access, COMMUNITY_PUBLISH_CONFIG.access);
+  assert.equal(packageJson.publishConfig?.registry, COMMUNITY_PUBLISH_CONFIG.registry);
   assert.deepEqual(Object.keys(packageJson.dependencies || {}), []);
 
   const licenseText = await readTarballText(entries, 'LICENSE');

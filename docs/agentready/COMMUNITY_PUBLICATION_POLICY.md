@@ -17,13 +17,29 @@ Current candidate version:
 0.1.0-alpha.0
 ```
 
-The package must remain:
+The root repository `package.json` must remain:
 
 ```json
 "private": true
 ```
 
-until an explicit publication approval PR changes it.
+This protects the repository root against accidental publication.
+
+The staged AgentReady Community tarball `package.json` must be technically publishable after approval:
+
+```json
+{
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}
+```
+
+The staged tarball package must not contain `private: true`.
+
+Publication remains forbidden until final tarball approval and explicit release approval are recorded.
 
 ## Authorized Publication Source
 
@@ -101,7 +117,10 @@ Before publication, verify:
 
 - package name;
 - version;
-- `private: true` until publication approval;
+- root `package.json` remains `private: true`;
+- staged package `package.json` does not contain `private: true`;
+- staged package `publishConfig.access` is `public`;
+- staged package `publishConfig.registry` is `https://registry.npmjs.org/`;
 - staged package `package.json` license is `Apache-2.0`;
 - staged package includes the dedicated Apache-2.0 `LICENSE`;
 - staged package includes `NOTICE`;
@@ -155,7 +174,7 @@ If a published package must be withdrawn:
 This PR must not:
 
 - run `npm publish`;
-- remove `private: true`;
+- remove `private: true` from the root repository `package.json`;
 - create a tag;
 - create a GitHub Release;
 - create a Marketplace listing;
