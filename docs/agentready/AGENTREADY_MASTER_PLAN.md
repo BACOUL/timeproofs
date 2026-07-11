@@ -28,18 +28,28 @@ Every new implementation prompt must be generated from the ledger.
 
 ## Execution Granularity
 
-One executable `CODEX_PR` task equals one coherent and realistically reviewable pull request.
+One ledger work item equals one independently verifiable unit of work.
 
-A `CODEX_PR` task must not combine multiple independently testable systems,
-multiple unrelated public page families or multiple lifecycle stages merely
-to reduce the planned prompt count.
+One Codex execution batch equals one coherent pull request that may complete
+one or several compatible ledger work items.
 
-A task must be split when its deliverables could reasonably be implemented,
-tested, reviewed, reverted or released independently.
+One execution-ready Codex batch equals one generated Codex prompt.
 
-Each executable task needs one concrete outcome, a coherent file or surface
-scope, precise dependencies, its own test plan, its own evidence, an
-independent rollback boundary and a short scope justification.
+Detailed `CODEX_WORK_ITEM` entries preserve the exhaustive inventory of
+known work. They are not automatically prompts.
+
+`CODEX_PR` is reserved for historical or current PR-shaped work such as
+#113, #114 and #115.
+
+An execution batch may group several work items only when they share a
+real implementation and review boundary: milestone, horizon, owner,
+functional family, compatible paths, common test plan and common rollback.
+
+Codex prompts are generated from execution batches, not directly from
+individual work items.
+
+Batching reduces execution overhead without removing deliverables,
+acceptance criteria, evidence requirements or auditability.
 
 The execution system represents all work known and approved as of the current Decision Log.
 

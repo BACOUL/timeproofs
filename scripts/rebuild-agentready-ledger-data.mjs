@@ -57,6 +57,8 @@ const doc = {
 };
 
 const tasks = [];
+const executionBatches = [];
+const historicalPrTaskIds = new Set(["AR-GOV-001", "AR-GOV-002", "AR-GOV-003"]);
 const slug = (value) => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 70);
 
 function task(input) {
@@ -85,13 +87,14 @@ function task(input) {
     required_commands: input.required_commands ?? [],
     required_evidence: input.required_evidence ?? [`${input.title} evidence`],
     evidence: input.evidence ?? [],
+    execution_batch_id: input.execution_batch_id ?? null,
     manual_actions: input.manual_actions ?? [],
     external_verification: input.external_verification ?? null,
     decision_gate: input.decision_gate ?? null,
     recurrence: input.recurrence ?? null,
     notes: input.notes ?? ""
   };
-  if (t.task_type === "CODEX_PR") {
+  if (t.task_type === "CODEX_PR" || t.task_type === "CODEX_WORK_ITEM") {
     t.branch = t.branch || slug(t.pr_title || t.title);
     t.pr_title = t.pr_title || `${t.workstream.toLowerCase()}(agentready): ${t.title.toLowerCase()}`;
     t.allowed_paths = t.allowed_paths.length ? t.allowed_paths : ["docs/agentready/**"];
@@ -106,7 +109,7 @@ function task(input) {
   return t;
 }
 const epic = (id, milestone, horizon, workstream, title, depends_on = []) => task({ id, task_type: "EPIC", milestone, delivery_horizon: horizon, workstream, title, objective: `${title} workstream.`, status: milestone === "M1" ? "IN_PROGRESS" : "PLANNED", owner: "CODEX_AND_JEASON", weight: 8, depends_on, source_documents: [doc.master], acceptance_criteria: ["child tasks are tracked"], required_evidence: ["child tasks tracked in ledger"], notes: "EPIC is not executable directly." });
-const codex = (parent_id, id, milestone, horizon, workstream, title, options = {}) => task({ parent_id, id, task_type: "CODEX_PR", milestone, delivery_horizon: horizon, workstream, title, ...options });
+const codex = (parent_id, id, milestone, horizon, workstream, title, options = {}) => task({ parent_id, id, task_type: historicalPrTaskIds.has(id) ? "CODEX_PR" : "CODEX_WORK_ITEM", milestone, delivery_horizon: horizon, workstream, title, ...options });
 const manual = (parent_id, id, type, milestone, horizon, workstream, title, owner, status, options = {}) => task({ parent_id, id, task_type: type, milestone, delivery_horizon: horizon, workstream, title, owner, status, ...options });
 const ownerAction = (parent_id, id, milestone, horizon, workstream, title, options = {}) => manual(parent_id, id, "OWNER_ACTION", milestone, horizon, workstream, title, "JEASON", "OWNER_ACTION_REQUIRED", options);
 const legalReview = (parent_id, id, milestone, horizon, title, options = {}) => manual(parent_id, id, "LEGAL_REVIEW", milestone, horizon, "LEG", title, "LEGAL", "LEGAL_REVIEW_REQUIRED", options);
@@ -217,6 +220,231 @@ external("AR-SITE-EPIC","AR-I18N-001","M8","POST_LAUNCH","I18N","Verify internat
 epic("AR-TEAM-EPIC","M8","POST_REVENUE","PRO","Team and Agency post-revenue expansion",["AR-LAUNCH-001","AR-MARKET-001"]);
 ["Add Team organizations and members","Add hosted CI history and governance","Add Agency client workspaces and branding"].forEach((title,i)=>codex("AR-TEAM-EPIC",`AR-TEAM-${String(i+1).padStart(3,"0")}`,"M8","POST_REVENUE","PRO",title,{status:"POST_REVENUE",depends_on:["AR-LAUNCH-001","AR-MARKET-001"],source_documents:[doc.entitlements],branch:slug(title),pr_title:`feat(post-revenue): ${title.toLowerCase()}`,allowed_paths:["docs/agentready/**","server/**","api/**","*.html"],forbidden_paths:["agentready-core/**","package.json","LICENSE"],manual_actions:["Owner approves post-revenue expansion"]}));
 
+const unique = (values) => [...new Set(values.filter(Boolean))];
+const tasksById = () => new Map(tasks.map((item) => [item.id, item]));
+const batchIds = new Set();
+
+function batchStatus(items, override) {
+  if (override) return override;
+  if (items.some((item) => item.status === "IN_REVIEW")) return "IN_REVIEW";
+  if (items.every((item) => item.status === "DONE")) return "DONE";
+  if (items.some((item) => item.status === "BLOCKED")) return "BLOCKED";
+  if (items.every((item) => item.status === "POST_REVENUE")) return "POST_REVENUE";
+  if (items.every((item) => item.status === "POST_LAUNCH")) return "POST_LAUNCH";
+  return "PLANNED";
+}
+
+function createExecutionBatch(input) {
+  const map = tasksById();
+  const items = input.work_item_ids.map((id) => {
+    const item = map.get(id);
+    if (!item) throw new Error(`Unknown work item for batch ${input.id}: ${id}`);
+    return item;
+  });
+  if (batchIds.has(input.id)) throw new Error(`Duplicate batch id: ${input.id}`);
+  batchIds.add(input.id);
+  for (const item of items) item.execution_batch_id = input.id;
+  const first = items[0];
+  const status = batchStatus(items, input.status);
+  const sourceDocs = unique(items.flatMap((item) => item.source_documents || []));
+  const allowedPaths = unique(items.flatMap((item) => item.allowed_paths || []));
+  const forbiddenPaths = unique(items.flatMap((item) => item.forbidden_paths || []));
+  const commands = unique(items.flatMap((item) => item.required_commands || []));
+  const multipleWorkstreams = new Set(items.map((item) => item.workstream)).size > 1;
+  const batch = {
+    id: input.id,
+    title: input.title,
+    objective: input.objective ?? `${input.title}.`,
+    milestone: input.milestone ?? first.milestone,
+    delivery_horizon: input.delivery_horizon ?? first.delivery_horizon,
+    status,
+    spec_status: input.spec_status ?? (status === "DONE" || status === "IN_REVIEW" ? "EXECUTION_READY" : "SKELETON"),
+    owner: input.owner ?? "CODEX",
+    work_item_ids: input.work_item_ids,
+    depends_on_batches: input.depends_on_batches ?? [],
+    depends_on_tasks: input.depends_on_tasks ?? [],
+    branch: input.branch ?? first.branch ?? slug(input.title),
+    pr_title: input.pr_title ?? first.pr_title ?? `${first.workstream.toLowerCase()}(agentready): ${input.title.toLowerCase()}`,
+    ...(input.pr_number ? { pr_number: input.pr_number } : {}),
+    allowed_paths: input.allowed_paths ?? allowedPaths,
+    forbidden_paths: input.forbidden_paths ?? forbiddenPaths,
+    deliverables: input.deliverables ?? items.map((item) => item.title),
+    acceptance_criteria: input.acceptance_criteria ?? unique(items.flatMap((item) => item.acceptance_criteria || [])),
+    independent_test_plan: input.independent_test_plan ?? unique(items.flatMap((item) => item.independent_test_plan || [])),
+    required_commands: input.required_commands ?? (commands.length ? commands : ["node scripts/validate-agentready-execution-system.mjs"]),
+    required_evidence: input.required_evidence ?? unique(items.flatMap((item) => item.required_evidence || [])),
+    rollback_boundary: input.rollback_boundary ?? `Revert ${input.id} without reverting unrelated batches.`,
+    scope_justification: input.scope_justification ?? (multipleWorkstreams ? "Batch groups compatible workstreams with one shared review and rollback boundary." : "Batch groups compatible work items with one shared review and rollback boundary."),
+    manual_actions: input.manual_actions ?? unique(items.flatMap((item) => item.manual_actions || [])),
+    external_verifications: input.external_verifications ?? unique(items.filter((item) => item.external_verification?.required).map((item) => item.external_verification.topic)),
+    evidence: input.evidence ?? [],
+    notes: input.notes ?? "",
+    source_documents: sourceDocs
+  };
+  executionBatches.push(batch);
+  return batch;
+}
+
+function createBatch(id, title, work_item_ids, options = {}) {
+  return createExecutionBatch({ id, title, work_item_ids, ...options });
+}
+
+createBatch("ARB-GOV-001", "Rebaseline Community and Pro strategy", ["AR-GOV-001"], {
+  status: "DONE",
+  owner: "CODEX",
+  pr_number: 113,
+  branch: "docs-agentready-community-pro-rebaseline",
+  pr_title: "docs(product): rebaseline AgentReady Community and Pro strategy",
+  required_evidence: ["PR #113 merge SHA"],
+  evidence: [{ type: "merge", pr: 113, merge_sha: "2db4ada5ce9ae59975bd47d3c26736444c01b983" }]
+});
+createBatch("ARB-GOV-002", "Resolve and record Community publication blockers", ["AR-GOV-002"], {
+  status: "DONE",
+  owner: "CODEX",
+  pr_number: 114,
+  branch: "release-agentready-community-publication-blockers",
+  pr_title: "release(agentready): resolve Community publication blockers",
+  required_evidence: ["PR #114 merge SHA"],
+  evidence: [{ type: "merge", pr: 114, merge_sha: "92c728f5f8fe2756e697bcc75bce90786f2ed147" }]
+});
+createBatch("ARB-GOV-003", "Add canonical AgentReady execution system", ["AR-GOV-003"], {
+  status: "IN_REVIEW",
+  owner: "CODEX_AND_JEASON",
+  pr_number: 115,
+  branch: "docs-agentready-canonical-execution-system",
+  pr_title: "docs(project): add canonical AgentReady execution system",
+  required_commands: [
+    "node scripts/rebuild-agentready-ledger-data.mjs",
+    "node scripts/generate-agentready-ledger-views.mjs --write",
+    "node scripts/generate-agentready-status.mjs --write",
+    "node scripts/generate-agentready-next-action.mjs --write",
+    "node scripts/generate-agentready-next-prompt.mjs --write",
+    "node scripts/validate-agentready-strategy-docs.mjs",
+    "node scripts/validate-agentready-execution-system.mjs"
+  ],
+  required_evidence: ["draft PR #115", "workflow success", "human ledger review before merge"],
+  manual_actions: ["HUMAN LEDGER REVIEW REQUIRED BEFORE MERGE"]
+});
+
+const batchDefinitions = [
+  ["ARB-COM-001", "Publish Community CLI and immutable release", ["AR-COM-006"], { status: "BLOCKED", spec_status: "SPECIFIED", scope_justification: "Atomic release boundary after owner and legal approval." }],
+  ["ARB-COM-002", "Publish public GitHub Action distribution", ["AR-COM-007", "AR-COM-009"]],
+  ["ARB-COM-003", "Validate public Community installation", ["AR-COM-008"]],
+  ["ARB-ONB-001", "Ship Community onboarding commands and tutorial", ["AR-ONB-001", "AR-ONB-002", "AR-ONB-003", "AR-ONB-004"]],
+  ["ARB-ENG-001", "Add benchmark corpus and annotation harness", ["AR-ENG-001"]],
+  ["ARB-ENG-002", "Add benchmark metric calculation", ["AR-ENG-002"]],
+  ["ARB-ENG-003", "Correct known AR rule semantics", ["AR-ENG-003"], { scope_justification: "Weight 5 compatible rule-semantics correction across the documented AR001 AR003 AR008 and AR010 gaps." }],
+  ["ARB-ENG-004", "Add performance benchmark and reproducible report", ["AR-ENG-004", "AR-ENG-005"]],
+  ["ARB-ENG-005", "Prepare voluntary false-positive reporting command", ["AR-ENG-006"]],
+  ["ARB-PRO-001", "Add versioned policy configuration", ["AR-PRO-001"]],
+  ["ARB-PRO-002", "Add baseline and new-risk comparison", ["AR-PRO-002", "AR-PRO-003"]],
+  ["ARB-PRO-003", "Add SARIF and pull request annotations", ["AR-PRO-004", "AR-PRO-005"]],
+  ["ARB-PRO-004", "Add local structured expiring exceptions", ["AR-PRO-006", "AR-PRO-007"]],
+  ["ARB-PRO-005", "Add Pro MVP integration tests", ["AR-PRO-008"]],
+  ["ARB-LIC-001", "Implement entitlement format", ["AR-LIC-001", "AR-LIC-002", "AR-LIC-003"]],
+  ["ARB-LIC-002", "Implement local license verification", ["AR-LIC-004"]],
+  ["ARB-LIC-003", "Implement repository registration", ["AR-LIC-005"]],
+  ["ARB-LIC-004", "Implement license lifecycle", ["AR-LIC-006", "AR-LIC-007"]],
+  ["ARB-LIC-005", "Add license security and privacy QA", ["AR-LIC-008"]],
+  ["ARB-BILL-001", "Add billing foundation", ["AR-BILL-002", "AR-BILL-003", "AR-BILL-004"]],
+  ["ARB-BILL-002", "Add billing events and provisioning", ["AR-BILL-005", "AR-BILL-006"]],
+  ["ARB-BILL-003", "Add billing lifecycle handling", ["AR-BILL-008", "AR-BILL-009", "AR-BILL-010"]],
+  ["ARB-BILL-004", "Add billing customer operations", ["AR-BILL-007", "AR-BILL-011", "AR-BILL-013", "AR-BILL-014"]],
+  ["ARB-BILL-005", "Add billing communications", ["AR-BILL-012"]],
+  ["ARB-BILL-006", "Run end-to-end billing QA", ["AR-BILL-015"]],
+  ["ARB-SUPPORT-001", "Publish support surfaces", ["AR-SUPPORT-001", "AR-SUPPORT-002"]],
+  ["ARB-SITE-001", "Publish positioning pages", ["AR-SITE-001", "AR-SITE-002", "AR-SITE-003", "AR-SITE-004", "AR-SITE-005"]],
+  ["ARB-SITE-002", "Publish protocol and CI pages", ["AR-SITE-006", "AR-SITE-007", "AR-SITE-008", "AR-SITE-009", "AR-SITE-016"]],
+  ["ARB-SITE-003", "Publish proof and methodology pages", ["AR-SITE-010", "AR-SITE-011", "AR-SITE-012", "AR-SITE-013", "AR-SITE-014", "AR-SITE-015"]],
+  ["ARB-SITE-004", "Publish trust and support pages", ["AR-SITE-017", "AR-SITE-018", "AR-SITE-019", "AR-SITE-022", "AR-SITE-023", "AR-SITE-024"]],
+  ["ARB-SITE-005", "Publish legal pages after legal review", ["AR-SITE-020", "AR-SITE-021"]],
+  ["ARB-SITE-006", "Publish commercial account journey pages", ["AR-SITE-025"]],
+  ["ARB-SEO-001", "Add SEO foundation", ["AR-SEO-001"]],
+  ["ARB-SEO-002", "Add SEO metadata and structured data", ["AR-SEO-002"]],
+  ["ARB-SEO-003", "Add SEO quality and monitoring", ["AR-SEO-003", "AR-SEO-012"]],
+  ["ARB-SEO-004", "Add SEO content architecture", ["AR-SEO-005", "AR-SEO-006", "AR-SEO-007", "AR-SEO-008"]],
+  ["ARB-SEO-005", "Add SEO rule example and comparison pages", ["AR-SEO-009", "AR-SEO-010", "AR-SEO-011"]],
+  ["ARB-GEO-001", "Add GEO canonical entity content", ["AR-GEO-001", "AR-GEO-002", "AR-GEO-006"]],
+  ["ARB-GEO-002", "Add GEO extractibility content", ["AR-GEO-003", "AR-GEO-004", "AR-GEO-005"]],
+  ["ARB-GEO-003", "Add GEO validation", ["AR-GEO-007"]],
+  ["ARB-GEO-004", "Add post-launch GEO monitoring experiments", ["AR-GEO-008", "AR-GEO-009"], { status: "POST_LAUNCH" }],
+  ["ARB-COMP-001", "Create competitive matrix and positioning", ["AR-COMP-002", "AR-COMP-003"]],
+  ["ARB-COMP-002", "Publish competitive category pages", ["AR-COMP-004", "AR-COMP-005"]],
+  ["ARB-COMP-003", "Create competitive update process", ["AR-COMP-006"]],
+  ["ARB-DOC-001", "Publish documentation hub", ["AR-DOC-001"]],
+  ["ARB-DOC-002", "Publish Community developer documentation", ["AR-DOC-002", "AR-DOC-003", "AR-DOC-004", "AR-DOC-005"]],
+  ["ARB-DOC-003", "Publish Pro developer documentation", ["AR-DOC-006", "AR-DOC-007", "AR-DOC-008"]],
+  ["ARB-DOC-004", "Publish support and compatibility documentation", ["AR-DOC-009", "AR-DOC-010", "AR-DOC-011"]],
+  ["ARB-DOC-005", "Publish OpenAPI and MCP examples documentation", ["AR-DOC-012", "AR-DOC-013"]],
+  ["ARB-INT-001", "Publish framework integration guides", ["AR-INT-001", "AR-INT-002", "AR-INT-003", "AR-INT-004", "AR-INT-005"], { status: "POST_LAUNCH" }],
+  ["ARB-CAT-001", "Publish AR dictionary model", ["AR-CAT-001"], { status: "POST_LAUNCH" }],
+  ["ARB-CAT-002", "Publish first AR rule pages", ["AR-CAT-002", "AR-CAT-003"], { status: "POST_LAUNCH" }],
+  ["ARB-CAT-003", "Publish remaining AR rule pages", ["AR-CAT-004", "AR-CAT-005", "AR-CAT-006"], { status: "POST_LAUNCH" }],
+  ["ARB-CAT-004", "Publish bad fixed library", ["AR-CAT-007"], { status: "POST_LAUNCH" }],
+  ["ARB-CAT-005", "Publish badge model", ["AR-CAT-008"], { status: "POST_LAUNCH" }],
+  ["ARB-CAT-006", "Publish namespace and benchmark governance", ["AR-CAT-009", "AR-CAT-010"], { status: "POST_LAUNCH" }],
+  ["ARB-CAT-007", "Prepare observatory and state report", ["AR-CAT-011", "AR-CAT-012"], { status: "POST_LAUNCH" }],
+  ["ARB-INFRA-001", "Define infrastructure architecture", ["AR-INFRA-001", "AR-INFRA-002"]],
+  ["ARB-INFRA-002", "Define data and migrations", ["AR-INFRA-003"]],
+  ["ARB-INFRA-003", "Define secrets and administration", ["AR-INFRA-004"]],
+  ["ARB-INFRA-004", "Define backup and recovery", ["AR-INFRA-005"]],
+  ["ARB-INFRA-005", "Define observability and costs", ["AR-INFRA-006"]],
+  ["ARB-SEC-001", "Record security review remediation tasks", ["AR-SEC-002"]],
+  ["ARB-SEC-002", "Fix blocking security review findings", ["AR-SEC-003"], { status: "BLOCKED" }],
+  ["ARB-REL-001", "Add reliability and incident runbooks", ["AR-REL-001", "AR-REL-002", "AR-REL-003"]],
+  ["ARB-LAUNCH-001", "Run launch audit", ["AR-LAUNCH-001"]],
+  ["ARB-ACQ-001", "Prepare global acquisition system", ["AR-ACQ-001", "AR-ACQ-002", "AR-ACQ-003"]],
+  ["ARB-TEAM-001", "Plan post-revenue Team and Agency expansion", ["AR-TEAM-001", "AR-TEAM-002", "AR-TEAM-003"], { status: "POST_REVENUE" }]
+];
+for (const [id, title, work_item_ids, options = {}] of batchDefinitions) createBatch(id, title, work_item_ids, options);
+
+function createFallbackBatches() {
+  const remaining = tasks.filter((item) => item.task_type === "CODEX_WORK_ITEM" && !item.execution_batch_id);
+  const grouped = new Map();
+  for (const item of remaining) {
+    const key = `${item.parent_id}|${item.milestone}|${item.delivery_horizon}|${item.workstream}|${item.status}`;
+    if (!grouped.has(key)) grouped.set(key, []);
+    grouped.get(key).push(item);
+  }
+  let index = 1;
+  for (const items of grouped.values()) {
+    for (let i = 0; i < items.length; i += 5) {
+      const chunk = items.slice(i, i + 5);
+      const first = chunk[0];
+      createBatch(`ARB-AUTO-${String(index++).padStart(3, "0")}`, `${first.workstream} execution batch`, chunk.map((item) => item.id), {
+        status: batchStatus(chunk),
+        branch: slug(`${first.workstream} ${chunk[0].title}`),
+        pr_title: `${first.workstream.toLowerCase()}(agentready): complete ${first.workstream.toLowerCase()} batch`,
+        scope_justification: "Fallback batch groups compatible remaining work items to avoid orphaned active tasks."
+      });
+    }
+  }
+}
+createFallbackBatches();
+
+function finalizeBatchDependencies() {
+  const map = tasksById();
+  const taskToBatch = new Map();
+  for (const batch of executionBatches) for (const id of batch.work_item_ids) taskToBatch.set(id, batch.id);
+  for (const batch of executionBatches) {
+    const own = new Set(batch.work_item_ids);
+    const taskDeps = [];
+    const batchDeps = [];
+    for (const id of batch.work_item_ids) {
+      const item = map.get(id);
+      for (const dep of item.depends_on || []) {
+        if (own.has(dep)) continue;
+        const depBatch = taskToBatch.get(dep);
+        if (depBatch && depBatch !== batch.id) batchDeps.push(depBatch);
+        else taskDeps.push(dep);
+      }
+    }
+    batch.depends_on_batches = unique([...(batch.depends_on_batches || []), ...batchDeps]);
+    batch.depends_on_tasks = unique([...(batch.depends_on_tasks || []), ...taskDeps]);
+  }
+}
+finalizeBatchDependencies();
+
 const surfaces = [
   ["/","Homepage","AR-SITE-001"],["/product","Product overview","AR-SITE-002"],["/community","Community","AR-SITE-003"],["/pro","Pro","AR-SITE-004"],["/pricing","Pricing","AR-SITE-005"],["/openapi","OpenAPI","AR-SITE-006"],["/mcp","MCP","AR-SITE-007"],["/agentready-ci","CI Gate","AR-SITE-008"],["/how-it-works","How it works","AR-SITE-009"],["/methodology","Methodology","AR-SITE-010"],["/limitations","Limitations","AR-SITE-011"],["/benchmark","Benchmark","AR-SITE-012"],["/examples/bad-fixed","Bad/fixed examples","AR-SITE-013"],["/rules","Rule overview","AR-SITE-014"],["/changelog","Changelog","AR-SITE-015"],["/compatibility","Compatibility","AR-SITE-016"],["/trust","Trust Center","AR-SITE-017"],["/security","Security","AR-SITE-018"],["/privacy","Privacy","AR-SITE-019"],["/terms","Terms","AR-SITE-020"],["/refund","Refund","AR-SITE-021"],["/responsible-disclosure","Responsible disclosure","AR-SITE-022"],["/status","Status","AR-SITE-023"],["/support","Support","AR-SITE-024"],["/account","Account","AR-SITE-025"],["/activation","Activation","AR-SITE-025"],["/billing","Billing","AR-SITE-025"],["/checkout-success","Checkout success","AR-SITE-025"],["/checkout-cancelled","Checkout cancelled","AR-SITE-025"],["/customer-portal","Customer Portal instructions","AR-SITE-025"],["/cancellation","Cancellation","AR-SITE-025"],["/recovery","Recovery","AR-SITE-025"],["/docs/installation","Installation docs","AR-DOC-002"],["/docs/cli","CLI reference","AR-DOC-003"],["/docs/github-action","GitHub Action docs","AR-DOC-004"],["/docs/configuration","Configuration docs","AR-DOC-005"],["/docs/policies","Policy docs","AR-DOC-005"],["/docs/baseline","Baseline docs","AR-DOC-006"],["/docs/sarif","SARIF docs","AR-DOC-007"],["/docs/exceptions","Exception docs","AR-DOC-008"],["/docs/troubleshooting","Troubleshooting","AR-DOC-009"],["/docs/migration","Migration docs","AR-DOC-011"],["/docs/examples","Examples docs","AR-DOC-012"],["/docs/integrations","Integrations index","AR-INT-001"]
 ];
@@ -232,7 +460,22 @@ function taskForDoc(file) { const f = file.toLowerCase(); if (f.includes('billin
 const docs = ['README.md','ROADMAP.md','AGENTREADY_PROJECT_CONTEXT.md',...walk('docs/agentready')];
 const document_coverage = [...new Set(docs)].filter((file) => !generatedSet.has(file)).map((file) => { const text = read(file); const historical = file.includes('/history/') || file.includes('/legacy/') || text.includes('Status: HISTORICAL') || text.includes('HISTORICAL') || text.includes('SUPERSEDED BY'); return { document: file, status: historical ? 'HISTORICAL' : 'ACTIVE', task_ids: historical ? ['AR-GOV-001'] : taskForDoc(file) }; });
 
-const ledger = { schema_version: '1.1', project: 'AgentReady', repository: 'BACOUL/timeproofs', strategic_authority: doc.master, execution_authority: doc.sequence, decision_authority: doc.decision, granularity_rule: 'A CODEX_PR task must not combine multiple independently testable systems, multiple unrelated public page families or multiple lifecycle stages merely to reduce the planned prompt count. A task must be split when its deliverables could reasonably be implemented, tested, reviewed, reverted or released independently.', generated_files: generatedFiles, milestones, tasks, site_surfaces, document_coverage };
+const ledger = {
+  schema_version: '1.2',
+  project: 'AgentReady',
+  repository: 'BACOUL/timeproofs',
+  strategic_authority: doc.master,
+  execution_authority: doc.sequence,
+  decision_authority: doc.decision,
+  granularity_rule: 'One ledger work item = one independently verifiable unit of work. One Codex execution batch = one coherent pull request that may complete one or several compatible ledger work items. One execution-ready Codex batch = one generated Codex prompt.',
+  batch_grouping_rule: 'Codex prompts are generated from coherent execution batches, not directly from detailed work items. Batching reduces execution overhead without removing deliverables, acceptance criteria, evidence requirements or auditability.',
+  generated_files: generatedFiles,
+  milestones,
+  tasks,
+  execution_batches: executionBatches,
+  site_surfaces,
+  document_coverage
+};
 writeFileSync('docs/agentready/AGENTREADY_EXECUTION_LEDGER.json', `${JSON.stringify(ledger, null, 2)}\
 `);
-console.log(`Wrote ${tasks.length} tasks, ${tasks.filter((t) => t.task_type === 'CODEX_PR').length} CODEX_PR tasks, ${site_surfaces.length} site surfaces, ${document_coverage.filter((d) => d.status === 'ACTIVE').length} active docs.`);
+console.log(`Wrote ${tasks.length} tasks, ${tasks.filter((t) => t.task_type === 'CODEX_WORK_ITEM').length} CODEX_WORK_ITEM tasks, ${executionBatches.length} execution batches, ${site_surfaces.length} site surfaces, ${document_coverage.filter((d) => d.status === 'ACTIVE').length} active docs.`);

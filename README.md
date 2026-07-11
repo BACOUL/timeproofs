@@ -25,6 +25,10 @@ If another document conflicts with the master plan, the master plan prevails.
 
 `AGENTREADY_EXECUTION_LEDGER.json` is the canonical detailed execution register. Generated Markdown views must not be edited manually. Every approved known task must exist in the canonical ledger.
 
+The ledger tracks detailed `CODEX_WORK_ITEM` entries separately from Codex
+execution batches. Future prompts are generated from `execution_batches`, not
+directly from individual work items.
+
 ## Product Direction
 
 This repository is focused on:
@@ -171,6 +175,10 @@ docs-agentready-canonical-execution-system
 ```
 
 This inserted governance PR creates the canonical ledger, generated status, next action, next Codex prompt, prompt counts, reconciliation scripts and change control.
+
+The prompt count is batch-based: one execution-ready batch equals one generated
+Codex prompt. Detailed work items remain individually auditable inside each
+batch.
 
 After this PR is merged and reconciled, the next action is selected by:
 

@@ -19,10 +19,60 @@ export const generatedPaths = {
 };
 
 const allowed = {
-  task_type: ["CODEX_PR", "OWNER_ACTION", "LEGAL_REVIEW", "SECURITY_REVIEW", "DESIGN_REVIEW", "EXTERNAL_SPECIALIST_ACTION", "EXTERNAL_VERIFICATION", "DECISION_GATE", "RECURRING_OPERATION", "EPIC"],
-  status: ["DONE", "READY", "IN_PROGRESS", "IN_REVIEW", "MERGED_PENDING_EVIDENCE", "PLANNED", "BLOCKED", "OWNER_ACTION_REQUIRED", "LEGAL_REVIEW_REQUIRED", "SECURITY_REVIEW_REQUIRED", "EXTERNAL_SPECIALIST_REQUIRED", "EXTERNAL_VERIFICATION_REQUIRED", "DECISION_REQUIRED", "RECURRING", "POST_LAUNCH", "POST_REVENUE", "REJECTED"],
+  task_type: [
+    "CODEX_WORK_ITEM",
+    "CODEX_PR",
+    "OWNER_ACTION",
+    "LEGAL_REVIEW",
+    "SECURITY_REVIEW",
+    "DESIGN_REVIEW",
+    "EXTERNAL_SPECIALIST_ACTION",
+    "EXTERNAL_VERIFICATION",
+    "DECISION_GATE",
+    "RECURRING_OPERATION",
+    "EPIC"
+  ],
+  status: [
+    "DONE",
+    "READY",
+    "IN_PROGRESS",
+    "IN_REVIEW",
+    "MERGED_PENDING_EVIDENCE",
+    "PLANNED",
+    "BLOCKED",
+    "OWNER_ACTION_REQUIRED",
+    "LEGAL_REVIEW_REQUIRED",
+    "SECURITY_REVIEW_REQUIRED",
+    "EXTERNAL_SPECIALIST_REQUIRED",
+    "EXTERNAL_VERIFICATION_REQUIRED",
+    "DECISION_REQUIRED",
+    "RECURRING",
+    "POST_LAUNCH",
+    "POST_REVENUE",
+    "REJECTED"
+  ],
+  batch_status: [
+    "DONE",
+    "READY",
+    "IN_PROGRESS",
+    "IN_REVIEW",
+    "MERGED_PENDING_EVIDENCE",
+    "PLANNED",
+    "BLOCKED",
+    "POST_LAUNCH",
+    "POST_REVENUE",
+    "REJECTED"
+  ],
+  spec_status: ["SKELETON", "SPECIFIED", "EXECUTION_READY"],
   owner: ["CODEX", "JEASON", "CODEX_AND_JEASON", "LEGAL", "DESIGN", "SECURITY", "EXTERNAL_SPECIALIST"],
-  delivery_horizon: ["BEFORE_COMMUNITY_PUBLICATION", "BEFORE_PRO_TECHNICAL_COMPLETION", "BEFORE_PRO_FIRST_SALE", "BEFORE_GLOBAL_LAUNCH", "POST_LAUNCH", "POST_REVENUE"],
+  delivery_horizon: [
+    "BEFORE_COMMUNITY_PUBLICATION",
+    "BEFORE_PRO_TECHNICAL_COMPLETION",
+    "BEFORE_PRO_FIRST_SALE",
+    "BEFORE_GLOBAL_LAUNCH",
+    "POST_LAUNCH",
+    "POST_REVENUE"
+  ],
   weight: [1, 2, 3, 5, 8]
 };
 
@@ -38,6 +88,14 @@ const horizonRank = {
 const generatedMarkdown = new Set(Object.values(generatedPaths).filter((filePath) => filePath.endsWith(".md")));
 const rootActiveDocuments = ["README.md", "ROADMAP.md", "AGENTREADY_PROJECT_CONTEXT.md"];
 const issuedStatuses = new Set(["IN_PROGRESS", "IN_REVIEW", "MERGED_PENDING_EVIDENCE"]);
+const blockingStatuses = [
+  "OWNER_ACTION_REQUIRED",
+  "LEGAL_REVIEW_REQUIRED",
+  "SECURITY_REVIEW_REQUIRED",
+  "EXTERNAL_SPECIALIST_REQUIRED",
+  "EXTERNAL_VERIFICATION_REQUIRED",
+  "DECISION_REQUIRED"
+];
 
 export function readLedger(filePath = LEDGER_PATH) {
   return JSON.parse(readFileSync(filePath, "utf8"));
@@ -51,8 +109,16 @@ export function taskMap(ledger) {
   return new Map(ledger.tasks.map((task) => [task.id, task]));
 }
 
-export function isDone(task) {
-  return task.status === "DONE";
+export function batchMap(ledger) {
+  return new Map((ledger.execution_batches || []).map((batch) => [batch.id, batch]));
+}
+
+export function isDone(item) {
+  return item.status === "DONE";
+}
+
+export function isCodexWorkItem(task) {
+  return ["CODEX_WORK_ITEM", "CODEX_PR"].includes(task.task_type);
 }
 
 export function isCodexPrompt(task) {
@@ -65,62 +131,126 @@ export function progress(tasks) {
   return { done, total, percent: total ? Number(((done / total) * 100).toFixed(1)) : 0 };
 }
 
-function milestoneNumber(task) {
-  return Number(String(task.milestone || "").replace(/^M/, "")) || 99;
+function milestoneNumber(item) {
+  return Number(String(item.milestone || "").replace(/^M/, "")) || 99;
 }
 
-function countRemaining(codexTasks, predicate) {
-  const remainingTasks = codexTasks.filter((task) => !isDone(task) && predicate(task));
-  const promptsToIssue = remainingTasks.filter((task) => !issuedStatuses.has(task.status)).length;
-  return { tasks: remainingTasks.length, prompts_to_issue: promptsToIssue };
+function isBatchIssued(batch) {
+  return issuedStatuses.has(batch.status);
+}
+
+function dependencyTasksDone(batch, tasks) {
+  return (batch.depends_on_tasks || []).every((id) => tasks.get(id)?.status === "DONE");
+}
+
+function dependencyBatchesDone(batch, batches) {
+  return (batch.depends_on_batches || []).every((id) => batches.get(id)?.status === "DONE");
+}
+
+function isExecutionReadyBatch(batch, ledger) {
+  return batch.owner === "CODEX"
+    && batch.status === "READY"
+    && batch.spec_status === "EXECUTION_READY"
+    && dependencyTasksDone(batch, taskMap(ledger))
+    && dependencyBatchesDone(batch, batchMap(ledger));
+}
+
+function countRemainingBatches(batches, predicate) {
+  const remaining = batches.filter((batch) => !isDone(batch) && predicate(batch));
+  const notYetIssued = remaining.filter((batch) => !isBatchIssued(batch)).length;
+  return { batches: remaining.length, not_yet_issued: notYetIssued };
+}
+
+function ceilDays(count, perDay) {
+  return Math.ceil(count / perDay);
 }
 
 export function promptCounts(ledger) {
-  const codex = ledger.tasks.filter(isCodexPrompt).filter((task) => task.status !== "REJECTED");
-  const remaining = codex.filter((task) => !isDone(task));
-  const by_status = {};
-  for (const task of codex) by_status[task.status] = (by_status[task.status] || 0) + 1;
-  const issuedNotMerged = remaining.filter((task) => issuedStatuses.has(task.status)).length;
-  const beforeCommunity = countRemaining(codex, (task) => task.delivery_horizon === "BEFORE_COMMUNITY_PUBLICATION" && milestoneNumber(task) <= 3);
-  const beforeProTechnical = countRemaining(codex, (task) => milestoneNumber(task) <= 5 && !["POST_LAUNCH", "POST_REVENUE"].includes(task.delivery_horizon));
-  const beforeProSale = countRemaining(codex, (task) => milestoneNumber(task) <= 6 && !["POST_LAUNCH", "POST_REVENUE"].includes(task.delivery_horizon));
-  const beforeGlobalLaunch = countRemaining(codex, (task) => milestoneNumber(task) <= 7 && !["POST_LAUNCH", "POST_REVENUE"].includes(task.delivery_horizon));
-  const category = countRemaining(codex, (task) => task.milestone === "M8" && task.delivery_horizon !== "POST_REVENUE");
-  const postLaunch = countRemaining(codex, (task) => task.delivery_horizon === "POST_LAUNCH");
-  const postRevenue = countRemaining(codex, (task) => task.delivery_horizon === "POST_REVENUE");
+  const detailed = ledger.tasks.filter(isCodexWorkItem).filter((task) => task.status !== "REJECTED");
+  const batches = (ledger.execution_batches || []).filter((batch) => batch.status !== "REJECTED");
+  const remainingBatches = batches.filter((batch) => !isDone(batch));
+  const batchStatus = {};
+  for (const batch of batches) batchStatus[batch.status] = (batchStatus[batch.status] || 0) + 1;
+  const beforeCommunity = countRemainingBatches(batches, (batch) => batch.delivery_horizon === "BEFORE_COMMUNITY_PUBLICATION" && milestoneNumber(batch) <= 3);
+  const beforeProTechnical = countRemainingBatches(batches, (batch) => milestoneNumber(batch) <= 5 && !["POST_LAUNCH", "POST_REVENUE"].includes(batch.delivery_horizon));
+  const beforeProSale = countRemainingBatches(batches, (batch) => milestoneNumber(batch) <= 6 && !["POST_LAUNCH", "POST_REVENUE"].includes(batch.delivery_horizon));
+  const beforeGlobalLaunch = countRemainingBatches(batches, (batch) => milestoneNumber(batch) <= 7 && !["POST_LAUNCH", "POST_REVENUE"].includes(batch.delivery_horizon));
+  const category = countRemainingBatches(batches, (batch) => batch.milestone === "M8" && batch.delivery_horizon !== "POST_REVENUE");
+  const postLaunch = countRemainingBatches(batches, (batch) => batch.delivery_horizon === "POST_LAUNCH");
+  const postRevenue = countRemainingBatches(batches, (batch) => batch.delivery_horizon === "POST_REVENUE");
+  const workItemsPerBatch = batches.map((batch) => (batch.work_item_ids || []).length);
+  const largestBatchSize = workItemsPerBatch.length ? Math.max(...workItemsPerBatch) : 0;
+  const averageWorkItemsPerBatch = workItemsPerBatch.length
+    ? Number((workItemsPerBatch.reduce((sum, value) => sum + value, 0) / workItemsPerBatch.length).toFixed(2))
+    : 0;
   return {
     generated_from: LEDGER_PATH,
-    total_planned_codex_pr_tasks: codex.length,
-    completed_codex_pr_tasks: codex.filter(isDone).length,
-    prompts_already_issued_and_currently_in_review: issuedNotMerged,
-    prompts_not_yet_issued: remaining.length - issuedNotMerged,
-    remaining_planned_codex_prompts: remaining.length,
-    by_status,
-    remaining_tasks_before_community_publication: beforeCommunity.tasks,
-    remaining_prompts_to_issue_before_community_publication: beforeCommunity.prompts_to_issue,
-    remaining_tasks_before_pro_technical_completion: beforeProTechnical.tasks,
-    remaining_prompts_to_issue_before_pro_technical_completion: beforeProTechnical.prompts_to_issue,
-    remaining_tasks_before_pro_first_sale: beforeProSale.tasks,
-    remaining_prompts_to_issue_before_pro_first_sale: beforeProSale.prompts_to_issue,
-    remaining_tasks_before_global_launch: beforeGlobalLaunch.tasks,
-    remaining_prompts_to_issue_before_global_launch: beforeGlobalLaunch.prompts_to_issue,
-    global_category_building: category.prompts_to_issue,
-    post_launch: postLaunch.prompts_to_issue,
-    post_revenue: postRevenue.prompts_to_issue,
+    detailed_work_items: {
+      total: detailed.length,
+      completed: detailed.filter(isDone).length,
+      remaining: detailed.filter((task) => !isDone(task)).length
+    },
+    execution_batches: {
+      total: batches.length,
+      completed: batches.filter(isDone).length,
+      in_review: batches.filter((batch) => batch.status === "IN_REVIEW").length,
+      not_yet_issued: remainingBatches.filter((batch) => !isBatchIssued(batch)).length,
+      immediately_executable: batches.filter((batch) => isExecutionReadyBatch(batch, ledger)).length,
+      by_status: batchStatus,
+      average_work_items_per_batch: averageWorkItemsPerBatch,
+      largest_batch_size: largestBatchSize,
+      batches_with_more_than_five_work_items: batches.filter((batch) => (batch.work_item_ids || []).length > 5).map((batch) => batch.id),
+      batches_with_more_than_eight_work_items: batches.filter((batch) => (batch.work_item_ids || []).length > 8).map((batch) => batch.id)
+    },
+    remaining_batches: {
+      before_community_publication: beforeCommunity.batches,
+      before_pro_technical_completion: beforeProTechnical.batches,
+      before_pro_first_sale: beforeProSale.batches,
+      before_global_launch: beforeGlobalLaunch.batches,
+      category_building: category.batches,
+      post_launch: postLaunch.batches,
+      post_revenue: postRevenue.batches
+    },
+    remaining_batches_not_yet_issued: {
+      before_community_publication: beforeCommunity.not_yet_issued,
+      before_pro_technical_completion: beforeProTechnical.not_yet_issued,
+      before_pro_first_sale: beforeProSale.not_yet_issued,
+      before_global_launch: beforeGlobalLaunch.not_yet_issued,
+      category_building: category.not_yet_issued,
+      post_launch: postLaunch.not_yet_issued,
+      post_revenue: postRevenue.not_yet_issued
+    },
+    capacity: {
+      community_days_at_5_per_day: ceilDays(beforeCommunity.not_yet_issued, 5),
+      community_days_at_6_per_day: ceilDays(beforeCommunity.not_yet_issued, 6),
+      pro_technical_days_at_5_per_day: ceilDays(beforeProTechnical.not_yet_issued, 5),
+      pro_technical_days_at_6_per_day: ceilDays(beforeProTechnical.not_yet_issued, 6),
+      first_sale_days_at_5_per_day: ceilDays(beforeProSale.not_yet_issued, 5),
+      first_sale_days_at_6_per_day: ceilDays(beforeProSale.not_yet_issued, 6),
+      global_launch_days_at_5_per_day: ceilDays(beforeGlobalLaunch.not_yet_issued, 5),
+      global_launch_days_at_6_per_day: ceilDays(beforeGlobalLaunch.not_yet_issued, 6)
+    },
     unplanned_correction_prompts: "not knowable in advance"
   };
 }
 
 export function selectNextAction(ledger) {
-  const inReview = ledger.tasks.find((task) => task.status === "IN_REVIEW");
-  if (inReview) return { task: inReview, action_owner: "JEASON", action_type: "REVIEW_OR_MERGE", summary: `Human review and merge decision for ${inReview.pr_title}.` };
-  const blocking = ["OWNER_ACTION_REQUIRED", "LEGAL_REVIEW_REQUIRED", "SECURITY_REVIEW_REQUIRED", "EXTERNAL_SPECIALIST_REQUIRED", "EXTERNAL_VERIFICATION_REQUIRED", "DECISION_REQUIRED"];
-  for (const status of blocking) {
-    const task = ledger.tasks.find((candidate) => candidate.status === status);
-    if (task) return { task, action_owner: task.owner, action_type: status, summary: task.objective };
+  const inReviewBatch = (ledger.execution_batches || []).find((batch) => batch.status === "IN_REVIEW");
+  if (inReviewBatch) {
+    return {
+      kind: "batch",
+      batch: inReviewBatch,
+      action_owner: "JEASON",
+      action_type: "REVIEW_OR_MERGE",
+      summary: `Human review and merge decision for ${inReviewBatch.pr_title}.`
+    };
   }
-  const ready = ledger.tasks.find((task) => task.status === "READY");
-  if (ready) return { task: ready, action_owner: ready.owner, action_type: "READY", summary: ready.objective };
+  for (const status of blockingStatuses) {
+    const task = ledger.tasks.find((candidate) => candidate.status === status);
+    if (task) return { kind: "task", task, action_owner: task.owner, action_type: status, summary: task.objective };
+  }
+  const readyBatch = (ledger.execution_batches || []).find((batch) => isExecutionReadyBatch(batch, ledger));
+  if (readyBatch) return { kind: "batch", batch: readyBatch, action_owner: readyBatch.owner, action_type: "READY", summary: readyBatch.objective };
   return null;
 }
 
@@ -189,11 +319,110 @@ export function documentCoverageStats(ledger) {
   };
 }
 
+function batchLabel(batch) {
+  return `${batch.id} - ${batch.title}`;
+}
+
+function nextActionText(next) {
+  if (!next) return "No next action is available.";
+  if (next.kind === "batch") {
+    return [
+      `Batch ID: ${next.batch.id}`,
+      `Title: ${next.batch.title}`,
+      `Action owner: ${next.action_owner}`,
+      `Action type: ${next.action_type}`,
+      `Status: ${next.batch.status}`,
+      `Specification: ${next.batch.spec_status}`,
+      `Objective:\n${next.batch.objective}`,
+      "",
+      `Work items:\n${linesFor(next.batch.work_item_ids)}`,
+      "",
+      `Required evidence:\n${linesFor(next.batch.required_evidence)}`,
+      "",
+      `Manual actions:\n${linesFor(next.batch.manual_actions)}`
+    ].join("\n");
+  }
+  return [
+    `Task ID: ${next.task.id}`,
+    `Title: ${next.task.title}`,
+    `Action owner: ${next.action_owner}`,
+    `Action type: ${next.action_type}`,
+    `Status: ${next.task.status}`,
+    `Objective:\n${next.task.objective}`,
+    "",
+    `Required evidence:\n${linesFor(next.task.required_evidence)}`,
+    "",
+    `Manual actions:\n${linesFor(next.task.manual_actions)}`
+  ].join("\n");
+}
+
+function promptForBatch(batch, ledger) {
+  const tasks = taskMap(ledger);
+  const items = (batch.work_item_ids || []).map((id) => tasks.get(id)).filter(Boolean);
+  return [
+    `Repository: BACOUL/timeproofs`,
+    `Base: timeproofs`,
+    `Batch ID: ${batch.id}`,
+    `Work item IDs: ${batch.work_item_ids.join(", ")}`,
+    `Milestone: ${batch.milestone}`,
+    `Horizon: ${batch.delivery_horizon}`,
+    `Objective: ${batch.objective}`,
+    `Branch: ${batch.branch}`,
+    `PR title: ${batch.pr_title}`,
+    "",
+    `Documents sources:`,
+    linesFor([...new Set(items.flatMap((item) => item.source_documents || []))]),
+    "",
+    `Dependencies:`,
+    linesFor([...(batch.depends_on_batches || []), ...(batch.depends_on_tasks || [])]),
+    "",
+    `Deliverables:`,
+    linesFor(batch.deliverables),
+    "",
+    `Routes or surfaces:`,
+    linesFor([...new Set(items.flatMap((item) => item.estimated_files_or_surfaces || item.deliverables || []))]),
+    "",
+    `Allowed paths:`,
+    linesFor(batch.allowed_paths),
+    "",
+    `Forbidden paths:`,
+    linesFor(batch.forbidden_paths),
+    "",
+    `Acceptance criteria by work item:`,
+    linesFor(items.map((item) => `${item.id}: ${(item.acceptance_criteria || []).join("; ")}`)),
+    "",
+    `Batch acceptance criteria:`,
+    linesFor(batch.acceptance_criteria),
+    "",
+    `Commands:`,
+    linesFor(batch.required_commands),
+    "",
+    `Independent test plan:`,
+    linesFor(batch.independent_test_plan),
+    "",
+    `Required evidence:`,
+    linesFor(batch.required_evidence),
+    "",
+    `Rollback: ${batch.rollback_boundary}`,
+    "",
+    `Manual actions:`,
+    linesFor(batch.manual_actions),
+    "",
+    `External verifications:`,
+    linesFor(batch.external_verifications),
+    "",
+    `Interdictions: stay strictly inside the batch scope, do not publish, do not create tags or releases, and do not merge the PR.`,
+    "",
+    `Response format: summarize files changed, validations, workflow status, draft status, and any remaining human review.`
+  ].join("\n");
+}
+
 export function generatedContents(ledger) {
   const counts = promptCounts(ledger);
   const next = selectNextAction(ledger);
   const global = progress(ledger.tasks);
   const coverageStats = documentCoverageStats(ledger);
+  const batches = ledger.execution_batches || [];
   const ledgerMd = [
     GENERATED_HEADER,
     "# AgentReady Execution Ledger",
@@ -209,7 +438,29 @@ export function generatedContents(ledger) {
       linesFor((m.criteria || []).map((criterion) => `${criterion.criterion_id}: ${criterion.description} -> ${(criterion.satisfied_by || []).join(", ")}`)),
       ""
     ]),
-    "## Tasks",
+    "## Execution Batches",
+    ...batches.flatMap((batch) => [
+      `### ${batchLabel(batch)}`,
+      `- Status: ${batch.status}`,
+      `- Spec status: ${batch.spec_status}`,
+      `- Owner: ${batch.owner}`,
+      `- Milestone: ${batch.milestone}`,
+      `- Horizon: ${batch.delivery_horizon}`,
+      `- Work items: ${batch.work_item_ids.join(", ")}`,
+      `- Depends on batches: ${batch.depends_on_batches.length ? batch.depends_on_batches.join(", ") : "None"}`,
+      `- Depends on tasks: ${batch.depends_on_tasks.length ? batch.depends_on_tasks.join(", ") : "None"}`,
+      `- Branch: ${batch.branch || "None"}`,
+      `- PR title: ${batch.pr_title || "None"}`,
+      batch.pr_number ? `- PR: #${batch.pr_number}` : "",
+      "Deliverables:",
+      linesFor(batch.deliverables),
+      "Acceptance criteria:",
+      linesFor(batch.acceptance_criteria),
+      "Required evidence:",
+      linesFor(batch.required_evidence),
+      ""
+    ]),
+    "## Detailed Tasks",
     ...ledger.tasks.flatMap((t) => [
       `### ${t.id} - ${t.title}`,
       `- Type: ${t.task_type}`,
@@ -219,9 +470,8 @@ export function generatedContents(ledger) {
       `- Horizon: ${t.delivery_horizon}`,
       `- Workstream: ${t.workstream}`,
       `- Weight: ${t.weight}`,
+      `- Execution batch: ${t.execution_batch_id || "None"}`,
       `- Depends on: ${t.depends_on.length ? t.depends_on.join(", ") : "None"}`,
-      `- Branch: ${t.branch || "None"}`,
-      `- PR title: ${t.pr_title || "None"}`,
       t.pr_number ? `- PR: #${t.pr_number}` : "",
       "Deliverables:",
       linesFor(t.deliverables),
@@ -239,7 +489,45 @@ export function generatedContents(ledger) {
     "## Summary",
     `- Total tasks: ${ledger.tasks.length}`,
     `- Total weighted progress: ${global.done}/${global.total} (${global.percent}%)`,
-    `- Next action: ${next ? `${next.task.id} - ${next.task.title}` : "None"}`,
+    `- Next action: ${next ? (next.kind === "batch" ? `${next.batch.id} - ${next.batch.title}` : `${next.task.id} - ${next.task.title}`) : "None"}`,
+    "",
+    "## Detailed Work Items",
+    `Total detailed Codex work items: ${counts.detailed_work_items.total}`,
+    `Completed detailed Codex work items: ${counts.detailed_work_items.completed}`,
+    `Remaining detailed Codex work items: ${counts.detailed_work_items.remaining}`,
+    "",
+    "## Execution Batches",
+    `Total planned Codex execution batches: ${counts.execution_batches.total}`,
+    `Completed Codex execution batches: ${counts.execution_batches.completed}`,
+    `Execution batches currently in review: ${counts.execution_batches.in_review}`,
+    `Execution batches not yet issued: ${counts.execution_batches.not_yet_issued}`,
+    `Immediately executable Codex prompts: ${counts.execution_batches.immediately_executable}`,
+    `Average work items per batch: ${counts.execution_batches.average_work_items_per_batch}`,
+    `Largest batch size: ${counts.execution_batches.largest_batch_size}`,
+    `Batches with more than five work items: ${counts.execution_batches.batches_with_more_than_five_work_items.length}`,
+    `Batches with more than eight work items: ${counts.execution_batches.batches_with_more_than_eight_work_items.length}`,
+    "",
+    "## Execution Batches By Objective",
+    `Execution batches remaining before Community publicly usable: ${counts.remaining_batches.before_community_publication}`,
+    `Execution batches remaining before Pro technically complete: ${counts.remaining_batches.before_pro_technical_completion}`,
+    `Execution batches remaining before first Pro sale: ${counts.remaining_batches.before_pro_first_sale}`,
+    `Execution batches remaining before global launch: ${counts.remaining_batches.before_global_launch}`,
+    `Execution batches for category-building: ${counts.remaining_batches.category_building}`,
+    `Execution batches post-launch: ${counts.remaining_batches.post_launch}`,
+    `Execution batches post-revenue: ${counts.remaining_batches.post_revenue}`,
+    "",
+    "## Prompt Day Capacity",
+    `Community days at 5 prompts/day: ${counts.capacity.community_days_at_5_per_day}`,
+    `Community days at 6 prompts/day: ${counts.capacity.community_days_at_6_per_day}`,
+    `Pro technical days at 5 prompts/day: ${counts.capacity.pro_technical_days_at_5_per_day}`,
+    `Pro technical days at 6 prompts/day: ${counts.capacity.pro_technical_days_at_6_per_day}`,
+    `First-sale days at 5 prompts/day: ${counts.capacity.first_sale_days_at_5_per_day}`,
+    `First-sale days at 6 prompts/day: ${counts.capacity.first_sale_days_at_6_per_day}`,
+    `Global-launch days at 5 prompts/day: ${counts.capacity.global_launch_days_at_5_per_day}`,
+    `Global-launch days at 6 prompts/day: ${counts.capacity.global_launch_days_at_6_per_day}`,
+    "",
+    "These figures count planned execution batches only.",
+    "They do not include owner, legal, security or external actions, waiting time, human review or unplanned correction prompts.",
     "",
     "## Progress By Horizon",
     ...[...groupBy(ledger.tasks, "delivery_horizon")].map(([h, tasks]) => {
@@ -253,34 +541,6 @@ export function generatedContents(ledger) {
       return `- ${m.id} ${m.name}: ${p.done}/${p.total} (${p.percent}%)`;
     }),
     "",
-    "## Codex Prompt Count",
-    `Total planned CODEX_PR tasks: ${counts.total_planned_codex_pr_tasks}`,
-    `Completed CODEX_PR tasks: ${counts.completed_codex_pr_tasks}`,
-    `Prompts already issued and currently in review: ${counts.prompts_already_issued_and_currently_in_review}`,
-    `Prompts not yet issued: ${counts.prompts_not_yet_issued}`,
-    `Remaining planned Codex prompts: ${counts.remaining_planned_codex_prompts}`,
-    `Currently READY Codex prompts: ${counts.by_status.READY || 0}`,
-    `Currently IN_PROGRESS Codex prompts: ${counts.by_status.IN_PROGRESS || 0}`,
-    `Currently IN_REVIEW Codex prompts: ${counts.by_status.IN_REVIEW || 0}`,
-    `Currently BLOCKED Codex prompts: ${counts.by_status.BLOCKED || 0}`,
-    "",
-    `Remaining tasks before Community publicly usable: ${counts.remaining_tasks_before_community_publication}`,
-    `Remaining prompts to issue before Community publicly usable: ${counts.remaining_prompts_to_issue_before_community_publication}`,
-    `Remaining tasks before Pro technically complete: ${counts.remaining_tasks_before_pro_technical_completion}`,
-    `Remaining prompts to issue before Pro technically complete: ${counts.remaining_prompts_to_issue_before_pro_technical_completion}`,
-    `Remaining tasks before Pro first sale: ${counts.remaining_tasks_before_pro_first_sale}`,
-    `Remaining prompts to issue before Pro first sale: ${counts.remaining_prompts_to_issue_before_pro_first_sale}`,
-    `Remaining tasks before global launch: ${counts.remaining_tasks_before_global_launch}`,
-    `Remaining prompts to issue before global launch: ${counts.remaining_prompts_to_issue_before_global_launch}`,
-    `Category-building prompts: ${counts.global_category_building}`,
-    `Post-launch prompts: ${counts.post_launch}`,
-    `Post-revenue prompts: ${counts.post_revenue}`,
-    "",
-    "Unplanned correction prompts: not knowable in advance",
-    "",
-    "The planned prompt count is exact for the current approved ledger.",
-    "Additional correction prompts may be required after human or automated review, but they cannot be known before the corresponding pull request is inspected.",
-    "",
     "## Document Coverage",
     `Active documents discovered: ${coverageStats.active_documents_discovered}`,
     `Active documents covered: ${coverageStats.active_documents_covered}`,
@@ -293,20 +553,27 @@ export function generatedContents(ledger) {
     GENERATED_HEADER,
     "# Next Action",
     "",
-    next ? `Task ID: ${next.task.id}\nTitle: ${next.task.title}\nAction owner: ${next.action_owner}\nAction type: ${next.action_type}\nStatus: ${next.task.status}\nObjective:\n${next.task.objective}\n\nRequired evidence:\n${linesFor(next.task.required_evidence)}\n\nManual actions:\n${linesFor(next.task.manual_actions)}` : "No next action is available.",
+    nextActionText(next),
     ""
   ].join("\n");
   const nextPrompt = [
     GENERATED_HEADER,
     "# Next Codex Prompt",
     "",
-    next && next.task.task_type === "CODEX_PR" && next.task.owner === "CODEX" && next.task.status === "READY"
-      ? `Repository: BACOUL/timeproofs\nBase: timeproofs\nTask ID: ${next.task.id}\nMilestone: ${next.task.milestone}\nHorizon: ${next.task.delivery_horizon}\nObjective: ${next.task.objective}\nBranch: ${next.task.branch}\nPR title: ${next.task.pr_title}\n\nAllowed paths:\n${linesFor(next.task.allowed_paths)}\n\nForbidden paths:\n${linesFor(next.task.forbidden_paths)}\n\nAcceptance criteria:\n${linesFor(next.task.acceptance_criteria)}\n\nRequired commands:\n${linesFor(next.task.required_commands)}\n\nRequired evidence:\n${linesFor(next.task.required_evidence)}\n\nStay strictly within scope and do not merge the PR.`
-      : `No CODEX task is currently authorized.\n\nThe current next action belongs to:\n${next ? `${next.action_owner} - ${next.task.id} - ${next.task.title}` : "None"}\n\nCodex must not start another implementation prompt until the blocking owner, legal, security, design, or external action is complete and the ledger has been reconciled.`,
+    next && next.kind === "batch" && isExecutionReadyBatch(next.batch, ledger)
+      ? promptForBatch(next.batch, ledger)
+      : `No CODEX execution batch is currently authorized.\n\nThe current next action belongs to:\n${next ? `${next.action_owner} - ${next.kind === "batch" ? `${next.batch.id} - ${next.batch.title}` : `${next.task.id} - ${next.task.title}`}` : "None"}\n\nCodex prompts are generated from execution batches, not directly from detailed work items. Codex must not start another implementation prompt until the blocking owner, legal, security, design, or external action is complete and the ledger has been reconciled.`,
     ""
   ].join("\n");
-  const ownerRows = ledger.tasks.filter((t) => t.owner !== "CODEX" || t.external_verification?.required).map((t) => `| ${t.id} | ${t.owner} | ${t.status} | ${t.title} | ${(t.required_evidence || []).join("<br>")} |`).join("\n");
-  const ownerActions = `${GENERATED_HEADER}\n# Owner And External Actions\n\n| Task ID | Owner | Status | Title | Required evidence |\n|---|---|---|---|---|\n${ownerRows}\n`;
+  const ownerTaskRows = ledger.tasks
+    .filter((t) => t.owner !== "CODEX" || t.external_verification?.required)
+    .map((t) => `| ${t.id} | task | ${t.owner} | ${t.status} | ${t.title} | ${(t.required_evidence || []).join("<br>")} |`)
+    .join("\n");
+  const ownerBatchRows = batches
+    .filter((batch) => batch.owner !== "CODEX")
+    .map((batch) => `| ${batch.id} | batch | ${batch.owner} | ${batch.status} | ${batch.title} | ${(batch.required_evidence || []).join("<br>")} |`)
+    .join("\n");
+  const ownerActions = `${GENERATED_HEADER}\n# Owner And External Actions\n\n| ID | Kind | Owner | Status | Title | Required evidence |\n|---|---|---|---|---|---|\n${[ownerTaskRows, ownerBatchRows].filter(Boolean).join("\n")}\n`;
   const surfaceRows = (ledger.site_surfaces || []).map((surface) => {
     return `| ${surface.task_id} | ${surface.planned_route} | ${surface.topic} | ${surface.audience} | ${surface.search_intent} | ${surface.ai_question_entity} | ${surface.cta} | ${surface.primary_evidence_source} | ${surface.structured_data} | ${surface.competitor_category} | ${surface.status} | ${surface.publication_criteria.join("<br>")} |`;
   }).join("\n");
@@ -354,9 +621,58 @@ function validateMilestoneCriteria(ledger, add) {
         add(horizonRank[task.delivery_horizon] <= horizonRank[milestone.delivery_horizon], `${id} horizon ${task.delivery_horizon} is later than ${criterion.criterion_id}`);
       }
       if (criterion.requires_human) {
-        add((criterion.satisfied_by || []).some((id) => map.get(id)?.task_type !== "CODEX_PR"), `${criterion.criterion_id} requires human evidence but has only CODEX_PR tasks`);
+        add((criterion.satisfied_by || []).some((id) => map.get(id)?.task_type !== "CODEX_WORK_ITEM" && map.get(id)?.task_type !== "CODEX_PR"), `${criterion.criterion_id} requires human evidence but has only Codex work items`);
       }
     }
+  }
+}
+
+function validateBatches(ledger, add) {
+  const tasks = taskMap(ledger);
+  const batches = batchMap(ledger);
+  add(Array.isArray(ledger.execution_batches), "execution_batches is absent");
+  const taskToBatches = new Map();
+  for (const batch of ledger.execution_batches || []) {
+    add(batch.id, "batch missing id");
+    add(allowed.batch_status.includes(batch.status), `${batch.id} invalid status`);
+    add(allowed.spec_status.includes(batch.spec_status), `${batch.id} invalid spec_status`);
+    add(allowed.owner.includes(batch.owner), `${batch.id} invalid owner`);
+    add(batch.work_item_ids?.length, `${batch.id} has no work items`);
+    add(batch.branch, `${batch.id} missing branch`);
+    add(batch.pr_title, `${batch.id} missing PR title`);
+    add(batch.rollback_boundary, `${batch.id} missing rollback boundary`);
+    add(batch.independent_test_plan?.length, `${batch.id} missing tests`);
+    add(batch.required_evidence?.length, `${batch.id} missing required evidence`);
+    add(batch.deliverables?.length, `${batch.id} missing deliverables`);
+    add(batch.acceptance_criteria?.length, `${batch.id} missing acceptance criteria`);
+    add(batch.required_commands?.length, `${batch.id} missing commands`);
+    if (batch.status === "DONE") add(batch.evidence?.length, `${batch.id} DONE without evidence`);
+    if (batch.status === "IN_REVIEW") add(batch.pr_number, `${batch.id} IN_REVIEW without PR number`);
+    if (batch.status === "READY") {
+      add(batch.spec_status === "EXECUTION_READY", `${batch.id} READY but not EXECUTION_READY`);
+      for (const dep of batch.depends_on_tasks || []) add(tasks.get(dep)?.status === "DONE", `${batch.id} READY but task dependency ${dep} is not DONE`);
+      for (const dep of batch.depends_on_batches || []) add(batches.get(dep)?.status === "DONE", `${batch.id} READY but batch dependency ${dep} is not DONE`);
+    }
+    add((batch.work_item_ids || []).length <= 8 || (batch.scope_justification || "").includes("exceeds eight"), `${batch.id} exceeds eight work items without justification`);
+    const batchTasks = (batch.work_item_ids || []).map((id) => tasks.get(id)).filter(Boolean);
+    add(batchTasks.length === (batch.work_item_ids || []).length, `${batch.id} references an unknown work item`);
+    const milestones = new Set(batchTasks.map((task) => task.milestone));
+    const horizons = new Set(batchTasks.map((task) => task.delivery_horizon));
+    const workstreams = new Set(batchTasks.map((task) => task.workstream));
+    add(milestones.size <= 1, `${batch.id} combines multiple milestones`);
+    add(horizons.size <= 1, `${batch.id} combines incompatible horizons`);
+    add(workstreams.size <= 1 || (batch.scope_justification || "").includes("compatible workstreams"), `${batch.id} combines incompatible workstreams`);
+    for (const task of batchTasks) {
+      add(["CODEX_WORK_ITEM", "CODEX_PR"].includes(task.task_type), `${batch.id} contains non-Codex work item ${task.id}`);
+      taskToBatches.set(task.id, [...(taskToBatches.get(task.id) || []), batch.id]);
+      add(task.execution_batch_id === batch.id, `${task.id} does not reciprocally reference ${batch.id}`);
+    }
+  }
+  for (const task of ledger.tasks.filter(isCodexWorkItem)) {
+    add(task.execution_batch_id, `${task.id} is not linked to an execution batch`);
+    add(batches.has(task.execution_batch_id), `${task.id} references unknown batch ${task.execution_batch_id}`);
+    const refs = taskToBatches.get(task.id) || [];
+    add(refs.length === 1, `${task.id} appears in ${refs.length} execution batches`);
   }
 }
 
@@ -365,7 +681,7 @@ export function validateLedger(ledger, compareGenerated = true) {
   const add = (condition, message) => { if (!condition) errors.push(message); };
   const map = taskMap(ledger);
   const ids = new Set();
-  add(ledger.schema_version === "1.1", "schema_version must be 1.1");
+  add(ledger.schema_version === "1.2", "schema_version must be 1.2");
   add(ledger.strategic_authority === "docs/agentready/AGENTREADY_MASTER_PLAN.md", "bad strategic authority");
   add(ledger.execution_authority === "docs/agentready/EXECUTION_SEQUENCE.md", "bad execution authority");
   add(ledger.decision_authority === "docs/agentready/DECISION_LOG.md", "bad decision authority");
@@ -396,16 +712,18 @@ export function validateLedger(ledger, compareGenerated = true) {
     if (task.status === "DONE") add(task.evidence?.length, `${task.id} DONE without evidence`);
     if (task.status === "READY") for (const dep of task.depends_on || []) add(map.get(dep)?.status === "DONE", `${task.id} READY but ${dep} is not DONE`);
     if (task.status === "IN_REVIEW") add(task.pr_number, `${task.id} IN_REVIEW without PR number`);
+    if (isCodexWorkItem(task)) {
+      for (const key of ["deliverables", "estimated_files_or_surfaces", "independent_test_plan"]) add(Array.isArray(task[key]) && task[key].length, `${task.id} Codex work item missing ${key}`);
+      add(task.rollback_boundary, `${task.id} Codex work item missing rollback boundary`);
+      add(task.scope_justification, `${task.id} Codex work item missing scope justification`);
+      if (task.weight === 5) add(task.scope_justification.includes("Weight 5"), `${task.id} weight 5 lacks explicit justification`);
+    } else {
+      add(!task.branch, `${task.id} non-Codex task must not have branch`);
+    }
     if (task.task_type === "CODEX_PR") {
+      add(task.pr_number, `${task.id} CODEX_PR must be historical or in review and have a PR number`);
       add(task.branch, `${task.id} CODEX_PR missing branch`);
       add(task.pr_title, `${task.id} CODEX_PR missing PR title`);
-      for (const key of ["deliverables", "estimated_files_or_surfaces", "independent_test_plan"]) add(Array.isArray(task[key]) && task[key].length, `${task.id} CODEX_PR missing ${key}`);
-      add(task.rollback_boundary, `${task.id} CODEX_PR missing rollback boundary`);
-      add(task.scope_justification, `${task.id} CODEX_PR missing scope justification`);
-      if (task.weight === 5) add(task.scope_justification.includes("Weight 5"), `${task.id} weight 5 lacks explicit justification`);
-      add((task.deliverables || []).length <= 4 || task.scope_justification.includes("strongly coupled"), `${task.id} combines too many deliverables without split justification`);
-    } else {
-      add(!task.branch, `${task.id} non-CODEX task must not have branch`);
     }
     if (task.task_type === "EPIC") add(ledger.tasks.some((candidate) => candidate.parent_id === task.id), `${task.id} EPIC has no child`);
     if (task.task_type === "RECURRING_OPERATION") add(task.recurrence?.frequency, `${task.id} recurring task lacks frequency`);
@@ -430,6 +748,7 @@ export function validateLedger(ledger, compareGenerated = true) {
     visited.add(id);
   }
   for (const id of map.keys()) visit(id);
+  validateBatches(ledger, add);
   add(selectNextAction(ledger), "no next action");
   const publish = map.get("AR-COM-006");
   if (publish?.status === "READY") for (const blocker of ["AR-COM-001", "AR-COM-002", "AR-COM-003", "AR-COM-004", "AR-COM-005", "AR-COM-006A"]) add(map.get(blocker)?.status === "DONE", `publish READY while ${blocker} is not DONE`);
@@ -437,19 +756,18 @@ export function validateLedger(ledger, compareGenerated = true) {
   for (const required of ["AR-BILL-001", "AR-BILL-002", "AR-BILL-003", "AR-BILL-004", "AR-BILL-005", "AR-BILL-006", "AR-BILL-007", "AR-BILL-008", "AR-BILL-009", "AR-BILL-010", "AR-BILL-011", "AR-BILL-012", "AR-BILL-013", "AR-FIN-001", "AR-BILL-014"]) add(map.has(required), `missing explicit billing/customer lifecycle task ${required}`);
   for (const required of ["AR-LIC-001", "AR-LIC-002", "AR-LIC-003", "AR-LIC-004", "AR-LIC-005", "AR-LIC-006", "AR-LIC-007", "AR-LIC-008"]) add(map.has(required), `missing explicit licensing task ${required}`);
   for (const required of ["AR-ENG-001", "AR-ENG-001H", "AR-ENG-002", "AR-ENG-003", "AR-ENG-004", "AR-ENG-005"]) add(map.has(required), `missing benchmark task ${required}`);
-  add(map.get("AR-ENG-001H")?.task_type !== "CODEX_PR" && map.get("AR-ENG-001H")?.owner !== "CODEX", "human annotation task must not be exclusively Codex");
+  add(map.get("AR-ENG-001H")?.task_type !== "CODEX_WORK_ITEM" && map.get("AR-ENG-001H")?.task_type !== "CODEX_PR" && map.get("AR-ENG-001H")?.owner !== "CODEX", "human annotation task must not be exclusively Codex");
   add(map.has("AR-SEC-001") && map.has("AR-SEC-002") && map.has("AR-SEC-003") && map.has("AR-SEC-004"), "security review remediation mechanism is incomplete");
   validateMilestoneCriteria(ledger, add);
   validateActiveDocumentCoverage(ledger, add);
   const counts = promptCounts(ledger);
-  const codex = ledger.tasks.filter((t) => isCodexPrompt(t) && t.status !== "REJECTED");
-  const actualRemaining = codex.filter((t) => !isDone(t)).length;
-  const actualIssued = codex.filter((t) => !isDone(t) && issuedStatuses.has(t.status)).length;
-  add(counts.remaining_planned_codex_prompts === actualRemaining, "prompt count mismatch");
-  add(counts.prompts_already_issued_and_currently_in_review === actualIssued, "issued prompt count mismatch");
-  add(counts.prompts_not_yet_issued === actualRemaining - actualIssued, "not-yet-issued prompt count mismatch");
-  add(!ledger.tasks.some((t) => t.task_type === "EPIC" && isCodexPrompt(t)), "EPIC counted as prompt");
-  add(counts.remaining_tasks_before_pro_first_sale === codex.filter((t) => !isDone(t) && !["POST_LAUNCH", "POST_REVENUE"].includes(t.delivery_horizon) && milestoneNumber(t) <= 6).length, "first sale task count includes wrong tasks");
+  const detailed = ledger.tasks.filter((t) => isCodexWorkItem(t) && t.status !== "REJECTED");
+  const batches = (ledger.execution_batches || []).filter((batch) => batch.status !== "REJECTED");
+  add(counts.detailed_work_items.total === detailed.length, "detailed work item total mismatch");
+  add(counts.execution_batches.total === batches.length, "execution batch total mismatch");
+  add(counts.execution_batches.immediately_executable === batches.filter((batch) => isExecutionReadyBatch(batch, ledger)).length, "immediately executable prompt count mismatch");
+  add(counts.remaining_batches.before_pro_first_sale === batches.filter((batch) => !isDone(batch) && !["POST_LAUNCH", "POST_REVENUE"].includes(batch.delivery_horizon) && milestoneNumber(batch) <= 6).length, "first sale batch count includes wrong batches");
+  add((ledger.execution_batches || []).some((batch) => batch.id === "ARB-GOV-003" && batch.status === "IN_REVIEW"), "PR #115 batch must remain IN_REVIEW");
   if (compareGenerated) {
     const generated = generatedContents(ledger);
     for (const [filePath, expected] of Object.entries(generated)) {
@@ -470,6 +788,34 @@ export function reconcileTask({ taskId, pr, mergeSha, write = false }) {
   task.pr_number = Number(pr);
   task.status = "DONE";
   task.evidence = [...(task.evidence || []), { type: "merge", pr: Number(pr), merge_sha: mergeSha }];
+  if (write) {
+    writeLedger(ledger);
+    writeGeneratedViews(ledger);
+  }
+  return { ledger, next: selectNextAction(ledger) };
+}
+
+export function reconcileBatch({ batchId, pr, mergeSha, write = false }) {
+  const ledger = readLedger();
+  const batches = batchMap(ledger);
+  const tasks = taskMap(ledger);
+  const batch = batches.get(batchId);
+  if (!batch) throw new Error(`Unknown batch: ${batchId}`);
+  if (!["IN_REVIEW", "MERGED_PENDING_EVIDENCE"].includes(batch.status)) throw new Error(`${batchId} must be IN_REVIEW or MERGED_PENDING_EVIDENCE`);
+  if (!mergeSha) throw new Error("merge SHA is required");
+  batch.pr_number = Number(pr);
+  batch.status = "DONE";
+  batch.evidence = [...(batch.evidence || []), { type: "merge", pr: Number(pr), merge_sha: mergeSha }];
+  for (const id of batch.work_item_ids || []) {
+    const task = tasks.get(id);
+    if (!task) continue;
+    const satisfied = (task.acceptance_criteria || []).length && (task.required_evidence || []).length;
+    if (satisfied && ["IN_REVIEW", "MERGED_PENDING_EVIDENCE", "PLANNED", "BLOCKED"].includes(task.status)) {
+      task.pr_number = Number(pr);
+      task.status = "DONE";
+      task.evidence = [...(task.evidence || []), { type: "merge", pr: Number(pr), merge_sha: mergeSha }];
+    }
+  }
   if (write) {
     writeLedger(ledger);
     writeGeneratedViews(ledger);

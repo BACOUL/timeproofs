@@ -17,6 +17,40 @@ its own test plan, its own evidence, an independent rollback boundary and a
 scope justification. If separate deliverables can reasonably be implemented,
 tested, reviewed, reverted or released independently, they must be split.
 
+The ledger distinguishes detailed work items from Codex execution batches:
+
+```txt
+One ledger work item = one independently verifiable unit of work.
+One Codex execution batch = one coherent pull request that may complete one or several compatible ledger work items.
+One execution-ready Codex batch = one generated Codex prompt.
+```
+
+Detailed `CODEX_WORK_ITEM` entries may remain numerous. They do not become
+prompts by themselves. Future prompts are generated only from
+`execution_batches`.
+
+A batch may be refined without a new strategic decision when the refinement
+does not change the product, scope, horizon, milestone, deliverable, or
+Community/Pro boundary.
+
+A change that removes, adds, materially changes, splits, merges or resequences
+approved deliverables must be recorded through the Decision Log and the
+canonical ledger before implementation.
+
+The batch cycle is:
+
+```txt
+planned work item
+-> batch refinement
+-> execution-ready batch
+-> dependencies completed
+-> generated Codex prompt
+-> implementation
+-> review
+-> merge
+-> reconciliation
+```
+
 ## Required Decision Fields
 
 - identifier;

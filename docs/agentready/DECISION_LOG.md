@@ -15,6 +15,19 @@ Status: ACTIVE
 
 This does not change the AgentReady product strategy, Community/Pro scope or publication blockers.
 
+## 2026-07-11 - Execution batches for Codex prompts
+
+Decision ID: DL-2026-07-11-CODEX-EXECUTION-BATCHES
+Decision: Codex prompts are generated from coherent execution batches, not directly from individual ledger work items.
+Reason: The detailed ledger remains the exhaustive inventory of known approved work, but one page, small document or microfunction should not automatically become a separate pull request and prompt.
+Impact: Future detailed Codex units use `CODEX_WORK_ITEM`; historical and current PR-shaped work remains `CODEX_PR`; `execution_batches` define the prompt-producing review boundary.
+Supersedes: prompt counts derived directly from every `CODEX_PR`-classified detail task.
+Status: ACTIVE
+
+Batching reduces execution overhead without removing deliverables, acceptance criteria, evidence requirements or auditability.
+
+A future change to batch composition does not require a strategic decision if it does not change product strategy, scope, horizon, milestone, deliverable, or the Community/Pro boundary. Any change that removes or materially changes an approved deliverable must be recorded through this Decision Log and the canonical ledger.
+
 ## 2026-07-10 - Shift-left contract security
 
 Decision: AgentReady is the shift-left CI gate for agent-facing contracts.

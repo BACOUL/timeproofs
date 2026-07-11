@@ -14,10 +14,20 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 Generated Markdown views are read-only projections of that ledger.
 
-Task granularity is mandatory. One executable `CODEX_PR` task must equal one
-coherent, realistically reviewable pull request. It must not combine multiple
-independently testable systems, unrelated public page families or lifecycle
-stages merely to reduce prompt count.
+Task granularity remains mandatory, but prompt counting is now batch-based.
+
+```txt
+One ledger work item = one independently verifiable unit of work.
+
+One Codex execution batch = one coherent pull request that may complete
+one or several compatible ledger work items.
+
+One execution-ready Codex batch = one generated Codex prompt.
+```
+
+`CODEX_WORK_ITEM` entries track detailed deliverables. `CODEX_PR` entries are
+reserved for historical or current PR-shaped work. Future Codex prompts must
+come from `execution_batches`, not directly from individual work items.
 
 Future discoveries must pass through:
 

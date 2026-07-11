@@ -26,6 +26,10 @@ If another document conflicts with `AGENTREADY_MASTER_PLAN.md`, the master plan 
 
 `AGENTREADY_EXECUTION_LEDGER.json` is the canonical detailed execution register. Generated Markdown views must not be edited manually.
 
+Detailed `CODEX_WORK_ITEM` entries are tracked separately from Codex execution
+batches. A generated Codex prompt comes from an execution-ready batch, not
+directly from an individual work item.
+
 Core promise:
 
 ```txt
@@ -166,6 +170,10 @@ docs-agentready-canonical-execution-system
 ```
 
 After it merges and is reconciled, use `NEXT_ACTION.md`. Use `NEXT_CODEX_PROMPT.md` only when it authorizes a Codex task.
+
+`NEXT_CODEX_PROMPT.md` is batch-based. If the next action belongs to Jeason,
+legal, security, design or an external verification, it must refuse to produce
+a new Codex implementation prompt.
 
 ## No-Drift Rule
 

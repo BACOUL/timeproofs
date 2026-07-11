@@ -5,13 +5,17 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 # Next Action
 
-Task ID: AR-GOV-003
+Batch ID: ARB-GOV-003
 Title: Add canonical AgentReady execution system
 Action owner: JEASON
 Action type: REVIEW_OR_MERGE
 Status: IN_REVIEW
+Specification: EXECUTION_READY
 Objective:
 Add canonical AgentReady execution system.
+
+Work items:
+  - AR-GOV-003
 
 Required evidence:
   - draft PR #115
