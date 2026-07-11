@@ -1252,7 +1252,7 @@
       "workstream": "LEG",
       "title": "Approve AgentReady Community license",
       "objective": "Approve AgentReady Community license.",
-      "status": "LEGAL_REVIEW_REQUIRED",
+      "status": "DONE",
       "owner": "LEGAL",
       "weight": 3,
       "depends_on": [
@@ -1263,21 +1263,41 @@
       ],
       "source_documents": [
         "docs/agentready/COMMUNITY_LICENSE_DECISION.md",
-        "LICENSE"
+        "packaging/agentready-community/LICENSE",
+        "packaging/agentready-community/NOTICE",
+        "packaging/agentready-community/README.md"
       ],
       "branch": "",
       "pr_title": "",
       "allowed_paths": [],
       "forbidden_paths": [],
       "acceptance_criteria": [
-        "final license approved",
-        "package license and LICENSE coherent"
+        "final Community package license approved",
+        "package license and dedicated LICENSE coherent",
+        "root repository LICENSE unchanged and outside package boundary"
       ],
       "required_commands": [],
       "required_evidence": [
-        "legal approval or owner legal decision"
+        "owner legal decision",
+        "contributor audit",
+        "package boundary documentation"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "type": "owner_legal_decision",
+          "date": "2026-07-11",
+          "decision_owner": "JEASON",
+          "license": "Apache-2.0",
+          "scope": "AgentReady Community npm package files only",
+          "trademarks_excluded": [
+            "TimeProofs",
+            "AgentReady"
+          ],
+          "pro_components_excluded": true,
+          "rights_audit": "Git history for bin/agentready.js, agentready-core/*.js, and agentready-core/simulation/*.js showed BACOUL and Codex author identities only; no third-party substantive contributor identified.",
+          "publication": false
+        }
+      ],
       "execution_batch_id": null,
       "manual_actions": [],
       "external_verification": null,
@@ -1298,7 +1318,7 @@
       "workstream": "LEG",
       "title": "Treat package-public ProofSpec references",
       "objective": "Treat package-public ProofSpec references.",
-      "status": "LEGAL_REVIEW_REQUIRED",
+      "status": "DONE",
       "owner": "LEGAL",
       "weight": 3,
       "depends_on": [
@@ -1309,22 +1329,37 @@
       ],
       "source_documents": [
         "docs/agentready/COMMUNITY_PROOFSPEC_REFERENCE_AUDIT.md",
-        "LICENSE",
-        "README.md"
+        "packaging/agentready-community/LICENSE",
+        "packaging/agentready-community/README.md"
       ],
       "branch": "",
       "pr_title": "",
       "allowed_paths": [],
       "forbidden_paths": [],
       "acceptance_criteria": [
-        "legacy references removed, renamed or legally justified"
+        "legacy references removed, renamed or legally justified for package-public files",
+        "root LICENSE excluded from Community tarball",
+        "root README excluded from Community tarball",
+        "ProofSpec references absent from Community tarball"
       ],
       "required_commands": [],
       "required_evidence": [
         "legal treatment decision",
-        "updated package-public audit"
+        "updated package-public audit",
+        "staged package validation"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "type": "package_public_reference_treatment",
+          "date": "2026-07-11",
+          "package_boundary": "Community package built from dedicated staging directory",
+          "root_license_excluded": true,
+          "root_readme_excluded": true,
+          "proofspec_absent_from_tarball": true,
+          "package_public_audit_updated": true,
+          "publication": false
+        }
+      ],
       "execution_batch_id": null,
       "manual_actions": [],
       "external_verification": null,
@@ -19830,9 +19865,9 @@
     },
     {
       "document": "docs/agentready/COMMUNITY_PROOFSPEC_REFERENCE_AUDIT.md",
-      "status": "HISTORICAL",
+      "status": "ACTIVE",
       "task_ids": [
-        "AR-GOV-001"
+        "AR-GOV-003"
       ]
     },
     {

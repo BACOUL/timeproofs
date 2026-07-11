@@ -102,6 +102,10 @@ Before publication, verify:
 - package name;
 - version;
 - `private: true` until publication approval;
+- staged package `package.json` license is `Apache-2.0`;
+- staged package includes the dedicated Apache-2.0 `LICENSE`;
+- staged package includes `NOTICE`;
+- staged package includes the dedicated Community `README.md`;
 - exact file list;
 - no secrets;
 - no `.env`;
@@ -110,10 +114,21 @@ Before publication, verify:
 - no Stripe;
 - no dashboard;
 - no private data;
-- `README.md`, `package.json`, and `LICENSE` coherence;
+- no root repository `LICENSE` in the tarball;
+- no root repository `README.md` in the tarball;
+- no package-public legacy ProofSpec or timestamp language;
+- `README.md`, `package.json`, `NOTICE`, and `LICENSE` coherence;
 - SHA-256 checksum;
 - source commit SHA;
 - release manifest.
+
+The Community package boundary must be built from:
+
+```txt
+packaging/agentready-community/
+```
+
+The root repository `LICENSE` remains outside the npm package boundary.
 
 ## Changelog, Tag, And Release
 

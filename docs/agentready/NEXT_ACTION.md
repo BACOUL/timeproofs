@@ -5,16 +5,17 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 # Next Action
 
-Task ID: AR-COM-003
-Title: Approve AgentReady Community license
-Action owner: LEGAL
-Action type: LEGAL_REVIEW_REQUIRED
-Status: LEGAL_REVIEW_REQUIRED
+Task ID: AR-COM-005
+Title: Approve final Community tarball content
+Action owner: JEASON
+Action type: OWNER_ACTION_REQUIRED
+Status: OWNER_ACTION_REQUIRED
 Objective:
-Approve AgentReady Community license.
+Approve final Community tarball content.
 
 Required evidence:
-  - legal approval or owner legal decision
+  - approved tarball SHA-256
+  - approved source commit
 
 Manual actions:
   - None

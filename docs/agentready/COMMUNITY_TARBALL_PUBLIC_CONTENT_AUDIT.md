@@ -2,7 +2,8 @@
 
 Status: BLOCKED UNTIL FINAL APPROVED ARTIFACT
 
-This document records the planned public package contents and the checks required before publication.
+This document records the planned public package contents and the checks
+required before publication.
 
 ## Package Metadata
 
@@ -18,56 +19,63 @@ Expected version:
 0.1.0-alpha.0
 ```
 
-Package must remain private in this PR:
+Package must remain private until explicit publication approval:
 
 ```json
 "private": true
 ```
 
-License field:
+Staged Community package license field:
 
 ```json
-"license": "SEE LICENSE IN LICENSE"
+"license": "Apache-2.0"
 ```
 
-## Included By npm Automatically
+The root repository `package.json` and `LICENSE` remain unchanged. They are
+not the staged package manifest or package license.
 
-- `package.json`
-- `README.md`
-- `LICENSE`
+## Dedicated Package Assets
 
-## Included By Package Whitelist
+The Community tarball is built from a staging directory that copies:
 
 ```txt
-bin/agentready.js
-agentready-core/*.js
-agentready-core/simulation/*.js
+packaging/agentready-community/LICENSE -> LICENSE
+packaging/agentready-community/NOTICE -> NOTICE
+packaging/agentready-community/README.md -> README.md
 ```
 
-## Expected Runtime Files
+## Expected Files
 
-- `bin/agentready.js`
-- `agentready-core/classify-action.js`
-- `agentready-core/detect-risks.js`
-- `agentready-core/extract-mcp-tools.js`
-- `agentready-core/extract-operations.js`
-- `agentready-core/generate-agentready-json.js`
-- `agentready-core/index.js`
-- `agentready-core/parse-mcp-tools.js`
-- `agentready-core/parse-openapi.js`
-- `agentready-core/parse-yaml.js`
-- `agentready-core/report.js`
-- `agentready-core/scan-mcp-tools.js`
-- `agentready-core/score.js`
-- `agentready-core/types.js`
-- `agentready-core/simulation/parse-simulation-scenario.js`
-- `agentready-core/simulation/run-static-simulation.js`
-- `agentready-core/simulation/simulation-result.js`
+```txt
+LICENSE
+NOTICE
+README.md
+package.json
+bin/agentready.js
+agentready-core/classify-action.js
+agentready-core/detect-risks.js
+agentready-core/extract-mcp-tools.js
+agentready-core/extract-operations.js
+agentready-core/generate-agentready-json.js
+agentready-core/index.js
+agentready-core/parse-mcp-tools.js
+agentready-core/parse-openapi.js
+agentready-core/parse-yaml.js
+agentready-core/report.js
+agentready-core/scan-mcp-tools.js
+agentready-core/score.js
+agentready-core/types.js
+agentready-core/simulation/parse-simulation-scenario.js
+agentready-core/simulation/run-static-simulation.js
+agentready-core/simulation/simulation-result.js
+```
 
 ## Expected Exclusions
 
 The public package must not include:
 
+- root repository `LICENSE`;
+- root repository `README.md`;
 - public HTML site;
 - docs directory;
 - tests;
@@ -78,14 +86,18 @@ The public package must not include:
 - secrets;
 - `.env`;
 - release candidate artifacts;
-- GitHub workflow internals not required at runtime.
+- GitHub workflow internals not required at runtime;
+- Pro, Team or Agency implementation;
+- package-public historical ProofSpec or timestamp language.
 
 ## Current Blockers
 
-- `LICENSE` still contains legacy ProofSpec/protocol/timestamp terms.
-- `README.md` contains a historical proof-of-existence note and is automatically included.
-- Final tarball SHA-256 must be produced by the Community release candidate workflow after blockers are closed.
+- final tarball file list must be approved by owner;
+- final source commit must be approved by owner;
+- final tarball SHA-256 must be approved by owner;
+- publication approval must remain `NO` until a dedicated approval flow changes it.
 
 ## Publication Impact
 
-Publication is blocked until the final artifact contents are inspected and the license/ProofSpec blockers are resolved or explicitly approved.
+Publication is blocked until the final artifact contents are inspected and
+explicitly approved.

@@ -6,6 +6,7 @@ import path from 'node:path';
 
 const workflowPath = '.github/workflows/agentready-community-release-candidate.yml';
 const scriptPath = 'scripts/create-agentready-community-release-candidate.mjs';
+const packageLibPath = 'scripts/agentready-community-package-lib.mjs';
 const packagePath = 'package.json';
 const releaseNotesPath = 'docs/agentready/COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_0_DRAFT.md';
 const workflowDocPath = 'docs/agentready/COMMUNITY_RELEASE_WORKFLOW.md';
@@ -14,6 +15,7 @@ const versioningPath = 'docs/agentready/GITHUB_ACTION_VERSIONING.md';
 
 const workflow = await fs.readFile(workflowPath, 'utf8');
 const script = await fs.readFile(scriptPath, 'utf8');
+const packageLib = await fs.readFile(packageLibPath, 'utf8');
 const pkg = JSON.parse(await fs.readFile(packagePath, 'utf8'));
 const releaseNotes = await fs.readFile(releaseNotesPath, 'utf8');
 const workflowDoc = await fs.readFile(workflowDocPath, 'utf8');
@@ -50,25 +52,42 @@ assert.match(workflow, /uses:\s*\.\/\.github\/actions\/agentready/);
 assert.match(workflow, /actions\/upload-artifact@v4/);
 assert.match(workflow, /retention-days:\s*7/);
 assert.match(workflow, /agentready-community-release-candidate-0\.1\.0-alpha\.0/);
+assert.match(workflow, /packaging\/agentready-community\/\*\*/);
+assert.match(workflow, /scripts\/agentready-community-package-lib\.mjs/);
+assert.match(workflow, /assert\.equal\(manifest\.community_license,\s*'Apache-2\.0'\)/);
+assert.match(workflow, /assert\.equal\(manifest\.tarball\.entry_count,\s*21\)/);
 
 assert.equal(pkg.private, true);
 assert.equal(pkg.name, '@timeproofs/agentready');
 assert.equal(pkg.version, '0.1.0-alpha.0');
 assert.equal(pkg.scripts['release:community:candidate'], 'node scripts/create-agentready-community-release-candidate.mjs');
 
-assert.match(script, /status:\s*'candidate_only'/);
-assert.match(script, /publication_ready:\s*false/);
-assert.match(script, /createHash\('sha256'\)/);
-assert.match(script, /git', \['rev-parse', 'HEAD'\]/);
+assert.match(script, /createCommunityReleaseCandidate/);
 assert.doesNotMatch(script, /process\.env\.GITHUB_SHA/);
-assert.match(script, /Release candidate output directory must not be the repository root\./);
-assert.match(script, /Release candidate output directory must be empty\./);
-assert.match(script, /'pack'/);
-assert.match(script, /'--pack-destination'/);
 assert.doesNotMatch(script, /\bnpm\s+publish\b/);
 assert.doesNotMatch(script, /\bgh\s+release\s+create\b/);
 assert.doesNotMatch(script, /\bgit\s+tag\b/);
 assert.doesNotMatch(script, authTokenPattern);
+
+assert.match(packageLib, /status:\s*'candidate_only'/);
+assert.match(packageLib, /publication_ready:\s*false/);
+assert.match(packageLib, /community_license:\s*COMMUNITY_LICENSE/);
+assert.match(packageLib, /createHash\('sha256'\)/);
+assert.match(packageLib, /\['rev-parse', 'HEAD'\]/);
+assert.match(packageLib, /Release candidate output directory must not be the repository root\./);
+assert.match(packageLib, /Release candidate output directory must be empty\./);
+assert.match(packageLib, /'pack'/);
+assert.match(packageLib, /'--pack-destination'/);
+assert.match(packageLib, /COMMUNITY_LICENSE = 'Apache-2\.0'/);
+assert.match(packageLib, /packaging\/agentready-community\/LICENSE/);
+assert.match(packageLib, /packaging\/agentready-community\/NOTICE/);
+assert.match(packageLib, /packaging\/agentready-community\/README\.md/);
+assert.match(packageLib, /validateCommunityTarball/);
+assert.match(packageLib, /ProofSpec/);
+assert.doesNotMatch(packageLib, /\bnpm\s+publish\b/);
+assert.doesNotMatch(packageLib, /\bgh\s+release\s+create\b/);
+assert.doesNotMatch(packageLib, /\bgit\s+tag\b/);
+assert.doesNotMatch(packageLib, authTokenPattern);
 
 assert.match(releaseNotes, /Draft release notes - not published\./);
 assert.doesNotMatch(releaseNotes, /published in Marketplace|npm package available|Pro plan is available|Team plan is available|Agency plan is available/);

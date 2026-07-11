@@ -1,44 +1,66 @@
 # AgentReady Community ProofSpec Reference Audit
 
-Status: LEGAL REVIEW REQUIRED
+Status: PACKAGE-PUBLIC REFERENCES TREATED
 
-This audit classifies legacy ProofSpec, proof-of-existence, timestamp, verification, protocol, and certification references before any Community publication.
+Publication status: NOT PUBLISHED
+
+Audit date: 2026-07-11
+
+## Decision
+
+The AgentReady Community package is built from a dedicated staging directory.
+It does not directly package the repository root.
+
+The staged package uses dedicated assets:
+
+- `packaging/agentready-community/LICENSE`;
+- `packaging/agentready-community/NOTICE`;
+- `packaging/agentready-community/README.md`.
+
+The historical root `LICENSE` file is not included in the Community tarball.
+
+The historical root `README.md` file is not included in the Community tarball.
 
 ## Package-Included Files
 
-These files are included or automatically included in the npm tarball.
+The package candidate is limited to these families:
 
-| File | Reference | Classification | Required action before publication |
-| --- | --- | --- | --- |
-| `LICENSE` | ProofSpec, TimeProofs protocol, timestamp proofs, attribution requirement | LEGAL REVIEW REQUIRED | Decide whether to replace, rewrite, or explicitly retain these terms for AgentReady Community. |
-| `README.md` | Previous proof-of-existence website and timestamp/verify pages described as historical | PUBLIC PACKAGE REFERENCE | Confirm whether this historical note should remain in the package README or move to docs outside the tarball. |
-| `package.json` | No ProofSpec reference | KEEP | No ProofSpec action required. |
-| `bin/agentready.js` | No ProofSpec reference found | KEEP | No ProofSpec action required. |
-| `agentready-core/*.js` | No ProofSpec reference found | KEEP | No ProofSpec action required. |
-| `agentready-core/simulation/*.js` | No ProofSpec reference found | KEEP | No ProofSpec action required. |
+```txt
+LICENSE
+NOTICE
+README.md
+package.json
+bin/agentready.js
+agentready-core/*.js
+agentready-core/simulation/*.js
+```
 
-## Repository References Outside The npm Package
+The release candidate script validates that the tarball does not contain:
 
-These references are outside the planned package whitelist and do not ship in the Community npm tarball.
+- `ProofSpec`;
+- `proof-of-existence`;
+- `TimeProofs protocol`;
+- `timestamp proofs`;
+- `Based on the TimeProofs open protocol`.
 
-| Area | Classification | Notes |
-| --- | --- | --- |
-| `docs/agentready/legacy/` | HISTORICAL ONLY | Legacy notes are intentionally retained outside the active package. |
-| older active planning docs marked `SUPERSEDED BY AGENTREADY_MASTER_PLAN.md` | HISTORICAL ONLY | These must not drive active scope. |
-| `.github/ISSUE_TEMPLATE/` ProofSpec references | OUTSIDE PACKAGE NPM | Should be cleaned later if still visible to contributors, but not a tarball blocker. |
-| active AgentReady docs mentioning certification as forbidden wording | KEEP | These references define prohibited claims. |
-| runtime references to `verify` meaning action success | KEEP | These are not ProofSpec/proof-of-existence references. |
+## Historical Repository References
 
-## Required Decision
+Historical references outside the package may remain in repository history,
+legacy notes, public HTML or active planning documents where they describe:
 
-The key publication blocker is the package-included `LICENSE` file. It contains legacy ProofSpec and proof-of-existence terms that may confuse AgentReady Community users or create license ambiguity.
+- removed legacy product context;
+- prohibited wording;
+- superseded decisions;
+- publication blockers that have now been resolved for the npm package.
 
-OWNER ACTION REQUIRED:
-
-1. Decide whether the package README should mention legacy proof-of-existence history.
-2. Decide whether `LICENSE` should be replaced or split before publication.
-3. Obtain legal approval before changing license terms.
+Those references do not ship in the AgentReady Community npm package candidate.
 
 ## Publication Impact
 
-Publication is blocked until package-included ProofSpec references are resolved or legally approved for retention.
+`AR-COM-004 — Treat package-public ProofSpec references` is resolved for the
+Community package boundary.
+
+This does not approve publication.
+
+Final publication still requires owner approval of the exact tarball SHA-256
+and source commit.

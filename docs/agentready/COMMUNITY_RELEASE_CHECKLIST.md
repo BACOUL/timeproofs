@@ -39,8 +39,9 @@ Publication status: BLOCKED
 | Checksum is generated | READY | SHA-256 file |
 | Clean installation works | READY | Package smoke test |
 | Node.js 20 is required | READY | `engines.node` |
-| License publication decision is approved | BLOCKED | AgentReady legal license decision not approved |
-| npm scope ownership is confirmed | BLOCKED | npm scope ownership not confirmed |
+| License publication decision is approved | READY | Owner decision dated 2026-07-11: staged AgentReady Community package uses Apache-2.0 |
+| npm scope ownership is confirmed | READY | Owner attestation dated 2026-07-11 confirms control of npm organization `timeproofs` and scope `@timeproofs` |
+| Dedicated Community package assets exist | READY | `packaging/agentready-community/LICENSE`, `NOTICE`, and `README.md` |
 
 ## GitHub Action
 
@@ -58,8 +59,9 @@ Publication status: BLOCKED
 
 | Requirement | Status | Evidence |
 |---|---|---|
-| AgentReady legal license validated | BLOCKED | Legal decision required |
-| Legacy LICENSE references resolved or clarified | BLOCKED | LICENSE unchanged |
+| AgentReady Community package license validated | READY | Owner decision dated 2026-07-11: Apache-2.0 for package files only |
+| Legacy root LICENSE excluded from Community package | READY | Release candidate script stages dedicated package assets |
+| Package-public legacy references resolved | READY | `COMMUNITY_PROOFSPEC_REFERENCE_AUDIT.md` |
 | Publisher identity confirmed | BLOCKED | Legal launch docs still require completion |
 | Mandatory limitation is present | READY | Docs include limitation text |
 
@@ -68,9 +70,10 @@ Publication status: BLOCKED
 | Requirement | Status | Evidence |
 |---|---|---|
 | Explicit release approval recorded | BLOCKED | Not granted |
-| npm scope controlled | BLOCKED | Scope ownership not confirmed |
-| npm 2FA or trusted publishing policy validated | BLOCKED | Not finalized |
+| npm scope controlled | READY | Owner attestation dated 2026-07-11 |
+| npm 2FA or trusted publishing policy validated | READY | npm 2FA enabled; trusted publishing preferred for future dedicated setup |
 | Package made publishable | BLOCKED | `private: true` remains |
+| Final tarball content approved | BLOCKED | Owner must approve final file list, source commit and SHA-256 |
 | Tag created on reviewed commit | BLOCKED | No tag created |
 | Release notes verified | READY | Draft notes exist |
 | GitHub Release created | BLOCKED | No GitHub Release exists |

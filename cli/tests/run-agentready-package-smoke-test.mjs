@@ -3,6 +3,12 @@ import { spawn } from 'node:child_process';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import {
+  COMMUNITY_LICENSE,
+  EXPECTED_PACKAGE_FILES,
+  createCommunityReleaseCandidate,
+  validateCommunityTarball
+} from '../../scripts/agentready-community-package-lib.mjs';
 
 const repoRoot = process.cwd();
 const packageJson = JSON.parse(await fs.readFile(path.join(repoRoot, 'package.json'), 'utf8'));
@@ -10,47 +16,25 @@ const tmpRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'agentready-package-'));
 const npmCli = process.env.AGENTREADY_NPM_CLI || process.env.npm_execpath || 'npm';
 const npxCli = process.env.AGENTREADY_NPX_CLI || inferNpxCli(npmCli) || 'npx';
 
-const expectedPackageFiles = [
-  'LICENSE',
-  'README.md',
-  'agentready-core/classify-action.js',
-  'agentready-core/detect-risks.js',
-  'agentready-core/extract-mcp-tools.js',
-  'agentready-core/extract-operations.js',
-  'agentready-core/generate-agentready-json.js',
-  'agentready-core/index.js',
-  'agentready-core/parse-mcp-tools.js',
-  'agentready-core/parse-openapi.js',
-  'agentready-core/parse-yaml.js',
-  'agentready-core/report.js',
-  'agentready-core/scan-mcp-tools.js',
-  'agentready-core/score.js',
-  'agentready-core/simulation/parse-simulation-scenario.js',
-  'agentready-core/simulation/run-static-simulation.js',
-  'agentready-core/simulation/simulation-result.js',
-  'agentready-core/types.js',
-  'bin/agentready.js',
-  'package.json'
-];
-
 try {
-  const pack = await npm(['pack', repoRoot, '--json'], { cwd: tmpRoot });
-  assert.equal(pack.code, 0, pack.stderr || pack.stdout);
-
-  const [packInfo] = JSON.parse(pack.stdout);
+  const candidateDir = path.join(tmpRoot, 'candidate');
+  const candidate = await createCommunityReleaseCandidate({ repoRoot, outputDir: candidateDir });
+  const { packInfo } = candidate;
   assert.ok(packInfo.filename, 'npm pack should return a tarball filename');
   assert.equal(packInfo.name, packageJson.name);
   assert.equal(packInfo.version, packageJson.version);
 
-  const tarballPath = path.join(tmpRoot, packInfo.filename);
+  const tarballPath = candidate.tarballPath;
   await assertFileExists(tarballPath);
   assertPackageFileList(packInfo.files.map((file) => file.path));
+  await validateCommunityTarball(tarballPath);
 
   const cleanProject = path.join(tmpRoot, 'clean-project');
   await fs.mkdir(cleanProject);
   await npm(['init', '-y'], { cwd: cleanProject });
   const install = await npm(['install', tarballPath, '--ignore-scripts'], { cwd: cleanProject });
   assert.equal(install.code, 0, install.stderr || install.stdout);
+  await assertInstalledPackageMetadata(cleanProject);
 
   await copyFixture('valid-simple-openapi.json', cleanProject);
   await copyFixture('mcp-tools-simple.json', cleanProject);
@@ -164,7 +148,7 @@ async function copyFixture(name, destinationRoot) {
 
 function assertPackageFileList(actualFiles) {
   const actual = [...actualFiles].sort();
-  const expected = [...expectedPackageFiles].sort();
+  const expected = [...EXPECTED_PACKAGE_FILES].sort();
   assert.deepEqual(actual, expected, `Unexpected tarball contents:\n${actual.join('\n')}`);
 }
 
@@ -173,21 +157,44 @@ async function assertFileExists(filePath) {
   assert.equal(stat.isFile(), true, `${filePath} should exist`);
 }
 
+async function assertInstalledPackageMetadata(cleanProject) {
+  const installedRoot = path.join(cleanProject, 'node_modules', '@timeproofs', 'agentready');
+  const installedPackage = JSON.parse(await fs.readFile(path.join(installedRoot, 'package.json'), 'utf8'));
+  assert.equal(installedPackage.license, COMMUNITY_LICENSE);
+  assert.equal(installedPackage.private, true);
+  await assertFileExists(path.join(installedRoot, 'LICENSE'));
+  await assertFileExists(path.join(installedRoot, 'NOTICE'));
+  const readme = await fs.readFile(path.join(installedRoot, 'README.md'), 'utf8');
+  assert.match(readme, /AgentReady Community/);
+  assert.doesNotMatch(readme, /ProofSpec|proof-of-existence|timestamp proofs|TimeProofs protocol/i);
+}
+
 function npm(args, options) {
   return runTool(npmCli, args, options);
 }
 
 function npx(args, options) {
+  if (path.basename(npxCli).toLowerCase().startsWith('pnpm')) {
+    const translated = args[0] === '--no-install' ? ['exec', ...args.slice(1)] : ['exec', ...args];
+    return runTool(npxCli, translated, options);
+  }
   return runTool(npxCli, args, options);
 }
 
 function runTool(command, args, options) {
   const isJsCli = command.endsWith('.js');
+  const isWindowsCmd = process.platform === 'win32' && /\.(cmd|bat)$/i.test(command);
+  if (isWindowsCmd) {
+    return runSpawn('cmd.exe', ['/d', '/s', '/c', [command, ...args].map(quoteCmdArg).join(' ')], options);
+  }
   const spawnCommand = isJsCli ? process.execPath : command;
   const spawnArgs = isJsCli ? [command, ...args] : args;
+  return runSpawn(spawnCommand, spawnArgs, options);
+}
 
+function runSpawn(command, args, options) {
   return new Promise((resolve, reject) => {
-    const child = spawn(spawnCommand, spawnArgs, {
+    const child = spawn(command, args, {
       cwd: options.cwd,
       stdio: ['ignore', 'pipe', 'pipe'],
       env: {
@@ -214,6 +221,12 @@ function runTool(command, args, options) {
       resolve({ code, stdout, stderr });
     });
   });
+}
+
+function quoteCmdArg(value) {
+  const text = String(value);
+  if (!/[ \t"&|<>^]/.test(text)) return text;
+  return `"${text.replace(/"/g, '\\"')}"`;
 }
 
 function inferNpxCli(command) {
