@@ -15,7 +15,7 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 | AR-COM-002 | task | JEASON | DONE | Define npm account security | owner-provided npm security evidence |
 | AR-COM-003 | task | LEGAL | DONE | Approve AgentReady Community license | owner legal decision<br>contributor audit<br>package boundary documentation |
 | AR-COM-004 | task | LEGAL | DONE | Treat package-public ProofSpec references | legal treatment decision<br>updated package-public audit<br>staged package validation |
-| AR-COM-005 | task | JEASON | OWNER_ACTION_REQUIRED | Approve final Community tarball content | approved tarball SHA-256<br>approved source commit |
+| AR-COM-005 | task | JEASON | DONE | Approve final Community tarball content | approved tarball SHA-256<br>approved source commit |
 | AR-COM-006A | task | JEASON | DECISION_REQUIRED | Explicit Community publication approval | approved commit<br>approved version<br>approved tarball SHA-256<br>approval date |
 | AR-ONB-EPIC | task | CODEX_AND_JEASON | PLANNED | Community onboarding | child tasks tracked in ledger |
 | AR-ENG-EPIC | task | CODEX_AND_JEASON | PLANNED | Engine benchmark and quality | child tasks tracked in ledger |

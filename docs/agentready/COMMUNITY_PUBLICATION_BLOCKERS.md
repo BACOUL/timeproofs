@@ -25,7 +25,7 @@ Allowed statuses:
 | publication policy | RESOLVED | `COMMUNITY_PUBLICATION_POLICY.md` defines source, auth, tests, tarball checks, tag/release rules, and publication bans. | Keep policy current. | Publication remains blocked by approval items. |
 | explicit approval gate | RESOLVED | `COMMUNITY_PUBLICATION_APPROVAL_CHECKLIST.md` exists and says `PUBLICATION APPROVED: NO`. | Owner must fill approval fields in a future approval PR. | Publication blocked until approval becomes YES in a dedicated approval flow. |
 | provenance workflow | RESOLVED | Existing `AgentReady Community Release Candidate` workflow validates source commit, package, action, checksum, and artifact. | Use it on the final approved commit. | Publication blocked until approval items resolve. |
-| exact tarball public content | OWNER ACTION REQUIRED | Release candidate script now stages and validates the exact Community package boundary. Final artifact still requires owner approval by SHA-256. | Owner must approve final tarball file list, source commit and SHA-256. | Publication blocked. |
+| exact tarball public content | RESOLVED | JEASON approval dated 2026-07-11 records final content approval for commit `61a5dab90afe6363f7ea386712bb8cdc48e9f665`, version `0.1.0-alpha.0`, tarball SHA-256 `f1381d16277707cfc5d1005ed5e865139aa5a1ed0fcc1fb7de35c2f1a5eab77d`, ZIP SHA-256 `9bd533ae306e2c511af6af2d7aad7031916d6f24eae3ed4b21cd5364e1dd12c1`, workflow run `13`, and 21 controlled files. | Keep approval tied to the exact source commit and tarball SHA-256. | Publication remains blocked until explicit publication approval is granted. |
 
 ## Current Publication Decision
 
@@ -35,5 +35,5 @@ PUBLICATION APPROVED: NO
 
 ## Next Authorized Action
 
-The next authorized action is owner approval of final Community tarball
-content, not publication.
+The next authorized action is explicit owner review of Community publication
+approval, not publication itself.
