@@ -1,6 +1,11 @@
 # AgentReady Community Tarball Public Content Audit
 
-Status: BLOCKED UNTIL FINAL APPROVED ARTIFACT
+Status: APPROVED CONTENT — PUBLICATION NOT APPROVED
+
+```txt
+TARBALL CONTENT APPROVED: YES
+PUBLICATION APPROVED: NO
+```
 
 This document records the planned public package contents and the checks
 required before publication.
@@ -104,14 +109,126 @@ The public package must not include:
 - Pro, Team or Agency implementation;
 - package-public historical ProofSpec or timestamp language.
 
+## Final Approved Artifact
+
+```txt
+TARBALL CONTENT APPROVED: YES
+PUBLICATION APPROVED: NO
+```
+
+Approver:
+
+```txt
+JEASON
+```
+
+Approval date:
+
+```txt
+2026-07-11
+```
+
+Approved package:
+
+```txt
+@timeproofs/agentready
+```
+
+Approved version:
+
+```txt
+0.1.0-alpha.0
+```
+
+Approved source commit:
+
+```txt
+61a5dab90afe6363f7ea386712bb8cdc48e9f665
+```
+
+Approved tarball SHA-256:
+
+```txt
+f1381d16277707cfc5d1005ed5e865139aa5a1ed0fcc1fb7de35c2f1a5eab77d
+```
+
+Controlled GitHub Actions ZIP SHA-256:
+
+```txt
+9bd533ae306e2c511af6af2d7aad7031916d6f24eae3ed4b21cd5364e1dd12c1
+```
+
+Workflow:
+
+```txt
+AgentReady Community Release Candidate
+Run #13
+Branch: timeproofs
+```
+
+Controlled file count:
+
+```txt
+21
+```
+
+Controlled files:
+
+```txt
+LICENSE
+NOTICE
+README.md
+package.json
+bin/agentready.js
+agentready-core/classify-action.js
+agentready-core/detect-risks.js
+agentready-core/extract-mcp-tools.js
+agentready-core/extract-operations.js
+agentready-core/generate-agentready-json.js
+agentready-core/index.js
+agentready-core/parse-mcp-tools.js
+agentready-core/parse-openapi.js
+agentready-core/parse-yaml.js
+agentready-core/report.js
+agentready-core/scan-mcp-tools.js
+agentready-core/score.js
+agentready-core/types.js
+agentready-core/simulation/parse-simulation-scenario.js
+agentready-core/simulation/run-static-simulation.js
+agentready-core/simulation/simulation-result.js
+```
+
+Controlled results:
+
+- manifest references the approved source commit;
+- tarball SHA-256 matches the manifest and `.sha256` file;
+- package contains exactly 21 files;
+- license is `Apache-2.0`;
+- `NOTICE` is present;
+- Community package does not contain `private: true`;
+- `publishConfig.access` is `public`;
+- `publishConfig.registry` is `https://registry.npmjs.org/`;
+- no forbidden historical ProofSpec reference is present;
+- no secret is present;
+- no Pro, Stripe, backend or internal content is present;
+- clean install and CLI behavior were validated;
+- no real publication was performed.
+
+Owner approval statement:
+
+```txt
+«J’approuve le contenu final du tarball AgentReady Community 0.1.0-alpha.0, lié au commit 61a5dab90afe6363f7ea386712bb8cdc48e9f665 et au SHA-256 f1381d16277707cfc5d1005ed5e865139aa5a1ed0fcc1fb7de35c2f1a5eab77d. Cette approbation n’autorise pas encore sa publication.»
+```
+
+This content approval is not a publication authorization.
+
 ## Current Blockers
 
-- final tarball file list must be approved by owner;
-- final source commit must be approved by owner;
-- final tarball SHA-256 must be approved by owner;
 - publication approval must remain `NO` until a dedicated approval flow changes it.
 
 ## Publication Impact
 
-Publication is blocked until the final artifact contents are inspected and
-explicitly approved.
+The final artifact contents have been inspected and approved.
+
+Publication remains blocked until explicit publication approval is recorded in
+a dedicated approval flow.

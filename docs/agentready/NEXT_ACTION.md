@@ -5,17 +5,19 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 # Next Action
 
-Task ID: AR-COM-005
-Title: Approve final Community tarball content
+Task ID: AR-COM-006A
+Title: Explicit Community publication approval
 Action owner: JEASON
-Action type: OWNER_ACTION_REQUIRED
-Status: OWNER_ACTION_REQUIRED
+Action type: DECISION_REQUIRED
+Status: DECISION_REQUIRED
 Objective:
-Approve final Community tarball content.
+Explicit Community publication approval.
 
 Required evidence:
+  - approved commit
+  - approved version
   - approved tarball SHA-256
-  - approved source commit
+  - approval date
 
 Manual actions:
   - None

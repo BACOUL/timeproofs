@@ -74,7 +74,7 @@ Publication status: BLOCKED
 | npm scope controlled | READY | Owner attestation dated 2026-07-11 |
 | npm 2FA or trusted publishing policy validated | READY | npm 2FA enabled; trusted publishing preferred for future dedicated setup |
 | Package made publishable after approval | READY | staged Community tarball package omits `private: true` and sets public npm publish config |
-| Final tarball content approved | BLOCKED | Owner must approve final file list, source commit and SHA-256 |
+| Final tarball content approved | READY | JEASON approval dated 2026-07-11 for commit `61a5dab90afe6363f7ea386712bb8cdc48e9f665`, version `0.1.0-alpha.0`, tarball SHA-256 `f1381d16277707cfc5d1005ed5e865139aa5a1ed0fcc1fb7de35c2f1a5eab77d` |
 | Tag created on reviewed commit | BLOCKED | No tag created |
 | Release notes verified | READY | Draft notes exist |
 | GitHub Release created | BLOCKED | No GitHub Release exists |
