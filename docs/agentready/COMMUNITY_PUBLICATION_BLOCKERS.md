@@ -25,7 +25,7 @@ Allowed statuses:
 | publication policy | RESOLVED | `COMMUNITY_PUBLICATION_POLICY.md` defines source, auth, tests, tarball checks, tag/release rules, and publication bans. | Keep policy current. | Publication remains blocked by approval items. |
 | explicit approval gate | RESOLVED | `COMMUNITY_PUBLICATION_APPROVAL_CHECKLIST.md` exists and says `PUBLICATION APPROVED: NO`. | Owner must fill approval fields in a future approval PR. | Publication blocked until approval becomes YES in a dedicated approval flow. |
 | provenance workflow | RESOLVED | Existing `AgentReady Community Release Candidate` workflow validates source commit, package, action, checksum, and artifact. | Use it on the final approved commit. | Publication blocked until approval items resolve. |
-| exact tarball public content | OWNER ACTION REQUIRED | Previous JEASON approval dated 2026-07-11 for commit `61a5dab90afe6363f7ea386712bb8cdc48e9f665` and tarball SHA-256 `f1381d16277707cfc5d1005ed5e865139aa5a1ed0fcc1fb7de35c2f1a5eab77d` is retained as historical evidence but superseded because the release channel was corrected to `alpha`, changing the package README and `package.json`. | JEASON must approve the corrected `alpha` tarball content, source commit and SHA-256. | Publication remains blocked until new tarball content approval and explicit publication approval are granted. |
+| exact tarball public content | RESOLVED | JEASON approval dated 2026-07-11 records corrected alpha tarball content approval for commit `150da23932c1fb9433cb3d546904f03c18c909e9`, version `0.1.0-alpha.0`, tarball SHA-256 `602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe`, ZIP SHA-256 `1a318eab6a7af3a313da820546b36c4392b58502a025e8bd0a8a06ba45a3c248`, npm dist-tag `alpha`, and 21 controlled files. | Keep approval tied to the exact source commit, tarball SHA-256 and npm dist-tag. | Publication remains blocked until explicit publication approval is granted. |
 
 ## Current Publication Decision
 
@@ -35,5 +35,5 @@ PUBLICATION APPROVED: NO
 
 ## Next Authorized Action
 
-The next authorized action is owner approval of the corrected `alpha`
-Community tarball content, not publication itself.
+The next authorized action is explicit owner review of Community publication
+approval, not publication itself.

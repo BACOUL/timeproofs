@@ -8,7 +8,7 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 No CODEX execution batch is currently authorized.
 
 The current next action belongs to:
-JEASON - AR-COM-005 - Approve final Community tarball content
+JEASON - AR-COM-006A - Explicit Community publication approval
 
 Codex prompts are generated from execution batches, not directly from detailed work items. Codex must not start another implementation prompt until the blocking owner, legal, security, design, or external action is complete and the ledger has been reconciled.
 
