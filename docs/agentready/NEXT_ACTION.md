@@ -5,16 +5,16 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 # Next Action
 
-Task ID: AR-COM-001
-Title: Verify control of npm scope @timeproofs
-Action owner: JEASON
-Action type: OWNER_ACTION_REQUIRED
-Status: OWNER_ACTION_REQUIRED
+Task ID: AR-COM-003
+Title: Approve AgentReady Community license
+Action owner: LEGAL
+Action type: LEGAL_REVIEW_REQUIRED
+Status: LEGAL_REVIEW_REQUIRED
 Objective:
-Verify control of npm scope @timeproofs.
+Approve AgentReady Community license.
 
 Required evidence:
-  - owner-provided npm scope evidence
+  - legal approval or owner legal decision
 
 Manual actions:
   - None

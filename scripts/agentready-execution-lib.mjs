@@ -143,6 +143,10 @@ function dependencyTasksDone(batch, tasks) {
   return (batch.depends_on_tasks || []).every((id) => tasks.get(id)?.status === "DONE");
 }
 
+function taskDependenciesDone(task, tasks) {
+  return (task.depends_on || []).every((id) => tasks.get(id)?.status === "DONE");
+}
+
 function dependencyBatchesDone(batch, batches) {
   return (batch.depends_on_batches || []).every((id) => batches.get(id)?.status === "DONE");
 }
@@ -235,6 +239,7 @@ export function promptCounts(ledger) {
 }
 
 export function selectNextAction(ledger) {
+  const tasks = taskMap(ledger);
   const inReviewBatch = (ledger.execution_batches || []).find((batch) => batch.status === "IN_REVIEW");
   if (inReviewBatch) {
     return {
@@ -245,9 +250,10 @@ export function selectNextAction(ledger) {
       summary: `Human review and merge decision for ${inReviewBatch.pr_title}.`
     };
   }
-  for (const status of blockingStatuses) {
-    const task = ledger.tasks.find((candidate) => candidate.status === status);
-    if (task) return { kind: "task", task, action_owner: task.owner, action_type: status, summary: task.objective };
+  for (const task of ledger.tasks) {
+    if (blockingStatuses.includes(task.status) && taskDependenciesDone(task, tasks)) {
+      return { kind: "task", task, action_owner: task.owner, action_type: task.status, summary: task.objective };
+    }
   }
   const readyBatch = (ledger.execution_batches || []).find((batch) => isExecutionReadyBatch(batch, ledger));
   if (readyBatch) return { kind: "batch", batch: readyBatch, action_owner: readyBatch.owner, action_type: "READY", summary: readyBatch.objective };
@@ -808,6 +814,14 @@ export function validateLedger(ledger, compareGenerated = true) {
   for (const id of map.keys()) visit(id);
   validateBatches(ledger, add);
   add(selectNextAction(ledger), "no next action");
+  const next = selectNextAction(ledger);
+  if (next?.kind === "task") {
+    for (const dep of next.task.depends_on || []) add(map.get(dep)?.status === "DONE", `${next.task.id} selected before dependency ${dep} is DONE`);
+  }
+  const tarballApproval = map.get("AR-COM-005");
+  if (next?.kind === "task" && next.task.id === "AR-COM-005") {
+    for (const dep of ["AR-COM-003", "AR-COM-004"]) add(map.get(dep)?.status === "DONE", "AR-COM-005 selected before license and ProofSpec dependencies are DONE");
+  }
   const publish = map.get("AR-COM-006");
   if (publish?.status === "READY") for (const blocker of ["AR-COM-001", "AR-COM-002", "AR-COM-003", "AR-COM-004", "AR-COM-005", "AR-COM-006A"]) add(map.get(blocker)?.status === "DONE", `publish READY while ${blocker} is not DONE`);
   for (const task of ledger.tasks.filter((t) => t.workstream === "PRO" && t.status === "READY")) add(map.get("AR-ENG-005")?.status === "DONE", `${task.id} Pro READY before final benchmark`);

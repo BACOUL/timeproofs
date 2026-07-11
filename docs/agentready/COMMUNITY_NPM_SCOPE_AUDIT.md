@@ -1,6 +1,6 @@
 # AgentReady Community npm Scope Audit
 
-Status: OWNER ACTION REQUIRED
+Status: OWNER VERIFIED ON 2026-07-11
 
 This document records the current evidence for the planned Community npm package.
 
@@ -29,31 +29,26 @@ Commands were run without storing npm tokens or secrets in the repository.
 
 ## Current Findings
 
-Scope control: OWNER ACTION REQUIRED
+Owner verification date: 2026-07-11
 
-Package publishability: OWNER ACTION REQUIRED
+npm account: `bacoul`
 
-Organization required: OWNER ACTION REQUIRED
+npm organization: `timeproofs`
 
-2FA status: OWNER ACTION REQUIRED
+npm scope: `@timeproofs`
 
-Trusted publishing status: OWNER ACTION REQUIRED
+Selected plan: public packages on the free plan
 
-Current account access list: OWNER ACTION REQUIRED
+Scope control: confirmed by the owner
 
-## Required Owner Actions
+Package publishability: owner confirms the organization and rights needed to publish a future public package under `@timeproofs`
 
-Before any publication:
+Package publication status: no package published as of 2026-07-11
 
-1. Log in to npm with the project owner account.
-2. Confirm whether the `@timeproofs` scope is controlled by the project owner.
-3. If the scope does not exist, create the npm user or organization required to control `@timeproofs`.
-4. Confirm that `@timeproofs/agentready` can be published under that scope.
-5. Record which npm accounts have owner or maintainer access.
-6. Enable required 2FA or configure trusted publishing.
-7. Document whether trusted publishing is available and appropriate for this package.
-8. Do not create or store long-lived npm tokens in the repository.
+Sensitive data: no password, npm token, 2FA code, recovery code or screenshot is recorded in this repository
 
 ## Publication Impact
 
-Publication is blocked until scope ownership, package publishability, account access, and npm security requirements are verified by the owner.
+The npm scope ownership blocker is recorded as owner-verified. Publication remains blocked by the separate license, ProofSpec, tarball approval and explicit publication approval gates.
+
+This audit does not authorize npm publication.
