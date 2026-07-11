@@ -1,22 +1,42 @@
 # AgentReady Community Publication Approval Checklist
 
-Status: BLOCKED
+Status: APPROVED
 
-This checklist is the explicit publication gate. This PR does not approve publication.
+This checklist is the explicit publication gate. Publication is approved only
+for the exact artifact, version and alpha dist-tag recorded below.
 
 ```txt
-PUBLICATION APPROVED: NO
-APPROVED BY:
-APPROVED COMMIT:
-APPROVED VERSION:
-APPROVED TARBALL SHA-256:
-APPROVAL DATE:
+PUBLICATION APPROVED: YES
+APPROVED BY: JEASON
+APPROVED COMMIT: 150da23932c1fb9433cb3d546904f03c18c909e9
+APPROVED VERSION: 0.1.0-alpha.0
+APPROVED TARBALL SHA-256: 602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe
+APPROVAL DATE: 2026-07-12
 NPM DIST-TAG: alpha
 LATEST TAG MODIFIED: NO
+IMMUTABLE GIT TAG AUTHORIZED: v0.1.0-alpha.0
+GITHUB RELEASE AUTHORIZED: YES
+ARTIFACT MODIFICATION AUTHORIZED: NO
+OTHER VERSION AUTHORIZED: NO
 FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
 NPM TOKEN: none
 FUTURE AUTH: Trusted Publishing OIDC after initial package creation
 ```
+
+## Owner Publication Authorization
+
+```txt
+«J’autorise explicitement la publication publique de @timeproofs/agentready version 0.1.0-alpha.0, exclusivement sous le dist-tag npm alpha, à partir du commit source approuvé 150da23932c1fb9433cb3d546904f03c18c909e9 et du tarball dont le SHA-256 est 602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe. J’autorise également la création du tag Git immuable v0.1.0-alpha.0 et de la GitHub Release correspondante. Cette autorisation ne permet pas de publier sous latest, de modifier l’artefact approuvé ou de publier une autre version. Approbation donnée par JEASON le 12 juillet 2026.»
+```
+
+Final decision:
+
+- publication is authorized only for the exact approved artifact;
+- publication is authorized only under npm dist-tag `alpha`;
+- publishing under `latest` is forbidden;
+- immutable Git tag `v0.1.0-alpha.0` is authorized;
+- the corresponding GitHub Release is authorized;
+- publication has not yet been executed.
 
 ## Tarball Content Approval
 
@@ -46,7 +66,7 @@ PREVIOUS PUBLICATION AUTHORIZED BY APPROVAL: NO
 
 The previous tarball content approval is retained as historical evidence only.
 
-## Required Before Changing To YES
+## Recorded Approval Preconditions
 
 - npm scope ownership verified;
 - npm package publishability verified;
@@ -70,4 +90,4 @@ The previous tarball content approval is retained as historical evidence only.
 
 ## Current Decision
 
-Publication remains blocked.
+Publication approval is recorded. Publication has not yet been executed.

@@ -7,8 +7,8 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 ## Summary
 - Total tasks: 190
-- Total weighted progress: 28/658 (4.3%)
-- Next action: AR-COM-006A - Explicit Community publication approval
+- Total weighted progress: 31/658 (4.7%)
+- Next action: ARB-COM-001 - Publish Community CLI and immutable release
 
 ## Detailed Work Items
 Total detailed Codex work items: 147
@@ -20,7 +20,7 @@ Total planned Codex execution batches: 71
 Completed Codex execution batches: 3
 Execution batches currently in review: 0
 Execution batches not yet issued: 68
-Immediately executable Codex prompts: 0
+Immediately executable Codex prompts: 1
 Average work items per batch: 2.07
 Largest batch size: 6
 Batches with more than five work items: 2
@@ -55,7 +55,7 @@ External Pro sales required: 1
 Credible public value cases required: 1
 
 ## Progress By Horizon
-- BEFORE_COMMUNITY_PUBLICATION: 28/81 (34.6%)
+- BEFORE_COMMUNITY_PUBLICATION: 31/81 (38.3%)
 - POST_LAUNCH: 0/83 (0%)
 - BEFORE_PRO_TECHNICAL_COMPLETION: 0/66 (0%)
 - BEFORE_PRO_FIRST_SALE: 0/109 (0%)
@@ -64,7 +64,7 @@ Credible public value cases required: 1
 
 ## Progress By Milestone
 - M1 Governance locked: 13/23 (56.5%)
-- M2 Community publication blockers resolved: 15/26 (57.7%)
+- M2 Community publication blockers resolved: 18/26 (69.2%)
 - M3 Community publicly usable: 0/34 (0%)
 - M4 Engine benchmark established: 0/31 (0%)
 - M5 Pro technically complete: 0/35 (0%)

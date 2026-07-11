@@ -252,8 +252,8 @@ Required evidence:
   - human ledger review before merge
 
 ### ARB-COM-001 - Publish Community CLI and immutable release
-- Status: BLOCKED
-- Spec status: SPECIFIED
+- Status: READY
+- Spec status: EXECUTION_READY
 - Owner: CODEX
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
@@ -2005,7 +2005,7 @@ Required evidence:
 
 ### AR-COM-006A - Explicit Community publication approval
 - Type: DECISION_GATE
-- Status: DECISION_REQUIRED
+- Status: DONE
 - Owner: JEASON
 - Milestone: M2
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
@@ -2026,7 +2026,7 @@ Required evidence:
 
 ### AR-COM-006 - Publish Community CLI and immutable release
 - Type: CODEX_WORK_ITEM
-- Status: BLOCKED
+- Status: READY
 - Owner: CODEX
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
@@ -2714,7 +2714,7 @@ Required evidence:
 - Workstream: FIN
 - Weight: 3
 - Execution batch: None
-- Depends on: AR-GOV-003
+- Depends on: AR-LIC-008
 
 Deliverables:
   - None
@@ -3542,7 +3542,7 @@ Required evidence:
 - Workstream: SEO
 - Weight: 3
 - Execution batch: None
-- Depends on: None
+- Depends on: AR-SEO-003
 
 Deliverables:
   - None
@@ -3920,7 +3920,7 @@ Required evidence:
 - Workstream: COMP
 - Weight: 3
 - Execution batch: None
-- Depends on: None
+- Depends on: AR-BILL-015
 
 Deliverables:
   - None
