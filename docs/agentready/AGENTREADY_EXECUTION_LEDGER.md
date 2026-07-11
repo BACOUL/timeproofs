@@ -1899,7 +1899,7 @@ Required evidence:
 
 ### AR-COM-001 - Verify control of npm scope @timeproofs
 - Type: OWNER_ACTION
-- Status: OWNER_ACTION_REQUIRED
+- Status: DONE
 - Owner: JEASON
 - Milestone: M2
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
@@ -1918,7 +1918,7 @@ Required evidence:
 
 ### AR-COM-002 - Define npm account security
 - Type: OWNER_ACTION
-- Status: OWNER_ACTION_REQUIRED
+- Status: DONE
 - Owner: JEASON
 - Milestone: M2
 - Horizon: BEFORE_COMMUNITY_PUBLICATION

@@ -69,6 +69,16 @@ Required security:
 - no publication credentials in docs, workflows, or logs;
 - no `id-token: write` permission until a dedicated trusted-publishing PR is approved.
 
+Owner security verification recorded on 2026-07-11:
+
+- npm account `bacoul` has 2FA enabled;
+- no long-lived npm token has been created or stored for AgentReady publication;
+- no npm secret may be committed to the repository;
+- npm recovery codes must never be recorded in the repository;
+- trusted publishing should be preferred when it is technically configured and explicitly approved.
+
+This verification does not authorize publication.
+
 ## Required Tests Before Publication
 
 Run at minimum:

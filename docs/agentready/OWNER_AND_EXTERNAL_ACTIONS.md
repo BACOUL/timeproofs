@@ -11,8 +11,8 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 | AR-GOV-003 | task | CODEX_AND_JEASON | DONE | Add canonical AgentReady execution system | draft PR #115<br>workflow success<br>human ledger review before merge |
 | AR-GOV-004 | task | CODEX_AND_JEASON | RECURRING | Monthly execution ledger review | dated review evidence |
 | AR-COM-EPIC | task | CODEX_AND_JEASON | PLANNED | Community publication | child tasks tracked in ledger |
-| AR-COM-001 | task | JEASON | OWNER_ACTION_REQUIRED | Verify control of npm scope @timeproofs | owner-provided npm scope evidence |
-| AR-COM-002 | task | JEASON | OWNER_ACTION_REQUIRED | Define npm account security | owner-provided npm security evidence |
+| AR-COM-001 | task | JEASON | DONE | Verify control of npm scope @timeproofs | owner-provided npm scope evidence |
+| AR-COM-002 | task | JEASON | DONE | Define npm account security | owner-provided npm security evidence |
 | AR-COM-003 | task | LEGAL | LEGAL_REVIEW_REQUIRED | Approve AgentReady Community license | legal approval or owner legal decision |
 | AR-COM-004 | task | LEGAL | LEGAL_REVIEW_REQUIRED | Treat package-public ProofSpec references | legal treatment decision<br>updated package-public audit |
 | AR-COM-005 | task | JEASON | OWNER_ACTION_REQUIRED | Approve final Community tarball content | approved tarball SHA-256<br>approved source commit |
