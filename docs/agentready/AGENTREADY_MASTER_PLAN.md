@@ -298,6 +298,31 @@ Known rule-quality issues to strengthen:
 
 No rule is scientifically validated until measured.
 
+Benchmark acceptance thresholds must be defined, dated and approved before
+final benchmark results are calculated. They must cover precision, recall,
+false-positive rate, false-negative rate, performance, reproducibility and
+ambiguous-case behavior.
+
+Thresholds must not be changed after observing final results to make a result
+look better.
+
+## Commercial Validation Gates
+
+Before AgentReady is presented as globally validated or category-established,
+the ledger must require:
+
+- at least ten external Community users on real contracts, MCP servers or repositories;
+- at least three explicit Pro payment signals;
+- at least one real external Pro sale with payment collected, entitlement delivered and activation completed;
+- at least one credible public value case based on a real issue and real fix.
+
+Internal accounts, project-owned test accounts, fixtures, automated installs,
+AgentReady repository CI runs and internal Stripe test purchases do not count
+as external validation.
+
+These gates do not block Community publication, Pro technical construction or
+the first Pro sale path. They block only premature global-validation claims.
+
 ## Distribution And Onboarding
 
 Community publication sequence:

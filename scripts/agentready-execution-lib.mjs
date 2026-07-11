@@ -423,6 +423,11 @@ export function generatedContents(ledger) {
   const global = progress(ledger.tasks);
   const coverageStats = documentCoverageStats(ledger);
   const batches = ledger.execution_batches || [];
+  const tasks = taskMap(ledger);
+  const externalUsersRequired = tasks.get("AR-MARKET-001A")?.validation_thresholds?.external_community_users_required ?? 0;
+  const paymentSignalsRequired = tasks.get("AR-MARKET-001B")?.validation_thresholds?.explicit_pro_payment_signals_required ?? 0;
+  const externalSalesRequired = tasks.get("AR-MARKET-001C")?.validation_thresholds?.external_pro_sales_required ?? 0;
+  const valueCasesRequired = tasks.get("AR-MARKET-001D")?.validation_thresholds?.credible_public_value_cases_required ?? 0;
   const ledgerMd = [
     GENERATED_HEADER,
     "# AgentReady Execution Ledger",
@@ -529,6 +534,12 @@ export function generatedContents(ledger) {
     "These figures count planned execution batches only.",
     "They do not include owner, legal, security or external actions, waiting time, human review or unplanned correction prompts.",
     "",
+    "## Product Validation Thresholds",
+    `External Community users required: ${externalUsersRequired}`,
+    `Explicit Pro payment signals required: ${paymentSignalsRequired}`,
+    `External Pro sales required: ${externalSalesRequired}`,
+    `Credible public value cases required: ${valueCasesRequired}`,
+    "",
     "## Progress By Horizon",
     ...[...groupBy(ledger.tasks, "delivery_horizon")].map(([h, tasks]) => {
       const p = progress(tasks);
@@ -625,6 +636,53 @@ function validateMilestoneCriteria(ledger, add) {
       }
     }
   }
+}
+
+function validateCommercialAndBenchmarkGates(ledger, add) {
+  const map = taskMap(ledger);
+  const m7 = ledger.milestones.find((milestone) => milestone.id === "M7");
+  const marketCriterion = (m7?.criteria || []).find((criterion) => criterion.criterion_id === "M7-MARKET-VALIDATION");
+  add(marketCriterion, "M7 missing commercial validation criterion");
+  const expectedMarketTasks = ["AR-MARKET-001A", "AR-MARKET-001B", "AR-MARKET-001C", "AR-MARKET-001D", "AR-MARKET-001"];
+  for (const id of expectedMarketTasks) {
+    add(map.has(id), `missing commercial validation gate ${id}`);
+    add(marketCriterion?.satisfied_by?.includes(id), `M7-MARKET-VALIDATION does not include ${id}`);
+    add(map.get(id)?.task_type === "DECISION_GATE", `${id} must be a DECISION_GATE`);
+    add(!isCodexWorkItem(map.get(id) || {}), `${id} must not be counted as a Codex prompt`);
+  }
+  const users = map.get("AR-MARKET-001A");
+  add((users?.validation_thresholds?.external_community_users_required || 0) >= 10, "external Community user threshold must be at least ten");
+  add(users?.validation_thresholds?.excludes_project_accounts === true, "project accounts must not count as external users");
+  add(users?.validation_thresholds?.excludes_internal_fixtures === true, "fixtures/internal CI must not count as external users");
+  add(users?.validation_thresholds?.requires_real_contract_or_repository === true, "external users must use real contracts, MCP servers, or repositories");
+  const payment = map.get("AR-MARKET-001B");
+  add((payment?.validation_thresholds?.explicit_pro_payment_signals_required || 0) >= 3, "explicit Pro payment signal threshold must be at least three");
+  add(payment?.validation_thresholds?.excludes_generic_interest === true, "generic interest must not count as a payment signal");
+  add(payment?.validation_thresholds?.excludes_project_team_responses === true, "project team responses must not count as payment signals");
+  const sale = map.get("AR-MARKET-001C");
+  add((sale?.validation_thresholds?.external_pro_sales_required || 0) >= 1, "first external Pro sale must be required");
+  add(sale?.validation_thresholds?.excludes_internal_test_purchase === true, "internal or test purchases must not count as external Pro sale");
+  add(sale?.validation_thresholds?.requires_payment_collected === true, "first external Pro sale must require collected payment");
+  add(sale?.validation_thresholds?.requires_entitlement_delivered === true, "first external Pro sale must require delivered entitlement");
+  const valueCase = map.get("AR-MARKET-001D");
+  add((valueCase?.validation_thresholds?.credible_public_value_cases_required || 0) >= 1, "credible public value case must be required");
+  add(valueCase?.validation_thresholds?.prohibits_invented_case === true, "public value case must not be invented");
+  add(valueCase?.validation_thresholds?.prohibits_safety_guarantee === true, "public value case must not imply guaranteed safety");
+  const aggregate = map.get("AR-MARKET-001");
+  for (const id of ["AR-MARKET-001A", "AR-MARKET-001B", "AR-MARKET-001C", "AR-MARKET-001D"]) {
+    add((aggregate?.depends_on || []).includes(id), `commercial aggregate gate must depend on ${id}`);
+  }
+  add((map.get("AR-LAUNCH-001")?.depends_on || []).includes("AR-MARKET-001"), "global launch audit must depend on aggregate commercial validation");
+  const thresholdGate = map.get("AR-ENG-001T");
+  add(thresholdGate?.task_type === "DECISION_GATE", "benchmark threshold gate must be a DECISION_GATE");
+  add(thresholdGate?.owner === "CODEX_AND_JEASON", "benchmark threshold gate must be owned by CODEX_AND_JEASON");
+  add(thresholdGate?.validation_thresholds?.must_be_defined_before_final_results === true, "benchmark thresholds must be frozen before final results");
+  const requiredMetrics = thresholdGate?.validation_thresholds?.required_metrics || [];
+  for (const metric of ["precision", "recall", "false_positive_rate", "false_negative_rate", "performance", "reproducibility", "ambiguous_case_behavior"]) {
+    add(requiredMetrics.includes(metric), `benchmark threshold gate missing ${metric}`);
+  }
+  add((map.get("AR-ENG-002")?.depends_on || []).includes("AR-ENG-001T"), "benchmark metric calculation must depend on frozen thresholds");
+  add((map.get("AR-ENG-005")?.depends_on || []).includes("AR-ENG-001T"), "final benchmark report must depend on frozen thresholds");
 }
 
 function validateBatches(ledger, add) {
@@ -759,6 +817,7 @@ export function validateLedger(ledger, compareGenerated = true) {
   add(map.get("AR-ENG-001H")?.task_type !== "CODEX_WORK_ITEM" && map.get("AR-ENG-001H")?.task_type !== "CODEX_PR" && map.get("AR-ENG-001H")?.owner !== "CODEX", "human annotation task must not be exclusively Codex");
   add(map.has("AR-SEC-001") && map.has("AR-SEC-002") && map.has("AR-SEC-003") && map.has("AR-SEC-004"), "security review remediation mechanism is incomplete");
   validateMilestoneCriteria(ledger, add);
+  validateCommercialAndBenchmarkGates(ledger, add);
   validateActiveDocumentCoverage(ledger, add);
   const counts = promptCounts(ledger);
   const detailed = ledger.tasks.filter((t) => isCodexWorkItem(t) && t.status !== "REJECTED");

@@ -20,6 +20,7 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 | AR-ONB-EPIC | task | CODEX_AND_JEASON | PLANNED | Community onboarding | child tasks tracked in ledger |
 | AR-ENG-EPIC | task | CODEX_AND_JEASON | PLANNED | Engine benchmark and quality | child tasks tracked in ledger |
 | AR-ENG-001H | task | CODEX_AND_JEASON | OWNER_ACTION_REQUIRED | Validate human benchmark annotations | dated human annotation approval |
+| AR-ENG-001T | task | CODEX_AND_JEASON | DECISION_REQUIRED | Freeze benchmark acceptance thresholds before final evaluation | dated approved benchmark threshold record before final evaluation |
 | AR-PRO-EPIC | task | CODEX_AND_JEASON | PLANNED | Pro MVP | child tasks tracked in ledger |
 | AR-LIC-EPIC | task | CODEX_AND_JEASON | PLANNED | Licensing and entitlements | child tasks tracked in ledger |
 | AR-BILL-EPIC | task | CODEX_AND_JEASON | PLANNED | Stripe and customer lifecycle automation | child tasks tracked in ledger |
@@ -43,7 +44,11 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 | AR-UX-001 | task | DESIGN | EXTERNAL_SPECIALIST_REQUIRED | Review premium UX conversion and accessibility | design review report |
 | AR-LAUNCH-001 | task | CODEX_AND_JEASON | PLANNED | Run AgentReady Community and Pro launch audit | launch audit report<br>owner launch decision |
 | AR-LAUNCH-001H | task | JEASON | OWNER_ACTION_REQUIRED | Approve global launch audit outcome | owner launch approval or correction decision |
-| AR-MARKET-001 | task | JEASON | DECISION_REQUIRED | Evaluate first Community users and Pro price signal | decision gate record |
+| AR-MARKET-001A | task | JEASON | DECISION_REQUIRED | Validate ten external Community users | pseudonymized user identifiers<br>date<br>usage type<br>general result<br>30-day reuse signal when measurable<br>consent record for any public quote |
+| AR-MARKET-001B | task | JEASON | DECISION_REQUIRED | Validate three explicit Pro payment signals | date<br>pseudonymized profile<br>price presented<br>response obtained<br>exchange context<br>publication authorization if needed |
+| AR-MARKET-001C | task | JEASON | DECISION_REQUIRED | Complete first external Pro sale | external customer pseudonymous record<br>payment received proof<br>delivered entitlement record<br>activation evidence<br>real Pro usage evidence<br>invoice or payment proof<br>refund or cancellation handling evidence if applicable |
+| AR-MARKET-001D | task | CODEX_AND_JEASON | DECISION_REQUIRED | Publish one credible AgentReady value case | case owner authorization<br>pseudonymized case record<br>rule ID<br>before result<br>fix summary<br>after result<br>limitations<br>confidentiality review |
+| AR-MARKET-001 | task | JEASON | DECISION_REQUIRED | Evaluate AgentReady commercial validation evidence | commercial validation decision record |
 | AR-OPS-001 | task | CODEX_AND_JEASON | RECURRING | Run monthly post-launch operations review | dated review evidence |
 | AR-I18N-001 | task | EXTERNAL_SPECIALIST | POST_LAUNCH | Verify internationalization obligations | Verify internationalization obligations evidence |
 | AR-TEAM-EPIC | task | CODEX_AND_JEASON | PLANNED | Team and Agency post-revenue expansion | child tasks tracked in ledger |

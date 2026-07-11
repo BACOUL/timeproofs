@@ -65,6 +65,7 @@ Horizon: BEFORE_PRO_TECHNICAL_COMPLETION
 Exit criteria:
   - OpenAPI and MCP corpora
   - human annotations
+  - benchmark acceptance thresholds frozen before final evaluation
   - precision and recall
   - false-positive and false-negative rates
   - performance
@@ -73,6 +74,7 @@ Exit criteria:
 Criteria links:
   - M4-CORPUS: OpenAPI and MCP corpora and harness -> AR-ENG-001
   - M4-HUMAN-LABELS: human annotations validated -> AR-ENG-001H
+  - M4-THRESHOLDS: benchmark acceptance thresholds frozen before final evaluation -> AR-ENG-001T
   - M4-METRICS: precision recall false positive and false negative rates -> AR-ENG-002
   - M4-AR-FIXES: AR001 AR003 AR008 AR010 treated or documented -> AR-ENG-003
   - M4-PERFORMANCE: performance and reproducibility -> AR-ENG-004, AR-ENG-005
@@ -149,6 +151,7 @@ Exit criteria:
   - performance
   - competition
   - support and incidents
+  - minimum external usage, payment and public-value evidence established
 Criteria links:
   - M7-SITE: global product site -> AR-SITE-001, AR-SITE-002, AR-SITE-003, AR-SITE-004, AR-SITE-005, AR-SITE-006, AR-SITE-007, AR-SITE-008, AR-SITE-009, AR-SITE-010, AR-SITE-011, AR-SITE-012, AR-SITE-013, AR-SITE-014, AR-SITE-015, AR-SITE-016, AR-SITE-017, AR-SITE-018, AR-SITE-019, AR-SITE-020, AR-SITE-021, AR-SITE-022, AR-SITE-023, AR-SITE-024, AR-SITE-025
   - M7-DOCS: documentation -> AR-DOC-001, AR-DOC-002, AR-DOC-003, AR-DOC-004, AR-DOC-005, AR-DOC-006, AR-DOC-007, AR-DOC-008, AR-DOC-009, AR-DOC-010, AR-DOC-011, AR-DOC-012, AR-DOC-013
@@ -157,6 +160,7 @@ Criteria links:
   - M7-COMPETITION: competition and positioning -> AR-COMP-001, AR-COMP-002, AR-COMP-003, AR-COMP-004, AR-COMP-005, AR-COMP-006, AR-COMP-007
   - M7-INFRA-RELIABILITY: infrastructure reliability support and incidents -> AR-INFRA-001, AR-INFRA-002, AR-INFRA-003, AR-INFRA-004, AR-INFRA-005, AR-INFRA-006, AR-REL-001, AR-REL-002, AR-REL-003
   - M7-UX: accessibility performance and conversion review -> AR-UX-001
+  - M7-MARKET-VALIDATION: Minimum external usage, payment and public-value evidence established -> AR-MARKET-001A, AR-MARKET-001B, AR-MARKET-001C, AR-MARKET-001D, AR-MARKET-001
   - M7-LAUNCH: final launch audit -> AR-LAUNCH-001, AR-LAUNCH-001H
 
 ### M8 - Category-building active
@@ -367,7 +371,7 @@ Required evidence:
 - Horizon: BEFORE_PRO_TECHNICAL_COMPLETION
 - Work items: AR-ENG-002
 - Depends on batches: None
-- Depends on tasks: AR-ENG-001H
+- Depends on tasks: AR-ENG-001H, AR-ENG-001T
 - Branch: add-benchmark-metric-calculation
 - PR title: test(engine): add benchmark metric calculation
 
@@ -405,7 +409,7 @@ Required evidence:
 - Horizon: BEFORE_PRO_TECHNICAL_COMPLETION
 - Work items: AR-ENG-004, AR-ENG-005
 - Depends on batches: ARB-ENG-002, ARB-ENG-003
-- Depends on tasks: AR-ENG-001H
+- Depends on tasks: AR-ENG-001H, AR-ENG-001T
 - Branch: add-performance-and-reproducibility-benchmark
 - PR title: test(engine): add performance and reproducibility benchmark
 
@@ -1711,7 +1715,7 @@ Required evidence:
 - Horizon: BEFORE_GLOBAL_LAUNCH
 - Work items: AR-LAUNCH-001
 - Depends on batches: ARB-SITE-006, ARB-REL-001
-- Depends on tasks: AR-SEC-004, AR-FIN-001
+- Depends on tasks: AR-SEC-004, AR-FIN-001, AR-MARKET-001
 - Branch: qa-launch-agentready-community-pro
 - PR title: qa(launch): run AgentReady Community and Pro launch audit
 
@@ -2232,6 +2236,33 @@ Acceptance criteria:
 Required evidence:
   - dated human annotation approval
 
+### AR-ENG-001T - Freeze benchmark acceptance thresholds before final evaluation
+- Type: DECISION_GATE
+- Status: DECISION_REQUIRED
+- Owner: CODEX_AND_JEASON
+- Milestone: M4
+- Horizon: BEFORE_PRO_TECHNICAL_COMPLETION
+- Workstream: ENG
+- Weight: 3
+- Execution batch: None
+- Depends on: AR-ENG-001
+
+Deliverables:
+  - None
+Acceptance criteria:
+  - benchmark acceptance thresholds are defined before final metric calculation
+  - thresholds are dated
+  - thresholds are approved before observing final results
+  - precision threshold recorded
+  - recall threshold recorded
+  - false-positive threshold recorded
+  - false-negative threshold recorded
+  - performance threshold recorded
+  - reproducibility threshold recorded
+  - ambiguous-case behavior threshold recorded
+Required evidence:
+  - dated approved benchmark threshold record before final evaluation
+
 ### AR-ENG-002 - Add benchmark metric calculation
 - Type: CODEX_WORK_ITEM
 - Status: PLANNED
@@ -2241,7 +2272,7 @@ Required evidence:
 - Workstream: ENG
 - Weight: 3
 - Execution batch: ARB-ENG-002
-- Depends on: AR-ENG-001H
+- Depends on: AR-ENG-001H, AR-ENG-001T
 
 Deliverables:
   - Add benchmark metric calculation
@@ -2295,7 +2326,7 @@ Required evidence:
 - Workstream: ENG
 - Weight: 3
 - Execution batch: ARB-ENG-004
-- Depends on: AR-ENG-001H, AR-ENG-002, AR-ENG-003, AR-ENG-004
+- Depends on: AR-ENG-001H, AR-ENG-001T, AR-ENG-002, AR-ENG-003, AR-ENG-004
 
 Deliverables:
   - Publish reproducible benchmark report and limitations
@@ -4923,7 +4954,7 @@ Required evidence:
 - Workstream: LAUNCH
 - Weight: 5
 - Execution batch: ARB-LAUNCH-001
-- Depends on: AR-SITE-025, AR-SEC-004, AR-FIN-001, AR-REL-003
+- Depends on: AR-SITE-025, AR-SEC-004, AR-FIN-001, AR-REL-003, AR-MARKET-001
 
 Deliverables:
   - Run AgentReady Community and Pro launch audit
@@ -4951,7 +4982,7 @@ Acceptance criteria:
 Required evidence:
   - owner launch approval or correction decision
 
-### AR-MARKET-001 - Evaluate first Community users and Pro price signal
+### AR-MARKET-001A - Validate ten external Community users
 - Type: DECISION_GATE
 - Status: DECISION_REQUIRED
 - Owner: JEASON
@@ -4960,14 +4991,143 @@ Required evidence:
 - Workstream: MARKET
 - Weight: 3
 - Execution batch: None
-- Depends on: AR-COM-006
+- Depends on: AR-COM-008
 
 Deliverables:
   - None
 Acceptance criteria:
-  - Evaluate first Community users and Pro price signal complete
+  - at least ten distinct external users
+  - no user is Jeason or a project-owned test account
+  - each user ran AgentReady on a real OpenAPI contract, MCP server, or repository
+  - automated installs, internal fixtures, and AgentReady repository CI runs do not count
+  - first-use date recorded
+  - 30-day reuse or return signal measured where possible
+  - positive feedback, negative feedback, and abandonment reasons recorded honestly
 Required evidence:
-  - decision gate record
+  - pseudonymized user identifiers
+  - date
+  - usage type
+  - general result
+  - 30-day reuse signal when measurable
+  - consent record for any public quote
+
+### AR-MARKET-001B - Validate three explicit Pro payment signals
+- Type: DECISION_GATE
+- Status: DECISION_REQUIRED
+- Owner: JEASON
+- Milestone: M7
+- Horizon: BEFORE_GLOBAL_LAUNCH
+- Workstream: MARKET
+- Weight: 3
+- Execution batch: None
+- Depends on: AR-MARKET-001A
+
+Deliverables:
+  - None
+Acceptance criteria:
+  - at least three external users or companies
+  - real Pro price presented clearly
+  - real Pro scope presented clearly
+  - explicit response indicates willingness to pay, intent to buy, commercial trial request, or willingness to continue toward purchase
+  - generic compliments or general interest do not count
+  - no false testimonial
+  - no response generated by the project team
+Required evidence:
+  - date
+  - pseudonymized profile
+  - price presented
+  - response obtained
+  - exchange context
+  - publication authorization if needed
+
+### AR-MARKET-001C - Complete first external Pro sale
+- Type: DECISION_GATE
+- Status: DECISION_REQUIRED
+- Owner: JEASON
+- Milestone: M7
+- Horizon: BEFORE_GLOBAL_LAUNCH
+- Workstream: MARKET
+- Weight: 3
+- Execution batch: None
+- Depends on: AR-BILL-015, AR-SEC-004, AR-FIN-001, AR-LEG-001, AR-SUPPORT-002
+
+Deliverables:
+  - None
+Acceptance criteria:
+  - client is external and real
+  - payment is actually collected
+  - purchase is not made by Jeason, a close contact used as a test, an internal account, or a project-owned card
+  - Pro entitlement is actually delivered
+  - activation succeeds
+  - at least one real Pro usage occurs
+  - invoice or proof of payment is available
+  - refund or cancellation is handled correctly if requested
+Required evidence:
+  - external customer pseudonymous record
+  - payment received proof
+  - delivered entitlement record
+  - activation evidence
+  - real Pro usage evidence
+  - invoice or payment proof
+  - refund or cancellation handling evidence if applicable
+
+### AR-MARKET-001D - Publish one credible AgentReady value case
+- Type: DECISION_GATE
+- Status: DECISION_REQUIRED
+- Owner: CODEX_AND_JEASON
+- Milestone: M7
+- Horizon: BEFORE_GLOBAL_LAUNCH
+- Workstream: MARKET
+- Weight: 3
+- Execution batch: None
+- Depends on: AR-MARKET-001A, AR-ENG-005
+
+Deliverables:
+  - None
+Acceptance criteria:
+  - real issue detected on a real contract or repository
+  - issue is useful and not purely cosmetic
+  - AgentReady rule identified
+  - bad state documented
+  - fix documented
+  - new AgentReady result after fix documented
+  - limitations explained
+  - no claim that AgentReady guarantees safety
+  - case owner authorized publication
+  - case anonymized if needed
+  - no confidential data exposed
+  - results published honestly
+Required evidence:
+  - case owner authorization
+  - pseudonymized case record
+  - rule ID
+  - before result
+  - fix summary
+  - after result
+  - limitations
+  - confidentiality review
+
+### AR-MARKET-001 - Evaluate AgentReady commercial validation evidence
+- Type: DECISION_GATE
+- Status: DECISION_REQUIRED
+- Owner: JEASON
+- Milestone: M7
+- Horizon: BEFORE_GLOBAL_LAUNCH
+- Workstream: MARKET
+- Weight: 3
+- Execution batch: None
+- Depends on: AR-MARKET-001A, AR-MARKET-001B, AR-MARKET-001C, AR-MARKET-001D
+
+Deliverables:
+  - None
+Acceptance criteria:
+  - external usage evidence reviewed
+  - payment signal evidence reviewed
+  - external sale evidence reviewed
+  - public value case reviewed
+  - continue correct pause pivot or reject decision recorded
+Required evidence:
+  - commercial validation decision record
 
 ### AR-ACQ-001 - Prepare global launch acquisition plan
 - Type: CODEX_WORK_ITEM

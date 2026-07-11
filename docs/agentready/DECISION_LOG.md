@@ -28,6 +28,17 @@ Batching reduces execution overhead without removing deliverables, acceptance cr
 
 A future change to batch composition does not require a strategic decision if it does not change product strategy, scope, horizon, milestone, deliverable, or the Community/Pro boundary. Any change that removes or materially changes an approved deliverable must be recorded through this Decision Log and the canonical ledger.
 
+## 2026-07-11 - Commercial and benchmark validation thresholds
+
+Decision ID: DL-2026-07-11-COMMERCIAL-BENCHMARK-THRESHOLDS
+Decision: Benchmark thresholds and minimum commercial validation evidence must be recorded before final claims or global validation.
+Reason: AgentReady should not adjust benchmark acceptance thresholds after seeing results, and it should not present global product validation without external users, explicit payment signal, a real external Pro sale, and one credible value case.
+Impact: The ledger now requires `AR-ENG-001T`, `AR-MARKET-001A`, `AR-MARKET-001B`, `AR-MARKET-001C`, `AR-MARKET-001D`, and aggregate `AR-MARKET-001` gates.
+Supersedes: vague market-validation intentions without explicit thresholds.
+Status: ACTIVE
+
+These gates do not block Community publication, Pro technical construction, or the initial Pro sale path. They block only claims that AgentReady is globally validated or category-established.
+
 ## 2026-07-10 - Shift-left contract security
 
 Decision: AgentReady is the shift-left CI gate for agent-facing contracts.
