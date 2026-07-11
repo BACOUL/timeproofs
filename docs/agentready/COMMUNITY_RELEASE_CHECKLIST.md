@@ -33,7 +33,8 @@ Publication status: BLOCKED
 |---|---|---|
 | Package name is `@timeproofs/agentready` | READY | `package.json` |
 | Version is `0.1.0-alpha.0` | READY | `package.json` |
-| Package remains private | READY | `private: true` |
+| Root repository package remains private | READY | root `package.json` keeps `private: true` |
+| Community tarball package is technically publishable | READY | staged tarball `package.json` omits `private: true` and sets `publishConfig.access: public` |
 | Tarball can be built | READY | `npm pack --json` through release candidate script |
 | Tarball content is exact | READY | Release candidate script file-list assertion |
 | Checksum is generated | READY | SHA-256 file |
@@ -72,7 +73,7 @@ Publication status: BLOCKED
 | Explicit release approval recorded | BLOCKED | Not granted |
 | npm scope controlled | READY | Owner attestation dated 2026-07-11 |
 | npm 2FA or trusted publishing policy validated | READY | npm 2FA enabled; trusted publishing preferred for future dedicated setup |
-| Package made publishable | BLOCKED | `private: true` remains |
+| Package made publishable after approval | READY | staged Community tarball package omits `private: true` and sets public npm publish config |
 | Final tarball content approved | BLOCKED | Owner must approve final file list, source commit and SHA-256 |
 | Tag created on reviewed commit | BLOCKED | No tag created |
 | Release notes verified | READY | Draft notes exist |

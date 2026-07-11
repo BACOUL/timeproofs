@@ -10,7 +10,8 @@ This is a Community release candidate note for review only.
 - GitHub Release: not created.
 - GitHub tag: not created.
 - Marketplace listing: not created.
-- Package visibility: still blocked by `private: true`.
+- Root repository package: still protected by `private: true`.
+- Staged Community tarball package: technically publishable after approval, but not approved and not published.
 
 ## What This Candidate Contains
 
@@ -67,7 +68,6 @@ It identifies structural risks that may cause AI agents to misuse APIs, tools or
 
 ## Publication Blockers
 
-- package remains private.
 - final Community tarball content not approved.
 - explicit release approval not granted.
 - no public tag exists.

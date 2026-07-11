@@ -5,6 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {
   COMMUNITY_LICENSE,
+  COMMUNITY_PUBLISH_CONFIG,
   EXPECTED_PACKAGE_FILES,
   createCommunityReleaseCandidate,
   validateCommunityTarball
@@ -12,6 +13,7 @@ import {
 
 const repoRoot = process.cwd();
 const packageJson = JSON.parse(await fs.readFile(path.join(repoRoot, 'package.json'), 'utf8'));
+assert.equal(packageJson.private, true, 'root package.json must remain private');
 const tmpRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'agentready-package-'));
 const npmCli = process.env.AGENTREADY_NPM_CLI || process.env.npm_execpath || 'npm';
 const npxCli = process.env.AGENTREADY_NPX_CLI || inferNpxCli(npmCli) || 'npx';
@@ -161,7 +163,9 @@ async function assertInstalledPackageMetadata(cleanProject) {
   const installedRoot = path.join(cleanProject, 'node_modules', '@timeproofs', 'agentready');
   const installedPackage = JSON.parse(await fs.readFile(path.join(installedRoot, 'package.json'), 'utf8'));
   assert.equal(installedPackage.license, COMMUNITY_LICENSE);
-  assert.equal(installedPackage.private, true);
+  assert.notEqual(installedPackage.private, true);
+  assert.equal(installedPackage.publishConfig?.access, COMMUNITY_PUBLISH_CONFIG.access);
+  assert.equal(installedPackage.publishConfig?.registry, COMMUNITY_PUBLISH_CONFIG.registry);
   await assertFileExists(path.join(installedRoot, 'LICENSE'));
   await assertFileExists(path.join(installedRoot, 'NOTICE'));
   const readme = await fs.readFile(path.join(installedRoot, 'README.md'), 'utf8');

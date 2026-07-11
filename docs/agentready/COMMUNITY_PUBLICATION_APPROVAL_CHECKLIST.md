@@ -17,6 +17,9 @@ APPROVAL DATE:
 
 - npm scope ownership verified;
 - npm package publishability verified;
+- root repository package remains `private: true`;
+- staged Community tarball package omits `private: true`;
+- staged Community tarball package uses public npm `publishConfig`;
 - npm account access list documented;
 - npm 2FA enabled or trusted publishing decision completed;
 - AgentReady Community package license approved for the package boundary;

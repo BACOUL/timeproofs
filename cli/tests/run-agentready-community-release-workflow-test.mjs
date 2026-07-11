@@ -56,6 +56,12 @@ assert.match(workflow, /packaging\/agentready-community\/\*\*/);
 assert.match(workflow, /scripts\/agentready-community-package-lib\.mjs/);
 assert.match(workflow, /assert\.equal\(manifest\.community_license,\s*'Apache-2\.0'\)/);
 assert.match(workflow, /assert\.equal\(manifest\.tarball\.entry_count,\s*21\)/);
+assert.match(workflow, /assert\.equal\(manifest\.package_private,\s*false\)/);
+assert.match(workflow, /assert\.equal\(manifest\.package_publish_access,\s*'public'\)/);
+assert.match(workflow, /assert\.equal\(manifest\.package_publish_registry,\s*'https:\/\/registry\.npmjs\.org\/'\)/);
+assert.match(workflow, /assert\.notEqual\(pkg\.private,\s*true\)/);
+assert.match(workflow, /assert\.equal\(pkg\.publishConfig\?\.access,\s*'public'\)/);
+assert.match(workflow, /assert\.equal\(pkg\.publishConfig\?\.registry,\s*'https:\/\/registry\.npmjs\.org\/'\)/);
 
 assert.equal(pkg.private, true);
 assert.equal(pkg.name, '@timeproofs/agentready');
@@ -71,6 +77,9 @@ assert.doesNotMatch(script, authTokenPattern);
 
 assert.match(packageLib, /status:\s*'candidate_only'/);
 assert.match(packageLib, /publication_ready:\s*false/);
+assert.match(packageLib, /package_private:\s*false/);
+assert.match(packageLib, /package_publish_access:\s*COMMUNITY_PUBLISH_CONFIG\.access/);
+assert.match(packageLib, /publishConfig:\s*COMMUNITY_PUBLISH_CONFIG/);
 assert.match(packageLib, /community_license:\s*COMMUNITY_LICENSE/);
 assert.match(packageLib, /createHash\('sha256'\)/);
 assert.match(packageLib, /\['rev-parse', 'HEAD'\]/);

@@ -45,7 +45,7 @@ Binary command:
 agentready
 ```
 
-The package remains marked as:
+The root repository package remains marked as:
 
 ```json
 {
@@ -53,7 +53,24 @@ The package remains marked as:
 }
 ```
 
-This prevents accidental publication in this preparation PR.
+This prevents accidental publication from the repository root.
+
+The staged AgentReady Community tarball package is built from a dedicated
+package boundary and is technically publishable after approval:
+
+```json
+{
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}
+```
+
+That staged tarball package must not contain `private: true`, but publication
+remains blocked until the final artifact, commit and approval checklist are
+explicitly approved.
 
 ## NPM Name Check
 
@@ -285,7 +302,8 @@ If installed from a local tarball, npm still records the package under the packa
 ## Limitations
 
 - The package is not published.
-- The package remains `private: true`.
+- The root repository package remains `private: true`.
+- The staged Community tarball package is not published and still requires final approval.
 - Public npm installation is not available yet.
 - The scope `@timeproofs` still needs ownership/access confirmation.
 - The CLI performs static local scans only.

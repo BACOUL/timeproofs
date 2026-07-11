@@ -107,7 +107,10 @@ It also validates:
 
 - package name;
 - package version;
-- `private: true`;
+- root `package.json` keeps `private: true`;
+- staged Community tarball `package.json` does not contain `private: true`;
+- staged Community tarball `publishConfig.access` is `public`;
+- staged Community tarball `publishConfig.registry` is `https://registry.npmjs.org/`;
 - Node engine;
 - binary command;
 - license field;
@@ -175,7 +178,10 @@ The script:
 
 - reads `package.json`;
 - verifies package metadata;
-- verifies `private: true`;
+- verifies the root package remains `private: true`;
+- generates a staged Community package manifest without `private: true`;
+- sets staged Community package `publishConfig.access` to `public`;
+- sets staged Community package `publishConfig.registry` to `https://registry.npmjs.org/`;
 - calculates the planned tag from the version;
 - runs `npm pack --json`;
 - validates the exact package file list;
@@ -201,7 +207,9 @@ Required status:
 ```json
 {
   "status": "candidate_only",
-  "publication_ready": false
+  "publication_ready": false,
+  "package_private": false,
+  "package_publish_access": "public"
 }
 ```
 
@@ -292,7 +300,6 @@ Rollback is not active in this candidate-only workflow because no public artifac
 
 ## Publication Blockers
 
-- package remains private.
 - final Community tarball content not approved.
 - explicit release approval not granted.
 - no public tag exists.
