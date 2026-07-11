@@ -1,6 +1,6 @@
 # AgentReady Self-Service Execution Plan
 
-Status: SUPERSEDED SUMMARY
+Status: ACTIVE POINTER TO CANONICAL EXECUTION SYSTEM
 
 This active file is intentionally short after the Community + Pro rebaseline.
 
@@ -9,8 +9,25 @@ Execution authority now lives in:
 - `AGENTREADY_MASTER_PLAN.md`
 - `EXECUTION_SEQUENCE.md`
 - `DECISION_LOG.md`
+- `AGENTREADY_EXECUTION_LEDGER.json`
 
 If this file conflicts with `AGENTREADY_MASTER_PLAN.md`, the master plan prevails.
+
+Generated Markdown views must not be edited manually.
+
+Current inserted governance PR:
+
+```txt
+docs(project): add canonical AgentReady execution system
+```
+
+Branch:
+
+```txt
+docs-agentready-canonical-execution-system
+```
+
+This PR is inserted before further publication-blocker resolution to prevent project drift, omissions and improvised execution prompts. It does not change product strategy, Community/Pro scope or publication blockers.
 
 ## Current Product Direction
 
@@ -18,7 +35,7 @@ AgentReady is the shift-left CI gate for agent-facing contracts.
 
 AgentReady analyzes OpenAPI specifications and MCP tools before deployment to identify ambiguous, unbounded or insufficiently controlled agent actions.
 
-## Only Next PR
+## Next After Governance Reconciliation
 
 ```txt
 release(agentready): resolve Community publication blockers

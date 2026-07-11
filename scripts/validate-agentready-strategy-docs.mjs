@@ -18,6 +18,8 @@ const requiredDocs = [
   "docs/agentready/DUE_DILIGENCE_AND_TRANSFERABILITY.md",
   "docs/agentready/EXECUTION_SEQUENCE.md",
   "docs/agentready/DECISION_LOG.md",
+  "docs/agentready/AGENTREADY_EXECUTION_LEDGER.json",
+  "docs/agentready/PROJECT_CHANGE_CONTROL.md",
   "docs/agentready/history/SELF_SERVICE_EXECUTION_PLAN_PRE_REBASELINE.md",
 ];
 
@@ -98,6 +100,11 @@ assert(master.includes("This document supersedes earlier AgentReady product, com
 assert(master.includes("1. `AGENTREADY_MASTER_PLAN.md`"), "Master Plan hierarchy must list itself first");
 assert(master.includes("2. `EXECUTION_SEQUENCE.md`"), "Master Plan hierarchy must list the execution sequence second");
 assert(master.includes("3. `DECISION_LOG.md`"), "Master Plan hierarchy must list the decision log third");
+assert(master.includes("4. `AGENTREADY_EXECUTION_LEDGER.json`"), "Master Plan hierarchy must list the canonical execution ledger fourth");
+assert(master.includes("Generated Markdown views must not be edited manually."), "Master Plan must protect generated views");
+assert(master.includes("Every approved known task must exist in the canonical ledger."), "Master Plan must require every known task in the ledger");
+assert(master.includes("Every new implementation prompt must be generated from the ledger."), "Master Plan must require implementation prompts from the ledger");
+assert(master.includes("Unknown future events, external changes and newly discovered work are handled through the mandatory change-control process before implementation."), "Master Plan must include change-control rule for unknown future work");
 assert(master.includes("If another document conflicts with AGENTREADY_MASTER_PLAN.md, the master plan prevails."), "Master Plan conflict rule is missing");
 assert(master.includes("AgentReady is the shift-left CI gate for agent-facing contracts."), "Official positioning is missing");
 assert(master.includes("AgentReady analyzes OpenAPI specifications and MCP tools before deployment to identify ambiguous, unbounded or insufficiently controlled agent actions."), "Official description is missing");
@@ -119,6 +126,8 @@ assert(master.includes(publishPrTitle), "Master Plan must name the gated publish
 assert(master.includes("If any blocker remains open"), "Master Plan must block publication while blockers remain open");
 
 assertIncludes("docs/agentready/EXECUTION_SEQUENCE.md", "Status: ACTIVE SOURCE OF EXECUTION ORDER");
+assertIncludes("docs/agentready/EXECUTION_SEQUENCE.md", "docs/agentready/AGENTREADY_EXECUTION_LEDGER.json");
+assertIncludes("docs/agentready/EXECUTION_SEQUENCE.md", "docs(project): add canonical AgentReady execution system");
 assertIncludes("docs/agentready/EXECUTION_SEQUENCE.md", "Phase 2 - Resolve Community Blockers");
 assertIncludes("docs/agentready/EXECUTION_SEQUENCE.md", "Phase 6 - MVP Pro");
 assertIncludes("docs/agentready/EXECUTION_SEQUENCE.md", "## Post-Revenue");
@@ -126,6 +135,8 @@ assertIncludes("docs/agentready/EXECUTION_SEQUENCE.md", blockerPrTitle);
 assertIncludes("docs/agentready/EXECUTION_SEQUENCE.md", publishPrTitle);
 
 assertIncludes("docs/agentready/DECISION_LOG.md", "Community and Pro at launch");
+assertIncludes("docs/agentready/DECISION_LOG.md", "Decision ID: DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM");
+assertIncludes("docs/agentready/DECISION_LOG.md", "The canonical execution-system PR is inserted before further publication-blocker resolution in order to prevent project drift, omissions and improvised execution prompts.");
 assertIncludes("docs/agentready/DECISION_LOG.md", "Team and Agency are post-revenue");
 assertIncludes("docs/agentready/DECISION_LOG.md", "Community includes free CI blocking");
 assertIncludes("docs/agentready/DECISION_LOG.md", "No silent Community telemetry");
@@ -139,8 +150,12 @@ for (const file of [
   "docs/agentready/EXECUTION_LOCK_90_DAYS.md",
   "docs/agentready/REMAINING_WORK.md",
 ]) {
+  assert(read(file).includes("AGENTREADY_EXECUTION_LEDGER.json") || file === "docs/agentready/EXECUTION_LOCK_90_DAYS.md", `${file} must mention the canonical execution ledger or be covered by execution lock`);
   assert(read(file).includes(blockerPrTitle) || read(file).includes("COMMUNITY_PUBLICATION_BLOCKERS.md") || read(file).includes("Resolve documented owner/legal Community publication blockers"), `${file} must point to the blocker flow`);
 }
+
+assertIncludes("docs/agentready/PROJECT_CHANGE_CONTROL.md", "No implementation task may change the product strategy, launch scope,");
+assertIncludes("docs/agentready/PROJECT_CHANGE_CONTROL.md", "The ledger represents all known approved work, not unknowable future work.");
 
 for (const file of [
   "README.md",
@@ -288,7 +303,7 @@ const activeDocs = [...new Set([...requiredDocs, ...keyDocs])];
 for (const file of activeDocs) {
   const content = read(file);
   if (content.includes("feat(pro): add versioned AgentReady policy configuration")) {
-    const allowed = file === "docs/agentready/EXECUTION_SEQUENCE.md" || content.includes("SUPERSEDED BY");
+    const allowed = file === "docs/agentready/EXECUTION_SEQUENCE.md" || file === "docs/agentready/AGENTREADY_EXECUTION_LEDGER.json" || content.includes("SUPERSEDED BY");
     assert(allowed, `${file} must not actively launch Pro policy immediately after #112`);
   }
 }

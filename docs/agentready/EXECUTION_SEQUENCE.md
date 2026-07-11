@@ -6,6 +6,35 @@ Authority: `AGENTREADY_MASTER_PLAN.md`.
 
 PR numbers are provisional. Titles and order are authoritative.
 
+Detailed execution register:
+
+```txt
+docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
+```
+
+Generated Markdown views are read-only projections of that ledger.
+
+Task granularity remains mandatory, but prompt counting is now batch-based.
+
+```txt
+One ledger work item = one independently verifiable unit of work.
+
+One Codex execution batch = one coherent pull request that may complete
+one or several compatible ledger work items.
+
+One execution-ready Codex batch = one generated Codex prompt.
+```
+
+`CODEX_WORK_ITEM` entries track detailed deliverables. `CODEX_PR` entries are
+reserved for historical or current PR-shaped work. Future Codex prompts must
+come from `execution_batches`, not directly from individual work items.
+
+Future discoveries must pass through:
+
+```txt
+docs/agentready/PROJECT_CHANGE_CONTROL.md
+```
+
 ## Phase 0 - Completed Foundation
 
 - CLI packaging candidate;
@@ -19,6 +48,14 @@ docs(product): rebaseline AgentReady Community and Pro strategy
 ```
 
 ## Phase 2 - Resolve Community Blockers
+
+Inserted governance PR before further blocker resolution:
+
+```txt
+docs(project): add canonical AgentReady execution system
+```
+
+This insertion prevents project drift, omissions and improvised execution prompts. It does not change product strategy, Community/Pro scope or publication blockers.
 
 ```txt
 release(agentready): resolve Community publication blockers

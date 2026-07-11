@@ -4,6 +4,41 @@ Status: ACTIVE DECISION RECORD
 
 Authority: `AGENTREADY_MASTER_PLAN.md`.
 
+## 2026-07-10 - Canonical execution system
+
+Decision ID: DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM
+Decision: Insert the canonical execution-system PR before further publication-blocker resolution.
+Reason: The canonical execution-system PR is inserted before further publication-blocker resolution in order to prevent project drift, omissions and improvised execution prompts.
+Impact: `AGENTREADY_EXECUTION_LEDGER.json` becomes the canonical detailed execution register, generated Markdown views become read-only, and future implementation prompts must be generated from the ledger.
+Supersedes: ad hoc prompt sequencing after #114.
+Status: ACTIVE
+
+This does not change the AgentReady product strategy, Community/Pro scope or publication blockers.
+
+## 2026-07-11 - Execution batches for Codex prompts
+
+Decision ID: DL-2026-07-11-CODEX-EXECUTION-BATCHES
+Decision: Codex prompts are generated from coherent execution batches, not directly from individual ledger work items.
+Reason: The detailed ledger remains the exhaustive inventory of known approved work, but one page, small document or microfunction should not automatically become a separate pull request and prompt.
+Impact: Future detailed Codex units use `CODEX_WORK_ITEM`; historical and current PR-shaped work remains `CODEX_PR`; `execution_batches` define the prompt-producing review boundary.
+Supersedes: prompt counts derived directly from every `CODEX_PR`-classified detail task.
+Status: ACTIVE
+
+Batching reduces execution overhead without removing deliverables, acceptance criteria, evidence requirements or auditability.
+
+A future change to batch composition does not require a strategic decision if it does not change product strategy, scope, horizon, milestone, deliverable, or the Community/Pro boundary. Any change that removes or materially changes an approved deliverable must be recorded through this Decision Log and the canonical ledger.
+
+## 2026-07-11 - Commercial and benchmark validation thresholds
+
+Decision ID: DL-2026-07-11-COMMERCIAL-BENCHMARK-THRESHOLDS
+Decision: Benchmark thresholds and minimum commercial validation evidence must be recorded before final claims or global validation.
+Reason: AgentReady should not adjust benchmark acceptance thresholds after seeing results, and it should not present global product validation without external users, explicit payment signal, a real external Pro sale, and one credible value case.
+Impact: The ledger now requires `AR-ENG-001T`, `AR-MARKET-001A`, `AR-MARKET-001B`, `AR-MARKET-001C`, `AR-MARKET-001D`, and aggregate `AR-MARKET-001` gates.
+Supersedes: vague market-validation intentions without explicit thresholds.
+Status: ACTIVE
+
+These gates do not block Community publication, Pro technical construction, or the initial Pro sale path. They block only claims that AgentReady is globally validated or category-established.
+
 ## 2026-07-10 - Shift-left contract security
 
 Decision: AgentReady is the shift-left CI gate for agent-facing contracts.

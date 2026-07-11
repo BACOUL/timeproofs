@@ -11,10 +11,49 @@ If another document conflicts with AGENTREADY_MASTER_PLAN.md, the master plan pr
 1. `AGENTREADY_MASTER_PLAN.md`
 2. `EXECUTION_SEQUENCE.md`
 3. `DECISION_LOG.md`
-4. specialized specifications
-5. historical documents
+4. `AGENTREADY_EXECUTION_LEDGER.json`
+5. specialized active specifications
+6. generated Markdown views
+7. historical documents
 
 Historical documents may remain useful context, but they do not define current product direction.
+
+`AGENTREADY_EXECUTION_LEDGER.json` is the canonical detailed execution register.
+
+Generated Markdown views must not be edited manually.
+
+Every approved known task must exist in the canonical ledger.
+
+Every new implementation prompt must be generated from the ledger.
+
+## Execution Granularity
+
+One ledger work item equals one independently verifiable unit of work.
+
+One Codex execution batch equals one coherent pull request that may complete
+one or several compatible ledger work items.
+
+One execution-ready Codex batch equals one generated Codex prompt.
+
+Detailed `CODEX_WORK_ITEM` entries preserve the exhaustive inventory of
+known work. They are not automatically prompts.
+
+`CODEX_PR` is reserved for historical or current PR-shaped work such as
+#113, #114 and #115.
+
+An execution batch may group several work items only when they share a
+real implementation and review boundary: milestone, horizon, owner,
+functional family, compatible paths, common test plan and common rollback.
+
+Codex prompts are generated from execution batches, not directly from
+individual work items.
+
+Batching reduces execution overhead without removing deliverables,
+acceptance criteria, evidence requirements or auditability.
+
+The execution system represents all work known and approved as of the current Decision Log.
+
+Unknown future events, external changes and newly discovered work are handled through the mandatory change-control process before implementation.
 
 ## Official Positioning
 
@@ -258,6 +297,31 @@ Known rule-quality issues to strengthen:
 - AR010: structured rate-limit detection is insufficient.
 
 No rule is scientifically validated until measured.
+
+Benchmark acceptance thresholds must be defined, dated and approved before
+final benchmark results are calculated. They must cover precision, recall,
+false-positive rate, false-negative rate, performance, reproducibility and
+ambiguous-case behavior.
+
+Thresholds must not be changed after observing final results to make a result
+look better.
+
+## Commercial Validation Gates
+
+Before AgentReady is presented as globally validated or category-established,
+the ledger must require:
+
+- at least ten external Community users on real contracts, MCP servers or repositories;
+- at least three explicit Pro payment signals;
+- at least one real external Pro sale with payment collected, entitlement delivered and activation completed;
+- at least one credible public value case based on a real issue and real fix.
+
+Internal accounts, project-owned test accounts, fixtures, automated installs,
+AgentReady repository CI runs and internal Stripe test purchases do not count
+as external validation.
+
+These gates do not block Community publication, Pro technical construction or
+the first Pro sale path. They block only premature global-validation claims.
 
 ## Distribution And Onboarding
 

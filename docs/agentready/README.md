@@ -17,10 +17,18 @@ AgentReady analyzes OpenAPI specifications and MCP tools before deployment to id
 | 1 | `AGENTREADY_MASTER_PLAN.md` |
 | 2 | `EXECUTION_SEQUENCE.md` |
 | 3 | `DECISION_LOG.md` |
-| 4 | Specialized specifications |
-| 5 | Historical documents |
+| 4 | `AGENTREADY_EXECUTION_LEDGER.json` |
+| 5 | Specialized active specifications |
+| 6 | Generated Markdown views |
+| 7 | Historical documents |
 
 If another document conflicts with `AGENTREADY_MASTER_PLAN.md`, the master plan prevails.
+
+`AGENTREADY_EXECUTION_LEDGER.json` is the canonical detailed execution register. Generated Markdown views must not be edited manually.
+
+Detailed `CODEX_WORK_ITEM` entries are tracked separately from Codex execution
+batches. A generated Codex prompt comes from an execution-ready batch, not
+directly from an individual work item.
 
 Core promise:
 
@@ -91,6 +99,14 @@ There is no manual review offer, mandatory contact-sales step, quote workflow, m
 | `AGENTREADY_MASTER_PLAN.md` | Active source of truth |
 | `EXECUTION_SEQUENCE.md` | Active execution order |
 | `DECISION_LOG.md` | Active decision record |
+| `AGENTREADY_EXECUTION_LEDGER.json` | Canonical detailed execution register |
+| `AGENTREADY_EXECUTION_LEDGER.md` | Generated task view |
+| `AGENTREADY_STATUS.md` | Generated project status and prompt counts |
+| `NEXT_ACTION.md` | Generated next action |
+| `NEXT_CODEX_PROMPT.md` | Generated prompt when Codex is authorized |
+| `OWNER_AND_EXTERNAL_ACTIONS.md` | Generated owner/legal/external action view |
+| `GLOBAL_SITE_SEO_GEO_COMPETITIVE_MATRIX.md` | Generated site, SEO, GEO and competitive matrix |
+| `PROJECT_CHANGE_CONTROL.md` | Mandatory change-control process |
 | `PRODUCT_SCOPE_AND_NON_GOALS.md` | Scope and non-goals |
 | `COMMUNITY_PRO_ENTITLEMENTS.md` | Community and Pro launch boundaries |
 | `ENGINE_QUALITY_AND_BENCHMARK_PLAN.md` | Benchmark and quality gates |
@@ -138,6 +154,26 @@ docs/agentready/legacy/
 ```
 
 This content is historical only and does not define the active product direction.
+
+## Canonical Execution System
+
+Current governance PR:
+
+```txt
+docs(project): add canonical AgentReady execution system
+```
+
+Branch:
+
+```txt
+docs-agentready-canonical-execution-system
+```
+
+After it merges and is reconciled, use `NEXT_ACTION.md`. Use `NEXT_CODEX_PROMPT.md` only when it authorizes a Codex task.
+
+`NEXT_CODEX_PROMPT.md` is batch-based. If the next action belongs to Jeason,
+legal, security, design or an external verification, it must refuse to produce
+a new Codex implementation prompt.
 
 ## No-Drift Rule
 
