@@ -111,6 +111,7 @@ It also validates:
 - staged Community tarball `package.json` does not contain `private: true`;
 - staged Community tarball `publishConfig.access` is `public`;
 - staged Community tarball `publishConfig.registry` is `https://registry.npmjs.org/`;
+- staged Community tarball `publishConfig.tag` is `alpha`;
 - Node engine;
 - binary command;
 - license field;
@@ -182,6 +183,7 @@ The script:
 - generates a staged Community package manifest without `private: true`;
 - sets staged Community package `publishConfig.access` to `public`;
 - sets staged Community package `publishConfig.registry` to `https://registry.npmjs.org/`;
+- sets staged Community package `publishConfig.tag` to `alpha`;
 - calculates the planned tag from the version;
 - runs `npm pack --json`;
 - validates the exact package file list;
@@ -209,7 +211,9 @@ Required status:
   "status": "candidate_only",
   "publication_ready": false,
   "package_private": false,
-  "package_publish_access": "public"
+  "package_publish_access": "public",
+  "package_publish_registry": "https://registry.npmjs.org/",
+  "package_publish_tag": "alpha"
 }
 ```
 
@@ -270,6 +274,52 @@ Version:
 
 ```txt
 0.1.0-alpha.0
+```
+
+```txt
+VERSION: 0.1.0-alpha.0
+NPM DIST-TAG: alpha
+LATEST TAG MODIFIED: NO
+FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
+NPM TOKEN: none
+FUTURE AUTH: Trusted Publishing OIDC after initial package creation
+PUBLICATION APPROVED: NO
+```
+
+NPM DIST-TAG:
+
+```txt
+alpha
+```
+
+LATEST TAG MODIFIED:
+
+```txt
+NO
+```
+
+FIRST PUBLICATION AUTH:
+
+```txt
+manual npm CLI with owner 2FA
+```
+
+NPM TOKEN:
+
+```txt
+none
+```
+
+FUTURE AUTH:
+
+```txt
+Trusted Publishing OIDC after initial package creation
+```
+
+PUBLICATION APPROVED:
+
+```txt
+NO
 ```
 
 Planned future tag:

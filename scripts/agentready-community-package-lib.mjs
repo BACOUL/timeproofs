@@ -15,7 +15,8 @@ export const EXPECTED_ROOT_LICENSE = 'SEE LICENSE IN LICENSE';
 export const COMMUNITY_LICENSE = 'Apache-2.0';
 export const COMMUNITY_PUBLISH_CONFIG = Object.freeze({
   access: 'public',
-  registry: 'https://registry.npmjs.org/'
+  registry: 'https://registry.npmjs.org/',
+  tag: 'alpha'
 });
 export const MANIFEST_NAME = 'agentready-community-release-candidate-manifest.json';
 export const RELEASE_NOTES_RELATIVE_PATH = 'docs/agentready/COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_0_DRAFT.md';
@@ -152,6 +153,7 @@ export async function createCommunityReleaseCandidate({ repoRoot, outputDir }) {
       package_private: false,
       package_publish_access: COMMUNITY_PUBLISH_CONFIG.access,
       package_publish_registry: COMMUNITY_PUBLISH_CONFIG.registry,
+      package_publish_tag: COMMUNITY_PUBLISH_CONFIG.tag,
       community_license: COMMUNITY_LICENSE,
       package_boundary: 'staged AgentReady Community package only',
       tarball: {
@@ -267,6 +269,7 @@ export async function validateCommunityTarball(tarballPath) {
   assert.notEqual(packageJson.private, true);
   assert.equal(packageJson.publishConfig?.access, COMMUNITY_PUBLISH_CONFIG.access);
   assert.equal(packageJson.publishConfig?.registry, COMMUNITY_PUBLISH_CONFIG.registry);
+  assert.equal(packageJson.publishConfig?.tag, COMMUNITY_PUBLISH_CONFIG.tag);
   assert.deepEqual(Object.keys(packageJson.dependencies || {}), []);
 
   const licenseText = await readTarballText(entries, 'LICENSE');
@@ -280,6 +283,9 @@ export async function validateCommunityTarball(tarballPath) {
   const readmeText = await readTarballText(entries, 'README.md');
   assert.match(readmeText, /AgentReady Community/);
   assert.match(readmeText, /not yet\s+published/i);
+  assert.match(readmeText, /npm install @timeproofs\/agentready@alpha/);
+  assert.match(readmeText, /npx @timeproofs\/agentready@alpha --help/);
+  assert.match(readmeText, /not distributed under `latest`/i);
   assert.doesNotMatch(readmeText, /ProofSpec|proof-of-existence|preuve d['’]existence|timestamp proofs|TimeProofs protocol/i);
 
   const combinedText = [licenseText, noticeText, readmeText, JSON.stringify(packageJson)].join('\n');

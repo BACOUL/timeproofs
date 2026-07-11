@@ -1982,7 +1982,7 @@ Required evidence:
 
 ### AR-COM-005 - Approve final Community tarball content
 - Type: OWNER_ACTION
-- Status: DONE
+- Status: OWNER_ACTION_REQUIRED
 - Owner: JEASON
 - Milestone: M2
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
@@ -1994,11 +1994,14 @@ Required evidence:
 Deliverables:
   - None
 Acceptance criteria:
-  - tarball file list reviewed
-  - checksum approved
+  - corrected alpha-channel tarball file list reviewed
+  - corrected alpha-channel checksum approved
+  - npm dist-tag alpha verified
+  - publication remains unauthorized
 Required evidence:
-  - approved tarball SHA-256
-  - approved source commit
+  - approved corrected tarball SHA-256
+  - approved corrected source commit
+  - owner approval confirming npm dist-tag alpha
 
 ### AR-COM-006A - Explicit Community publication approval
 - Type: DECISION_GATE

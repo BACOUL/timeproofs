@@ -1,10 +1,16 @@
 # AgentReady Community Tarball Public Content Audit
 
-Status: APPROVED CONTENT — PUBLICATION NOT APPROVED
+Status: CONTENT APPROVAL SUPERSEDED - PUBLICATION NOT APPROVED
 
 ```txt
-TARBALL CONTENT APPROVED: YES
+TARBALL CONTENT APPROVED: NO
 PUBLICATION APPROVED: NO
+VERSION: 0.1.0-alpha.0
+NPM DIST-TAG: alpha
+LATEST TAG MODIFIED: NO
+FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
+NPM TOKEN: none
+FUTURE AUTH: Trusted Publishing OIDC after initial package creation
 ```
 
 This document records the planned public package contents and the checks
@@ -37,7 +43,8 @@ The staged Community tarball package must be technically publishable after appro
   "license": "Apache-2.0",
   "publishConfig": {
     "access": "public",
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "tag": "alpha"
   }
 }
 ```
@@ -109,11 +116,13 @@ The public package must not include:
 - Pro, Team or Agency implementation;
 - package-public historical ProofSpec or timestamp language.
 
-## Final Approved Artifact
+## Superseded Approved Artifact
 
 ```txt
-TARBALL CONTENT APPROVED: YES
+TARBALL CONTENT APPROVED: SUPERSEDED
 PUBLICATION APPROVED: NO
+SUPERSEDED DATE: 2026-07-11
+SUPERSEDED REASON: release channel corrected to alpha, changing the tarball content
 ```
 
 Approver:
@@ -208,6 +217,7 @@ Controlled results:
 - Community package does not contain `private: true`;
 - `publishConfig.access` is `public`;
 - `publishConfig.registry` is `https://registry.npmjs.org/`;
+- `publishConfig.tag` was not yet set to `alpha` in this superseded artifact;
 - no forbidden historical ProofSpec reference is present;
 - no secret is present;
 - no Pro, Stripe, backend or internal content is present;
@@ -220,15 +230,20 @@ Owner approval statement:
 «J’approuve le contenu final du tarball AgentReady Community 0.1.0-alpha.0, lié au commit 61a5dab90afe6363f7ea386712bb8cdc48e9f665 et au SHA-256 f1381d16277707cfc5d1005ed5e865139aa5a1ed0fcc1fb7de35c2f1a5eab77d. Cette approbation n’autorise pas encore sa publication.»
 ```
 
-This content approval is not a publication authorization.
+This content approval is not a publication authorization and is no longer
+usable for publication because the corrected alpha release channel changes the
+tarball contents.
 
 ## Current Blockers
 
+- a new tarball content approval is required for the corrected `alpha` channel artifact;
 - publication approval must remain `NO` until a dedicated approval flow changes it.
 
 ## Publication Impact
 
-The final artifact contents have been inspected and approved.
+The previously approved artifact contents have been inspected but are now
+superseded.
 
-Publication remains blocked until explicit publication approval is recorded in
-a dedicated approval flow.
+Publication remains blocked until the corrected `alpha` artifact receives a
+new owner content approval and explicit publication approval is recorded in a
+dedicated approval flow.

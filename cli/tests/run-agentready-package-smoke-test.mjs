@@ -166,10 +166,16 @@ async function assertInstalledPackageMetadata(cleanProject) {
   assert.notEqual(installedPackage.private, true);
   assert.equal(installedPackage.publishConfig?.access, COMMUNITY_PUBLISH_CONFIG.access);
   assert.equal(installedPackage.publishConfig?.registry, COMMUNITY_PUBLISH_CONFIG.registry);
+  assert.equal(installedPackage.publishConfig?.tag, COMMUNITY_PUBLISH_CONFIG.tag);
   await assertFileExists(path.join(installedRoot, 'LICENSE'));
   await assertFileExists(path.join(installedRoot, 'NOTICE'));
   const readme = await fs.readFile(path.join(installedRoot, 'README.md'), 'utf8');
   assert.match(readme, /AgentReady Community/);
+  assert.match(readme, /npm install @timeproofs\/agentready@alpha/);
+  assert.match(readme, /npx @timeproofs\/agentready@alpha --help/);
+  assert.match(readme, /not distributed under `latest`/i);
+  assert.doesNotMatch(readme, /^npm install @timeproofs\/agentready$/m);
+  assert.doesNotMatch(readme, /^npx @timeproofs\/agentready --help$/m);
   assert.doesNotMatch(readme, /ProofSpec|proof-of-existence|timestamp proofs|TimeProofs protocol/i);
 }
 

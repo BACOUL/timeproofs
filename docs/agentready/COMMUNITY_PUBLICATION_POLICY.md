@@ -32,7 +32,8 @@ The staged AgentReady Community tarball `package.json` must be technically publi
   "license": "Apache-2.0",
   "publishConfig": {
     "access": "public",
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "tag": "alpha"
   }
 }
 ```
@@ -40,6 +41,22 @@ The staged AgentReady Community tarball `package.json` must be technically publi
 The staged tarball package must not contain `private: true`.
 
 Publication remains forbidden until final tarball approval and explicit release approval are recorded.
+
+## Alpha Release Channel
+
+```txt
+VERSION: 0.1.0-alpha.0
+NPM DIST-TAG: alpha
+LATEST TAG MODIFIED: NO
+FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
+NPM TOKEN: none
+FUTURE AUTH: Trusted Publishing OIDC after initial package creation
+PUBLICATION APPROVED: NO
+```
+
+The first publication of `0.1.0-alpha.0`, if later approved, must use the
+explicit npm `alpha` dist-tag. It must not create, move or rely on the
+implicit `latest` tag.
 
 ## Authorized Publication Source
 
@@ -75,6 +92,16 @@ Preferred future method:
 ```txt
 trusted publishing, if npm scope/package support and owner policy allow it
 ```
+
+First-publication method for `0.1.0-alpha.0`:
+
+```txt
+manual npm CLI with owner 2FA
+```
+
+No npm token is to be created or stored for the first publication. Trusted
+Publishing OIDC remains the preferred future method after initial package
+creation and a dedicated configuration PR.
 
 Required security:
 
@@ -121,6 +148,7 @@ Before publication, verify:
 - staged package `package.json` does not contain `private: true`;
 - staged package `publishConfig.access` is `public`;
 - staged package `publishConfig.registry` is `https://registry.npmjs.org/`;
+- staged package `publishConfig.tag` is `alpha`;
 - staged package `package.json` license is `Apache-2.0`;
 - staged package includes the dedicated Apache-2.0 `LICENSE`;
 - staged package includes `NOTICE`;
