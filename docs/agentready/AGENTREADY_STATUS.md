@@ -7,18 +7,18 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 ## Summary
 - Total tasks: 190
-- Total weighted progress: 8/658 (1.2%)
-- Next action: ARB-GOV-003 - Add canonical AgentReady execution system
+- Total weighted progress: 13/658 (2%)
+- Next action: AR-COM-001 - Verify control of npm scope @timeproofs
 
 ## Detailed Work Items
 Total detailed Codex work items: 147
-Completed detailed Codex work items: 2
-Remaining detailed Codex work items: 145
+Completed detailed Codex work items: 3
+Remaining detailed Codex work items: 144
 
 ## Execution Batches
 Total planned Codex execution batches: 71
-Completed Codex execution batches: 2
-Execution batches currently in review: 1
+Completed Codex execution batches: 3
+Execution batches currently in review: 0
 Execution batches not yet issued: 68
 Immediately executable Codex prompts: 0
 Average work items per batch: 2.07
@@ -27,10 +27,10 @@ Batches with more than five work items: 2
 Batches with more than eight work items: 0
 
 ## Execution Batches By Objective
-Execution batches remaining before Community publicly usable: 5
-Execution batches remaining before Pro technically complete: 15
-Execution batches remaining before first Pro sale: 29
-Execution batches remaining before global launch: 59
+Execution batches remaining before Community publicly usable: 4
+Execution batches remaining before Pro technically complete: 14
+Execution batches remaining before first Pro sale: 28
+Execution batches remaining before global launch: 58
 Execution batches for category-building: 9
 Execution batches post-launch: 9
 Execution batches post-revenue: 1
@@ -55,7 +55,7 @@ External Pro sales required: 1
 Credible public value cases required: 1
 
 ## Progress By Horizon
-- BEFORE_COMMUNITY_PUBLICATION: 8/81 (9.9%)
+- BEFORE_COMMUNITY_PUBLICATION: 13/81 (16%)
 - POST_LAUNCH: 0/83 (0%)
 - BEFORE_PRO_TECHNICAL_COMPLETION: 0/66 (0%)
 - BEFORE_PRO_FIRST_SALE: 0/109 (0%)
@@ -63,7 +63,7 @@ Credible public value cases required: 1
 - POST_REVENUE: 0/17 (0%)
 
 ## Progress By Milestone
-- M1 Governance locked: 8/23 (34.8%)
+- M1 Governance locked: 13/23 (56.5%)
 - M2 Community publication blockers resolved: 0/26 (0%)
 - M3 Community publicly usable: 0/34 (0%)
 - M4 Engine benchmark established: 0/31 (0%)

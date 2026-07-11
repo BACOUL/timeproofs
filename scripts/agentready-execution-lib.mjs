@@ -826,7 +826,13 @@ export function validateLedger(ledger, compareGenerated = true) {
   add(counts.execution_batches.total === batches.length, "execution batch total mismatch");
   add(counts.execution_batches.immediately_executable === batches.filter((batch) => isExecutionReadyBatch(batch, ledger)).length, "immediately executable prompt count mismatch");
   add(counts.remaining_batches.before_pro_first_sale === batches.filter((batch) => !isDone(batch) && !["POST_LAUNCH", "POST_REVENUE"].includes(batch.delivery_horizon) && milestoneNumber(batch) <= 6).length, "first sale batch count includes wrong batches");
-  add((ledger.execution_batches || []).some((batch) => batch.id === "ARB-GOV-003" && batch.status === "IN_REVIEW"), "PR #115 batch must remain IN_REVIEW");
+  const governanceBatch = (ledger.execution_batches || []).find((batch) => batch.id === "ARB-GOV-003");
+  add(Boolean(governanceBatch), "PR #115 governance batch must exist");
+  if (governanceBatch) {
+    const reconciled = governanceBatch.status === "DONE"
+      && (governanceBatch.evidence || []).some((entry) => entry.type === "merge" && entry.pr === 115 && entry.merge_sha);
+    add(governanceBatch.status === "IN_REVIEW" || reconciled, "PR #115 batch must be IN_REVIEW or DONE with merge evidence");
+  }
   if (compareGenerated) {
     const generated = generatedContents(ledger);
     for (const [filePath, expected] of Object.entries(generated)) {

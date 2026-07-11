@@ -8,7 +8,7 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 | ID | Kind | Owner | Status | Title | Required evidence |
 |---|---|---|---|---|---|
 | AR-GOV-EPIC | task | CODEX_AND_JEASON | IN_PROGRESS | Governance and anti-drift | child tasks tracked in ledger |
-| AR-GOV-003 | task | CODEX_AND_JEASON | IN_REVIEW | Add canonical AgentReady execution system | draft PR #115<br>workflow success<br>human ledger review before merge |
+| AR-GOV-003 | task | CODEX_AND_JEASON | DONE | Add canonical AgentReady execution system | draft PR #115<br>workflow success<br>human ledger review before merge |
 | AR-GOV-004 | task | CODEX_AND_JEASON | RECURRING | Monthly execution ledger review | dated review evidence |
 | AR-COM-EPIC | task | CODEX_AND_JEASON | PLANNED | Community publication | child tasks tracked in ledger |
 | AR-COM-001 | task | JEASON | OWNER_ACTION_REQUIRED | Verify control of npm scope @timeproofs | owner-provided npm scope evidence |
@@ -52,4 +52,4 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 | AR-OPS-001 | task | CODEX_AND_JEASON | RECURRING | Run monthly post-launch operations review | dated review evidence |
 | AR-I18N-001 | task | EXTERNAL_SPECIALIST | POST_LAUNCH | Verify internationalization obligations | Verify internationalization obligations evidence |
 | AR-TEAM-EPIC | task | CODEX_AND_JEASON | PLANNED | Team and Agency post-revenue expansion | child tasks tracked in ledger |
-| ARB-GOV-003 | batch | CODEX_AND_JEASON | IN_REVIEW | Add canonical AgentReady execution system | draft PR #115<br>workflow success<br>human ledger review before merge |
+| ARB-GOV-003 | batch | CODEX_AND_JEASON | DONE | Add canonical AgentReady execution system | draft PR #115<br>workflow success<br>human ledger review before merge |

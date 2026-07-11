@@ -5,23 +5,17 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 # Next Action
 
-Batch ID: ARB-GOV-003
-Title: Add canonical AgentReady execution system
+Task ID: AR-COM-001
+Title: Verify control of npm scope @timeproofs
 Action owner: JEASON
-Action type: REVIEW_OR_MERGE
-Status: IN_REVIEW
-Specification: EXECUTION_READY
+Action type: OWNER_ACTION_REQUIRED
+Status: OWNER_ACTION_REQUIRED
 Objective:
-Add canonical AgentReady execution system.
-
-Work items:
-  - AR-GOV-003
+Verify control of npm scope @timeproofs.
 
 Required evidence:
-  - draft PR #115
-  - workflow success
-  - human ledger review before merge
+  - owner-provided npm scope evidence
 
 Manual actions:
-  - HUMAN LEDGER REVIEW REQUIRED BEFORE MERGE
+  - None
 
