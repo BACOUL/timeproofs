@@ -10,6 +10,8 @@ on:
       - "bin/agentready.js"
       - "cli/tests/**"
       - "scripts/create-agentready-community-release-candidate.mjs"
+      - "scripts/agentready-community-package-lib.mjs"
+      - "packaging/agentready-community/**"
       - "package.json"
       - "README.md"
       - "docs/agentready/COMMUNITY_RELEASE_WORKFLOW.md"
@@ -163,8 +165,10 @@ jobs:
           assert.equal(manifest.publication.github_tag, false);
           assert.equal(manifest.github_action.versioned_tag_created, false);
           assert.equal(manifest.package_private, true);
+          assert.equal(manifest.community_license, 'Apache-2.0');
           assert.equal(manifest.planned_tag, 'v0.1.0-alpha.0');
-          assert.equal(manifest.tarball.entry_count, 20);
+          assert.equal(manifest.tarball.entry_count, 21);
+          assert.ok(manifest.tarball.files.includes('NOTICE'));
           assert.equal(manifest.commit_sha, process.env.EXPECTED_COMMIT_SHA);
           NODE
 

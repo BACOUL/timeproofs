@@ -7,8 +7,8 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 ## Summary
 - Total tasks: 190
-- Total weighted progress: 19/658 (2.9%)
-- Next action: AR-COM-003 - Approve AgentReady Community license
+- Total weighted progress: 25/658 (3.8%)
+- Next action: AR-COM-005 - Approve final Community tarball content
 
 ## Detailed Work Items
 Total detailed Codex work items: 147
@@ -55,7 +55,7 @@ External Pro sales required: 1
 Credible public value cases required: 1
 
 ## Progress By Horizon
-- BEFORE_COMMUNITY_PUBLICATION: 19/81 (23.5%)
+- BEFORE_COMMUNITY_PUBLICATION: 25/81 (30.9%)
 - POST_LAUNCH: 0/83 (0%)
 - BEFORE_PRO_TECHNICAL_COMPLETION: 0/66 (0%)
 - BEFORE_PRO_FIRST_SALE: 0/109 (0%)
@@ -64,7 +64,7 @@ Credible public value cases required: 1
 
 ## Progress By Milestone
 - M1 Governance locked: 13/23 (56.5%)
-- M2 Community publication blockers resolved: 6/26 (23.1%)
+- M2 Community publication blockers resolved: 12/26 (46.2%)
 - M3 Community publicly usable: 0/34 (0%)
 - M4 Engine benchmark established: 0/31 (0%)
 - M5 Pro technically complete: 0/35 (0%)
@@ -73,9 +73,9 @@ Credible public value cases required: 1
 - M8 Category-building active: 0/98 (0%)
 
 ## Document Coverage
-Active documents discovered: 65
-Active documents covered: 65
+Active documents discovered: 66
+Active documents covered: 66
 Uncovered active documents: 0
-Historical documents excluded: 37
+Historical documents excluded: 36
 Generated documents excluded: 6
 

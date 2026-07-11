@@ -67,11 +67,9 @@ It identifies structural risks that may cause AI agents to misuse APIs, tools or
 
 ## Publication Blockers
 
-- npm scope ownership not confirmed.
-- legacy LICENSE references unresolved.
-- AgentReady legal license decision not approved.
 - package remains private.
+- final Community tarball content not approved.
+- explicit release approval not granted.
 - no public tag exists.
 - no GitHub Release exists.
-- npm publication security policy not finalized.
-- explicit release approval not granted.
+- trusted publishing provenance not configured for publication.

@@ -1937,7 +1937,7 @@ Required evidence:
 
 ### AR-COM-003 - Approve AgentReady Community license
 - Type: LEGAL_REVIEW
-- Status: LEGAL_REVIEW_REQUIRED
+- Status: DONE
 - Owner: LEGAL
 - Milestone: M2
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
@@ -1949,14 +1949,17 @@ Required evidence:
 Deliverables:
   - None
 Acceptance criteria:
-  - final license approved
-  - package license and LICENSE coherent
+  - final Community package license approved
+  - package license and dedicated LICENSE coherent
+  - root repository LICENSE unchanged and outside package boundary
 Required evidence:
-  - legal approval or owner legal decision
+  - owner legal decision
+  - contributor audit
+  - package boundary documentation
 
 ### AR-COM-004 - Treat package-public ProofSpec references
 - Type: LEGAL_REVIEW
-- Status: LEGAL_REVIEW_REQUIRED
+- Status: DONE
 - Owner: LEGAL
 - Milestone: M2
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
@@ -1968,10 +1971,14 @@ Required evidence:
 Deliverables:
   - None
 Acceptance criteria:
-  - legacy references removed, renamed or legally justified
+  - legacy references removed, renamed or legally justified for package-public files
+  - root LICENSE excluded from Community tarball
+  - root README excluded from Community tarball
+  - ProofSpec references absent from Community tarball
 Required evidence:
   - legal treatment decision
   - updated package-public audit
+  - staged package validation
 
 ### AR-COM-005 - Approve final Community tarball content
 - Type: OWNER_ACTION

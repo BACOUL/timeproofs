@@ -1,69 +1,98 @@
 # AgentReady Community License Decision
 
-Status: LEGAL REVIEW REQUIRED
+Status: ACTIVE DECISION
 
-FINAL LICENSE APPROVAL REQUIRED BEFORE PUBLICATION
+Publication status: NOT PUBLISHED
 
-This document records the current licensing state for a future AgentReady Community publication. It does not change `LICENSE` or `package.json`.
+Decision date: 2026-07-11
 
-## Current Repository State
+Decision owner: Jeason Bacoul
 
-`package.json` declares:
+## Decision
 
-```json
-"license": "SEE LICENSE IN LICENSE"
-```
-
-The current `LICENSE` file begins with MIT License text, then includes additional TimeProofs protocol and trademark terms tied to legacy ProofSpec and timestamp/proof-of-existence material.
-
-Current blocker:
+The future public npm package:
 
 ```txt
-legacy LICENSE references unresolved
+@timeproofs/agentready
 ```
 
-## Current Tarball License Exposure
+will be distributed as AgentReady Community under:
 
-The npm package automatically includes:
+```txt
+Apache License 2.0
+SPDX: Apache-2.0
+```
 
-- `LICENSE`;
-- `README.md`;
-- `package.json`.
+This decision applies only to the files actually included in the staged
+AgentReady Community npm package.
 
-Because `LICENSE` is included in the tarball, its ProofSpec and legacy TimeProofs protocol terms would be shipped to Community users unless resolved before publication.
+It does not relicense the whole `BACOUL/timeproofs` repository.
 
-## Intended Public Layers
+## Repository License Separation
 
-The following layers are intended to be public or publicly auditable, subject to final license approval:
+The root `LICENSE` file remains unchanged. It contains historical TimeProofs
+and ProofSpec terms and is not included in the AgentReady Community package
+candidate.
 
-- AgentReady Community CLI;
-- GitHub Action;
-- `agentready.json` format;
-- AR rule taxonomy;
-- Community rule documentation;
-- bad/fixed examples;
-- Community rule format.
+The Community package has dedicated package assets under:
 
-## TimeProofs And AgentReady Marks
+```txt
+packaging/agentready-community/
+```
 
-The names `TimeProofs` and `AgentReady` should remain protected product or brand identifiers. A code license decision must not imply unrestricted trademark rights.
+Those package assets provide the npm distribution boundary:
 
-## Assets Not Included In Community Publication
+- `LICENSE`: unmodified Apache License 2.0 text;
+- `NOTICE`: factual attribution and trademark note;
+- `README.md`: npm-focused AgentReady Community README.
 
-The following assets are not part of the Community package publication decision:
+The release candidate script stages these assets into the package root before
+running `npm pack`.
 
-- Pro services;
-- licensing service;
-- entitlement service;
-- advanced rule packs;
-- calibration;
+## Trademark Boundary
+
+The names `TimeProofs` and `AgentReady` are product names. The Apache License
+2.0 does not grant trademark rights.
+
+Descriptive uses that are normally legally allowed remain possible, but forks,
+packages, services or reports must not claim to be official, approved,
+certified or affiliated with TimeProofs unless that status is separately
+granted.
+
+This document does not claim that the marks are registered.
+
+## Excluded Assets
+
+The Apache-2.0 Community package decision does not include:
+
+- AgentReady Pro;
+- license and entitlement services;
+- backend or hosted services;
+- billing and customer account services;
+- proprietary advanced rules;
+- internal calibration;
 - full benchmark corpus;
 - internal benchmark data;
 - advanced differential engine;
-- enriched future SARIF workflows;
-- Team or Agency features.
+- Team or Agency features;
+- secrets, infrastructure or internal operations.
 
-## Dependency License Audit
+## Contributor And Rights Audit
+
+Audit scope:
+
+- `bin/agentready.js`;
+- `agentready-core/*.js`;
+- `agentready-core/simulation/*.js`.
+
+Git history reviewed on 2026-07-11 shows only these author identities on the
+package-boundary source files:
+
+- `BACOUL`;
+- `Codex`.
+
+No third-party substantive contributor was identified in that audited history.
+No private email address is recorded in this document.
 
 Current package runtime dependencies:
 
@@ -71,19 +100,15 @@ Current package runtime dependencies:
 none
 ```
 
-The CLI package uses Node.js built-ins and local repository files. There are currently no third-party runtime dependencies to publish in the package metadata.
-
-## Decision Status
-
-No final license change is made in this PR.
-
-Publication remains blocked until:
-
-- the owner approves the AgentReady Community license;
-- legal review confirms whether the current MIT text plus additional terms is appropriate;
-- ProofSpec references in `LICENSE` are removed, replaced, or explicitly retained with a clear reason;
-- package `README.md`, `package.json`, and `LICENSE` are coherent for AgentReady Community.
+The package uses Node.js built-ins and local AgentReady Community source files.
 
 ## Publication Impact
 
-Publication is blocked.
+`AR-COM-003 — Approve AgentReady Community license` is resolved by owner
+decision for the package boundary.
+
+This does not approve publication.
+
+Publication remains blocked until the final Community tarball content,
+publication approval, tag, release and npm publication gates are explicitly
+completed.

@@ -18,9 +18,9 @@ APPROVAL DATE:
 - npm scope ownership verified;
 - npm package publishability verified;
 - npm account access list documented;
-- npm 2FA or trusted publishing decision completed;
-- license approved by owner and legal review;
-- legacy ProofSpec references resolved or explicitly approved;
+- npm 2FA enabled or trusted publishing decision completed;
+- AgentReady Community package license approved for the package boundary;
+- package-public legacy references resolved by staged package assets;
 - package tarball contents reviewed;
 - tarball SHA-256 recorded;
 - source commit recorded;

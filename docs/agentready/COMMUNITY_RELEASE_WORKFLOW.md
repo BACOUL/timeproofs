@@ -292,25 +292,21 @@ Rollback is not active in this candidate-only workflow because no public artifac
 
 ## Publication Blockers
 
-- npm scope ownership not confirmed.
-- legacy LICENSE references unresolved.
-- AgentReady legal license decision not approved.
 - package remains private.
+- final Community tarball content not approved.
+- explicit release approval not granted.
 - no public tag exists.
 - no GitHub Release exists.
-- npm publication security policy not finalized.
-- explicit release approval not granted.
+- trusted publishing provenance not configured for publication.
 
 ## Required Approvals Before Publication
 
 Before publication can be considered:
 
-- package scope ownership must be verified;
-- legal license decision must be approved;
-- publication security policy must be approved;
-- 2FA or trusted publishing policy must be defined;
+- final Community tarball contents must be approved;
+- final source commit must be approved;
+- final tarball SHA-256 must be approved;
 - release notes must be reviewed;
-- exact tarball contents must be approved;
 - immutable tag target commit must be approved;
 - explicit release approval must be recorded.
 
