@@ -10,6 +10,7 @@ Use only:
 - NOT_APPLICABLE
 
 Publication status: BLOCKED
+Publication execution status: AWAITING_OWNER_NPM_PUBLICATION
 
 ```txt
 VERSION: 0.1.0-alpha.0
@@ -89,6 +90,7 @@ LATEST TAG MODIFIED: NO
 | npm 2FA or trusted publishing policy validated | READY | npm 2FA enabled; trusted publishing preferred for future dedicated setup |
 | Package made publishable after approval | READY | staged Community tarball package omits `private: true` and sets public npm publish config |
 | Final tarball content approved | READY | JEASON approval dated 2026-07-11 for commit `150da23932c1fb9433cb3d546904f03c18c909e9`, version `0.1.0-alpha.0`, tarball SHA-256 `602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe`, npm dist-tag `alpha` |
+| Publication preflight completed | READY | `COMMUNITY_PUBLICATION_EXECUTION.md` records externally verified preflight evidence and stops at the owner npm publication checkpoint |
 | Tag created on reviewed commit | BLOCKED | No tag created |
 | Release notes verified | READY | Draft notes exist |
 | GitHub Release created | BLOCKED | No GitHub Release exists |

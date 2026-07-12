@@ -16,7 +16,9 @@ TimeProofs AgentReady = pre-deployment CI gate for agent-facing OpenAPI and MCP 
 
 ### Blocked
 
-- Public npm publication, GitHub Release creation, immutable tag creation, and Marketplace listing remain blocked until explicit release approval.
+- Public npm publication, immutable tag creation, and GitHub Release creation are approved only for the exact `0.1.0-alpha.0` alpha artifact, but have not been executed.
+- npm publication is awaiting the owner checkpoint: JEASON must publish manually with owner 2FA and no npm token.
+- Marketplace listing remains outside this release step.
 
 ## 0.1.0-alpha.0 - candidate, not released
 
