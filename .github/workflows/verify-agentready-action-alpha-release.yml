@@ -8,7 +8,7 @@ on:
       - .github/workflows/verify-agentready-action-alpha-release.yml
 
 permissions:
-  contents: read
+  contents: write
   issues: write
 
 jobs:
@@ -19,6 +19,11 @@ jobs:
       TARGET_SHA: d6634d0fbbe1fced510fc49d8871d52a3dc7f348
       TAG_NAME: agentready-action-v0.1.0-alpha.0
     steps:
+      - name: Check out operations branch
+        uses: actions/checkout@v4
+        with:
+          ref: ops-publish-agentready-action-alpha
+
       - name: Verify immutable tag and prerelease
         id: verify
         shell: bash
@@ -38,6 +43,34 @@ jobs:
           echo "tag_sha=$tag_sha" >> "$GITHUB_OUTPUT"
           echo "release_url=$release_url" >> "$GITHUB_OUTPUT"
 
+      - name: Persist verification record
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p ops
+          cat > ops/agentready-action-alpha-release-verification.json <<EOF
+          {
+            "tag": "agentready-action-v0.1.0-alpha.0",
+            "tag_target": "${{ steps.verify.outputs.tag_sha }}",
+            "approved_implementation_sha": "d6634d0fbbe1fced510fc49d8871d52a3dc7f348",
+            "target_matches_approved_sha": true,
+            "release_url": "${{ steps.verify.outputs.release_url }}",
+            "draft": false,
+            "prerelease": true,
+            "npm_operation_performed": false,
+            "marketplace_owner_ui_required": true
+          }
+          EOF
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ops/agentready-action-alpha-release-verification.json
+          if git diff --cached --quiet; then
+            echo "Verification record already current."
+          else
+            git commit -m "ops(release): record AgentReady Action alpha verification"
+            git push origin HEAD:ops-publish-agentready-action-alpha
+          fi
+
       - name: Record verified owner checkpoint evidence on PR 129
         shell: bash
         run: |
@@ -45,20 +78,14 @@ jobs:
           cat > /tmp/comment.md <<EOF
           ## Owner checkpoint — tag and prerelease created
 
-          Verified immutable Action tag:
-
           - Tag: \`agentready-action-v0.1.0-alpha.0\`
           - Exact target: \`${{ steps.verify.outputs.tag_sha }}\`
           - Approved implementation SHA: \`d6634d0fbbe1fced510fc49d8871d52a3dc7f348\`
           - Target matches approved SHA: **YES**
-
-          Verified public GitHub prerelease:
-
           - Release URL: ${{ steps.verify.outputs.release_url }}
           - Draft: **false**
           - Prerelease: **true**
-
-          No npm operation was performed.
+          - npm operation: **none**
 
           GitHub Marketplace publication still requires the repository owner's interactive Marketplace agreement/category/2FA step in GitHub's Release Action interface.
           EOF
