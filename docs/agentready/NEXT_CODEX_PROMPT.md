@@ -79,11 +79,14 @@ Rollback: Revert ARB-COM-001 without reverting unrelated batches.
 
 Manual actions:
   - Codex verifies the approved artifact, checksum, package, version, source commit and alpha dist-tag before any publication.
+  - JEASON may perform a temporary local owner login with npm login --auth-type=web on his own Termux device; the login may be stored only in the owner's local ~/.npmrc for this controlled first publication.
   - JEASON runs the exact npm publish command locally and enters owner 2FA privately in his own terminal.
-  - JEASON must never send or store his npm password, 2FA code, recovery codes or authentication secrets.
+  - JEASON must never send his npm password, 2FA code, recovery codes or authentication secrets to Codex, GitHub, a pull request, a workflow, a log or the repository.
+  - JEASON must run npm logout immediately after npm publication and verification.
   - After npm publication succeeds, Codex verifies the public npm package before creating the authorized immutable Git tag and GitHub Release.
 
 Authorized external actions:
+  - perform temporary local npm owner login with npm login --auth-type=web on JEASON's device for the controlled first publication only
   - publish the exact approved tarball as @timeproofs/agentready@0.1.0-alpha.0 under npm dist-tag alpha, through the JEASON manual checkpoint
   - create immutable Git tag v0.1.0-alpha.0 pointing exactly to commit 150da23932c1fb9433cb3d546904f03c18c909e9 after npm publication succeeds
   - create the corresponding GitHub Release after npm publication succeeds
@@ -96,16 +99,20 @@ Authorized external actions:
   - recalculate the tarball SHA-256 and confirm it is exactly 602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe
   - confirm package @timeproofs/agentready, version 0.1.0-alpha.0, public access and npm dist-tag alpha
   - confirm latest will not be created, moved or modified
+  - prepare npm login --auth-type=web for JEASON's temporary local owner login, but do not execute it
   - prepare the exact npm publish command
   - stop before any owner 2FA entry
 
 ## Point de contrôle propriétaire obligatoire
 
+  - JEASON runs npm login --auth-type=web in his own local Termux terminal if not already authenticated
+  - JEASON allows npm CLI to store the temporary owner login only in his personal ~/.npmrc on that device
   - JEASON must verify the local SHA-256 is exactly 602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe before publishing
   - JEASON runs npm publish "<path-to-approved-tarball>" --access public --tag alpha in his own local terminal
   - JEASON enters npm 2FA only in his own terminal
   - JEASON never communicates the 2FA code, password, recovery code or token to Codex
   - Codex waits for JEASON's npm publication result before continuing
+  - JEASON runs npm logout immediately after publication and verification
 
 ## Après confirmation npm
 
@@ -124,7 +131,9 @@ Forbidden actions:
   - do not rebuild, modify or replace the approved tarball
   - do not publish another package version
   - do not create, move or modify the npm latest dist-tag
-  - do not create or store an npm token
+  - do not create manual npm tokens from the npm website
+  - do not configure NPM_TOKEN, NODE_AUTH_TOKEN, automation tokens or CI npm tokens
+  - do not store npm credentials outside JEASON's temporary local owner ~/.npmrc created by npm login --auth-type=web
   - do not request, receive, print or store a password, 2FA code or recovery code
   - do not create the Git tag before npm publication is confirmed
   - do not point v0.1.0-alpha.0 to any commit other than 150da23932c1fb9433cb3d546904f03c18c909e9

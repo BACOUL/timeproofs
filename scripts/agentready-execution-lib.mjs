@@ -867,7 +867,8 @@ export function validateLedger(ledger, compareGenerated = true) {
     add(forbiddenActions.some((item) => item.includes("latest")), "ARB-COM-001 must forbid latest");
     add(forbiddenActions.some((item) => item.includes("another package version")), "ARB-COM-001 must forbid another version");
     add(forbiddenActions.some((item) => item.includes("rebuild, modify or replace the approved tarball")), "ARB-COM-001 must forbid tarball modification");
-    add(forbiddenActions.some((item) => item.includes("npm token")), "ARB-COM-001 must forbid npm token creation/storage");
+    add(forbiddenActions.some((item) => item.includes("manual npm tokens")), "ARB-COM-001 must forbid manual npm token creation");
+    add(forbiddenActions.some((item) => item.includes("NPM_TOKEN") && item.includes("NODE_AUTH_TOKEN")), "ARB-COM-001 must forbid automation and CI npm tokens");
     add(forbiddenActions.some((item) => item.includes("password") && item.includes("2FA code") && item.includes("recovery code")), "ARB-COM-001 must forbid receiving or storing npm secrets and 2FA codes");
     add(forbiddenActions.some((item) => item.includes("any commit other than 150da23932c1fb9433cb3d546904f03c18c909e9")), "ARB-COM-001 must forbid tagging any commit except approved source commit");
     add(!prompt.includes("do not publish, do not create tags or releases"), "ARB-COM-001 prompt contains contradictory generic publication ban");
@@ -878,6 +879,10 @@ export function validateLedger(ledger, compareGenerated = true) {
     add(prompt.includes("alpha"), "ARB-COM-001 prompt missing alpha dist-tag");
     add(prompt.includes("v0.1.0-alpha.0"), "ARB-COM-001 prompt missing immutable tag");
     add(prompt.includes("latest"), "ARB-COM-001 prompt missing latest prohibition");
+    add(prompt.includes("npm login --auth-type=web"), "ARB-COM-001 prompt missing temporary local npm login command");
+    add(prompt.includes("~/.npmrc"), "ARB-COM-001 prompt missing owner local ~/.npmrc storage boundary");
+    add(prompt.includes("NPM_TOKEN") && prompt.includes("NODE_AUTH_TOKEN"), "ARB-COM-001 prompt missing automation token prohibition");
+    add(prompt.includes("npm logout"), "ARB-COM-001 prompt missing post-publication logout requirement");
     add(prompt.includes("never communicates the 2FA code") || prompt.includes("do not request, receive, print or store a password, 2FA code or recovery code"), "ARB-COM-001 prompt must forbid sharing 2FA");
   }
   for (const task of ledger.tasks.filter((t) => t.workstream === "PRO" && t.status === "READY")) add(map.get("AR-ENG-005")?.status === "DONE", `${task.id} Pro READY before final benchmark`);

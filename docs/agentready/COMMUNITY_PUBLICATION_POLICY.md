@@ -57,7 +57,11 @@ APPROVED TARBALL SHA-256: 602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a48
 NPM DIST-TAG: alpha
 LATEST TAG MODIFIED: NO
 FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
-NPM TOKEN: none
+NPM AUTOMATION TOKEN: none
+TEMPORARY LOCAL OWNER LOGIN: authorized for controlled first publication only
+LOCAL LOGIN STORAGE: owner device ~/.npmrc only
+CREDENTIAL SHARING: forbidden
+POST-PUBLICATION ACTION: npm logout immediately after verification
 FUTURE AUTH: Trusted Publishing OIDC after initial package creation
 ```
 
@@ -134,24 +138,44 @@ First-publication method for `0.1.0-alpha.0`:
 manual npm CLI with owner 2FA
 ```
 
-No npm token is to be created or stored for the first publication. Trusted
-Publishing OIDC remains the preferred future method after initial package
-creation and a dedicated configuration PR.
+The only authorized npm authentication for the first publication is a temporary
+local owner login created automatically by:
+
+```sh
+npm login --auth-type=web
+```
+
+This login may be stored only in JEASON's personal `~/.npmrc` on the owner
+device used for the controlled publication. It may be used only to publish the
+exact approved artifact and must be removed immediately after publication and
+verification with:
+
+```sh
+npm logout
+```
+
+Trusted Publishing OIDC remains the preferred future method after initial
+package creation and a dedicated configuration PR.
 
 Required security:
 
 - npm 2FA enabled for owner accounts, unless trusted publishing fully replaces token use for publication;
 - no long-lived npm token stored in the repository;
+- no manually created npm token from the npm website;
+- no npm automation token or CI token;
 - no `NPM_TOKEN`;
 - no `NODE_AUTH_TOKEN`;
 - no publication credentials in docs, workflows, or logs;
 - no password, 2FA code, recovery code or token may be requested, received, printed or stored by Codex;
+- no npm credential may be stored outside the temporary local owner `~/.npmrc`;
+- `npm logout` is required immediately after publication and verification;
 - no `id-token: write` permission until a dedicated trusted-publishing PR is approved.
 
 Owner security verification recorded on 2026-07-11:
 
 - npm account `bacoul` has 2FA enabled;
 - no long-lived npm token has been created or stored for AgentReady publication;
+- temporary local owner login is authorized only for the controlled first publication;
 - no npm secret may be committed to the repository;
 - npm recovery codes must never be recorded in the repository;
 - trusted publishing should be preferred when it is technically configured and explicitly approved.

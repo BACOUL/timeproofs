@@ -305,7 +305,11 @@ APPROVAL DATE: 2026-07-12
 NPM DIST-TAG: alpha
 LATEST TAG MODIFIED: NO
 FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
-NPM TOKEN: none
+NPM AUTOMATION TOKEN: none
+TEMPORARY LOCAL OWNER LOGIN: authorized for controlled first publication only
+LOCAL LOGIN STORAGE: owner device ~/.npmrc only
+CREDENTIAL SHARING: forbidden
+POST-PUBLICATION ACTION: npm logout immediately after verification
 FUTURE AUTH: Trusted Publishing OIDC after initial package creation
 ```
 
@@ -327,10 +331,34 @@ FIRST PUBLICATION AUTH:
 manual npm CLI with owner 2FA
 ```
 
-NPM TOKEN:
+NPM AUTOMATION TOKEN:
 
 ```txt
 none
+```
+
+TEMPORARY LOCAL OWNER LOGIN:
+
+```txt
+authorized for controlled first publication only
+```
+
+LOCAL LOGIN STORAGE:
+
+```txt
+owner device ~/.npmrc only
+```
+
+CREDENTIAL SHARING:
+
+```txt
+forbidden
+```
+
+POST-PUBLICATION ACTION:
+
+```txt
+npm logout immediately after verification
 ```
 
 FUTURE AUTH:

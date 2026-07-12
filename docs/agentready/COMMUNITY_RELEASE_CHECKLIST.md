@@ -17,7 +17,11 @@ VERSION: 0.1.0-alpha.0
 NPM DIST-TAG: alpha
 LATEST TAG MODIFIED: NO
 FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
-NPM TOKEN: none
+NPM AUTOMATION TOKEN: none
+TEMPORARY LOCAL OWNER LOGIN: authorized for controlled first publication only
+LOCAL LOGIN STORAGE: owner device ~/.npmrc only
+CREDENTIAL SHARING: forbidden
+POST-PUBLICATION ACTION: npm logout immediately after verification
 FUTURE AUTH: Trusted Publishing OIDC after initial package creation
 PUBLICATION APPROVED: YES
 APPROVED NPM DIST-TAG: alpha
@@ -32,6 +36,11 @@ Status: AWAITING_OWNER_NPM_PUBLICATION
 Preflight result: PASS
 Preflight performed externally: NO
 Codex binary inspection performed: YES
+npm authentication status: NOT_AUTHENTICATED
+approved login command: npm login --auth-type=web
+temporary local owner login authorized: YES
+npm automation token authorized: NO
+post-publication logout required: YES
 Approved artifact source: GitHub Actions artifact `agentready-community-release-candidate-0.1.0-alpha.0` from run `29169283466`
 Approved tarball local inspection path: C:\Users\mattb\AppData\Local\Temp\agentready-preflight-approved-150da\unzipped\timeproofs-agentready-0.1.0-alpha.0.tgz
 
@@ -72,9 +81,12 @@ npm publish "<chemin-local-vers-le-tarball-approuve>" --access public --tag alph
 ```
 
 JEASON verifies the local SHA-256 first.
+JEASON runs `npm login --auth-type=web` locally if authentication is required.
 JEASON executes the command himself in his own terminal.
 JEASON enters the 2FA code only in his own terminal.
-No npm password, 2FA code, recovery code or token is communicated to Codex.
+The temporary npm login may be stored only in JEASON's personal owner-device `~/.npmrc`.
+No npm password, 2FA code, recovery code, manual token, automation token, `NPM_TOKEN` or `NODE_AUTH_TOKEN` is communicated to Codex.
+JEASON runs `npm logout` immediately after publication and verification.
 Codex waits for npm confirmation before any Git tag or GitHub Release.
 
 ## Product
