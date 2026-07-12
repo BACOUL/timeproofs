@@ -7,9 +7,9 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 Batch ID: ARB-SITE-PREMIUM-001
 Title: Build premium design system navigation and footer
-Action owner: JEASON
-Action type: REVIEW_OR_MERGE
-Status: IN_REVIEW
+Action owner: CODEX_AND_JEASON
+Action type: READY
+Status: READY
 Specification: EXECUTION_READY
 Objective:
 Build premium design system navigation and footer.

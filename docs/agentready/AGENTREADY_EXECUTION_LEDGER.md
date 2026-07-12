@@ -335,7 +335,7 @@ Required evidence:
   - rollback procedure
 
 ### ARB-SITE-PREMIUM-001 - Build premium design system navigation and footer
-- Status: IN_REVIEW
+- Status: READY
 - Spec status: EXECUTION_READY
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
@@ -345,7 +345,7 @@ Required evidence:
 - Depends on tasks: None
 - Branch: site-agentready-premium-foundation
 - PR title: site(agentready): build premium design system and navigation
-- PR: #132
+
 Deliverables:
   - Build premium design system navigation and footer
 Acceptance criteria:
