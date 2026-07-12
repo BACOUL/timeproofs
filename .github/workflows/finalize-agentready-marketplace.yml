@@ -1,0 +1,200 @@
+name: Finalize AgentReady Marketplace Evidence
+
+on:
+  push:
+    branches:
+      - docs-finalize-agentready-marketplace
+
+permissions:
+  contents: write
+
+jobs:
+  public-action-smoke:
+    if: ${{ !contains(github.event.head_commit.message, '[marketplace-finalized]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Public OpenAPI tag smoke
+        id: openapi
+        uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0
+        with:
+          type: openapi
+          file: ./agentready-examples/valid-simple-openapi.json
+          min-score: '0'
+          fail-on: none
+          out: public-openapi-output
+      - name: Public MCP tag smoke
+        id: mcp
+        uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0
+        with:
+          type: mcp
+          file: ./agentready-examples/mcp-tools-simple.json
+          min-score: '0'
+          fail-on: none
+          out: public-mcp-output
+      - name: Verify public outputs
+        shell: bash
+        run: |
+          test -n "${{ steps.openapi.outputs.score }}"
+          test -n "${{ steps.openapi.outputs.status }}"
+          test -f "${{ steps.openapi.outputs.report-path }}"
+          test -f "${{ steps.openapi.outputs.contract-path }}"
+          test -n "${{ steps.mcp.outputs.score }}"
+          test -n "${{ steps.mcp.outputs.status }}"
+          test -f "${{ steps.mcp.outputs.report-path }}"
+          test -f "${{ steps.mcp.outputs.contract-path }}"
+
+  finalize-evidence:
+    if: ${{ !contains(github.event.head_commit.message, '[marketplace-finalized]') }}
+    needs: public-action-smoke
+    runs-on: ubuntu-latest
+    env:
+      TAG_NAME: agentready-action-v0.1.0-alpha.0
+      APPROVED_SHA: d6634d0fbbe1fced510fc49d8871d52a3dc7f348
+      MERGE_SHA: 3070e7827e8118ca62ad6cdb7c37deff9ef24b47
+      RELEASE_URL: https://github.com/BACOUL/timeproofs/releases/tag/agentready-action-v0.1.0-alpha.0
+      EXPECTED_MARKETPLACE_URL: https://github.com/marketplace/actions/agentready-ci-gate-by-timeproofs
+      PUBLIC_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: docs-finalize-agentready-marketplace
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Verify immutable tag and public prerelease
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${TAG_NAME}" --jq '.object.sha')"
+          test "$tag_sha" = "$APPROVED_SHA"
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${TAG_NAME}" --jq '.draft')" = "false"
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${TAG_NAME}" --jq '.prerelease')" = "true"
+
+      - name: Verify public Marketplace listing
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL -A 'Mozilla/5.0' "$EXPECTED_MARKETPLACE_URL" -o /tmp/marketplace.html
+          grep -qi 'AgentReady CI Gate by TimeProofs' /tmp/marketplace.html
+          echo "MARKETPLACE_URL=$EXPECTED_MARKETPLACE_URL" >> "$GITHUB_ENV"
+
+      - name: Record publication evidence and close ARB-COM-002
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+
+          const approvedSha = process.env.APPROVED_SHA;
+          const mergeSha = process.env.MERGE_SHA;
+          const tag = process.env.TAG_NAME;
+          const releaseUrl = process.env.RELEASE_URL;
+          const marketplaceUrl = process.env.MARKETPLACE_URL;
+          const publicRunUrl = process.env.PUBLIC_RUN_URL;
+
+          function read(file) { return fs.readFileSync(file, 'utf8'); }
+          function write(file, content) { fs.writeFileSync(file, content); }
+          function replaceRequired(content, before, after, label) {
+            if (!content.includes(before)) throw new Error(`Missing replacement target: ${label}`);
+            return content.replace(before, after);
+          }
+
+          const evidencePath = 'docs/agentready/AGENTREADY_ACTION_PUBLICATION_EVIDENCE.md';
+          write(evidencePath, `# AgentReady GitHub Action Publication Evidence\n\nStatus: PUBLISHED\n\n## Immutable release\n\n- Action: \`AgentReady CI Gate by TimeProofs\`\n- Approved implementation SHA: \`${approvedSha}\`\n- Immutable tag: \`${tag}\`\n- Verified tag target: \`${approvedSha}\`\n- GitHub prerelease: ${releaseUrl}\n- Marketplace listing: ${marketplaceUrl}\n- Release state: public, non-draft, prerelease\n- Marketplace categories: Continuous integration and Security\n- Owner agreement: accepted privately\n- Owner 2FA: completed privately; no credential material recorded\n\n## Public validation\n\n- Public immutable-tag workflow: ${publicRunUrl}\n- OpenAPI tag smoke: PASS\n- MCP tag smoke: PASS\n- Full-SHA reference: \`uses: BACOUL/timeproofs@${approvedSha}\`\n- Tag reference: \`uses: BACOUL/timeproofs@${tag}\`\n- Minimum workflow permission: \`contents: read\`\n- TimeProofs account required: no\n- TimeProofs backend required: no\n- Contract upload or silent telemetry: none\n- npm operation performed during Action publication: no\n\n## Merge sequencing exception\n\nPR #129 was merged at \`${mergeSha}\` before the final Marketplace checkbox was available because GitHub exposed the Release Action flow only after root \`action.yml\` existed on the default branch. The owner then published the existing immutable tag through the Marketplace UI. The tag was not moved or recreated.\n\n## Rollback\n\nNever move or delete the immutable tag to conceal a defect. Preserve the audit trail, remove the affected listing if required, publish a notice, correct the issue in a reviewed commit, and create a new immutable Action tag.\n`);
+
+          let ci = read('agentready-ci.html');
+          ci = replaceRequired(ci, 'uses: after-owner-marketplace-checkpoint', `uses: BACOUL/timeproofs@${tag}`, 'CI placeholder');
+          ci = ci.replace('GitHub Marketplace Action checkpoint', 'GitHub Marketplace Action');
+          ci = ci.replace('The root GitHub Marketplace Action metadata is prepared at <code>/action.yml</code>. Public Action references are published only after JEASON approves the exact implementation commit, creates the immutable Action tag, and completes the GitHub Marketplace owner checkpoint.', `The GitHub Marketplace Action is public. Pin the immutable alpha tag <code>${tag}</code>, or use the full verified commit SHA <code>${approvedSha}</code> for the strongest supply-chain control.`);
+          ci = ci.replace('<p>TimeProofs AgentReady does not guarantee that an AI agent will never fail. It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.</p>\n        <p>It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.</p>', '<p>TimeProofs AgentReady does not guarantee that an AI agent will never fail. It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.</p>');
+          write('agentready-ci.html', ci);
+
+          for (const file of ['docs/agentready/GITHUB_ACTION_USAGE.md', 'docs/agentready/GITHUB_ACTION_VERSIONING.md', 'README.md', 'AGENTREADY_PROJECT_CONTEXT.md', 'CHANGELOG.md']) {
+            let text = read(file);
+            text = text.replaceAll('<FULL_ACTION_RELEASE_COMMIT_SHA>', approvedSha);
+            text = text.replaceAll('PENDING_OWNER_APPROVAL', approvedSha);
+            text = text.replaceAll('PENDING_OWNER_ACTION', approvedSha);
+            text = text.replaceAll('PENDING_OWNER_CONFIRMATION', 'RECORDED_IN_AGENTREADY_ACTION_PUBLICATION_EVIDENCE');
+            write(file, text);
+          }
+
+          let usage = read('docs/agentready/GITHUB_ACTION_USAGE.md');
+          usage += `\n\n## Public Marketplace release\n\n- Marketplace: ${marketplaceUrl}\n- Immutable tag: \`${tag}\`\n- Full verified SHA: \`${approvedSha}\`\n- Publication evidence: [AGENTREADY_ACTION_PUBLICATION_EVIDENCE.md](./AGENTREADY_ACTION_PUBLICATION_EVIDENCE.md)\n`;
+          write('docs/agentready/GITHUB_ACTION_USAGE.md', usage);
+
+          let versioning = read('docs/agentready/GITHUB_ACTION_VERSIONING.md');
+          versioning += `\n\n## Published Action alpha\n\nThe immutable Action tag \`${tag}\` is public and points exactly to \`${approvedSha}\`. The corresponding prerelease is ${releaseUrl} and the Marketplace listing is ${marketplaceUrl}. No moving major tag is authorized during the alpha.\n`;
+          write('docs/agentready/GITHUB_ACTION_VERSIONING.md', versioning);
+
+          let spec = read('docs/agentready/GITHUB_ACTION_MARKETPLACE_EXECUTION_SPEC.md');
+          const start = spec.indexOf('Status: PRE_OWNER_CHECKPOINT');
+          const end = spec.indexOf('Compromised-release response:', start);
+          if (start < 0 || end < 0) throw new Error('Marketplace evidence record boundaries not found');
+          const finalRecord = `Status: PUBLISHED_AND_VERIFIED\n\nFinal publication fields:\n\n- Approved implementation SHA: \`${approvedSha}\`\n- Immutable Action tag: \`${tag}\`\n- Immutable Action tag target: \`${approvedSha}\`\n- GitHub prerelease URL: ${releaseUrl}\n- Marketplace URL: ${marketplaceUrl}\n- Public tag workflow run: ${publicRunUrl}\n- Full-SHA usage example: \`uses: BACOUL/timeproofs@${approvedSha}\`\n- Owner Marketplace agreement: accepted privately\n- Owner 2FA: completed privately; no secret recorded\n- npm operation during this release: none\n- Detailed evidence: [AGENTREADY_ACTION_PUBLICATION_EVIDENCE.md](./AGENTREADY_ACTION_PUBLICATION_EVIDENCE.md)\n\n`;
+          spec = spec.slice(0, start) + finalRecord + spec.slice(end);
+          write('docs/agentready/GITHUB_ACTION_MARKETPLACE_EXECUTION_SPEC.md', spec);
+
+          let rebuild = read('scripts/rebuild-agentready-ledger-data.mjs');
+          const lines = rebuild.split('\n');
+          const idx = lines.findIndex((line) => line.startsWith('  ["ARB-COM-002"'));
+          if (idx < 0) throw new Error('ARB-COM-002 source definition not found');
+          const old = lines[idx];
+          const evidence = `{ type: "github_action_marketplace_publication", pr: 129, merge_sha: "${mergeSha}", approved_implementation_sha: "${approvedSha}", git_tag: "${tag}", git_tag_target: "${approvedSha}", remote_tag_verified: true, github_release_url: "${releaseUrl}", github_release_prerelease: true, github_release_draft: false, marketplace_url: "${marketplaceUrl}", marketplace_published: true, marketplace_categories: ["Continuous integration", "Security"], public_tag_workflow_run: "${publicRunUrl}", openapi_public_tag_smoke: "PASS", mcp_public_tag_smoke: "PASS", full_sha_reference: "BACOUL/timeproofs@${approvedSha}", owner_agreement_accepted_privately: true, owner_2fa_completed_privately: true, new_npm_operation_executed: false }`;
+          let updated = old.replace('status: "IN_REVIEW"', 'status: "DONE"');
+          updated = updated.replace('evidence: [],', `evidence: [${evidence}],`);
+          if (!updated.includes(`evidence: [${evidence}]`)) {
+            updated = updated.replace('notes: "If the Marketplace UI rejects repository composition or metadata, stop and return through change control rather than bypassing validation."', `evidence: [${evidence}], notes: "PR #129 merged the validated root Action. Marketplace publication succeeded after the documented default-branch sequencing exception. The immutable tag remains fixed, public OpenAPI and MCP tag smoke tests passed, and no npm operation occurred."`);
+          }
+          updated = updated.replace('"release listing and site evidence are recorded before merge"', '"release listing and site evidence are recorded, with the documented default-branch sequencing exception"');
+          updated = updated.replace('notes: "If the Marketplace UI rejects repository composition or metadata, stop and return through change control rather than bypassing validation."', 'notes: "PR #129 merged the validated root Action. Marketplace publication succeeded after the documented default-branch sequencing exception. The immutable tag remains fixed, public OpenAPI and MCP tag smoke tests passed, and no npm operation occurred."');
+          lines[idx] = updated;
+          write('scripts/rebuild-agentready-ledger-data.mjs', lines.join('\n'));
+
+          let decision = read('docs/agentready/DECISION_LOG.md');
+          decision += `\n\n## DL-2026-07-12-AGENTREADY-ACTION-MARKETPLACE-PUBLISHED\n\nStatus: ACTIVE\n\n- Root \`action.yml\` was merged through PR #129 at \`${mergeSha}\`.\n- The immutable tag \`${tag}\` remains fixed on \`${approvedSha}\`.\n- The GitHub prerelease and Marketplace listing are public.\n- GitHub required root \`action.yml\` on the default branch before the Marketplace checkbox became available; this sequencing exception is recorded rather than hidden.\n- Public OpenAPI and MCP tag smoke tests passed.\n- No npm operation occurred.\n`;
+          write('docs/agentready/DECISION_LOG.md', decision);
+          NODE
+
+      - name: Regenerate canonical execution views
+        run: |
+          node scripts/rebuild-agentready-ledger-data.mjs
+          node scripts/generate-agentready-ledger-views.mjs --write
+          node scripts/generate-agentready-status.mjs --write
+          node scripts/generate-agentready-next-action.mjs --write
+          node scripts/generate-agentready-next-prompt.mjs --write
+
+      - name: Validate final state
+        run: |
+          node agentready-core/tests/run-agentready-core-tests.mjs
+          node cli/tests/run-agentready-cli-tests.mjs
+          node cli/tests/run-agentready-action-smoke-test.mjs
+          node cli/tests/run-agentready-package-smoke-test.mjs
+          node cli/tests/run-agentready-community-release-workflow-test.mjs
+          node scripts/validate-agentready-action-marketplace-readiness.mjs
+          node scripts/validate-agentready-strategy-docs.mjs
+          node scripts/validate-agentready-execution-system.mjs
+          git diff --check
+          node scripts/rebuild-agentready-ledger-data.mjs
+          node scripts/generate-agentready-ledger-views.mjs --write
+          node scripts/generate-agentready-status.mjs --write
+          node scripts/generate-agentready-next-action.mjs --write
+          node scripts/generate-agentready-next-prompt.mjs --write
+          git diff --exit-code
+
+      - name: Commit final evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add agentready-ci.html README.md AGENTREADY_PROJECT_CONTEXT.md CHANGELOG.md docs/agentready scripts/rebuild-agentready-ledger-data.mjs
+          git commit -m 'docs(agentready): finalize Marketplace publication evidence [marketplace-finalized]'
+          git push origin HEAD:docs-finalize-agentready-marketplace
