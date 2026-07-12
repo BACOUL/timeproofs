@@ -1,0 +1,115 @@
+name: Build AgentReady COM-002 Artifact
+
+on:
+  pull_request:
+    branches:
+      - timeproofs
+    paths:
+      - .github/workflows/build-agentready-com-002-artifact.yml
+      - .github/workflows/refine-agentready-com-002.yml
+      - scripts/refine-agentready-com-002.mjs
+      - scripts/fix-agentready-com-002-release-guard.mjs
+      - docs/agentready/GITHUB_ACTION_MARKETPLACE_EXECUTION_SPEC.md
+      - docs/agentready/GITHUB_ACTION_USAGE.md
+      - docs/agentready/GITHUB_ACTION_VERSIONING.md
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out specification branch
+        uses: actions/checkout@v4
+        with:
+          ref: docs-agentready-com-002-execution-ready
+          fetch-depth: 1
+          show-progress: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Apply specification refinement
+        run: |
+          node scripts/refine-agentready-com-002.mjs
+          node scripts/fix-agentready-com-002-release-guard.mjs
+
+      - name: Rebuild and generate
+        run: |
+          node scripts/rebuild-agentready-ledger-data.mjs
+          node scripts/generate-agentready-ledger-views.mjs --write
+          node scripts/generate-agentready-status.mjs --write
+          node scripts/generate-agentready-next-action.mjs --write
+          node scripts/generate-agentready-next-prompt.mjs --write
+
+      - name: Validate
+        run: |
+          node scripts/validate-agentready-strategy-docs.mjs
+          node scripts/validate-agentready-execution-system.mjs
+          node cli/tests/run-agentready-community-release-workflow-test.mjs
+          git diff --check
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import { generatedContents, readLedger, selectNextAction } from './scripts/agentready-execution-lib.mjs';
+          const ledger = readLedger();
+          const batch = ledger.execution_batches.find((item) => item.id === 'ARB-COM-002');
+          const next = selectNextAction(ledger);
+          const prompt = generatedContents(ledger)['docs/agentready/NEXT_CODEX_PROMPT.md'];
+          assert.equal(batch.status, 'READY');
+          assert.equal(batch.spec_status, 'EXECUTION_READY');
+          assert.equal(next.batch.id, 'ARB-COM-002');
+          assert.equal(next.action_type, 'READY');
+          assert.match(prompt, /agentready-action-v0\.1\.0-alpha\.0/);
+          assert.match(prompt, /Point de contrôle propriétaire obligatoire/);
+          NODE
+
+      - name: Verify deterministic regeneration
+        run: |
+          git diff > /tmp/before.diff
+          node scripts/rebuild-agentready-ledger-data.mjs
+          node scripts/generate-agentready-ledger-views.mjs --write
+          node scripts/generate-agentready-status.mjs --write
+          node scripts/generate-agentready-next-action.mjs --write
+          node scripts/generate-agentready-next-prompt.mjs --write
+          git diff > /tmp/after.diff
+          cmp /tmp/before.diff /tmp/after.diff
+
+      - name: Assemble final files
+        run: |
+          mkdir -p /tmp/com002-final
+          while IFS= read -r file; do
+            mkdir -p "/tmp/com002-final/$(dirname "$file")"
+            cp "$file" "/tmp/com002-final/$file"
+          done <<'FILES'
+          docs/agentready/GITHUB_ACTION_MARKETPLACE_EXECUTION_SPEC.md
+          docs/agentready/GITHUB_ACTION_USAGE.md
+          docs/agentready/GITHUB_ACTION_VERSIONING.md
+          scripts/rebuild-agentready-ledger-data.mjs
+          scripts/agentready-execution-lib.mjs
+          .github/workflows/agentready-community-release-candidate.yml
+          cli/tests/run-agentready-community-release-workflow-test.mjs
+          docs/agentready/AGENTREADY_CODEX_PROMPT_COUNT.json
+          docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
+          docs/agentready/AGENTREADY_EXECUTION_LEDGER.md
+          docs/agentready/AGENTREADY_STATUS.md
+          docs/agentready/NEXT_ACTION.md
+          docs/agentready/NEXT_CODEX_PROMPT.md
+          docs/agentready/OWNER_AND_EXTERNAL_ACTIONS.md
+          docs/agentready/GLOBAL_SITE_SEO_GEO_COMPETITIVE_MATRIX.md
+          FILES
+          printf '%s\n' \
+            scripts/refine-agentready-com-002.mjs \
+            scripts/fix-agentready-com-002-release-guard.mjs \
+            .github/workflows/refine-agentready-com-002.yml \
+            .github/workflows/build-agentready-com-002-artifact.yml \
+            > /tmp/com002-final/DELETE_FILES.txt
+
+      - name: Upload validated final files
+        uses: actions/upload-artifact@v4
+        with:
+          name: agentready-com-002-final-files
+          path: /tmp/com002-final
+          retention-days: 1
