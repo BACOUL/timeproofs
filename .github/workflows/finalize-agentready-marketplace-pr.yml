@@ -20,7 +20,6 @@ permissions:
 
 jobs:
   finalize:
-    if: ${{ !contains(github.event.pull_request.head.sha, '0000000') }}
     runs-on: ubuntu-latest
     env:
       TAG_NAME: agentready-action-v0.1.0-alpha.0
@@ -86,17 +85,24 @@ jobs:
           node scripts/generate-agentready-status.mjs --write
           node scripts/generate-agentready-next-action.mjs --write
           node scripts/generate-agentready-next-prompt.mjs --write
-      - name: Validate
-        run: |
-          node agentready-core/tests/run-agentready-core-tests.mjs
-          node cli/tests/run-agentready-cli-tests.mjs
-          node cli/tests/run-agentready-action-smoke-test.mjs
-          node cli/tests/run-agentready-package-smoke-test.mjs
-          node cli/tests/run-agentready-community-release-workflow-test.mjs
-          node scripts/validate-agentready-action-marketplace-readiness.mjs
-          node scripts/validate-agentready-strategy-docs.mjs
-          node scripts/validate-agentready-execution-system.mjs
-          git diff --check
+      - name: Core tests
+        run: node agentready-core/tests/run-agentready-core-tests.mjs
+      - name: CLI tests
+        run: node cli/tests/run-agentready-cli-tests.mjs
+      - name: Action smoke test
+        run: node cli/tests/run-agentready-action-smoke-test.mjs
+      - name: Package smoke test
+        run: node cli/tests/run-agentready-package-smoke-test.mjs
+      - name: Community release workflow test
+        run: node cli/tests/run-agentready-community-release-workflow-test.mjs
+      - name: Marketplace readiness validator
+        run: node scripts/validate-agentready-action-marketplace-readiness.mjs
+      - name: Strategy validator
+        run: node scripts/validate-agentready-strategy-docs.mjs
+      - name: Execution system validator
+        run: node scripts/validate-agentready-execution-system.mjs
+      - name: Diff check
+        run: git diff --check
       - name: Commit generated evidence
         run: |
           set -euo pipefail
