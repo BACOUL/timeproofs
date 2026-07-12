@@ -368,7 +368,7 @@ complementary runtime products is preferred before building a new runtime produc
 
 ## Distribution And Onboarding
 
-Community publication sequence:
+Community publication and validation sequence:
 
 1. resolve license;
 2. confirm npm scope;
@@ -377,13 +377,29 @@ Community publication sequence:
 5. publish Community package;
 6. create immutable tag;
 7. create GitHub Release;
-8. test public installation;
-9. prepare public Action repository if needed;
-10. publish on GitHub Marketplace.
+8. publish and verify the public GitHub Action;
+9. rebuild the shared premium design system, navigation and footer;
+10. redesign the homepage and core product pages;
+11. complete premium mobile, accessibility, performance and SEO QA;
+12. test public installation from clean external environments;
+13. implement and validate the three-minute onboarding path;
+14. begin external pilot outreach only after the premium site and public installation gates pass.
 
 GitHub Marketplace is a distribution channel, not a security validation.
 
 Stripe remains the initial payment channel.
+
+## Premium Site Gate Before Public Validation
+
+The GitHub Marketplace Action is public, but publication is not the commercial launch. Before public installation validation, onboarding promotion, maintainer outreach or external pilot recruitment, the project must complete three premium-site batches:
+
+1. shared design system, desktop and mobile navigation, and footer;
+2. homepage and core product-page redesign;
+3. independent mobile, accessibility, performance, SEO and visual-consistency QA.
+
+The gate exists because the current public site does not yet communicate the quality, trust and hierarchy of the product. The redesign must remain static, fast, dependency-light, local-first and honest about current capabilities. It does not authorize product, engine, CLI, Action, npm, billing, account or runtime changes.
+
+The detailed implementation boundary is defined in `PREMIUM_SITE_REDESIGN_EXECUTION_SPEC.md`.
 
 ## License Architecture
 

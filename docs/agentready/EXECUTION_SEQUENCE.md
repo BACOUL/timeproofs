@@ -86,18 +86,34 @@ Phase gate:
 release(agentready): publish Community CLI and immutable release
 ```
 
-## Phase 4 - Marketplace And Onboarding
+## Phase 4 - Marketplace Distribution
 
 ```txt
 feat(distribution): publish AgentReady GitHub Marketplace action
+```
+
+Marketplace is distribution, not validation by GitHub. The immutable public Action is complete and remains unchanged by the following site work.
+
+## Phase 4B - Premium Product Site Before Public Validation
+
+```txt
+site(agentready): build premium design system and navigation
+site(agentready): redesign homepage and core product pages
+qa(site): validate premium mobile accessibility performance and SEO
+```
+
+These three batches run before `ARB-COM-003`. They rebuild the shared site shell, product narrative and independent QA without modifying the engine, CLI, npm package, immutable Action, billing or runtime scope. No meaningful Marketplace promotion, maintainer outreach or external pilot recruitment begins before the premium QA batch passes.
+
+## Phase 4C - Public Installation And Onboarding
+
+```txt
+qa(community): validate public AgentReady installation
 feat(community): add three-minute onboarding commands
 ```
 
-Marketplace is distribution, not validation by GitHub.
+Public installation validation follows the premium-site gate. Onboarding follows the public installation batch.
 
-The distribution batch must also align the current public site with the active model: Community available, Pro in preparation, no manual review or Fix Pack offer as the active purchase path, and visible npm and Action installation instructions.
-
-## Phase 4A - External Pilot Preparation
+## Phase 4D - External Pilot Preparation
 
 ```txt
 docs(validation): prepare AgentReady external Community pilot kit

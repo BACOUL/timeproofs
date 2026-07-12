@@ -142,6 +142,7 @@
         "GitHub Release",
         "public installation tested",
         "public Action usable",
+        "premium product shell and core pages validated",
         "onboarding documented",
         "no signup",
         "no payment"
@@ -174,6 +175,15 @@
           "satisfied_by": [
             "AR-COM-007",
             "AR-COM-009"
+          ]
+        },
+        {
+          "criterion_id": "M3-PREMIUM-SITE",
+          "description": "premium product shell and core pages validated",
+          "satisfied_by": [
+            "AR-SITE-PREMIUM-001",
+            "AR-SITE-PREMIUM-002",
+            "AR-SITE-PREMIUM-003"
           ]
         },
         {
@@ -2369,6 +2379,380 @@
       ],
       "rollback_boundary": "Revert feat-distribution-agentready-marketplace-action without reverting unrelated work.",
       "scope_justification": "Single coherent deliverable with independent review and rollback."
+    },
+    {
+      "id": "AR-SITE-PREMIUM-EPIC",
+      "parent_id": null,
+      "decision_ids": [
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM"
+      ],
+      "task_type": "EPIC",
+      "milestone": "M3",
+      "delivery_horizon": "BEFORE_COMMUNITY_PUBLICATION",
+      "workstream": "SITE",
+      "title": "Premium public product site before external validation",
+      "objective": "Premium public product site before external validation workstream.",
+      "status": "PLANNED",
+      "owner": "CODEX_AND_JEASON",
+      "weight": 8,
+      "depends_on": [
+        "AR-COM-006"
+      ],
+      "blocks": [],
+      "source_documents": [
+        "docs/agentready/AGENTREADY_MASTER_PLAN.md"
+      ],
+      "branch": "",
+      "pr_title": "",
+      "allowed_paths": [],
+      "forbidden_paths": [],
+      "acceptance_criteria": [
+        "child tasks are tracked"
+      ],
+      "required_commands": [],
+      "required_evidence": [
+        "child tasks tracked in ledger"
+      ],
+      "evidence": [],
+      "execution_batch_id": null,
+      "manual_actions": [],
+      "authorized_actions": [],
+      "forbidden_actions": [],
+      "codex_preflight_steps": [],
+      "owner_checkpoint_steps": [],
+      "post_confirmation_steps": [],
+      "external_verification": null,
+      "decision_gate": null,
+      "validation_thresholds": null,
+      "recurrence": null,
+      "notes": "EPIC is not executable directly."
+    },
+    {
+      "id": "AR-SITE-PREMIUM-001",
+      "parent_id": "AR-SITE-PREMIUM-EPIC",
+      "decision_ids": [
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM",
+        "DL-2026-07-12-PREMIUM-SITE-BEFORE-VALIDATION"
+      ],
+      "task_type": "CODEX_WORK_ITEM",
+      "milestone": "M3",
+      "delivery_horizon": "BEFORE_COMMUNITY_PUBLICATION",
+      "workstream": "SITE",
+      "title": "Build premium design system navigation and footer",
+      "objective": "Build premium design system navigation and footer.",
+      "status": "READY",
+      "owner": "CODEX_AND_JEASON",
+      "weight": 5,
+      "depends_on": [],
+      "blocks": [],
+      "source_documents": [
+        "docs/agentready/PREMIUM_SITE_REQUIREMENTS.md",
+        "docs/agentready/PUBLIC_SITE_INFORMATION_ARCHITECTURE.md",
+        "docs/agentready/PREMIUM_SITE_REDESIGN_EXECUTION_SPEC.md",
+        "docs/agentready/SITE_COPY_GUIDE.md"
+      ],
+      "branch": "site-agentready-premium-foundation",
+      "pr_title": "site(agentready): build premium design system and navigation",
+      "allowed_paths": [
+        "assets/**",
+        "*.html",
+        "docs/agentready/**",
+        "scripts/**"
+      ],
+      "forbidden_paths": [
+        "agentready-core/**",
+        "bin/**",
+        "package.json",
+        "action.yml",
+        ".github/workflows/**",
+        "packaging/**",
+        "server/**",
+        "api/**",
+        "LICENSE",
+        "NOTICE"
+      ],
+      "acceptance_criteria": [
+        "one shared design system controls navigation footer typography focus states buttons and code surfaces",
+        "desktop navigation exposes Product Resources Pricing Trust GitHub and Scan a contract with real destinations",
+        "Product exposes OpenAPI MCP CI Gate and report or agentready.json destinations",
+        "Resources exposes docs examples rules methodology and changelog destinations where real routes exist",
+        "mobile navigation has large touch targets grouped links visible CTA Escape close focus containment focus restoration scroll lock and no 320px overflow",
+        "critical links remain available through progressive enhancement",
+        "footer exposes Product Standard Developers and Trust groups",
+        "active indexable AgentReady pages use the shared shell without duplicated nav or footer implementations",
+        "page body content and product sections are preserved in this foundation batch",
+        "no broken route fake page fake product external font frontend framework tracker telemetry or backend dependency is added",
+        "reduced-motion and visible keyboard focus are supported",
+        "canonical metadata structured data and mandatory limitation text are preserved"
+      ],
+      "required_commands": [
+        "node scripts/validate-agentready-site-navigation.mjs",
+        "node scripts/validate-agentready-strategy-docs.mjs",
+        "node scripts/validate-agentready-execution-system.mjs",
+        "git diff --check"
+      ],
+      "required_evidence": [
+        "page and shell migration inventory",
+        "desktop navigation screenshots",
+        "mobile closed and open navigation screenshots",
+        "keyboard and focus test matrix",
+        "link validation report",
+        "320px no-overflow evidence",
+        "reduced-motion and no-JS evidence",
+        "shared asset inventory and size summary",
+        "owner visual review before merge"
+      ],
+      "evidence": [],
+      "execution_batch_id": "ARB-SITE-PREMIUM-001",
+      "manual_actions": [
+        "JEASON reviews desktop and mobile visual evidence before merge"
+      ],
+      "authorized_actions": [
+        "create dependency-free shared CSS and minimal JavaScript assets",
+        "replace duplicated active-page navigation and footer markup",
+        "add static validators and documented visual evidence"
+      ],
+      "forbidden_actions": [
+        "do not redesign homepage or page-body sections in this batch",
+        "do not rewrite product claims beyond navigation and footer labels required for accuracy",
+        "do not modify engine CLI Action package npm tags billing accounts backend or runtime behavior",
+        "do not add external fonts frameworks analytics telemetry uploads or live calls",
+        "do not create fake pages customer logos dashboards certifications or safety claims",
+        "do not merge without owner visual review"
+      ],
+      "codex_preflight_steps": [
+        "inventory all active indexable root HTML pages and current shared assets",
+        "record every navigation and footer variant",
+        "map every proposed menu label to an existing valid route",
+        "identify inline shell styles that conflict with shared assets",
+        "capture baseline desktop and mobile screenshots",
+        "open a draft PR before broad HTML migration"
+      ],
+      "owner_checkpoint_steps": [],
+      "post_confirmation_steps": [],
+      "external_verification": null,
+      "decision_gate": null,
+      "validation_thresholds": null,
+      "recurrence": null,
+      "notes": "",
+      "deliverables": [
+        "shared premium design tokens and shell assets",
+        "desktop Product and Resources navigation",
+        "accessible full-height mobile navigation",
+        "four-group premium footer",
+        "active-page and focus states",
+        "navigation link and shell validator",
+        "desktop and mobile visual evidence"
+      ],
+      "estimated_files_or_surfaces": [
+        "assets/site-nav.css",
+        "new shared site CSS or JavaScript assets",
+        "header navigation and footer on active indexable AgentReady HTML pages"
+      ],
+      "independent_test_plan": [
+        "inventory every active indexable AgentReady page and existing nav footer variant",
+        "run static link and duplicate-shell validation",
+        "test desktop menus by pointer and keyboard",
+        "test mobile menu at 320 375 768 and 900 pixel widths",
+        "test Escape outside click focus containment focus restoration and body scroll lock",
+        "test with reduced motion and JavaScript disabled for critical links",
+        "record before and after desktop and mobile evidence",
+        "confirm no page-body redesign or product-code change entered the batch"
+      ],
+      "rollback_boundary": "Revert the shared shell assets and navigation or footer migrations without reverting Marketplace publication or product code.",
+      "scope_justification": "Weight 5 justified: one coherent shared-shell system across active static pages with a single visual review and rollback boundary."
+    },
+    {
+      "id": "AR-SITE-PREMIUM-002",
+      "parent_id": "AR-SITE-PREMIUM-EPIC",
+      "decision_ids": [
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM",
+        "DL-2026-07-12-PREMIUM-SITE-BEFORE-VALIDATION"
+      ],
+      "task_type": "CODEX_WORK_ITEM",
+      "milestone": "M3",
+      "delivery_horizon": "BEFORE_COMMUNITY_PUBLICATION",
+      "workstream": "SITE",
+      "title": "Redesign homepage and core product pages",
+      "objective": "Redesign homepage and core product pages.",
+      "status": "PLANNED",
+      "owner": "CODEX",
+      "weight": 5,
+      "depends_on": [],
+      "blocks": [],
+      "source_documents": [
+        "docs/agentready/PREMIUM_SITE_REQUIREMENTS.md",
+        "docs/agentready/PUBLIC_SITE_INFORMATION_ARCHITECTURE.md",
+        "docs/agentready/PREMIUM_SITE_REDESIGN_EXECUTION_SPEC.md",
+        "docs/agentready/SITE_COPY_GUIDE.md"
+      ],
+      "branch": "site-agentready-premium-core-pages",
+      "pr_title": "site(agentready): redesign homepage and core product pages",
+      "allowed_paths": [
+        "assets/**",
+        "index.html",
+        "agentready-ci.html",
+        "agentready.html",
+        "agentready-mcp.html",
+        "pricing.html",
+        "agentready-docs.html",
+        "docs/agentready/**",
+        "scripts/**"
+      ],
+      "forbidden_paths": [
+        "agentready-core/**",
+        "bin/**",
+        "package.json",
+        "action.yml",
+        ".github/workflows/**",
+        "packaging/**",
+        "server/**",
+        "api/**",
+        "LICENSE",
+        "NOTICE"
+      ],
+      "acceptance_criteria": [
+        "hero defines the category and primary action within one viewport",
+        "homepage follows problem demonstration OpenAPI and MCP CI differentiation proof trust limitation CTA order",
+        "product demonstration uses real AgentReady findings outputs and policy behavior",
+        "Community is available free and Pro remains in preparation",
+        "no unavailable feature or fake customer proof is presented",
+        "sections use varied composition rather than repeated card grids",
+        "all commands tags rule codes and outputs match merged product behavior"
+      ],
+      "required_commands": [],
+      "required_evidence": [
+        "desktop and mobile page evidence",
+        "content-source mapping",
+        "CTA and link audit",
+        "real product-output provenance"
+      ],
+      "evidence": [],
+      "execution_batch_id": "ARB-SITE-PREMIUM-002",
+      "manual_actions": [],
+      "authorized_actions": [],
+      "forbidden_actions": [],
+      "codex_preflight_steps": [],
+      "owner_checkpoint_steps": [],
+      "post_confirmation_steps": [],
+      "external_verification": null,
+      "decision_gate": null,
+      "validation_thresholds": null,
+      "recurrence": null,
+      "notes": "",
+      "deliverables": [
+        "premium homepage",
+        "premium CI Gate page",
+        "premium OpenAPI and MCP pages",
+        "truthful pricing page",
+        "primary docs entry page",
+        "realistic product demonstration and proof sections"
+      ],
+      "estimated_files_or_surfaces": [
+        "one coherent file or surface family"
+      ],
+      "independent_test_plan": [
+        "run relevant existing tests",
+        "run execution-system validator"
+      ],
+      "rollback_boundary": "Revert the six core page redesigns while preserving the premium shared shell.",
+      "scope_justification": "Weight 5 justified: complex but single reviewable system with one rollback boundary."
+    },
+    {
+      "id": "AR-SITE-PREMIUM-003",
+      "parent_id": "AR-SITE-PREMIUM-EPIC",
+      "decision_ids": [
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM",
+        "DL-2026-07-12-PREMIUM-SITE-BEFORE-VALIDATION"
+      ],
+      "task_type": "CODEX_WORK_ITEM",
+      "milestone": "M3",
+      "delivery_horizon": "BEFORE_COMMUNITY_PUBLICATION",
+      "workstream": "SITE",
+      "title": "Validate premium mobile accessibility performance and SEO",
+      "objective": "Validate premium mobile accessibility performance and SEO.",
+      "status": "PLANNED",
+      "owner": "CODEX",
+      "weight": 5,
+      "depends_on": [],
+      "blocks": [],
+      "source_documents": [
+        "docs/agentready/PREMIUM_SITE_REQUIREMENTS.md",
+        "docs/agentready/PUBLIC_SITE_INFORMATION_ARCHITECTURE.md",
+        "docs/agentready/PREMIUM_SITE_REDESIGN_EXECUTION_SPEC.md",
+        "docs/agentready/SEO_GEO_AI_FIRST_REQUIREMENTS.md"
+      ],
+      "branch": "qa-agentready-premium-site",
+      "pr_title": "qa(site): validate premium mobile accessibility performance and SEO",
+      "allowed_paths": [
+        "assets/**",
+        "*.html",
+        "sitemap.xml",
+        "robots.txt",
+        "docs/agentready/**",
+        "scripts/**"
+      ],
+      "forbidden_paths": [
+        "agentready-core/**",
+        "bin/**",
+        "package.json",
+        "action.yml",
+        ".github/workflows/**",
+        "packaging/**",
+        "server/**",
+        "api/**",
+        "LICENSE",
+        "NOTICE"
+      ],
+      "acceptance_criteria": [
+        "Android iPhone-size tablet and desktop layouts pass",
+        "keyboard focus semantics contrast touch targets and reduced motion pass",
+        "no horizontal overflow broken link empty CTA or hidden critical content remains",
+        "critical product content is available without JavaScript",
+        "performance evidence meets documented static-site budgets",
+        "titles descriptions canonicals structured data and internal links are valid",
+        "stale manual offers and unsupported product claims are absent",
+        "mandatory limitation remains on key pages"
+      ],
+      "required_commands": [],
+      "required_evidence": [
+        "viewport matrix",
+        "accessibility audit",
+        "performance report",
+        "SEO and structured-data report",
+        "broken-link report",
+        "final visual consistency review"
+      ],
+      "evidence": [],
+      "execution_batch_id": "ARB-SITE-PREMIUM-003",
+      "manual_actions": [],
+      "authorized_actions": [],
+      "forbidden_actions": [],
+      "codex_preflight_steps": [],
+      "owner_checkpoint_steps": [],
+      "post_confirmation_steps": [],
+      "external_verification": null,
+      "decision_gate": null,
+      "validation_thresholds": null,
+      "recurrence": null,
+      "notes": "",
+      "deliverables": [
+        "cross-viewport QA report",
+        "accessibility and keyboard report",
+        "performance and Core Web Vitals evidence",
+        "SEO metadata and structured-data audit",
+        "visual consistency and stale-copy audit",
+        "blocking corrections"
+      ],
+      "estimated_files_or_surfaces": [
+        "one coherent file or surface family"
+      ],
+      "independent_test_plan": [
+        "run relevant existing tests",
+        "run execution-system validator"
+      ],
+      "rollback_boundary": "Revert only QA corrections that regress the approved premium design; preserve evidence and issue records.",
+      "scope_justification": "Weight 5 justified: complex but single reviewable system with one rollback boundary."
     },
     {
       "id": "AR-ONB-EPIC",
@@ -15122,6 +15506,292 @@
       ]
     },
     {
+      "id": "ARB-SITE-PREMIUM-001",
+      "title": "Build premium design system navigation and footer",
+      "objective": "Build premium design system navigation and footer.",
+      "milestone": "M3",
+      "delivery_horizon": "BEFORE_COMMUNITY_PUBLICATION",
+      "status": "READY",
+      "spec_status": "EXECUTION_READY",
+      "owner": "CODEX_AND_JEASON",
+      "work_item_ids": [
+        "AR-SITE-PREMIUM-001"
+      ],
+      "depends_on_batches": [
+        "ARB-COM-002"
+      ],
+      "depends_on_tasks": [],
+      "branch": "site-agentready-premium-foundation",
+      "pr_title": "site(agentready): build premium design system and navigation",
+      "allowed_paths": [
+        "assets/**",
+        "*.html",
+        "docs/agentready/**",
+        "scripts/**"
+      ],
+      "forbidden_paths": [
+        "agentready-core/**",
+        "bin/**",
+        "package.json",
+        "action.yml",
+        ".github/workflows/**",
+        "packaging/**",
+        "server/**",
+        "api/**",
+        "LICENSE",
+        "NOTICE"
+      ],
+      "deliverables": [
+        "Build premium design system navigation and footer"
+      ],
+      "acceptance_criteria": [
+        "one shared design system controls navigation footer typography focus states buttons and code surfaces",
+        "desktop navigation exposes Product Resources Pricing Trust GitHub and Scan a contract with real destinations",
+        "Product exposes OpenAPI MCP CI Gate and report or agentready.json destinations",
+        "Resources exposes docs examples rules methodology and changelog destinations where real routes exist",
+        "mobile navigation has large touch targets grouped links visible CTA Escape close focus containment focus restoration scroll lock and no 320px overflow",
+        "critical links remain available through progressive enhancement",
+        "footer exposes Product Standard Developers and Trust groups",
+        "active indexable AgentReady pages use the shared shell without duplicated nav or footer implementations",
+        "page body content and product sections are preserved in this foundation batch",
+        "no broken route fake page fake product external font frontend framework tracker telemetry or backend dependency is added",
+        "reduced-motion and visible keyboard focus are supported",
+        "canonical metadata structured data and mandatory limitation text are preserved"
+      ],
+      "independent_test_plan": [
+        "inventory every active indexable AgentReady page and existing nav footer variant",
+        "run static link and duplicate-shell validation",
+        "test desktop menus by pointer and keyboard",
+        "test mobile menu at 320 375 768 and 900 pixel widths",
+        "test Escape outside click focus containment focus restoration and body scroll lock",
+        "test with reduced motion and JavaScript disabled for critical links",
+        "record before and after desktop and mobile evidence",
+        "confirm no page-body redesign or product-code change entered the batch"
+      ],
+      "required_commands": [
+        "node scripts/validate-agentready-site-navigation.mjs",
+        "node scripts/validate-agentready-strategy-docs.mjs",
+        "node scripts/validate-agentready-execution-system.mjs",
+        "git diff --check"
+      ],
+      "required_evidence": [
+        "page and shell migration inventory",
+        "desktop navigation screenshots",
+        "mobile closed and open navigation screenshots",
+        "keyboard and focus test matrix",
+        "link validation report",
+        "320px no-overflow evidence",
+        "reduced-motion and no-JS evidence",
+        "shared asset inventory and size summary",
+        "owner visual review before merge"
+      ],
+      "rollback_boundary": "Revert ARB-SITE-PREMIUM-001 without reverting unrelated batches.",
+      "scope_justification": "Batch groups compatible work items with one shared review and rollback boundary.",
+      "manual_actions": [
+        "JEASON reviews desktop and mobile visual evidence before merge"
+      ],
+      "authorized_actions": [
+        "create dependency-free shared CSS and minimal JavaScript assets",
+        "replace duplicated active-page navigation and footer markup",
+        "add static validators and documented visual evidence"
+      ],
+      "forbidden_actions": [
+        "do not redesign homepage or page-body sections in this batch",
+        "do not rewrite product claims beyond navigation and footer labels required for accuracy",
+        "do not modify engine CLI Action package npm tags billing accounts backend or runtime behavior",
+        "do not add external fonts frameworks analytics telemetry uploads or live calls",
+        "do not create fake pages customer logos dashboards certifications or safety claims",
+        "do not merge without owner visual review"
+      ],
+      "codex_preflight_steps": [
+        "inventory all active indexable root HTML pages and current shared assets",
+        "record every navigation and footer variant",
+        "map every proposed menu label to an existing valid route",
+        "identify inline shell styles that conflict with shared assets",
+        "capture baseline desktop and mobile screenshots",
+        "open a draft PR before broad HTML migration"
+      ],
+      "owner_checkpoint_steps": [],
+      "post_confirmation_steps": [],
+      "external_verifications": [],
+      "evidence": [],
+      "notes": "",
+      "source_documents": [
+        "docs/agentready/PREMIUM_SITE_REQUIREMENTS.md",
+        "docs/agentready/PUBLIC_SITE_INFORMATION_ARCHITECTURE.md",
+        "docs/agentready/PREMIUM_SITE_REDESIGN_EXECUTION_SPEC.md",
+        "docs/agentready/SITE_COPY_GUIDE.md"
+      ]
+    },
+    {
+      "id": "ARB-SITE-PREMIUM-002",
+      "title": "Redesign homepage and core product pages",
+      "objective": "Redesign homepage and core product pages.",
+      "milestone": "M3",
+      "delivery_horizon": "BEFORE_COMMUNITY_PUBLICATION",
+      "status": "PLANNED",
+      "spec_status": "SKELETON",
+      "owner": "CODEX",
+      "work_item_ids": [
+        "AR-SITE-PREMIUM-002"
+      ],
+      "depends_on_batches": [
+        "ARB-SITE-PREMIUM-001"
+      ],
+      "depends_on_tasks": [],
+      "branch": "site-agentready-premium-core-pages",
+      "pr_title": "site(agentready): redesign homepage and core product pages",
+      "allowed_paths": [
+        "assets/**",
+        "index.html",
+        "agentready-ci.html",
+        "agentready.html",
+        "agentready-mcp.html",
+        "pricing.html",
+        "agentready-docs.html",
+        "docs/agentready/**",
+        "scripts/**"
+      ],
+      "forbidden_paths": [
+        "agentready-core/**",
+        "bin/**",
+        "package.json",
+        "action.yml",
+        ".github/workflows/**",
+        "packaging/**",
+        "server/**",
+        "api/**",
+        "LICENSE",
+        "NOTICE"
+      ],
+      "deliverables": [
+        "Redesign homepage and core product pages"
+      ],
+      "acceptance_criteria": [
+        "hero defines the category and primary action within one viewport",
+        "homepage follows problem demonstration OpenAPI and MCP CI differentiation proof trust limitation CTA order",
+        "product demonstration uses real AgentReady findings outputs and policy behavior",
+        "Community is available free and Pro remains in preparation",
+        "no unavailable feature or fake customer proof is presented",
+        "sections use varied composition rather than repeated card grids",
+        "all commands tags rule codes and outputs match merged product behavior"
+      ],
+      "independent_test_plan": [
+        "run relevant existing tests",
+        "run execution-system validator"
+      ],
+      "required_commands": [
+        "node scripts/validate-agentready-execution-system.mjs"
+      ],
+      "required_evidence": [
+        "desktop and mobile page evidence",
+        "content-source mapping",
+        "CTA and link audit",
+        "real product-output provenance"
+      ],
+      "rollback_boundary": "Revert ARB-SITE-PREMIUM-002 without reverting unrelated batches.",
+      "scope_justification": "Batch groups compatible work items with one shared review and rollback boundary.",
+      "manual_actions": [],
+      "authorized_actions": [],
+      "forbidden_actions": [],
+      "codex_preflight_steps": [],
+      "owner_checkpoint_steps": [],
+      "post_confirmation_steps": [],
+      "external_verifications": [],
+      "evidence": [],
+      "notes": "",
+      "source_documents": [
+        "docs/agentready/PREMIUM_SITE_REQUIREMENTS.md",
+        "docs/agentready/PUBLIC_SITE_INFORMATION_ARCHITECTURE.md",
+        "docs/agentready/PREMIUM_SITE_REDESIGN_EXECUTION_SPEC.md",
+        "docs/agentready/SITE_COPY_GUIDE.md"
+      ]
+    },
+    {
+      "id": "ARB-SITE-PREMIUM-003",
+      "title": "Validate premium mobile accessibility performance and SEO",
+      "objective": "Validate premium mobile accessibility performance and SEO.",
+      "milestone": "M3",
+      "delivery_horizon": "BEFORE_COMMUNITY_PUBLICATION",
+      "status": "PLANNED",
+      "spec_status": "SKELETON",
+      "owner": "CODEX",
+      "work_item_ids": [
+        "AR-SITE-PREMIUM-003"
+      ],
+      "depends_on_batches": [
+        "ARB-SITE-PREMIUM-002"
+      ],
+      "depends_on_tasks": [],
+      "branch": "qa-agentready-premium-site",
+      "pr_title": "qa(site): validate premium mobile accessibility performance and SEO",
+      "allowed_paths": [
+        "assets/**",
+        "*.html",
+        "sitemap.xml",
+        "robots.txt",
+        "docs/agentready/**",
+        "scripts/**"
+      ],
+      "forbidden_paths": [
+        "agentready-core/**",
+        "bin/**",
+        "package.json",
+        "action.yml",
+        ".github/workflows/**",
+        "packaging/**",
+        "server/**",
+        "api/**",
+        "LICENSE",
+        "NOTICE"
+      ],
+      "deliverables": [
+        "Validate premium mobile accessibility performance and SEO"
+      ],
+      "acceptance_criteria": [
+        "Android iPhone-size tablet and desktop layouts pass",
+        "keyboard focus semantics contrast touch targets and reduced motion pass",
+        "no horizontal overflow broken link empty CTA or hidden critical content remains",
+        "critical product content is available without JavaScript",
+        "performance evidence meets documented static-site budgets",
+        "titles descriptions canonicals structured data and internal links are valid",
+        "stale manual offers and unsupported product claims are absent",
+        "mandatory limitation remains on key pages"
+      ],
+      "independent_test_plan": [
+        "run relevant existing tests",
+        "run execution-system validator"
+      ],
+      "required_commands": [
+        "node scripts/validate-agentready-execution-system.mjs"
+      ],
+      "required_evidence": [
+        "viewport matrix",
+        "accessibility audit",
+        "performance report",
+        "SEO and structured-data report",
+        "broken-link report",
+        "final visual consistency review"
+      ],
+      "rollback_boundary": "Revert ARB-SITE-PREMIUM-003 without reverting unrelated batches.",
+      "scope_justification": "Batch groups compatible work items with one shared review and rollback boundary.",
+      "manual_actions": [],
+      "authorized_actions": [],
+      "forbidden_actions": [],
+      "codex_preflight_steps": [],
+      "owner_checkpoint_steps": [],
+      "post_confirmation_steps": [],
+      "external_verifications": [],
+      "evidence": [],
+      "notes": "",
+      "source_documents": [
+        "docs/agentready/PREMIUM_SITE_REQUIREMENTS.md",
+        "docs/agentready/PUBLIC_SITE_INFORMATION_ARCHITECTURE.md",
+        "docs/agentready/PREMIUM_SITE_REDESIGN_EXECUTION_SPEC.md",
+        "docs/agentready/SEO_GEO_AI_FIRST_REQUIREMENTS.md"
+      ]
+    },
+    {
       "id": "ARB-COM-003",
       "title": "Validate public Community installation",
       "objective": "Validate public Community installation.",
@@ -15134,6 +15804,7 @@
         "AR-COM-008"
       ],
       "depends_on_batches": [
+        "ARB-SITE-PREMIUM-003",
         "ARB-COM-001"
       ],
       "depends_on_tasks": [],
@@ -15220,6 +15891,7 @@
         "AR-ONB-004"
       ],
       "depends_on_batches": [
+        "ARB-COM-003",
         "ARB-COM-001"
       ],
       "depends_on_tasks": [],
@@ -23011,6 +23683,14 @@
       "task_ids": [
         "AR-SITE-007",
         "AR-INT-002"
+      ]
+    },
+    {
+      "document": "docs/agentready/PREMIUM_SITE_REDESIGN_EXECUTION_SPEC.md",
+      "status": "ACTIVE",
+      "task_ids": [
+        "AR-SITE-EPIC",
+        "AR-UX-001"
       ]
     },
     {

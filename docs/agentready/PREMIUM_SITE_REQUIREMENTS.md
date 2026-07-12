@@ -90,6 +90,14 @@ Required design qualities:
 
 The site should communicate engineering seriousness before marketing polish.
 
+## Premium Foundation Visual Direction
+
+The shared visual system must use graphite or deep-navy foundations, restrained blue/cyan accents and subtle gradients. It must avoid bright color fields, repetitive identical card grids, generic AI imagery, emoji decoration, fake dashboards, excessive glassmorphism and animation-heavy effects.
+
+Sections should use varied composition and hierarchy. The design should feel like a premium developer-security product while preserving static performance, legibility and factual product evidence.
+
+The canonical navigation, footer and three-batch execution boundary are defined in `PREMIUM_SITE_REDESIGN_EXECUTION_SPEC.md`.
+
 ## UX Criteria
 
 ### Desktop
