@@ -86,15 +86,15 @@ for (const requiredCommand of [
 }
 assert.match(workflow, /git diff --exit-code --/);
 assert.ok(workflow.includes("const completedBatch = batches.get('ARB-COM-002')"));
-assert.ok(workflow.includes("const nextBatch = batches.get('ARB-SITE-PREMIUM-001')"));
+assert.ok(workflow.includes("const nextBatch = batches.get('ARB-SITE-GLOBAL-002')"));
 assert.ok(workflow.includes("assert.equal(completedBatch?.status, 'DONE')"));
 assert.ok(workflow.includes("assert.equal(nextBatch?.status, 'READY')"));
 assert.ok(workflow.includes("assert.equal(nextBatch?.spec_status, 'EXECUTION_READY')"));
-assert.ok(workflow.includes("assert.equal(next?.batch?.id, 'ARB-SITE-PREMIUM-001')"));
+assert.ok(workflow.includes("assert.equal(next?.batch?.id, 'ARB-SITE-GLOBAL-002')"));
 assert.ok(workflow.includes("assert.equal(next?.action_type, 'READY')"));
 assert.ok(workflow.includes('assert.match(nextPrompt, /Repository:'));
-assert.match(workflow, /Batch ID: ARB-SITE-PREMIUM-001/);
-assert.match(workflow, /site-agentready-premium-foundation/);
+assert.match(workflow, /Batch ID: ARB-SITE-GLOBAL-002/);
+assert.match(workflow, /site-agentready-global-product/);
 assert.match(workflow, /assert\.equal\(manifest\.community_license,\s*'Apache-2\.0'\)/);
 assert.match(workflow, /assert\.equal\(manifest\.tarball\.entry_count,\s*21\)/);
 assert.match(workflow, /assert\.equal\(manifest\.package_private,\s*false\)/);

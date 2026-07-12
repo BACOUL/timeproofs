@@ -233,3 +233,13 @@ Supersedes: the sequence that moved directly from Marketplace publication to `AR
 Status: ACTIVE
 
 The npm package, immutable repository release, Action tag, Marketplace listing, static-first scope and Community/Pro boundary remain unchanged.
+
+
+## 2026-07-13 - Global standard site before public validation
+
+Decision ID: DL-2026-07-13-GLOBAL-STANDARD-SITE-BEFORE-VALIDATION
+Decision: Replace the limited three-batch premium-site sequence with a seven-stage global-standard site program before ARB-COM-003 and external promotion.
+Reason: PR #132 proves the shared shell but also demonstrates that a header, footer and six product pages cannot establish AgentReady as a credible candidate standard. Pricing, standard rules, governance, company identity, trust, legal foundations, developer adoption, SEO, GEO and international architecture must be part of the baseline rather than deferred until or after launch.
+Impact: PR #132 remains open as an approved technical stack base. ARB-SITE-GLOBAL-002 becomes the next executable stacked batch. Public installation, onboarding promotion and pilot outreach depend on ARB-SITE-GLOBAL-007. Existing later SITE, SEO, GEO, DOC and CAT work becomes deeper expansion rather than the first public baseline.
+Supersedes: DL-2026-07-12-PREMIUM-SITE-BEFORE-VALIDATION for all work after ARB-SITE-PREMIUM-001.
+Status: ACTIVE

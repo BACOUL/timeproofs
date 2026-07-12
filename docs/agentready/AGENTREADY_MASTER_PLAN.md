@@ -378,28 +378,32 @@ Community publication and validation sequence:
 6. create immutable tag;
 7. create GitHub Release;
 8. publish and verify the public GitHub Action;
-9. rebuild the shared premium design system, navigation and footer;
-10. redesign the homepage and core product pages;
-11. complete premium mobile, accessibility, performance and SEO QA;
-12. test public installation from clean external environments;
-13. implement and validate the three-minute onboarding path;
-14. begin external pilot outreach only after the premium site and public installation gates pass.
+9. build the shared global design system, navigation and footer;
+10. publish the global product, scanners, CI, Community, planned Pro and pricing foundation;
+11. publish the AgentReady standard, rules, severity, versioning and governance foundation;
+12. publish company, trust, security, privacy and legal foundations from verified facts;
+13. publish developer documentation, adoption, examples and contribution paths;
+14. complete SEO, GEO and AI-first, structured-data and international architecture;
+15. complete independent global mobile, accessibility, performance, content and discoverability QA;
+16. test public installation from clean external environments;
+17. implement and validate the three-minute onboarding path;
+18. begin external pilot outreach only after the global site and public installation gates pass.
 
 GitHub Marketplace is a distribution channel, not a security validation.
 
 Stripe remains the initial payment channel.
 
-## Premium Site Gate Before Public Validation
+## Global Standard Site Gate Before Public Validation
 
-The GitHub Marketplace Action is public, but publication is not the commercial launch. Before public installation validation, onboarding promotion, maintainer outreach or external pilot recruitment, the project must complete three premium-site batches:
+The GitHub Marketplace Action is public, but publication is not the commercial launch. Before public installation validation, onboarding promotion, maintainer outreach or external pilot recruitment, the project must complete the global-standard site program.
 
-1. shared design system, desktop and mobile navigation, and footer;
-2. homepage and core product-page redesign;
-3. independent mobile, accessibility, performance, SEO and visual-consistency QA.
+The program covers the shared shell, product and pricing, standard and rules, company and trust, legal foundations, developer documentation and adoption, SEO, GEO and AI-first architecture, international structure and independent global QA.
 
-The gate exists because the current public site does not yet communicate the quality, trust and hierarchy of the product. The redesign must remain static, fast, dependency-light, local-first and honest about current capabilities. It does not authorize product, engine, CLI, Action, npm, billing, account or runtime changes.
+The existing PR #132 is retained as a technical stack base and must not be treated as the finished public site. Stacked draft PRs are authorized so the complete site can be reviewed before production is left with a partial redesign.
 
-The detailed implementation boundary is defined in `PREMIUM_SITE_REDESIGN_EXECUTION_SPEC.md`.
+The program remains static, fast, dependency-light, local-first and honest about current capabilities. It does not authorize engine, CLI, Action, npm, billing, account, hosted scanning or runtime changes.
+
+The detailed authority is defined in `GLOBAL_STANDARD_SITE_PROGRAM.md`. The earlier `PREMIUM_SITE_REDESIGN_EXECUTION_SPEC.md` remains authoritative only for the shell foundation batch.
 
 ## License Architecture
 
