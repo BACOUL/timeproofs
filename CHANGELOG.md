@@ -14,11 +14,16 @@ TimeProofs AgentReady = pre-deployment CI gate for agent-facing OpenAPI and MCP 
 
 - Community release candidate workflow, manifest, checksum, and temporary CI artifact validation.
 
-### Blocked
+### Release Evidence
 
-- Public npm publication, GitHub Release creation, immutable tag creation, and Marketplace listing remain blocked until explicit release approval.
+- Public npm publication of `@timeproofs/agentready@0.1.0-alpha.0` succeeded under `alpha`.
+- npm also exposed `latest: 0.1.0-alpha.0` unexpectedly; JEASON accepted this temporarily until the first stable release.
+- Immutable Git tag `v0.1.0-alpha.0` was created for commit `150da23932c1fb9433cb3d546904f03c18c909e9`.
+- GitHub prerelease `v0.1.0-alpha.0` was created.
+- No new npm operation is authorized after the documented `latest` exception.
+- Marketplace listing remains outside this release step.
 
-## 0.1.0-alpha.0 - candidate, not released
+## 0.1.0-alpha.0 - alpha prerelease
 
 ### Added
 

@@ -8,7 +8,7 @@ const workflowPath = '.github/workflows/agentready-community-release-candidate.y
 const scriptPath = 'scripts/create-agentready-community-release-candidate.mjs';
 const packageLibPath = 'scripts/agentready-community-package-lib.mjs';
 const packagePath = 'package.json';
-const releaseNotesPath = 'docs/agentready/COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_0_DRAFT.md';
+const releaseNotesPath = 'docs/agentready/COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_0.md';
 const workflowDocPath = 'docs/agentready/COMMUNITY_RELEASE_WORKFLOW.md';
 const checklistPath = 'docs/agentready/COMMUNITY_RELEASE_CHECKLIST.md';
 const versioningPath = 'docs/agentready/GITHUB_ACTION_VERSIONING.md';
@@ -79,6 +79,10 @@ assert.doesNotMatch(script, authTokenPattern);
 
 assert.match(packageLib, /status:\s*'candidate_only'/);
 assert.match(packageLib, /publication_ready:\s*false/);
+assert.match(packageLib, /release candidate workflow is read-only and cannot publish/);
+assert.match(packageLib, /release candidate workflow cannot create Git tags/);
+assert.match(packageLib, /release candidate workflow cannot create GitHub Releases/);
+assert.match(packageLib, /no new npm operation is authorized from this workflow/);
 assert.match(packageLib, /package_private:\s*false/);
 assert.match(packageLib, /package_publish_access:\s*COMMUNITY_PUBLISH_CONFIG\.access/);
 assert.match(packageLib, /package_publish_tag:\s*COMMUNITY_PUBLISH_CONFIG\.tag/);
@@ -102,26 +106,44 @@ assert.doesNotMatch(packageLib, /\bgh\s+release\s+create\b/);
 assert.doesNotMatch(packageLib, /\bgit\s+tag\b/);
 assert.doesNotMatch(packageLib, authTokenPattern);
 
-assert.match(releaseNotes, /Draft release notes - not published\./);
-assert.match(releaseNotes, /NPM DIST-TAG:\s*alpha/);
-assert.match(releaseNotes, /LATEST TAG MODIFIED:\s*NO/);
+assert.match(releaseNotes, /published AgentReady Community alpha release/);
+assert.match(releaseNotes, /NPM PACKAGE STATUS:\s*PUBLISHED/);
+assert.match(releaseNotes, /NPM DIST-TAG alpha:\s*0\.1\.0-alpha\.0/);
+assert.match(releaseNotes, /NPM DIST-TAG latest:\s*0\.1\.0-alpha\.0/);
+assert.match(releaseNotes, /LATEST ACCEPTANCE DECISION:\s*ACCEPT_TEMPORARILY/);
+assert.match(releaseNotes, /GIT TAG STATUS:\s*CREATED/);
+assert.match(releaseNotes, /GIT TAG TARGET:\s*150da23932c1fb9433cb3d546904f03c18c909e9/);
+assert.match(releaseNotes, /GITHUB RELEASE:\s*CREATED/);
+assert.match(releaseNotes, /GITHUB RELEASE PRERELEASE:\s*true/);
+assert.match(releaseNotes, /GITHUB RELEASE DRAFT:\s*false/);
+assert.match(releaseNotes, /GITHUB RELEASE LATEST:\s*false/);
+assert.match(releaseNotes, /MARKETPLACE LISTING:\s*NOT CREATED/);
+assert.match(releaseNotes, /NEW NPM OPERATION AUTHORIZED:\s*NO/);
+assert.doesNotMatch(releaseNotes, /Draft release notes - not published|npm package: not published|GitHub Release: not created|GitHub tag: not created|publication approval not granted|no public tag exists|no GitHub Release exists|Planned public commands after publication|public npm availability/);
 assert.doesNotMatch(releaseNotes, /published in Marketplace|npm package available|Pro plan is available|Team plan is available|Agency plan is available/);
 
-assert.match(workflowDoc, /Candidate Only/);
+assert.match(workflowDoc, /Read-Only Candidate Workflow/);
 assert.match(workflowDoc, /NPM DIST-TAG:\s*alpha/);
-assert.match(workflowDoc, /LATEST TAG MODIFIED:\s*NO/);
-assert.match(workflowDoc, /Publication is forbidden/);
+assert.match(workflowDoc, /latest` dist-tag temporarily until the first stable release/);
+assert.match(workflowDoc, /Publication actions are unavailable in this workflow/);
 assert.match(workflowDoc, /permissions:\s*contents:\s*read/);
 assert.match(workflowDoc, /v0\.1\.0-alpha\.0/);
-assert.match(workflowDoc, /not created/);
+assert.match(workflowDoc, /GitHub Release created and marked prerelease/);
+assert.doesNotMatch(workflowDoc, /Candidate Only|Publication is forbidden|Actual tag creation remains blocked/);
 
-assert.match(checklist, /Publication status: BLOCKED/);
+assert.match(checklist, /Publication status: PUBLISHED_WITH_DOCUMENTED_EXCEPTION/);
+assert.match(checklist, /Git tag created:\s*YES/);
+assert.match(checklist, /GitHub Release created:\s*YES/);
+assert.match(checklist, /GitHub Release prerelease:\s*YES/);
+assert.match(checklist, /GitHub Release latest:\s*NO/);
 assert.match(checklist, /npm scope ownership/);
 assert.match(checklist, /explicit release approval/i);
 
-assert.match(versioning, /Actual tag creation remains blocked/);
+assert.match(versioning, /v0\.1\.0-alpha\.0: created/);
 assert.match(versioning, /v0\.1\.0-alpha\.0/);
-assert.match(versioning, /not created/);
+assert.match(versioning, /GitHub Release `v0\.1\.0-alpha\.0` is created as a prerelease and is not marked\s+latest/);
+assert.match(versioning, /no Marketplace listing exists/);
+assert.doesNotMatch(versioning, /Actual tag creation remains blocked|Planned versioned reference - tag not created yet/);
 
 await assertUnsafeOutputDirectoryGuards();
 

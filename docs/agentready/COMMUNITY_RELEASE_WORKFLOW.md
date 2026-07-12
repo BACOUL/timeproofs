@@ -1,4 +1,4 @@
-# AgentReady Community Release Workflow
+﻿# AgentReady Community Release Workflow
 
 ## Purpose
 
@@ -16,9 +16,10 @@ Core promise:
 Fail the build before unsafe agent-facing APIs or MCP tools are deployed.
 ```
 
-## Candidate Only
+## Read-Only Candidate Workflow
 
-The workflow prepares and validates a release candidate. It does not create a public release.
+The workflow prepares and validates a release candidate artifact. It remains
+read-only and does not create a public release by itself.
 
 Candidate validation means:
 
@@ -31,12 +32,12 @@ reviewed commit
 -> GitHub Action validation
 -> checksum
 -> release manifest
--> draft release notes
+-> release notes snapshot
 -> temporary CI artifact
--> explicit publication blockers
+-> release evidence checks
 ```
 
-Publication is forbidden in this workflow.
+Publication actions are unavailable in this workflow.
 
 The workflow must not:
 
@@ -92,7 +93,7 @@ approved exact artifact
 -> JEASON manual npm publish with private owner 2FA
 -> public npm verification
 -> immutable tag at approved source commit
--> GitHub Release
+-> GitHub prerelease
 -> public installation test
 -> evidence recorded
 -> human review before merge
@@ -212,7 +213,7 @@ The script:
 - calculates SHA-256;
 - writes a checksum file;
 - writes a release candidate manifest;
-- copies draft release notes;
+- copies release notes;
 - writes only to the explicit output directory.
 
 The output directory must not be the repository root and must be empty if it already exists. The script must not recursively delete or silently overwrite user-provided output directories.
@@ -303,9 +304,13 @@ PUBLICATION APPROVED: YES
 APPROVED BY: JEASON
 APPROVAL DATE: 2026-07-12
 NPM DIST-TAG: alpha
-LATEST TAG MODIFIED: NO
+LATEST TAG MODIFIED: TEMPORARILY ACCEPTED AS 0.1.0-alpha.0
 FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
-NPM TOKEN: none
+NPM AUTOMATION TOKEN: none
+TEMPORARY LOCAL OWNER LOGIN: authorized for controlled first publication only
+LOCAL LOGIN STORAGE: owner device ~/.npmrc only
+CREDENTIAL SHARING: forbidden
+POST-PUBLICATION ACTION: npm logout immediately after verification
 FUTURE AUTH: Trusted Publishing OIDC after initial package creation
 ```
 
@@ -318,7 +323,7 @@ alpha
 LATEST TAG MODIFIED:
 
 ```txt
-NO
+TEMPORARILY ACCEPTED AS 0.1.0-alpha.0
 ```
 
 FIRST PUBLICATION AUTH:
@@ -327,10 +332,34 @@ FIRST PUBLICATION AUTH:
 manual npm CLI with owner 2FA
 ```
 
-NPM TOKEN:
+NPM AUTOMATION TOKEN:
 
 ```txt
 none
+```
+
+TEMPORARY LOCAL OWNER LOGIN:
+
+```txt
+authorized for controlled first publication only
+```
+
+LOCAL LOGIN STORAGE:
+
+```txt
+owner device ~/.npmrc only
+```
+
+CREDENTIAL SHARING:
+
+```txt
+forbidden
+```
+
+POST-PUBLICATION ACTION:
+
+```txt
+npm logout immediately after verification
 ```
 
 FUTURE AUTH:
@@ -339,7 +368,7 @@ FUTURE AUTH:
 Trusted Publishing OIDC after initial package creation
 ```
 
-Planned future tag:
+Current immutable tag:
 
 ```txt
 v0.1.0-alpha.0
@@ -348,12 +377,13 @@ v0.1.0-alpha.0
 Tag status:
 
 ```txt
-not created
+created
 ```
 
 The Community release workflow prepares and validates the release candidate.
-Actual tag creation remains outside this workflow and is allowed only in the
-controlled publication handoff after npm publication succeeds.
+Actual tag creation remains outside this workflow. The tag was created after the
+recorded owner decision accepting the unexpected npm `latest` dist-tag temporarily until the first stable release.
+No new npm operation is authorized.
 
 ## Future Rollback Procedure
 
@@ -365,27 +395,35 @@ When public release exists, rollback must be handled in a dedicated release deci
 - update moving major references only after validation;
 - keep affected artifacts traceable.
 
-Rollback is not active in this candidate-only workflow because no public artifact is published.
+Rollback or remediation is not active in this workflow step. npm publication has
+succeeded, and the unexpected `latest` dist-tag is accepted temporarily by owner decision
+until the first stable release. Further npm action remains forbidden; the Git tag and GitHub prerelease have been created and now require evidence review.
 
 ## Publication Blockers
 
 - final Community tarball content approved.
 - explicit publication approval granted.
-- npm publication not yet executed.
-- immutable tag not yet created.
-- GitHub Release not yet created.
+- npm publication succeeded for `@timeproofs/agentready@0.1.0-alpha.0`.
+- npm `alpha` dist-tag observed as `0.1.0-alpha.0`.
+- npm `latest` dist-tag unexpectedly observed as `0.1.0-alpha.0`.
+- attempted `latest` removal failed with E400; no dist-tag was removed.
+- immutable tag `v0.1.0-alpha.0` created and remotely verified.
+- GitHub Release created and marked prerelease.
 - trusted publishing provenance not configured for future automated publication.
+- owner decision on the unexpected `latest` deviation recorded as ACCEPT_TEMPORARILY.
+- all future prereleases must be published explicitly with npm dist-tag `alpha`;
 
-## Required Approvals Before Publication
+## Controlled Continuation After Latest Decision
 
-Before controlled publication executes:
+After immutable Git tag and GitHub prerelease creation:
 
-- Codex must verify the approved exact artifact and checksum;
-- JEASON must perform the first npm publication manually with private owner 2FA;
-- Codex must verify public npm availability under `alpha`;
-- Codex must verify `latest` was not created or modified;
-- the immutable tag must point exactly to `150da23932c1fb9433cb3d546904f03c18c909e9`;
-- the GitHub Release must reference the approved artifact and evidence.
+- JEASON has accepted temporarily that `latest` points to `0.1.0-alpha.0` until the first stable release;
+- Codex must not retry npm dist-tag removal, modify `alpha`, modify `latest`,
+  deprecate, unpublish or republish without a new explicit instruction;
+- the immutable tag points exactly to
+  `150da23932c1fb9433cb3d546904f03c18c909e9`;
+- the GitHub Release references the approved artifact and evidence;
+- the GitHub Release is a prerelease, not draft, and not marked latest.
 
 ## Mandatory Limitation
 

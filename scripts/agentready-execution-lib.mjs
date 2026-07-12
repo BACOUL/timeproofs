@@ -40,12 +40,14 @@ const allowed = {
     "MERGED_PENDING_EVIDENCE",
     "PLANNED",
     "BLOCKED",
+    "PASS_WITH_DOCUMENTED_EXCEPTION",
     "OWNER_ACTION_REQUIRED",
     "LEGAL_REVIEW_REQUIRED",
     "SECURITY_REVIEW_REQUIRED",
     "EXTERNAL_SPECIALIST_REQUIRED",
     "EXTERNAL_VERIFICATION_REQUIRED",
     "DECISION_REQUIRED",
+    "DECIDED",
     "RECURRING",
     "POST_LAUNCH",
     "POST_REVENUE",
@@ -59,6 +61,7 @@ const allowed = {
     "MERGED_PENDING_EVIDENCE",
     "PLANNED",
     "BLOCKED",
+    "PASS_WITH_DOCUMENTED_EXCEPTION",
     "POST_LAUNCH",
     "POST_REVENUE",
     "REJECTED"
@@ -117,6 +120,10 @@ export function isDone(item) {
   return item.status === "DONE";
 }
 
+function isDependencySatisfied(item) {
+  return ["DONE", "DECIDED", "PASS_WITH_DOCUMENTED_EXCEPTION"].includes(item?.status);
+}
+
 export function isCodexWorkItem(task) {
   return ["CODEX_WORK_ITEM", "CODEX_PR"].includes(task.task_type);
 }
@@ -140,11 +147,11 @@ function isBatchIssued(batch) {
 }
 
 function dependencyTasksDone(batch, tasks) {
-  return (batch.depends_on_tasks || []).every((id) => tasks.get(id)?.status === "DONE");
+  return (batch.depends_on_tasks || []).every((id) => isDependencySatisfied(tasks.get(id)));
 }
 
 function taskDependenciesDone(task, tasks) {
-  return (task.depends_on || []).every((id) => tasks.get(id)?.status === "DONE");
+  return (task.depends_on || []).every((id) => isDependencySatisfied(tasks.get(id)));
 }
 
 function dependencyBatchesDone(batch, batches) {
@@ -742,7 +749,7 @@ function validateBatches(ledger, add) {
     if (batch.status === "IN_REVIEW") add(batch.pr_number, `${batch.id} IN_REVIEW without PR number`);
     if (batch.status === "READY") {
       add(batch.spec_status === "EXECUTION_READY", `${batch.id} READY but not EXECUTION_READY`);
-      for (const dep of batch.depends_on_tasks || []) add(tasks.get(dep)?.status === "DONE", `${batch.id} READY but task dependency ${dep} is not DONE`);
+      for (const dep of batch.depends_on_tasks || []) add(isDependencySatisfied(tasks.get(dep)), `${batch.id} READY but task dependency ${dep} is not satisfied`);
       for (const dep of batch.depends_on_batches || []) add(batches.get(dep)?.status === "DONE", `${batch.id} READY but batch dependency ${dep} is not DONE`);
     }
     add((batch.work_item_ids || []).length <= 8 || (batch.scope_justification || "").includes("exceeds eight"), `${batch.id} exceeds eight work items without justification`);
@@ -802,7 +809,7 @@ export function validateLedger(ledger, compareGenerated = true) {
     add(task.required_evidence?.length, `${task.id} lacks required evidence`);
     add(task.source_documents?.length, `${task.id} lacks source document`);
     if (task.status === "DONE") add(task.evidence?.length, `${task.id} DONE without evidence`);
-    if (task.status === "READY") for (const dep of task.depends_on || []) add(map.get(dep)?.status === "DONE", `${task.id} READY but ${dep} is not DONE`);
+    if (task.status === "READY") for (const dep of task.depends_on || []) add(isDependencySatisfied(map.get(dep)), `${task.id} READY but ${dep} is not satisfied`);
     if (task.status === "IN_REVIEW") add(task.pr_number, `${task.id} IN_REVIEW without PR number`);
     if (isCodexWorkItem(task)) {
       for (const key of ["deliverables", "estimated_files_or_surfaces", "independent_test_plan"]) add(Array.isArray(task[key]) && task[key].length, `${task.id} Codex work item missing ${key}`);
@@ -859,25 +866,30 @@ export function validateLedger(ledger, compareGenerated = true) {
     const forbiddenActions = communityPublishBatch.forbidden_actions || [];
     const prompt = generatedContents(ledger)[generatedPaths.nextPrompt] || "";
     add(communityPublishBatch.owner === "CODEX_AND_JEASON", "ARB-COM-001 must be owned by CODEX_AND_JEASON");
-    add(manualActions.length > 0, "ARB-COM-001 must contain JEASON manual actions");
+    add(manualActions.length > 0, "ARB-COM-001 must contain manual action evidence");
     add(!manualActions.includes("None"), "ARB-COM-001 must not say Manual actions: None");
-    add(manualActions.some((item) => item.includes("JEASON runs") && item.includes("2FA") && item.includes("terminal")), "ARB-COM-001 missing JEASON private 2FA manual checkpoint");
-    add(authorizedActions.some((item) => item.includes("@timeproofs/agentready@0.1.0-alpha.0") && item.includes("alpha")), "ARB-COM-001 missing authorized alpha npm publication action");
+    add(manualActions.some((item) => item.includes("ACCEPT_TEMPORARILY") && item.includes("latest")), "ARB-COM-001 missing JEASON documented latest decision");
+    add(!authorizedActions.some((item) => item.includes("npm publish")), "ARB-COM-001 must not authorize another npm publish");
     add(authorizedActions.some((item) => item.includes("v0.1.0-alpha.0") && item.includes("150da23932c1fb9433cb3d546904f03c18c909e9")), "ARB-COM-001 missing authorized immutable tag target");
     add(forbiddenActions.some((item) => item.includes("latest")), "ARB-COM-001 must forbid latest");
     add(forbiddenActions.some((item) => item.includes("another package version")), "ARB-COM-001 must forbid another version");
     add(forbiddenActions.some((item) => item.includes("rebuild, modify or replace the approved tarball")), "ARB-COM-001 must forbid tarball modification");
-    add(forbiddenActions.some((item) => item.includes("npm token")), "ARB-COM-001 must forbid npm token creation/storage");
+    add(forbiddenActions.some((item) => item.includes("new npm operation")), "ARB-COM-001 must forbid new npm operations");
+    add(forbiddenActions.some((item) => item.includes("manual npm tokens")), "ARB-COM-001 must forbid manual npm token creation");
+    add(forbiddenActions.some((item) => item.includes("NPM_TOKEN") && item.includes("NODE_AUTH_TOKEN")), "ARB-COM-001 must forbid automation and CI npm tokens");
     add(forbiddenActions.some((item) => item.includes("password") && item.includes("2FA code") && item.includes("recovery code")), "ARB-COM-001 must forbid receiving or storing npm secrets and 2FA codes");
     add(forbiddenActions.some((item) => item.includes("any commit other than 150da23932c1fb9433cb3d546904f03c18c909e9")), "ARB-COM-001 must forbid tagging any commit except approved source commit");
     add(!prompt.includes("do not publish, do not create tags or releases"), "ARB-COM-001 prompt contains contradictory generic publication ban");
     add(prompt.includes("CODEX_AND_JEASON"), "ARB-COM-001 prompt must contain CODEX_AND_JEASON");
-    add(prompt.includes("## Point de contrôle propriétaire obligatoire"), "ARB-COM-001 prompt must contain owner checkpoint");
+    add(prompt.includes("ACCEPT_TEMPORARILY"), "ARB-COM-001 prompt must contain owner latest decision");
     add(prompt.includes("602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe"), "ARB-COM-001 prompt missing approved tarball SHA-256");
     add(prompt.includes("150da23932c1fb9433cb3d546904f03c18c909e9"), "ARB-COM-001 prompt missing approved source commit");
     add(prompt.includes("alpha"), "ARB-COM-001 prompt missing alpha dist-tag");
     add(prompt.includes("v0.1.0-alpha.0"), "ARB-COM-001 prompt missing immutable tag");
-    add(prompt.includes("latest"), "ARB-COM-001 prompt missing latest prohibition");
+    add(prompt.includes("latest") && prompt.includes("temporarily accepted"), "ARB-COM-001 prompt missing latest documented exception");
+    add(prompt.includes("do not perform any new npm operation"), "ARB-COM-001 prompt missing new npm operation prohibition");
+    add(!prompt.includes("npm login --auth-type=web"), "ARB-COM-001 prompt must not request npm login after publication");
+    add(prompt.includes("NPM_TOKEN") && prompt.includes("NODE_AUTH_TOKEN"), "ARB-COM-001 prompt missing automation token prohibition");
     add(prompt.includes("never communicates the 2FA code") || prompt.includes("do not request, receive, print or store a password, 2FA code or recovery code"), "ARB-COM-001 prompt must forbid sharing 2FA");
   }
   for (const task of ledger.tasks.filter((t) => t.workstream === "PRO" && t.status === "READY")) add(map.get("AR-ENG-005")?.status === "DONE", `${task.id} Pro READY before final benchmark`);

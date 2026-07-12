@@ -17,7 +17,8 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 | AR-COM-004 | task | LEGAL | DONE | Treat package-public ProofSpec references | legal treatment decision<br>updated package-public audit<br>staged package validation |
 | AR-COM-005 | task | JEASON | DONE | Approve final Community tarball content | approved corrected tarball SHA-256<br>approved corrected source commit<br>owner approval confirming npm dist-tag alpha |
 | AR-COM-006A | task | JEASON | DONE | Explicit Community publication approval | approved commit<br>approved version<br>approved tarball SHA-256<br>approval date |
-| AR-COM-006 | task | CODEX_AND_JEASON | READY | Publish Community CLI and immutable release | approved tarball SHA-256 verification<br>JEASON npm publication confirmation without secrets<br>npm package URL<br>immutable tag<br>GitHub Release URL<br>public installation test |
+| AR-COM-006B | task | JEASON | DECIDED | Decide handling of unexpected npm latest dist-tag | owner decision ACCEPT_TEMPORARILY on latest deviation<br>recorded alpha and latest dist-tags<br>first-stable-release limit |
+| AR-COM-006 | task | CODEX_AND_JEASON | PASS_WITH_DOCUMENTED_EXCEPTION | Publish Community CLI and immutable release | approved tarball SHA-256 verification<br>JEASON npm publication confirmation without secrets<br>npm package URL<br>documented latest exception<br>immutable tag<br>GitHub Release URL |
 | AR-ONB-EPIC | task | CODEX_AND_JEASON | PLANNED | Community onboarding | child tasks tracked in ledger |
 | AR-ENG-EPIC | task | CODEX_AND_JEASON | PLANNED | Engine benchmark and quality | child tasks tracked in ledger |
 | AR-ENG-001H | task | CODEX_AND_JEASON | OWNER_ACTION_REQUIRED | Validate human benchmark annotations | dated human annotation approval |
@@ -54,4 +55,4 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 | AR-I18N-001 | task | EXTERNAL_SPECIALIST | POST_LAUNCH | Verify internationalization obligations | Verify internationalization obligations evidence |
 | AR-TEAM-EPIC | task | CODEX_AND_JEASON | PLANNED | Team and Agency post-revenue expansion | child tasks tracked in ledger |
 | ARB-GOV-003 | batch | CODEX_AND_JEASON | DONE | Add canonical AgentReady execution system | draft PR #115<br>workflow success<br>human ledger review before merge |
-| ARB-COM-001 | batch | CODEX_AND_JEASON | READY | Publish Community CLI and immutable release | approved tarball SHA-256 verification<br>JEASON npm publication confirmation without secrets<br>npm package URL<br>immutable tag<br>GitHub Release URL<br>public installation test |
+| ARB-COM-001 | batch | CODEX_AND_JEASON | IN_REVIEW | Publish Community CLI and immutable release | approved tarball SHA-256 verification<br>JEASON npm publication confirmation without secrets<br>npm package URL<br>documented latest exception<br>immutable tag<br>GitHub Release URL |

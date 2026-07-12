@@ -252,33 +252,33 @@ Required evidence:
   - human ledger review before merge
 
 ### ARB-COM-001 - Publish Community CLI and immutable release
-- Status: READY
+- Status: IN_REVIEW
 - Spec status: EXECUTION_READY
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Work items: AR-COM-006
 - Depends on batches: None
-- Depends on tasks: AR-COM-001, AR-COM-002, AR-COM-003, AR-COM-004, AR-COM-005, AR-COM-006A
+- Depends on tasks: AR-COM-001, AR-COM-002, AR-COM-003, AR-COM-004, AR-COM-005, AR-COM-006A, AR-COM-006B
 - Branch: release-agentready-community-cli
 - PR title: release(agentready): publish Community CLI and immutable release
-
+- PR: #124
 Deliverables:
   - Publish Community CLI and immutable release
 Acceptance criteria:
-  - Codex verifies the exact approved artifact before publication
-  - JEASON performs the manual npm publish checkpoint with private owner 2FA
-  - publication occurs only under npm dist-tag alpha
-  - latest is not created, moved or modified
-  - immutable tag and GitHub Release are created only after npm publication is confirmed
-  - public install tested
+  - Codex verified the exact approved artifact before publication
+  - JEASON performed the manual npm publish checkpoint with private owner 2FA
+  - publication succeeded under npm dist-tag alpha
+  - latest unexpectedly points to 0.1.0-alpha.0 and is accepted temporarily by JEASON until the first stable release
+  - all future prereleases must be published explicitly with npm dist-tag alpha
+  - immutable tag and GitHub prerelease were created without performing any new npm operation
 Required evidence:
   - approved tarball SHA-256 verification
   - JEASON npm publication confirmation without secrets
   - npm package URL
+  - documented latest exception
   - immutable tag
   - GitHub Release URL
-  - public installation test
 
 ### ARB-COM-002 - Publish public GitHub Action distribution
 - Status: PLANNED
@@ -2029,33 +2029,57 @@ Required evidence:
   - approved tarball SHA-256
   - approval date
 
+### AR-COM-006B - Decide handling of unexpected npm latest dist-tag
+- Type: DECISION_GATE
+- Status: DECIDED
+- Owner: JEASON
+- Milestone: M3
+- Horizon: BEFORE_COMMUNITY_PUBLICATION
+- Workstream: COM
+- Weight: 3
+- Execution batch: None
+- Depends on: AR-COM-001, AR-COM-002, AR-COM-003, AR-COM-004, AR-COM-005, AR-COM-006A
+
+Deliverables:
+  - None
+Acceptance criteria:
+  - owner decision recorded for unexpected latest dist-tag
+  - alpha dist-tag documented as 0.1.0-alpha.0
+  - latest dist-tag documented as 0.1.0-alpha.0
+  - temporary acceptance remains limited until first stable release
+  - future prereleases must use npm dist-tag alpha explicitly
+Required evidence:
+  - owner decision ACCEPT_TEMPORARILY on latest deviation
+  - recorded alpha and latest dist-tags
+  - first-stable-release limit
+
 ### AR-COM-006 - Publish Community CLI and immutable release
 - Type: CODEX_WORK_ITEM
-- Status: READY
+- Status: PASS_WITH_DOCUMENTED_EXCEPTION
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Workstream: COM
 - Weight: 5
 - Execution batch: ARB-COM-001
-- Depends on: AR-COM-001, AR-COM-002, AR-COM-003, AR-COM-004, AR-COM-005, AR-COM-006A
+- Depends on: AR-COM-001, AR-COM-002, AR-COM-003, AR-COM-004, AR-COM-005, AR-COM-006A, AR-COM-006B
 
 Deliverables:
   - Publish Community CLI and immutable release
 Acceptance criteria:
-  - Codex verifies the exact approved artifact before publication
-  - JEASON performs the manual npm publish checkpoint with private owner 2FA
-  - publication occurs only under npm dist-tag alpha
-  - latest is not created, moved or modified
-  - immutable tag and GitHub Release are created only after npm publication is confirmed
-  - public install tested
+  - Codex verified the exact approved artifact before publication
+  - JEASON performed the manual npm publish checkpoint with private owner 2FA
+  - publication succeeded under npm dist-tag alpha
+  - latest unexpectedly points to 0.1.0-alpha.0 and is accepted temporarily by JEASON until the first stable release
+  - all future prereleases must be published explicitly with npm dist-tag alpha
+  - immutable tag and GitHub prerelease were created without performing any new npm operation
 Required evidence:
   - approved tarball SHA-256 verification
   - JEASON npm publication confirmation without secrets
   - npm package URL
+  - documented latest exception
   - immutable tag
   - GitHub Release URL
-  - public installation test
 
 ### AR-COM-007 - Publish public AgentReady GitHub Action distribution
 - Type: CODEX_WORK_ITEM

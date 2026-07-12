@@ -16,7 +16,7 @@ on:
       - "README.md"
       - "docs/agentready/COMMUNITY_RELEASE_WORKFLOW.md"
       - "docs/agentready/COMMUNITY_RELEASE_CHECKLIST.md"
-      - "docs/agentready/COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_0_DRAFT.md"
+      - "docs/agentready/COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_0.md"
       - "docs/agentready/GITHUB_ACTION_VERSIONING.md"
       - "docs/agentready/CLI_PUBLIC_DISTRIBUTION.md"
   workflow_dispatch:
@@ -148,7 +148,7 @@ jobs:
           test -f "$candidate_dir/timeproofs-agentready-0.1.0-alpha.0.tgz"
           test -f "$candidate_dir/timeproofs-agentready-0.1.0-alpha.0.tgz.sha256"
           test -f "$candidate_dir/agentready-community-release-candidate-manifest.json"
-          test -f "$candidate_dir/COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_0_DRAFT.md"
+          test -f "$candidate_dir/COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_0.md"
           file_count="$(find "$candidate_dir" -type f | wc -l | tr -d ' ')"
           test "$file_count" = "4"
           EXPECTED_COMMIT_SHA="$(git rev-parse HEAD)" node --input-type=module <<'NODE'

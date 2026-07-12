@@ -1,4 +1,4 @@
-# AgentReady Community Publication Approval Checklist
+﻿# AgentReady Community Publication Approval Checklist
 
 Status: APPROVED
 
@@ -13,20 +13,28 @@ APPROVED VERSION: 0.1.0-alpha.0
 APPROVED TARBALL SHA-256: 602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe
 APPROVAL DATE: 2026-07-12
 NPM DIST-TAG: alpha
-LATEST TAG MODIFIED: NO
+LATEST TAG MODIFIED: TEMPORARILY ACCEPTED AS 0.1.0-alpha.0
+LATEST ACCEPTANCE DECISION: ACCEPT_TEMPORARILY
+LATEST TEMPORARY ACCEPTANCE: until first stable release
+FUTURE PRERELEASES DIST-TAG: alpha
+NEW NPM OPERATION AUTHORIZED: NO
 IMMUTABLE GIT TAG AUTHORIZED: v0.1.0-alpha.0
 GITHUB RELEASE AUTHORIZED: YES
 ARTIFACT MODIFICATION AUTHORIZED: NO
 OTHER VERSION AUTHORIZED: NO
 FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
-NPM TOKEN: none
+NPM AUTOMATION TOKEN: none
+TEMPORARY LOCAL OWNER LOGIN: authorized for controlled first publication only
+LOCAL LOGIN STORAGE: owner device ~/.npmrc only
+CREDENTIAL SHARING: forbidden
+POST-PUBLICATION ACTION: npm logout immediately after verification
 FUTURE AUTH: Trusted Publishing OIDC after initial package creation
 ```
 
 ## Owner Publication Authorization
 
 ```txt
-«J’autorise explicitement la publication publique de @timeproofs/agentready version 0.1.0-alpha.0, exclusivement sous le dist-tag npm alpha, à partir du commit source approuvé 150da23932c1fb9433cb3d546904f03c18c909e9 et du tarball dont le SHA-256 est 602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe. J’autorise également la création du tag Git immuable v0.1.0-alpha.0 et de la GitHub Release correspondante. Cette autorisation ne permet pas de publier sous latest, de modifier l’artefact approuvé ou de publier une autre version. Approbation donnée par JEASON le 12 juillet 2026.»
+Â«Jâ€™autorise explicitement la publication publique de @timeproofs/agentready version 0.1.0-alpha.0, exclusivement sous le dist-tag npm alpha, Ã  partir du commit source approuvÃ© 150da23932c1fb9433cb3d546904f03c18c909e9 et du tarball dont le SHA-256 est 602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe. Jâ€™autorise Ã©galement la crÃ©ation du tag Git immuable v0.1.0-alpha.0 et de la GitHub Release correspondante. Cette autorisation ne permet pas de publier sous latest, de modifier lâ€™artefact approuvÃ© ou de publier une autre version. Approbation donnÃ©e par JEASON le 12 juillet 2026.Â»
 ```
 
 Final decision:

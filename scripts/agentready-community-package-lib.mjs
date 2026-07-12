@@ -19,7 +19,7 @@ export const COMMUNITY_PUBLISH_CONFIG = Object.freeze({
   tag: 'alpha'
 });
 export const MANIFEST_NAME = 'agentready-community-release-candidate-manifest.json';
-export const RELEASE_NOTES_RELATIVE_PATH = 'docs/agentready/COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_0_DRAFT.md';
+export const RELEASE_NOTES_RELATIVE_PATH = 'docs/agentready/COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_0.md';
 
 export const EXPECTED_PACKAGE_FILES = [
   'LICENSE',
@@ -66,10 +66,10 @@ const COMMUNITY_SOURCE_FILES = [
 ];
 
 export const PUBLICATION_BLOCKERS = [
-  'final Community tarball content not approved',
-  'explicit release approval not granted',
-  'no public tag exists',
-  'no GitHub Release exists',
+  'release candidate workflow is read-only and cannot publish',
+  'release candidate workflow cannot create Git tags',
+  'release candidate workflow cannot create GitHub Releases',
+  'no new npm operation is authorized from this workflow',
   'trusted publishing provenance not configured for publication'
 ];
 
@@ -176,8 +176,8 @@ export async function createCommunityReleaseCandidate({ repoRoot, outputDir }) {
       },
       release_notes: {
         filename: releaseNotesFilename,
-        draft: true,
-        published: false
+        draft: false,
+        published: true
       },
       blockers: PUBLICATION_BLOCKERS
     };
