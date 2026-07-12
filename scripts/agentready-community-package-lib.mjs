@@ -165,7 +165,7 @@ export async function createCommunityReleaseCandidate({ repoRoot, outputDir }) {
         files: packageFiles
       },
       github_action: {
-        path: '.github/actions/agentready/action.yml',
+        path: 'action.yml',
         versioned_tag_created: false
       },
       publication: {

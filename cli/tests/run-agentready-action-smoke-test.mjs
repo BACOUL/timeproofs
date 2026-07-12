@@ -5,7 +5,8 @@ import os from 'node:os';
 import path from 'node:path';
 
 const repoRoot = process.cwd();
-const actionPath = path.join(repoRoot, '.github', 'actions', 'agentready', 'action.yml');
+const actionPath = path.join(repoRoot, 'action.yml');
+const nestedActionPath = path.join(repoRoot, '.github', 'actions', 'agentready', 'action.yml');
 const workflowPath = path.join(repoRoot, '.github', 'workflows', 'agentready-action-integration.yml');
 const versioningDocPath = path.join(repoRoot, 'docs', 'agentready', 'GITHUB_ACTION_VERSIONING.md');
 const cliPath = path.join(repoRoot, 'bin', 'agentready.js');
@@ -26,7 +27,11 @@ async function testActionMetadata() {
   const action = await fs.readFile(actionPath, 'utf8');
   const runBlock = extractRunBlock(action);
 
-  assert.match(action, /name: TimeProofs AgentReady CI Gate/);
+  await assertFileMissing(nestedActionPath);
+  assert.match(action, /name: AgentReady CI Gate by TimeProofs/);
+  assert.match(action, /author: TimeProofs/);
+  assert.match(action, /description: Static CI gate for agent-facing OpenAPI and MCP contracts\./);
+  assert.match(action, /branding:\s*\n\s*icon: shield\s*\n\s*color: blue/);
   assert.match(action, /file:/);
   assert.match(action, /type:/);
   assert.match(action, /min-score:/);
@@ -48,7 +53,8 @@ async function testActionMetadata() {
   assert.match(runBlock, /min_score="\$AGENTREADY_INPUT_MIN_SCORE"/);
   assert.match(runBlock, /fail_on="\$AGENTREADY_INPUT_FAIL_ON"/);
   assert.match(runBlock, /out_dir="\$AGENTREADY_INPUT_OUT"/);
-  assert.match(runBlock, /GITHUB_ACTION_PATH\/\.\.\/\.\.\/\.\./);
+  assert.match(runBlock, /action_repo_root="\$\(cd "\$GITHUB_ACTION_PATH" && pwd\)"/);
+  assert.doesNotMatch(runBlock, /GITHUB_ACTION_PATH\/\.\.\/\.\.\/\.\./);
   assert.match(runBlock, /cd "\$GITHUB_WORKSPACE"/);
   assert.match(action, /bin\/agentready\.js/);
   assert.match(action, /--min-score/);
@@ -67,7 +73,8 @@ async function testActionIntegrationWorkflowMetadata() {
 
   assert.match(workflow, /runs-on: ubuntu-latest/);
   assert.match(workflow, /node-version: "20"/);
-  assert.match(workflow, /uses: \.\/\.github\/actions\/agentready/);
+  assert.match(workflow, /uses: \.\//);
+  assert.doesNotMatch(workflow, /uses: \.\/\.github\/actions\/agentready/);
   assert.match(workflow, /id: openapi_pass/);
   assert.match(workflow, /id: mcp_pass/);
   assert.match(workflow, /id: openapi_policy_fail/);
@@ -93,6 +100,7 @@ async function testVersioningDocumentation() {
   assert.match(doc, /must remain immutable/);
   assert.match(doc, /no moving major Action tag is created during the alpha batch/);
   assert.match(doc, /GitHub prerelease `v0\.1\.0-alpha\.0` exists and is not marked latest/);
+  assert.match(doc, /root `\/action\.yml` is not yet published on the default branch at the start of `ARB-COM-002`/);
   assert.match(doc, /no Marketplace listing exists at the start of `ARB-COM-002`/);
   assert.match(doc, /ubuntu-latest/);
   assert.match(doc, /Node\.js 20/);
@@ -147,6 +155,16 @@ async function testActionEquivalentMcpScan() {
 async function assertFileExists(filePath) {
   const stat = await fs.stat(filePath);
   assert.equal(stat.isFile(), true, `${filePath} should exist`);
+}
+
+async function assertFileMissing(filePath) {
+  try {
+    await fs.stat(filePath);
+  } catch (error) {
+    if (error?.code === 'ENOENT') return;
+    throw error;
+  }
+  assert.fail(`${filePath} should not exist`);
 }
 
 function extractRunBlock(action) {

@@ -162,9 +162,10 @@ The remaining action is human review and merge of the publication evidence PR.
 
 | Requirement | Status | Evidence |
 |---|---|---|
-| Local composite action is tested | READY | `uses: ./.github/actions/agentready` |
-| Inputs are documented | READY | `.github/actions/agentready/action.yml` |
-| Outputs are documented | READY | `.github/actions/agentready/action.yml` |
+| Root Marketplace action is prepared | READY | `/action.yml` |
+| Local composite action is tested | READY | `uses: ./` |
+| Inputs are documented | READY | `/action.yml` |
+| Outputs are documented | READY | `/action.yml` |
 | Policy FAIL preserves outputs | READY | Action integration workflow |
 | Future immutable tag is defined | READY | `v0.1.0-alpha.0` candidate |
 | Future immutable tag exists | READY | Remote tag `v0.1.0-alpha.0` exists |

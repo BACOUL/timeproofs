@@ -22,7 +22,7 @@ Statuses:
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Engine | Stable OpenAPI and MCP risk analysis | Core exists and tests pass | Stable Community-grade scanner | yes | Product/Engineering | `agentready-core/`, tests | READY |
 | CLI | CI-capable CLI | CLI alpha exists | Stable Community CLI with docs | yes | Engineering | `bin/agentready.js`, CLI tests | READY |
-| GitHub Action | Wrapper around CLI | Wrapper exists | Documented and copyable workflow | yes | Engineering | `.github/actions/agentready/action.yml` | READY |
+| GitHub Action | Wrapper around CLI | Root Marketplace metadata exists | Documented and copyable workflow | yes | Engineering | `/action.yml` | READY |
 | Licenses | Automatic Pro license after payment | Not implemented | Pro license generated after checkout | yes | Engineering | `LICENSE_AND_ENTITLEMENT_ARCHITECTURE.md` | PLANNED |
 | Entitlements | Community + Pro feature gates | Not implemented | Pro entitlement object enforced; Community remains accountless | yes | Engineering | `PRICING_AND_ENTITLEMENTS_V0_1.md` | PLANNED |
 | Billing | Stripe Checkout and subscriptions | Not implemented | Test-mode Pro checkout, portal, invoices | yes | Engineering/Ops | `AUTOMATED_PURCHASE_AND_BILLING_FLOW.md` | PLANNED |

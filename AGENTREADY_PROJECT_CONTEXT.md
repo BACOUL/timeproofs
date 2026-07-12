@@ -41,9 +41,16 @@ Built and merged:
 - CLI public distribution package preparation;
 - versioned GitHub Action preparation;
 - Community release workflow preparation;
+- Community CLI alpha publication completed;
 - legacy proof runtime artifacts removed.
 
-Community public publication remains blocked and has not occurred.
+Community CLI alpha publication has occurred for `@timeproofs/agentready@0.1.0-alpha.0`. The GitHub Marketplace Action distribution is the current owner-checkpoint batch and is not yet published.
+
+Reserved Action tag for that checkpoint:
+
+```txt
+agentready-action-v0.1.0-alpha.0
+```
 
 ## Current Execution Sequence
 
@@ -61,6 +68,7 @@ Completed:
 10. Versioned GitHub Action preparation validated.
 11. Community release workflow prepared.
 12. Community + Pro strategy rebaselined.
+13. Community CLI alpha published with documented `latest` exception.
 
 Current inserted governance step:
 
@@ -83,8 +91,8 @@ docs/agentready/NEXT_ACTION.md
 Sequence after governance:
 
 1. Resolve documented owner/legal Community publication blockers.
-2. Community publication only after every blocker is `RESOLVED` and explicit approval exists.
-3. Marketplace and three-minute onboarding.
+2. Community CLI alpha publication.
+3. Marketplace Action and three-minute onboarding.
 4. Engine benchmark.
 5. Pro MVP features.
 6. Engine quality alignment.
@@ -111,7 +119,7 @@ docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
 ```txt
 agentready-core/
 bin/agentready.js
-.github/actions/agentready/action.yml
+action.yml
 docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md
 docs/agentready/AGENTREADY_MASTER_PLAN.md
 docs/agentready/EXECUTION_SEQUENCE.md

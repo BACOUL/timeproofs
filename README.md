@@ -54,6 +54,7 @@ Done:
 - commercial bad/fixed CI Gate validation;
 - stable rule codes AR001-AR010;
 - GitHub Action wrapper;
+- root GitHub Marketplace Action preparation in review;
 - versioned GitHub Action preparation;
 - `agentready.json` spec v0.1;
 - `/agentready-ci` public page;
@@ -63,9 +64,21 @@ Done:
 - public docs and examples;
 - legal, privacy, and terms draft pages;
 - legacy proof runtime artifacts removed.
-- Community release workflow prepared.
+- Community CLI alpha published with documented `latest` exception.
 
-Community public publication remains blocked and has not occurred.
+Community CLI publication has occurred for `@timeproofs/agentready@0.1.0-alpha.0` under `alpha`. The GitHub Marketplace Action remains in the owner-checkpoint batch and is not yet published as a Marketplace listing.
+
+Reserved Action release reference for the owner checkpoint:
+
+```yaml
+uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0
+```
+
+Full-SHA reference to be populated after owner publication:
+
+```yaml
+uses: BACOUL/timeproofs@<FULL_ACTION_RELEASE_COMMIT_SHA>
+```
 
 ## Community Capabilities
 
@@ -189,7 +202,7 @@ docs/agentready/NEXT_ACTION.md
 If every blocker is `RESOLVED`, the next release PR may be:
 
 ```txt
-release(agentready): publish Community CLI and immutable release
+feat(distribution): publish AgentReady GitHub Marketplace action
 ```
 
 If any blocker remains open, the next authorized action is the owner or legal action named in `docs/agentready/COMMUNITY_PUBLICATION_BLOCKERS.md`.
@@ -202,7 +215,7 @@ docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
 
 ## Prepared Local Package Test
 
-The CLI package is prepared for local tarball validation, but it is not published.
+The CLI package is published as an alpha. Local tarball validation remains available for release discipline.
 
 ```txt
 npm pack

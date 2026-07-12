@@ -47,7 +47,7 @@ const limitation =
   "It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.";
 
 function read(relativePath) {
-  return readFileSync(path.join(repoRoot, relativePath), "utf8");
+  return readFileSync(path.join(repoRoot, relativePath), "utf8").replace(/\r\n/g, "\n");
 }
 
 function fail(message) {

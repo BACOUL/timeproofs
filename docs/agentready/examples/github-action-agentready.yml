@@ -11,6 +11,8 @@ on:
 jobs:
   agentready:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
@@ -18,10 +20,9 @@ jobs:
         with:
           node-version: '20'
 
-      # Current local usage for a vendored or checked-out action copy.
       - name: AgentReady OpenAPI gate
         id: openapi_gate
-        uses: ./.github/actions/agentready
+        uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0
         with:
           type: openapi
           file: ./openapi.json
@@ -31,7 +32,7 @@ jobs:
 
       - name: AgentReady MCP gate
         id: mcp_gate
-        uses: ./.github/actions/agentready
+        uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0
         with:
           type: mcp
           file: ./mcp-tools.json
@@ -47,10 +48,10 @@ jobs:
           echo "MCP: ${{ steps.mcp_gate.outputs.score }} - ${{ steps.mcp_gate.outputs.status }}"
           echo "MCP report: ${{ steps.mcp_gate.outputs.report-path }}"
 
-# Development branch reference - not a stable release:
+# Security-hardened full-SHA form, populated after the owner checkpoint:
 #
-# uses: BACOUL/timeproofs/.github/actions/agentready@timeproofs
+# uses: BACOUL/timeproofs@<FULL_ACTION_RELEASE_COMMIT_SHA>
 #
-# Planned versioned reference - tag not created yet:
+# Local repository development reference only:
 #
-# uses: BACOUL/timeproofs/.github/actions/agentready@v0.1.0-alpha.0
+# uses: ./

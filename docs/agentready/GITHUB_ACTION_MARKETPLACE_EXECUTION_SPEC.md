@@ -325,6 +325,55 @@ The completed batch must contain:
 - public-site alignment report;
 - rollback and compromised-release procedure.
 
+## Action Release Evidence Record
+
+Status: PRE_OWNER_CHECKPOINT
+
+Root metadata audit:
+
+- root metadata file: `/action.yml`
+- nested metadata file: removed after internal reference migration
+- name candidate: `AgentReady CI Gate by TimeProofs`
+- author: `TimeProofs`
+- description: `Static CI gate for agent-facing OpenAPI and MCP contracts.`
+- branding: `shield` / `blue`
+- inputs: `file`, `type`, `min-score`, `fail-on`, `out`
+- outputs: `score`, `status`, `report-path`, `contract-path`
+- runtime: composite Action wrapping the existing CLI
+- backend, account, secret and telemetry dependency: none
+
+Reference migration inventory:
+
+- internal workflows use `uses: ./`
+- public examples use `uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0`
+- full-SHA examples use `uses: BACOUL/timeproofs@<FULL_ACTION_RELEASE_COMMIT_SHA>` until the owner-published tag target is verified
+- historical nested references are labeled as historical source layout only
+
+Pre-owner checkpoint fields:
+
+- Approved implementation SHA: `PENDING_OWNER_APPROVAL`
+- Reserved immutable Action tag: `agentready-action-v0.1.0-alpha.0`
+- Immutable Action tag target: `PENDING_OWNER_ACTION`
+- GitHub prerelease URL: `PENDING_OWNER_CONFIRMATION`
+- Marketplace URL: `PENDING_OWNER_CONFIRMATION`
+- Public tag workflow run: `PENDING_OWNER_CONFIRMATION`
+- Full-SHA usage example: `PENDING_OWNER_CONFIRMATION`
+- Owner Marketplace agreement and private 2FA attestation: `PENDING_OWNER_CONFIRMATION`
+
+Automated validation evidence is recorded in the implementation PR before the
+owner checkpoint. Final public evidence must be recorded after JEASON provides
+the public GitHub Release URL and Marketplace URL.
+
+Compromised-release response:
+
+1. do not move or delete the immutable Action tag;
+2. preserve the audit trail;
+3. remove the affected release from Marketplace when necessary;
+4. publish a corrective notice;
+5. prepare a corrected reviewed commit;
+6. issue a new immutable Action tag;
+7. update documentation and evidence.
+
 ## Forbidden Actions
 
 This batch must not:

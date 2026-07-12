@@ -93,6 +93,12 @@ jobs:
 
 A hardened example must replace third-party Action tags and the AgentReady tag with full commit SHAs.
 
+Security-hardened AgentReady form after owner verification:
+
+```yaml
+uses: BACOUL/timeproofs@<FULL_ACTION_RELEASE_COMMIT_SHA>
+```
+
 The Community Action requires only:
 
 ```yaml
@@ -111,6 +117,12 @@ uses: BACOUL/timeproofs@timeproofs
 ```
 
 Do not use the default branch as a stable production reference.
+
+Inside this repository, local workflow tests use the root Action with:
+
+```yaml
+uses: ./
+```
 
 ## Inputs
 
@@ -202,7 +214,7 @@ At the start of `ARB-COM-002`:
 - the repository is public;
 - npm Community alpha is published;
 - the historical nested Action source exists at `v0.1.0-alpha.0`;
-- root `/action.yml` is not yet published;
+- root `/action.yml` is implemented by this batch and is not yet published through the Marketplace owner checkpoint;
 - `agentready-action-v0.1.0-alpha.0` is reserved but not created;
 - no Marketplace listing exists.
 
