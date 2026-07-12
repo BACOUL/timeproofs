@@ -302,7 +302,7 @@ function groupBy(tasks, key) {
 function walkMarkdownFiles(dir) {
   const out = [];
   if (!existsSync(dir)) return out;
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+  for (const entry of readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
     const absolute = path.join(dir, entry.name);
     const relative = absolute.replaceAll(path.sep, "/");
     if (entry.isDirectory()) out.push(...walkMarkdownFiles(absolute));
@@ -323,7 +323,7 @@ export function documentCoverageStats(ledger) {
   const discovered = [
     ...rootActiveDocuments.filter((filePath) => existsSync(filePath)),
     ...walkMarkdownFiles("docs/agentready")
-  ];
+  ].sort((a, b) => a.localeCompare(b));
   const generated = [];
   const historical = [];
   const active = [];
