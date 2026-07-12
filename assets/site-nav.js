@@ -1,103 +1,117 @@
 (() => {
-  const menuLinks = [
-    ['/', 'Home'],
-    ['/agentready-ci.html', 'CI Gate'],
-    ['/agentready.html', 'OpenAPI scanner'],
-    ['/agentready-mcp.html', 'MCP scanner'],
-    ['/agentready-simulation.html', 'Static simulation'],
-    ['/agentready-sample-report.html', 'Sample report'],
-    ['/pricing.html', 'Pricing'],
-    ['/agentready-resources.html', 'Resources'],
-    ['/agentready-docs.html', 'Docs'],
-    ['/agentready-examples.html', 'Examples'],
-    ['/agentready-test.html', 'Tests'],
-    ['/legal.html', 'Legal notice'],
-    ['/privacy.html', 'Privacy'],
-    ['/terms.html', 'Terms']
-  ];
+  const focusableSelector = [
+    'a[href]',
+    'button:not([disabled])',
+    'summary',
+    'textarea:not([disabled])',
+    'input:not([disabled])',
+    'select:not([disabled])',
+    '[tabindex]:not([tabindex="-1"])'
+  ].join(',');
 
-  function ensureStylesheet() {
-    if (document.querySelector('link[href="/assets/site-nav.css"]')) return;
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = '/assets/site-nav.css';
-    document.head.appendChild(link);
+  let lastTrigger = null;
+
+  function normalizePath(href) {
+    try {
+      const url = new URL(href, window.location.origin);
+      if (url.origin !== window.location.origin) return '';
+      if (url.pathname === '/') return '/';
+      return url.pathname.replace(/\/+$/, '');
+    } catch {
+      return '';
+    }
   }
 
-  function createMobileMenu() {
-    if (document.querySelector('.site-menu-toggle')) return null;
-    const details = document.createElement('details');
-    details.className = 'site-menu-toggle';
+  function markCurrentLinks() {
+    const current = window.location.pathname === '/' ? '/' : window.location.pathname.replace(/\/+$/, '');
+    document.querySelectorAll('.ar-shell a[href], .ar-footer a[href]').forEach((link) => {
+      if (normalizePath(link.href) === current) link.setAttribute('aria-current', 'page');
+    });
+  }
 
-    const summary = document.createElement('summary');
-    summary.className = 'site-menu-button';
-    summary.setAttribute('aria-label', 'Open navigation menu');
-    summary.innerHTML = '<span></span>Menu';
+  function closeDetails(details, restoreFocus = true) {
+    if (!details || !details.open) return;
+    details.open = false;
+    const summary = details.querySelector('summary');
+    if (summary) summary.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('ar-nav-open');
+    if (restoreFocus && lastTrigger && document.contains(lastTrigger)) lastTrigger.focus();
+  }
 
-    const nav = document.createElement('nav');
-    nav.className = 'site-menu-panel';
-    nav.setAttribute('aria-label', 'Mobile navigation');
+  function closeOtherMenus(currentDetails) {
+    document.querySelectorAll('.ar-nav-menu[open], .ar-mobile-nav[open]').forEach((details) => {
+      if (details !== currentDetails) closeDetails(details, false);
+    });
+  }
 
-    menuLinks.forEach(([href, label]) => {
-      const a = document.createElement('a');
-      a.href = href;
-      a.textContent = label;
-      nav.appendChild(a);
+  function setupDetails(details) {
+    const summary = details.querySelector('summary');
+    if (!summary) return;
+    summary.setAttribute('aria-expanded', details.open ? 'true' : 'false');
+
+    summary.addEventListener('click', () => {
+      lastTrigger = summary;
     });
 
-    details.appendChild(summary);
-    details.appendChild(nav);
-    return details;
-  }
-
-  function ensureMobileMenu() {
-    const navBar = document.querySelector('header .nav');
-    if (!navBar) return;
-    const menu = createMobileMenu();
-    if (menu) navBar.appendChild(menu);
-  }
-
-  function ensureFooterLinks() {
-    const footer = document.querySelector('footer .wrap');
-    if (!footer || footer.querySelector('.footer-links')) return;
-
-    const links = document.createElement('div');
-    links.className = 'footer-links';
-    [
-      ['/agentready-ci.html', 'CI Gate'],
-      ['/agentready-sample-report.html', 'Sample report'],
-      ['/pricing.html', 'Pricing'],
-      ['/agentready-resources.html', 'Resources'],
-      ['/legal.html', 'Legal notice'],
-      ['/privacy.html', 'Privacy'],
-      ['/terms.html', 'Terms'],
-      ['/agentready-docs.html', 'Docs']
-    ].forEach(([href, label]) => {
-      const a = document.createElement('a');
-      a.href = href;
-      a.textContent = label;
-      links.appendChild(a);
+    details.addEventListener('toggle', () => {
+      summary.setAttribute('aria-expanded', details.open ? 'true' : 'false');
+      if (details.open) {
+        closeOtherMenus(details);
+        if (details.classList.contains('ar-mobile-nav')) {
+          document.body.classList.add('ar-nav-open');
+          const firstLink = details.querySelector('.ar-mobile-panel a[href]');
+          if (firstLink) window.setTimeout(() => firstLink.focus(), 0);
+        }
+      } else if (details.classList.contains('ar-mobile-nav')) {
+        document.body.classList.remove('ar-nav-open');
+      }
     });
-    footer.appendChild(links);
-  }
 
-  function closeMenuAfterClick() {
-    document.addEventListener('click', (event) => {
-      const openMenu = document.querySelector('.site-menu-toggle[open]');
-      if (!openMenu) return;
-      if (openMenu.contains(event.target)) {
-        if (event.target && event.target.tagName === 'A') openMenu.removeAttribute('open');
+    details.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeDetails(details, true);
         return;
       }
-      openMenu.removeAttribute('open');
+
+      if (!details.classList.contains('ar-mobile-nav') || event.key !== 'Tab' || !details.open) return;
+
+      const focusable = Array.from(details.querySelectorAll(focusableSelector)).filter((element) => {
+        return element.offsetParent !== null || element === summary;
+      });
+      if (!focusable.length) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     });
+  }
+
+  function closeOnOutsideClick(event) {
+    document.querySelectorAll('.ar-nav-menu[open], .ar-mobile-nav[open]').forEach((details) => {
+      if (!details.contains(event.target)) closeDetails(details, false);
+    });
+  }
+
+  function closeMobileAfterNavigation(event) {
+    const link = event.target.closest('.ar-mobile-panel a[href]');
+    if (!link) return;
+    const details = link.closest('.ar-mobile-nav');
+    closeDetails(details, true);
   }
 
   function boot() {
-    ensureStylesheet();
-    ensureMobileMenu();
-    ensureFooterLinks();
-    closeMenuAfterClick();
+    markCurrentLinks();
+    document.querySelectorAll('.ar-nav-menu, .ar-mobile-nav').forEach(setupDetails);
+    document.addEventListener('click', closeOnOutsideClick);
+    document.addEventListener('click', closeMobileAfterNavigation);
   }
 
   if (document.readyState === 'loading') {

@@ -1,10 +1,12 @@
 # AgentReady Premium Site Foundation Evidence
 
-Status: PREFLIGHT RECORDED
+Status: OWNER VISUAL REVIEW REQUIRED
 
 Batch: ARB-SITE-PREMIUM-001
 
 Branch: site-agentready-premium-foundation
+
+Draft PR: https://github.com/BACOUL/timeproofs/pull/132
 
 ## Scope Boundary
 
@@ -94,10 +96,83 @@ Baseline screenshots captured before broad HTML migration:
 | CI Gate desktop baseline | `docs/agentready/evidence/site-premium-foundation/baseline-ci-desktop.png` |
 | CI Gate mobile baseline with menu open | `docs/agentready/evidence/site-premium-foundation/baseline-ci-mobile-open.png` |
 
-## Preflight Findings
+## Post-Migration Screenshots
+
+Screenshots captured after shared-shell migration:
+
+| Evidence | File |
+| --- | --- |
+| Homepage desktop shell | `docs/agentready/evidence/site-premium-foundation/after-index-desktop.png` |
+| Homepage desktop Product menu open | `docs/agentready/evidence/site-premium-foundation/after-index-desktop-product-menu.png` |
+| Homepage mobile closed at 320 px | `docs/agentready/evidence/site-premium-foundation/after-index-mobile-closed-320.png` |
+| Homepage mobile open at 320 px | `docs/agentready/evidence/site-premium-foundation/after-index-mobile-open-320.png` |
+| Homepage mobile no-JS open at 320 px | `docs/agentready/evidence/site-premium-foundation/after-index-mobile-no-js-open-320.png` |
+| CI Gate desktop shell | `docs/agentready/evidence/site-premium-foundation/after-ci-desktop.png` |
+| CI Gate mobile open at 375 px | `docs/agentready/evidence/site-premium-foundation/after-ci-mobile-open-375.png` |
+
+## Validation Evidence
+
+Summary markers:
+
+- Link validation: PASS
+- 320px no-overflow: PASS
+- Keyboard and focus: PASS
+- No-JS critical links: PASS
+- Reduced-motion: PASS
+
+| Check | Result |
+| --- | --- |
+| Link validation | PASS |
+| Static duplicate-shell validation | PASS |
+| Desktop pointer menu | PASS |
+| Mobile 320 px closed and open states | PASS |
+| 320px no-overflow | PASS |
+| 375, 768 and 900 px no-overflow | PASS |
+| Keyboard and focus | PASS |
+| Escape close | PASS |
+| Outside-click close | PASS |
+| Focus restoration | PASS |
+| Focus containment | PASS |
+| Body scroll lock | PASS |
+| No-JS critical links | PASS |
+| Reduced-motion | PASS |
+| Page-body redesign avoided | PASS |
+| Product-code change avoided | PASS |
+
+Responsive overflow was checked on representative active pages:
+
+- `/`
+- `/agentready.html`
+- `/agentready-mcp.html`
+- `/agentready-ci.html`
+- `/agentready-docs.html`
+- `/agentready-json.html`
+- `/pricing.html`
+
+Widths checked:
+
+- 320 px
+- 375 px
+- 768 px
+- 900 px
+
+## Shared Asset Inventory
+
+| Asset | Purpose | Size |
+| --- | --- | --- |
+| `assets/site-nav.css` | Shared shell, navigation, footer, typography, focus, buttons, code surfaces and responsive controls | 8,608 bytes |
+| `assets/site-nav.js` | Dependency-free enhancement for active state, Escape close, outside-click close, focus containment, focus restoration and scroll lock | 4,089 bytes |
+
+No external font, frontend framework, tracker, telemetry, upload flow or backend dependency was added.
+
+## Preflight And Migration Findings
 
 - Broad HTML migration has not started at this preflight point.
 - The draft PR must be opened before replacing active-page navigation and footer markup.
-- Existing body content and product sections must be preserved during the migration.
+- The draft PR was opened before replacing active-page navigation and footer markup.
+- Existing body content and product sections were preserved during the migration.
 - No npm operation, tag operation, GitHub Release operation or Marketplace operation is required for this batch.
 
+## Owner Review
+
+JEASON must review the desktop and mobile visual evidence before merge.

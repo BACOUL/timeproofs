@@ -18,9 +18,9 @@ Remaining detailed Codex work items: 148
 ## Execution Batches
 Total planned Codex execution batches: 75
 Completed Codex execution batches: 5
-Execution batches currently in review: 0
-Execution batches not yet issued: 70
-Immediately executable Codex prompts: 1
+Execution batches currently in review: 1
+Execution batches not yet issued: 69
+Immediately executable Codex prompts: 0
 Average work items per batch: 2.01
 Largest batch size: 6
 Batches with more than five work items: 2
@@ -38,7 +38,7 @@ Execution batches post-revenue: 1
 ## Prompt Day Capacity
 Community days at 5 prompts/day: 1
 Community days at 6 prompts/day: 1
-Pro technical days at 5 prompts/day: 4
+Pro technical days at 5 prompts/day: 3
 Pro technical days at 6 prompts/day: 3
 First-sale days at 5 prompts/day: 6
 First-sale days at 6 prompts/day: 5
@@ -73,8 +73,8 @@ Credible public value cases required: 1
 - M8 Category-building active: 0/98 (0%)
 
 ## Document Coverage
-Active documents discovered: 70
-Active documents covered: 70
+Active documents discovered: 71
+Active documents covered: 71
 Uncovered active documents: 0
 Historical documents excluded: 36
 Generated documents excluded: 6
