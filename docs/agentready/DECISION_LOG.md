@@ -221,3 +221,15 @@ Status: ACTIVE
 - GitHub required root `action.yml` on the default branch before the Marketplace checkbox became available; this sequencing exception is recorded rather than hidden.
 - Public OpenAPI and MCP tag smoke tests passed.
 - No npm operation occurred.
+
+
+## 2026-07-12 - Premium site before public validation
+
+Decision ID: DL-2026-07-12-PREMIUM-SITE-BEFORE-VALIDATION
+Decision: Insert three premium public-site batches before `ARB-COM-003`, public onboarding promotion and external pilot outreach.
+Reason: The Community CLI and GitHub Marketplace Action are technically credible, but the current navigation, hierarchy, mobile experience and visual system do not yet communicate a premium developer-security product. Sending first external users to that surface would reduce trust and waste launch attention.
+Impact: `ARB-SITE-PREMIUM-001`, `ARB-SITE-PREMIUM-002` and `ARB-SITE-PREMIUM-003` are inserted after `ARB-COM-002`; `ARB-COM-003` depends on premium QA; onboarding follows public installation validation; no meaningful acquisition begins before premium QA passes.
+Supersedes: the sequence that moved directly from Marketplace publication to `ARB-COM-003` and onboarding.
+Status: ACTIVE
+
+The npm package, immutable repository release, Action tag, Marketplace listing, static-first scope and Community/Pro boundary remain unchanged.

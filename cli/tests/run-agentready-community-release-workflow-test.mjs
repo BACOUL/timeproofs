@@ -85,16 +85,16 @@ for (const requiredCommand of [
   assert.match(workflow, new RegExp(escapeRegExp(requiredCommand)));
 }
 assert.match(workflow, /git diff --exit-code --/);
+assert.ok(workflow.includes("const completedBatch = batches.get('ARB-COM-002')"));
+assert.ok(workflow.includes("const nextBatch = batches.get('ARB-SITE-PREMIUM-001')"));
 assert.ok(workflow.includes("assert.equal(completedBatch?.status, 'DONE')"));
-assert.ok(workflow.includes("assert.equal(next?.batch?.id, 'ARB-COM-002')"));
-assert.ok(workflow.includes("assert.equal(next?.action_type, 'READY')"));
-assert.ok(workflow.includes("assert.equal(next?.action_type, 'REVIEW_OR_MERGE')"));
-assert.ok(workflow.includes("assert.ok(['READY', 'IN_REVIEW'].includes(nextBatch?.status))"));
+assert.ok(workflow.includes("assert.equal(nextBatch?.status, 'READY')"));
 assert.ok(workflow.includes("assert.equal(nextBatch?.spec_status, 'EXECUTION_READY')"));
-assert.ok(workflow.includes("assert.match(nextPrompt, /Repository:"));
-assert.ok(workflow.includes("assert.match(nextPrompt, /No CODEX execution batch is currently authorized/)"));
-assert.match(workflow, /Batch ID: ARB-COM-002/);
-assert.match(workflow, /Point de contrôle propriétaire obligatoire/);
+assert.ok(workflow.includes("assert.equal(next?.batch?.id, 'ARB-SITE-PREMIUM-001')"));
+assert.ok(workflow.includes("assert.equal(next?.action_type, 'READY')"));
+assert.ok(workflow.includes('assert.match(nextPrompt, /Repository:'));
+assert.match(workflow, /Batch ID: ARB-SITE-PREMIUM-001/);
+assert.match(workflow, /site-agentready-premium-foundation/);
 assert.match(workflow, /assert\.equal\(manifest\.community_license,\s*'Apache-2\.0'\)/);
 assert.match(workflow, /assert\.equal\(manifest\.tarball\.entry_count,\s*21\)/);
 assert.match(workflow, /assert\.equal\(manifest\.package_private,\s*false\)/);

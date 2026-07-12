@@ -5,32 +5,42 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 # Next Action
 
-Batch ID: ARB-COM-003
-Title: Validate public Community installation
-Action owner: CODEX
-Action type: SPECIFICATION_REFINEMENT_REQUIRED
-Status: PLANNED
-Specification: SKELETON
+Batch ID: ARB-SITE-PREMIUM-001
+Title: Build premium design system navigation and footer
+Action owner: CODEX_AND_JEASON
+Action type: READY
+Status: READY
+Specification: EXECUTION_READY
 Objective:
-Validate public Community installation.
+Build premium design system navigation and footer.
 
 Work items:
-  - AR-COM-008
+  - AR-SITE-PREMIUM-001
 
 Required evidence:
-  - OS and Node.js matrix
-  - external-repository workflow runs
-  - PASS FAIL exit-code evidence
-  - report path evidence
-  - offline or backend-independent evidence
-  - unsupported-case register
+  - page and shell migration inventory
+  - desktop navigation screenshots
+  - mobile closed and open navigation screenshots
+  - keyboard and focus test matrix
+  - link validation report
+  - 320px no-overflow evidence
+  - reduced-motion and no-JS evidence
+  - shared asset inventory and size summary
+  - owner visual review before merge
 
 Manual actions:
-  - None
+  - JEASON reviews desktop and mobile visual evidence before merge
 
 Authorized external actions:
-  - None
+  - create dependency-free shared CSS and minimal JavaScript assets
+  - replace duplicated active-page navigation and footer markup
+  - add static validators and documented visual evidence
 
 Forbidden actions:
-  - None
+  - do not redesign homepage or page-body sections in this batch
+  - do not rewrite product claims beyond navigation and footer labels required for accuracy
+  - do not modify engine CLI Action package npm tags billing accounts backend or runtime behavior
+  - do not add external fonts frameworks analytics telemetry uploads or live calls
+  - do not create fake pages customer logos dashboards certifications or safety claims
+  - do not merge without owner visual review
 

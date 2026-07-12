@@ -49,6 +49,7 @@ Exit criteria:
   - GitHub Release
   - public installation tested
   - public Action usable
+  - premium product shell and core pages validated
   - onboarding documented
   - no signup
   - no payment
@@ -57,6 +58,7 @@ Criteria links:
   - M3-TAG-RELEASE: immutable tag and GitHub Release -> AR-COM-006
   - M3-PUBLIC-INSTALL: public installation tested -> AR-COM-008
   - M3-ACTION: public Action usable -> AR-COM-007, AR-COM-009
+  - M3-PREMIUM-SITE: premium product shell and core pages validated -> AR-SITE-PREMIUM-001, AR-SITE-PREMIUM-002, AR-SITE-PREMIUM-003
   - M3-ONBOARDING: onboarding documented without signup or payment -> AR-ONB-001, AR-ONB-002, AR-ONB-003, AR-ONB-004
 
 ### M4 - External pilot and engine benchmark established
@@ -332,6 +334,103 @@ Required evidence:
   - site alignment report
   - rollback procedure
 
+### ARB-SITE-PREMIUM-001 - Build premium design system navigation and footer
+- Status: READY
+- Spec status: EXECUTION_READY
+- Owner: CODEX_AND_JEASON
+- Milestone: M3
+- Horizon: BEFORE_COMMUNITY_PUBLICATION
+- Work items: AR-SITE-PREMIUM-001
+- Depends on batches: ARB-COM-002
+- Depends on tasks: None
+- Branch: site-agentready-premium-foundation
+- PR title: site(agentready): build premium design system and navigation
+
+Deliverables:
+  - Build premium design system navigation and footer
+Acceptance criteria:
+  - one shared design system controls navigation footer typography focus states buttons and code surfaces
+  - desktop navigation exposes Product Resources Pricing Trust GitHub and Scan a contract with real destinations
+  - Product exposes OpenAPI MCP CI Gate and report or agentready.json destinations
+  - Resources exposes docs examples rules methodology and changelog destinations where real routes exist
+  - mobile navigation has large touch targets grouped links visible CTA Escape close focus containment focus restoration scroll lock and no 320px overflow
+  - critical links remain available through progressive enhancement
+  - footer exposes Product Standard Developers and Trust groups
+  - active indexable AgentReady pages use the shared shell without duplicated nav or footer implementations
+  - page body content and product sections are preserved in this foundation batch
+  - no broken route fake page fake product external font frontend framework tracker telemetry or backend dependency is added
+  - reduced-motion and visible keyboard focus are supported
+  - canonical metadata structured data and mandatory limitation text are preserved
+Required evidence:
+  - page and shell migration inventory
+  - desktop navigation screenshots
+  - mobile closed and open navigation screenshots
+  - keyboard and focus test matrix
+  - link validation report
+  - 320px no-overflow evidence
+  - reduced-motion and no-JS evidence
+  - shared asset inventory and size summary
+  - owner visual review before merge
+
+### ARB-SITE-PREMIUM-002 - Redesign homepage and core product pages
+- Status: PLANNED
+- Spec status: SKELETON
+- Owner: CODEX
+- Milestone: M3
+- Horizon: BEFORE_COMMUNITY_PUBLICATION
+- Work items: AR-SITE-PREMIUM-002
+- Depends on batches: ARB-SITE-PREMIUM-001
+- Depends on tasks: None
+- Branch: site-agentready-premium-core-pages
+- PR title: site(agentready): redesign homepage and core product pages
+
+Deliverables:
+  - Redesign homepage and core product pages
+Acceptance criteria:
+  - hero defines the category and primary action within one viewport
+  - homepage follows problem demonstration OpenAPI and MCP CI differentiation proof trust limitation CTA order
+  - product demonstration uses real AgentReady findings outputs and policy behavior
+  - Community is available free and Pro remains in preparation
+  - no unavailable feature or fake customer proof is presented
+  - sections use varied composition rather than repeated card grids
+  - all commands tags rule codes and outputs match merged product behavior
+Required evidence:
+  - desktop and mobile page evidence
+  - content-source mapping
+  - CTA and link audit
+  - real product-output provenance
+
+### ARB-SITE-PREMIUM-003 - Validate premium mobile accessibility performance and SEO
+- Status: PLANNED
+- Spec status: SKELETON
+- Owner: CODEX
+- Milestone: M3
+- Horizon: BEFORE_COMMUNITY_PUBLICATION
+- Work items: AR-SITE-PREMIUM-003
+- Depends on batches: ARB-SITE-PREMIUM-002
+- Depends on tasks: None
+- Branch: qa-agentready-premium-site
+- PR title: qa(site): validate premium mobile accessibility performance and SEO
+
+Deliverables:
+  - Validate premium mobile accessibility performance and SEO
+Acceptance criteria:
+  - Android iPhone-size tablet and desktop layouts pass
+  - keyboard focus semantics contrast touch targets and reduced motion pass
+  - no horizontal overflow broken link empty CTA or hidden critical content remains
+  - critical product content is available without JavaScript
+  - performance evidence meets documented static-site budgets
+  - titles descriptions canonicals structured data and internal links are valid
+  - stale manual offers and unsupported product claims are absent
+  - mandatory limitation remains on key pages
+Required evidence:
+  - viewport matrix
+  - accessibility audit
+  - performance report
+  - SEO and structured-data report
+  - broken-link report
+  - final visual consistency review
+
 ### ARB-COM-003 - Validate public Community installation
 - Status: PLANNED
 - Spec status: SKELETON
@@ -339,7 +438,7 @@ Required evidence:
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Work items: AR-COM-008
-- Depends on batches: ARB-COM-001
+- Depends on batches: ARB-SITE-PREMIUM-003, ARB-COM-001
 - Depends on tasks: None
 - Branch: qa-community-public-installation
 - PR title: qa(community): validate public AgentReady installation
@@ -372,7 +471,7 @@ Required evidence:
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Work items: AR-ONB-001, AR-ONB-002, AR-ONB-003, AR-ONB-004
-- Depends on batches: ARB-COM-001
+- Depends on batches: ARB-COM-003, ARB-COM-001
 - Depends on tasks: None
 - Branch: add-local-scan-onboarding-command
 - PR title: feat(community): add local scan onboarding command
@@ -2325,6 +2424,134 @@ Required evidence:
   - Marketplace URL
   - owner checkpoint attestation
   - public listing verification
+
+### AR-SITE-PREMIUM-EPIC - Premium public product site before external validation
+- Type: EPIC
+- Status: PLANNED
+- Owner: CODEX_AND_JEASON
+- Milestone: M3
+- Horizon: BEFORE_COMMUNITY_PUBLICATION
+- Workstream: SITE
+- Weight: 8
+- Execution batch: None
+- Depends on: AR-COM-006
+
+Deliverables:
+  - None
+Acceptance criteria:
+  - child tasks are tracked
+Required evidence:
+  - child tasks tracked in ledger
+
+### AR-SITE-PREMIUM-001 - Build premium design system navigation and footer
+- Type: CODEX_WORK_ITEM
+- Status: READY
+- Owner: CODEX_AND_JEASON
+- Milestone: M3
+- Horizon: BEFORE_COMMUNITY_PUBLICATION
+- Workstream: SITE
+- Weight: 5
+- Execution batch: ARB-SITE-PREMIUM-001
+- Depends on: None
+
+Deliverables:
+  - shared premium design tokens and shell assets
+  - desktop Product and Resources navigation
+  - accessible full-height mobile navigation
+  - four-group premium footer
+  - active-page and focus states
+  - navigation link and shell validator
+  - desktop and mobile visual evidence
+Acceptance criteria:
+  - one shared design system controls navigation footer typography focus states buttons and code surfaces
+  - desktop navigation exposes Product Resources Pricing Trust GitHub and Scan a contract with real destinations
+  - Product exposes OpenAPI MCP CI Gate and report or agentready.json destinations
+  - Resources exposes docs examples rules methodology and changelog destinations where real routes exist
+  - mobile navigation has large touch targets grouped links visible CTA Escape close focus containment focus restoration scroll lock and no 320px overflow
+  - critical links remain available through progressive enhancement
+  - footer exposes Product Standard Developers and Trust groups
+  - active indexable AgentReady pages use the shared shell without duplicated nav or footer implementations
+  - page body content and product sections are preserved in this foundation batch
+  - no broken route fake page fake product external font frontend framework tracker telemetry or backend dependency is added
+  - reduced-motion and visible keyboard focus are supported
+  - canonical metadata structured data and mandatory limitation text are preserved
+Required evidence:
+  - page and shell migration inventory
+  - desktop navigation screenshots
+  - mobile closed and open navigation screenshots
+  - keyboard and focus test matrix
+  - link validation report
+  - 320px no-overflow evidence
+  - reduced-motion and no-JS evidence
+  - shared asset inventory and size summary
+  - owner visual review before merge
+
+### AR-SITE-PREMIUM-002 - Redesign homepage and core product pages
+- Type: CODEX_WORK_ITEM
+- Status: PLANNED
+- Owner: CODEX
+- Milestone: M3
+- Horizon: BEFORE_COMMUNITY_PUBLICATION
+- Workstream: SITE
+- Weight: 5
+- Execution batch: ARB-SITE-PREMIUM-002
+- Depends on: None
+
+Deliverables:
+  - premium homepage
+  - premium CI Gate page
+  - premium OpenAPI and MCP pages
+  - truthful pricing page
+  - primary docs entry page
+  - realistic product demonstration and proof sections
+Acceptance criteria:
+  - hero defines the category and primary action within one viewport
+  - homepage follows problem demonstration OpenAPI and MCP CI differentiation proof trust limitation CTA order
+  - product demonstration uses real AgentReady findings outputs and policy behavior
+  - Community is available free and Pro remains in preparation
+  - no unavailable feature or fake customer proof is presented
+  - sections use varied composition rather than repeated card grids
+  - all commands tags rule codes and outputs match merged product behavior
+Required evidence:
+  - desktop and mobile page evidence
+  - content-source mapping
+  - CTA and link audit
+  - real product-output provenance
+
+### AR-SITE-PREMIUM-003 - Validate premium mobile accessibility performance and SEO
+- Type: CODEX_WORK_ITEM
+- Status: PLANNED
+- Owner: CODEX
+- Milestone: M3
+- Horizon: BEFORE_COMMUNITY_PUBLICATION
+- Workstream: SITE
+- Weight: 5
+- Execution batch: ARB-SITE-PREMIUM-003
+- Depends on: None
+
+Deliverables:
+  - cross-viewport QA report
+  - accessibility and keyboard report
+  - performance and Core Web Vitals evidence
+  - SEO metadata and structured-data audit
+  - visual consistency and stale-copy audit
+  - blocking corrections
+Acceptance criteria:
+  - Android iPhone-size tablet and desktop layouts pass
+  - keyboard focus semantics contrast touch targets and reduced motion pass
+  - no horizontal overflow broken link empty CTA or hidden critical content remains
+  - critical product content is available without JavaScript
+  - performance evidence meets documented static-site budgets
+  - titles descriptions canonicals structured data and internal links are valid
+  - stale manual offers and unsupported product claims are absent
+  - mandatory limitation remains on key pages
+Required evidence:
+  - viewport matrix
+  - accessibility audit
+  - performance report
+  - SEO and structured-data report
+  - broken-link report
+  - final visual consistency review
 
 ### AR-ONB-EPIC - Community onboarding
 - Type: EPIC

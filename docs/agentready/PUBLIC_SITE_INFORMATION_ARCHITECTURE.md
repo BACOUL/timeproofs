@@ -316,36 +316,51 @@ This page should be especially LLM-readable.
 
 ## Target Navigation
 
-Recommended top navigation:
+Recommended desktop navigation:
 
 ```txt
-Product
-CI Gate
-Docs
-Examples
-Standard
+TimeProofs / AgentReady
+Product ▼
+Resources ▼
 Pricing
+Trust
+GitHub
+Scan a contract
 ```
 
-Recommended dropdown or expanded docs navigation:
+Product menu:
 
 ```txt
-OpenAPI scanner
-MCP scanner
-GitHub Action
-agentready.json
-Rule codes
-Limitations
+OpenAPI Scanner
+MCP Scanner
+GitHub CI Gate
+Reports and agentready.json
 ```
+
+Resources menu:
+
+```txt
+Documentation
+Examples
+AgentReady Rules
+Methodology
+Changelog
+```
+
+Every label must map to a real destination. Do not create broken routes or imply unavailable product surfaces.
+
+Mobile navigation must use a full-height panel or drawer with grouped Product, Resources and Trust areas, large touch targets, visible primary CTA, Escape and outside-click close behavior, focus containment, focus restoration, body scroll lock, current-page state and progressive enhancement.
 
 Mobile navigation priority:
 
-1. Scan OpenAPI
-2. Scan MCP tools
-3. CI Gate
-4. Docs
-5. Examples
-6. Pricing
+1. Scan a contract;
+2. OpenAPI Scanner;
+3. MCP Scanner;
+4. GitHub CI Gate;
+5. Documentation;
+6. Examples;
+7. Pricing;
+8. Trust.
 
 ## Target Footer
 
