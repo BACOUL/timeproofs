@@ -92,16 +92,15 @@ jobs:
           git diff > /tmp/com002-after.diff
           cmp /tmp/com002-before.diff /tmp/com002-after.diff
 
-      - name: Remove one-time refinement helpers
+      - name: Remove one-time refinement scripts
         run: |
           rm scripts/refine-agentready-com-002.mjs
           rm scripts/fix-agentready-com-002-release-guard.mjs
-          rm .github/workflows/refine-agentready-com-002.yml
 
-      - name: Commit validated execution-ready specification
+      - name: Commit validated non-workflow specification files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
+          git add docs/agentready scripts/agentready-execution-lib.mjs scripts/rebuild-agentready-ledger-data.mjs cli/tests/run-agentready-community-release-workflow-test.mjs scripts/refine-agentready-com-002.mjs scripts/fix-agentready-com-002-release-guard.mjs
           git commit -m "docs(distribution): make ARB-COM-002 execution ready"
           git push origin HEAD:docs-agentready-com-002-execution-ready
