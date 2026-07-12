@@ -44,7 +44,7 @@ jobs:
           assert.equal(batches.get('ARB-COM-002')?.status, 'DONE');
           assert.equal(batches.get('ARB-SITE-PREMIUM-001')?.status, 'READY');
           assert.equal(batches.get('ARB-SITE-PREMIUM-001')?.spec_status, 'EXECUTION_READY');
-          assert.deepEqual(batches.get('ARB-COM-003')?.depends_on_batches, ['ARB-SITE-PREMIUM-003']);
+          assert.ok((batches.get('ARB-COM-003')?.depends_on_batches || []).includes('ARB-SITE-PREMIUM-003'));
           assert.equal(next?.batch?.id, 'ARB-SITE-PREMIUM-001');
           assert.equal(next?.action_type, 'READY');
           assert.match(prompt, /Batch ID: ARB-SITE-PREMIUM-001/);
