@@ -190,10 +190,12 @@
     },
     {
       "id": "M4",
-      "name": "Engine benchmark established",
+      "name": "External pilot and engine benchmark established",
       "status": "PLANNED",
       "delivery_horizon": "BEFORE_PRO_TECHNICAL_COMPLETION",
       "exit_criteria": [
+        "external pilot kit",
+        "five-user external pilot",
         "OpenAPI and MCP corpora",
         "human annotations",
         "benchmark acceptance thresholds frozen before final evaluation",
@@ -201,9 +203,27 @@
         "false-positive and false-negative rates",
         "performance",
         "reproducibility",
+        "differentiation evidence",
+        "MCP static coverage matrix",
+        "explicit pre-Pro decision",
         "AR001 AR003 AR008 AR010 treated or documented"
       ],
       "criteria": [
+        {
+          "criterion_id": "M4-PILOT-KIT",
+          "description": "external pilot kit and evidence registry",
+          "satisfied_by": [
+            "AR-MARKET-PILOT-001"
+          ]
+        },
+        {
+          "criterion_id": "M4-PILOT-EVIDENCE",
+          "description": "five-user external pilot evidence",
+          "satisfied_by": [
+            "AR-MARKET-PILOT-001H"
+          ],
+          "requires_human": true
+        },
         {
           "criterion_id": "M4-CORPUS",
           "description": "OpenAPI and MCP corpora and harness",
@@ -248,6 +268,21 @@
             "AR-ENG-004",
             "AR-ENG-005"
           ]
+        },
+        {
+          "criterion_id": "M4-DIFFERENTIATION",
+          "description": "factual differentiation evidence and MCP static coverage matrix",
+          "satisfied_by": [
+            "AR-ENG-005"
+          ]
+        },
+        {
+          "criterion_id": "M4-PRO-DECISION",
+          "description": "explicit decision before Pro implementation",
+          "satisfied_by": [
+            "AR-MARKET-PILOT-002"
+          ],
+          "requires_human": true
         }
       ]
     },
@@ -324,6 +359,7 @@
       "status": "PLANNED",
       "delivery_horizon": "BEFORE_PRO_FIRST_SALE",
       "exit_criteria": [
+        "commercial infrastructure approval",
         "license and entitlements",
         "activation",
         "five repositories",
@@ -339,6 +375,14 @@
         "controlled purchase"
       ],
       "criteria": [
+        {
+          "criterion_id": "M6-MARKET-GATE",
+          "description": "ten-user payment-signal and value-case gate approved",
+          "satisfied_by": [
+            "AR-MARKET-002"
+          ],
+          "requires_human": true
+        },
         {
           "criterion_id": "M6-ENTITLEMENTS",
           "description": "license and entitlements",
@@ -1914,7 +1958,8 @@
       "id": "AR-COM-007",
       "parent_id": "AR-COM-EPIC",
       "decision_ids": [
-        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM"
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM",
+        "DL-2026-07-12-VALIDATION-GATES"
       ],
       "task_type": "CODEX_WORK_ITEM",
       "milestone": "M3",
@@ -1931,26 +1976,51 @@
       "blocks": [],
       "source_documents": [
         "docs/agentready/GITHUB_ACTION_VERSIONING.md",
-        "docs/agentready/GITHUB_ACTION_USAGE.md"
+        "docs/agentready/GITHUB_ACTION_USAGE.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "feat-distribution-agentready-marketplace-action",
       "pr_title": "feat(distribution): publish AgentReady GitHub Marketplace action",
       "allowed_paths": [
         ".github/**",
-        "docs/agentready/**"
+        "docs/agentready/**",
+        "README.md",
+        "AGENTREADY_PROJECT_CONTEXT.md",
+        "index.html",
+        "pricing.html",
+        "agentready-ci.html",
+        "action.yml"
       ],
       "forbidden_paths": [
         "agentready-core/**",
+        "bin/**",
         "package.json",
-        "LICENSE",
-        "*.html"
+        "LICENSE"
       ],
       "acceptance_criteria": [
-        "Publish public AgentReady GitHub Action distribution complete"
+        "Action is consumable from a public distribution path",
+        "release tag and full commit SHA pinning are documented",
+        "minimum GitHub permissions are documented",
+        "Action inputs outputs and failure behavior are documented",
+        "provenance dependency secret and code-scanning controls are documented where supported",
+        "compromised-release revocation and replacement procedure is documented",
+        "public site no longer presents manual review Fix Pack email payment or mandatory contact as the active Community/Pro model",
+        "public site states Community is available and Pro is in preparation",
+        "npm and public Action installation paths are visible",
+        "Marketplace wording does not imply GitHub security validation"
       ],
-      "required_commands": [],
+      "required_commands": [
+        "node cli/tests/run-agentready-action-smoke-test.mjs",
+        "node scripts/validate-agentready-strategy-docs.mjs",
+        "node scripts/validate-agentready-execution-system.mjs"
+      ],
       "required_evidence": [
-        "Publish public AgentReady GitHub Action distribution evidence"
+        "public Action URL or public distribution evidence",
+        "copyable pinned workflow",
+        "permissions review",
+        "supply-chain control evidence",
+        "Marketplace compliance evidence",
+        "public-site alignment evidence"
       ],
       "evidence": [],
       "execution_batch_id": "ARB-COM-002",
@@ -1966,14 +2036,21 @@
       "recurrence": null,
       "notes": "",
       "deliverables": [
-        "Publish public AgentReady GitHub Action distribution"
+        "public Action distribution",
+        "copyable workflow",
+        "immutable version pinning guidance",
+        "minimum permissions",
+        "supply-chain and revocation guidance",
+        "current public-site Community/Pro alignment"
       ],
       "estimated_files_or_surfaces": [
         "one coherent file or surface family"
       ],
       "independent_test_plan": [
-        "run relevant existing tests",
-        "run execution-system validator"
+        "run Action smoke test",
+        "run a pinned Action from an external-style fixture repository",
+        "verify public pages contain the active Community/Pro status and no obsolete manual offer",
+        "run strategy and execution-system validators"
       ],
       "rollback_boundary": "Revert feat-distribution-agentready-marketplace-action without reverting unrelated work.",
       "scope_justification": "Single coherent deliverable with independent review and rollback."
@@ -1982,7 +2059,8 @@
       "id": "AR-COM-008",
       "parent_id": "AR-COM-EPIC",
       "decision_ids": [
-        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM"
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM",
+        "DL-2026-07-12-VALIDATION-GATES"
       ],
       "task_type": "CODEX_WORK_ITEM",
       "milestone": "M3",
@@ -1998,26 +2076,50 @@
       ],
       "blocks": [],
       "source_documents": [
-        "docs/agentready/CLI_PUBLIC_DISTRIBUTION.md"
+        "docs/agentready/CLI_PUBLIC_DISTRIBUTION.md",
+        "docs/agentready/GITHUB_ACTION_USAGE.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "qa-community-public-installation",
       "pr_title": "qa(community): validate public AgentReady installation",
       "allowed_paths": [
+        "cli/**",
         ".github/**",
-        "docs/agentready/**"
+        "agentready-examples/**",
+        "docs/agentready/**",
+        "scripts/**"
       ],
       "forbidden_paths": [
-        "agentready-core/**",
         "package.json",
         "LICENSE",
         "*.html"
       ],
       "acceptance_criteria": [
-        "Validate public Community installation complete"
+        "public npm installation succeeds from clean environments",
+        "Linux macOS and Windows evidence is recorded",
+        "all officially supported Node.js major versions are tested",
+        "paths with spaces and monorepository behavior are tested",
+        "single and multiple OpenAPI or MCP inputs are tested",
+        "invalid input and large input within documented limits are tested",
+        "PASS FAIL exit codes and report paths are verified",
+        "Community operation does not require a TimeProofs backend",
+        "Action installation is tested outside the TimeProofs repository",
+        "failures and unsupported cases are documented honestly"
       ],
-      "required_commands": [],
+      "required_commands": [
+        "node agentready-core/tests/run-agentready-core-tests.mjs",
+        "node cli/tests/run-agentready-cli-tests.mjs",
+        "node cli/tests/run-agentready-action-smoke-test.mjs",
+        "node cli/tests/run-agentready-package-smoke-test.mjs",
+        "node scripts/validate-agentready-execution-system.mjs"
+      ],
       "required_evidence": [
-        "Validate public Community installation evidence"
+        "OS and Node.js matrix",
+        "external-repository workflow runs",
+        "PASS FAIL exit-code evidence",
+        "report path evidence",
+        "offline or backend-independent evidence",
+        "unsupported-case register"
       ],
       "evidence": [],
       "execution_batch_id": "ARB-COM-003",
@@ -2033,14 +2135,19 @@
       "recurrence": null,
       "notes": "",
       "deliverables": [
-        "Validate public Community installation"
+        "clean-environment installation matrix",
+        "external-repository Action validation",
+        "PASS FAIL and error-behavior evidence",
+        "documented unsupported cases"
       ],
       "estimated_files_or_surfaces": [
         "one coherent file or surface family"
       ],
       "independent_test_plan": [
-        "run relevant existing tests",
-        "run execution-system validator"
+        "run CLI core Action and package tests",
+        "execute clean-environment OS matrix",
+        "exercise external-style public and private repository fixtures",
+        "record every unsupported scenario"
       ],
       "rollback_boundary": "Revert qa-community-public-installation without reverting unrelated work.",
       "scope_justification": "Single coherent deliverable with independent review and rollback."
@@ -2049,7 +2156,8 @@
       "id": "AR-COM-009",
       "parent_id": "AR-COM-EPIC",
       "decision_ids": [
-        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM"
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM",
+        "DL-2026-07-12-VALIDATION-GATES"
       ],
       "task_type": "CODEX_WORK_ITEM",
       "milestone": "M3",
@@ -2065,26 +2173,42 @@
       ],
       "blocks": [],
       "source_documents": [
-        "docs/agentready/GITHUB_ACTION_VERSIONING.md"
+        "docs/agentready/GITHUB_ACTION_VERSIONING.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "docs-marketplace-agentready-action-compliance",
       "pr_title": "docs(distribution): prepare AgentReady Marketplace listing compliance",
       "allowed_paths": [
         ".github/**",
-        "docs/agentready/**"
+        "docs/agentready/**",
+        "README.md",
+        "action.yml"
       ],
       "forbidden_paths": [
         "agentready-core/**",
+        "bin/**",
         "package.json",
         "LICENSE",
         "*.html"
       ],
       "acceptance_criteria": [
-        "Prepare GitHub Marketplace listing compliance complete"
+        "Marketplace metadata requirements are satisfied",
+        "branding and repository links are valid",
+        "listing copy states static-analysis scope and mandatory limitation",
+        "listing does not claim certification guaranteed safety or GitHub validation",
+        "immutable tag and SHA pinning guidance is included",
+        "minimum permissions are visible"
       ],
-      "required_commands": [],
+      "required_commands": [
+        "node cli/tests/run-agentready-action-smoke-test.mjs",
+        "node scripts/validate-agentready-strategy-docs.mjs",
+        "node scripts/validate-agentready-execution-system.mjs"
+      ],
       "required_evidence": [
-        "Prepare GitHub Marketplace listing compliance evidence"
+        "Marketplace metadata review",
+        "listing copy review",
+        "branding and links review",
+        "version pinning and permissions review"
       ],
       "evidence": [],
       "execution_batch_id": "ARB-COM-002",
@@ -2100,7 +2224,10 @@
       "recurrence": null,
       "notes": "",
       "deliverables": [
-        "Prepare GitHub Marketplace listing compliance"
+        "Marketplace metadata and branding compliance",
+        "factual listing copy",
+        "version and permission guidance",
+        "listing evidence checklist"
       ],
       "estimated_files_or_surfaces": [
         "one coherent file or surface family"
@@ -2163,7 +2290,8 @@
       "id": "AR-ONB-001",
       "parent_id": "AR-ONB-EPIC",
       "decision_ids": [
-        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM"
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM",
+        "DL-2026-07-12-VALIDATION-GATES"
       ],
       "task_type": "CODEX_WORK_ITEM",
       "milestone": "M3",
@@ -2180,7 +2308,8 @@
       "blocks": [],
       "source_documents": [
         "docs/agentready/THREE_MINUTE_ONBOARDING_SPEC.md",
-        "docs/agentready/CLI_PUBLIC_DISTRIBUTION.md"
+        "docs/agentready/CLI_PUBLIC_DISTRIBUTION.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "add-local-scan-onboarding-command",
       "pr_title": "feat(community): add local scan onboarding command",
@@ -2196,13 +2325,17 @@
         "*.html"
       ],
       "acceptance_criteria": [
-        "Add local scan onboarding command complete"
+        "canonical local OpenAPI and MCP scan commands work without global installation",
+        "errors are actionable",
+        "no signup token upload or TimeProofs backend is required"
       ],
       "required_commands": [
         "node cli/tests/run-agentready-cli-tests.mjs"
       ],
       "required_evidence": [
-        "Add local scan onboarding command evidence"
+        "clean local scan evidence",
+        "OpenAPI and MCP command evidence",
+        "error output evidence"
       ],
       "evidence": [],
       "execution_batch_id": "ARB-ONB-001",
@@ -2234,7 +2367,8 @@
       "id": "AR-ONB-002",
       "parent_id": "AR-ONB-EPIC",
       "decision_ids": [
-        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM"
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM",
+        "DL-2026-07-12-VALIDATION-GATES"
       ],
       "task_type": "CODEX_WORK_ITEM",
       "milestone": "M3",
@@ -2251,7 +2385,8 @@
       "blocks": [],
       "source_documents": [
         "docs/agentready/THREE_MINUTE_ONBOARDING_SPEC.md",
-        "docs/agentready/CLI_PUBLIC_DISTRIBUTION.md"
+        "docs/agentready/CLI_PUBLIC_DISTRIBUTION.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "add-init-workflow-generator",
       "pr_title": "feat(community): add init workflow generator",
@@ -2267,13 +2402,23 @@
         "*.html"
       ],
       "acceptance_criteria": [
-        "Add init workflow generator complete"
+        "init detects OpenAPI and MCP files",
+        "files are shown before writing",
+        "confirmation is required",
+        "Community workflow is generated",
+        "a local scan is run",
+        "Pro policy is not generated",
+        "rollback or cleanup is documented"
       ],
       "required_commands": [
         "node cli/tests/run-agentready-cli-tests.mjs"
       ],
       "required_evidence": [
-        "Add init workflow generator evidence"
+        "detection evidence",
+        "confirmation evidence",
+        "generated workflow",
+        "local scan evidence",
+        "cleanup evidence"
       ],
       "evidence": [],
       "execution_batch_id": "ARB-ONB-001",
@@ -2305,7 +2450,8 @@
       "id": "AR-ONB-003",
       "parent_id": "AR-ONB-EPIC",
       "decision_ids": [
-        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM"
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM",
+        "DL-2026-07-12-VALIDATION-GATES"
       ],
       "task_type": "CODEX_WORK_ITEM",
       "milestone": "M3",
@@ -2322,7 +2468,8 @@
       "blocks": [],
       "source_documents": [
         "docs/agentready/THREE_MINUTE_ONBOARDING_SPEC.md",
-        "docs/agentready/CLI_PUBLIC_DISTRIBUTION.md"
+        "docs/agentready/CLI_PUBLIC_DISTRIBUTION.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "add-demo-command-and-fixtures",
       "pr_title": "feat(community): add demo command and fixtures",
@@ -2338,13 +2485,18 @@
         "*.html"
       ],
       "acceptance_criteria": [
-        "Add demo command and fixtures complete"
+        "demo works without network access to TimeProofs",
+        "demo includes a useful PASS and FAIL path",
+        "fixtures are deterministic and documented",
+        "demo output points to the next CI step"
       ],
       "required_commands": [
         "node cli/tests/run-agentready-cli-tests.mjs"
       ],
       "required_evidence": [
-        "Add demo command and fixtures evidence"
+        "deterministic demo evidence",
+        "PASS and FAIL demo output",
+        "fixture documentation"
       ],
       "evidence": [],
       "execution_batch_id": "ARB-ONB-001",
@@ -2376,7 +2528,8 @@
       "id": "AR-ONB-004",
       "parent_id": "AR-ONB-EPIC",
       "decision_ids": [
-        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM"
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM",
+        "DL-2026-07-12-VALIDATION-GATES"
       ],
       "task_type": "CODEX_WORK_ITEM",
       "milestone": "M3",
@@ -2393,29 +2546,41 @@
       "blocks": [],
       "source_documents": [
         "docs/agentready/THREE_MINUTE_ONBOARDING_SPEC.md",
-        "docs/agentready/CLI_PUBLIC_DISTRIBUTION.md"
+        "docs/agentready/CLI_PUBLIC_DISTRIBUTION.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "publish-three-minute-tutorial",
-      "pr_title": "feat(community): publish three-minute tutorial",
+      "pr_title": "docs(community): publish three-minute tutorial",
       "allowed_paths": [
-        "cli/**",
-        "agentready-examples/**",
-        "docs/agentready/**"
+        "docs/agentready/**",
+        "README.md",
+        "index.html",
+        "agentready-ci.html"
       ],
       "forbidden_paths": [
         "agentready-core/**",
+        "bin/**",
         "package.json",
-        "LICENSE",
-        "*.html"
+        "LICENSE"
       ],
       "acceptance_criteria": [
-        "Publish three-minute tutorial complete"
+        "one canonical discover run init commit first-run path is documented",
+        "flow is timed from a clean environment",
+        "target is under three minutes",
+        "no signup card token upload or global install is required",
+        "tutorial links from public discovery surfaces",
+        "rollback or cleanup is documented"
       ],
       "required_commands": [
-        "node cli/tests/run-agentready-cli-tests.mjs"
+        "node cli/tests/run-agentready-cli-tests.mjs",
+        "node scripts/validate-agentready-strategy-docs.mjs",
+        "node scripts/validate-agentready-execution-system.mjs"
       ],
       "required_evidence": [
-        "Publish three-minute tutorial evidence"
+        "dated clean-environment timing",
+        "first successful GitHub run",
+        "public tutorial links",
+        "cleanup instructions"
       ],
       "evidence": [],
       "execution_batch_id": "ARB-ONB-001",
@@ -2442,6 +2607,314 @@
       ],
       "rollback_boundary": "Revert publish-three-minute-tutorial without reverting unrelated work.",
       "scope_justification": "Single coherent deliverable with independent review and rollback."
+    },
+    {
+      "id": "AR-PILOT-EPIC",
+      "parent_id": null,
+      "decision_ids": [
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM"
+      ],
+      "task_type": "EPIC",
+      "milestone": "M4",
+      "delivery_horizon": "BEFORE_PRO_TECHNICAL_COMPLETION",
+      "workstream": "MARKET",
+      "title": "External Community pilot and differentiation",
+      "objective": "External Community pilot and differentiation workstream.",
+      "status": "PLANNED",
+      "owner": "CODEX_AND_JEASON",
+      "weight": 8,
+      "depends_on": [
+        "AR-COM-008",
+        "AR-ONB-004"
+      ],
+      "blocks": [],
+      "source_documents": [
+        "docs/agentready/AGENTREADY_MASTER_PLAN.md"
+      ],
+      "branch": "",
+      "pr_title": "",
+      "allowed_paths": [],
+      "forbidden_paths": [],
+      "acceptance_criteria": [
+        "child tasks are tracked"
+      ],
+      "required_commands": [],
+      "required_evidence": [
+        "child tasks tracked in ledger"
+      ],
+      "evidence": [],
+      "execution_batch_id": null,
+      "manual_actions": [],
+      "authorized_actions": [],
+      "forbidden_actions": [],
+      "codex_preflight_steps": [],
+      "owner_checkpoint_steps": [],
+      "post_confirmation_steps": [],
+      "external_verification": null,
+      "decision_gate": null,
+      "validation_thresholds": null,
+      "recurrence": null,
+      "notes": "EPIC is not executable directly."
+    },
+    {
+      "id": "AR-MARKET-PILOT-001",
+      "parent_id": "AR-PILOT-EPIC",
+      "decision_ids": [
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM",
+        "DL-2026-07-12-VALIDATION-GATES"
+      ],
+      "task_type": "CODEX_WORK_ITEM",
+      "milestone": "M4",
+      "delivery_horizon": "BEFORE_PRO_TECHNICAL_COMPLETION",
+      "workstream": "MARKET",
+      "title": "Prepare external Community pilot kit and evidence registry",
+      "objective": "Prepare external Community pilot kit and evidence registry.",
+      "status": "PLANNED",
+      "owner": "CODEX",
+      "weight": 3,
+      "depends_on": [
+        "AR-COM-008",
+        "AR-ONB-004"
+      ],
+      "blocks": [],
+      "source_documents": [
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md",
+        "docs/agentready/GO_TO_MARKET_PLAN.md",
+        "docs/agentready/DISTRIBUTION_ADOPTION_AND_STANDARDIZATION_STRATEGY.md",
+        "docs/agentready/PRIVACY_TELEMETRY_SUPPORT_AND_TRUST_MODEL.md"
+      ],
+      "branch": "docs-agentready-external-community-pilot-kit",
+      "pr_title": "docs(validation): prepare AgentReady external Community pilot kit",
+      "allowed_paths": [
+        "docs/agentready/**",
+        "agentready-examples/**",
+        "scripts/**"
+      ],
+      "forbidden_paths": [
+        "agentready-core/**",
+        "bin/**",
+        ".github/actions/**",
+        "package.json",
+        "LICENSE",
+        "*.html"
+      ],
+      "acceptance_criteria": [
+        "pilot kit can record five distinct external users and three real repositories",
+        "OpenAPI and MCP usage are recorded separately",
+        "first use and 30-day reuse fields exist",
+        "real issue fix and after-result evidence can be recorded",
+        "false positives false negatives abandonment and feature requests are captured",
+        "payment-signal context and real price presentation can be recorded",
+        "public quote and case publication require consent",
+        "no automatic outreach invented evidence silent telemetry or default full-contract upload is introduced"
+      ],
+      "required_commands": [
+        "node scripts/validate-agentready-strategy-docs.mjs",
+        "node scripts/validate-agentready-execution-system.mjs"
+      ],
+      "required_evidence": [
+        "completed empty pilot templates",
+        "threshold-to-evidence mapping",
+        "consent and redaction review",
+        "no-telemetry review"
+      ],
+      "evidence": [],
+      "execution_batch_id": "ARB-MARKET-PILOT-001",
+      "manual_actions": [],
+      "authorized_actions": [],
+      "forbidden_actions": [],
+      "codex_preflight_steps": [],
+      "owner_checkpoint_steps": [],
+      "post_confirmation_steps": [],
+      "external_verification": null,
+      "decision_gate": null,
+      "validation_thresholds": null,
+      "recurrence": null,
+      "notes": "",
+      "deliverables": [
+        "tester guide",
+        "pilot evidence registry",
+        "false-positive and false-negative register",
+        "abandonment and feature-request register",
+        "before fix after case template",
+        "consent and confidentiality checklist",
+        "outreach candidate worksheet",
+        "voluntary redacted feedback procedure"
+      ],
+      "estimated_files_or_surfaces": [
+        "one coherent file or surface family"
+      ],
+      "independent_test_plan": [
+        "validate every required threshold has an evidence field",
+        "test templates with synthetic labels clearly marked as examples",
+        "verify consent redaction and confidentiality controls",
+        "run execution-system validator"
+      ],
+      "rollback_boundary": "Revert docs-agentready-external-community-pilot-kit without reverting unrelated work.",
+      "scope_justification": "Single coherent deliverable with independent review and rollback."
+    },
+    {
+      "id": "AR-MARKET-PILOT-001H",
+      "parent_id": "AR-PILOT-EPIC",
+      "decision_ids": [
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM",
+        "DL-2026-07-12-VALIDATION-GATES"
+      ],
+      "task_type": "OWNER_ACTION",
+      "milestone": "M4",
+      "delivery_horizon": "BEFORE_PRO_TECHNICAL_COMPLETION",
+      "workstream": "MARKET",
+      "title": "Validate five-user external Community pilot",
+      "objective": "Validate five-user external Community pilot.",
+      "status": "OWNER_ACTION_REQUIRED",
+      "owner": "JEASON",
+      "weight": 3,
+      "depends_on": [
+        "AR-MARKET-PILOT-001"
+      ],
+      "blocks": [
+        "AR-MARKET-PILOT-002"
+      ],
+      "source_documents": [
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md",
+        "docs/agentready/GO_TO_MARKET_PLAN.md"
+      ],
+      "branch": "",
+      "pr_title": "",
+      "allowed_paths": [],
+      "forbidden_paths": [],
+      "acceptance_criteria": [
+        "at least five distinct external Community users",
+        "at least three real external repositories or contract surfaces",
+        "at least one real OpenAPI use",
+        "at least one real MCP use",
+        "at least two measurable 30-day return or reuse signals where the observation window permits",
+        "at least one useful real issue detected and corrected",
+        "false positives false negatives abandonment reasons and feature requests recorded honestly",
+        "at least one explicit signal identifies a function for which an external user may pay",
+        "project accounts fixtures automated installs and TimeProofs repository runs are excluded"
+      ],
+      "required_commands": [],
+      "required_evidence": [
+        "pseudonymized pilot-user records",
+        "repository or contract-surface records",
+        "OpenAPI and MCP usage evidence",
+        "reuse evidence or pending observation status",
+        "real issue fix and after-result evidence",
+        "feedback and abandonment register",
+        "payment-function signal context"
+      ],
+      "evidence": [],
+      "execution_batch_id": null,
+      "manual_actions": [],
+      "authorized_actions": [],
+      "forbidden_actions": [],
+      "codex_preflight_steps": [],
+      "owner_checkpoint_steps": [],
+      "post_confirmation_steps": [],
+      "external_verification": null,
+      "decision_gate": null,
+      "validation_thresholds": {
+        "external_users_required": 5,
+        "real_repositories_or_surfaces_required": 3,
+        "openapi_uses_required": 1,
+        "mcp_uses_required": 1,
+        "reuse_signals_required": 2,
+        "useful_real_issue_and_fix_required": 1,
+        "explicit_payment_function_signals_required": 1,
+        "excludes_project_accounts": true,
+        "excludes_internal_fixtures": true,
+        "excludes_automated_installs": true
+      },
+      "recurrence": null,
+      "notes": ""
+    },
+    {
+      "id": "AR-MARKET-PILOT-002",
+      "parent_id": "AR-PILOT-EPIC",
+      "decision_ids": [
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM",
+        "DL-2026-07-12-VALIDATION-GATES"
+      ],
+      "task_type": "DECISION_GATE",
+      "milestone": "M4",
+      "delivery_horizon": "BEFORE_PRO_TECHNICAL_COMPLETION",
+      "workstream": "MARKET",
+      "title": "Decide whether AgentReady proceeds to Pro implementation",
+      "objective": "Decide whether AgentReady proceeds to Pro implementation.",
+      "status": "DECISION_REQUIRED",
+      "owner": "CODEX_AND_JEASON",
+      "weight": 3,
+      "depends_on": [
+        "AR-MARKET-PILOT-001H",
+        "AR-ENG-005"
+      ],
+      "blocks": [
+        "AR-PRO-001"
+      ],
+      "source_documents": [
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md",
+        "docs/agentready/ENGINE_QUALITY_AND_BENCHMARK_PLAN.md",
+        "docs/agentready/GO_TO_MARKET_PLAN.md"
+      ],
+      "branch": "",
+      "pr_title": "",
+      "allowed_paths": [],
+      "forbidden_paths": [],
+      "acceptance_criteria": [
+        "pilot threshold evidence reviewed",
+        "benchmark thresholds and final results reviewed",
+        "agent-specific differentiation evidence reviewed",
+        "MCP static coverage and limitations reviewed",
+        "false positives false negatives reuse abandonment and feature requests reviewed",
+        "continue correct pause pivot or reject decision recorded"
+      ],
+      "required_commands": [],
+      "required_evidence": [
+        "pilot decision record",
+        "benchmark review",
+        "differentiation review",
+        "selected outcome and owner approval"
+      ],
+      "evidence": [],
+      "execution_batch_id": null,
+      "manual_actions": [],
+      "authorized_actions": [],
+      "forbidden_actions": [],
+      "codex_preflight_steps": [],
+      "owner_checkpoint_steps": [],
+      "post_confirmation_steps": [],
+      "external_verification": null,
+      "decision_gate": {
+        "metrics": [
+          "external users",
+          "real repositories",
+          "OpenAPI and MCP usage",
+          "30-day reuse",
+          "useful real issues",
+          "false positives",
+          "false negatives",
+          "abandonment reasons",
+          "feature requests",
+          "payment-function signals",
+          "precision",
+          "recall",
+          "differentiation evidence"
+        ],
+        "review_date": null,
+        "allowed_outcomes": [
+          "CONTINUE",
+          "CORRECT",
+          "PAUSE",
+          "PIVOT",
+          "REJECT"
+        ],
+        "selected_outcome": null,
+        "owner_approval": null
+      },
+      "validation_thresholds": null,
+      "recurrence": null,
+      "notes": ""
     },
     {
       "id": "AR-ENG-EPIC",
@@ -2494,7 +2967,8 @@
       "id": "AR-ENG-001",
       "parent_id": "AR-ENG-EPIC",
       "decision_ids": [
-        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM"
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM",
+        "DL-2026-07-12-VALIDATION-GATES"
       ],
       "task_type": "CODEX_WORK_ITEM",
       "milestone": "M4",
@@ -2511,7 +2985,8 @@
       "blocks": [],
       "source_documents": [
         "docs/agentready/ENGINE_QUALITY_AND_BENCHMARK_PLAN.md",
-        "docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md"
+        "docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "test-engine-benchmark-corpus-harness",
       "pr_title": "test(engine): add AgentReady benchmark corpus foundation",
@@ -2526,13 +3001,22 @@
         "*.html"
       ],
       "acceptance_criteria": [
-        "Add benchmark corpus architecture and annotation schema complete"
+        "corpus supports safe dangerous ambiguous false-positive and false-negative cases",
+        "OpenAPI and MCP cases are separated",
+        "human labels and disagreements can be recorded",
+        "baseline comparison fields are reproducible and tool versions are recorded",
+        "MCP risks can be classified as detected partially detectable or statically non-detectable",
+        "external pilot findings can be incorporated without confidential data"
       ],
       "required_commands": [
-        "node agentready-core/tests/run-agentready-core-tests.mjs"
+        "node agentready-core/tests/run-agentready-core-tests.mjs",
+        "node scripts/validate-agentready-execution-system.mjs"
       ],
       "required_evidence": [
-        "Add benchmark corpus architecture and annotation schema evidence"
+        "corpus and annotation schema",
+        "baseline comparison schema",
+        "MCP coverage schema",
+        "sample reproducible fixtures"
       ],
       "evidence": [],
       "execution_batch_id": "ARB-ENG-001",
@@ -2548,7 +3032,11 @@
       "recurrence": null,
       "notes": "",
       "deliverables": [
-        "Add benchmark corpus architecture and annotation schema"
+        "safe and dangerous OpenAPI corpus schema",
+        "safe and dangerous MCP corpus schema",
+        "human annotation schema",
+        "representative general-validator and linter baseline schema",
+        "MCP static coverage classification schema"
       ],
       "estimated_files_or_surfaces": [
         "one coherent file or surface family"
@@ -2724,7 +3212,8 @@
       "blocks": [],
       "source_documents": [
         "docs/agentready/ENGINE_QUALITY_AND_BENCHMARK_PLAN.md",
-        "docs/agentready/AGENTREADY_RULE_CODES.md"
+        "docs/agentready/AGENTREADY_RULE_CODES.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "add-benchmark-metric-calculation",
       "pr_title": "test(engine): add benchmark metric calculation",
@@ -2794,7 +3283,8 @@
       "blocks": [],
       "source_documents": [
         "docs/agentready/ENGINE_QUALITY_AND_BENCHMARK_PLAN.md",
-        "docs/agentready/AGENTREADY_RULE_CODES.md"
+        "docs/agentready/AGENTREADY_RULE_CODES.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "correct-ar001-ar003-ar008-and-ar010-semantics",
       "pr_title": "fix(engine): correct ar001 ar003 ar008 and ar010 semantics",
@@ -2864,7 +3354,8 @@
       "blocks": [],
       "source_documents": [
         "docs/agentready/ENGINE_QUALITY_AND_BENCHMARK_PLAN.md",
-        "docs/agentready/AGENTREADY_RULE_CODES.md"
+        "docs/agentready/AGENTREADY_RULE_CODES.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "add-performance-and-reproducibility-benchmark",
       "pr_title": "test(engine): add performance and reproducibility benchmark",
@@ -2938,7 +3429,8 @@
       "blocks": [],
       "source_documents": [
         "docs/agentready/ENGINE_QUALITY_AND_BENCHMARK_PLAN.md",
-        "docs/agentready/AGENTREADY_RULE_CODES.md"
+        "docs/agentready/AGENTREADY_RULE_CODES.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "publish-reproducible-benchmark-report-and-limitations",
       "pr_title": "test(engine): publish reproducible benchmark report and limitations",
@@ -2953,7 +3445,12 @@
         "*.html"
       ],
       "acceptance_criteria": [
-        "Publish reproducible benchmark report and limitations complete"
+        "reproducible final report publishes precision recall false-positive false-negative performance and reproducibility results",
+        "representative general validation or linting baselines are versioned and reproduced",
+        "agent-specific differentiation is stated factually from measured cases",
+        "MCP coverage matrix distinguishes detected partially detectable and statically non-detectable risks",
+        "limitations and complementary runtime categories are explicit",
+        "external pilot findings are included only with consent and without confidential data"
       ],
       "required_commands": [
         "node agentready-core/tests/run-agentready-core-tests.mjs"
@@ -3008,7 +3505,8 @@
       "blocks": [],
       "source_documents": [
         "docs/agentready/ENGINE_QUALITY_AND_BENCHMARK_PLAN.md",
-        "docs/agentready/AGENTREADY_RULE_CODES.md"
+        "docs/agentready/AGENTREADY_RULE_CODES.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "prepare-voluntary-false-positive-reporting-command",
       "pr_title": "feat(engine): prepare voluntary false-positive reporting command",
@@ -3073,7 +3571,7 @@
       "owner": "CODEX_AND_JEASON",
       "weight": 8,
       "depends_on": [
-        "AR-ENG-005"
+        "AR-MARKET-PILOT-002"
       ],
       "blocks": [],
       "source_documents": [
@@ -3120,11 +3618,12 @@
       "owner": "CODEX",
       "weight": 3,
       "depends_on": [
-        "AR-ENG-005"
+        "AR-MARKET-PILOT-002"
       ],
       "blocks": [],
       "source_documents": [
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "add-versioned-agentready-policy-configuration",
       "pr_title": "feat(pro): add versioned agentready policy configuration",
@@ -3195,7 +3694,8 @@
       ],
       "blocks": [],
       "source_documents": [
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "add-baseline-comparison",
       "pr_title": "feat(pro): add baseline comparison",
@@ -3266,7 +3766,8 @@
       ],
       "blocks": [],
       "source_documents": [
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "add-new-risks-only-mode",
       "pr_title": "feat(pro): add new-risks-only mode",
@@ -3337,7 +3838,8 @@
       ],
       "blocks": [],
       "source_documents": [
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "add-sarif-export",
       "pr_title": "feat(pro): add sarif export",
@@ -3408,7 +3910,8 @@
       ],
       "blocks": [],
       "source_documents": [
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "add-pull-request-annotations",
       "pr_title": "feat(pro): add pull request annotations",
@@ -3479,7 +3982,8 @@
       ],
       "blocks": [],
       "source_documents": [
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "add-local-structured-exceptions-schema",
       "pr_title": "feat(pro): add local structured exceptions schema",
@@ -3550,7 +4054,8 @@
       ],
       "blocks": [],
       "source_documents": [
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "enforce-exception-owner-justification-and-expiry",
       "pr_title": "feat(pro): enforce exception owner justification and expiry",
@@ -3621,7 +4126,8 @@
       ],
       "blocks": [],
       "source_documents": [
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "add-pro-mvp-integration-tests",
       "pr_title": "feat(pro): add pro mvp integration tests",
@@ -3688,7 +4194,8 @@
       "owner": "CODEX_AND_JEASON",
       "weight": 8,
       "depends_on": [
-        "AR-PRO-008"
+        "AR-PRO-008",
+        "AR-MARKET-002"
       ],
       "blocks": [],
       "source_documents": [
@@ -3735,12 +4242,14 @@
       "owner": "CODEX",
       "weight": 3,
       "depends_on": [
-        "AR-PRO-008"
+        "AR-PRO-008",
+        "AR-MARKET-002"
       ],
       "blocks": [],
       "source_documents": [
         "docs/agentready/LICENSE_AND_ENTITLEMENT_ARCHITECTURE.md",
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "implement-entitlement-data-model",
       "pr_title": "feat(licensing): implement entitlement data model",
@@ -3811,7 +4320,8 @@
       "blocks": [],
       "source_documents": [
         "docs/agentready/LICENSE_AND_ENTITLEMENT_ARCHITECTURE.md",
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "generate-random-license-key-and-server-side-hash-model",
       "pr_title": "feat(licensing): generate random license key and server-side hash model",
@@ -3882,7 +4392,8 @@
       "blocks": [],
       "source_documents": [
         "docs/agentready/LICENSE_AND_ENTITLEMENT_ARCHITECTURE.md",
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "add-signed-entitlement-token",
       "pr_title": "feat(licensing): add signed entitlement token",
@@ -3953,7 +4464,8 @@
       "blocks": [],
       "source_documents": [
         "docs/agentready/LICENSE_AND_ENTITLEMENT_ARCHITECTURE.md",
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "add-local-signature-verification-cache-grace-and-offline-behavior",
       "pr_title": "feat(licensing): add local signature verification cache grace and offline behavior",
@@ -4024,7 +4536,8 @@
       "blocks": [],
       "source_documents": [
         "docs/agentready/LICENSE_AND_ENTITLEMENT_ARCHITECTURE.md",
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "add-repository-registration-and-pseudonymization",
       "pr_title": "feat(licensing): add repository registration and pseudonymization",
@@ -4095,7 +4608,8 @@
       "blocks": [],
       "source_documents": [
         "docs/agentready/LICENSE_AND_ENTITLEMENT_ARCHITECTURE.md",
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "add-license-activation-and-recovery-flow",
       "pr_title": "feat(licensing): add license activation and recovery flow",
@@ -4166,7 +4680,8 @@
       "blocks": [],
       "source_documents": [
         "docs/agentready/LICENSE_AND_ENTITLEMENT_ARCHITECTURE.md",
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "add-license-lifecycle-revocation-renewal-downgrade-and-cancellation",
       "pr_title": "feat(licensing): add license lifecycle revocation renewal downgrade and cancellation",
@@ -4237,7 +4752,8 @@
       "blocks": [],
       "source_documents": [
         "docs/agentready/LICENSE_AND_ENTITLEMENT_ARCHITECTURE.md",
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "add-licensing-security-and-privacy-tests",
       "pr_title": "feat(licensing): add licensing security and privacy tests",
@@ -12760,14 +13276,62 @@
       "notes": ""
     },
     {
-      "id": "AR-MARKET-001A",
-      "parent_id": "AR-SITE-EPIC",
+      "id": "AR-MARKET-EPIC",
+      "parent_id": null,
       "decision_ids": [
         "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM"
       ],
+      "task_type": "EPIC",
+      "milestone": "M5",
+      "delivery_horizon": "BEFORE_PRO_FIRST_SALE",
+      "workstream": "MARKET",
+      "title": "Commercial validation and evidence gates",
+      "objective": "Commercial validation and evidence gates workstream.",
+      "status": "PLANNED",
+      "owner": "CODEX_AND_JEASON",
+      "weight": 8,
+      "depends_on": [
+        "AR-MARKET-PILOT-002"
+      ],
+      "blocks": [],
+      "source_documents": [
+        "docs/agentready/AGENTREADY_MASTER_PLAN.md"
+      ],
+      "branch": "",
+      "pr_title": "",
+      "allowed_paths": [],
+      "forbidden_paths": [],
+      "acceptance_criteria": [
+        "child tasks are tracked"
+      ],
+      "required_commands": [],
+      "required_evidence": [
+        "child tasks tracked in ledger"
+      ],
+      "evidence": [],
+      "execution_batch_id": null,
+      "manual_actions": [],
+      "authorized_actions": [],
+      "forbidden_actions": [],
+      "codex_preflight_steps": [],
+      "owner_checkpoint_steps": [],
+      "post_confirmation_steps": [],
+      "external_verification": null,
+      "decision_gate": null,
+      "validation_thresholds": null,
+      "recurrence": null,
+      "notes": "EPIC is not executable directly."
+    },
+    {
+      "id": "AR-MARKET-001A",
+      "parent_id": "AR-MARKET-EPIC",
+      "decision_ids": [
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM",
+        "DL-2026-07-12-VALIDATION-GATES"
+      ],
       "task_type": "DECISION_GATE",
-      "milestone": "M7",
-      "delivery_horizon": "BEFORE_GLOBAL_LAUNCH",
+      "milestone": "M5",
+      "delivery_horizon": "BEFORE_PRO_FIRST_SALE",
       "workstream": "MARKET",
       "title": "Validate ten external Community users",
       "objective": "Validate ten external Community users.",
@@ -12775,12 +13339,13 @@
       "owner": "JEASON",
       "weight": 3,
       "depends_on": [
-        "AR-COM-008"
+        "AR-MARKET-PILOT-002"
       ],
       "blocks": [],
       "source_documents": [
         "docs/agentready/GO_TO_MARKET_PLAN.md",
-        "docs/agentready/DISTRIBUTION_ADOPTION_AND_STANDARDIZATION_STRATEGY.md"
+        "docs/agentready/DISTRIBUTION_ADOPTION_AND_STANDARDIZATION_STRATEGY.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "",
       "pr_title": "",
@@ -12846,13 +13411,14 @@
     },
     {
       "id": "AR-MARKET-001B",
-      "parent_id": "AR-SITE-EPIC",
+      "parent_id": "AR-MARKET-EPIC",
       "decision_ids": [
-        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM"
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM",
+        "DL-2026-07-12-VALIDATION-GATES"
       ],
       "task_type": "DECISION_GATE",
-      "milestone": "M7",
-      "delivery_horizon": "BEFORE_GLOBAL_LAUNCH",
+      "milestone": "M5",
+      "delivery_horizon": "BEFORE_PRO_FIRST_SALE",
       "workstream": "MARKET",
       "title": "Validate three explicit Pro payment signals",
       "objective": "Validate three explicit Pro payment signals.",
@@ -12865,7 +13431,8 @@
       "blocks": [],
       "source_documents": [
         "docs/agentready/GO_TO_MARKET_PLAN.md",
-        "docs/agentready/PRICING_AND_ENTITLEMENTS_V0_1.md"
+        "docs/agentready/PRICING_AND_ENTITLEMENTS_V0_1.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "",
       "pr_title": "",
@@ -12927,8 +13494,93 @@
       "notes": ""
     },
     {
+      "id": "AR-MARKET-002",
+      "parent_id": "AR-MARKET-EPIC",
+      "decision_ids": [
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM",
+        "DL-2026-07-12-VALIDATION-GATES"
+      ],
+      "task_type": "DECISION_GATE",
+      "milestone": "M5",
+      "delivery_horizon": "BEFORE_PRO_FIRST_SALE",
+      "workstream": "MARKET",
+      "title": "Authorize licensing Stripe and account implementation",
+      "objective": "Authorize licensing Stripe and account implementation.",
+      "status": "DECISION_REQUIRED",
+      "owner": "CODEX_AND_JEASON",
+      "weight": 3,
+      "depends_on": [
+        "AR-MARKET-001A",
+        "AR-MARKET-001B",
+        "AR-MARKET-001D"
+      ],
+      "blocks": [
+        "AR-LIC-001"
+      ],
+      "source_documents": [
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md",
+        "docs/agentready/GO_TO_MARKET_PLAN.md",
+        "docs/agentready/PRICING_AND_ENTITLEMENTS_V0_1.md",
+        "docs/agentready/ENGINE_QUALITY_AND_BENCHMARK_PLAN.md"
+      ],
+      "branch": "",
+      "pr_title": "",
+      "allowed_paths": [],
+      "forbidden_paths": [],
+      "acceptance_criteria": [
+        "ten external Community users gate passed",
+        "three explicit Pro payment signals gate passed at the real price and scope",
+        "credible external value case gate passed",
+        "benchmark and differentiation evidence accepted",
+        "owner authorizes or refuses commercial infrastructure implementation",
+        "continue correct pause pivot or reject decision recorded"
+      ],
+      "required_commands": [],
+      "required_evidence": [
+        "commercial infrastructure authorization decision",
+        "ten-user evidence review",
+        "payment-signal evidence review",
+        "value-case evidence review",
+        "benchmark and differentiation review"
+      ],
+      "evidence": [],
+      "execution_batch_id": null,
+      "manual_actions": [],
+      "authorized_actions": [],
+      "forbidden_actions": [],
+      "codex_preflight_steps": [],
+      "owner_checkpoint_steps": [],
+      "post_confirmation_steps": [],
+      "external_verification": null,
+      "decision_gate": {
+        "metrics": [
+          "external Community users",
+          "30-day reuse",
+          "explicit Pro payment signals",
+          "credible public value cases",
+          "precision",
+          "recall",
+          "false-positive rate",
+          "differentiation evidence"
+        ],
+        "review_date": null,
+        "allowed_outcomes": [
+          "CONTINUE",
+          "CORRECT",
+          "PAUSE",
+          "PIVOT",
+          "REJECT"
+        ],
+        "selected_outcome": null,
+        "owner_approval": null
+      },
+      "validation_thresholds": null,
+      "recurrence": null,
+      "notes": ""
+    },
+    {
       "id": "AR-MARKET-001C",
-      "parent_id": "AR-SITE-EPIC",
+      "parent_id": "AR-MARKET-EPIC",
       "decision_ids": [
         "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM"
       ],
@@ -13018,13 +13670,14 @@
     },
     {
       "id": "AR-MARKET-001D",
-      "parent_id": "AR-SITE-EPIC",
+      "parent_id": "AR-MARKET-EPIC",
       "decision_ids": [
-        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM"
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM",
+        "DL-2026-07-12-VALIDATION-GATES"
       ],
       "task_type": "DECISION_GATE",
-      "milestone": "M7",
-      "delivery_horizon": "BEFORE_GLOBAL_LAUNCH",
+      "milestone": "M5",
+      "delivery_horizon": "BEFORE_PRO_FIRST_SALE",
       "workstream": "MARKET",
       "title": "Publish one credible AgentReady value case",
       "objective": "Publish one credible AgentReady value case.",
@@ -13039,7 +13692,8 @@
       "source_documents": [
         "docs/agentready/GO_TO_MARKET_PLAN.md",
         "docs/agentready/ENGINE_QUALITY_AND_BENCHMARK_PLAN.md",
-        "docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md"
+        "docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "",
       "pr_title": "",
@@ -13112,7 +13766,8 @@
       "id": "AR-MARKET-001",
       "parent_id": "AR-SITE-EPIC",
       "decision_ids": [
-        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM"
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM",
+        "DL-2026-07-12-VALIDATION-GATES"
       ],
       "task_type": "DECISION_GATE",
       "milestone": "M7",
@@ -14173,10 +14828,17 @@
       "pr_title": "feat(distribution): publish AgentReady GitHub Marketplace action",
       "allowed_paths": [
         ".github/**",
-        "docs/agentready/**"
+        "docs/agentready/**",
+        "README.md",
+        "AGENTREADY_PROJECT_CONTEXT.md",
+        "index.html",
+        "pricing.html",
+        "agentready-ci.html",
+        "action.yml"
       ],
       "forbidden_paths": [
         "agentready-core/**",
+        "bin/**",
         "package.json",
         "LICENSE",
         "*.html"
@@ -14186,19 +14848,47 @@
         "Prepare GitHub Marketplace listing compliance"
       ],
       "acceptance_criteria": [
-        "Publish public AgentReady GitHub Action distribution complete",
-        "Prepare GitHub Marketplace listing compliance complete"
+        "Action is consumable from a public distribution path",
+        "release tag and full commit SHA pinning are documented",
+        "minimum GitHub permissions are documented",
+        "Action inputs outputs and failure behavior are documented",
+        "provenance dependency secret and code-scanning controls are documented where supported",
+        "compromised-release revocation and replacement procedure is documented",
+        "public site no longer presents manual review Fix Pack email payment or mandatory contact as the active Community/Pro model",
+        "public site states Community is available and Pro is in preparation",
+        "npm and public Action installation paths are visible",
+        "Marketplace wording does not imply GitHub security validation",
+        "Marketplace metadata requirements are satisfied",
+        "branding and repository links are valid",
+        "listing copy states static-analysis scope and mandatory limitation",
+        "listing does not claim certification guaranteed safety or GitHub validation",
+        "immutable tag and SHA pinning guidance is included",
+        "minimum permissions are visible"
       ],
       "independent_test_plan": [
+        "run Action smoke test",
+        "run a pinned Action from an external-style fixture repository",
+        "verify public pages contain the active Community/Pro status and no obsolete manual offer",
+        "run strategy and execution-system validators",
         "run relevant existing tests",
         "run execution-system validator"
       ],
       "required_commands": [
+        "node cli/tests/run-agentready-action-smoke-test.mjs",
+        "node scripts/validate-agentready-strategy-docs.mjs",
         "node scripts/validate-agentready-execution-system.mjs"
       ],
       "required_evidence": [
-        "Publish public AgentReady GitHub Action distribution evidence",
-        "Prepare GitHub Marketplace listing compliance evidence"
+        "public Action URL or public distribution evidence",
+        "copyable pinned workflow",
+        "permissions review",
+        "supply-chain control evidence",
+        "Marketplace compliance evidence",
+        "public-site alignment evidence",
+        "Marketplace metadata review",
+        "listing copy review",
+        "branding and links review",
+        "version pinning and permissions review"
       ],
       "rollback_boundary": "Revert ARB-COM-002 without reverting unrelated batches.",
       "scope_justification": "Batch groups compatible work items with one shared review and rollback boundary.",
@@ -14213,7 +14903,8 @@
       "notes": "",
       "source_documents": [
         "docs/agentready/GITHUB_ACTION_VERSIONING.md",
-        "docs/agentready/GITHUB_ACTION_USAGE.md"
+        "docs/agentready/GITHUB_ACTION_USAGE.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ]
     },
     {
@@ -14235,11 +14926,13 @@
       "branch": "qa-community-public-installation",
       "pr_title": "qa(community): validate public AgentReady installation",
       "allowed_paths": [
+        "cli/**",
         ".github/**",
-        "docs/agentready/**"
+        "agentready-examples/**",
+        "docs/agentready/**",
+        "scripts/**"
       ],
       "forbidden_paths": [
-        "agentready-core/**",
         "package.json",
         "LICENSE",
         "*.html"
@@ -14248,17 +14941,37 @@
         "Validate public Community installation"
       ],
       "acceptance_criteria": [
-        "Validate public Community installation complete"
+        "public npm installation succeeds from clean environments",
+        "Linux macOS and Windows evidence is recorded",
+        "all officially supported Node.js major versions are tested",
+        "paths with spaces and monorepository behavior are tested",
+        "single and multiple OpenAPI or MCP inputs are tested",
+        "invalid input and large input within documented limits are tested",
+        "PASS FAIL exit codes and report paths are verified",
+        "Community operation does not require a TimeProofs backend",
+        "Action installation is tested outside the TimeProofs repository",
+        "failures and unsupported cases are documented honestly"
       ],
       "independent_test_plan": [
-        "run relevant existing tests",
-        "run execution-system validator"
+        "run CLI core Action and package tests",
+        "execute clean-environment OS matrix",
+        "exercise external-style public and private repository fixtures",
+        "record every unsupported scenario"
       ],
       "required_commands": [
+        "node agentready-core/tests/run-agentready-core-tests.mjs",
+        "node cli/tests/run-agentready-cli-tests.mjs",
+        "node cli/tests/run-agentready-action-smoke-test.mjs",
+        "node cli/tests/run-agentready-package-smoke-test.mjs",
         "node scripts/validate-agentready-execution-system.mjs"
       ],
       "required_evidence": [
-        "Validate public Community installation evidence"
+        "OS and Node.js matrix",
+        "external-repository workflow runs",
+        "PASS FAIL exit-code evidence",
+        "report path evidence",
+        "offline or backend-independent evidence",
+        "unsupported-case register"
       ],
       "rollback_boundary": "Revert ARB-COM-003 without reverting unrelated batches.",
       "scope_justification": "Batch groups compatible work items with one shared review and rollback boundary.",
@@ -14272,7 +14985,9 @@
       "evidence": [],
       "notes": "",
       "source_documents": [
-        "docs/agentready/CLI_PUBLIC_DISTRIBUTION.md"
+        "docs/agentready/CLI_PUBLIC_DISTRIBUTION.md",
+        "docs/agentready/GITHUB_ACTION_USAGE.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ]
     },
     {
@@ -14299,13 +15014,17 @@
       "allowed_paths": [
         "cli/**",
         "agentready-examples/**",
-        "docs/agentready/**"
+        "docs/agentready/**",
+        "README.md",
+        "index.html",
+        "agentready-ci.html"
       ],
       "forbidden_paths": [
         "agentready-core/**",
         "package.json",
         "LICENSE",
-        "*.html"
+        "*.html",
+        "bin/**"
       ],
       "deliverables": [
         "Add local scan onboarding command",
@@ -14314,23 +15033,51 @@
         "Publish three-minute tutorial"
       ],
       "acceptance_criteria": [
-        "Add local scan onboarding command complete",
-        "Add init workflow generator complete",
-        "Add demo command and fixtures complete",
-        "Publish three-minute tutorial complete"
+        "canonical local OpenAPI and MCP scan commands work without global installation",
+        "errors are actionable",
+        "no signup token upload or TimeProofs backend is required",
+        "init detects OpenAPI and MCP files",
+        "files are shown before writing",
+        "confirmation is required",
+        "Community workflow is generated",
+        "a local scan is run",
+        "Pro policy is not generated",
+        "rollback or cleanup is documented",
+        "demo works without network access to TimeProofs",
+        "demo includes a useful PASS and FAIL path",
+        "fixtures are deterministic and documented",
+        "demo output points to the next CI step",
+        "one canonical discover run init commit first-run path is documented",
+        "flow is timed from a clean environment",
+        "target is under three minutes",
+        "no signup card token upload or global install is required",
+        "tutorial links from public discovery surfaces"
       ],
       "independent_test_plan": [
         "run relevant existing tests",
         "run execution-system validator"
       ],
       "required_commands": [
-        "node cli/tests/run-agentready-cli-tests.mjs"
+        "node cli/tests/run-agentready-cli-tests.mjs",
+        "node scripts/validate-agentready-strategy-docs.mjs",
+        "node scripts/validate-agentready-execution-system.mjs"
       ],
       "required_evidence": [
-        "Add local scan onboarding command evidence",
-        "Add init workflow generator evidence",
-        "Add demo command and fixtures evidence",
-        "Publish three-minute tutorial evidence"
+        "clean local scan evidence",
+        "OpenAPI and MCP command evidence",
+        "error output evidence",
+        "detection evidence",
+        "confirmation evidence",
+        "generated workflow",
+        "local scan evidence",
+        "cleanup evidence",
+        "deterministic demo evidence",
+        "PASS and FAIL demo output",
+        "fixture documentation",
+        "dated clean-environment timing",
+        "first successful GitHub run",
+        "public tutorial links",
+        "cleanup instructions"
       ],
       "rollback_boundary": "Revert ARB-ONB-001 without reverting unrelated batches.",
       "scope_justification": "Batch groups compatible work items with one shared review and rollback boundary.",
@@ -14345,7 +15092,90 @@
       "notes": "",
       "source_documents": [
         "docs/agentready/THREE_MINUTE_ONBOARDING_SPEC.md",
-        "docs/agentready/CLI_PUBLIC_DISTRIBUTION.md"
+        "docs/agentready/CLI_PUBLIC_DISTRIBUTION.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
+      ]
+    },
+    {
+      "id": "ARB-MARKET-PILOT-001",
+      "title": "Prepare external Community pilot kit",
+      "objective": "Prepare external Community pilot kit.",
+      "milestone": "M4",
+      "delivery_horizon": "BEFORE_PRO_TECHNICAL_COMPLETION",
+      "status": "PLANNED",
+      "spec_status": "SKELETON",
+      "owner": "CODEX",
+      "work_item_ids": [
+        "AR-MARKET-PILOT-001"
+      ],
+      "depends_on_batches": [
+        "ARB-COM-003",
+        "ARB-ONB-001"
+      ],
+      "depends_on_tasks": [],
+      "branch": "docs-agentready-external-community-pilot-kit",
+      "pr_title": "docs(validation): prepare AgentReady external Community pilot kit",
+      "allowed_paths": [
+        "docs/agentready/**",
+        "agentready-examples/**",
+        "scripts/**"
+      ],
+      "forbidden_paths": [
+        "agentready-core/**",
+        "bin/**",
+        ".github/actions/**",
+        "package.json",
+        "LICENSE",
+        "*.html"
+      ],
+      "deliverables": [
+        "tester guide",
+        "pilot evidence registry",
+        "false-positive and false-negative register",
+        "abandonment and feature-request register",
+        "before fix after case template",
+        "consent and confidentiality checklist",
+        "outreach candidate worksheet",
+        "voluntary feedback procedure"
+      ],
+      "acceptance_criteria": [
+        "all five-user pilot thresholds map to evidence fields",
+        "templates distinguish OpenAPI and MCP use",
+        "reuse issue fix false-positive false-negative abandonment feature-request and payment-signal evidence can be recorded",
+        "consent redaction and confidentiality controls are explicit",
+        "no automatic outreach invented evidence or silent telemetry is introduced"
+      ],
+      "independent_test_plan": [
+        "validate every required threshold has an evidence field",
+        "test templates with synthetic labels clearly marked as examples",
+        "verify consent redaction and confidentiality controls",
+        "run execution-system validator"
+      ],
+      "required_commands": [
+        "node scripts/validate-agentready-strategy-docs.mjs",
+        "node scripts/validate-agentready-execution-system.mjs"
+      ],
+      "required_evidence": [
+        "pilot kit review",
+        "threshold-to-evidence mapping",
+        "consent and privacy review"
+      ],
+      "rollback_boundary": "Revert ARB-MARKET-PILOT-001 without reverting unrelated batches.",
+      "scope_justification": "One coherent documentation and evidence-system boundary for the external Community pilot.",
+      "manual_actions": [],
+      "authorized_actions": [],
+      "forbidden_actions": [],
+      "codex_preflight_steps": [],
+      "owner_checkpoint_steps": [],
+      "post_confirmation_steps": [],
+      "external_verifications": [],
+      "evidence": [],
+      "notes": "",
+      "source_documents": [
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md",
+        "docs/agentready/GO_TO_MARKET_PLAN.md",
+        "docs/agentready/DISTRIBUTION_ADOPTION_AND_STANDARDIZATION_STRATEGY.md",
+        "docs/agentready/PRIVACY_TELEMETRY_SUPPORT_AND_TRUST_MODEL.md"
       ]
     },
     {
@@ -14380,17 +15210,26 @@
         "Add benchmark corpus architecture and annotation schema"
       ],
       "acceptance_criteria": [
-        "Add benchmark corpus architecture and annotation schema complete"
+        "corpus supports safe dangerous ambiguous false-positive and false-negative cases",
+        "OpenAPI and MCP cases are separated",
+        "human labels and disagreements can be recorded",
+        "baseline comparison fields are reproducible and tool versions are recorded",
+        "MCP risks can be classified as detected partially detectable or statically non-detectable",
+        "external pilot findings can be incorporated without confidential data"
       ],
       "independent_test_plan": [
         "run relevant existing tests",
         "run execution-system validator"
       ],
       "required_commands": [
-        "node agentready-core/tests/run-agentready-core-tests.mjs"
+        "node agentready-core/tests/run-agentready-core-tests.mjs",
+        "node scripts/validate-agentready-execution-system.mjs"
       ],
       "required_evidence": [
-        "Add benchmark corpus architecture and annotation schema evidence"
+        "corpus and annotation schema",
+        "baseline comparison schema",
+        "MCP coverage schema",
+        "sample reproducible fixtures"
       ],
       "rollback_boundary": "Revert ARB-ENG-001 without reverting unrelated batches.",
       "scope_justification": "Batch groups compatible work items with one shared review and rollback boundary.",
@@ -14405,7 +15244,8 @@
       "notes": "",
       "source_documents": [
         "docs/agentready/ENGINE_QUALITY_AND_BENCHMARK_PLAN.md",
-        "docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md"
+        "docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ]
     },
     {
@@ -14466,7 +15306,8 @@
       "notes": "",
       "source_documents": [
         "docs/agentready/ENGINE_QUALITY_AND_BENCHMARK_PLAN.md",
-        "docs/agentready/AGENTREADY_RULE_CODES.md"
+        "docs/agentready/AGENTREADY_RULE_CODES.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ]
     },
     {
@@ -14526,7 +15367,8 @@
       "notes": "",
       "source_documents": [
         "docs/agentready/ENGINE_QUALITY_AND_BENCHMARK_PLAN.md",
-        "docs/agentready/AGENTREADY_RULE_CODES.md"
+        "docs/agentready/AGENTREADY_RULE_CODES.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ]
     },
     {
@@ -14568,7 +15410,12 @@
       ],
       "acceptance_criteria": [
         "Add performance and reproducibility benchmark complete",
-        "Publish reproducible benchmark report and limitations complete"
+        "reproducible final report publishes precision recall false-positive false-negative performance and reproducibility results",
+        "representative general validation or linting baselines are versioned and reproduced",
+        "agent-specific differentiation is stated factually from measured cases",
+        "MCP coverage matrix distinguishes detected partially detectable and statically non-detectable risks",
+        "limitations and complementary runtime categories are explicit",
+        "external pilot findings are included only with consent and without confidential data"
       ],
       "independent_test_plan": [
         "run relevant existing tests",
@@ -14594,7 +15441,8 @@
       "notes": "",
       "source_documents": [
         "docs/agentready/ENGINE_QUALITY_AND_BENCHMARK_PLAN.md",
-        "docs/agentready/AGENTREADY_RULE_CODES.md"
+        "docs/agentready/AGENTREADY_RULE_CODES.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ]
     },
     {
@@ -14654,7 +15502,8 @@
       "notes": "",
       "source_documents": [
         "docs/agentready/ENGINE_QUALITY_AND_BENCHMARK_PLAN.md",
-        "docs/agentready/AGENTREADY_RULE_CODES.md"
+        "docs/agentready/AGENTREADY_RULE_CODES.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ]
     },
     {
@@ -14669,10 +15518,10 @@
       "work_item_ids": [
         "AR-PRO-001"
       ],
-      "depends_on_batches": [
-        "ARB-ENG-004"
+      "depends_on_batches": [],
+      "depends_on_tasks": [
+        "AR-MARKET-PILOT-002"
       ],
-      "depends_on_tasks": [],
       "branch": "add-versioned-agentready-policy-configuration",
       "pr_title": "feat(pro): add versioned agentready policy configuration",
       "allowed_paths": [
@@ -14715,7 +15564,8 @@
       "evidence": [],
       "notes": "",
       "source_documents": [
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ]
     },
     {
@@ -14780,7 +15630,8 @@
       "evidence": [],
       "notes": "",
       "source_documents": [
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ]
     },
     {
@@ -14845,7 +15696,8 @@
       "evidence": [],
       "notes": "",
       "source_documents": [
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ]
     },
     {
@@ -14910,7 +15762,8 @@
       "evidence": [],
       "notes": "",
       "source_documents": [
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ]
     },
     {
@@ -14971,7 +15824,8 @@
       "evidence": [],
       "notes": "",
       "source_documents": [
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ]
     },
     {
@@ -14991,7 +15845,9 @@
       "depends_on_batches": [
         "ARB-PRO-005"
       ],
-      "depends_on_tasks": [],
+      "depends_on_tasks": [
+        "AR-MARKET-002"
+      ],
       "branch": "implement-entitlement-data-model",
       "pr_title": "feat(licensing): implement entitlement data model",
       "allowed_paths": [
@@ -15040,7 +15896,8 @@
       "notes": "",
       "source_documents": [
         "docs/agentready/LICENSE_AND_ENTITLEMENT_ARCHITECTURE.md",
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ]
     },
     {
@@ -15101,7 +15958,8 @@
       "notes": "",
       "source_documents": [
         "docs/agentready/LICENSE_AND_ENTITLEMENT_ARCHITECTURE.md",
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ]
     },
     {
@@ -15162,7 +16020,8 @@
       "notes": "",
       "source_documents": [
         "docs/agentready/LICENSE_AND_ENTITLEMENT_ARCHITECTURE.md",
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ]
     },
     {
@@ -15227,7 +16086,8 @@
       "notes": "",
       "source_documents": [
         "docs/agentready/LICENSE_AND_ENTITLEMENT_ARCHITECTURE.md",
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ]
     },
     {
@@ -15288,7 +16148,8 @@
       "notes": "",
       "source_documents": [
         "docs/agentready/LICENSE_AND_ENTITLEMENT_ARCHITECTURE.md",
-        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md"
+        "docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md",
+        "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ]
     },
     {
@@ -22063,6 +22924,14 @@
       "task_ids": [
         "AR-COM-006",
         "AR-DOC-003"
+      ]
+    },
+    {
+      "document": "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md",
+      "status": "ACTIVE",
+      "task_ids": [
+        "AR-MARKET-PILOT-001",
+        "AR-MARKET-PILOT-002"
       ]
     },
     {

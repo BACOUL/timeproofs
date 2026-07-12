@@ -37,7 +37,7 @@ Impact: The ledger now requires `AR-ENG-001T`, `AR-MARKET-001A`, `AR-MARKET-001B
 Supersedes: vague market-validation intentions without explicit thresholds.
 Status: ACTIVE
 
-These gates do not block Community publication, Pro technical construction, or the initial Pro sale path. They block only claims that AgentReady is globally validated or category-established.
+This decision is refined by DL-2026-07-12-VALIDATION-GATES. The final global-validation thresholds remain active, while earlier pilot and commercial-infrastructure gates now control future execution.
 
 ## 2026-07-10 - Shift-left contract security
 

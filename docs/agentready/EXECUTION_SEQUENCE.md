@@ -95,13 +95,25 @@ feat(community): add three-minute onboarding commands
 
 Marketplace is distribution, not validation by GitHub.
 
+The distribution batch must also align the current public site with the active model: Community available, Pro in preparation, no manual review or Fix Pack offer as the active purchase path, and visible npm and Action installation instructions.
+
+## Phase 4A - External Pilot Preparation
+
+```txt
+docs(validation): prepare AgentReady external Community pilot kit
+```
+
+Codex prepares the tester guide, evidence registry, false-positive register, case template and consent controls. Human outreach and evidence collection remain owner actions.
+
 ## Phase 5 - Engine Benchmark
 
 ```txt
 test(engine): add AgentReady labeled benchmark foundation
 ```
 
-Benchmark and critical corrections must be completed before paid launch.
+Benchmark and critical corrections must be completed before paid launch. The reproducible report must also include factual differentiation evidence and an MCP static-coverage matrix.
+
+Before Phase 6 begins, the external pilot and benchmark evidence must produce an explicit `CONTINUE`, `CORRECT`, `PAUSE`, `PIVOT` or `REJECT` decision. Only `CONTINUE` authorizes the first Pro implementation batch.
 
 ## Phase 6 - MVP Pro
 
@@ -118,6 +130,10 @@ feat(pro): add documented and expiring policy exceptions
 fix(engine): align AR001 AR003 AR008 and AR010 semantics
 test(engine): establish AgentReady quality gates
 ```
+
+## Commercial Infrastructure Gate
+
+Before licensing, Stripe, account or transactional-email implementation begins, require ten external Community users, three explicit Pro payment signals at the real price and scope, one credible external value case, accepted benchmark/differentiation evidence and an owner authorization decision.
 
 ## Phase 8 - Licensing, Stripe, And Automation
 

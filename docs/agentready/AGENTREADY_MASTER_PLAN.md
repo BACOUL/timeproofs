@@ -320,8 +320,51 @@ Internal accounts, project-owned test accounts, fixtures, automated installs,
 AgentReady repository CI runs and internal Stripe test purchases do not count
 as external validation.
 
-These gates do not block Community publication, Pro technical construction or
-the first Pro sale path. They block only premature global-validation claims.
+These four gates remain mandatory before global-validation or category-established
+claims. Earlier product-construction gates are defined below.
+
+## Early External Pilot And Commercial Evidence Gates
+
+Community publication is not blocked by market validation. After Community distribution,
+public installation validation and three-minute onboarding, the ledger must require an
+external Community pilot before Pro implementation begins.
+
+The early pilot gate requires:
+
+- at least five distinct external Community users;
+- at least three real external repositories or contract surfaces;
+- at least one real OpenAPI use and one real MCP use;
+- at least two measurable 30-day return or reuse signals where the observation window permits;
+- at least one useful real issue detected and corrected;
+- recorded false positives, false negatives, abandonment reasons and feature requests;
+- at least one explicit signal identifying a function for which an external user may pay.
+
+Pilot evidence and the reproducible benchmark must lead to an explicit owner decision:
+`CONTINUE`, `CORRECT`, `PAUSE`, `PIVOT` or `REJECT`. `CONTINUE` is required
+before the first Pro implementation batch.
+
+Before licensing, Stripe, account and transactional-email implementation begins, the
+ledger must additionally require:
+
+- at least ten external Community users;
+- at least three explicit Pro payment signals after presenting the real price and scope;
+- at least one credible external value case based on a real issue and fix;
+- accepted benchmark and differentiation evidence;
+- an explicit owner decision authorizing commercial infrastructure work.
+
+The first external Pro sale remains a later global-validation gate because commercial
+infrastructure is required to complete that sale.
+
+The detailed thresholds, evidence rules and exclusions are defined in
+`VALIDATION_GATES_AND_EXTERNAL_PILOT.md`.
+
+## Static-First And Dynamic-Analysis Boundary
+
+AgentReady remains a static shift-left CI gate for Community and Pro V0.1. Dynamic
+execution, runtime guardrails or live API/MCP scanning are not immediate launch
+requirements. They may be evaluated only after real revenue and repeated external demand,
+through a dedicated decision, threat model and execution plan. Integration with
+complementary runtime products is preferred before building a new runtime product.
 
 ## Distribution And Onboarding
 

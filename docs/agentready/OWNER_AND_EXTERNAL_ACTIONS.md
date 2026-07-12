@@ -20,6 +20,9 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 | AR-COM-006B | task | JEASON | DECIDED | Decide handling of unexpected npm latest dist-tag | owner decision ACCEPT_TEMPORARILY on latest deviation<br>recorded alpha and latest dist-tags<br>first-stable-release limit |
 | AR-COM-006 | task | CODEX_AND_JEASON | PASS_WITH_DOCUMENTED_EXCEPTION | Publish Community CLI and immutable release | approved tarball SHA-256 verification<br>JEASON npm publication confirmation without secrets<br>npm package URL<br>documented latest exception<br>immutable tag<br>GitHub Release URL |
 | AR-ONB-EPIC | task | CODEX_AND_JEASON | PLANNED | Community onboarding | child tasks tracked in ledger |
+| AR-PILOT-EPIC | task | CODEX_AND_JEASON | PLANNED | External Community pilot and differentiation | child tasks tracked in ledger |
+| AR-MARKET-PILOT-001H | task | JEASON | OWNER_ACTION_REQUIRED | Validate five-user external Community pilot | pseudonymized pilot-user records<br>repository or contract-surface records<br>OpenAPI and MCP usage evidence<br>reuse evidence or pending observation status<br>real issue fix and after-result evidence<br>feedback and abandonment register<br>payment-function signal context |
+| AR-MARKET-PILOT-002 | task | CODEX_AND_JEASON | DECISION_REQUIRED | Decide whether AgentReady proceeds to Pro implementation | pilot decision record<br>benchmark review<br>differentiation review<br>selected outcome and owner approval |
 | AR-ENG-EPIC | task | CODEX_AND_JEASON | PLANNED | Engine benchmark and quality | child tasks tracked in ledger |
 | AR-ENG-001H | task | CODEX_AND_JEASON | OWNER_ACTION_REQUIRED | Validate human benchmark annotations | dated human annotation approval |
 | AR-ENG-001T | task | CODEX_AND_JEASON | DECISION_REQUIRED | Freeze benchmark acceptance thresholds before final evaluation | dated approved benchmark threshold record before final evaluation |
@@ -46,8 +49,10 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 | AR-UX-001 | task | DESIGN | EXTERNAL_SPECIALIST_REQUIRED | Review premium UX conversion and accessibility | design review report |
 | AR-LAUNCH-001 | task | CODEX_AND_JEASON | PLANNED | Run AgentReady Community and Pro launch audit | launch audit report<br>owner launch decision |
 | AR-LAUNCH-001H | task | JEASON | OWNER_ACTION_REQUIRED | Approve global launch audit outcome | owner launch approval or correction decision |
+| AR-MARKET-EPIC | task | CODEX_AND_JEASON | PLANNED | Commercial validation and evidence gates | child tasks tracked in ledger |
 | AR-MARKET-001A | task | JEASON | DECISION_REQUIRED | Validate ten external Community users | pseudonymized user identifiers<br>date<br>usage type<br>general result<br>30-day reuse signal when measurable<br>consent record for any public quote |
 | AR-MARKET-001B | task | JEASON | DECISION_REQUIRED | Validate three explicit Pro payment signals | date<br>pseudonymized profile<br>price presented<br>response obtained<br>exchange context<br>publication authorization if needed |
+| AR-MARKET-002 | task | CODEX_AND_JEASON | DECISION_REQUIRED | Authorize licensing Stripe and account implementation | commercial infrastructure authorization decision<br>ten-user evidence review<br>payment-signal evidence review<br>value-case evidence review<br>benchmark and differentiation review |
 | AR-MARKET-001C | task | JEASON | DECISION_REQUIRED | Complete first external Pro sale | external customer pseudonymous record<br>payment received proof<br>delivered entitlement record<br>activation evidence<br>real Pro usage evidence<br>invoice or payment proof<br>refund or cancellation handling evidence if applicable |
 | AR-MARKET-001D | task | CODEX_AND_JEASON | DECISION_REQUIRED | Publish one credible AgentReady value case | case owner authorization<br>pseudonymized case record<br>rule ID<br>before result<br>fix summary<br>after result<br>limitations<br>confidentiality review |
 | AR-MARKET-001 | task | JEASON | DECISION_REQUIRED | Evaluate AgentReady commercial validation evidence | commercial validation decision record |
