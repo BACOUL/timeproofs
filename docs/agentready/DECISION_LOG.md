@@ -197,6 +197,7 @@ Decision: Architecture, releases, dependencies, incidents, and operations must b
 Reason: The product must not depend only on founder memory.
 Impact: Due diligence discipline is permanent.
 Supersedes: informal operations.
+Status: ACTIVE
 
 ## 2026-07-12 - Earlier validation gates before Pro and commercial infrastructure
 
