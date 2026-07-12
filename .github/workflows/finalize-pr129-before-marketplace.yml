@@ -1,0 +1,127 @@
+name: Finalize PR 129 Before Marketplace
+
+on:
+  push:
+    branches:
+      - ops-publish-agentready-action-alpha
+    paths:
+      - .github/workflows/finalize-pr129-before-marketplace.yml
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat-distribution-agentready-marketplace-action
+          fetch-depth: 1
+
+      - name: Apply post-tag pre-Marketplace corrections
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+
+          const sha = 'd6634d0fbbe1fced510fc49d8871d52a3dc7f348';
+          const tag = 'agentready-action-v0.1.0-alpha.0';
+          const releaseUrl = 'https://github.com/BACOUL/timeproofs/releases/tag/agentready-action-v0.1.0-alpha.0';
+
+          function replaceOnce(path, before, after) {
+            let text = fs.readFileSync(path, 'utf8');
+            if (!text.includes(before)) throw new Error(`${path}: missing expected text: ${before}`);
+            text = text.replace(before, after);
+            fs.writeFileSync(path, text);
+          }
+
+          function replaceAll(path, before, after) {
+            let text = fs.readFileSync(path, 'utf8');
+            if (!text.includes(before)) throw new Error(`${path}: missing expected text: ${before}`);
+            text = text.split(before).join(after);
+            fs.writeFileSync(path, text);
+          }
+
+          replaceOnce(
+            'agentready-ci.html',
+            'AgentReady Community is available for free through the npm alpha. AgentReady Pro is in preparation. The root GitHub Marketplace Action is prepared for the owner publication checkpoint.',
+            'AgentReady Community is available for free through the npm alpha. AgentReady Pro is in preparation. The immutable GitHub Action alpha release is available; Marketplace publication follows after the root Action is merged to the default branch.'
+          );
+          replaceOnce('agentready-ci.html', 'GitHub Marketplace Action checkpoint', 'GitHub Action');
+          replaceOnce('agentready-ci.html', 'uses: after-owner-marketplace-checkpoint', `uses: BACOUL/timeproofs@${tag}`);
+          replaceOnce(
+            'agentready-ci.html',
+            'The root GitHub Marketplace Action metadata is prepared at <code>/action.yml</code>. Public Action references are published only after JEASON approves the exact implementation commit, creates the immutable Action tag, and completes the GitHub Marketplace owner checkpoint.',
+            `The immutable Action tag <code>${tag}</code> targets the reviewed release commit. Marketplace listing remains pending until <code>/action.yml</code> is available on the default branch.`
+          );
+          replaceOnce(
+            'agentready-ci.html',
+            '<p>TimeProofs AgentReady does not guarantee that an AI agent will never fail. It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.</p>\n        <p>It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.</p>',
+            '<p>TimeProofs AgentReady does not guarantee that an AI agent will never fail. It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.</p>'
+          );
+
+          replaceAll('docs/agentready/GITHUB_ACTION_USAGE.md', '<FULL_ACTION_RELEASE_COMMIT_SHA>', sha);
+          replaceOnce(
+            'docs/agentready/GITHUB_ACTION_USAGE.md',
+            `- \`${tag}\` is reserved but not created;`,
+            `- \`${tag}\` is created and verified at \`${sha}\`;`
+          );
+          replaceOnce(
+            'docs/agentready/GITHUB_ACTION_USAGE.md',
+            '- no Marketplace listing exists.',
+            '- the GitHub prerelease exists; the Marketplace listing remains pending until the root Action is present on the default branch.'
+          );
+
+          replaceAll('docs/agentready/examples/github-action-agentready.yml', '<FULL_ACTION_RELEASE_COMMIT_SHA>', sha);
+
+          replaceOnce(
+            'docs/agentready/GITHUB_ACTION_VERSIONING.md',
+            '`ARB-COM-002` creates root `/action.yml` in the implementation PR. It must still stop before tag, GitHub Release and Marketplace publication until JEASON approves the exact implementation commit.',
+            `JEASON approved \`${sha}\`. The immutable tag \`${tag}\` and public prerelease now exist and remain immutable. Marketplace publication is deferred until root \`/action.yml\` is merged to the default branch, because GitHub exposes the Marketplace release flow from the repository Action metadata page.`
+          );
+
+          replaceOnce('docs/agentready/GITHUB_ACTION_MARKETPLACE_EXECUTION_SPEC.md', 'Status: PRE_OWNER_CHECKPOINT', 'Status: POST_TAG_PRE_MARKETPLACE');
+          replaceOnce('docs/agentready/GITHUB_ACTION_MARKETPLACE_EXECUTION_SPEC.md', '- Approved implementation SHA: `PENDING_OWNER_APPROVAL`', `- Approved implementation SHA: \`${sha}\``);
+          replaceOnce('docs/agentready/GITHUB_ACTION_MARKETPLACE_EXECUTION_SPEC.md', '- Immutable Action tag target: `PENDING_OWNER_ACTION`', `- Immutable Action tag target: \`${sha}\``);
+          replaceOnce('docs/agentready/GITHUB_ACTION_MARKETPLACE_EXECUTION_SPEC.md', '- GitHub prerelease URL: `PENDING_OWNER_CONFIRMATION`', `- GitHub prerelease URL: ${releaseUrl}`);
+          replaceOnce('docs/agentready/GITHUB_ACTION_MARKETPLACE_EXECUTION_SPEC.md', '- Full-SHA usage example: `PENDING_OWNER_CONFIRMATION`', `- Full-SHA usage example: \`uses: BACOUL/timeproofs@${sha}\``);
+          replaceOnce(
+            'docs/agentready/GITHUB_ACTION_MARKETPLACE_EXECUTION_SPEC.md',
+            'Automated validation evidence is recorded in the implementation PR before the\nowner checkpoint. Final public evidence must be recorded after JEASON provides\nthe public GitHub Release URL and Marketplace URL.',
+            'Automated validation evidence is recorded in the implementation PR. The immutable tag and public prerelease are verified. The PR may now merge so the root Action metadata exists on the default branch; Marketplace URL and public listing evidence remain mandatory before closing `ARB-COM-002`.'
+          );
+          NODE
+
+      - name: Validate
+        shell: bash
+        run: |
+          set -euo pipefail
+          node agentready-core/tests/run-agentready-core-tests.mjs
+          node cli/tests/run-agentready-cli-tests.mjs
+          node cli/tests/run-agentready-action-smoke-test.mjs
+          node cli/tests/run-agentready-package-smoke-test.mjs
+          node cli/tests/run-agentready-community-release-workflow-test.mjs
+          node scripts/validate-agentready-action-marketplace-readiness.mjs
+          node scripts/validate-agentready-strategy-docs.mjs
+          node scripts/validate-agentready-execution-system.mjs
+          git diff --check
+
+      - name: Commit and push PR correction
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add agentready-ci.html docs/agentready/GITHUB_ACTION_USAGE.md docs/agentready/GITHUB_ACTION_VERSIONING.md docs/agentready/GITHUB_ACTION_MARKETPLACE_EXECUTION_SPEC.md docs/agentready/examples/github-action-agentready.yml
+          git commit -m "docs(distribution): prepare default-branch Marketplace handoff"
+          git push origin HEAD:feat-distribution-agentready-marketplace-action
+
+      - name: Record result on PR 129
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/issues/129/comments" -f body='Default-branch Marketplace handoff prepared and validated. The placeholder was replaced by the immutable Action tag, tag/prerelease evidence was recorded, and Marketplace publication is now explicitly deferred until `/action.yml` is merged to the default branch. No npm operation occurred.'
