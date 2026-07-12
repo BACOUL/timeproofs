@@ -88,13 +88,15 @@ jobs:
 
           assert.equal(completedBatch?.status, 'DONE');
           assert.equal(nextBatch?.id, 'ARB-COM-002');
-          assert.notEqual(nextBatch?.spec_status, 'EXECUTION_READY');
+          assert.equal(nextBatch?.status, 'READY');
+          assert.equal(nextBatch?.spec_status, 'EXECUTION_READY');
           assert.equal(next?.kind, 'batch');
           assert.equal(next?.batch?.id, 'ARB-COM-002');
-          assert.equal(next?.action_type, 'SPECIFICATION_REFINEMENT_REQUIRED');
-          assert.match(nextPrompt, /No CODEX execution batch is currently authorized/);
-          assert.match(nextPrompt, /not EXECUTION_READY/);
-          assert.doesNotMatch(nextPrompt, /Repository: BACOUL\/timeproofs/);
+          assert.equal(next?.action_type, 'READY');
+          assert.match(nextPrompt, /Repository: BACOUL\/timeproofs/);
+          assert.match(nextPrompt, /Batch ID: ARB-COM-002/);
+          assert.match(nextPrompt, /Point de contrôle propriétaire obligatoire/);
+          assert.match(nextPrompt, /agentready-action-v0\.1\.0-alpha\.0/);
           NODE
 
       - name: Verify package metadata

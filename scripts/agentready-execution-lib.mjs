@@ -460,7 +460,7 @@ function promptForBatch(batch, ledger) {
       ""
     ].join("\n") : "",
     batch.post_confirmation_steps?.length ? [
-      `## Après confirmation npm`,
+      `## Après confirmation propriétaire`,
       "",
       linesFor(batch.post_confirmation_steps),
       ""

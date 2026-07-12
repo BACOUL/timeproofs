@@ -82,9 +82,12 @@ for (const requiredCommand of [
 assert.match(workflow, /git diff --exit-code --/);
 assert.ok(workflow.includes("assert.equal(completedBatch?.status, 'DONE')"));
 assert.ok(workflow.includes("assert.equal(next?.batch?.id, 'ARB-COM-002')"));
-assert.ok(workflow.includes("assert.equal(next?.action_type, 'SPECIFICATION_REFINEMENT_REQUIRED')"));
-assert.ok(workflow.includes("assert.notEqual(nextBatch?.spec_status, 'EXECUTION_READY')"));
-assert.match(workflow, /No CODEX execution batch is currently authorized/);
+assert.ok(workflow.includes("assert.equal(next?.action_type, 'READY')"));
+assert.ok(workflow.includes("assert.equal(nextBatch?.status, 'READY')"));
+assert.ok(workflow.includes("assert.equal(nextBatch?.spec_status, 'EXECUTION_READY')"));
+assert.ok(workflow.includes("assert.match(nextPrompt, /Repository:"));
+assert.match(workflow, /Batch ID: ARB-COM-002/);
+assert.match(workflow, /Point de contrôle propriétaire obligatoire/);
 assert.match(workflow, /assert\.equal\(manifest\.community_license,\s*'Apache-2\.0'\)/);
 assert.match(workflow, /assert\.equal\(manifest\.tarball\.entry_count,\s*21\)/);
 assert.match(workflow, /assert\.equal\(manifest\.package_private,\s*false\)/);
@@ -170,10 +173,12 @@ assert.match(checklist, /GitHub Release latest:\s*NO/);
 assert.match(checklist, /npm scope ownership/);
 assert.match(checklist, /explicit release approval/i);
 
-assert.match(versioning, /v0\.1\.0-alpha\.0: created/);
+assert.match(versioning, /Existing Immutable Repository Release/);
 assert.match(versioning, /v0\.1\.0-alpha\.0/);
-assert.match(versioning, /GitHub Release `v0\.1\.0-alpha\.0` is created as a prerelease and is not marked\s+latest/);
-assert.match(versioning, /no Marketplace listing exists/);
+assert.match(versioning, /GitHub prerelease `v0\.1\.0-alpha\.0` exists and is not marked latest/);
+assert.match(versioning, /no Marketplace listing exists at the start of `ARB-COM-002`/);
+assert.match(versioning, /agentready-action-v0\.1\.0-alpha\.0/);
+assert.match(versioning, /root `\/action\.yml` is not yet published/);
 assert.doesNotMatch(versioning, /Actual tag creation remains blocked|Planned versioned reference - tag not created yet/);
 
 await assertUnsafeOutputDirectoryGuards();

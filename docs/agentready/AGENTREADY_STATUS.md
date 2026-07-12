@@ -20,7 +20,7 @@ Total planned Codex execution batches: 72
 Completed Codex execution batches: 4
 Execution batches currently in review: 0
 Execution batches not yet issued: 68
-Immediately executable Codex prompts: 0
+Immediately executable Codex prompts: 1
 Average work items per batch: 2.06
 Largest batch size: 6
 Batches with more than five work items: 2
@@ -73,8 +73,8 @@ Credible public value cases required: 1
 - M8 Category-building active: 0/98 (0%)
 
 ## Document Coverage
-Active documents discovered: 67
-Active documents covered: 67
+Active documents discovered: 68
+Active documents covered: 68
 Uncovered active documents: 0
 Historical documents excluded: 36
 Generated documents excluded: 6

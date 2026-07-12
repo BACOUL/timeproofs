@@ -83,15 +83,17 @@ async function testActionIntegrationWorkflowMetadata() {
 async function testVersioningDocumentation() {
   const doc = await fs.readFile(versioningDocPath, 'utf8');
 
-  assert.match(doc, /Immutable References/);
-  assert.match(doc, /Moving Major References/);
-  assert.match(doc, /Development Branches/);
-  assert.match(doc, /Development branch reference - not a stable release/);
-  assert.match(doc, /Alpha immutable versioned reference - prerelease/);
+  assert.match(doc, /Existing Immutable Repository Release/);
+  assert.match(doc, /Root Marketplace Action Requirement/);
+  assert.match(doc, /First Marketplace Action Release/);
+  assert.match(doc, /Public References After Publication/);
   assert.match(doc, /v0\.1\.0-alpha\.0/);
-  assert.match(doc, /v0\.1\.0-alpha\.0: created/);
-  assert.match(doc, /No public stable action tag and no moving major tag are created by this release/);
-  assert.match(doc, /GitHub Release `v0\.1\.0-alpha\.0` is created as a prerelease and is not marked\s+latest/);
+  assert.match(doc, /150da23932c1fb9433cb3d546904f03c18c909e9/);
+  assert.match(doc, /agentready-action-v0\.1\.0-alpha\.0/);
+  assert.match(doc, /must remain immutable/);
+  assert.match(doc, /no moving major Action tag is created during the alpha batch/);
+  assert.match(doc, /GitHub prerelease `v0\.1\.0-alpha\.0` exists and is not marked latest/);
+  assert.match(doc, /no Marketplace listing exists at the start of `ARB-COM-002`/);
   assert.match(doc, /ubuntu-latest/);
   assert.match(doc, /Node\.js 20/);
 }
