@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: docs-agentready-refine-arb-com-002
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Setup Node.js 20
         uses: actions/setup-node@v4
@@ -35,7 +35,7 @@ jobs:
           set -uo pipefail
           {
             set -e
-            git fetch --quiet origin timeproofs
+            git fetch --quiet origin timeproofs:refs/remotes/origin/timeproofs
             git show origin/timeproofs:.github/workflows/agentready-community-release-candidate.yml > .github/workflows/agentready-community-release-candidate.yml
             python3 <<'PY'
           from pathlib import Path
