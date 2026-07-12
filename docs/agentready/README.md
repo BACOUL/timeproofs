@@ -61,7 +61,9 @@ The merged foundation now includes:
 - Community release workflow preparation.
 - Community + Pro strategy rebaseline.
 
-Community public publication remains blocked and has not occurred.
+Community alpha publication has occurred with a documented temporary `latest`
+exception accepted by JEASON until the first stable release. The evidence PR
+for the immutable tag and GitHub prerelease remains in review.
 
 ## Self-Service Commercial Direction
 
@@ -136,7 +138,7 @@ There is no manual review offer, mandatory contact-sales step, quote workflow, m
 | `GITHUB_ACTION_VERSIONING.md` | Planned GitHub Action tag and versioning model |
 | `COMMUNITY_RELEASE_WORKFLOW.md` | Community release candidate workflow |
 | `COMMUNITY_RELEASE_CHECKLIST.md` | Community release readiness and publication blockers |
-| `COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_0_DRAFT.md` | Draft notes for the unpublished Community candidate |
+| `COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_0.md` | Release notes for the published Community alpha prerelease |
 | `AGENTREADY_JSON_SPEC.md` | `agentready.json` v0.1 contract |
 | `AGENTREADY_RULE_CODES.md` | Stable AR001-AR010 rule codes |
 | `COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md` | Bad/fixed CI Gate validation |

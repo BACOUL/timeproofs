@@ -87,9 +87,11 @@ async function testVersioningDocumentation() {
   assert.match(doc, /Moving Major References/);
   assert.match(doc, /Development Branches/);
   assert.match(doc, /Development branch reference - not a stable release/);
-  assert.match(doc, /Planned versioned reference - tag not created yet/);
+  assert.match(doc, /Alpha immutable versioned reference - prerelease/);
   assert.match(doc, /v0\.1\.0-alpha\.0/);
-  assert.match(doc, /No public stable action tag is created in this PR/);
+  assert.match(doc, /v0\.1\.0-alpha\.0: created/);
+  assert.match(doc, /No public stable action tag and no moving major tag are created by this release/);
+  assert.match(doc, /GitHub Release `v0\.1\.0-alpha\.0` is created as a prerelease and is not marked\s+latest/);
   assert.match(doc, /ubuntu-latest/);
   assert.match(doc, /Node\.js 20/);
 }

@@ -71,9 +71,16 @@ future prereleases dist-tag: alpha
 new npm operation authorized: NO
 npm logout executed: YES
 npm whoami after logout: ENEEDAUTH
-Git tag created: NO
-GitHub Release created: NO
-continuation authorized: YES, for immutable Git tag and GitHub Release only
+Git tag created: YES
+Git tag: v0.1.0-alpha.0
+Git tag target: 150da23932c1fb9433cb3d546904f03c18c909e9
+Remote tag verified: YES
+GitHub Release created: YES
+GitHub Release URL: https://github.com/BACOUL/timeproofs/releases/tag/v0.1.0-alpha.0
+GitHub Release prerelease: YES
+GitHub Release latest: NO
+Release notes match validated file: YES
+continuation authorized: NO; ARB-COM-001 evidence PR requires review and merge
 Owner latest decision recorded: YES
 
 - package metadata verified from the approved tarball
@@ -96,6 +103,11 @@ Owner latest decision recorded: YES
 - latest pointing to 0.1.0-alpha.0 is accepted temporarily until the first stable release
 - every future prerelease must be published explicitly with npm dist-tag alpha
 - no new npm operation is authorized by this decision
+- immutable Git tag `v0.1.0-alpha.0` created and remotely verified
+- tag target verified as `150da23932c1fb9433cb3d546904f03c18c909e9`
+- GitHub Release created at `https://github.com/BACOUL/timeproofs/releases/tag/v0.1.0-alpha.0`
+- GitHub Release is marked prerelease and not latest
+- Release notes match `docs/agentready/COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_0.md`
 - npm logout succeeded; npm whoami returned ENEEDAUTH after logout
 - no npm password, 2FA code, recovery code, token or secret was recorded in the repository, GitHub, Codex, a PR or a workflow
 - version command previously verified against the approved artifact evidence
