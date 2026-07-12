@@ -42,10 +42,7 @@ jobs:
         run: node scripts/fix-agentready-validation-migration.mjs
 
       - name: Rebuild canonical ledger
-        shell: bash
-        run: |
-          set -o pipefail
-          node scripts/rebuild-agentready-ledger-data.mjs 2>&1 | tee /tmp/agentready-rebuild.log
+        run: node scripts/rebuild-agentready-ledger-data.mjs
 
       - name: Generate ledger views
         run: |
@@ -55,10 +52,25 @@ jobs:
           node scripts/generate-agentready-next-prompt.mjs --write
 
       - name: Validate strategy and execution system
+        shell: bash
         run: |
-          node scripts/validate-agentready-strategy-docs.mjs
-          node scripts/validate-agentready-execution-system.mjs
-          git diff --check
+          set +e
+          {
+            node scripts/validate-agentready-strategy-docs.mjs
+            node scripts/validate-agentready-execution-system.mjs
+            git diff --check
+          } > /tmp/agentready-validation.log 2>&1
+          status=$?
+          cat /tmp/agentready-validation.log
+          if [ "$status" -ne 0 ]; then
+            cp /tmp/agentready-validation.log docs/agentready/VALIDATION_GATE_MIGRATION_ERROR.txt
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add docs/agentready/VALIDATION_GATE_MIGRATION_ERROR.txt
+            git commit -m "chore(governance): record validation diagnostic"
+            git push origin HEAD:docs-agentready-strengthen-validation-gates
+            exit "$status"
+          fi
 
       - name: Verify deterministic regeneration
         run: |
@@ -73,6 +85,7 @@ jobs:
 
       - name: Remove one-time migration helpers
         run: |
+          rm -f docs/agentready/VALIDATION_GATE_MIGRATION_ERROR.txt
           rm scripts/apply-agentready-validation-gates.mjs
           rm scripts/fix-agentready-validation-migration.mjs
           rm .github/workflows/apply-agentready-validation-gates.yml
