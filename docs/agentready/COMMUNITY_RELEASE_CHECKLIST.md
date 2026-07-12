@@ -26,6 +26,55 @@ GITHUB RELEASE AUTHORIZED: YES
 LATEST TAG MODIFIED: NO
 ```
 
+## Controlled Publication Execution Checkpoint
+
+Status: AWAITING_OWNER_NPM_PUBLICATION
+Preflight result: PASS
+Preflight performed externally: YES
+Codex binary inspection performed: NO
+
+Package: @timeproofs/agentready
+Version: 0.1.0-alpha.0
+Approved source commit: 150da23932c1fb9433cb3d546904f03c18c909e9
+Approved tarball SHA-256: 602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe
+npm dist-tag: alpha
+Future immutable Git tag authorized: v0.1.0-alpha.0
+Future Git tag target: 150da23932c1fb9433cb3d546904f03c18c909e9
+latest modification authorized: NO
+npm publication executed: NO
+Git tag created: NO
+GitHub Release created: NO
+Owner checkpoint required: YES
+
+- package metadata externally verified
+- publishConfig.access = public
+- publishConfig.registry = https://registry.npmjs.org/
+- publishConfig.tag = alpha
+- Apache-2.0
+- dependencies empty
+- no private: true in Community package
+- LICENSE, NOTICE and README present
+- no secret or .env
+- no symbolic link
+- no HTML
+- no Pro, Stripe, backend or dashboard
+- external npm publish dry-run PASS
+- external clean installation PASS
+- version command PASS
+- help command PASS
+
+Prepared but not executed:
+
+```sh
+npm publish "<chemin-local-vers-le-tarball-approuve>" --access public --tag alpha
+```
+
+JEASON verifies the local SHA-256 first.
+JEASON executes the command himself in his own terminal.
+JEASON enters the 2FA code only in his own terminal.
+No npm password, 2FA code, recovery code or token is communicated to Codex.
+Codex waits for npm confirmation before any Git tag or GitHub Release.
+
 ## Product
 
 | Requirement | Status | Evidence |
@@ -90,7 +139,7 @@ LATEST TAG MODIFIED: NO
 | npm 2FA or trusted publishing policy validated | READY | npm 2FA enabled; trusted publishing preferred for future dedicated setup |
 | Package made publishable after approval | READY | staged Community tarball package omits `private: true` and sets public npm publish config |
 | Final tarball content approved | READY | JEASON approval dated 2026-07-11 for commit `150da23932c1fb9433cb3d546904f03c18c909e9`, version `0.1.0-alpha.0`, tarball SHA-256 `602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe`, npm dist-tag `alpha` |
-| Publication preflight completed | READY | `COMMUNITY_PUBLICATION_EXECUTION.md` records externally verified preflight evidence and stops at the owner npm publication checkpoint |
+| Publication preflight completed | READY | The `Controlled Publication Execution Checkpoint` section in this checklist records externally verified preflight evidence and stops at the owner npm publication checkpoint. |
 | Tag created on reviewed commit | BLOCKED | No tag created |
 | Release notes verified | READY | Draft notes exist |
 | GitHub Release created | BLOCKED | No GitHub Release exists |
