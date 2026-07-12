@@ -46,12 +46,17 @@ jobs:
           node scripts/generate-agentready-next-action.mjs --write
           node scripts/generate-agentready-next-prompt.mjs --write
 
-      - name: Validate strategy execution and release guards
-        run: |
-          node scripts/validate-agentready-strategy-docs.mjs
-          node scripts/validate-agentready-execution-system.mjs
-          node cli/tests/run-agentready-community-release-workflow-test.mjs
-          git diff --check
+      - name: Validate strategy documents
+        run: node scripts/validate-agentready-strategy-docs.mjs
+
+      - name: Validate execution system
+        run: node scripts/validate-agentready-execution-system.mjs
+
+      - name: Validate Community release workflow guards
+        run: node cli/tests/run-agentready-community-release-workflow-test.mjs
+
+      - name: Validate diff formatting
+        run: git diff --check
 
       - name: Verify generated executable prompt
         run: |
