@@ -292,7 +292,7 @@ Required evidence:
   - GitHub Release URL
 
 ### ARB-COM-002 - Publish public GitHub Action distribution
-- Status: READY
+- Status: IN_REVIEW
 - Spec status: EXECUTION_READY
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
@@ -302,7 +302,7 @@ Required evidence:
 - Depends on tasks: None
 - Branch: feat-distribution-agentready-marketplace-action
 - PR title: feat(distribution): publish AgentReady GitHub Marketplace action
-
+- PR: #129
 Deliverables:
   - canonical root Marketplace Action
   - migrated workflows and tests
