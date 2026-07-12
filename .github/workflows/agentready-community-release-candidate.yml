@@ -1,18 +1,18 @@
 name: Bootstrap ARB-COM-002 Refinement
 
 on:
-  push:
-    branches:
-      - docs-agentready-refine-arb-com-002
   pull_request:
     branches:
       - timeproofs
-    paths:
-      - ".github/workflows/agentready-community-release-candidate.yml"
-      - ".github/workflows/refine-arb-com-002.yml"
+    types:
+      - reopened
 
 permissions:
   contents: write
+
+concurrency:
+  group: arb-com-002-refinement
+  cancel-in-progress: true
 
 jobs:
   refine:
@@ -96,11 +96,11 @@ jobs:
           }
           tail -n 60 /tmp/validate.log
 
-      - name: Commit validated refinement
+      - name: Commit validated specification files
         shell: bash
         run: |
           set -euo pipefail
-          rm -f .github/workflows/refine-arb-com-002.yml
+          git restore --source=HEAD -- .github/workflows/agentready-community-release-candidate.yml .github/workflows/refine-arb-com-002.yml
           rm -f docs/agentready/ARB_COM_002_REFINEMENT_FAILURE.log
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
