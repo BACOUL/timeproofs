@@ -6,13 +6,13 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 # Next Action
 
 Batch ID: ARB-SITE-PREMIUM-001
-Title: Build premium design system navigation and footer
-Action owner: CODEX_AND_JEASON
-Action type: READY
-Status: READY
+Title: Build global site shell navigation and footer
+Action owner: JEASON
+Action type: REVIEW_OR_MERGE
+Status: IN_REVIEW
 Specification: EXECUTION_READY
 Objective:
-Build premium design system navigation and footer.
+Build global site shell navigation and footer.
 
 Work items:
   - AR-SITE-PREMIUM-001
@@ -29,7 +29,7 @@ Required evidence:
   - owner visual review before merge
 
 Manual actions:
-  - JEASON reviews desktop and mobile visual evidence before merge
+  - JEASON reviews the complete stacked site before the stack is merged
 
 Authorized external actions:
   - create dependency-free shared CSS and minimal JavaScript assets

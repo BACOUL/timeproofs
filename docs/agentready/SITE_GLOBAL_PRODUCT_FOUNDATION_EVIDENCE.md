@@ -1,6 +1,6 @@
 # AgentReady Global Product Foundation Evidence
 
-Status: PREFLIGHT STARTED
+Status: OWNER PRODUCT PREVIEW REQUIRED
 
 Batch: `ARB-SITE-GLOBAL-002`
 
@@ -82,6 +82,69 @@ MCP fixture:
 - policy: `FAIL`
 - critical findings: `1`
 - rule codes: `AR009_UNCLEAR_AGENT_INSTRUCTIONS`, `AR002_MISSING_CONFIRMATION_BOUNDARY`, `AR005_SENSITIVE_DATA_EXPOSURE`, `AR007_OVERBROAD_TOOL_SCOPE`, `AR003_DESTRUCTIVE_OPERATION_AMBIGUOUS`
+
+Fixed comparison fixtures displayed or referenced:
+
+- `agentready-examples/commercial/openapi-refund-risk.fixed.json`: score `84`, policy `PASS`.
+- `agentready-examples/commercial/mcp-email-risk.fixed.json`: score `90`, policy `PASS`.
+
+Displayed examples are static renderings of the current engine output. They are not customer evidence, benchmark evidence, certification evidence or scientific validation.
+
+## Implemented Route Summary
+
+- `/`: category problem, product action, local scanner CTA, CI path and real OpenAPI output example.
+- `/product.html`: product overview, browser scanner, CLI, Action and limitation boundary.
+- `/agentready.html`: OpenAPI coverage explanation, reproducible finding before file selection, preserved local browser scanner.
+- `/agentready-mcp.html`: accepted MCP JSON format, detectable and non-detectable categories, reproducible finding before file selection, preserved local browser scanner.
+- `/agentready-ci.html`: public GitHub Action usage, immutable tag and full-SHA pinning, PASS and policy FAIL behavior, outputs.
+- `/agentready-docs.html`: product documentation entry point for browser, CLI, Action and output specs.
+- `/community.html`: currently available free Community capabilities, no account, no payment and local-first behavior.
+- `/pro.html`: planned Pro boundary, planned pricing, no purchase, no checkout and no availability date.
+- `/pricing.html`: Community `0 EUR`, planned Pro `24 EUR excluding tax` monthly or `240 EUR excluding tax` annually, no Team/Agency/Enterprise plan cards.
+
+## CTA And Link Report
+
+Primary product CTAs resolve to existing routes:
+
+- scan OpenAPI: `/agentready.html`
+- scan MCP: `/agentready-mcp.html`
+- CI Gate: `/agentready-ci.html`
+- documentation: `/agentready-docs.html`
+- product overview: `/product.html`
+- Community: `/community.html`
+- planned Pro: `/pro.html`
+- pricing: `/pricing.html`
+
+Navigation validation status: `PASS`.
+
+## Availability And Claim Review
+
+- Community is shown as available and free.
+- Pro is labelled planned and not purchasable.
+- Pro price is mapped to `docs/agentready/PRICING_AND_ENTITLEMENTS_V0_1.md` and `docs/agentready/COMMUNITY_PRO_ENTITLEMENTS.md`.
+- Team, Agency and Enterprise are not presented as available launch plans.
+- No customer logo, benchmark, certification, standard-status or guaranteed safety claim was added.
+- The mandatory limitation appears on the primary product, scanner, CI, docs and pricing surfaces.
+
+## No-JavaScript And Viewport Evidence
+
+Evidence directory:
+
+`docs/agentready/evidence/site-global-product-foundation/`
+
+Generated artifacts:
+
+- desktop screenshots for every primary page: `desktop-index.png`, `desktop-product.png`, `desktop-openapi.png`, `desktop-mcp.png`, `desktop-ci.png`, `desktop-docs.png`, `desktop-community.png`, `desktop-pro.png`, `desktop-pricing.png`.
+- mobile screenshots for every primary page at `375px`.
+- `320px` screenshots for every primary page.
+- no-JavaScript screenshots for `index.html`, `agentready.html`, `agentready-mcp.html`, `agentready-ci.html`, `pricing.html`.
+- `overflow-320-report.json`: `PASS`, no page reports horizontal overflow.
+- `cta-link-report.json`: `PASS`, no local route is missing.
+- `keyboard-focus-report.json`: `PASS`, focus reaches skip link, brand, navigation and CTAs.
+- `no-javascript-report.json`: `PASS`, core static content remains visible without JavaScript.
+- Combined preview URL: provided in the PR body and final response because the local port is environment-specific.
+
+The core content of the product, pricing and documentation pages is static HTML. Browser scanner execution still requires JavaScript, but each scanner page exposes the coverage, limitations and reproducible example before the upload control.
 
 ## Current Product Claim Inventory
 

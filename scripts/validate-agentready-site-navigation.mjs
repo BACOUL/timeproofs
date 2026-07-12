@@ -5,6 +5,9 @@ const repoRoot = process.cwd();
 
 const activePages = [
   "index.html",
+  "product.html",
+  "community.html",
+  "pro.html",
   "agentready.html",
   "agentready-mcp.html",
   "agentready-ci.html",
@@ -130,7 +133,7 @@ for (const page of activePages) {
   for (const text of forbiddenSiteText) {
     if (html.includes(text)) fail(`${page} contains stale or forbidden copy: ${text}`);
   }
-  if (["index.html", "agentready.html", "agentready-mcp.html", "agentready-ci.html", "agentready-docs.html", "agentready-json.html", "pricing.html", "terms.html"].includes(page) && !html.includes(mandatoryLimitation)) {
+  if (["index.html", "product.html", "community.html", "pro.html", "agentready.html", "agentready-mcp.html", "agentready-ci.html", "agentready-docs.html", "agentready-json.html", "pricing.html", "terms.html"].includes(page) && !html.includes(mandatoryLimitation)) {
     fail(`${page} is missing the mandatory limitation text`);
   }
   assertLocalLinks(page, html);

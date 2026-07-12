@@ -49,7 +49,7 @@ Exit criteria:
   - GitHub Release
   - public installation tested
   - public Action usable
-  - premium product shell and core pages validated
+  - global product standard trust documentation and discovery site validated
   - onboarding documented
   - no signup
   - no payment
@@ -58,7 +58,7 @@ Criteria links:
   - M3-TAG-RELEASE: immutable tag and GitHub Release -> AR-COM-006
   - M3-PUBLIC-INSTALL: public installation tested -> AR-COM-008
   - M3-ACTION: public Action usable -> AR-COM-007, AR-COM-009
-  - M3-PREMIUM-SITE: premium product shell and core pages validated -> AR-SITE-PREMIUM-001, AR-SITE-PREMIUM-002, AR-SITE-PREMIUM-003
+  - M3-GLOBAL-SITE: global product standard trust documentation and discovery site validated -> AR-SITE-PREMIUM-001, AR-SITE-GLOBAL-002, AR-SITE-GLOBAL-003, AR-SITE-GLOBAL-004, AR-SITE-GLOBAL-005, AR-SITE-GLOBAL-006, AR-SITE-GLOBAL-007
   - M3-ONBOARDING: onboarding documented without signup or payment -> AR-ONB-001, AR-ONB-002, AR-ONB-003, AR-ONB-004
 
 ### M4 - External pilot and engine benchmark established
@@ -334,8 +334,8 @@ Required evidence:
   - site alignment report
   - rollback procedure
 
-### ARB-SITE-PREMIUM-001 - Build premium design system navigation and footer
-- Status: READY
+### ARB-SITE-PREMIUM-001 - Build global site shell navigation and footer
+- Status: IN_REVIEW
 - Spec status: EXECUTION_READY
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
@@ -345,9 +345,9 @@ Required evidence:
 - Depends on tasks: None
 - Branch: site-agentready-premium-foundation
 - PR title: site(agentready): build premium design system and navigation
-
+- PR: #132
 Deliverables:
-  - Build premium design system navigation and footer
+  - Build global site shell navigation and footer
 Acceptance criteria:
   - one shared design system controls navigation footer typography focus states buttons and code surfaces
   - desktop navigation exposes Product Resources Pricing Trust GitHub and Scan a contract with real destinations
@@ -372,64 +372,135 @@ Required evidence:
   - shared asset inventory and size summary
   - owner visual review before merge
 
-### ARB-SITE-PREMIUM-002 - Redesign homepage and core product pages
-- Status: PLANNED
-- Spec status: SKELETON
-- Owner: CODEX
+### ARB-SITE-GLOBAL-002 - Publish global product scanners CI and planned pricing foundation
+- Status: IN_REVIEW
+- Spec status: EXECUTION_READY
+- Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
-- Work items: AR-SITE-PREMIUM-002
+- Work items: AR-SITE-GLOBAL-002
 - Depends on batches: ARB-SITE-PREMIUM-001
 - Depends on tasks: None
-- Branch: site-agentready-premium-core-pages
-- PR title: site(agentready): redesign homepage and core product pages
-
+- Branch: site-agentready-global-product
+- PR title: site(agentready): publish global product and pricing foundation
+- PR: #134
 Deliverables:
-  - Redesign homepage and core product pages
+  - Publish global product scanners CI and planned pricing foundation
 Acceptance criteria:
-  - hero defines the category and primary action within one viewport
-  - homepage follows problem demonstration OpenAPI and MCP CI differentiation proof trust limitation CTA order
-  - product demonstration uses real AgentReady findings outputs and policy behavior
-  - Community is available free and Pro remains in preparation
-  - no unavailable feature or fake customer proof is presented
-  - sections use varied composition rather than repeated card grids
-  - all commands tags rule codes and outputs match merged product behavior
+  - a new visitor understands the problem product and primary action within one viewport
+  - OpenAPI and MCP pages explain detection coverage and show realistic findings before file selection
+  - the real scanners remain functional
+  - browser CLI and GitHub Action paths are visible
+  - Community is shown as available and free
+  - planned Pro price is 24 EUR excluding tax monthly or 240 EUR excluding tax annually
+  - Pro is clearly not purchasable and unavailable features are labelled planned
+  - Team Agency and Enterprise are not presented as available
+  - real product outputs and immutable Action usage are used
+  - no fake proof customer benchmark certification or standard-status claim is added
+  - page bodies use varied premium composition rather than repetitive cards
+  - all pages remain usable on mobile and without JavaScript for core content
 Required evidence:
-  - desktop and mobile page evidence
-  - content-source mapping
-  - CTA and link audit
-  - real product-output provenance
+  - desktop and mobile screenshots for every primary page
+  - real output provenance
+  - pricing source mapping
+  - CTA and link report
+  - no-JavaScript evidence
+  - combined preview URL
 
-### ARB-SITE-PREMIUM-003 - Validate premium mobile accessibility performance and SEO
+### ARB-SITE-GLOBAL-003 - Publish AgentReady standard rules and governance foundation
 - Status: PLANNED
 - Spec status: SKELETON
 - Owner: CODEX
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
-- Work items: AR-SITE-PREMIUM-003
-- Depends on batches: ARB-SITE-PREMIUM-002
+- Work items: AR-SITE-GLOBAL-003
+- Depends on batches: ARB-SITE-GLOBAL-002
 - Depends on tasks: None
-- Branch: qa-agentready-premium-site
-- PR title: qa(site): validate premium mobile accessibility performance and SEO
+- Branch: site-agentready-global-standard
+- PR title: site(standard): publish AgentReady standard foundation
 
 Deliverables:
-  - Validate premium mobile accessibility performance and SEO
+  - Publish AgentReady standard rules and governance foundation
 Acceptance criteria:
-  - Android iPhone-size tablet and desktop layouts pass
-  - keyboard focus semantics contrast touch targets and reduced motion pass
-  - no horizontal overflow broken link empty CTA or hidden critical content remains
-  - critical product content is available without JavaScript
-  - performance evidence meets documented static-site budgets
-  - titles descriptions canonicals structured data and internal links are valid
-  - stale manual offers and unsupported product claims are absent
-  - mandatory limitation remains on key pages
+  - Publish AgentReady standard rules and governance foundation complete after preceding stacked site batch is reviewed
 Required evidence:
-  - viewport matrix
-  - accessibility audit
-  - performance report
-  - SEO and structured-data report
-  - broken-link report
-  - final visual consistency review
+  - Publish AgentReady standard rules and governance foundation evidence
+
+### ARB-SITE-GLOBAL-004 - Publish company trust security privacy and legal foundation
+- Status: PLANNED
+- Spec status: SKELETON
+- Owner: CODEX
+- Milestone: M3
+- Horizon: BEFORE_COMMUNITY_PUBLICATION
+- Work items: AR-SITE-GLOBAL-004
+- Depends on batches: ARB-SITE-GLOBAL-003
+- Depends on tasks: None
+- Branch: site-agentready-global-trust
+- PR title: site(trust): publish company and legal foundation
+
+Deliverables:
+  - Publish company trust security privacy and legal foundation
+Acceptance criteria:
+  - Publish company trust security privacy and legal foundation complete after preceding stacked site batch is reviewed
+Required evidence:
+  - Publish company trust security privacy and legal foundation evidence
+
+### ARB-SITE-GLOBAL-005 - Publish developer documentation adoption examples and contribution foundation
+- Status: PLANNED
+- Spec status: SKELETON
+- Owner: CODEX
+- Milestone: M3
+- Horizon: BEFORE_COMMUNITY_PUBLICATION
+- Work items: AR-SITE-GLOBAL-005
+- Depends on batches: ARB-SITE-GLOBAL-004
+- Depends on tasks: None
+- Branch: site-agentready-global-docs-adoption
+- PR title: site(docs): publish developer documentation and adoption foundation
+
+Deliverables:
+  - Publish developer documentation adoption examples and contribution foundation
+Acceptance criteria:
+  - Publish developer documentation adoption examples and contribution foundation complete after preceding stacked site batch is reviewed
+Required evidence:
+  - Publish developer documentation adoption examples and contribution foundation evidence
+
+### ARB-SITE-GLOBAL-006 - Publish SEO GEO AI-first and international foundation
+- Status: PLANNED
+- Spec status: SKELETON
+- Owner: CODEX
+- Milestone: M3
+- Horizon: BEFORE_COMMUNITY_PUBLICATION
+- Work items: AR-SITE-GLOBAL-006
+- Depends on batches: ARB-SITE-GLOBAL-005
+- Depends on tasks: None
+- Branch: site-agentready-global-discovery
+- PR title: site(discovery): publish SEO GEO and international foundation
+
+Deliverables:
+  - Publish SEO GEO AI-first and international foundation
+Acceptance criteria:
+  - Publish SEO GEO AI-first and international foundation complete after preceding stacked site batch is reviewed
+Required evidence:
+  - Publish SEO GEO AI-first and international foundation evidence
+
+### ARB-SITE-GLOBAL-007 - Validate complete global standard site
+- Status: PLANNED
+- Spec status: SKELETON
+- Owner: CODEX_AND_JEASON
+- Milestone: M3
+- Horizon: BEFORE_COMMUNITY_PUBLICATION
+- Work items: AR-SITE-GLOBAL-007
+- Depends on batches: ARB-SITE-GLOBAL-006
+- Depends on tasks: None
+- Branch: qa-agentready-global-standard-site
+- PR title: qa(site): validate complete global standard site
+
+Deliverables:
+  - Validate complete global standard site
+Acceptance criteria:
+  - Validate complete global standard site complete after preceding stacked site batch is reviewed
+Required evidence:
+  - Validate complete global standard site evidence
 
 ### ARB-COM-003 - Validate public Community installation
 - Status: PLANNED
@@ -438,7 +509,7 @@ Required evidence:
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Work items: AR-COM-008
-- Depends on batches: ARB-SITE-PREMIUM-003, ARB-COM-001
+- Depends on batches: ARB-SITE-GLOBAL-007, ARB-COM-001
 - Depends on tasks: None
 - Branch: qa-community-public-installation
 - PR title: qa(community): validate public AgentReady installation
@@ -1996,6 +2067,49 @@ Required evidence:
   - Add hosted CI history and governance evidence
   - Add Agency client workspaces and branding evidence
 
+### ARB-AUTO-001 - SITE execution batch
+- Status: PLANNED
+- Spec status: SKELETON
+- Owner: CODEX
+- Milestone: M3
+- Horizon: BEFORE_COMMUNITY_PUBLICATION
+- Work items: AR-SITE-PREMIUM-002, AR-SITE-PREMIUM-003
+- Depends on batches: None
+- Depends on tasks: None
+- Branch: site-redesign-homepage-and-core-product-pages
+- PR title: site(agentready): complete site batch
+
+Deliverables:
+  - Redesign homepage and core product pages
+  - Validate premium mobile accessibility performance and SEO
+Acceptance criteria:
+  - hero defines the category and primary action within one viewport
+  - homepage follows problem demonstration OpenAPI and MCP CI differentiation proof trust limitation CTA order
+  - product demonstration uses real AgentReady findings outputs and policy behavior
+  - Community is available free and Pro remains in preparation
+  - no unavailable feature or fake customer proof is presented
+  - sections use varied composition rather than repeated card grids
+  - all commands tags rule codes and outputs match merged product behavior
+  - Android iPhone-size tablet and desktop layouts pass
+  - keyboard focus semantics contrast touch targets and reduced motion pass
+  - no horizontal overflow broken link empty CTA or hidden critical content remains
+  - critical product content is available without JavaScript
+  - performance evidence meets documented static-site budgets
+  - titles descriptions canonicals structured data and internal links are valid
+  - stale manual offers and unsupported product claims are absent
+  - mandatory limitation remains on key pages
+Required evidence:
+  - desktop and mobile page evidence
+  - content-source mapping
+  - CTA and link audit
+  - real product-output provenance
+  - viewport matrix
+  - accessibility audit
+  - performance report
+  - SEO and structured-data report
+  - broken-link report
+  - final visual consistency review
+
 ## Detailed Tasks
 ### AR-GOV-EPIC - Governance and anti-drift
 - Type: EPIC
@@ -2425,7 +2539,7 @@ Required evidence:
   - owner checkpoint attestation
   - public listing verification
 
-### AR-SITE-PREMIUM-EPIC - Premium public product site before external validation
+### AR-SITE-PREMIUM-EPIC - Global standard public site before external validation
 - Type: EPIC
 - Status: PLANNED
 - Owner: CODEX_AND_JEASON
@@ -2443,7 +2557,7 @@ Acceptance criteria:
 Required evidence:
   - child tasks tracked in ledger
 
-### AR-SITE-PREMIUM-001 - Build premium design system navigation and footer
+### AR-SITE-PREMIUM-001 - Build global site shell navigation and footer
 - Type: CODEX_WORK_ITEM
 - Status: IN_REVIEW
 - Owner: CODEX_AND_JEASON
@@ -2486,6 +2600,138 @@ Required evidence:
   - shared asset inventory and size summary
   - owner visual review before merge
 
+### AR-SITE-GLOBAL-002 - Publish global product scanners CI and planned pricing foundation
+- Type: CODEX_WORK_ITEM
+- Status: IN_REVIEW
+- Owner: CODEX_AND_JEASON
+- Milestone: M3
+- Horizon: BEFORE_COMMUNITY_PUBLICATION
+- Workstream: SITE
+- Weight: 5
+- Execution batch: ARB-SITE-GLOBAL-002
+- Depends on: None
+- PR: #134
+Deliverables:
+  - category-defining homepage
+  - product overview
+  - Community page
+  - planned Pro page
+  - truthful pricing page
+  - complete OpenAPI and MCP scanner presentation
+  - CI Gate and CLI adoption sections
+  - real report and agentready.json demonstrations
+  - complete combined preview based on PR #132
+Acceptance criteria:
+  - a new visitor understands the problem product and primary action within one viewport
+  - OpenAPI and MCP pages explain detection coverage and show realistic findings before file selection
+  - the real scanners remain functional
+  - browser CLI and GitHub Action paths are visible
+  - Community is shown as available and free
+  - planned Pro price is 24 EUR excluding tax monthly or 240 EUR excluding tax annually
+  - Pro is clearly not purchasable and unavailable features are labelled planned
+  - Team Agency and Enterprise are not presented as available
+  - real product outputs and immutable Action usage are used
+  - no fake proof customer benchmark certification or standard-status claim is added
+  - page bodies use varied premium composition rather than repetitive cards
+  - all pages remain usable on mobile and without JavaScript for core content
+Required evidence:
+  - desktop and mobile screenshots for every primary page
+  - real output provenance
+  - pricing source mapping
+  - CTA and link report
+  - no-JavaScript evidence
+  - combined preview URL
+
+### AR-SITE-GLOBAL-003 - Publish AgentReady standard rules and governance foundation
+- Type: CODEX_WORK_ITEM
+- Status: PLANNED
+- Owner: CODEX
+- Milestone: M3
+- Horizon: BEFORE_COMMUNITY_PUBLICATION
+- Workstream: SITE
+- Weight: 5
+- Execution batch: ARB-SITE-GLOBAL-003
+- Depends on: None
+
+Deliverables:
+  - Publish AgentReady standard rules and governance foundation
+Acceptance criteria:
+  - Publish AgentReady standard rules and governance foundation complete after preceding stacked site batch is reviewed
+Required evidence:
+  - Publish AgentReady standard rules and governance foundation evidence
+
+### AR-SITE-GLOBAL-004 - Publish company trust security privacy and legal foundation
+- Type: CODEX_WORK_ITEM
+- Status: PLANNED
+- Owner: CODEX
+- Milestone: M3
+- Horizon: BEFORE_COMMUNITY_PUBLICATION
+- Workstream: SITE
+- Weight: 5
+- Execution batch: ARB-SITE-GLOBAL-004
+- Depends on: None
+
+Deliverables:
+  - Publish company trust security privacy and legal foundation
+Acceptance criteria:
+  - Publish company trust security privacy and legal foundation complete after preceding stacked site batch is reviewed
+Required evidence:
+  - Publish company trust security privacy and legal foundation evidence
+
+### AR-SITE-GLOBAL-005 - Publish developer documentation adoption examples and contribution foundation
+- Type: CODEX_WORK_ITEM
+- Status: PLANNED
+- Owner: CODEX
+- Milestone: M3
+- Horizon: BEFORE_COMMUNITY_PUBLICATION
+- Workstream: SITE
+- Weight: 5
+- Execution batch: ARB-SITE-GLOBAL-005
+- Depends on: None
+
+Deliverables:
+  - Publish developer documentation adoption examples and contribution foundation
+Acceptance criteria:
+  - Publish developer documentation adoption examples and contribution foundation complete after preceding stacked site batch is reviewed
+Required evidence:
+  - Publish developer documentation adoption examples and contribution foundation evidence
+
+### AR-SITE-GLOBAL-006 - Publish SEO GEO AI-first and international foundation
+- Type: CODEX_WORK_ITEM
+- Status: PLANNED
+- Owner: CODEX
+- Milestone: M3
+- Horizon: BEFORE_COMMUNITY_PUBLICATION
+- Workstream: SITE
+- Weight: 5
+- Execution batch: ARB-SITE-GLOBAL-006
+- Depends on: None
+
+Deliverables:
+  - Publish SEO GEO AI-first and international foundation
+Acceptance criteria:
+  - Publish SEO GEO AI-first and international foundation complete after preceding stacked site batch is reviewed
+Required evidence:
+  - Publish SEO GEO AI-first and international foundation evidence
+
+### AR-SITE-GLOBAL-007 - Validate complete global standard site
+- Type: CODEX_WORK_ITEM
+- Status: PLANNED
+- Owner: CODEX
+- Milestone: M3
+- Horizon: BEFORE_COMMUNITY_PUBLICATION
+- Workstream: SITE
+- Weight: 5
+- Execution batch: ARB-SITE-GLOBAL-007
+- Depends on: None
+
+Deliverables:
+  - Validate complete global standard site
+Acceptance criteria:
+  - Validate complete global standard site complete after preceding stacked site batch is reviewed
+Required evidence:
+  - Validate complete global standard site evidence
+
 ### AR-SITE-PREMIUM-002 - Redesign homepage and core product pages
 - Type: CODEX_WORK_ITEM
 - Status: PLANNED
@@ -2494,7 +2740,7 @@ Required evidence:
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Workstream: SITE
 - Weight: 5
-- Execution batch: ARB-SITE-PREMIUM-002
+- Execution batch: ARB-AUTO-001
 - Depends on: None
 
 Deliverables:
@@ -2526,7 +2772,7 @@ Required evidence:
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Workstream: SITE
 - Weight: 5
-- Execution batch: ARB-SITE-PREMIUM-003
+- Execution batch: ARB-AUTO-001
 - Depends on: None
 
 Deliverables:
