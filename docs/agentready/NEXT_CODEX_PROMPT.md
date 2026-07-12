@@ -8,7 +8,7 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 No CODEX execution batch is currently authorized.
 
 The current next action belongs to:
-JEASON - ARB-SITE-PREMIUM-001 - Build global site shell navigation and footer
+JEASON - ARB-SITE-GLOBAL-002 - Publish global product scanners CI and planned pricing foundation
 
 Codex prompts are generated from execution batches, not directly from detailed work items. Codex must not start another implementation prompt until the blocking owner, legal, security, design, or external action is complete and the ledger has been reconciled.
 

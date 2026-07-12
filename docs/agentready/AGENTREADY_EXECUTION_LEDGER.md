@@ -335,7 +335,7 @@ Required evidence:
   - rollback procedure
 
 ### ARB-SITE-PREMIUM-001 - Build global site shell navigation and footer
-- Status: IN_REVIEW
+- Status: READY
 - Spec status: EXECUTION_READY
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
