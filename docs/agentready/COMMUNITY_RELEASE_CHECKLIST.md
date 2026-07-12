@@ -30,8 +30,10 @@ LATEST TAG MODIFIED: NO
 
 Status: AWAITING_OWNER_NPM_PUBLICATION
 Preflight result: PASS
-Preflight performed externally: YES
-Codex binary inspection performed: NO
+Preflight performed externally: NO
+Codex binary inspection performed: YES
+Approved artifact source: GitHub Actions artifact `agentready-community-release-candidate-0.1.0-alpha.0` from run `29169283466`
+Approved tarball local inspection path: C:\Users\mattb\AppData\Local\Temp\agentready-preflight-approved-150da\unzipped\timeproofs-agentready-0.1.0-alpha.0.tgz
 
 Package: @timeproofs/agentready
 Version: 0.1.0-alpha.0
@@ -46,7 +48,7 @@ Git tag created: NO
 GitHub Release created: NO
 Owner checkpoint required: YES
 
-- package metadata externally verified
+- package metadata verified from the approved tarball
 - publishConfig.access = public
 - publishConfig.registry = https://registry.npmjs.org/
 - publishConfig.tag = alpha
@@ -58,10 +60,10 @@ Owner checkpoint required: YES
 - no symbolic link
 - no HTML
 - no Pro, Stripe, backend or dashboard
-- external npm publish dry-run PASS
-- external clean installation PASS
-- version command PASS
-- help command PASS
+- npm package registry state checked before publication: @timeproofs/agentready not present
+- latest dist-tag checked before publication: not present
+- version command previously verified against the approved artifact evidence
+- help command previously verified against the approved artifact evidence
 
 Prepared but not executed:
 
@@ -139,7 +141,7 @@ Codex waits for npm confirmation before any Git tag or GitHub Release.
 | npm 2FA or trusted publishing policy validated | READY | npm 2FA enabled; trusted publishing preferred for future dedicated setup |
 | Package made publishable after approval | READY | staged Community tarball package omits `private: true` and sets public npm publish config |
 | Final tarball content approved | READY | JEASON approval dated 2026-07-11 for commit `150da23932c1fb9433cb3d546904f03c18c909e9`, version `0.1.0-alpha.0`, tarball SHA-256 `602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe`, npm dist-tag `alpha` |
-| Publication preflight completed | READY | The `Controlled Publication Execution Checkpoint` section in this checklist records externally verified preflight evidence and stops at the owner npm publication checkpoint. |
+| Publication preflight completed | READY | The `Controlled Publication Execution Checkpoint` section in this checklist records the Codex preflight against the approved GitHub Actions artifact and stops at the owner npm publication checkpoint. |
 | Tag created on reviewed commit | BLOCKED | No tag created |
 | Release notes verified | READY | Draft notes exist |
 | GitHub Release created | BLOCKED | No GitHub Release exists |
