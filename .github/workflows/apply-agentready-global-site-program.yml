@@ -1,26 +1,36 @@
 name: Apply AgentReady Global Standard Site Program
 
 on:
-  push:
+  pull_request:
     branches:
-      - docs-agentready-global-site-program
+      - timeproofs
 
 permissions:
   contents: write
 
 jobs:
   migrate:
-    if: ${{ !contains(github.event.head_commit.message, '[global-site-applied]') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           ref: docs-agentready-global-site-program
           fetch-depth: 0
+      - name: Check whether migration is pending
+        id: guard
+        shell: bash
+        run: |
+          if test -f docs/agentready/GLOBAL_STANDARD_SITE_PROGRAM.md; then
+            echo 'needed=false' >> "$GITHUB_OUTPUT"
+          else
+            echo 'needed=true' >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/setup-node@v4
+        if: steps.guard.outputs.needed == 'true'
         with:
           node-version: '20'
       - name: Preserve temporary migration files for commit
+        if: steps.guard.outputs.needed == 'true'
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -36,8 +46,10 @@ jobs:
           p.write_text(text.replace(block, ''))
           PY
       - name: Apply global standard site governance
+        if: steps.guard.outputs.needed == 'true'
         run: node scripts/apply-agentready-global-site-program.mjs
       - name: Regenerate canonical execution system
+        if: steps.guard.outputs.needed == 'true'
         run: |
           node scripts/rebuild-agentready-ledger-data.mjs
           node scripts/generate-agentready-ledger-views.mjs --write
@@ -45,6 +57,7 @@ jobs:
           node scripts/generate-agentready-next-action.mjs --write
           node scripts/generate-agentready-next-prompt.mjs --write
       - name: Record validation diagnostics
+        if: steps.guard.outputs.needed == 'true'
         shell: bash
         run: |
           set +e
@@ -78,6 +91,7 @@ jobs:
           NODE
           exit 0
       - name: Commit generated governance and diagnostics
+        if: steps.guard.outputs.needed == 'true'
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
