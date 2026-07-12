@@ -1977,83 +1977,182 @@
       "source_documents": [
         "docs/agentready/GITHUB_ACTION_VERSIONING.md",
         "docs/agentready/GITHUB_ACTION_USAGE.md",
+        "docs/agentready/GITHUB_ACTION_MARKETPLACE_EXECUTION_SPEC.md",
         "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
       "branch": "feat-distribution-agentready-marketplace-action",
       "pr_title": "feat(distribution): publish AgentReady GitHub Marketplace action",
       "allowed_paths": [
-        ".github/**",
+        "action.yml",
+        ".github/actions/agentready/action.yml",
+        ".github/workflows/**",
+        "cli/tests/**",
+        "scripts/**",
         "docs/agentready/**",
         "README.md",
         "AGENTREADY_PROJECT_CONTEXT.md",
+        "CHANGELOG.md",
         "index.html",
         "pricing.html",
-        "agentready-ci.html",
-        "action.yml"
+        "agentready-ci.html"
       ],
       "forbidden_paths": [
         "agentready-core/**",
         "bin/**",
         "package.json",
-        "LICENSE"
+        "packaging/agentready-community/**",
+        "LICENSE",
+        "NOTICE",
+        "server/**",
+        "api/**"
       ],
       "acceptance_criteria": [
-        "Action is consumable from a public distribution path",
-        "release tag and full commit SHA pinning are documented",
-        "minimum GitHub permissions are documented",
-        "Action inputs outputs and failure behavior are documented",
-        "provenance dependency secret and code-scanning controls are documented where supported",
-        "compromised-release revocation and replacement procedure is documented",
-        "public site no longer presents manual review Fix Pack email payment or mandatory contact as the active Community/Pro model",
+        "one Marketplace metadata file exists at repository root as action.yml",
+        "nested Action metadata is removed after every reference is migrated",
+        "root Action preserves file type min-score fail-on and out inputs",
+        "root Action preserves score status report-path and contract-path outputs",
+        "root Action preserves exit codes and policy-failure outputs",
+        "root metadata contains the reviewed unique-name candidate author description shield branding and blue color",
+        "internal workflows use the root Action",
+        "public docs include immutable Action tag and full-SHA examples",
+        "canonical consumer workflow declares contents read and no broader permissions",
+        "no secret or TimeProofs backend is required",
+        "existing v0.1.0-alpha.0 tag and release remain unchanged",
+        "reserved tag agentready-action-v0.1.0-alpha.0 is used only at the owner checkpoint",
+        "Marketplace publication is performed only through the reviewed owner checkpoint",
         "public site states Community is available and Pro is in preparation",
-        "npm and public Action installation paths are visible",
-        "Marketplace wording does not imply GitHub security validation"
+        "active public pages remove manual review Fix Pack email payment mandatory contact and available-Pro wording",
+        "Marketplace wording does not imply GitHub validation certification or guaranteed safety",
+        "no npm operation package version change engine change or runtime feature is introduced"
       ],
       "required_commands": [
+        "node agentready-core/tests/run-agentready-core-tests.mjs",
+        "node cli/tests/run-agentready-cli-tests.mjs",
         "node cli/tests/run-agentready-action-smoke-test.mjs",
+        "node cli/tests/run-agentready-package-smoke-test.mjs",
+        "node cli/tests/run-agentready-community-release-workflow-test.mjs",
+        "node scripts/validate-agentready-action-marketplace-readiness.mjs",
+        "node scripts/rebuild-agentready-ledger-data.mjs",
+        "node scripts/generate-agentready-ledger-views.mjs --write",
+        "node scripts/generate-agentready-status.mjs --write",
+        "node scripts/generate-agentready-next-action.mjs --write",
+        "node scripts/generate-agentready-next-prompt.mjs --write",
         "node scripts/validate-agentready-strategy-docs.mjs",
-        "node scripts/validate-agentready-execution-system.mjs"
+        "node scripts/validate-agentready-execution-system.mjs",
+        "git diff --check"
       ],
       "required_evidence": [
-        "public Action URL or public distribution evidence",
-        "copyable pinned workflow",
-        "permissions review",
-        "supply-chain control evidence",
-        "Marketplace compliance evidence",
-        "public-site alignment evidence"
+        "root action.yml metadata audit",
+        "nested-reference migration inventory",
+        "Action test and workflow evidence",
+        "exact approved Action implementation commit SHA",
+        "immutable Action tag and verified target",
+        "GitHub prerelease URL",
+        "Marketplace listing URL",
+        "owner private agreement and 2FA completion attestation without secrets",
+        "public immutable-tag workflow run",
+        "full-SHA usage example",
+        "minimum-permissions review",
+        "supply-chain review",
+        "public-site alignment report",
+        "compromised-release and rollback procedure"
       ],
       "evidence": [],
       "execution_batch_id": "ARB-COM-002",
-      "manual_actions": [],
-      "authorized_actions": [],
-      "forbidden_actions": [],
-      "codex_preflight_steps": [],
-      "owner_checkpoint_steps": [],
-      "post_confirmation_steps": [],
+      "manual_actions": [
+        "JEASON reviews and approves the exact implementation commit before tagging",
+        "JEASON accepts the GitHub Marketplace Developer Agreement if requested",
+        "JEASON privately creates the immutable Action tag and Marketplace GitHub Release with 2FA",
+        "JEASON provides only public Release and Marketplace URLs and confirmation, never credentials or codes",
+        "JEASON reviews final evidence before merge"
+      ],
+      "authorized_actions": [
+        "create root action.yml and remove the nested Action metadata after reference migration",
+        "update AgentReady workflows tests active docs and the three approved public pages",
+        "prepare the Action-specific prerelease notes and evidence record",
+        "after owner approval create public documentation using agentready-action-v0.1.0-alpha.0 and the verified full SHA",
+        "verify the public GitHub Release and Marketplace listing"
+      ],
+      "forbidden_actions": [
+        "do not perform any npm login publish unpublish deprecate or dist-tag operation",
+        "do not move delete recreate or repurpose v0.1.0-alpha.0",
+        "do not create a moving Action major tag",
+        "do not modify package.json package staging AgentReady engine or CLI implementation",
+        "do not request receive print store or create passwords 2FA codes recovery codes tokens or secrets",
+        "do not automate Marketplace agreement acceptance or owner 2FA",
+        "do not add telemetry contract uploads hosted scans runtime execution billing Stripe accounts licenses or dashboards",
+        "do not claim GitHub reviewed certified or guaranteed AgentReady results",
+        "do not merge before owner review and post-publication evidence"
+      ],
+      "codex_preflight_steps": [
+        "verify v0.1.0-alpha.0 still targets 150da23932c1fb9433cb3d546904f03c18c909e9",
+        "verify root action.yml is absent before implementation",
+        "run the existing nested Action tests before migration",
+        "inventory every .github/actions/agentready reference",
+        "inventory active site wording for manual review Fix Pack email payment mandatory contact stale Community status and available-Pro claims",
+        "confirm no npm operation is needed",
+        "open a draft PR before the owner checkpoint"
+      ],
+      "owner_checkpoint_steps": [
+        "review and approve the exact implementation commit SHA",
+        "accept the GitHub Marketplace Developer Agreement if GitHub requests it",
+        "create immutable tag agentready-action-v0.1.0-alpha.0 on exactly the approved implementation commit",
+        "draft a prerelease from that tag and select Publish this Action to the GitHub Marketplace",
+        "resolve only factual metadata warnings or a name conflict through the reviewed PR",
+        "choose the closest current Marketplace categories",
+        "publish privately with owner 2FA",
+        "return only the public Release URL Marketplace URL and confirmation without credentials or codes"
+      ],
+      "post_confirmation_steps": [
+        "verify the Action tag target",
+        "verify the GitHub prerelease and Marketplace listing",
+        "verify final name description branding categories links inputs outputs and usage",
+        "run the public Action by immutable tag from a controlled workflow",
+        "record the full-SHA form",
+        "replace documentation placeholders with verified references",
+        "record release listing workflow and site-alignment evidence",
+        "leave the PR open for final human review and merge"
+      ],
       "external_verification": null,
       "decision_gate": null,
       "validation_thresholds": null,
       "recurrence": null,
-      "notes": "",
+      "notes": "The Action-specific tag namespace preserves the existing immutable npm and repository release. If GitHub Marketplace rejects the current repository composition, stop publication and return through change control for a dedicated Action repository decision.",
       "deliverables": [
-        "public Action distribution",
-        "copyable workflow",
-        "immutable version pinning guidance",
-        "minimum permissions",
-        "supply-chain and revocation guidance",
-        "current public-site Community/Pro alignment"
+        "canonical root action.yml",
+        "nested Action metadata removal and reference migration",
+        "public tag-pinned and SHA-pinned workflows",
+        "minimum permissions example",
+        "Marketplace release preparation",
+        "supply-chain and compromised-release procedure",
+        "active public-site Community and Pro alignment",
+        "Action release evidence record"
       ],
       "estimated_files_or_surfaces": [
-        "one coherent file or surface family"
+        "/action.yml",
+        "/.github/actions/agentready/action.yml removal",
+        "AgentReady workflows",
+        "Action tests",
+        "README and Action docs",
+        "index.html",
+        "pricing.html",
+        "agentready-ci.html",
+        "Action release evidence"
       ],
       "independent_test_plan": [
-        "run Action smoke test",
-        "run a pinned Action from an external-style fixture repository",
-        "verify public pages contain the active Community/Pro status and no obsolete manual offer",
-        "run strategy and execution-system validators"
+        "run the complete core CLI Action package and Community release workflow suite",
+        "validate root metadata and absence of nested metadata",
+        "exercise OpenAPI PASS MCP PASS expected policy FAIL and invalid-input behavior",
+        "verify outputs survive valid policy failure",
+        "verify canonical workflow permissions are contents read only",
+        "verify all local Action references are migrated",
+        "verify tag and full-SHA examples",
+        "verify active site pages contain current Community Pro and limitation copy and no obsolete offers",
+        "after owner publication run the public Action by immutable tag and record the full-SHA form",
+        "run strategy and execution-system validators and deterministic regeneration"
       ],
       "rollback_boundary": "Revert feat-distribution-agentready-marketplace-action without reverting unrelated work.",
-      "scope_justification": "Single coherent deliverable with independent review and rollback."
+      "scope_justification": "One atomic public-distribution boundary: root Action migration, Marketplace-compliant metadata, owner publication checkpoint, immutable release evidence, and narrowly scoped active-site alignment share one review and rollback boundary."
     },
     {
       "id": "AR-COM-008",
@@ -2174,41 +2273,65 @@
       "blocks": [],
       "source_documents": [
         "docs/agentready/GITHUB_ACTION_VERSIONING.md",
+        "docs/agentready/GITHUB_ACTION_USAGE.md",
+        "docs/agentready/GITHUB_ACTION_MARKETPLACE_EXECUTION_SPEC.md",
         "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ],
-      "branch": "docs-marketplace-agentready-action-compliance",
-      "pr_title": "docs(distribution): prepare AgentReady Marketplace listing compliance",
+      "branch": "feat-distribution-agentready-marketplace-action",
+      "pr_title": "feat(distribution): publish AgentReady GitHub Marketplace action",
       "allowed_paths": [
-        ".github/**",
+        "action.yml",
+        ".github/actions/agentready/action.yml",
+        ".github/workflows/**",
+        "cli/tests/**",
+        "scripts/**",
         "docs/agentready/**",
         "README.md",
-        "action.yml"
+        "AGENTREADY_PROJECT_CONTEXT.md",
+        "CHANGELOG.md",
+        "index.html",
+        "pricing.html",
+        "agentready-ci.html"
       ],
       "forbidden_paths": [
         "agentready-core/**",
         "bin/**",
         "package.json",
+        "packaging/agentready-community/**",
         "LICENSE",
-        "*.html"
+        "NOTICE",
+        "server/**",
+        "api/**"
       ],
       "acceptance_criteria": [
-        "Marketplace metadata requirements are satisfied",
-        "branding and repository links are valid",
-        "listing copy states static-analysis scope and mandatory limitation",
-        "listing does not claim certification guaranteed safety or GitHub validation",
-        "immutable tag and SHA pinning guidance is included",
-        "minimum permissions are visible"
+        "repository is public",
+        "one action.yml exists at root",
+        "metadata name is confirmed unique by the Marketplace interface",
+        "author description inputs outputs runs and branding are valid",
+        "listing copy states static scope privacy behavior and mandatory limitation",
+        "listing does not imply GitHub validation certification or guaranteed safety",
+        "immutable tag and full-SHA guidance are visible",
+        "minimum contents-read permission is visible",
+        "Marketplace Developer Agreement and owner 2FA remain private owner actions",
+        "final public Release and Marketplace URLs are recorded",
+        "a Marketplace validation rejection stops publication and is recorded honestly"
       ],
       "required_commands": [
         "node cli/tests/run-agentready-action-smoke-test.mjs",
+        "node scripts/validate-agentready-action-marketplace-readiness.mjs",
         "node scripts/validate-agentready-strategy-docs.mjs",
         "node scripts/validate-agentready-execution-system.mjs"
       ],
       "required_evidence": [
-        "Marketplace metadata review",
+        "root metadata review",
+        "unique-name UI result",
         "listing copy review",
-        "branding and links review",
-        "version pinning and permissions review"
+        "branding and category review",
+        "version pinning and permissions review",
+        "GitHub Release URL",
+        "Marketplace URL",
+        "owner checkpoint attestation",
+        "public listing verification"
       ],
       "evidence": [],
       "execution_batch_id": "ARB-COM-002",
@@ -2224,19 +2347,27 @@
       "recurrence": null,
       "notes": "",
       "deliverables": [
-        "Marketplace metadata and branding compliance",
+        "Marketplace-compliant root metadata",
         "factual listing copy",
-        "version and permission guidance",
-        "listing evidence checklist"
+        "unique-name owner verification",
+        "branding and category review",
+        "tag release and listing evidence checklist",
+        "Marketplace removal and corrective-release procedure"
       ],
       "estimated_files_or_surfaces": [
-        "one coherent file or surface family"
+        "/action.yml",
+        "Marketplace GitHub Release",
+        "Marketplace listing",
+        "Action release evidence documentation"
       ],
       "independent_test_plan": [
-        "run relevant existing tests",
-        "run execution-system validator"
+        "run the Marketplace readiness validator",
+        "review metadata against current official GitHub requirements",
+        "verify UI validation warnings at the owner checkpoint",
+        "verify public listing after publication",
+        "verify removal and corrective-release instructions"
       ],
-      "rollback_boundary": "Revert docs-marketplace-agentready-action-compliance without reverting unrelated work.",
+      "rollback_boundary": "Revert feat-distribution-agentready-marketplace-action without reverting unrelated work.",
       "scope_justification": "Single coherent deliverable with independent review and rollback."
     },
     {
@@ -14813,9 +14944,9 @@
       "objective": "Publish public GitHub Action distribution.",
       "milestone": "M3",
       "delivery_horizon": "BEFORE_COMMUNITY_PUBLICATION",
-      "status": "PLANNED",
-      "spec_status": "SKELETON",
-      "owner": "CODEX",
+      "status": "READY",
+      "spec_status": "EXECUTION_READY",
+      "owner": "CODEX_AND_JEASON",
       "work_item_ids": [
         "AR-COM-007",
         "AR-COM-009"
@@ -14827,83 +14958,139 @@
       "branch": "feat-distribution-agentready-marketplace-action",
       "pr_title": "feat(distribution): publish AgentReady GitHub Marketplace action",
       "allowed_paths": [
-        ".github/**",
+        "action.yml",
+        ".github/actions/agentready/action.yml",
+        ".github/workflows/**",
+        "cli/tests/**",
+        "scripts/**",
         "docs/agentready/**",
         "README.md",
         "AGENTREADY_PROJECT_CONTEXT.md",
+        "CHANGELOG.md",
         "index.html",
         "pricing.html",
-        "agentready-ci.html",
-        "action.yml"
+        "agentready-ci.html"
       ],
       "forbidden_paths": [
         "agentready-core/**",
         "bin/**",
         "package.json",
+        "packaging/agentready-community/**",
         "LICENSE",
-        "*.html"
+        "NOTICE",
+        "server/**",
+        "api/**"
       ],
       "deliverables": [
-        "Publish public AgentReady GitHub Action distribution",
-        "Prepare GitHub Marketplace listing compliance"
+        "canonical root Marketplace Action",
+        "migrated workflows and tests",
+        "tag-pinned and SHA-pinned public workflows",
+        "Marketplace prerelease and listing",
+        "supply-chain and rollback documentation",
+        "current public-site alignment",
+        "immutable evidence record"
       ],
       "acceptance_criteria": [
-        "Action is consumable from a public distribution path",
-        "release tag and full commit SHA pinning are documented",
-        "minimum GitHub permissions are documented",
-        "Action inputs outputs and failure behavior are documented",
-        "provenance dependency secret and code-scanning controls are documented where supported",
-        "compromised-release revocation and replacement procedure is documented",
-        "public site no longer presents manual review Fix Pack email payment or mandatory contact as the active Community/Pro model",
-        "public site states Community is available and Pro is in preparation",
-        "npm and public Action installation paths are visible",
-        "Marketplace wording does not imply GitHub security validation",
-        "Marketplace metadata requirements are satisfied",
-        "branding and repository links are valid",
-        "listing copy states static-analysis scope and mandatory limitation",
-        "listing does not claim certification guaranteed safety or GitHub validation",
-        "immutable tag and SHA pinning guidance is included",
-        "minimum permissions are visible"
+        "all AR-COM-007 and AR-COM-009 criteria pass",
+        "all automated validations pass before the owner checkpoint",
+        "owner publishes only the approved immutable Action commit",
+        "post-publication public Action run passes",
+        "release listing and site evidence are recorded before merge",
+        "existing npm package release and tag remain unchanged"
       ],
       "independent_test_plan": [
-        "run Action smoke test",
-        "run a pinned Action from an external-style fixture repository",
-        "verify public pages contain the active Community/Pro status and no obsolete manual offer",
-        "run strategy and execution-system validators",
-        "run relevant existing tests",
-        "run execution-system validator"
+        "preflight existing Action behavior",
+        "validate root migration and metadata",
+        "run complete regression suite",
+        "validate active site copy",
+        "perform owner Marketplace checkpoint",
+        "verify public tag listing and full-SHA references",
+        "rerun deterministic governance generation"
       ],
       "required_commands": [
+        "node agentready-core/tests/run-agentready-core-tests.mjs",
+        "node cli/tests/run-agentready-cli-tests.mjs",
         "node cli/tests/run-agentready-action-smoke-test.mjs",
+        "node cli/tests/run-agentready-package-smoke-test.mjs",
+        "node cli/tests/run-agentready-community-release-workflow-test.mjs",
+        "node scripts/validate-agentready-action-marketplace-readiness.mjs",
+        "node scripts/rebuild-agentready-ledger-data.mjs",
+        "node scripts/generate-agentready-ledger-views.mjs --write",
+        "node scripts/generate-agentready-status.mjs --write",
+        "node scripts/generate-agentready-next-action.mjs --write",
+        "node scripts/generate-agentready-next-prompt.mjs --write",
         "node scripts/validate-agentready-strategy-docs.mjs",
-        "node scripts/validate-agentready-execution-system.mjs"
+        "node scripts/validate-agentready-execution-system.mjs",
+        "git diff --check"
       ],
       "required_evidence": [
-        "public Action URL or public distribution evidence",
-        "copyable pinned workflow",
-        "permissions review",
-        "supply-chain control evidence",
-        "Marketplace compliance evidence",
-        "public-site alignment evidence",
-        "Marketplace metadata review",
-        "listing copy review",
-        "branding and links review",
-        "version pinning and permissions review"
+        "root metadata audit",
+        "reference migration inventory",
+        "test and workflow evidence",
+        "approved implementation SHA",
+        "immutable Action tag target",
+        "GitHub prerelease URL",
+        "Marketplace URL",
+        "public tag workflow run",
+        "full-SHA example",
+        "permissions and supply-chain review",
+        "site alignment report",
+        "rollback procedure"
       ],
-      "rollback_boundary": "Revert ARB-COM-002 without reverting unrelated batches.",
-      "scope_justification": "Batch groups compatible work items with one shared review and rollback boundary.",
-      "manual_actions": [],
-      "authorized_actions": [],
-      "forbidden_actions": [],
-      "codex_preflight_steps": [],
-      "owner_checkpoint_steps": [],
-      "post_confirmation_steps": [],
-      "external_verifications": [],
+      "rollback_boundary": "Before tagging, revert or close the PR. After Marketplace publication, preserve the immutable tag and audit trail, remove the affected release from Marketplace if necessary, publish a notice, and issue a corrected immutable Action tag.",
+      "scope_justification": "Root Action distribution, Marketplace publication, evidence, and the approved site alignment form one coherent public-release boundary.",
+      "manual_actions": [
+        "JEASON approves the exact implementation commit",
+        "JEASON accepts any required Marketplace agreement and publishes the tagged prerelease privately with 2FA",
+        "JEASON returns public URLs only",
+        "JEASON reviews final evidence before merge"
+      ],
+      "authorized_actions": [
+        "prepare and validate the root Action",
+        "migrate internal Action references",
+        "update approved docs tests workflows and public pages",
+        "after owner confirmation verify and record the public Action release and Marketplace listing"
+      ],
+      "forbidden_actions": [
+        "no npm operation",
+        "no movement or reuse of v0.1.0-alpha.0",
+        "no moving Action major tag",
+        "no engine CLI package billing backend or runtime changes",
+        "no credentials or 2FA material",
+        "no merge before final owner review"
+      ],
+      "codex_preflight_steps": [
+        "verify existing release immutability",
+        "run existing Action tests",
+        "inventory nested references and stale active-site wording",
+        "confirm root action.yml is absent",
+        "open a draft PR"
+      ],
+      "owner_checkpoint_steps": [
+        "approve exact implementation SHA",
+        "accept Marketplace agreement if required",
+        "tag exact commit as agentready-action-v0.1.0-alpha.0",
+        "publish Marketplace prerelease with private 2FA",
+        "provide public Release and Marketplace URLs only"
+      ],
+      "post_confirmation_steps": [
+        "verify tag target release and listing",
+        "run public tag reference",
+        "record full SHA and final metadata",
+        "replace placeholders",
+        "record all evidence",
+        "request final human review"
+      ],
+      "external_verifications": [
+        "current GitHub Marketplace root metadata and publication requirements",
+        "public Marketplace listing availability"
+      ],
       "evidence": [],
-      "notes": "",
+      "notes": "If the Marketplace UI rejects repository composition or metadata, stop and return through change control rather than bypassing validation.",
       "source_documents": [
         "docs/agentready/GITHUB_ACTION_VERSIONING.md",
         "docs/agentready/GITHUB_ACTION_USAGE.md",
+        "docs/agentready/GITHUB_ACTION_MARKETPLACE_EXECUTION_SPEC.md",
         "docs/agentready/VALIDATION_GATES_AND_EXTERNAL_PILOT.md"
       ]
     },
@@ -22503,6 +22690,14 @@
       "status": "ACTIVE",
       "task_ids": [
         "AR-GOV-003"
+      ]
+    },
+    {
+      "document": "docs/agentready/GITHUB_ACTION_MARKETPLACE_EXECUTION_SPEC.md",
+      "status": "ACTIVE",
+      "task_ids": [
+        "AR-COM-007",
+        "AR-DOC-004"
       ]
     },
     {

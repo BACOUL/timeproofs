@@ -292,9 +292,9 @@ Required evidence:
   - GitHub Release URL
 
 ### ARB-COM-002 - Publish public GitHub Action distribution
-- Status: PLANNED
-- Spec status: SKELETON
-- Owner: CODEX
+- Status: READY
+- Spec status: EXECUTION_READY
+- Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Work items: AR-COM-007, AR-COM-009
@@ -304,36 +304,33 @@ Required evidence:
 - PR title: feat(distribution): publish AgentReady GitHub Marketplace action
 
 Deliverables:
-  - Publish public AgentReady GitHub Action distribution
-  - Prepare GitHub Marketplace listing compliance
+  - canonical root Marketplace Action
+  - migrated workflows and tests
+  - tag-pinned and SHA-pinned public workflows
+  - Marketplace prerelease and listing
+  - supply-chain and rollback documentation
+  - current public-site alignment
+  - immutable evidence record
 Acceptance criteria:
-  - Action is consumable from a public distribution path
-  - release tag and full commit SHA pinning are documented
-  - minimum GitHub permissions are documented
-  - Action inputs outputs and failure behavior are documented
-  - provenance dependency secret and code-scanning controls are documented where supported
-  - compromised-release revocation and replacement procedure is documented
-  - public site no longer presents manual review Fix Pack email payment or mandatory contact as the active Community/Pro model
-  - public site states Community is available and Pro is in preparation
-  - npm and public Action installation paths are visible
-  - Marketplace wording does not imply GitHub security validation
-  - Marketplace metadata requirements are satisfied
-  - branding and repository links are valid
-  - listing copy states static-analysis scope and mandatory limitation
-  - listing does not claim certification guaranteed safety or GitHub validation
-  - immutable tag and SHA pinning guidance is included
-  - minimum permissions are visible
+  - all AR-COM-007 and AR-COM-009 criteria pass
+  - all automated validations pass before the owner checkpoint
+  - owner publishes only the approved immutable Action commit
+  - post-publication public Action run passes
+  - release listing and site evidence are recorded before merge
+  - existing npm package release and tag remain unchanged
 Required evidence:
-  - public Action URL or public distribution evidence
-  - copyable pinned workflow
-  - permissions review
-  - supply-chain control evidence
-  - Marketplace compliance evidence
-  - public-site alignment evidence
-  - Marketplace metadata review
-  - listing copy review
-  - branding and links review
-  - version pinning and permissions review
+  - root metadata audit
+  - reference migration inventory
+  - test and workflow evidence
+  - approved implementation SHA
+  - immutable Action tag target
+  - GitHub prerelease URL
+  - Marketplace URL
+  - public tag workflow run
+  - full-SHA example
+  - permissions and supply-chain review
+  - site alignment report
+  - rollback procedure
 
 ### ARB-COM-003 - Validate public Community installation
 - Status: PLANNED
@@ -2211,30 +2208,47 @@ Required evidence:
 - Depends on: AR-COM-006
 
 Deliverables:
-  - public Action distribution
-  - copyable workflow
-  - immutable version pinning guidance
-  - minimum permissions
-  - supply-chain and revocation guidance
-  - current public-site Community/Pro alignment
+  - canonical root action.yml
+  - nested Action metadata removal and reference migration
+  - public tag-pinned and SHA-pinned workflows
+  - minimum permissions example
+  - Marketplace release preparation
+  - supply-chain and compromised-release procedure
+  - active public-site Community and Pro alignment
+  - Action release evidence record
 Acceptance criteria:
-  - Action is consumable from a public distribution path
-  - release tag and full commit SHA pinning are documented
-  - minimum GitHub permissions are documented
-  - Action inputs outputs and failure behavior are documented
-  - provenance dependency secret and code-scanning controls are documented where supported
-  - compromised-release revocation and replacement procedure is documented
-  - public site no longer presents manual review Fix Pack email payment or mandatory contact as the active Community/Pro model
+  - one Marketplace metadata file exists at repository root as action.yml
+  - nested Action metadata is removed after every reference is migrated
+  - root Action preserves file type min-score fail-on and out inputs
+  - root Action preserves score status report-path and contract-path outputs
+  - root Action preserves exit codes and policy-failure outputs
+  - root metadata contains the reviewed unique-name candidate author description shield branding and blue color
+  - internal workflows use the root Action
+  - public docs include immutable Action tag and full-SHA examples
+  - canonical consumer workflow declares contents read and no broader permissions
+  - no secret or TimeProofs backend is required
+  - existing v0.1.0-alpha.0 tag and release remain unchanged
+  - reserved tag agentready-action-v0.1.0-alpha.0 is used only at the owner checkpoint
+  - Marketplace publication is performed only through the reviewed owner checkpoint
   - public site states Community is available and Pro is in preparation
-  - npm and public Action installation paths are visible
-  - Marketplace wording does not imply GitHub security validation
+  - active public pages remove manual review Fix Pack email payment mandatory contact and available-Pro wording
+  - Marketplace wording does not imply GitHub validation certification or guaranteed safety
+  - no npm operation package version change engine change or runtime feature is introduced
 Required evidence:
-  - public Action URL or public distribution evidence
-  - copyable pinned workflow
-  - permissions review
-  - supply-chain control evidence
-  - Marketplace compliance evidence
-  - public-site alignment evidence
+  - root action.yml metadata audit
+  - nested-reference migration inventory
+  - Action test and workflow evidence
+  - exact approved Action implementation commit SHA
+  - immutable Action tag and verified target
+  - GitHub prerelease URL
+  - Marketplace listing URL
+  - owner private agreement and 2FA completion attestation without secrets
+  - public immutable-tag workflow run
+  - full-SHA usage example
+  - minimum-permissions review
+  - supply-chain review
+  - public-site alignment report
+  - compromised-release and rollback procedure
 
 ### AR-COM-008 - Validate public Community installation
 - Type: CODEX_WORK_ITEM
@@ -2283,22 +2297,34 @@ Required evidence:
 - Depends on: AR-COM-007
 
 Deliverables:
-  - Marketplace metadata and branding compliance
+  - Marketplace-compliant root metadata
   - factual listing copy
-  - version and permission guidance
-  - listing evidence checklist
+  - unique-name owner verification
+  - branding and category review
+  - tag release and listing evidence checklist
+  - Marketplace removal and corrective-release procedure
 Acceptance criteria:
-  - Marketplace metadata requirements are satisfied
-  - branding and repository links are valid
-  - listing copy states static-analysis scope and mandatory limitation
-  - listing does not claim certification guaranteed safety or GitHub validation
-  - immutable tag and SHA pinning guidance is included
-  - minimum permissions are visible
+  - repository is public
+  - one action.yml exists at root
+  - metadata name is confirmed unique by the Marketplace interface
+  - author description inputs outputs runs and branding are valid
+  - listing copy states static scope privacy behavior and mandatory limitation
+  - listing does not imply GitHub validation certification or guaranteed safety
+  - immutable tag and full-SHA guidance are visible
+  - minimum contents-read permission is visible
+  - Marketplace Developer Agreement and owner 2FA remain private owner actions
+  - final public Release and Marketplace URLs are recorded
+  - a Marketplace validation rejection stops publication and is recorded honestly
 Required evidence:
-  - Marketplace metadata review
+  - root metadata review
+  - unique-name UI result
   - listing copy review
-  - branding and links review
+  - branding and category review
   - version pinning and permissions review
+  - GitHub Release URL
+  - Marketplace URL
+  - owner checkpoint attestation
+  - public listing verification
 
 ### AR-ONB-EPIC - Community onboarding
 - Type: EPIC
