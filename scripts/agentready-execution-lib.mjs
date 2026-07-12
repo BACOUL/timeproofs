@@ -152,7 +152,7 @@ function dependencyBatchesDone(batch, batches) {
 }
 
 function isExecutionReadyBatch(batch, ledger) {
-  return batch.owner === "CODEX"
+  return ["CODEX", "CODEX_AND_JEASON"].includes(batch.owner)
     && batch.status === "READY"
     && batch.spec_status === "EXECUTION_READY"
     && dependencyTasksDone(batch, taskMap(ledger))
@@ -345,7 +345,11 @@ function nextActionText(next) {
       "",
       `Required evidence:\n${linesFor(next.batch.required_evidence)}`,
       "",
-      `Manual actions:\n${linesFor(next.batch.manual_actions)}`
+      `Manual actions:\n${linesFor(next.batch.manual_actions)}`,
+      "",
+      `Authorized external actions:\n${linesFor(next.batch.authorized_actions)}`,
+      "",
+      `Forbidden actions:\n${linesFor(next.batch.forbidden_actions)}`
     ].join("\n");
   }
   return [
@@ -370,6 +374,7 @@ function promptForBatch(batch, ledger) {
     `Base: timeproofs`,
     `Batch ID: ${batch.id}`,
     `Work item IDs: ${batch.work_item_ids.join(", ")}`,
+    `Owner: ${batch.owner}`,
     `Milestone: ${batch.milestone}`,
     `Horizon: ${batch.delivery_horizon}`,
     `Objective: ${batch.objective}`,
@@ -414,10 +419,33 @@ function promptForBatch(batch, ledger) {
     `Manual actions:`,
     linesFor(batch.manual_actions),
     "",
+    `Authorized external actions:`,
+    linesFor(batch.authorized_actions),
+    "",
+    batch.codex_preflight_steps?.length ? [
+      `## Étape Codex préalable`,
+      "",
+      linesFor(batch.codex_preflight_steps),
+      ""
+    ].join("\n") : "",
+    batch.owner_checkpoint_steps?.length ? [
+      `## Point de contrôle propriétaire obligatoire`,
+      "",
+      linesFor(batch.owner_checkpoint_steps),
+      ""
+    ].join("\n") : "",
+    batch.post_confirmation_steps?.length ? [
+      `## Après confirmation npm`,
+      "",
+      linesFor(batch.post_confirmation_steps),
+      ""
+    ].join("\n") : "",
     `External verifications:`,
     linesFor(batch.external_verifications),
     "",
-    `Interdictions: stay strictly inside the batch scope, do not publish, do not create tags or releases, and do not merge the PR.`,
+    batch.forbidden_actions?.length
+      ? [`Forbidden actions:`, linesFor(batch.forbidden_actions)].join("\n")
+      : `Interdictions: stay strictly inside the batch scope, do not publish, do not create tags or releases, and do not merge the PR.`,
     "",
     `Response format: summarize files changed, validations, workflow status, draft status, and any remaining human review.`
   ].join("\n");
@@ -824,6 +852,34 @@ export function validateLedger(ledger, compareGenerated = true) {
   }
   const publish = map.get("AR-COM-006");
   if (publish?.status === "READY") for (const blocker of ["AR-COM-001", "AR-COM-002", "AR-COM-003", "AR-COM-004", "AR-COM-005", "AR-COM-006A"]) add(map.get(blocker)?.status === "DONE", `publish READY while ${blocker} is not DONE`);
+  const communityPublishBatch = (ledger.execution_batches || []).find((batch) => batch.id === "ARB-COM-001");
+  if (communityPublishBatch?.status === "READY") {
+    const manualActions = communityPublishBatch.manual_actions || [];
+    const authorizedActions = communityPublishBatch.authorized_actions || [];
+    const forbiddenActions = communityPublishBatch.forbidden_actions || [];
+    const prompt = generatedContents(ledger)[generatedPaths.nextPrompt] || "";
+    add(communityPublishBatch.owner === "CODEX_AND_JEASON", "ARB-COM-001 must be owned by CODEX_AND_JEASON");
+    add(manualActions.length > 0, "ARB-COM-001 must contain JEASON manual actions");
+    add(!manualActions.includes("None"), "ARB-COM-001 must not say Manual actions: None");
+    add(manualActions.some((item) => item.includes("JEASON runs") && item.includes("2FA") && item.includes("terminal")), "ARB-COM-001 missing JEASON private 2FA manual checkpoint");
+    add(authorizedActions.some((item) => item.includes("@timeproofs/agentready@0.1.0-alpha.0") && item.includes("alpha")), "ARB-COM-001 missing authorized alpha npm publication action");
+    add(authorizedActions.some((item) => item.includes("v0.1.0-alpha.0") && item.includes("150da23932c1fb9433cb3d546904f03c18c909e9")), "ARB-COM-001 missing authorized immutable tag target");
+    add(forbiddenActions.some((item) => item.includes("latest")), "ARB-COM-001 must forbid latest");
+    add(forbiddenActions.some((item) => item.includes("another package version")), "ARB-COM-001 must forbid another version");
+    add(forbiddenActions.some((item) => item.includes("rebuild, modify or replace the approved tarball")), "ARB-COM-001 must forbid tarball modification");
+    add(forbiddenActions.some((item) => item.includes("npm token")), "ARB-COM-001 must forbid npm token creation/storage");
+    add(forbiddenActions.some((item) => item.includes("password") && item.includes("2FA code") && item.includes("recovery code")), "ARB-COM-001 must forbid receiving or storing npm secrets and 2FA codes");
+    add(forbiddenActions.some((item) => item.includes("any commit other than 150da23932c1fb9433cb3d546904f03c18c909e9")), "ARB-COM-001 must forbid tagging any commit except approved source commit");
+    add(!prompt.includes("do not publish, do not create tags or releases"), "ARB-COM-001 prompt contains contradictory generic publication ban");
+    add(prompt.includes("CODEX_AND_JEASON"), "ARB-COM-001 prompt must contain CODEX_AND_JEASON");
+    add(prompt.includes("## Point de contrôle propriétaire obligatoire"), "ARB-COM-001 prompt must contain owner checkpoint");
+    add(prompt.includes("602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe"), "ARB-COM-001 prompt missing approved tarball SHA-256");
+    add(prompt.includes("150da23932c1fb9433cb3d546904f03c18c909e9"), "ARB-COM-001 prompt missing approved source commit");
+    add(prompt.includes("alpha"), "ARB-COM-001 prompt missing alpha dist-tag");
+    add(prompt.includes("v0.1.0-alpha.0"), "ARB-COM-001 prompt missing immutable tag");
+    add(prompt.includes("latest"), "ARB-COM-001 prompt missing latest prohibition");
+    add(prompt.includes("never communicates the 2FA code") || prompt.includes("do not request, receive, print or store a password, 2FA code or recovery code"), "ARB-COM-001 prompt must forbid sharing 2FA");
+  }
   for (const task of ledger.tasks.filter((t) => t.workstream === "PRO" && t.status === "READY")) add(map.get("AR-ENG-005")?.status === "DONE", `${task.id} Pro READY before final benchmark`);
   for (const required of ["AR-BILL-001", "AR-BILL-002", "AR-BILL-003", "AR-BILL-004", "AR-BILL-005", "AR-BILL-006", "AR-BILL-007", "AR-BILL-008", "AR-BILL-009", "AR-BILL-010", "AR-BILL-011", "AR-BILL-012", "AR-BILL-013", "AR-FIN-001", "AR-BILL-014"]) add(map.has(required), `missing explicit billing/customer lifecycle task ${required}`);
   for (const required of ["AR-LIC-001", "AR-LIC-002", "AR-LIC-003", "AR-LIC-004", "AR-LIC-005", "AR-LIC-006", "AR-LIC-007", "AR-LIC-008"]) add(map.has(required), `missing explicit licensing task ${required}`);

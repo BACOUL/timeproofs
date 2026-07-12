@@ -18,7 +18,11 @@ LATEST TAG MODIFIED: NO
 FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
 NPM TOKEN: none
 FUTURE AUTH: Trusted Publishing OIDC after initial package creation
-PUBLICATION APPROVED: NO
+PUBLICATION APPROVED: YES
+APPROVED NPM DIST-TAG: alpha
+IMMUTABLE GIT TAG AUTHORIZED: v0.1.0-alpha.0
+GITHUB RELEASE AUTHORIZED: YES
+LATEST TAG MODIFIED: NO
 ```
 
 ## Product
@@ -80,7 +84,7 @@ PUBLICATION APPROVED: NO
 
 | Requirement | Status | Evidence |
 |---|---|---|
-| Explicit release approval recorded | BLOCKED | Not granted |
+| Explicit release approval recorded | READY | JEASON approval dated 2026-07-12 authorizes publication of `@timeproofs/agentready` version `0.1.0-alpha.0` from commit `150da23932c1fb9433cb3d546904f03c18c909e9` and tarball SHA-256 `602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe`, exclusively under npm dist-tag `alpha`; immutable Git tag `v0.1.0-alpha.0` and corresponding GitHub Release are authorized but not yet created. |
 | npm scope controlled | READY | Owner attestation dated 2026-07-11 |
 | npm 2FA or trusted publishing policy validated | READY | npm 2FA enabled; trusted publishing preferred for future dedicated setup |
 | Package made publishable after approval | READY | staged Community tarball package omits `private: true` and sets public npm publish config |

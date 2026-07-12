@@ -252,9 +252,9 @@ Required evidence:
   - human ledger review before merge
 
 ### ARB-COM-001 - Publish Community CLI and immutable release
-- Status: BLOCKED
-- Spec status: SPECIFIED
-- Owner: CODEX
+- Status: READY
+- Spec status: EXECUTION_READY
+- Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Work items: AR-COM-006
@@ -266,10 +266,15 @@ Required evidence:
 Deliverables:
   - Publish Community CLI and immutable release
 Acceptance criteria:
-  - publication only from approved commit
-  - immutable tag and GitHub Release only when approved
+  - Codex verifies the exact approved artifact before publication
+  - JEASON performs the manual npm publish checkpoint with private owner 2FA
+  - publication occurs only under npm dist-tag alpha
+  - latest is not created, moved or modified
+  - immutable tag and GitHub Release are created only after npm publication is confirmed
   - public install tested
 Required evidence:
+  - approved tarball SHA-256 verification
+  - JEASON npm publication confirmation without secrets
   - npm package URL
   - immutable tag
   - GitHub Release URL
@@ -2005,7 +2010,7 @@ Required evidence:
 
 ### AR-COM-006A - Explicit Community publication approval
 - Type: DECISION_GATE
-- Status: DECISION_REQUIRED
+- Status: DONE
 - Owner: JEASON
 - Milestone: M2
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
@@ -2026,8 +2031,8 @@ Required evidence:
 
 ### AR-COM-006 - Publish Community CLI and immutable release
 - Type: CODEX_WORK_ITEM
-- Status: BLOCKED
-- Owner: CODEX
+- Status: READY
+- Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Workstream: COM
@@ -2038,10 +2043,15 @@ Required evidence:
 Deliverables:
   - Publish Community CLI and immutable release
 Acceptance criteria:
-  - publication only from approved commit
-  - immutable tag and GitHub Release only when approved
+  - Codex verifies the exact approved artifact before publication
+  - JEASON performs the manual npm publish checkpoint with private owner 2FA
+  - publication occurs only under npm dist-tag alpha
+  - latest is not created, moved or modified
+  - immutable tag and GitHub Release are created only after npm publication is confirmed
   - public install tested
 Required evidence:
+  - approved tarball SHA-256 verification
+  - JEASON npm publication confirmation without secrets
   - npm package URL
   - immutable tag
   - GitHub Release URL
@@ -2714,7 +2724,7 @@ Required evidence:
 - Workstream: FIN
 - Weight: 3
 - Execution batch: None
-- Depends on: AR-GOV-003
+- Depends on: AR-LIC-008
 
 Deliverables:
   - None
@@ -3542,7 +3552,7 @@ Required evidence:
 - Workstream: SEO
 - Weight: 3
 - Execution batch: None
-- Depends on: None
+- Depends on: AR-SEO-003
 
 Deliverables:
   - None
@@ -3920,7 +3930,7 @@ Required evidence:
 - Workstream: COMP
 - Weight: 3
 - Execution batch: None
-- Depends on: None
+- Depends on: AR-BILL-015
 
 Deliverables:
   - None
