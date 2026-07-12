@@ -6,12 +6,14 @@ on:
       - docs-agentready-com-002-execution-ready
     paths:
       - scripts/refine-agentready-com-002.mjs
+      - scripts/fix-agentready-com-002-release-guard.mjs
       - .github/workflows/refine-agentready-com-002.yml
   pull_request:
     branches:
       - timeproofs
     paths:
       - scripts/refine-agentready-com-002.mjs
+      - scripts/fix-agentready-com-002-release-guard.mjs
       - .github/workflows/refine-agentready-com-002.yml
 
 permissions:
@@ -35,6 +37,9 @@ jobs:
 
       - name: Apply COM-002 specification refinement
         run: node scripts/refine-agentready-com-002.mjs
+
+      - name: Stabilize Community release guard
+        run: node scripts/fix-agentready-com-002-release-guard.mjs
 
       - name: Rebuild canonical execution ledger
         run: node scripts/rebuild-agentready-ledger-data.mjs
@@ -97,6 +102,7 @@ jobs:
       - name: Remove one-time refinement helpers
         run: |
           rm scripts/refine-agentready-com-002.mjs
+          rm scripts/fix-agentready-com-002-release-guard.mjs
           rm .github/workflows/refine-agentready-com-002.yml
 
       - name: Commit validated execution-ready specification
