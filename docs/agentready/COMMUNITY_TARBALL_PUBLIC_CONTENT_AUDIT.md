@@ -1,13 +1,17 @@
-# AgentReady Community Tarball Public Content Audit
+﻿# AgentReady Community Tarball Public Content Audit
 
-Status: APPROVED CONTENT — PUBLICATION NOT APPROVED
+Status: APPROVED CONTENT â€” PUBLICATION NOT APPROVED
 
 ```txt
 TARBALL CONTENT APPROVED: YES
 PUBLICATION APPROVED: NO
 VERSION: 0.1.0-alpha.0
 NPM DIST-TAG: alpha
-LATEST TAG MODIFIED: NO
+LATEST TAG MODIFIED: TEMPORARILY ACCEPTED AS 0.1.0-alpha.0
+LATEST ACCEPTANCE DECISION: ACCEPT_TEMPORARILY
+LATEST TEMPORARY ACCEPTANCE: until first stable release
+FUTURE PRERELEASES DIST-TAG: alpha
+NEW NPM OPERATION AUTHORIZED: NO
 FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
 NPM AUTOMATION TOKEN: none
 TEMPORARY LOCAL OWNER LOGIN: authorized for controlled first publication only
@@ -236,7 +240,7 @@ Controlled results:
 Owner approval statement:
 
 ```txt
-«J’approuve le contenu final corrigé du tarball AgentReady Community 0.1.0-alpha.0, lié au commit 150da23932c1fb9433cb3d546904f03c18c909e9 et au SHA-256 602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe, destiné au dist-tag npm alpha. Cette approbation n’autorise pas encore sa publication.»
+Â«Jâ€™approuve le contenu final corrigÃ© du tarball AgentReady Community 0.1.0-alpha.0, liÃ© au commit 150da23932c1fb9433cb3d546904f03c18c909e9 et au SHA-256 602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe, destinÃ© au dist-tag npm alpha. Cette approbation nâ€™autorise pas encore sa publication.Â»
 ```
 
 This content approval is not a publication authorization.
@@ -352,7 +356,7 @@ Controlled results:
 Owner approval statement:
 
 ```txt
-«J’approuve le contenu final du tarball AgentReady Community 0.1.0-alpha.0, lié au commit 61a5dab90afe6363f7ea386712bb8cdc48e9f665 et au SHA-256 f1381d16277707cfc5d1005ed5e865139aa5a1ed0fcc1fb7de35c2f1a5eab77d. Cette approbation n’autorise pas encore sa publication.»
+Â«Jâ€™approuve le contenu final du tarball AgentReady Community 0.1.0-alpha.0, liÃ© au commit 61a5dab90afe6363f7ea386712bb8cdc48e9f665 et au SHA-256 f1381d16277707cfc5d1005ed5e865139aa5a1ed0fcc1fb7de35c2f1a5eab77d. Cette approbation nâ€™autorise pas encore sa publication.Â»
 ```
 
 This content approval is not a publication authorization and is no longer

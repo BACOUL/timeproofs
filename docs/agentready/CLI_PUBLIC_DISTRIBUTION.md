@@ -1,4 +1,4 @@
-# AgentReady CLI Public Distribution
+﻿# AgentReady CLI Public Distribution
 
 ## Status
 
@@ -78,7 +78,11 @@ explicitly approved.
 ```txt
 VERSION: 0.1.0-alpha.0
 NPM DIST-TAG: alpha
-LATEST TAG MODIFIED: NO
+LATEST TAG MODIFIED: TEMPORARILY ACCEPTED AS 0.1.0-alpha.0
+LATEST ACCEPTANCE DECISION: ACCEPT_TEMPORARILY
+LATEST TEMPORARY ACCEPTANCE: until first stable release
+FUTURE PRERELEASES DIST-TAG: alpha
+NEW NPM OPERATION AUTHORIZED: NO
 FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
 NPM AUTOMATION TOKEN: none
 TEMPORARY LOCAL OWNER LOGIN: authorized for controlled first publication only

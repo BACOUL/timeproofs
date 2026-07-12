@@ -6,16 +6,17 @@ Use only:
 
 - READY
 - BLOCKED
+- PASS_WITH_DOCUMENTED_EXCEPTION
 - NOT_STARTED
 - NOT_APPLICABLE
 
 Publication status: BLOCKED
-Publication execution status: NPM_PUBLISHED — UNEXPECTED_LATEST_REVIEW_REQUIRED
+Publication execution status: NPM_PUBLISHED — LATEST_ACCEPTED_TEMPORARILY
 
 ```txt
 VERSION: 0.1.0-alpha.0
 NPM DIST-TAG: alpha
-LATEST TAG MODIFIED: UNEXPECTEDLY CREATED BY NPM
+LATEST TAG MODIFIED: TEMPORARILY ACCEPTED AS 0.1.0-alpha.0
 FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
 NPM AUTOMATION TOKEN: none
 TEMPORARY LOCAL OWNER LOGIN: authorized for controlled first publication only
@@ -27,12 +28,12 @@ PUBLICATION APPROVED: YES
 APPROVED NPM DIST-TAG: alpha
 IMMUTABLE GIT TAG AUTHORIZED: v0.1.0-alpha.0
 GITHUB RELEASE AUTHORIZED: YES
-LATEST TAG MODIFIED: UNEXPECTEDLY CREATED BY NPM
+LATEST TAG MODIFIED: TEMPORARILY ACCEPTED AS 0.1.0-alpha.0
 ```
 
 ## Controlled Publication Execution Checkpoint
 
-Status: NPM_PUBLISHED — UNEXPECTED_LATEST_REVIEW_REQUIRED
+Status: NPM_PUBLISHED — LATEST_ACCEPTED_TEMPORARILY
 Preflight result: PASS
 Preflight performed externally: NO
 Codex binary inspection performed: YES
@@ -64,12 +65,16 @@ latest expected: NO
 latest removal attempted: YES
 latest removal command: npm dist-tag rm @timeproofs/agentready latest
 latest removal result: E400 400 Bad Request DELETE /-/package/@timeproofs%2fagentready/dist-tags/latest
+owner latest decision: ACCEPT_TEMPORARILY
+latest temporary acceptance: until first stable release
+future prereleases dist-tag: alpha
+new npm operation authorized: NO
 npm logout executed: YES
 npm whoami after logout: ENEEDAUTH
 Git tag created: NO
 GitHub Release created: NO
-continuation authorized: NO
-Owner checkpoint required: YES
+continuation authorized: YES, for immutable Git tag and GitHub Release only
+Owner latest decision recorded: YES
 
 - package metadata verified from the approved tarball
 - publishConfig.access = public
@@ -87,6 +92,10 @@ Owner checkpoint required: YES
 - alpha dist-tag observed after publication: 0.1.0-alpha.0
 - latest dist-tag unexpectedly observed after publication: 0.1.0-alpha.0
 - latest removal attempt failed with E400; no dist-tag was removed
+- JEASON decision AR-COM-006B: ACCEPT_TEMPORARILY
+- latest pointing to 0.1.0-alpha.0 is accepted temporarily until the first stable release
+- every future prerelease must be published explicitly with npm dist-tag alpha
+- no new npm operation is authorized by this decision
 - npm logout succeeded; npm whoami returned ENEEDAUTH after logout
 - no npm password, 2FA code, recovery code, token or secret was recorded in the repository, GitHub, Codex, a PR or a workflow
 - version command previously verified against the approved artifact evidence
@@ -99,8 +108,8 @@ npm publish ./timeproofs-agentready-0.1.0-alpha.0-approved.tgz --access public -
 ```
 
 The command succeeded, but npm exposed `latest: 0.1.0-alpha.0` unexpectedly.
-Continuation is not authorized until JEASON records a decision for this deviation.
-No Git tag or GitHub Release may be created before that decision.
+JEASON accepts this temporarily until the first stable release.
+The remaining controlled release work may proceed only to immutable Git tag and GitHub Release creation. No new npm operation is authorized.
 
 ## Product
 
@@ -166,7 +175,7 @@ No Git tag or GitHub Release may be created before that decision.
 | npm 2FA or trusted publishing policy validated | READY | npm 2FA enabled; trusted publishing preferred for future dedicated setup |
 | Package made publishable after approval | READY | staged Community tarball package omits `private: true` and sets public npm publish config |
 | Final tarball content approved | READY | JEASON approval dated 2026-07-11 for commit `150da23932c1fb9433cb3d546904f03c18c909e9`, version `0.1.0-alpha.0`, tarball SHA-256 `602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe`, npm dist-tag `alpha` |
-| npm publication executed | BLOCKED | npm publication succeeded for `@timeproofs/agentready@0.1.0-alpha.0`, but npm unexpectedly exposed `latest: 0.1.0-alpha.0`; removing `latest` failed with E400, so continuation is blocked pending owner decision. |
+| npm publication executed | PASS_WITH_DOCUMENTED_EXCEPTION | npm publication succeeded for `@timeproofs/agentready@0.1.0-alpha.0`; `alpha` points to `0.1.0-alpha.0`; `latest` also points to `0.1.0-alpha.0` and is temporarily accepted by JEASON until the first stable release. No new npm operation is authorized. |
 | Tag created on reviewed commit | BLOCKED | No tag created |
 | Release notes verified | READY | Draft notes exist |
 | GitHub Release created | BLOCKED | No GitHub Release exists |

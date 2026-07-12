@@ -1,4 +1,4 @@
-# AgentReady Community Release Workflow
+﻿# AgentReady Community Release Workflow
 
 ## Purpose
 
@@ -303,7 +303,7 @@ PUBLICATION APPROVED: YES
 APPROVED BY: JEASON
 APPROVAL DATE: 2026-07-12
 NPM DIST-TAG: alpha
-LATEST TAG MODIFIED: UNEXPECTEDLY CREATED BY NPM
+LATEST TAG MODIFIED: TEMPORARILY ACCEPTED AS 0.1.0-alpha.0
 FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
 NPM AUTOMATION TOKEN: none
 TEMPORARY LOCAL OWNER LOGIN: authorized for controlled first publication only
@@ -322,7 +322,7 @@ alpha
 LATEST TAG MODIFIED:
 
 ```txt
-UNEXPECTEDLY CREATED BY NPM
+TEMPORARILY ACCEPTED AS 0.1.0-alpha.0
 ```
 
 FIRST PUBLICATION AUTH:
@@ -380,9 +380,9 @@ not created
 ```
 
 The Community release workflow prepares and validates the release candidate.
-Actual tag creation remains outside this workflow. It is blocked until the
-owner records a decision for the unexpected npm `latest` dist-tag observed after
-publication.
+Actual tag creation remains outside this workflow. It may proceed only after the
+recorded owner decision accepting the unexpected npm `latest` dist-tag temporarily until the first stable release.
+No new npm operation is authorized.
 
 ## Future Rollback Procedure
 
@@ -395,8 +395,8 @@ When public release exists, rollback must be handled in a dedicated release deci
 - keep affected artifacts traceable.
 
 Rollback or remediation is not active in this workflow step. npm publication has
-succeeded, but the unexpected `latest` dist-tag requires an owner decision
-before any further npm, Git tag or GitHub Release action.
+succeeded, and the unexpected `latest` dist-tag is accepted temporarily by owner decision
+until the first stable release. Further npm action remains forbidden; Git tag and GitHub Release work may continue.
 
 ## Publication Blockers
 
@@ -409,13 +409,14 @@ before any further npm, Git tag or GitHub Release action.
 - immutable tag not yet created.
 - GitHub Release not yet created.
 - trusted publishing provenance not configured for future automated publication.
-- owner decision on the unexpected `latest` deviation required before continuation.
+- owner decision on the unexpected `latest` deviation recorded as ACCEPT_TEMPORARILY.
+- all future prereleases must be published explicitly with npm dist-tag `alpha`;
 
-## Required Decision Before Continuation
+## Controlled Continuation After Latest Decision
 
 Before any immutable Git tag or GitHub Release is created:
 
-- JEASON must decide how to handle the unexpected npm `latest` dist-tag;
+- JEASON has accepted temporarily that `latest` points to `0.1.0-alpha.0` until the first stable release;
 - Codex must not retry npm dist-tag removal, modify `alpha`, modify `latest`,
   deprecate, unpublish or republish without a new explicit instruction;
 - the immutable tag must still point exactly to

@@ -1,4 +1,4 @@
-# AgentReady Community Publication Policy
+﻿# AgentReady Community Publication Policy
 
 Status: ACTIVE PUBLICATION POLICY
 
@@ -55,7 +55,7 @@ APPROVED VERSION: 0.1.0-alpha.0
 APPROVED SOURCE COMMIT: 150da23932c1fb9433cb3d546904f03c18c909e9
 APPROVED TARBALL SHA-256: 602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe
 NPM DIST-TAG: alpha
-LATEST TAG MODIFIED: UNEXPECTEDLY CREATED BY NPM
+LATEST TAG MODIFIED: TEMPORARILY ACCEPTED AS 0.1.0-alpha.0
 FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
 NPM AUTOMATION TOKEN: none
 TEMPORARY LOCAL OWNER LOGIN: authorized for controlled first publication only
@@ -81,18 +81,22 @@ latest dist-tag: 0.1.0-alpha.0
 latest expected: NO
 latest removal attempted: YES
 latest removal result: E400 400 Bad Request DELETE /-/package/@timeproofs%2fagentready/dist-tags/latest
+owner latest decision: ACCEPT_TEMPORARILY
+latest temporary acceptance: until first stable release
+future prereleases dist-tag: alpha
+new npm operation authorized: NO
 npm logout executed: YES
 npm authentication status: LOGGED_OUT
 Git tag created: NO
 GitHub Release created: NO
-continuation authorized: NO
+continuation authorized: YES, for immutable Git tag and GitHub Release only
 ```
 
-The npm publication succeeded, but npm exposed `latest: 0.1.0-alpha.0`
-unexpectedly despite the explicit `--tag alpha` command. The attempted removal
-of `latest` failed with E400, and no dist-tag was removed. No immutable Git tag
-or GitHub Release may be created until JEASON records an owner decision for this
-deviation.
+The npm publication succeeded, and npm exposed `latest: 0.1.0-alpha.0`
+unexpectedly despite the explicit `--tag alpha` command. JEASON accepts this temporarily until the first stable release. The attempted removal
+of `latest` failed with E400, and no dist-tag was removed. No new npm operation is authorized. Immutable Git tag
+and GitHub Release work may continue only for the approved artifact and commit. All future prereleases must be published explicitly with npm dist-tag alpha.
+
 
 ## Authorized Publication Source
 
@@ -274,8 +278,8 @@ During controlled publication:
 4. The immutable tag must point exactly to `150da23932c1fb9433cb3d546904f03c18c909e9`.
 5. GitHub Release must point to the approved commit and tarball.
 
-No tag or GitHub Release may be created while the unexpected `latest`
-dist-tag decision is unresolved.
+The immutable Git tag and GitHub Release may proceed after the documented `latest`
+exception, but no new npm operation, `latest` modification, package replacement, or other version publication is authorized.
 
 ## Rollback And Deprecation
 

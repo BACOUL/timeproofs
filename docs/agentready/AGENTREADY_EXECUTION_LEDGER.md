@@ -252,7 +252,7 @@ Required evidence:
   - human ledger review before merge
 
 ### ARB-COM-001 - Publish Community CLI and immutable release
-- Status: BLOCKED
+- Status: READY
 - Spec status: EXECUTION_READY
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
@@ -266,16 +266,17 @@ Required evidence:
 Deliverables:
   - Publish Community CLI and immutable release
 Acceptance criteria:
-  - Codex verifies the exact approved artifact before publication
-  - JEASON performs the manual npm publish checkpoint with private owner 2FA
-  - publication occurs only under npm dist-tag alpha
-  - latest is not created, moved or modified
-  - immutable tag and GitHub Release are created only after npm publication is confirmed
-  - public install tested
+  - Codex verified the exact approved artifact before publication
+  - JEASON performed the manual npm publish checkpoint with private owner 2FA
+  - publication succeeded under npm dist-tag alpha
+  - latest unexpectedly points to 0.1.0-alpha.0 and is accepted temporarily by JEASON until the first stable release
+  - all future prereleases must be published explicitly with npm dist-tag alpha
+  - immutable tag and GitHub Release remain pending and must not perform a new npm operation
 Required evidence:
   - approved tarball SHA-256 verification
   - JEASON npm publication confirmation without secrets
   - npm package URL
+  - documented latest exception
   - immutable tag
   - GitHub Release URL
   - public installation test
@@ -2031,7 +2032,7 @@ Required evidence:
 
 ### AR-COM-006B - Decide handling of unexpected npm latest dist-tag
 - Type: DECISION_GATE
-- Status: DECISION_REQUIRED
+- Status: DECIDED
 - Owner: JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
@@ -2044,15 +2045,18 @@ Deliverables:
   - None
 Acceptance criteria:
   - owner decision recorded for unexpected latest dist-tag
-  - decision determines whether tag and GitHub Release may proceed
-  - no further npm, Git tag or GitHub Release action occurs before decision
+  - alpha dist-tag documented as 0.1.0-alpha.0
+  - latest dist-tag documented as 0.1.0-alpha.0
+  - temporary acceptance remains limited until first stable release
+  - future prereleases must use npm dist-tag alpha explicitly
 Required evidence:
-  - owner decision on latest deviation
-  - accepted remediation or continuation plan
+  - owner decision ACCEPT_TEMPORARILY on latest deviation
+  - recorded alpha and latest dist-tags
+  - first-stable-release limit
 
 ### AR-COM-006 - Publish Community CLI and immutable release
 - Type: CODEX_WORK_ITEM
-- Status: BLOCKED
+- Status: PASS_WITH_DOCUMENTED_EXCEPTION
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
@@ -2064,16 +2068,17 @@ Required evidence:
 Deliverables:
   - Publish Community CLI and immutable release
 Acceptance criteria:
-  - Codex verifies the exact approved artifact before publication
-  - JEASON performs the manual npm publish checkpoint with private owner 2FA
-  - publication occurs only under npm dist-tag alpha
-  - latest is not created, moved or modified
-  - immutable tag and GitHub Release are created only after npm publication is confirmed
-  - public install tested
+  - Codex verified the exact approved artifact before publication
+  - JEASON performed the manual npm publish checkpoint with private owner 2FA
+  - publication succeeded under npm dist-tag alpha
+  - latest unexpectedly points to 0.1.0-alpha.0 and is accepted temporarily by JEASON until the first stable release
+  - all future prereleases must be published explicitly with npm dist-tag alpha
+  - immutable tag and GitHub Release remain pending and must not perform a new npm operation
 Required evidence:
   - approved tarball SHA-256 verification
   - JEASON npm publication confirmation without secrets
   - npm package URL
+  - documented latest exception
   - immutable tag
   - GitHub Release URL
   - public installation test

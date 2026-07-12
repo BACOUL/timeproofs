@@ -8,7 +8,7 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 ## Summary
 - Total tasks: 191
 - Total weighted progress: 31/661 (4.7%)
-- Next action: AR-COM-006B - Decide handling of unexpected npm latest dist-tag
+- Next action: ARB-COM-001 - Publish Community CLI and immutable release
 
 ## Detailed Work Items
 Total detailed Codex work items: 147
@@ -20,7 +20,7 @@ Total planned Codex execution batches: 71
 Completed Codex execution batches: 3
 Execution batches currently in review: 0
 Execution batches not yet issued: 68
-Immediately executable Codex prompts: 0
+Immediately executable Codex prompts: 1
 Average work items per batch: 2.07
 Largest batch size: 6
 Batches with more than five work items: 2

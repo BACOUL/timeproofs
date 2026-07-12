@@ -1,10 +1,10 @@
-# AgentReady Community Publication Blockers
+﻿# AgentReady Community Publication Blockers
 
 Status: ACTIVE BLOCKER TRACKER
 
 Approval blockers are resolved.
-npm publication succeeded, but continuation is blocked by an unexpected `latest`
-dist-tag that requires owner decision before any Git tag or GitHub Release.
+npm publication succeeded. The unexpected `latest` dist-tag is accepted temporarily
+until the first stable release by owner decision AR-COM-006B.
 
 Allowed statuses:
 
@@ -33,19 +33,23 @@ Allowed statuses:
 
 ```txt
 PUBLICATION APPROVED: YES
-PUBLICATION STATE: NPM_PUBLISHED — UNEXPECTED_LATEST_REVIEW_REQUIRED
+PUBLICATION STATE: NPM_PUBLISHED — LATEST_ACCEPTED_TEMPORARILY
 NPM PUBLICATION RESULT: SUCCESS
 ALPHA DIST-TAG: 0.1.0-alpha.0
 LATEST DIST-TAG: 0.1.0-alpha.0
 LATEST EXPECTED: NO
 LATEST REMOVAL RESULT: E400
-CONTINUATION AUTHORIZED: NO
+LATEST ACCEPTANCE DECISION: ACCEPT_TEMPORARILY
+LATEST TEMPORARY ACCEPTANCE: until first stable release
+FUTURE PRERELEASES DIST-TAG: alpha
+NEW NPM OPERATION AUTHORIZED: NO
+CONTINUATION AUTHORIZED: YES, FOR IMMUTABLE GIT TAG AND GITHUB RELEASE ONLY
 ```
 
 ## Next Authorized Action
 
-The next authorized action is the owner decision:
+The next authorized action is the remaining controlled release execution:
 
-`AR-COM-006B — Decide handling of unexpected npm latest dist-tag`
+`AR-COM-006B â€” Decide handling of unexpected npm latest dist-tag`
 
-No Git tag or GitHub Release may be created until this decision is recorded.
+The npm portion is complete with a documented exception. The remaining work is immutable Git tag and GitHub Release creation only; no new npm operation is authorized.
