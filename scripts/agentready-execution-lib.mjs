@@ -776,7 +776,13 @@ function validateBatches(ledger, add) {
     if (batch.status === "READY") {
       add(batch.spec_status === "EXECUTION_READY", `${batch.id} READY but not EXECUTION_READY`);
       for (const dep of batch.depends_on_tasks || []) add(isDependencySatisfied(tasks.get(dep)), `${batch.id} READY but task dependency ${dep} is not satisfied`);
-      for (const dep of batch.depends_on_batches || []) add(batches.get(dep)?.status === "DONE", `${batch.id} READY but batch dependency ${dep} is not DONE`);
+      for (const dep of batch.depends_on_batches || []) {
+        const dependency = batches.get(dep);
+        const stackedDependencyAccepted = batch.stacked_execution_authorized === true
+          && batch.stacked_on_batch === dep
+          && dependency?.status === "IN_REVIEW";
+        add(dependency?.status === "DONE" || stackedDependencyAccepted, `${batch.id} READY but batch dependency ${dep} is neither DONE nor an authorized IN_REVIEW stack base`);
+      }
     }
     add((batch.work_item_ids || []).length <= 8 || (batch.scope_justification || "").includes("exceeds eight"), `${batch.id} exceeds eight work items without justification`);
     const batchTasks = (batch.work_item_ids || []).map((id) => tasks.get(id)).filter(Boolean);
