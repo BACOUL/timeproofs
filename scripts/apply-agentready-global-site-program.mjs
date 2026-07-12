@@ -440,8 +440,4 @@ for (const file of [".github/workflows/agentready-community-release-candidate.ym
   write(file, content);
 }
 
-for (const file of ["scripts/apply-agentready-global-site-program.mjs", ".github/workflows/apply-agentready-global-site-program.yml"]) {
-  if (fs.existsSync(file)) fs.rmSync(file);
-}
-
 console.log("Global standard site program applied.");

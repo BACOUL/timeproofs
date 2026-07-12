@@ -1,6 +1,8 @@
 # AgentReady Premium Site Redesign Execution Specification
 
-Status: ACTIVE EXECUTION SPECIFICATION
+Status: ACTIVE FOR ARB-SITE-PREMIUM-001 ONLY
+
+Later premium-site batches in this document are superseded by GLOBAL_STANDARD_SITE_PROGRAM.md. The design-system, navigation, mobile menu and footer requirements remain authoritative for PR #132.
 
 ## Decision
 

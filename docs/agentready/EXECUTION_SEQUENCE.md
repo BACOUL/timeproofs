@@ -94,15 +94,21 @@ feat(distribution): publish AgentReady GitHub Marketplace action
 
 Marketplace is distribution, not validation by GitHub. The immutable public Action is complete and remains unchanged by the following site work.
 
-## Phase 4B - Premium Product Site Before Public Validation
+## Phase 4B - Global Standard Site Before Public Validation
 
 ```txt
-site(agentready): build premium design system and navigation
-site(agentready): redesign homepage and core product pages
-qa(site): validate premium mobile accessibility performance and SEO
+site(agentready): build global design system and navigation
+site(agentready): publish global product scanners CI and planned pricing
+site(standard): publish AgentReady standard rules and governance foundation
+site(trust): publish company security privacy and legal foundation
+docs(adoption): publish developer and adoption foundation
+ai(site): publish SEO GEO AI-first and international architecture
+qa(site): validate the complete global site
 ```
 
-These three batches run before `ARB-COM-003`. They rebuild the shared site shell, product narrative and independent QA without modifying the engine, CLI, npm package, immutable Action, billing or runtime scope. No meaningful Marketplace promotion, maintainer outreach or external pilot recruitment begins before the premium QA batch passes.
+The shell PR may remain open as an approved stack base while the remaining site PRs are built against it. This avoids deploying a visibly partial redesign. The complete stack is reviewed, then merged in dependency order.
+
+No meaningful Marketplace promotion, maintainer outreach or external pilot recruitment begins before global-site QA passes. No batch in this phase modifies the engine, CLI, npm package, immutable Action, billing or runtime scope.
 
 ## Phase 4C - Public Installation And Onboarding
 
@@ -111,7 +117,7 @@ qa(community): validate public AgentReady installation
 feat(community): add three-minute onboarding commands
 ```
 
-Public installation validation follows the premium-site gate. Onboarding follows the public installation batch.
+Public installation validation follows the global-standard site gate. Onboarding follows the public installation batch.
 
 ## Phase 4D - External Pilot Preparation
 

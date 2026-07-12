@@ -155,7 +155,13 @@ function taskDependenciesDone(task, tasks) {
 }
 
 function dependencyBatchesDone(batch, batches) {
-  return (batch.depends_on_batches || []).every((id) => batches.get(id)?.status === "DONE");
+  return (batch.depends_on_batches || []).every((id) => {
+    const dependency = batches.get(id);
+    if (dependency?.status === "DONE") return true;
+    return batch.stacked_execution_authorized === true
+      && batch.stacked_on_batch === id
+      && dependency?.status === "IN_REVIEW";
+  });
 }
 
 function isExecutionReadyBatch(batch, ledger) {
@@ -255,6 +261,8 @@ export function promptCounts(ledger) {
 
 export function selectNextAction(ledger) {
   const tasks = taskMap(ledger);
+  const stackedReadyBatch = (ledger.execution_batches || []).find((batch) => batch.stacked_execution_authorized === true && isExecutionReadyBatch(batch, ledger));
+  if (stackedReadyBatch) return { kind: "batch", batch: stackedReadyBatch, action_owner: stackedReadyBatch.owner, action_type: "READY", summary: stackedReadyBatch.objective };
   const inReviewBatch = (ledger.execution_batches || []).find((batch) => batch.status === "IN_REVIEW");
   if (inReviewBatch) {
     return {
@@ -396,7 +404,7 @@ function promptForBatch(batch, ledger) {
   const items = (batch.work_item_ids || []).map((id) => tasks.get(id)).filter(Boolean);
   return [
     `Repository: BACOUL/timeproofs`,
-    `Base: timeproofs`,
+    `Base: ${batch.base_branch || "timeproofs"}`,
     `Batch ID: ${batch.id}`,
     `Work item IDs: ${batch.work_item_ids.join(", ")}`,
     `Owner: ${batch.owner}`,

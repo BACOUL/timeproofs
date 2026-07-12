@@ -5,42 +5,37 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 # Next Action
 
-Batch ID: ARB-SITE-PREMIUM-001
-Title: Build premium design system navigation and footer
+Batch ID: ARB-SITE-GLOBAL-002
+Title: Publish global product scanners CI and planned pricing foundation
 Action owner: CODEX_AND_JEASON
 Action type: READY
 Status: READY
 Specification: EXECUTION_READY
 Objective:
-Build premium design system navigation and footer.
+Publish global product scanners CI and planned pricing foundation.
 
 Work items:
-  - AR-SITE-PREMIUM-001
+  - AR-SITE-GLOBAL-002
 
 Required evidence:
-  - page and shell migration inventory
-  - desktop navigation screenshots
-  - mobile closed and open navigation screenshots
-  - keyboard and focus test matrix
-  - link validation report
-  - 320px no-overflow evidence
-  - reduced-motion and no-JS evidence
-  - shared asset inventory and size summary
-  - owner visual review before merge
+  - desktop and mobile screenshots for every primary page
+  - real output provenance
+  - pricing source mapping
+  - CTA and link report
+  - no-JavaScript evidence
+  - combined preview URL
 
 Manual actions:
-  - JEASON reviews desktop and mobile visual evidence before merge
+  - JEASON reviews the combined product and pricing preview
 
 Authorized external actions:
-  - create dependency-free shared CSS and minimal JavaScript assets
-  - replace duplicated active-page navigation and footer markup
-  - add static validators and documented visual evidence
+  - create real static product Community and planned Pro pages
+  - redesign the six existing core page bodies
+  - add shared static product assets and validators
 
 Forbidden actions:
-  - do not redesign homepage or page-body sections in this batch
-  - do not rewrite product claims beyond navigation and footer labels required for accuracy
-  - do not modify engine CLI Action package npm tags billing accounts backend or runtime behavior
-  - do not add external fonts frameworks analytics telemetry uploads or live calls
-  - do not create fake pages customer logos dashboards certifications or safety claims
-  - do not merge without owner visual review
+  - do not change engine CLI package Action workflows npm tags releases Marketplace billing accounts or runtime behavior
+  - do not present Pro as purchasable
+  - do not invent customers benchmarks legal identities or certifications
+  - do not merge any site PR
 
