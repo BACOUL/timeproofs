@@ -8,7 +8,7 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 No CODEX execution batch is currently authorized.
 
 The current next action belongs to:
-JEASON - ARB-COM-001 - Publish Community CLI and immutable release
+CODEX - ARB-COM-002 - Publish public GitHub Action distribution
 
-Codex prompts are generated from execution batches, not directly from detailed work items. Codex must not start another implementation prompt until the blocking owner, legal, security, design, or external action is complete and the ledger has been reconciled.
+The next batch has satisfied dependencies but is not EXECUTION_READY. Its specification must be refined before any executable Codex prompt can be generated.
 

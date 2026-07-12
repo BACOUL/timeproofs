@@ -55,4 +55,4 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 | AR-I18N-001 | task | EXTERNAL_SPECIALIST | POST_LAUNCH | Verify internationalization obligations | Verify internationalization obligations evidence |
 | AR-TEAM-EPIC | task | CODEX_AND_JEASON | PLANNED | Team and Agency post-revenue expansion | child tasks tracked in ledger |
 | ARB-GOV-003 | batch | CODEX_AND_JEASON | DONE | Add canonical AgentReady execution system | draft PR #115<br>workflow success<br>human ledger review before merge |
-| ARB-COM-001 | batch | CODEX_AND_JEASON | IN_REVIEW | Publish Community CLI and immutable release | approved tarball SHA-256 verification<br>JEASON npm publication confirmation without secrets<br>npm package URL<br>documented latest exception<br>immutable tag<br>GitHub Release URL |
+| ARB-COM-001 | batch | CODEX_AND_JEASON | DONE | Publish Community CLI and immutable release | approved tarball SHA-256 verification<br>JEASON npm publication confirmation without secrets<br>npm package URL<br>documented latest exception<br>immutable tag<br>GitHub Release URL |
