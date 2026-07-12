@@ -54,6 +54,37 @@ assert.match(workflow, /retention-days:\s*7/);
 assert.match(workflow, /agentready-community-release-candidate-0\.1\.0-alpha\.0/);
 assert.match(workflow, /packaging\/agentready-community\/\*\*/);
 assert.match(workflow, /scripts\/agentready-community-package-lib\.mjs/);
+for (const requiredPath of [
+  'scripts/agentready-execution-lib.mjs',
+  'scripts/rebuild-agentready-ledger-data.mjs',
+  'scripts/validate-agentready-execution-system.mjs',
+  'scripts/validate-agentready-strategy-docs.mjs',
+  'docs/agentready/AGENTREADY_EXECUTION_LEDGER.json',
+  'docs/agentready/AGENTREADY_EXECUTION_LEDGER.md',
+  'docs/agentready/AGENTREADY_STATUS.md',
+  'docs/agentready/NEXT_ACTION.md',
+  'docs/agentready/NEXT_CODEX_PROMPT.md'
+]) {
+  assert.match(workflow, new RegExp(escapeRegExp(requiredPath)));
+}
+for (const requiredCommand of [
+  'node scripts/rebuild-agentready-ledger-data.mjs',
+  'node scripts/generate-agentready-ledger-views.mjs --write',
+  'node scripts/generate-agentready-status.mjs --write',
+  'node scripts/generate-agentready-next-action.mjs --write',
+  'node scripts/generate-agentready-next-prompt.mjs --write',
+  'node scripts/validate-agentready-strategy-docs.mjs',
+  'node scripts/validate-agentready-execution-system.mjs',
+  'git diff --check'
+]) {
+  assert.match(workflow, new RegExp(escapeRegExp(requiredCommand)));
+}
+assert.match(workflow, /git diff --exit-code --/);
+assert.ok(workflow.includes("assert.equal(completedBatch?.status, 'DONE')"));
+assert.ok(workflow.includes("assert.equal(next?.batch?.id, 'ARB-COM-002')"));
+assert.ok(workflow.includes("assert.equal(next?.action_type, 'SPECIFICATION_REFINEMENT_REQUIRED')"));
+assert.ok(workflow.includes("assert.notEqual(nextBatch?.spec_status, 'EXECUTION_READY')"));
+assert.match(workflow, /No CODEX execution batch is currently authorized/);
 assert.match(workflow, /assert\.equal\(manifest\.community_license,\s*'Apache-2\.0'\)/);
 assert.match(workflow, /assert\.equal\(manifest\.tarball\.entry_count,\s*21\)/);
 assert.match(workflow, /assert\.equal\(manifest\.package_private,\s*false\)/);
@@ -191,4 +222,8 @@ function runScript(args) {
       resolve({ code, stdout, stderr });
     });
   });
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }

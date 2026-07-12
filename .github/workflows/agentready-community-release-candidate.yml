@@ -11,9 +11,24 @@ on:
       - "cli/tests/**"
       - "scripts/create-agentready-community-release-candidate.mjs"
       - "scripts/agentready-community-package-lib.mjs"
+      - "scripts/agentready-execution-lib.mjs"
+      - "scripts/rebuild-agentready-ledger-data.mjs"
+      - "scripts/generate-agentready-ledger-views.mjs"
+      - "scripts/generate-agentready-status.mjs"
+      - "scripts/generate-agentready-next-action.mjs"
+      - "scripts/generate-agentready-next-prompt.mjs"
+      - "scripts/validate-agentready-execution-system.mjs"
+      - "scripts/validate-agentready-strategy-docs.mjs"
       - "packaging/agentready-community/**"
       - "package.json"
       - "README.md"
+      - "docs/agentready/AGENTREADY_CODEX_PROMPT_COUNT.json"
+      - "docs/agentready/AGENTREADY_EXECUTION_LEDGER.json"
+      - "docs/agentready/AGENTREADY_EXECUTION_LEDGER.md"
+      - "docs/agentready/AGENTREADY_STATUS.md"
+      - "docs/agentready/NEXT_ACTION.md"
+      - "docs/agentready/NEXT_CODEX_PROMPT.md"
+      - "docs/agentready/OWNER_AND_EXTERNAL_ACTIONS.md"
       - "docs/agentready/COMMUNITY_RELEASE_WORKFLOW.md"
       - "docs/agentready/COMMUNITY_RELEASE_CHECKLIST.md"
       - "docs/agentready/COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_0.md"
@@ -39,6 +54,48 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+
+      - name: AgentReady execution system validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/rebuild-agentready-ledger-data.mjs
+          node scripts/generate-agentready-ledger-views.mjs --write
+          node scripts/generate-agentready-status.mjs --write
+          node scripts/generate-agentready-next-action.mjs --write
+          node scripts/generate-agentready-next-prompt.mjs --write
+          node scripts/validate-agentready-strategy-docs.mjs
+          node scripts/validate-agentready-execution-system.mjs
+          git diff --check
+          git diff --exit-code -- \
+            docs/agentready/AGENTREADY_CODEX_PROMPT_COUNT.json \
+            docs/agentready/AGENTREADY_EXECUTION_LEDGER.json \
+            docs/agentready/AGENTREADY_EXECUTION_LEDGER.md \
+            docs/agentready/AGENTREADY_STATUS.md \
+            docs/agentready/NEXT_ACTION.md \
+            docs/agentready/NEXT_CODEX_PROMPT.md \
+            docs/agentready/OWNER_AND_EXTERNAL_ACTIONS.md
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import { generatedContents, readLedger, selectNextAction } from './scripts/agentready-execution-lib.mjs';
+
+          const ledger = readLedger();
+          const batches = new Map((ledger.execution_batches || []).map((batch) => [batch.id, batch]));
+          const completedBatch = batches.get('ARB-COM-001');
+          const nextBatch = batches.get('ARB-COM-002');
+          const next = selectNextAction(ledger);
+          const nextPrompt = generatedContents(ledger)['docs/agentready/NEXT_CODEX_PROMPT.md'];
+
+          assert.equal(completedBatch?.status, 'DONE');
+          assert.equal(nextBatch?.id, 'ARB-COM-002');
+          assert.notEqual(nextBatch?.spec_status, 'EXECUTION_READY');
+          assert.equal(next?.kind, 'batch');
+          assert.equal(next?.batch?.id, 'ARB-COM-002');
+          assert.equal(next?.action_type, 'SPECIFICATION_REFINEMENT_REQUIRED');
+          assert.match(nextPrompt, /No CODEX execution batch is currently authorized/);
+          assert.match(nextPrompt, /not EXECUTION_READY/);
+          assert.doesNotMatch(nextPrompt, /Repository: BACOUL\/timeproofs/);
+          NODE
 
       - name: Verify package metadata
         shell: bash
