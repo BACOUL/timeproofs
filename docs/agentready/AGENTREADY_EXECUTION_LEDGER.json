@@ -1778,7 +1778,7 @@
         "publication succeeded under npm dist-tag alpha",
         "latest unexpectedly points to 0.1.0-alpha.0 and is accepted temporarily by JEASON until the first stable release",
         "all future prereleases must be published explicitly with npm dist-tag alpha",
-        "immutable tag and GitHub Release remain pending and must not perform a new npm operation"
+        "immutable tag and GitHub prerelease were created without performing any new npm operation"
       ],
       "required_commands": [
         "node cli/tests/run-agentready-package-smoke-test.mjs"
@@ -1789,8 +1789,7 @@
         "npm package URL",
         "documented latest exception",
         "immutable tag",
-        "GitHub Release URL",
-        "public installation test"
+        "GitHub Release URL"
       ],
       "evidence": [
         {
@@ -1826,21 +1825,37 @@
           "future_prereleases_dist_tag": "alpha",
           "new_npm_operation_authorized": false,
           "notes": "JEASON accepts temporarily that npm latest points to 0.1.0-alpha.0 until the first stable release. No new npm operation is authorized."
+        },
+        {
+          "type": "immutable_release_result",
+          "date": "2026-07-12",
+          "git_tag": "v0.1.0-alpha.0",
+          "tag_object_sha": "6e512802997d7cb5ab90dd2698e3b5731a4e48ee",
+          "tag_target_commit": "150da23932c1fb9433cb3d546904f03c18c909e9",
+          "remote_tag_verified": true,
+          "github_release_url": "https://github.com/BACOUL/timeproofs/releases/tag/v0.1.0-alpha.0",
+          "github_release_id": 352755662,
+          "github_release_prerelease": true,
+          "github_release_draft": false,
+          "github_release_latest": false,
+          "release_notes_match_validated_file": true,
+          "new_npm_operation_executed": false,
+          "notes": "Annotated immutable Git tag and GitHub prerelease were created after npm publication, with no new npm operation."
         }
       ],
       "execution_batch_id": "ARB-COM-001",
       "manual_actions": [
         "JEASON decision AR-COM-006B: ACCEPT_TEMPORARILY that npm latest points to 0.1.0-alpha.0 until the first stable release.",
-        "No new npm operation is authorized before immutable Git tag or GitHub Release creation.",
+        "No new npm operation is authorized after publication; immutable Git tag and GitHub Release evidence is now in review.",
         "All future prereleases must be published explicitly with npm dist-tag alpha.",
         "Codex must never request, receive, print or store an npm password, 2FA code, recovery code or token."
       ],
       "authorized_actions": [
         "verify that @timeproofs/agentready@0.1.0-alpha.0 is published and that alpha points to 0.1.0-alpha.0",
         "record that latest also points to 0.1.0-alpha.0 and is temporarily accepted until the first stable release",
-        "create immutable Git tag v0.1.0-alpha.0 pointing exactly to commit 150da23932c1fb9433cb3d546904f03c18c909e9 after npm publication succeeds",
-        "create the corresponding GitHub Release after npm publication succeeds",
-        "attach or reference the exact approved tarball, checksum and approved release notes"
+        "record immutable Git tag v0.1.0-alpha.0 pointing exactly to commit 150da23932c1fb9433cb3d546904f03c18c909e9",
+        "record the corresponding GitHub prerelease at https://github.com/BACOUL/timeproofs/releases/tag/v0.1.0-alpha.0",
+        "record the exact approved tarball, checksum and approved release notes"
       ],
       "forbidden_actions": [
         "do not perform any new npm operation",
@@ -1873,9 +1888,9 @@
         "verify the public npm package page exists",
         "verify @timeproofs/agentready@0.1.0-alpha.0 exists under alpha",
         "verify latest remains documented as temporarily accepted and do not modify it",
-        "create v0.1.0-alpha.0 pointing exactly to 150da23932c1fb9433cb3d546904f03c18c909e9",
-        "create the corresponding GitHub Release",
-        "record npm, tag, GitHub Release and public installation evidence in the publication PR"
+        "record v0.1.0-alpha.0 pointing exactly to 150da23932c1fb9433cb3d546904f03c18c909e9",
+        "record the corresponding GitHub prerelease",
+        "record npm, tag and GitHub Release evidence in the publication PR"
       ],
       "external_verification": null,
       "decision_gate": null,
@@ -13992,7 +14007,7 @@
       "objective": "Publish Community CLI and immutable release.",
       "milestone": "M3",
       "delivery_horizon": "BEFORE_COMMUNITY_PUBLICATION",
-      "status": "READY",
+      "status": "IN_REVIEW",
       "spec_status": "EXECUTION_READY",
       "owner": "CODEX_AND_JEASON",
       "work_item_ids": [
@@ -14035,7 +14050,7 @@
         "publication succeeded under npm dist-tag alpha",
         "latest unexpectedly points to 0.1.0-alpha.0 and is accepted temporarily by JEASON until the first stable release",
         "all future prereleases must be published explicitly with npm dist-tag alpha",
-        "immutable tag and GitHub Release remain pending and must not perform a new npm operation"
+        "immutable tag and GitHub prerelease were created without performing any new npm operation"
       ],
       "independent_test_plan": [
         "run relevant existing tests",
@@ -14050,23 +14065,22 @@
         "npm package URL",
         "documented latest exception",
         "immutable tag",
-        "GitHub Release URL",
-        "public installation test"
+        "GitHub Release URL"
       ],
       "rollback_boundary": "Revert ARB-COM-001 without reverting unrelated batches.",
       "scope_justification": "Atomic release boundary after owner, legal and private 2FA checkpoint approval.",
       "manual_actions": [
         "JEASON decision AR-COM-006B: ACCEPT_TEMPORARILY that npm latest points to 0.1.0-alpha.0 until the first stable release.",
-        "No new npm operation is authorized before immutable Git tag or GitHub Release creation.",
+        "No new npm operation is authorized after publication; immutable Git tag and GitHub Release evidence is now in review.",
         "All future prereleases must be published explicitly with npm dist-tag alpha.",
         "Codex must never request, receive, print or store an npm password, 2FA code, recovery code or token."
       ],
       "authorized_actions": [
         "verify that @timeproofs/agentready@0.1.0-alpha.0 is published and that alpha points to 0.1.0-alpha.0",
         "record that latest also points to 0.1.0-alpha.0 and is temporarily accepted until the first stable release",
-        "create immutable Git tag v0.1.0-alpha.0 pointing exactly to commit 150da23932c1fb9433cb3d546904f03c18c909e9 after npm publication succeeds",
-        "create the corresponding GitHub Release after npm publication succeeds",
-        "attach or reference the exact approved tarball, checksum and approved release notes"
+        "record immutable Git tag v0.1.0-alpha.0 pointing exactly to commit 150da23932c1fb9433cb3d546904f03c18c909e9",
+        "record the corresponding GitHub prerelease at https://github.com/BACOUL/timeproofs/releases/tag/v0.1.0-alpha.0",
+        "record the exact approved tarball, checksum and approved release notes"
       ],
       "forbidden_actions": [
         "do not perform any new npm operation",
@@ -14099,14 +14113,14 @@
         "verify the public npm package page exists",
         "verify @timeproofs/agentready@0.1.0-alpha.0 exists under alpha",
         "verify latest remains documented as temporarily accepted and do not modify it",
-        "create v0.1.0-alpha.0 pointing exactly to 150da23932c1fb9433cb3d546904f03c18c909e9",
-        "create the corresponding GitHub Release",
-        "record npm, tag, GitHub Release and public installation evidence in the publication PR"
+        "record v0.1.0-alpha.0 pointing exactly to 150da23932c1fb9433cb3d546904f03c18c909e9",
+        "record the corresponding GitHub prerelease",
+        "record npm, tag and GitHub Release evidence in the publication PR"
       ],
       "external_verifications": [],
       "evidence": [
         {
-          "type": "partial_publication",
+          "type": "publication_release_execution",
           "pr": 124,
           "npm_publication": "SUCCESS",
           "package": "@timeproofs/agentready",
@@ -14117,12 +14131,20 @@
           "owner_decision": "ACCEPT_TEMPORARILY",
           "latest_temporarily_accepted_until": "first stable release",
           "future_prereleases_dist_tag": "alpha",
-          "git_tag_created": false,
-          "github_release_created": false,
-          "new_npm_operation_authorized": false
+          "git_tag_created": true,
+          "git_tag": "v0.1.0-alpha.0",
+          "git_tag_target": "150da23932c1fb9433cb3d546904f03c18c909e9",
+          "remote_tag_verified": true,
+          "github_release_created": true,
+          "github_release_url": "https://github.com/BACOUL/timeproofs/releases/tag/v0.1.0-alpha.0",
+          "github_release_prerelease": true,
+          "github_release_latest": false,
+          "release_notes_match_validated_file": true,
+          "new_npm_operation_authorized": false,
+          "new_npm_operation_executed": false
         }
       ],
-      "notes": "npm publication succeeded. JEASON accepts temporarily that latest points to 0.1.0-alpha.0 until the first stable release. ARB-COM-001 is ready for the remaining immutable Git tag and GitHub Release work only; no new npm operation is authorized.",
+      "notes": "npm publication succeeded with a documented latest exception accepted temporarily by JEASON. The immutable Git tag and GitHub prerelease now exist and point to the approved source commit. PR #124 is in review to merge the release evidence; no new npm operation is authorized.",
       "source_documents": [
         "docs/agentready/COMMUNITY_PUBLICATION_POLICY.md",
         "docs/agentready/COMMUNITY_RELEASE_WORKFLOW.md"

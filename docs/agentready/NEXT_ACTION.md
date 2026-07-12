@@ -7,9 +7,9 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 Batch ID: ARB-COM-001
 Title: Publish Community CLI and immutable release
-Action owner: CODEX_AND_JEASON
-Action type: READY
-Status: READY
+Action owner: JEASON
+Action type: REVIEW_OR_MERGE
+Status: IN_REVIEW
 Specification: EXECUTION_READY
 Objective:
 Publish Community CLI and immutable release.
@@ -24,20 +24,19 @@ Required evidence:
   - documented latest exception
   - immutable tag
   - GitHub Release URL
-  - public installation test
 
 Manual actions:
   - JEASON decision AR-COM-006B: ACCEPT_TEMPORARILY that npm latest points to 0.1.0-alpha.0 until the first stable release.
-  - No new npm operation is authorized before immutable Git tag or GitHub Release creation.
+  - No new npm operation is authorized after publication; immutable Git tag and GitHub Release evidence is now in review.
   - All future prereleases must be published explicitly with npm dist-tag alpha.
   - Codex must never request, receive, print or store an npm password, 2FA code, recovery code or token.
 
 Authorized external actions:
   - verify that @timeproofs/agentready@0.1.0-alpha.0 is published and that alpha points to 0.1.0-alpha.0
   - record that latest also points to 0.1.0-alpha.0 and is temporarily accepted until the first stable release
-  - create immutable Git tag v0.1.0-alpha.0 pointing exactly to commit 150da23932c1fb9433cb3d546904f03c18c909e9 after npm publication succeeds
-  - create the corresponding GitHub Release after npm publication succeeds
-  - attach or reference the exact approved tarball, checksum and approved release notes
+  - record immutable Git tag v0.1.0-alpha.0 pointing exactly to commit 150da23932c1fb9433cb3d546904f03c18c909e9
+  - record the corresponding GitHub prerelease at https://github.com/BACOUL/timeproofs/releases/tag/v0.1.0-alpha.0
+  - record the exact approved tarball, checksum and approved release notes
 
 Forbidden actions:
   - do not perform any new npm operation

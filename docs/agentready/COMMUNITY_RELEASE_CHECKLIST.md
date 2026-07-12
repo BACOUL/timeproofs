@@ -10,8 +10,8 @@ Use only:
 - NOT_STARTED
 - NOT_APPLICABLE
 
-Publication status: BLOCKED
-Publication execution status: NPM_PUBLISHED — LATEST_ACCEPTED_TEMPORARILY
+Publication status: PUBLISHED_WITH_DOCUMENTED_EXCEPTION
+Publication execution status: GIT_TAG_AND_GITHUB_PRERELEASE_CREATED
 
 ```txt
 VERSION: 0.1.0-alpha.0
@@ -33,7 +33,7 @@ LATEST TAG MODIFIED: TEMPORARILY ACCEPTED AS 0.1.0-alpha.0
 
 ## Controlled Publication Execution Checkpoint
 
-Status: NPM_PUBLISHED — LATEST_ACCEPTED_TEMPORARILY
+Status: GIT_TAG_AND_GITHUB_PRERELEASE_CREATED
 Preflight result: PASS
 Preflight performed externally: NO
 Codex binary inspection performed: YES
@@ -109,7 +109,9 @@ npm publish ./timeproofs-agentready-0.1.0-alpha.0-approved.tgz --access public -
 
 The command succeeded, but npm exposed `latest: 0.1.0-alpha.0` unexpectedly.
 JEASON accepts this temporarily until the first stable release.
-The remaining controlled release work may proceed only to immutable Git tag and GitHub Release creation. No new npm operation is authorized.
+The controlled release work has created the immutable Git tag and GitHub prerelease.
+No new npm operation was executed after the owner latest decision.
+The remaining action is human review and merge of the publication evidence PR.
 
 ## Product
 
@@ -153,7 +155,7 @@ The remaining controlled release work may proceed only to immutable Git tag and 
 | Outputs are documented | READY | `.github/actions/agentready/action.yml` |
 | Policy FAIL preserves outputs | READY | Action integration workflow |
 | Future immutable tag is defined | READY | `v0.1.0-alpha.0` candidate |
-| Future immutable tag exists | BLOCKED | Tag not created |
+| Future immutable tag exists | READY | Remote tag `v0.1.0-alpha.0` exists |
 | Development branch is not documented as stable | READY | Action usage/versioning docs |
 
 ## Legal
@@ -170,16 +172,16 @@ The remaining controlled release work may proceed only to immutable Git tag and 
 
 | Requirement | Status | Evidence |
 |---|---|---|
-| Explicit release approval recorded | READY | JEASON approval dated 2026-07-12 authorizes publication of `@timeproofs/agentready` version `0.1.0-alpha.0` from commit `150da23932c1fb9433cb3d546904f03c18c909e9` and tarball SHA-256 `602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe`, exclusively under npm dist-tag `alpha`; immutable Git tag `v0.1.0-alpha.0` and corresponding GitHub Release are authorized but not yet created. |
+| Explicit release approval recorded | READY | JEASON approval dated 2026-07-12 authorizes publication of `@timeproofs/agentready` version `0.1.0-alpha.0` from commit `150da23932c1fb9433cb3d546904f03c18c909e9` and tarball SHA-256 `602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe`, exclusively under npm dist-tag `alpha`; immutable Git tag `v0.1.0-alpha.0` and corresponding GitHub Release were authorized. |
 | npm scope controlled | READY | Owner attestation dated 2026-07-11 |
 | npm 2FA or trusted publishing policy validated | READY | npm 2FA enabled; trusted publishing preferred for future dedicated setup |
 | Package made publishable after approval | READY | staged Community tarball package omits `private: true` and sets public npm publish config |
 | Final tarball content approved | READY | JEASON approval dated 2026-07-11 for commit `150da23932c1fb9433cb3d546904f03c18c909e9`, version `0.1.0-alpha.0`, tarball SHA-256 `602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe`, npm dist-tag `alpha` |
 | npm publication executed | PASS_WITH_DOCUMENTED_EXCEPTION | npm publication succeeded for `@timeproofs/agentready@0.1.0-alpha.0`; `alpha` points to `0.1.0-alpha.0`; `latest` also points to `0.1.0-alpha.0` and is temporarily accepted by JEASON until the first stable release. No new npm operation is authorized. |
-| Tag created on reviewed commit | BLOCKED | No tag created |
+| Tag created on reviewed commit | READY | Remote tag `v0.1.0-alpha.0` points to `150da23932c1fb9433cb3d546904f03c18c909e9` |
 | Release notes verified | READY | Draft notes exist |
-| GitHub Release created | BLOCKED | No GitHub Release exists |
-| Public documentation updated after release | NOT_STARTED | Requires actual release |
+| GitHub Release created | READY | `https://github.com/BACOUL/timeproofs/releases/tag/v0.1.0-alpha.0` is public and marked prerelease |
+| Public documentation updated after release | READY | Publication evidence is recorded in PR #124; merge remains required |
 
 ## Mandatory Limitation
 

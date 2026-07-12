@@ -18,9 +18,9 @@ Remaining detailed Codex work items: 144
 ## Execution Batches
 Total planned Codex execution batches: 71
 Completed Codex execution batches: 3
-Execution batches currently in review: 0
-Execution batches not yet issued: 68
-Immediately executable Codex prompts: 1
+Execution batches currently in review: 1
+Execution batches not yet issued: 67
+Immediately executable Codex prompts: 0
 Average work items per batch: 2.07
 Largest batch size: 6
 Batches with more than five work items: 2

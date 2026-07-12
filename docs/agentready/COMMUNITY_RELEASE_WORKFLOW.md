@@ -396,7 +396,7 @@ When public release exists, rollback must be handled in a dedicated release deci
 
 Rollback or remediation is not active in this workflow step. npm publication has
 succeeded, and the unexpected `latest` dist-tag is accepted temporarily by owner decision
-until the first stable release. Further npm action remains forbidden; Git tag and GitHub Release work may continue.
+until the first stable release. Further npm action remains forbidden; the Git tag and GitHub prerelease have been created and now require evidence review.
 
 ## Publication Blockers
 
@@ -414,7 +414,7 @@ until the first stable release. Further npm action remains forbidden; Git tag an
 
 ## Controlled Continuation After Latest Decision
 
-Before any immutable Git tag or GitHub Release is created:
+After immutable Git tag and GitHub prerelease creation:
 
 - JEASON has accepted temporarily that `latest` points to `0.1.0-alpha.0` until the first stable release;
 - Codex must not retry npm dist-tag removal, modify `alpha`, modify `latest`,

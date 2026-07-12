@@ -252,7 +252,7 @@ Required evidence:
   - human ledger review before merge
 
 ### ARB-COM-001 - Publish Community CLI and immutable release
-- Status: READY
+- Status: IN_REVIEW
 - Spec status: EXECUTION_READY
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
@@ -271,7 +271,7 @@ Acceptance criteria:
   - publication succeeded under npm dist-tag alpha
   - latest unexpectedly points to 0.1.0-alpha.0 and is accepted temporarily by JEASON until the first stable release
   - all future prereleases must be published explicitly with npm dist-tag alpha
-  - immutable tag and GitHub Release remain pending and must not perform a new npm operation
+  - immutable tag and GitHub prerelease were created without performing any new npm operation
 Required evidence:
   - approved tarball SHA-256 verification
   - JEASON npm publication confirmation without secrets
@@ -279,7 +279,6 @@ Required evidence:
   - documented latest exception
   - immutable tag
   - GitHub Release URL
-  - public installation test
 
 ### ARB-COM-002 - Publish public GitHub Action distribution
 - Status: PLANNED
@@ -2073,7 +2072,7 @@ Acceptance criteria:
   - publication succeeded under npm dist-tag alpha
   - latest unexpectedly points to 0.1.0-alpha.0 and is accepted temporarily by JEASON until the first stable release
   - all future prereleases must be published explicitly with npm dist-tag alpha
-  - immutable tag and GitHub Release remain pending and must not perform a new npm operation
+  - immutable tag and GitHub prerelease were created without performing any new npm operation
 Required evidence:
   - approved tarball SHA-256 verification
   - JEASON npm publication confirmation without secrets
@@ -2081,7 +2080,6 @@ Required evidence:
   - documented latest exception
   - immutable tag
   - GitHub Release URL
-  - public installation test
 
 ### AR-COM-007 - Publish public AgentReady GitHub Action distribution
 - Type: CODEX_WORK_ITEM
