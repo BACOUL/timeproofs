@@ -8,7 +8,7 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 ## Summary
 - Total tasks: 191
 - Total weighted progress: 31/661 (4.7%)
-- Next action: ARB-COM-001 - Publish Community CLI and immutable release
+- Next action: ARB-COM-002 - Publish public GitHub Action distribution
 
 ## Detailed Work Items
 Total detailed Codex work items: 147
@@ -17,8 +17,8 @@ Remaining detailed Codex work items: 144
 
 ## Execution Batches
 Total planned Codex execution batches: 71
-Completed Codex execution batches: 3
-Execution batches currently in review: 1
+Completed Codex execution batches: 4
+Execution batches currently in review: 0
 Execution batches not yet issued: 67
 Immediately executable Codex prompts: 0
 Average work items per batch: 2.07
@@ -27,10 +27,10 @@ Batches with more than five work items: 2
 Batches with more than eight work items: 0
 
 ## Execution Batches By Objective
-Execution batches remaining before Community publicly usable: 4
-Execution batches remaining before Pro technically complete: 14
-Execution batches remaining before first Pro sale: 28
-Execution batches remaining before global launch: 58
+Execution batches remaining before Community publicly usable: 3
+Execution batches remaining before Pro technically complete: 13
+Execution batches remaining before first Pro sale: 27
+Execution batches remaining before global launch: 57
 Execution batches for category-building: 9
 Execution batches post-launch: 9
 Execution batches post-revenue: 1

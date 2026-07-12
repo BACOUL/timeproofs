@@ -166,6 +166,14 @@ function isExecutionReadyBatch(batch, ledger) {
     && dependencyBatchesDone(batch, batchMap(ledger));
 }
 
+function isSpecificationRefinementCandidate(batch, ledger) {
+  return ["CODEX", "CODEX_AND_JEASON"].includes(batch.owner)
+    && batch.status === "PLANNED"
+    && batch.spec_status !== "EXECUTION_READY"
+    && dependencyTasksDone(batch, taskMap(ledger))
+    && dependencyBatchesDone(batch, batchMap(ledger));
+}
+
 function countRemainingBatches(batches, predicate) {
   const remaining = batches.filter((batch) => !isDone(batch) && predicate(batch));
   const notYetIssued = remaining.filter((batch) => !isBatchIssued(batch)).length;
@@ -264,6 +272,16 @@ export function selectNextAction(ledger) {
   }
   const readyBatch = (ledger.execution_batches || []).find((batch) => isExecutionReadyBatch(batch, ledger));
   if (readyBatch) return { kind: "batch", batch: readyBatch, action_owner: readyBatch.owner, action_type: "READY", summary: readyBatch.objective };
+  const specificationBatch = (ledger.execution_batches || []).find((batch) => isSpecificationRefinementCandidate(batch, ledger));
+  if (specificationBatch) {
+    return {
+      kind: "batch",
+      batch: specificationBatch,
+      action_owner: specificationBatch.owner,
+      action_type: "SPECIFICATION_REFINEMENT_REQUIRED",
+      summary: `Refine ${specificationBatch.id} to EXECUTION_READY before generating a Codex prompt.`
+    };
+  }
   return null;
 }
 
@@ -614,7 +632,7 @@ export function generatedContents(ledger) {
     "",
     next && next.kind === "batch" && isExecutionReadyBatch(next.batch, ledger)
       ? promptForBatch(next.batch, ledger)
-      : `No CODEX execution batch is currently authorized.\n\nThe current next action belongs to:\n${next ? `${next.action_owner} - ${next.kind === "batch" ? `${next.batch.id} - ${next.batch.title}` : `${next.task.id} - ${next.task.title}`}` : "None"}\n\nCodex prompts are generated from execution batches, not directly from detailed work items. Codex must not start another implementation prompt until the blocking owner, legal, security, design, or external action is complete and the ledger has been reconciled.`,
+      : `No CODEX execution batch is currently authorized.\n\nThe current next action belongs to:\n${next ? `${next.action_owner} - ${next.kind === "batch" ? `${next.batch.id} - ${next.batch.title}` : `${next.task.id} - ${next.task.title}`}` : "None"}\n\n${next?.action_type === "SPECIFICATION_REFINEMENT_REQUIRED" ? "The next batch has satisfied dependencies but is not EXECUTION_READY. Its specification must be refined before any executable Codex prompt can be generated." : "Codex prompts are generated from execution batches, not directly from detailed work items. Codex must not start another implementation prompt until the blocking owner, legal, security, design, or external action is complete and the ledger has been reconciled."}`,
     ""
   ].join("\n");
   const ownerTaskRows = ledger.tasks
