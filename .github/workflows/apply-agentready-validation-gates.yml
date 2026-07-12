@@ -1,0 +1,70 @@
+name: Apply AgentReady validation gates
+
+on:
+  push:
+    branches:
+      - docs-agentready-strengthen-validation-gates
+    paths:
+      - scripts/apply-agentready-validation-gates.mjs
+      - .github/workflows/apply-agentready-validation-gates.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out governance branch
+        uses: actions/checkout@v4
+        with:
+          ref: docs-agentready-strengthen-validation-gates
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Apply canonical plan changes
+        run: node scripts/apply-agentready-validation-gates.mjs
+
+      - name: Rebuild canonical ledger
+        run: node scripts/rebuild-agentready-ledger-data.mjs
+
+      - name: Generate ledger views
+        run: |
+          node scripts/generate-agentready-ledger-views.mjs --write
+          node scripts/generate-agentready-status.mjs --write
+          node scripts/generate-agentready-next-action.mjs --write
+          node scripts/generate-agentready-next-prompt.mjs --write
+
+      - name: Validate strategy and execution system
+        run: |
+          node scripts/validate-agentready-strategy-docs.mjs
+          node scripts/validate-agentready-execution-system.mjs
+          git diff --check
+
+      - name: Verify deterministic regeneration
+        run: |
+          git diff > /tmp/agentready-before.diff
+          node scripts/rebuild-agentready-ledger-data.mjs
+          node scripts/generate-agentready-ledger-views.mjs --write
+          node scripts/generate-agentready-status.mjs --write
+          node scripts/generate-agentready-next-action.mjs --write
+          node scripts/generate-agentready-next-prompt.mjs --write
+          git diff > /tmp/agentready-after.diff
+          cmp /tmp/agentready-before.diff /tmp/agentready-after.diff
+
+      - name: Remove one-time migration helpers
+        run: |
+          rm scripts/apply-agentready-validation-gates.mjs
+          rm .github/workflows/apply-agentready-validation-gates.yml
+
+      - name: Commit validated governance update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "docs(project): strengthen AgentReady validation gates"
+          git push origin HEAD:docs-agentready-strengthen-validation-gates
