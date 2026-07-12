@@ -292,7 +292,7 @@ Required evidence:
   - GitHub Release URL
 
 ### ARB-COM-002 - Publish public GitHub Action distribution
-- Status: IN_REVIEW
+- Status: DONE
 - Spec status: EXECUTION_READY
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
@@ -316,7 +316,7 @@ Acceptance criteria:
   - all automated validations pass before the owner checkpoint
   - owner publishes only the approved immutable Action commit
   - post-publication public Action run passes
-  - release listing and site evidence are recorded before merge
+  - release listing and site evidence are recorded, with the documented default-branch sequencing exception
   - existing npm package release and tag remain unchanged
 Required evidence:
   - root metadata audit

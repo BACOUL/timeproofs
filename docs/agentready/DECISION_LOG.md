@@ -209,3 +209,15 @@ Supersedes: the part of DL-2026-07-11-COMMERCIAL-BENCHMARK-THRESHOLDS that allow
 Status: ACTIVE
 
 Completed publication evidence, the npm package, immutable tag, GitHub prerelease and Community/Pro feature boundary are unchanged.
+
+
+## DL-2026-07-12-AGENTREADY-ACTION-MARKETPLACE-PUBLISHED
+
+Status: ACTIVE
+
+- Root `action.yml` was merged through PR #129 at `3070e7827e8118ca62ad6cdb7c37deff9ef24b47`.
+- The immutable tag `agentready-action-v0.1.0-alpha.0` remains fixed on `d6634d0fbbe1fced510fc49d8871d52a3dc7f348`.
+- The GitHub prerelease and Marketplace listing are public.
+- GitHub required root `action.yml` on the default branch before the Marketplace checkbox became available; this sequencing exception is recorded rather than hidden.
+- Public OpenAPI and MCP tag smoke tests passed.
+- No npm operation occurred.

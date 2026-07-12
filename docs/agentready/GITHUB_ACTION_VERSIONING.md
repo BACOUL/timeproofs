@@ -89,7 +89,7 @@ uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0
 Security-hardened full commit reference:
 
 ```yaml
-uses: BACOUL/timeproofs@<FULL_ACTION_RELEASE_COMMIT_SHA>
+uses: BACOUL/timeproofs@d6634d0fbbe1fced510fc49d8871d52a3dc7f348
 ```
 
 The full commit SHA is the recommended reference for maximum stability and supply-chain control.
@@ -192,3 +192,8 @@ The response is:
 TimeProofs AgentReady does not guarantee that an AI agent will never fail.
 
 It identifies structural risks that may cause AI agents to misuse APIs, tools, or MCP servers.
+
+
+## Published Action alpha
+
+The immutable Action tag `agentready-action-v0.1.0-alpha.0` is public and points exactly to `d6634d0fbbe1fced510fc49d8871d52a3dc7f348`. The corresponding prerelease is https://github.com/BACOUL/timeproofs/releases/tag/agentready-action-v0.1.0-alpha.0 and the Marketplace listing is https://github.com/marketplace/actions/agentready-ci-gate-by-timeproofs. No moving major tag is authorized during the alpha.

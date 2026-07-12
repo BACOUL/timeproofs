@@ -5,50 +5,32 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 # Next Action
 
-Batch ID: ARB-COM-002
-Title: Publish public GitHub Action distribution
-Action owner: JEASON
-Action type: REVIEW_OR_MERGE
-Status: IN_REVIEW
-Specification: EXECUTION_READY
+Batch ID: ARB-COM-003
+Title: Validate public Community installation
+Action owner: CODEX
+Action type: SPECIFICATION_REFINEMENT_REQUIRED
+Status: PLANNED
+Specification: SKELETON
 Objective:
-Publish public GitHub Action distribution.
+Validate public Community installation.
 
 Work items:
-  - AR-COM-007
-  - AR-COM-009
+  - AR-COM-008
 
 Required evidence:
-  - root metadata audit
-  - reference migration inventory
-  - test and workflow evidence
-  - approved implementation SHA
-  - immutable Action tag target
-  - GitHub prerelease URL
-  - Marketplace URL
-  - public tag workflow run
-  - full-SHA example
-  - permissions and supply-chain review
-  - site alignment report
-  - rollback procedure
+  - OS and Node.js matrix
+  - external-repository workflow runs
+  - PASS FAIL exit-code evidence
+  - report path evidence
+  - offline or backend-independent evidence
+  - unsupported-case register
 
 Manual actions:
-  - JEASON approves the exact implementation commit
-  - JEASON accepts any required Marketplace agreement and publishes the tagged prerelease privately with 2FA
-  - JEASON returns public URLs only
-  - JEASON reviews final evidence before merge
+  - None
 
 Authorized external actions:
-  - prepare and validate the root Action
-  - migrate internal Action references
-  - update approved docs tests workflows and public pages
-  - after owner confirmation verify and record the public Action release and Marketplace listing
+  - None
 
 Forbidden actions:
-  - no npm operation
-  - no movement or reuse of v0.1.0-alpha.0
-  - no moving Action major tag
-  - no engine CLI package billing backend or runtime changes
-  - no credentials or 2FA material
-  - no merge before final owner review
+  - None
 

@@ -50,7 +50,7 @@ uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0
 The security-hardened form will use the exact Action release commit:
 
 ```yaml
-uses: BACOUL/timeproofs@<FULL_ACTION_RELEASE_COMMIT_SHA>
+uses: BACOUL/timeproofs@d6634d0fbbe1fced510fc49d8871d52a3dc7f348
 ```
 
 These root references must not be presented as publicly available until the Action tag and Marketplace listing are verified.
@@ -96,7 +96,7 @@ A hardened example must replace third-party Action tags and the AgentReady tag w
 Security-hardened AgentReady form after owner verification:
 
 ```yaml
-uses: BACOUL/timeproofs@<FULL_ACTION_RELEASE_COMMIT_SHA>
+uses: BACOUL/timeproofs@d6634d0fbbe1fced510fc49d8871d52a3dc7f348
 ```
 
 The Community Action requires only:
@@ -225,3 +225,11 @@ After the owner checkpoint, real Release and Marketplace references must replace
 TimeProofs AgentReady does not guarantee that an AI agent will never fail.
 
 It identifies structural risks that may cause AI agents to misuse APIs, tools, or MCP servers.
+
+
+## Public Marketplace release
+
+- Marketplace: https://github.com/marketplace/actions/agentready-ci-gate-by-timeproofs
+- Immutable tag: `agentready-action-v0.1.0-alpha.0`
+- Full verified SHA: `d6634d0fbbe1fced510fc49d8871d52a3dc7f348`
+- Publication evidence: [AGENTREADY_ACTION_PUBLICATION_EVIDENCE.md](./AGENTREADY_ACTION_PUBLICATION_EVIDENCE.md)
