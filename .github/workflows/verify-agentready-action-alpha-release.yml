@@ -1,0 +1,65 @@
+name: Verify AgentReady Action Alpha Release
+
+on:
+  push:
+    branches:
+      - ops-publish-agentready-action-alpha
+    paths:
+      - .github/workflows/verify-agentready-action-alpha-release.yml
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TARGET_SHA: d6634d0fbbe1fced510fc49d8871d52a3dc7f348
+      TAG_NAME: agentready-action-v0.1.0-alpha.0
+    steps:
+      - name: Verify immutable tag and prerelease
+        id: verify
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${TAG_NAME}" > /tmp/tag.json
+          tag_sha="$(jq -r '.object.sha' /tmp/tag.json)"
+          test "$tag_sha" = "$TARGET_SHA"
+
+          gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${TAG_NAME}" > /tmp/release.json
+          test "$(jq -r '.tag_name' /tmp/release.json)" = "$TAG_NAME"
+          test "$(jq -r '.draft' /tmp/release.json)" = "false"
+          test "$(jq -r '.prerelease' /tmp/release.json)" = "true"
+          release_url="$(jq -r '.html_url' /tmp/release.json)"
+          test -n "$release_url"
+
+          echo "tag_sha=$tag_sha" >> "$GITHUB_OUTPUT"
+          echo "release_url=$release_url" >> "$GITHUB_OUTPUT"
+
+      - name: Record verified owner checkpoint evidence on PR 129
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > /tmp/comment.md <<EOF
+          ## Owner checkpoint — tag and prerelease created
+
+          Verified immutable Action tag:
+
+          - Tag: \`agentready-action-v0.1.0-alpha.0\`
+          - Exact target: \`${{ steps.verify.outputs.tag_sha }}\`
+          - Approved implementation SHA: \`d6634d0fbbe1fced510fc49d8871d52a3dc7f348\`
+          - Target matches approved SHA: **YES**
+
+          Verified public GitHub prerelease:
+
+          - Release URL: ${{ steps.verify.outputs.release_url }}
+          - Draft: **false**
+          - Prerelease: **true**
+
+          No npm operation was performed.
+
+          GitHub Marketplace publication still requires the repository owner's interactive Marketplace agreement/category/2FA step in GitHub's Release Action interface.
+          EOF
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/issues/129/comments" -F body=@/tmp/comment.md
