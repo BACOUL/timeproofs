@@ -4,11 +4,12 @@ on:
   pull_request:
     paths:
       - ".github/workflows/agentready-community-release-candidate.yml"
-      - ".github/actions/agentready/action.yml"
+      - "action.yml"
       - "agentready-core/**"
       - "agentready-examples/**"
       - "bin/agentready.js"
       - "cli/tests/**"
+      - "scripts/validate-agentready-action-marketplace-readiness.mjs"
       - "scripts/create-agentready-community-release-candidate.mjs"
       - "scripts/agentready-community-package-lib.mjs"
       - "scripts/agentready-execution-lib.mjs"
@@ -88,15 +89,20 @@ jobs:
 
           assert.equal(completedBatch?.status, 'DONE');
           assert.equal(nextBatch?.id, 'ARB-COM-002');
-          assert.equal(nextBatch?.status, 'READY');
+          assert.ok(['READY', 'IN_REVIEW'].includes(nextBatch?.status));
           assert.equal(nextBatch?.spec_status, 'EXECUTION_READY');
           assert.equal(next?.kind, 'batch');
           assert.equal(next?.batch?.id, 'ARB-COM-002');
-          assert.equal(next?.action_type, 'READY');
-          assert.match(nextPrompt, /Repository: BACOUL\/timeproofs/);
-          assert.match(nextPrompt, /Batch ID: ARB-COM-002/);
-          assert.match(nextPrompt, /Point de contrôle propriétaire obligatoire/);
-          assert.match(nextPrompt, /agentready-action-v0\.1\.0-alpha\.0/);
+          if (nextBatch?.status === 'READY') {
+            assert.equal(next?.action_type, 'READY');
+            assert.match(nextPrompt, /Repository: BACOUL\/timeproofs/);
+            assert.match(nextPrompt, /Batch ID: ARB-COM-002/);
+            assert.match(nextPrompt, /Point de contrôle propriétaire obligatoire/);
+            assert.match(nextPrompt, /agentready-action-v0\.1\.0-alpha\.0/);
+          } else {
+            assert.equal(next?.action_type, 'REVIEW_OR_MERGE');
+            assert.match(nextPrompt, /No CODEX execution batch is currently authorized/);
+          }
           NODE
 
       - name: Verify package metadata
@@ -127,6 +133,9 @@ jobs:
       - name: Action metadata smoke test
         run: node cli/tests/run-agentready-action-smoke-test.mjs
 
+      - name: Action Marketplace readiness test
+        run: node scripts/validate-agentready-action-marketplace-readiness.mjs
+
       - name: Package clean-install smoke test
         run: node cli/tests/run-agentready-package-smoke-test.mjs
 
@@ -135,7 +144,7 @@ jobs:
 
       - name: AgentReady OpenAPI PASS
         id: openapi_pass
-        uses: ./.github/actions/agentready
+        uses: ./
         with:
           type: openapi
           file: "./agentready-examples/valid-simple-openapi.json"
@@ -154,7 +163,7 @@ jobs:
 
       - name: AgentReady MCP PASS
         id: mcp_pass
-        uses: ./.github/actions/agentready
+        uses: ./
         with:
           type: mcp
           file: "./agentready-examples/mcp-tools-simple.json"
@@ -173,7 +182,7 @@ jobs:
 
       - name: AgentReady OpenAPI policy FAIL expected
         id: openapi_policy_fail
-        uses: ./.github/actions/agentready
+        uses: ./
         continue-on-error: true
         with:
           type: openapi

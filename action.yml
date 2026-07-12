@@ -1,5 +1,6 @@
-name: TimeProofs AgentReady CI Gate
-description: Scan an OpenAPI document or MCP tools file and fail the job when the AgentReady policy fails.
+name: AgentReady CI Gate by TimeProofs
+author: TimeProofs
+description: Static CI gate for agent-facing OpenAPI and MCP contracts.
 
 inputs:
   file:
@@ -55,7 +56,7 @@ runs:
         fail_on="$AGENTREADY_INPUT_FAIL_ON"
         out_dir="$AGENTREADY_INPUT_OUT"
 
-        action_repo_root="$(cd "$GITHUB_ACTION_PATH/../../.." && pwd)"
+        action_repo_root="$(cd "$GITHUB_ACTION_PATH" && pwd)"
         result_json="$RUNNER_TEMP/agentready-result.json"
 
         if [ "$scan_type" != "openapi" ] && [ "$scan_type" != "mcp" ]; then
@@ -155,3 +156,7 @@ runs:
         } >> "$GITHUB_OUTPUT"
 
         exit "$exit_code"
+
+branding:
+  icon: shield
+  color: blue

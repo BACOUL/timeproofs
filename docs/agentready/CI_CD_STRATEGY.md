@@ -57,7 +57,7 @@ The GitHub Action is the fastest adoption layer for GitHub users.
 It should be simple:
 
 ```yaml
-- uses: ./.github/actions/agentready
+- uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0
   with:
     file: openapi.yaml
     type: openapi
@@ -65,13 +65,17 @@ It should be simple:
     fail-on: critical
 ```
 
-For future versioned public use, the planned reference is:
+For maximum supply-chain pinning after the owner checkpoint, use the full verified Action release commit:
 
 ```yaml
-uses: BACOUL/timeproofs/.github/actions/agentready@v0.1.0-alpha.0
+uses: BACOUL/timeproofs@<FULL_ACTION_RELEASE_COMMIT_SHA>
 ```
 
-Planned versioned reference - tag not created yet.
+The repository-local development reference remains:
+
+```yaml
+uses: ./
+```
 
 ## CLI target commands
 
@@ -128,9 +132,11 @@ on:
 jobs:
   agentready:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/agentready
+      - uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0
         with:
           file: openapi.yaml
           type: openapi

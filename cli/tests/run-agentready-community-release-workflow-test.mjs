@@ -48,11 +48,16 @@ assert.doesNotMatch(workflow, /\bgh\s+release\s+create\b/);
 assert.doesNotMatch(workflow, /\bgit\s+tag\b/);
 assert.doesNotMatch(workflow, authTokenPattern);
 assert.doesNotMatch(workflow, idTokenWritePattern);
-assert.match(workflow, /uses:\s*\.\/\.github\/actions\/agentready/);
+assert.match(workflow, /uses:\s*\.\/\s*$/m);
+assert.doesNotMatch(workflow, /uses:\s*\.\/\.github\/actions\/agentready/);
+assert.match(workflow, /Action Marketplace readiness test/);
+assert.match(workflow, /node scripts\/validate-agentready-action-marketplace-readiness\.mjs/);
 assert.match(workflow, /actions\/upload-artifact@v4/);
 assert.match(workflow, /retention-days:\s*7/);
 assert.match(workflow, /agentready-community-release-candidate-0\.1\.0-alpha\.0/);
 assert.match(workflow, /packaging\/agentready-community\/\*\*/);
+assert.match(workflow, /action\.yml/);
+assert.match(workflow, /scripts\/validate-agentready-action-marketplace-readiness\.mjs/);
 assert.match(workflow, /scripts\/agentready-community-package-lib\.mjs/);
 for (const requiredPath of [
   'scripts/agentready-execution-lib.mjs',
@@ -83,9 +88,11 @@ assert.match(workflow, /git diff --exit-code --/);
 assert.ok(workflow.includes("assert.equal(completedBatch?.status, 'DONE')"));
 assert.ok(workflow.includes("assert.equal(next?.batch?.id, 'ARB-COM-002')"));
 assert.ok(workflow.includes("assert.equal(next?.action_type, 'READY')"));
-assert.ok(workflow.includes("assert.equal(nextBatch?.status, 'READY')"));
+assert.ok(workflow.includes("assert.equal(next?.action_type, 'REVIEW_OR_MERGE')"));
+assert.ok(workflow.includes("assert.ok(['READY', 'IN_REVIEW'].includes(nextBatch?.status))"));
 assert.ok(workflow.includes("assert.equal(nextBatch?.spec_status, 'EXECUTION_READY')"));
 assert.ok(workflow.includes("assert.match(nextPrompt, /Repository:"));
+assert.ok(workflow.includes("assert.match(nextPrompt, /No CODEX execution batch is currently authorized/)"));
 assert.match(workflow, /Batch ID: ARB-COM-002/);
 assert.match(workflow, /Point de contrôle propriétaire obligatoire/);
 assert.match(workflow, /assert\.equal\(manifest\.community_license,\s*'Apache-2\.0'\)/);
@@ -122,6 +129,7 @@ assert.match(packageLib, /package_publish_access:\s*COMMUNITY_PUBLISH_CONFIG\.ac
 assert.match(packageLib, /package_publish_tag:\s*COMMUNITY_PUBLISH_CONFIG\.tag/);
 assert.match(packageLib, /publishConfig:\s*COMMUNITY_PUBLISH_CONFIG/);
 assert.match(packageLib, /community_license:\s*COMMUNITY_LICENSE/);
+assert.match(packageLib, /path:\s*'action\.yml'/);
 assert.match(packageLib, /createHash\('sha256'\)/);
 assert.match(packageLib, /\['rev-parse', 'HEAD'\]/);
 assert.match(packageLib, /Release candidate output directory must not be the repository root\./);

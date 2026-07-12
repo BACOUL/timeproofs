@@ -398,13 +398,17 @@
     </section>
 
     <section class="section wrap">
+      <div class="section-head">
+        <h2>Add it to a pull request.</h2>
+        <p>AgentReady Community is available for free through the npm alpha. AgentReady Pro is in preparation. The root GitHub Marketplace Action is prepared for the owner publication checkpoint.</p>
+      </div>
       <div class="grid two">
         <article class="card code-card">
           <div class="code-title">CLI example</div>
-          <pre><code>node bin/agentready.js scan openapi ./openapi.json --min-score 75 --fail-on critical</code></pre>
+          <pre><code>npx @timeproofs/agentready@alpha scan openapi ./openapi.json --min-score 75 --fail-on critical</code></pre>
         </article>
         <article class="card code-card">
-          <div class="code-title">GitHub Action example</div>
+          <div class="code-title">GitHub Marketplace Action checkpoint</div>
           <pre><code>name: AgentReady
 
 on:
@@ -416,13 +420,15 @@ on:
 jobs:
   agentready:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
       - name: AgentReady OpenAPI CI gate
-        uses: BACOUL/timeproofs/.github/actions/agentready@timeproofs
+        uses: after-owner-marketplace-checkpoint
         with:
           type: openapi
           file: ./openapi.json
@@ -431,7 +437,7 @@ jobs:
           out: agentready-output</code></pre>
         </article>
       </div>
-      <p class="muted" style="margin-top:12px;">The action is a repository action wrapper around the AgentReady CLI, not a Marketplace listing. For a vendored local copy inside the same repository, use <code>uses: ./.github/actions/agentready</code>.</p>
+      <p class="muted" style="margin-top:12px;">The root GitHub Marketplace Action metadata is prepared at <code>/action.yml</code>. Public Action references are published only after JEASON approves the exact implementation commit, creates the immutable Action tag, and completes the GitHub Marketplace owner checkpoint.</p>
     </section>
 
     <section class="section wrap">
@@ -496,7 +502,7 @@ jobs:
     <section class="section wrap">
       <div class="card">
         <h2>Limitations</h2>
-        <p>TimeProofs AgentReady does not guarantee that an AI agent will never fail.</p>
+        <p>TimeProofs AgentReady does not guarantee that an AI agent will never fail. It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.</p>
         <p>It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.</p>
       </div>
     </section>

@@ -13,6 +13,8 @@ TimeProofs AgentReady = pre-deployment CI gate for agent-facing OpenAPI and MCP 
 ### Added
 
 - Community release candidate workflow, manifest, checksum, and temporary CI artifact validation.
+- Root GitHub Action Marketplace metadata prepared at `action.yml`.
+- GitHub Action Marketplace owner-checkpoint documentation, immutable tag plan, and supply-chain rollback procedure.
 
 ### Release Evidence
 
@@ -22,6 +24,7 @@ TimeProofs AgentReady = pre-deployment CI gate for agent-facing OpenAPI and MCP 
 - GitHub prerelease `v0.1.0-alpha.0` was created.
 - No new npm operation is authorized after the documented `latest` exception.
 - Marketplace listing remains outside this release step.
+- Marketplace Action publication remains pending owner checkpoint for `agentready-action-v0.1.0-alpha.0`.
 
 ## 0.1.0-alpha.0 - alpha prerelease
 

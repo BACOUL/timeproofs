@@ -30,7 +30,7 @@ It points to:
 
 This tag and its GitHub prerelease are already published and must remain immutable.
 
-At that historical source layout, the Action metadata is located at:
+At that historical source layout, the Action metadata was located at:
 
 ```txt
 .github/actions/agentready/action.yml
@@ -42,7 +42,7 @@ The corresponding immutable source reference is:
 uses: BACOUL/timeproofs/.github/actions/agentready@v0.1.0-alpha.0
 ```
 
-This is a historical alpha source reference. It is not the root Marketplace Action and it must not be represented as a Marketplace listing.
+This is a historical alpha source reference. It is not the root Marketplace Action and it must not be represented as a Marketplace listing or a current installation path.
 
 ## Root Marketplace Action Requirement
 
@@ -172,6 +172,8 @@ The Action release may have its own Action tag while embedding the unchanged npm
 - Action tag `agentready-action-v0.1.0-alpha.0` is reserved but not yet created.
 - no Marketplace listing exists at the start of `ARB-COM-002`.
 - no new npm operation is authorized.
+
+`ARB-COM-002` creates root `/action.yml` in the implementation PR. It must still stop before tag, GitHub Release and Marketplace publication until JEASON approves the exact implementation commit.
 
 ## Compromised Release Rule
 

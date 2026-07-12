@@ -3,15 +3,17 @@ name: AgentReady Action Integration
 on:
   pull_request:
     paths:
-      - ".github/actions/agentready/action.yml"
+      - "action.yml"
       - ".github/workflows/agentready-action-integration.yml"
       - "agentready-core/**"
       - "agentready-examples/**"
       - "bin/agentready.js"
       - "cli/tests/run-agentready-action-smoke-test.mjs"
+      - "scripts/validate-agentready-action-marketplace-readiness.mjs"
       - "package.json"
       - "docs/agentready/GITHUB_ACTION_USAGE.md"
       - "docs/agentready/GITHUB_ACTION_VERSIONING.md"
+      - "docs/agentready/GITHUB_ACTION_MARKETPLACE_EXECUTION_SPEC.md"
       - "docs/agentready/examples/github-action-agentready.yml"
   workflow_dispatch:
 
@@ -41,7 +43,7 @@ jobs:
 
       - name: AgentReady OpenAPI PASS
         id: openapi_pass
-        uses: ./.github/actions/agentready
+        uses: ./
         with:
           type: openapi
           file: "./agentready fixture space/valid simple openapi.json"
@@ -60,7 +62,7 @@ jobs:
 
       - name: AgentReady MCP PASS
         id: mcp_pass
-        uses: ./.github/actions/agentready
+        uses: ./
         with:
           type: mcp
           file: "./agentready-examples/mcp-tools-simple.json"
@@ -79,7 +81,7 @@ jobs:
 
       - name: AgentReady OpenAPI policy FAIL expected
         id: openapi_policy_fail
-        uses: ./.github/actions/agentready
+        uses: ./
         continue-on-error: true
         with:
           type: openapi
@@ -100,7 +102,7 @@ jobs:
 
       - name: AgentReady usage error expected
         id: usage_error
-        uses: ./.github/actions/agentready
+        uses: ./
         continue-on-error: true
         with:
           type: invalid

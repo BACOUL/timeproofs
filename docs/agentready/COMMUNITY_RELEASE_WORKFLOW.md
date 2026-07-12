@@ -167,7 +167,7 @@ No candidate generated from a temporary pull-request merge commit may serve as a
 The workflow executes the local composite action:
 
 ```yaml
-uses: ./.github/actions/agentready
+uses: ./
 ```
 
 It validates:

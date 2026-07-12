@@ -163,10 +163,14 @@ timeproofs generate-contract openapi.yaml
 
 ```yaml
 - name: TimeProofs AgentReady Scan
-  uses: BACOUL/timeproofs/.github/actions/agentready@v0.1.0-alpha.0
+  uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0
 ```
 
-Planned versioned reference - tag not created yet.
+Security-hardened full-SHA form after the owner checkpoint:
+
+```yaml
+uses: BACOUL/timeproofs@<FULL_ACTION_RELEASE_COMMIT_SHA>
+```
 
 ### Pourquoi cette phase est essentielle
 
