@@ -7,7 +7,7 @@ const repoRoot = process.cwd();
 const publishedActionSha = "d6634d0fbbe1fced510fc49d8871d52a3dc7f348";
 
 function read(relativePath) {
-  return readFileSync(path.join(repoRoot, relativePath), "utf8");
+  return readFileSync(path.join(repoRoot, relativePath), "utf8").replace(/\r\n/g, "\n");
 }
 
 function assertIncludes(file, expected) {

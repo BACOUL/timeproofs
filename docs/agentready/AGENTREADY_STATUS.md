@@ -73,8 +73,8 @@ Credible public value cases required: 1
 - M8 Category-building active: 0/98 (0%)
 
 ## Document Coverage
-Active documents discovered: 70
-Active documents covered: 70
+Active documents discovered: 71
+Active documents covered: 71
 Uncovered active documents: 0
 Historical documents excluded: 36
 Generated documents excluded: 6
