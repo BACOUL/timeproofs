@@ -4,6 +4,7 @@ import path from "node:path";
 import process from "node:process";
 
 const repoRoot = process.cwd();
+const publishedActionSha = "d6634d0fbbe1fced510fc49d8871d52a3dc7f348";
 
 function read(relativePath) {
   return readFileSync(path.join(repoRoot, relativePath), "utf8");
@@ -91,13 +92,31 @@ for (const file of [usageDoc, versioningDoc, executionSpec, exampleWorkflow, "RE
   assertIncludes(file, "agentready-action-v0.1.0-alpha.0");
 }
 for (const file of [usageDoc, versioningDoc, executionSpec, exampleWorkflow]) {
-  assertIncludes(file, "uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0");
-  assertIncludes(file, "uses: BACOUL/timeproofs@<FULL_ACTION_RELEASE_COMMIT_SHA>");
+  const content = read(file);
+  assert.ok(content.includes("uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0"), `${file} must include immutable tag usage`);
+  assert.ok(
+    content.includes("uses: BACOUL/timeproofs@<FULL_ACTION_RELEASE_COMMIT_SHA>") ||
+      content.includes(`uses: BACOUL/timeproofs@${publishedActionSha}`),
+    `${file} must include a placeholder or finalized full-SHA usage`
+  );
 }
 assertMatches(usageDoc, /permissions:\s*\n\s*contents:\s*read/);
 assertIncludes(executionSpec, "Action Release Evidence Record");
-assertIncludes(executionSpec, "Approved implementation SHA: `PENDING_OWNER_APPROVAL`");
-assertIncludes(executionSpec, "Marketplace URL: `PENDING_OWNER_CONFIRMATION`");
+const executionContent = read(executionSpec);
+assert.ok(
+  executionContent.includes("Status: PRE_OWNER_CHECKPOINT") ||
+    executionContent.includes("Status: PUBLISHED_AND_VERIFIED"),
+  "execution spec must identify pre-owner or published state"
+);
+if (executionContent.includes("Status: PRE_OWNER_CHECKPOINT")) {
+  assertIncludes(executionSpec, "Approved implementation SHA: `PENDING_OWNER_APPROVAL`");
+  assertIncludes(executionSpec, "Marketplace URL: `PENDING_OWNER_CONFIRMATION`");
+} else {
+  assertIncludes(executionSpec, `Approved implementation SHA: \`${publishedActionSha}\``);
+  assertIncludes(executionSpec, "https://github.com/marketplace/actions/agentready-ci-gate-by-timeproofs");
+  assertIncludes(executionSpec, "Owner Marketplace agreement: accepted privately");
+  assertIncludes(executionSpec, "Owner 2FA: completed privately; no secret recorded");
+}
 assertIncludes(executionSpec, "Compromised-release response");
 
 for (const site of ["index.html", "pricing.html", "agentready-ci.html"]) {
@@ -119,6 +138,11 @@ for (const site of ["index.html", "pricing.html", "agentready-ci.html"]) {
 assertIncludes("pricing.html", "AgentReady Community - available for free");
 assertIncludes("pricing.html", "AgentReady Pro - in preparation");
 assertIncludes("agentready-ci.html", "GitHub Marketplace Action");
-assertIncludes("agentready-ci.html", "after-owner-marketplace-checkpoint");
+const ciContent = read("agentready-ci.html");
+assert.ok(
+  ciContent.includes("after-owner-marketplace-checkpoint") ||
+    ciContent.includes("uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0"),
+  "agentready-ci.html must include pre-publication placeholder or finalized immutable tag"
+);
 
 console.log("AgentReady Action Marketplace readiness validation: PASS");
