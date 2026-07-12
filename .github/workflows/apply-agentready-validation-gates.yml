@@ -6,12 +6,14 @@ on:
       - docs-agentready-strengthen-validation-gates
     paths:
       - scripts/apply-agentready-validation-gates.mjs
+      - scripts/fix-agentready-validation-migration.mjs
       - .github/workflows/apply-agentready-validation-gates.yml
   pull_request:
     branches:
       - timeproofs
     paths:
       - scripts/apply-agentready-validation-gates.mjs
+      - scripts/fix-agentready-validation-migration.mjs
       - .github/workflows/apply-agentready-validation-gates.yml
 
 permissions:
@@ -35,6 +37,9 @@ jobs:
 
       - name: Apply canonical plan changes
         run: node scripts/apply-agentready-validation-gates.mjs
+
+      - name: Repair migrated market-gate placement
+        run: node scripts/fix-agentready-validation-migration.mjs
 
       - name: Rebuild canonical ledger
         shell: bash
@@ -69,6 +74,7 @@ jobs:
       - name: Remove one-time migration helpers
         run: |
           rm scripts/apply-agentready-validation-gates.mjs
+          rm scripts/fix-agentready-validation-migration.mjs
           rm .github/workflows/apply-agentready-validation-gates.yml
 
       - name: Commit validated governance update
