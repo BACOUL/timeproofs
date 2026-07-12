@@ -32,10 +32,12 @@ jobs:
       - name: Restore canonical workflow and apply refinement
         shell: bash
         run: |
-          set -euo pipefail
-          git fetch origin timeproofs
-          git show origin/timeproofs:.github/workflows/agentready-community-release-candidate.yml > .github/workflows/agentready-community-release-candidate.yml
-          python3 <<'PY'
+          set -uo pipefail
+          {
+            set -e
+            git fetch --quiet origin timeproofs
+            git show origin/timeproofs:.github/workflows/agentready-community-release-candidate.yml > .github/workflows/agentready-community-release-candidate.yml
+            python3 <<'PY'
           from pathlib import Path
           import textwrap
 
@@ -47,24 +49,38 @@ jobs:
           embedded = textwrap.dedent(workflow_text[start:end])
           exec(compile(embedded, 'embedded-arb-com-002-refinement.py', 'exec'))
           PY
+          } > /tmp/refine.log 2>&1 || {
+            echo "--- refinement failure ---"
+            tail -n 120 /tmp/refine.log
+            exit 1
+          }
+          tail -n 30 /tmp/refine.log || true
 
       - name: Regenerate and validate governance
         shell: bash
         run: |
-          set -euo pipefail
-          node scripts/rebuild-agentready-ledger-data.mjs
-          node scripts/generate-agentready-ledger-views.mjs --write
-          node scripts/generate-agentready-status.mjs --write
-          node scripts/generate-agentready-next-action.mjs --write
-          node scripts/generate-agentready-next-prompt.mjs --write
-          node cli/tests/run-agentready-community-release-workflow-test.mjs
-          node scripts/validate-agentready-strategy-docs.mjs
-          node scripts/validate-agentready-execution-system.mjs
-          git diff --check
-          grep -F "Batch ID: ARB-COM-002" docs/agentready/NEXT_CODEX_PROMPT.md
-          grep -F "Branch: feat-distribution-agentready-marketplace-action" docs/agentready/NEXT_CODEX_PROMPT.md
-          grep -F "Specification: EXECUTION_READY" docs/agentready/NEXT_ACTION.md
-          grep -F "Action type: READY" docs/agentready/NEXT_ACTION.md
+          set -uo pipefail
+          {
+            set -e
+            node scripts/rebuild-agentready-ledger-data.mjs
+            node scripts/generate-agentready-ledger-views.mjs --write
+            node scripts/generate-agentready-status.mjs --write
+            node scripts/generate-agentready-next-action.mjs --write
+            node scripts/generate-agentready-next-prompt.mjs --write
+            node cli/tests/run-agentready-community-release-workflow-test.mjs
+            node scripts/validate-agentready-strategy-docs.mjs
+            node scripts/validate-agentready-execution-system.mjs
+            git diff --check
+            grep -F "Batch ID: ARB-COM-002" docs/agentready/NEXT_CODEX_PROMPT.md
+            grep -F "Branch: feat-distribution-agentready-marketplace-action" docs/agentready/NEXT_CODEX_PROMPT.md
+            grep -F "Specification: EXECUTION_READY" docs/agentready/NEXT_ACTION.md
+            grep -F "Action type: READY" docs/agentready/NEXT_ACTION.md
+          } > /tmp/validate.log 2>&1 || {
+            echo "--- validation failure ---"
+            tail -n 160 /tmp/validate.log
+            exit 1
+          }
+          tail -n 60 /tmp/validate.log
 
       - name: Commit validated refinement
         shell: bash
