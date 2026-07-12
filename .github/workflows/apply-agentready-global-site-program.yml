@@ -1,4 +1,4 @@
-name: Apply AgentReady Global Standard Site Program
+name: Finalize AgentReady Global Standard Site Program
 
 on:
   pull_request:
@@ -9,46 +9,30 @@ permissions:
   contents: write
 
 jobs:
-  migrate:
+  finalize:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           ref: docs-agentready-global-site-program
           fetch-depth: 0
-      - name: Check whether migration is pending
+      - name: Check whether validator correction is pending
         id: guard
         shell: bash
         run: |
-          if test -f docs/agentready/GLOBAL_STANDARD_SITE_PROGRAM.md; then
-            echo 'needed=false' >> "$GITHUB_OUTPUT"
-          else
+          if test -f scripts/fix-agentready-stacked-validator.mjs; then
             echo 'needed=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'needed=false' >> "$GITHUB_OUTPUT"
           fi
       - uses: actions/setup-node@v4
         if: steps.guard.outputs.needed == 'true'
         with:
           node-version: '20'
-      - name: Preserve temporary migration files for commit
+      - name: Correct stacked batch validation and remove temporary files
         if: steps.guard.outputs.needed == 'true'
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          p = Path('scripts/apply-agentready-global-site-program.mjs')
-          text = p.read_text()
-          block = '''for (const file of ["scripts/apply-agentready-global-site-program.mjs", ".github/workflows/apply-agentready-global-site-program.yml"]) {
-            if (fs.existsSync(file)) fs.rmSync(file);
-          }
-
-          '''
-          if block not in text:
-              raise SystemExit('temporary cleanup block not found')
-          p.write_text(text.replace(block, ''))
-          PY
-      - name: Apply global standard site governance
-        if: steps.guard.outputs.needed == 'true'
-        run: node scripts/apply-agentready-global-site-program.mjs
-      - name: Regenerate canonical execution system
+        run: node scripts/fix-agentready-stacked-validator.mjs
+      - name: Regenerate canonical views
         if: steps.guard.outputs.needed == 'true'
         run: |
           node scripts/rebuild-agentready-ledger-data.mjs
@@ -56,49 +40,40 @@ jobs:
           node scripts/generate-agentready-status.mjs --write
           node scripts/generate-agentready-next-action.mjs --write
           node scripts/generate-agentready-next-prompt.mjs --write
-      - name: Record validation diagnostics
+      - name: Validate final governance state
         if: steps.guard.outputs.needed == 'true'
-        shell: bash
         run: |
-          set +e
-          out='docs/agentready/GLOBAL_SITE_MIGRATION_DIAGNOSTIC.txt'
-          : > "$out"
-          for cmd in \
-            'node scripts/validate-agentready-strategy-docs.mjs' \
-            'node scripts/validate-agentready-execution-system.mjs' \
-            'node cli/tests/run-agentready-community-release-workflow-test.mjs' \
-            'git diff --check'
-          do
-            echo "> $cmd" >> "$out"
-            bash -lc "$cmd" >> "$out" 2>&1
-            status=$?
-            echo "exit=$status" >> "$out"
-            echo >> "$out"
-          done
-          node --input-type=module >> "$out" 2>&1 <<'NODE'
+          node scripts/validate-agentready-strategy-docs.mjs
+          node scripts/validate-agentready-execution-system.mjs
+          git diff --check
+      - name: Verify global product prompt
+        if: steps.guard.outputs.needed == 'true'
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
           import fs from 'node:fs';
           import { readLedger, selectNextAction } from './scripts/agentready-execution-lib.mjs';
           const ledger = readLedger();
           const batches = new Map(ledger.execution_batches.map((batch) => [batch.id, batch]));
           const next = selectNextAction(ledger);
-          console.log(JSON.stringify({
-            foundation: batches.get('ARB-SITE-PREMIUM-001'),
-            product: batches.get('ARB-SITE-GLOBAL-002'),
-            installation: batches.get('ARB-COM-003'),
-            next,
-            prompt: fs.readFileSync('docs/agentready/NEXT_CODEX_PROMPT.md', 'utf8')
-          }, null, 2));
+          const prompt = fs.readFileSync('docs/agentready/NEXT_CODEX_PROMPT.md', 'utf8');
+          assert.equal(batches.get('ARB-SITE-PREMIUM-001')?.status, 'IN_REVIEW');
+          assert.equal(batches.get('ARB-SITE-PREMIUM-001')?.pr_number, 132);
+          assert.equal(batches.get('ARB-SITE-GLOBAL-002')?.status, 'READY');
+          assert.equal(batches.get('ARB-SITE-GLOBAL-002')?.stacked_execution_authorized, true);
+          assert.equal(next?.batch?.id, 'ARB-SITE-GLOBAL-002');
+          assert.equal(next?.action_type, 'READY');
+          assert.match(prompt, /Base: site-agentready-premium-foundation/);
+          assert.match(prompt, /Batch ID: ARB-SITE-GLOBAL-002/);
+          assert.match(prompt, /24 EUR excluding tax/);
           NODE
-          exit 0
-      - name: Restore permanent workflow for connector update
-        if: steps.guard.outputs.needed == 'true'
-        run: git checkout HEAD -- .github/workflows/agentready-community-release-candidate.yml
-      - name: Commit generated governance and diagnostics
+      - name: Commit final non-workflow state
         if: steps.guard.outputs.needed == 'true'
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
-          git commit -m 'docs(plan): establish global standard site program [global-site-applied]'
+          git reset .github/workflows/agentready-community-release-candidate.yml .github/workflows/apply-agentready-global-site-program.yml || true
+          git commit -m 'fix(plan): authorize validated stacked site execution'
           git push origin HEAD:docs-agentready-global-site-program
