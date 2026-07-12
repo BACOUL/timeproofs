@@ -1931,26 +1931,52 @@
       "blocks": [],
       "source_documents": [
         "docs/agentready/GITHUB_ACTION_VERSIONING.md",
-        "docs/agentready/GITHUB_ACTION_USAGE.md"
+        "docs/agentready/GITHUB_ACTION_USAGE.md",
+        "docs/agentready/GITHUB_MARKETPLACE_DISTRIBUTION_SPEC.md"
       ],
       "branch": "feat-distribution-agentready-marketplace-action",
       "pr_title": "feat(distribution): publish AgentReady GitHub Marketplace action",
       "allowed_paths": [
-        ".github/**",
-        "docs/agentready/**"
+        "action.yml",
+        ".github/actions/agentready/**",
+        ".github/workflows/agentready-action-integration.yml",
+        "scripts/agentready-action-entrypoint.sh",
+        "cli/tests/run-agentready-action-smoke-test.mjs",
+        "docs/agentready/GITHUB_ACTION_USAGE.md",
+        "docs/agentready/GITHUB_ACTION_VERSIONING.md",
+        "docs/agentready/GITHUB_MARKETPLACE_DISTRIBUTION_SPEC.md",
+        "docs/agentready/COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_1_DRAFT.md"
       ],
       "forbidden_paths": [
         "agentready-core/**",
+        "bin/**",
         "package.json",
         "LICENSE",
+        "packaging/agentready-community/**",
         "*.html"
       ],
       "acceptance_criteria": [
-        "Publish public AgentReady GitHub Action distribution complete"
+        "root action.yml exposes the same documented inputs and outputs as the nested compatibility action",
+        "root metadata contains Marketplace-safe name description and branding",
+        "root and nested metadata delegate to one shared implementation to prevent behavior drift",
+        "integration workflow validates root uses ./ and nested compatibility usage on ubuntu-latest with Node.js 20",
+        "PASS policy FAIL and usage-error behavior preserve documented exit semantics and outputs",
+        "public documentation uses the exact future immutable Action tag v0.1.0-alpha.1 and states that bundled CLI remains 0.1.0-alpha.0",
+        "implementation PR performs no npm publication tag release or Marketplace publication"
       ],
-      "required_commands": [],
+      "required_commands": [
+        "node cli/tests/run-agentready-action-smoke-test.mjs",
+        "node cli/tests/run-agentready-community-release-workflow-test.mjs",
+        "node scripts/validate-agentready-strategy-docs.mjs",
+        "node scripts/validate-agentready-execution-system.mjs",
+        "git diff --check"
+      ],
       "required_evidence": [
-        "Publish public AgentReady GitHub Action distribution evidence"
+        "root action metadata validation",
+        "root-reference integration workflow success",
+        "nested compatibility integration success",
+        "documented Action tag and bundled CLI version distinction",
+        "no publication action executed"
       ],
       "evidence": [],
       "execution_batch_id": "ARB-COM-002",
@@ -1966,17 +1992,30 @@
       "recurrence": null,
       "notes": "",
       "deliverables": [
-        "Publish public AgentReady GitHub Action distribution"
+        "root action.yml Marketplace entrypoint",
+        "shared Action execution entrypoint",
+        "root and nested Action integration coverage",
+        "immutable alpha Action usage documentation",
+        "draft Action release notes for v0.1.0-alpha.1"
       ],
       "estimated_files_or_surfaces": [
-        "one coherent file or surface family"
+        "action.yml",
+        ".github/actions/agentready/action.yml",
+        "scripts/agentready-action-entrypoint.sh",
+        ".github/workflows/agentready-action-integration.yml",
+        "docs/agentready/GITHUB_ACTION_USAGE.md",
+        "docs/agentready/GITHUB_ACTION_VERSIONING.md"
       ],
       "independent_test_plan": [
-        "run relevant existing tests",
-        "run execution-system validator"
+        "validate action metadata and shared entrypoint statically",
+        "run root Action OpenAPI and MCP PASS cases",
+        "run expected policy failure while preserving outputs",
+        "run invalid-input failure",
+        "confirm nested compatibility reference remains functional",
+        "run execution-system validators"
       ],
-      "rollback_boundary": "Revert feat-distribution-agentready-marketplace-action without reverting unrelated work.",
-      "scope_justification": "Single coherent deliverable with independent review and rollback."
+      "rollback_boundary": "Revert the root Action distribution entrypoint shared wrapper integration coverage and related docs without changing the published npm package or immutable v0.1.0-alpha.0 release.",
+      "scope_justification": "Single public Action distribution surface with one shared implementation and one rollback boundary."
     },
     {
       "id": "AR-COM-008",
@@ -2065,26 +2104,49 @@
       ],
       "blocks": [],
       "source_documents": [
-        "docs/agentready/GITHUB_ACTION_VERSIONING.md"
+        "docs/agentready/GITHUB_ACTION_VERSIONING.md",
+        "docs/agentready/GITHUB_ACTION_USAGE.md",
+        "docs/agentready/GITHUB_MARKETPLACE_DISTRIBUTION_SPEC.md"
       ],
       "branch": "docs-marketplace-agentready-action-compliance",
       "pr_title": "docs(distribution): prepare AgentReady Marketplace listing compliance",
       "allowed_paths": [
+        "action.yml",
         ".github/**",
-        "docs/agentready/**"
+        "docs/agentready/GITHUB_ACTION_VERSIONING.md",
+        "docs/agentready/GITHUB_ACTION_USAGE.md",
+        "docs/agentready/GITHUB_MARKETPLACE_DISTRIBUTION_SPEC.md",
+        "docs/agentready/COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_1_DRAFT.md"
       ],
       "forbidden_paths": [
         "agentready-core/**",
+        "bin/**",
         "package.json",
         "LICENSE",
+        "packaging/agentready-community/**",
         "*.html"
       ],
       "acceptance_criteria": [
-        "Prepare GitHub Marketplace listing compliance complete"
+        "compliance matrix covers public repository root metadata unique name branding release tag categories 2FA and Developer Agreement requirements",
+        "current monorepo structure is recorded as an explicit Marketplace eligibility risk",
+        "owner must verify GitHub reports Everything looks good before publication",
+        "owner must decide current repository versus dedicated Action repository before publication",
+        "Marketplace publication remains a separate owner checkpoint after implementation PR merge",
+        "no stable or moving major tag is created for the alpha release"
       ],
-      "required_commands": [],
+      "required_commands": [
+        "node cli/tests/run-agentready-action-smoke-test.mjs",
+        "node scripts/validate-agentready-strategy-docs.mjs",
+        "node scripts/validate-agentready-execution-system.mjs",
+        "git diff --check"
+      ],
       "required_evidence": [
-        "Prepare GitHub Marketplace listing compliance evidence"
+        "completed compliance matrix",
+        "owner repository-structure decision",
+        "GitHub Marketplace validation result",
+        "approved exact Action tag v0.1.0-alpha.1",
+        "approved categories and listing title",
+        "public listing or documented blocker evidence"
       ],
       "evidence": [],
       "execution_batch_id": "ARB-COM-002",
@@ -2100,17 +2162,25 @@
       "recurrence": null,
       "notes": "",
       "deliverables": [
-        "Prepare GitHub Marketplace listing compliance"
+        "Marketplace compliance matrix",
+        "owner publication checklist",
+        "repository-structure decision gate",
+        "release and rollback procedure"
       ],
       "estimated_files_or_surfaces": [
-        "one coherent file or surface family"
+        "docs/agentready/GITHUB_MARKETPLACE_DISTRIBUTION_SPEC.md",
+        "action.yml",
+        "GitHub Release Marketplace publication UI"
       ],
       "independent_test_plan": [
-        "run relevant existing tests",
-        "run execution-system validator"
+        "validate root action metadata fields",
+        "verify no second root action metadata file exists",
+        "verify documentation does not claim Marketplace publication before owner confirmation",
+        "verify immutable prior tag is unchanged",
+        "run execution-system validators"
       ],
-      "rollback_boundary": "Revert docs-marketplace-agentready-action-compliance without reverting unrelated work.",
-      "scope_justification": "Single coherent deliverable with independent review and rollback."
+      "rollback_boundary": "Revert Marketplace compliance documentation and unpublished metadata changes without changing npm or existing immutable releases.",
+      "scope_justification": "Marketplace readiness and Action distribution share one review checkpoint but publication remains owner-controlled."
     },
     {
       "id": "AR-ONB-EPIC",
@@ -14158,9 +14228,9 @@
       "objective": "Publish public GitHub Action distribution.",
       "milestone": "M3",
       "delivery_horizon": "BEFORE_COMMUNITY_PUBLICATION",
-      "status": "PLANNED",
-      "spec_status": "SKELETON",
-      "owner": "CODEX",
+      "status": "READY",
+      "spec_status": "EXECUTION_READY",
+      "owner": "CODEX_AND_JEASON",
       "work_item_ids": [
         "AR-COM-007",
         "AR-COM-009"
@@ -14168,52 +14238,124 @@
       "depends_on_batches": [
         "ARB-COM-001"
       ],
-      "depends_on_tasks": [],
+      "depends_on_tasks": [
+        "AR-COM-006"
+      ],
       "branch": "feat-distribution-agentready-marketplace-action",
       "pr_title": "feat(distribution): publish AgentReady GitHub Marketplace action",
       "allowed_paths": [
-        ".github/**",
-        "docs/agentready/**"
+        "action.yml",
+        ".github/actions/agentready/**",
+        ".github/workflows/agentready-action-integration.yml",
+        "scripts/agentready-action-entrypoint.sh",
+        "cli/tests/run-agentready-action-smoke-test.mjs",
+        "docs/agentready/GITHUB_ACTION_USAGE.md",
+        "docs/agentready/GITHUB_ACTION_VERSIONING.md",
+        "docs/agentready/GITHUB_MARKETPLACE_DISTRIBUTION_SPEC.md",
+        "docs/agentready/COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_1_DRAFT.md"
       ],
       "forbidden_paths": [
         "agentready-core/**",
+        "bin/**",
         "package.json",
         "LICENSE",
+        "packaging/agentready-community/**",
         "*.html"
       ],
       "deliverables": [
-        "Publish public AgentReady GitHub Action distribution",
-        "Prepare GitHub Marketplace listing compliance"
+        "root Marketplace-compatible action.yml",
+        "shared root and nested Action execution entrypoint",
+        "root-reference and compatibility integration tests",
+        "Marketplace compliance and owner checklist",
+        "draft v0.1.0-alpha.1 Action release notes"
       ],
       "acceptance_criteria": [
-        "Publish public AgentReady GitHub Action distribution complete",
-        "Prepare GitHub Marketplace listing compliance complete"
+        "one root action.yml exists and passes metadata validation",
+        "root and nested action references use one shared execution implementation",
+        "root Action integration passes OpenAPI MCP policy-failure and usage-error cases",
+        "documentation distinguishes Action tag v0.1.0-alpha.1 from bundled CLI 0.1.0-alpha.0",
+        "GitHub Marketplace eligibility is checked after merge before any listing publication",
+        "owner explicitly decides repository structure exact tag listing title categories and publication",
+        "no npm operation and no release operation occurs in the implementation PR"
       ],
       "independent_test_plan": [
-        "run relevant existing tests",
-        "run execution-system validator"
+        "run Action smoke test",
+        "run root and nested integration workflow",
+        "validate generated governance files are clean",
+        "verify forbidden publication commands and credentials are absent",
+        "run strategy and execution-system validators"
       ],
       "required_commands": [
-        "node scripts/validate-agentready-execution-system.mjs"
+        "node cli/tests/run-agentready-action-smoke-test.mjs",
+        "node cli/tests/run-agentready-community-release-workflow-test.mjs",
+        "node scripts/validate-agentready-strategy-docs.mjs",
+        "node scripts/validate-agentready-execution-system.mjs",
+        "git diff --check"
       ],
       "required_evidence": [
-        "Publish public AgentReady GitHub Action distribution evidence",
-        "Prepare GitHub Marketplace listing compliance evidence"
+        "implementation PR with reviewed root Action metadata",
+        "AgentReady Action Integration workflow success",
+        "Marketplace compliance matrix",
+        "GitHub Marketplace Everything looks good validation or exact blocker",
+        "owner decision for current versus dedicated Action repository",
+        "owner approval for exact v0.1.0-alpha.1 tag and listing publication",
+        "post-publication public consumer workflow evidence"
       ],
-      "rollback_boundary": "Revert ARB-COM-002 without reverting unrelated batches.",
-      "scope_justification": "Batch groups compatible work items with one shared review and rollback boundary.",
-      "manual_actions": [],
-      "authorized_actions": [],
-      "forbidden_actions": [],
-      "codex_preflight_steps": [],
-      "owner_checkpoint_steps": [],
-      "post_confirmation_steps": [],
+      "rollback_boundary": "Revert ARB-COM-002 Action distribution files and documentation without changing @timeproofs/agentready@0.1.0-alpha.0 or v0.1.0-alpha.0.",
+      "scope_justification": "Batch combines the Action entrypoint and its Marketplace compliance evidence as compatible workstreams with one implementation review and a separate owner-controlled publication checkpoint.",
+      "manual_actions": [
+        "JEASON reviews and merges the implementation PR",
+        "JEASON verifies the GitHub Marketplace eligibility screen reports Everything looks good",
+        "JEASON decides whether the current monorepo is acceptable or a dedicated Action repository is required",
+        "JEASON accepts the GitHub Marketplace Developer Agreement if prompted",
+        "JEASON approves the exact v0.1.0-alpha.1 tag listing title categories and Marketplace publication before any external write"
+      ],
+      "authorized_actions": [
+        "create and test root Action metadata in the implementation PR",
+        "retain the nested .github/actions/agentready compatibility reference",
+        "prepare draft release notes and Marketplace compliance evidence",
+        "after owner approval only create immutable Action tag v0.1.0-alpha.1 from the approved merged commit",
+        "after owner approval only create the corresponding GitHub prerelease and submit the Marketplace listing"
+      ],
+      "forbidden_actions": [
+        "do not perform any npm operation",
+        "do not log in to npm or create npm tokens",
+        "do not move delete or recreate v0.1.0-alpha.0",
+        "do not create v0 v1 or any stable tag",
+        "do not create v0.1.0-alpha.1 from a PR head",
+        "do not create a tag release or Marketplace listing before explicit owner approval",
+        "do not claim Windows or macOS support",
+        "do not claim Marketplace publication before public verification",
+        "do not merge the implementation PR automatically"
+      ],
+      "codex_preflight_steps": [
+        "confirm timeproofs HEAD contains merge 56fd2094b05740573e1fccd36f4c92e6d3254b06",
+        "confirm v0.1.0-alpha.0 remains immutable and points to 150da23932c1fb9433cb3d546904f03c18c909e9",
+        "confirm no root action.yml currently exists",
+        "confirm nested .github/actions/agentready/action.yml and Action integration tests are the current behavior source",
+        "confirm no npm action is required or authorized"
+      ],
+      "owner_checkpoint_steps": [
+        "review the implementation PR and green workflows",
+        "verify GitHub Marketplace eligibility and repository-structure acceptance",
+        "approve or reject use of the current repository",
+        "approve the exact merged commit for v0.1.0-alpha.1",
+        "approve listing title categories prerelease and Marketplace submission"
+      ],
+      "post_confirmation_steps": [
+        "create immutable v0.1.0-alpha.1 only from the owner-approved merged commit",
+        "create a GitHub prerelease that states bundled CLI version 0.1.0-alpha.0",
+        "publish the Marketplace listing only after GitHub eligibility passes",
+        "run a public consumer workflow using the exact tag",
+        "record tag release listing URL workflow evidence and any documented exception in a reconciliation PR"
+      ],
       "external_verifications": [],
       "evidence": [],
-      "notes": "",
+      "notes": "Specification refinement only authorizes the implementation prompt. External tag release and Marketplace publication remain blocked behind an explicit JEASON checkpoint.",
       "source_documents": [
         "docs/agentready/GITHUB_ACTION_VERSIONING.md",
-        "docs/agentready/GITHUB_ACTION_USAGE.md"
+        "docs/agentready/GITHUB_ACTION_USAGE.md",
+        "docs/agentready/GITHUB_MARKETPLACE_DISTRIBUTION_SPEC.md"
       ]
     },
     {
@@ -21658,6 +21800,13 @@
       "task_ids": [
         "AR-COM-007",
         "AR-DOC-004"
+      ]
+    },
+    {
+      "document": "docs/agentready/GITHUB_MARKETPLACE_DISTRIBUTION_SPEC.md",
+      "status": "ACTIVE",
+      "task_ids": [
+        "AR-GOV-003"
       ]
     },
     {

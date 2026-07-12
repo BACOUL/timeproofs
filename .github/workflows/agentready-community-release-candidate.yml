@@ -33,6 +33,8 @@ on:
       - "docs/agentready/COMMUNITY_RELEASE_CHECKLIST.md"
       - "docs/agentready/COMMUNITY_RELEASE_NOTES_0_1_0_ALPHA_0.md"
       - "docs/agentready/GITHUB_ACTION_VERSIONING.md"
+      - "docs/agentready/GITHUB_ACTION_USAGE.md"
+      - "docs/agentready/GITHUB_MARKETPLACE_DISTRIBUTION_SPEC.md"
       - "docs/agentready/CLI_PUBLIC_DISTRIBUTION.md"
   workflow_dispatch:
 
@@ -88,13 +90,13 @@ jobs:
 
           assert.equal(completedBatch?.status, 'DONE');
           assert.equal(nextBatch?.id, 'ARB-COM-002');
-          assert.notEqual(nextBatch?.spec_status, 'EXECUTION_READY');
+          assert.equal(nextBatch?.spec_status, 'EXECUTION_READY');
           assert.equal(next?.kind, 'batch');
           assert.equal(next?.batch?.id, 'ARB-COM-002');
-          assert.equal(next?.action_type, 'SPECIFICATION_REFINEMENT_REQUIRED');
-          assert.match(nextPrompt, /No CODEX execution batch is currently authorized/);
-          assert.match(nextPrompt, /not EXECUTION_READY/);
-          assert.doesNotMatch(nextPrompt, /Repository: BACOUL\/timeproofs/);
+          assert.equal(next?.action_type, 'READY');
+          assert.match(nextPrompt, /Repository: BACOUL\/timeproofs/);
+          assert.match(nextPrompt, /Batch ID: ARB-COM-002/);
+          assert.match(nextPrompt, /Branch: feat-distribution-agentready-marketplace-action/);
           NODE
 
       - name: Verify package metadata
