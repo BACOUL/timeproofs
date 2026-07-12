@@ -4,25 +4,39 @@ on:
   push:
     branches:
       - docs-agentready-premium-site-plan
+  pull_request:
+    branches:
+      - timeproofs
 
 permissions:
   contents: write
 
 jobs:
   migrate:
-    if: ${{ !contains(github.event.head_commit.message, '[premium-plan-applied]') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           ref: docs-agentready-premium-site-plan
           fetch-depth: 0
+      - name: Check whether migration is pending
+        id: guard
+        shell: bash
+        run: |
+          if test -f scripts/apply-agentready-premium-site-plan.mjs; then
+            echo 'needed=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'needed=false' >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/setup-node@v4
+        if: steps.guard.outputs.needed == 'true'
         with:
           node-version: '20'
       - name: Apply canonical plan changes
+        if: steps.guard.outputs.needed == 'true'
         run: node scripts/apply-agentready-premium-site-plan.mjs
       - name: Rebuild canonical ledger and views
+        if: steps.guard.outputs.needed == 'true'
         run: |
           node scripts/rebuild-agentready-ledger-data.mjs
           node scripts/generate-agentready-ledger-views.mjs --write
@@ -30,11 +44,13 @@ jobs:
           node scripts/generate-agentready-next-action.mjs --write
           node scripts/generate-agentready-next-prompt.mjs --write
       - name: Validate strategy and execution system
+        if: steps.guard.outputs.needed == 'true'
         run: |
           node scripts/validate-agentready-strategy-docs.mjs
           node scripts/validate-agentready-execution-system.mjs
           git diff --check
       - name: Verify premium batch is the next executable prompt
+        if: steps.guard.outputs.needed == 'true'
         run: |
           node --input-type=module <<'NODE'
           import assert from 'node:assert/strict';
@@ -56,6 +72,7 @@ jobs:
           assert.match(prompt, /Premium Site Redesign Execution Specification/);
           NODE
       - name: Verify deterministic regeneration
+        if: steps.guard.outputs.needed == 'true'
         run: |
           git diff > /tmp/before.diff
           node scripts/rebuild-agentready-ledger-data.mjs
@@ -66,6 +83,7 @@ jobs:
           git diff > /tmp/after.diff
           cmp /tmp/before.diff /tmp/after.diff
       - name: Commit governed plan
+        if: steps.guard.outputs.needed == 'true'
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
