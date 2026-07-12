@@ -56,6 +56,19 @@ jobs:
           }
           tail -n 30 /tmp/refine.log || true
 
+      - name: Capture refinement failure
+        if: failure()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p docs/agentready
+          cp /tmp/refine.log docs/agentready/ARB_COM_002_REFINEMENT_FAILURE.log
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/agentready/ARB_COM_002_REFINEMENT_FAILURE.log
+          git commit -m "chore(agentready): capture ARB-COM-002 refinement failure"
+          git push origin HEAD:docs-agentready-refine-arb-com-002
+
       - name: Regenerate and validate governance
         shell: bash
         run: |
@@ -87,6 +100,7 @@ jobs:
         run: |
           set -euo pipefail
           rm -f .github/workflows/refine-arb-com-002.yml
+          rm -f docs/agentready/ARB_COM_002_REFINEMENT_FAILURE.log
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
