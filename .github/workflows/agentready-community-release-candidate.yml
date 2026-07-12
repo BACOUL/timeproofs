@@ -84,20 +84,26 @@ jobs:
           const ledger = readLedger();
           const batches = new Map((ledger.execution_batches || []).map((batch) => [batch.id, batch]));
           const completedBatch = batches.get('ARB-COM-002');
-          const nextBatch = batches.get('ARB-SITE-PREMIUM-001');
+          const foundationBatch = batches.get('ARB-SITE-PREMIUM-001');
+          const nextBatch = batches.get('ARB-SITE-GLOBAL-002');
           const next = selectNextAction(ledger);
           const nextPrompt = generatedContents(ledger)['docs/agentready/NEXT_CODEX_PROMPT.md'];
 
           assert.equal(completedBatch?.status, 'DONE');
-          assert.equal(nextBatch?.id, 'ARB-SITE-PREMIUM-001');
+          assert.equal(foundationBatch?.status, 'IN_REVIEW');
+          assert.equal(foundationBatch?.pr_number, 132);
+          assert.equal(nextBatch?.id, 'ARB-SITE-GLOBAL-002');
           assert.equal(nextBatch?.status, 'READY');
           assert.equal(nextBatch?.spec_status, 'EXECUTION_READY');
+          assert.equal(nextBatch?.stacked_execution_authorized, true);
+          assert.equal(nextBatch?.stacked_on_batch, 'ARB-SITE-PREMIUM-001');
           assert.equal(next?.kind, 'batch');
-          assert.equal(next?.batch?.id, 'ARB-SITE-PREMIUM-001');
+          assert.equal(next?.batch?.id, 'ARB-SITE-GLOBAL-002');
           assert.equal(next?.action_type, 'READY');
           assert.match(nextPrompt, /Repository: BACOUL\/timeproofs/);
-          assert.match(nextPrompt, /Batch ID: ARB-SITE-PREMIUM-001/);
-          assert.match(nextPrompt, /site-agentready-premium-foundation/);
+          assert.match(nextPrompt, /Base: site-agentready-premium-foundation/);
+          assert.match(nextPrompt, /Batch ID: ARB-SITE-GLOBAL-002/);
+          assert.match(nextPrompt, /site-agentready-global-product/);
           NODE
 
       - name: Verify package metadata
