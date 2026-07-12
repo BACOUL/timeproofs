@@ -252,17 +252,17 @@ Required evidence:
   - human ledger review before merge
 
 ### ARB-COM-001 - Publish Community CLI and immutable release
-- Status: READY
+- Status: BLOCKED
 - Spec status: EXECUTION_READY
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Work items: AR-COM-006
 - Depends on batches: None
-- Depends on tasks: AR-COM-001, AR-COM-002, AR-COM-003, AR-COM-004, AR-COM-005, AR-COM-006A
+- Depends on tasks: AR-COM-001, AR-COM-002, AR-COM-003, AR-COM-004, AR-COM-005, AR-COM-006A, AR-COM-006B
 - Branch: release-agentready-community-cli
 - PR title: release(agentready): publish Community CLI and immutable release
-
+- PR: #124
 Deliverables:
   - Publish Community CLI and immutable release
 Acceptance criteria:
@@ -2029,16 +2029,37 @@ Required evidence:
   - approved tarball SHA-256
   - approval date
 
+### AR-COM-006B - Decide handling of unexpected npm latest dist-tag
+- Type: DECISION_GATE
+- Status: DECISION_REQUIRED
+- Owner: JEASON
+- Milestone: M3
+- Horizon: BEFORE_COMMUNITY_PUBLICATION
+- Workstream: COM
+- Weight: 3
+- Execution batch: None
+- Depends on: AR-COM-001, AR-COM-002, AR-COM-003, AR-COM-004, AR-COM-005, AR-COM-006A
+
+Deliverables:
+  - None
+Acceptance criteria:
+  - owner decision recorded for unexpected latest dist-tag
+  - decision determines whether tag and GitHub Release may proceed
+  - no further npm, Git tag or GitHub Release action occurs before decision
+Required evidence:
+  - owner decision on latest deviation
+  - accepted remediation or continuation plan
+
 ### AR-COM-006 - Publish Community CLI and immutable release
 - Type: CODEX_WORK_ITEM
-- Status: READY
+- Status: BLOCKED
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Workstream: COM
 - Weight: 5
 - Execution batch: ARB-COM-001
-- Depends on: AR-COM-001, AR-COM-002, AR-COM-003, AR-COM-004, AR-COM-005, AR-COM-006A
+- Depends on: AR-COM-001, AR-COM-002, AR-COM-003, AR-COM-004, AR-COM-005, AR-COM-006A, AR-COM-006B
 
 Deliverables:
   - Publish Community CLI and immutable release

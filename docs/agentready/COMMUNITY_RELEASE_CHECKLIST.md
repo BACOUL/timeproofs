@@ -10,12 +10,12 @@ Use only:
 - NOT_APPLICABLE
 
 Publication status: BLOCKED
-Publication execution status: AWAITING_OWNER_NPM_PUBLICATION
+Publication execution status: NPM_PUBLISHED — UNEXPECTED_LATEST_REVIEW_REQUIRED
 
 ```txt
 VERSION: 0.1.0-alpha.0
 NPM DIST-TAG: alpha
-LATEST TAG MODIFIED: NO
+LATEST TAG MODIFIED: UNEXPECTEDLY CREATED BY NPM
 FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
 NPM AUTOMATION TOKEN: none
 TEMPORARY LOCAL OWNER LOGIN: authorized for controlled first publication only
@@ -27,16 +27,16 @@ PUBLICATION APPROVED: YES
 APPROVED NPM DIST-TAG: alpha
 IMMUTABLE GIT TAG AUTHORIZED: v0.1.0-alpha.0
 GITHUB RELEASE AUTHORIZED: YES
-LATEST TAG MODIFIED: NO
+LATEST TAG MODIFIED: UNEXPECTEDLY CREATED BY NPM
 ```
 
 ## Controlled Publication Execution Checkpoint
 
-Status: AWAITING_OWNER_NPM_PUBLICATION
+Status: NPM_PUBLISHED — UNEXPECTED_LATEST_REVIEW_REQUIRED
 Preflight result: PASS
 Preflight performed externally: NO
 Codex binary inspection performed: YES
-npm authentication status: NOT_AUTHENTICATED
+npm authentication status: LOGGED_OUT
 approved login command: npm login --auth-type=web
 temporary local owner login authorized: YES
 npm automation token authorized: NO
@@ -52,9 +52,23 @@ npm dist-tag: alpha
 Future immutable Git tag authorized: v0.1.0-alpha.0
 Future Git tag target: 150da23932c1fb9433cb3d546904f03c18c909e9
 latest modification authorized: NO
-npm publication executed: NO
+npm publication executed: YES
+npm publication result: SUCCESS
+published version: 0.1.0-alpha.0
+publication confirmation: + @timeproofs/agentready@0.1.0-alpha.0
+publication command used: npm publish ./timeproofs-agentready-0.1.0-alpha.0-approved.tgz --access public --tag alpha
+published tarball SHA-256: 602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe
+alpha dist-tag: 0.1.0-alpha.0
+latest dist-tag: 0.1.0-alpha.0
+latest expected: NO
+latest removal attempted: YES
+latest removal command: npm dist-tag rm @timeproofs/agentready latest
+latest removal result: E400 400 Bad Request DELETE /-/package/@timeproofs%2fagentready/dist-tags/latest
+npm logout executed: YES
+npm whoami after logout: ENEEDAUTH
 Git tag created: NO
 GitHub Release created: NO
+continuation authorized: NO
 Owner checkpoint required: YES
 
 - package metadata verified from the approved tarball
@@ -69,25 +83,24 @@ Owner checkpoint required: YES
 - no symbolic link
 - no HTML
 - no Pro, Stripe, backend or dashboard
-- npm package registry state checked before publication: @timeproofs/agentready not present
-- latest dist-tag checked before publication: not present
+- npm publication succeeded for @timeproofs/agentready@0.1.0-alpha.0
+- alpha dist-tag observed after publication: 0.1.0-alpha.0
+- latest dist-tag unexpectedly observed after publication: 0.1.0-alpha.0
+- latest removal attempt failed with E400; no dist-tag was removed
+- npm logout succeeded; npm whoami returned ENEEDAUTH after logout
+- no npm password, 2FA code, recovery code, token or secret was recorded in the repository, GitHub, Codex, a PR or a workflow
 - version command previously verified against the approved artifact evidence
 - help command previously verified against the approved artifact evidence
 
-Prepared but not executed:
+Publication command executed by JEASON:
 
 ```sh
-npm publish "<chemin-local-vers-le-tarball-approuve>" --access public --tag alpha
+npm publish ./timeproofs-agentready-0.1.0-alpha.0-approved.tgz --access public --tag alpha
 ```
 
-JEASON verifies the local SHA-256 first.
-JEASON runs `npm login --auth-type=web` locally if authentication is required.
-JEASON executes the command himself in his own terminal.
-JEASON enters the 2FA code only in his own terminal.
-The temporary npm login may be stored only in JEASON's personal owner-device `~/.npmrc`.
-No npm password, 2FA code, recovery code, manual token, automation token, `NPM_TOKEN` or `NODE_AUTH_TOKEN` is communicated to Codex.
-JEASON runs `npm logout` immediately after publication and verification.
-Codex waits for npm confirmation before any Git tag or GitHub Release.
+The command succeeded, but npm exposed `latest: 0.1.0-alpha.0` unexpectedly.
+Continuation is not authorized until JEASON records a decision for this deviation.
+No Git tag or GitHub Release may be created before that decision.
 
 ## Product
 
@@ -153,7 +166,7 @@ Codex waits for npm confirmation before any Git tag or GitHub Release.
 | npm 2FA or trusted publishing policy validated | READY | npm 2FA enabled; trusted publishing preferred for future dedicated setup |
 | Package made publishable after approval | READY | staged Community tarball package omits `private: true` and sets public npm publish config |
 | Final tarball content approved | READY | JEASON approval dated 2026-07-11 for commit `150da23932c1fb9433cb3d546904f03c18c909e9`, version `0.1.0-alpha.0`, tarball SHA-256 `602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe`, npm dist-tag `alpha` |
-| Publication preflight completed | READY | The `Controlled Publication Execution Checkpoint` section in this checklist records the Codex preflight against the approved GitHub Actions artifact and stops at the owner npm publication checkpoint. |
+| npm publication executed | BLOCKED | npm publication succeeded for `@timeproofs/agentready@0.1.0-alpha.0`, but npm unexpectedly exposed `latest: 0.1.0-alpha.0`; removing `latest` failed with E400, so continuation is blocked pending owner decision. |
 | Tag created on reviewed commit | BLOCKED | No tag created |
 | Release notes verified | READY | Draft notes exist |
 | GitHub Release created | BLOCKED | No GitHub Release exists |

@@ -1631,6 +1631,81 @@
       "notes": ""
     },
     {
+      "id": "AR-COM-006B",
+      "parent_id": "AR-COM-EPIC",
+      "decision_ids": [
+        "DL-2026-07-10-CANONICAL-EXECUTION-SYSTEM"
+      ],
+      "task_type": "DECISION_GATE",
+      "milestone": "M3",
+      "delivery_horizon": "BEFORE_COMMUNITY_PUBLICATION",
+      "workstream": "COM",
+      "title": "Decide handling of unexpected npm latest dist-tag",
+      "objective": "Decide handling of unexpected npm latest dist-tag.",
+      "status": "DECISION_REQUIRED",
+      "owner": "JEASON",
+      "weight": 3,
+      "depends_on": [
+        "AR-COM-001",
+        "AR-COM-002",
+        "AR-COM-003",
+        "AR-COM-004",
+        "AR-COM-005",
+        "AR-COM-006A"
+      ],
+      "blocks": [
+        "AR-COM-006"
+      ],
+      "source_documents": [
+        "docs/agentready/COMMUNITY_PUBLICATION_POLICY.md",
+        "docs/agentready/COMMUNITY_RELEASE_WORKFLOW.md"
+      ],
+      "branch": "",
+      "pr_title": "",
+      "allowed_paths": [],
+      "forbidden_paths": [],
+      "acceptance_criteria": [
+        "owner decision recorded for unexpected latest dist-tag",
+        "decision determines whether tag and GitHub Release may proceed",
+        "no further npm, Git tag or GitHub Release action occurs before decision"
+      ],
+      "required_commands": [],
+      "required_evidence": [
+        "owner decision on latest deviation",
+        "accepted remediation or continuation plan"
+      ],
+      "evidence": [],
+      "execution_batch_id": null,
+      "manual_actions": [],
+      "authorized_actions": [],
+      "forbidden_actions": [],
+      "codex_preflight_steps": [],
+      "owner_checkpoint_steps": [],
+      "post_confirmation_steps": [],
+      "external_verification": null,
+      "decision_gate": {
+        "metrics": [
+          "npm publication success",
+          "alpha dist-tag observed",
+          "unexpected latest dist-tag observed",
+          "latest removal failed with E400"
+        ],
+        "review_date": null,
+        "allowed_outcomes": [
+          "CONTINUE",
+          "CORRECT",
+          "PAUSE",
+          "PIVOT",
+          "REJECT"
+        ],
+        "selected_outcome": null,
+        "owner_approval": null
+      },
+      "validation_thresholds": null,
+      "recurrence": null,
+      "notes": "npm publication succeeded under alpha, but npm also exposed latest: 0.1.0-alpha.0 unexpectedly. Removing latest failed with E400. Continuation is blocked before immutable Git tag or GitHub Release."
+    },
+    {
       "id": "AR-COM-006",
       "parent_id": "AR-COM-EPIC",
       "decision_ids": [
@@ -1642,7 +1717,7 @@
       "workstream": "COM",
       "title": "Publish Community CLI and immutable release",
       "objective": "Publish Community CLI and immutable release.",
-      "status": "READY",
+      "status": "BLOCKED",
       "owner": "CODEX_AND_JEASON",
       "weight": 5,
       "depends_on": [
@@ -1651,7 +1726,8 @@
         "AR-COM-003",
         "AR-COM-004",
         "AR-COM-005",
-        "AR-COM-006A"
+        "AR-COM-006A",
+        "AR-COM-006B"
       ],
       "blocks": [
         "AR-COM-008",
@@ -1697,7 +1773,30 @@
         "GitHub Release URL",
         "public installation test"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "type": "npm_publication_result",
+          "date": "2026-07-12",
+          "package": "@timeproofs/agentready",
+          "version": "0.1.0-alpha.0",
+          "command": "npm publish ./timeproofs-agentready-0.1.0-alpha.0-approved.tgz --access public --tag alpha",
+          "result": "SUCCESS",
+          "confirmation": "+ @timeproofs/agentready@0.1.0-alpha.0",
+          "tarball_sha256": "602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe",
+          "alpha_dist_tag": "0.1.0-alpha.0",
+          "latest_dist_tag": "0.1.0-alpha.0",
+          "latest_expected": false,
+          "latest_removal_attempted": true,
+          "latest_removal_command": "npm dist-tag rm @timeproofs/agentready latest",
+          "latest_removal_result": "E400 400 Bad Request DELETE /-/package/@timeproofs%2fagentready/dist-tags/latest",
+          "logout_executed": true,
+          "authentication_status": "LOGGED_OUT",
+          "continuation_authorized": false,
+          "git_tag_created": false,
+          "github_release_created": false,
+          "notes": "npm publication succeeded, but latest was unexpectedly created and could not be removed. Owner decision required before any Git tag or GitHub Release."
+        }
+      ],
       "execution_batch_id": "ARB-COM-001",
       "manual_actions": [
         "Codex verifies the approved artifact, checksum, package, version, source commit and alpha dist-tag before any publication.",
@@ -13871,7 +13970,7 @@
       "objective": "Publish Community CLI and immutable release.",
       "milestone": "M3",
       "delivery_horizon": "BEFORE_COMMUNITY_PUBLICATION",
-      "status": "READY",
+      "status": "BLOCKED",
       "spec_status": "EXECUTION_READY",
       "owner": "CODEX_AND_JEASON",
       "work_item_ids": [
@@ -13884,10 +13983,12 @@
         "AR-COM-003",
         "AR-COM-004",
         "AR-COM-005",
-        "AR-COM-006A"
+        "AR-COM-006A",
+        "AR-COM-006B"
       ],
       "branch": "release-agentready-community-cli",
       "pr_title": "release(agentready): publish Community CLI and immutable release",
+      "pr_number": 124,
       "allowed_paths": [
         "CHANGELOG.md",
         "docs/agentready/**"
@@ -13989,8 +14090,22 @@
         "record npm, tag, GitHub Release and public installation evidence in the publication PR"
       ],
       "external_verifications": [],
-      "evidence": [],
-      "notes": "",
+      "evidence": [
+        {
+          "type": "partial_publication",
+          "pr": 124,
+          "npm_publication": "SUCCESS",
+          "package": "@timeproofs/agentready",
+          "version": "0.1.0-alpha.0",
+          "alpha_dist_tag": "0.1.0-alpha.0",
+          "unexpected_latest_dist_tag": "0.1.0-alpha.0",
+          "latest_removal_result": "E400",
+          "git_tag_created": false,
+          "github_release_created": false,
+          "continuation_authorized": false
+        }
+      ],
+      "notes": "Blocked after npm publication because latest was unexpectedly set to 0.1.0-alpha.0 and latest removal failed with E400. Owner decision AR-COM-006B is required before tag or GitHub Release.",
       "source_documents": [
         "docs/agentready/COMMUNITY_PUBLICATION_POLICY.md",
         "docs/agentready/COMMUNITY_RELEASE_WORKFLOW.md"

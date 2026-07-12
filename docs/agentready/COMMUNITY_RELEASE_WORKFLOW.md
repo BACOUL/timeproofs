@@ -303,7 +303,7 @@ PUBLICATION APPROVED: YES
 APPROVED BY: JEASON
 APPROVAL DATE: 2026-07-12
 NPM DIST-TAG: alpha
-LATEST TAG MODIFIED: NO
+LATEST TAG MODIFIED: UNEXPECTEDLY CREATED BY NPM
 FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
 NPM AUTOMATION TOKEN: none
 TEMPORARY LOCAL OWNER LOGIN: authorized for controlled first publication only
@@ -322,7 +322,7 @@ alpha
 LATEST TAG MODIFIED:
 
 ```txt
-NO
+UNEXPECTEDLY CREATED BY NPM
 ```
 
 FIRST PUBLICATION AUTH:
@@ -380,8 +380,9 @@ not created
 ```
 
 The Community release workflow prepares and validates the release candidate.
-Actual tag creation remains outside this workflow and is allowed only in the
-controlled publication handoff after npm publication succeeds.
+Actual tag creation remains outside this workflow. It is blocked until the
+owner records a decision for the unexpected npm `latest` dist-tag observed after
+publication.
 
 ## Future Rollback Procedure
 
@@ -393,27 +394,34 @@ When public release exists, rollback must be handled in a dedicated release deci
 - update moving major references only after validation;
 - keep affected artifacts traceable.
 
-Rollback is not active in this candidate-only workflow because no public artifact is published.
+Rollback or remediation is not active in this workflow step. npm publication has
+succeeded, but the unexpected `latest` dist-tag requires an owner decision
+before any further npm, Git tag or GitHub Release action.
 
 ## Publication Blockers
 
 - final Community tarball content approved.
 - explicit publication approval granted.
-- npm publication not yet executed.
+- npm publication succeeded for `@timeproofs/agentready@0.1.0-alpha.0`.
+- npm `alpha` dist-tag observed as `0.1.0-alpha.0`.
+- npm `latest` dist-tag unexpectedly observed as `0.1.0-alpha.0`.
+- attempted `latest` removal failed with E400; no dist-tag was removed.
 - immutable tag not yet created.
 - GitHub Release not yet created.
 - trusted publishing provenance not configured for future automated publication.
+- owner decision on the unexpected `latest` deviation required before continuation.
 
-## Required Approvals Before Publication
+## Required Decision Before Continuation
 
-Before controlled publication executes:
+Before any immutable Git tag or GitHub Release is created:
 
-- Codex must verify the approved exact artifact and checksum;
-- JEASON must perform the first npm publication manually with private owner 2FA;
-- Codex must verify public npm availability under `alpha`;
-- Codex must verify `latest` was not created or modified;
-- the immutable tag must point exactly to `150da23932c1fb9433cb3d546904f03c18c909e9`;
-- the GitHub Release must reference the approved artifact and evidence.
+- JEASON must decide how to handle the unexpected npm `latest` dist-tag;
+- Codex must not retry npm dist-tag removal, modify `alpha`, modify `latest`,
+  deprecate, unpublish or republish without a new explicit instruction;
+- the immutable tag must still point exactly to
+  `150da23932c1fb9433cb3d546904f03c18c909e9` if continuation is approved;
+- the GitHub Release must still reference the approved artifact and evidence if
+  continuation is approved.
 
 ## Mandatory Limitation
 

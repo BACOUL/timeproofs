@@ -55,7 +55,7 @@ APPROVED VERSION: 0.1.0-alpha.0
 APPROVED SOURCE COMMIT: 150da23932c1fb9433cb3d546904f03c18c909e9
 APPROVED TARBALL SHA-256: 602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe
 NPM DIST-TAG: alpha
-LATEST TAG MODIFIED: NO
+LATEST TAG MODIFIED: UNEXPECTEDLY CREATED BY NPM
 FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
 NPM AUTOMATION TOKEN: none
 TEMPORARY LOCAL OWNER LOGIN: authorized for controlled first publication only
@@ -65,9 +65,34 @@ POST-PUBLICATION ACTION: npm logout immediately after verification
 FUTURE AUTH: Trusted Publishing OIDC after initial package creation
 ```
 
-The first publication of `0.1.0-alpha.0` is approved only for the explicit npm
-`alpha` dist-tag. It must not create, move or rely on the implicit `latest`
-tag.
+The first publication of `0.1.0-alpha.0` was approved only for the explicit npm
+`alpha` dist-tag. The approved process did not authorize creating, moving or
+relying on the implicit `latest` tag.
+
+## Actual Publication Result
+
+```txt
+npm publication executed: YES
+npm publication result: SUCCESS
+confirmation: + @timeproofs/agentready@0.1.0-alpha.0
+published version: 0.1.0-alpha.0
+alpha dist-tag: 0.1.0-alpha.0
+latest dist-tag: 0.1.0-alpha.0
+latest expected: NO
+latest removal attempted: YES
+latest removal result: E400 400 Bad Request DELETE /-/package/@timeproofs%2fagentready/dist-tags/latest
+npm logout executed: YES
+npm authentication status: LOGGED_OUT
+Git tag created: NO
+GitHub Release created: NO
+continuation authorized: NO
+```
+
+The npm publication succeeded, but npm exposed `latest: 0.1.0-alpha.0`
+unexpectedly despite the explicit `--tag alpha` command. The attempted removal
+of `latest` failed with E400, and no dist-tag was removed. No immutable Git tag
+or GitHub Release may be created until JEASON records an owner decision for this
+deviation.
 
 ## Authorized Publication Source
 
@@ -249,7 +274,8 @@ During controlled publication:
 4. The immutable tag must point exactly to `150da23932c1fb9433cb3d546904f03c18c909e9`.
 5. GitHub Release must point to the approved commit and tarball.
 
-No tag or GitHub Release is created in this authorization PR.
+No tag or GitHub Release may be created while the unexpected `latest`
+dist-tag decision is unresolved.
 
 ## Rollback And Deprecation
 

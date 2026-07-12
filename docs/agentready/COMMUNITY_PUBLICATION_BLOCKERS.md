@@ -3,7 +3,8 @@
 Status: ACTIVE BLOCKER TRACKER
 
 Approval blockers are resolved.
-Publication is authorized but not yet executed.
+npm publication succeeded, but continuation is blocked by an unexpected `latest`
+dist-tag that requires owner decision before any Git tag or GitHub Release.
 
 Allowed statuses:
 
@@ -23,7 +24,8 @@ Allowed statuses:
 | package-included ProofSpec references | RESOLVED | `COMMUNITY_PROOFSPEC_REFERENCE_AUDIT.md` records dedicated package assets and staged package validation. Root `LICENSE` and root `README.md` are excluded from the tarball. | Maintain staging boundary. | Package-public references resolved for controlled publication. |
 | staged package publishability | RESOLVED | Staged Community package `package.json` omits `private: true` and sets `publishConfig.access` to `public`, registry `https://registry.npmjs.org/`, and tag `alpha`. Root repository `package.json` remains `private: true`. | Recheck the final artifact before controlled publication. | Package is technically publishable after approval. |
 | publication policy | RESOLVED | `COMMUNITY_PUBLICATION_POLICY.md` defines source, auth, tests, tarball checks, tag/release rules, and publication bans. | Keep policy current. | Publication may proceed only through the controlled publication task. |
-| explicit approval gate | RESOLVED | JEASON approval dated 2026-07-12 authorizes publication of `@timeproofs/agentready` version `0.1.0-alpha.0` from source commit `150da23932c1fb9433cb3d546904f03c18c909e9` and tarball SHA-256 `602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe`, exclusively under npm dist-tag `alpha`; immutable Git tag `v0.1.0-alpha.0` and the corresponding GitHub Release are authorized. | Execute only the controlled publication task; do not change the artifact, version, or dist-tag. | Publication approval is recorded, but publication has not yet been executed. |
+| explicit approval gate | RESOLVED | JEASON approval dated 2026-07-12 authorizes publication of `@timeproofs/agentready` version `0.1.0-alpha.0` from source commit `150da23932c1fb9433cb3d546904f03c18c909e9` and tarball SHA-256 `602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe`, exclusively under npm dist-tag `alpha`; immutable Git tag `v0.1.0-alpha.0` and the corresponding GitHub Release are authorized. | Execute only the controlled publication task; do not change the artifact, version, or dist-tag. | Approval was sufficient for npm publication, which succeeded; continuation is now blocked by the unexpected `latest` dist-tag. |
+| unexpected npm `latest` dist-tag | OWNER ACTION REQUIRED | npm publication succeeded with `+ @timeproofs/agentready@0.1.0-alpha.0`; `alpha: 0.1.0-alpha.0` is conform, but `latest: 0.1.0-alpha.0` appeared unexpectedly. `npm dist-tag rm @timeproofs/agentready latest` failed with E400, and no dist-tag was removed. | JEASON must decide how to handle the unexpected `latest` dist-tag before any immutable Git tag or GitHub Release. | Continuation is blocked before tag and GitHub Release. |
 | provenance workflow | RESOLVED | Existing `AgentReady Community Release Candidate` workflow validates source commit, package, action, checksum, and artifact. | Use it for verification; it remains read-only and cannot publish. | Provenance validated for controlled publication. |
 | exact tarball public content | RESOLVED | JEASON approval dated 2026-07-11 records corrected alpha tarball content approval for commit `150da23932c1fb9433cb3d546904f03c18c909e9`, version `0.1.0-alpha.0`, tarball SHA-256 `602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe`, ZIP SHA-256 `1a318eab6a7af3a313da820546b36c4392b58502a025e8bd0a8a06ba45a3c248`, npm dist-tag `alpha`, and 21 controlled files. | Keep approval tied to the exact source commit, tarball SHA-256 and npm dist-tag. | Exact content approved for controlled publication. |
 
@@ -31,13 +33,19 @@ Allowed statuses:
 
 ```txt
 PUBLICATION APPROVED: YES
-PUBLICATION STATE: AUTHORIZED BUT NOT YET EXECUTED
+PUBLICATION STATE: NPM_PUBLISHED — UNEXPECTED_LATEST_REVIEW_REQUIRED
+NPM PUBLICATION RESULT: SUCCESS
+ALPHA DIST-TAG: 0.1.0-alpha.0
+LATEST DIST-TAG: 0.1.0-alpha.0
+LATEST EXPECTED: NO
+LATEST REMOVAL RESULT: E400
+CONTINUATION AUTHORIZED: NO
 ```
 
 ## Next Authorized Action
 
-The next authorized action is controlled execution of:
+The next authorized action is the owner decision:
 
-`AR-COM-006 — Publish Community CLI and immutable release`
+`AR-COM-006B — Decide handling of unexpected npm latest dist-tag`
 
-Publication approval is recorded, but publication has not yet been executed.
+No Git tag or GitHub Release may be created until this decision is recorded.
