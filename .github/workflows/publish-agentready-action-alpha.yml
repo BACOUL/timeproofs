@@ -1,0 +1,97 @@
+name: Publish AgentReady Action Alpha
+
+on:
+  push:
+    branches:
+      - ops-publish-agentready-action-alpha
+    paths:
+      - .github/workflows/publish-agentready-action-alpha.yml
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TARGET_SHA: d6634d0fbbe1fced510fc49d8871d52a3dc7f348
+      TAG_NAME: agentready-action-v0.1.0-alpha.0
+      RELEASE_TITLE: AgentReady GitHub Action v0.1.0-alpha.0
+    steps:
+      - name: Verify approved implementation commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "repos/${GITHUB_REPOSITORY}/commits/${TARGET_SHA}" --jq '.sha' | grep -Fx "$TARGET_SHA"
+
+      - name: Create or verify immutable Action tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          if gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${TAG_NAME}" > /tmp/tag.json 2>/dev/null; then
+            existing_sha="$(jq -r '.object.sha' /tmp/tag.json)"
+            test "$existing_sha" = "$TARGET_SHA"
+            echo "Immutable tag already exists on approved commit: $existing_sha"
+          else
+            gh api --method POST "repos/${GITHUB_REPOSITORY}/git/refs" \
+              -f ref="refs/tags/${TAG_NAME}" \
+              -f sha="$TARGET_SHA" > /tmp/tag.json
+            created_sha="$(jq -r '.object.sha' /tmp/tag.json)"
+            test "$created_sha" = "$TARGET_SHA"
+            echo "Created immutable tag on approved commit: $created_sha"
+          fi
+
+      - name: Create or verify public prerelease
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > /tmp/release-body.md <<'EOF'
+          First public alpha release of the TimeProofs AgentReady GitHub Action.
+
+          AgentReady statically scans OpenAPI specifications and MCP tool definitions for structural risks that may cause AI agents to misuse APIs, tools, or MCP servers.
+
+          This is an alpha prerelease. It performs local static analysis, requires no TimeProofs account or hosted backend, and does not guarantee that an AI agent will never fail.
+
+          Immutable usage:
+
+          ```yaml
+          uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0
+          ```
+
+          Approved implementation commit:
+
+          `d6634d0fbbe1fced510fc49d8871d52a3dc7f348`
+          EOF
+
+          if gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${TAG_NAME}" > /tmp/release.json 2>/dev/null; then
+            test "$(jq -r '.tag_name' /tmp/release.json)" = "$TAG_NAME"
+            test "$(jq -r '.draft' /tmp/release.json)" = "false"
+            test "$(jq -r '.prerelease' /tmp/release.json)" = "true"
+            echo "Prerelease already exists."
+          else
+            gh api --method POST "repos/${GITHUB_REPOSITORY}/releases" \
+              -f tag_name="$TAG_NAME" \
+              -f target_commitish="$TARGET_SHA" \
+              -f name="$RELEASE_TITLE" \
+              -F body=@/tmp/release-body.md \
+              -F draft=false \
+              -F prerelease=true \
+              -f make_latest=false > /tmp/release.json
+          fi
+
+          echo "release_url=$(jq -r '.html_url' /tmp/release.json)" >> "$GITHUB_OUTPUT"
+          jq '{tag_name, name, draft, prerelease, html_url}' /tmp/release.json
+        id: release
+
+      - name: Verify public tag and prerelease URLs
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${TAG_NAME}" --jq '.object.sha')"
+          test "$tag_sha" = "$TARGET_SHA"
+          release_url="${{ steps.release.outputs.release_url }}"
+          test -n "$release_url"
+          echo "TAG_TARGET=$tag_sha"
+          echo "RELEASE_URL=$release_url"
+          echo "MARKETPLACE_OWNER_UI_REQUIRED=https://github.com/${GITHUB_REPOSITORY}/releases/edit/${TAG_NAME}"
