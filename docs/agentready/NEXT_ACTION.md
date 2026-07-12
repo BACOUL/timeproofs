@@ -19,8 +19,16 @@ Work items:
   - AR-COM-009
 
 Required evidence:
-  - Publish public AgentReady GitHub Action distribution evidence
-  - Prepare GitHub Marketplace listing compliance evidence
+  - public Action URL or public distribution evidence
+  - copyable pinned workflow
+  - permissions review
+  - supply-chain control evidence
+  - Marketplace compliance evidence
+  - public-site alignment evidence
+  - Marketplace metadata review
+  - listing copy review
+  - branding and links review
+  - version pinning and permissions review
 
 Manual actions:
   - None

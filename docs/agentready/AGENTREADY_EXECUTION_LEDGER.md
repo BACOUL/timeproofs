@@ -59,10 +59,12 @@ Criteria links:
   - M3-ACTION: public Action usable -> AR-COM-007, AR-COM-009
   - M3-ONBOARDING: onboarding documented without signup or payment -> AR-ONB-001, AR-ONB-002, AR-ONB-003, AR-ONB-004
 
-### M4 - Engine benchmark established
+### M4 - External pilot and engine benchmark established
 Status: PLANNED
 Horizon: BEFORE_PRO_TECHNICAL_COMPLETION
 Exit criteria:
+  - external pilot kit
+  - five-user external pilot
   - OpenAPI and MCP corpora
   - human annotations
   - benchmark acceptance thresholds frozen before final evaluation
@@ -70,14 +72,21 @@ Exit criteria:
   - false-positive and false-negative rates
   - performance
   - reproducibility
+  - differentiation evidence
+  - MCP static coverage matrix
+  - explicit pre-Pro decision
   - AR001 AR003 AR008 AR010 treated or documented
 Criteria links:
+  - M4-PILOT-KIT: external pilot kit and evidence registry -> AR-MARKET-PILOT-001
+  - M4-PILOT-EVIDENCE: five-user external pilot evidence -> AR-MARKET-PILOT-001H
   - M4-CORPUS: OpenAPI and MCP corpora and harness -> AR-ENG-001
   - M4-HUMAN-LABELS: human annotations validated -> AR-ENG-001H
   - M4-THRESHOLDS: benchmark acceptance thresholds frozen before final evaluation -> AR-ENG-001T
   - M4-METRICS: precision recall false positive and false negative rates -> AR-ENG-002
   - M4-AR-FIXES: AR001 AR003 AR008 AR010 treated or documented -> AR-ENG-003
   - M4-PERFORMANCE: performance and reproducibility -> AR-ENG-004, AR-ENG-005
+  - M4-DIFFERENTIATION: factual differentiation evidence and MCP static coverage matrix -> AR-ENG-005
+  - M4-PRO-DECISION: explicit decision before Pro implementation -> AR-MARKET-PILOT-002
 
 ### M5 - Pro technically complete
 Status: PLANNED
@@ -103,6 +112,7 @@ Criteria links:
 Status: PLANNED
 Horizon: BEFORE_PRO_FIRST_SALE
 Exit criteria:
+  - commercial infrastructure approval
   - license and entitlements
   - activation
   - five repositories
@@ -117,6 +127,7 @@ Exit criteria:
   - refund
   - controlled purchase
 Criteria links:
+  - M6-MARKET-GATE: ten-user payment-signal and value-case gate approved -> AR-MARKET-002
   - M6-ENTITLEMENTS: license and entitlements -> AR-LIC-001, AR-LIC-003
   - M6-ACTIVATION: activation and recovery -> AR-LIC-006, AR-BILL-013
   - M6-FIVE-REPOS: five repositories and pseudonymization -> AR-LIC-005
@@ -296,11 +307,33 @@ Deliverables:
   - Publish public AgentReady GitHub Action distribution
   - Prepare GitHub Marketplace listing compliance
 Acceptance criteria:
-  - Publish public AgentReady GitHub Action distribution complete
-  - Prepare GitHub Marketplace listing compliance complete
+  - Action is consumable from a public distribution path
+  - release tag and full commit SHA pinning are documented
+  - minimum GitHub permissions are documented
+  - Action inputs outputs and failure behavior are documented
+  - provenance dependency secret and code-scanning controls are documented where supported
+  - compromised-release revocation and replacement procedure is documented
+  - public site no longer presents manual review Fix Pack email payment or mandatory contact as the active Community/Pro model
+  - public site states Community is available and Pro is in preparation
+  - npm and public Action installation paths are visible
+  - Marketplace wording does not imply GitHub security validation
+  - Marketplace metadata requirements are satisfied
+  - branding and repository links are valid
+  - listing copy states static-analysis scope and mandatory limitation
+  - listing does not claim certification guaranteed safety or GitHub validation
+  - immutable tag and SHA pinning guidance is included
+  - minimum permissions are visible
 Required evidence:
-  - Publish public AgentReady GitHub Action distribution evidence
-  - Prepare GitHub Marketplace listing compliance evidence
+  - public Action URL or public distribution evidence
+  - copyable pinned workflow
+  - permissions review
+  - supply-chain control evidence
+  - Marketplace compliance evidence
+  - public-site alignment evidence
+  - Marketplace metadata review
+  - listing copy review
+  - branding and links review
+  - version pinning and permissions review
 
 ### ARB-COM-003 - Validate public Community installation
 - Status: PLANNED
@@ -317,9 +350,23 @@ Required evidence:
 Deliverables:
   - Validate public Community installation
 Acceptance criteria:
-  - Validate public Community installation complete
+  - public npm installation succeeds from clean environments
+  - Linux macOS and Windows evidence is recorded
+  - all officially supported Node.js major versions are tested
+  - paths with spaces and monorepository behavior are tested
+  - single and multiple OpenAPI or MCP inputs are tested
+  - invalid input and large input within documented limits are tested
+  - PASS FAIL exit codes and report paths are verified
+  - Community operation does not require a TimeProofs backend
+  - Action installation is tested outside the TimeProofs repository
+  - failures and unsupported cases are documented honestly
 Required evidence:
-  - Validate public Community installation evidence
+  - OS and Node.js matrix
+  - external-repository workflow runs
+  - PASS FAIL exit-code evidence
+  - report path evidence
+  - offline or backend-independent evidence
+  - unsupported-case register
 
 ### ARB-ONB-001 - Ship Community onboarding commands and tutorial
 - Status: PLANNED
@@ -339,15 +386,73 @@ Deliverables:
   - Add demo command and fixtures
   - Publish three-minute tutorial
 Acceptance criteria:
-  - Add local scan onboarding command complete
-  - Add init workflow generator complete
-  - Add demo command and fixtures complete
-  - Publish three-minute tutorial complete
+  - canonical local OpenAPI and MCP scan commands work without global installation
+  - errors are actionable
+  - no signup token upload or TimeProofs backend is required
+  - init detects OpenAPI and MCP files
+  - files are shown before writing
+  - confirmation is required
+  - Community workflow is generated
+  - a local scan is run
+  - Pro policy is not generated
+  - rollback or cleanup is documented
+  - demo works without network access to TimeProofs
+  - demo includes a useful PASS and FAIL path
+  - fixtures are deterministic and documented
+  - demo output points to the next CI step
+  - one canonical discover run init commit first-run path is documented
+  - flow is timed from a clean environment
+  - target is under three minutes
+  - no signup card token upload or global install is required
+  - tutorial links from public discovery surfaces
 Required evidence:
-  - Add local scan onboarding command evidence
-  - Add init workflow generator evidence
-  - Add demo command and fixtures evidence
-  - Publish three-minute tutorial evidence
+  - clean local scan evidence
+  - OpenAPI and MCP command evidence
+  - error output evidence
+  - detection evidence
+  - confirmation evidence
+  - generated workflow
+  - local scan evidence
+  - cleanup evidence
+  - deterministic demo evidence
+  - PASS and FAIL demo output
+  - fixture documentation
+  - dated clean-environment timing
+  - first successful GitHub run
+  - public tutorial links
+  - cleanup instructions
+
+### ARB-MARKET-PILOT-001 - Prepare external Community pilot kit
+- Status: PLANNED
+- Spec status: SKELETON
+- Owner: CODEX
+- Milestone: M4
+- Horizon: BEFORE_PRO_TECHNICAL_COMPLETION
+- Work items: AR-MARKET-PILOT-001
+- Depends on batches: ARB-COM-003, ARB-ONB-001
+- Depends on tasks: None
+- Branch: docs-agentready-external-community-pilot-kit
+- PR title: docs(validation): prepare AgentReady external Community pilot kit
+
+Deliverables:
+  - tester guide
+  - pilot evidence registry
+  - false-positive and false-negative register
+  - abandonment and feature-request register
+  - before fix after case template
+  - consent and confidentiality checklist
+  - outreach candidate worksheet
+  - voluntary feedback procedure
+Acceptance criteria:
+  - all five-user pilot thresholds map to evidence fields
+  - templates distinguish OpenAPI and MCP use
+  - reuse issue fix false-positive false-negative abandonment feature-request and payment-signal evidence can be recorded
+  - consent redaction and confidentiality controls are explicit
+  - no automatic outreach invented evidence or silent telemetry is introduced
+Required evidence:
+  - pilot kit review
+  - threshold-to-evidence mapping
+  - consent and privacy review
 
 ### ARB-ENG-001 - Add benchmark corpus and annotation harness
 - Status: PLANNED
@@ -364,9 +469,17 @@ Required evidence:
 Deliverables:
   - Add benchmark corpus architecture and annotation schema
 Acceptance criteria:
-  - Add benchmark corpus architecture and annotation schema complete
+  - corpus supports safe dangerous ambiguous false-positive and false-negative cases
+  - OpenAPI and MCP cases are separated
+  - human labels and disagreements can be recorded
+  - baseline comparison fields are reproducible and tool versions are recorded
+  - MCP risks can be classified as detected partially detectable or statically non-detectable
+  - external pilot findings can be incorporated without confidential data
 Required evidence:
-  - Add benchmark corpus architecture and annotation schema evidence
+  - corpus and annotation schema
+  - baseline comparison schema
+  - MCP coverage schema
+  - sample reproducible fixtures
 
 ### ARB-ENG-002 - Add benchmark metric calculation
 - Status: PLANNED
@@ -423,7 +536,12 @@ Deliverables:
   - Publish reproducible benchmark report and limitations
 Acceptance criteria:
   - Add performance and reproducibility benchmark complete
-  - Publish reproducible benchmark report and limitations complete
+  - reproducible final report publishes precision recall false-positive false-negative performance and reproducibility results
+  - representative general validation or linting baselines are versioned and reproduced
+  - agent-specific differentiation is stated factually from measured cases
+  - MCP coverage matrix distinguishes detected partially detectable and statically non-detectable risks
+  - limitations and complementary runtime categories are explicit
+  - external pilot findings are included only with consent and without confidential data
 Required evidence:
   - Add performance and reproducibility benchmark evidence
   - Publish reproducible benchmark report and limitations evidence
@@ -454,8 +572,8 @@ Required evidence:
 - Milestone: M5
 - Horizon: BEFORE_PRO_TECHNICAL_COMPLETION
 - Work items: AR-PRO-001
-- Depends on batches: ARB-ENG-004
-- Depends on tasks: None
+- Depends on batches: None
+- Depends on tasks: AR-MARKET-PILOT-002
 - Branch: add-versioned-agentready-policy-configuration
 - PR title: feat(pro): add versioned agentready policy configuration
 
@@ -559,7 +677,7 @@ Required evidence:
 - Horizon: BEFORE_PRO_FIRST_SALE
 - Work items: AR-LIC-001, AR-LIC-002, AR-LIC-003
 - Depends on batches: ARB-PRO-005
-- Depends on tasks: None
+- Depends on tasks: AR-MARKET-002
 - Branch: implement-entitlement-data-model
 - PR title: feat(licensing): implement entitlement data model
 
@@ -2093,11 +2211,30 @@ Required evidence:
 - Depends on: AR-COM-006
 
 Deliverables:
-  - Publish public AgentReady GitHub Action distribution
+  - public Action distribution
+  - copyable workflow
+  - immutable version pinning guidance
+  - minimum permissions
+  - supply-chain and revocation guidance
+  - current public-site Community/Pro alignment
 Acceptance criteria:
-  - Publish public AgentReady GitHub Action distribution complete
+  - Action is consumable from a public distribution path
+  - release tag and full commit SHA pinning are documented
+  - minimum GitHub permissions are documented
+  - Action inputs outputs and failure behavior are documented
+  - provenance dependency secret and code-scanning controls are documented where supported
+  - compromised-release revocation and replacement procedure is documented
+  - public site no longer presents manual review Fix Pack email payment or mandatory contact as the active Community/Pro model
+  - public site states Community is available and Pro is in preparation
+  - npm and public Action installation paths are visible
+  - Marketplace wording does not imply GitHub security validation
 Required evidence:
-  - Publish public AgentReady GitHub Action distribution evidence
+  - public Action URL or public distribution evidence
+  - copyable pinned workflow
+  - permissions review
+  - supply-chain control evidence
+  - Marketplace compliance evidence
+  - public-site alignment evidence
 
 ### AR-COM-008 - Validate public Community installation
 - Type: CODEX_WORK_ITEM
@@ -2111,11 +2248,28 @@ Required evidence:
 - Depends on: AR-COM-006
 
 Deliverables:
-  - Validate public Community installation
+  - clean-environment installation matrix
+  - external-repository Action validation
+  - PASS FAIL and error-behavior evidence
+  - documented unsupported cases
 Acceptance criteria:
-  - Validate public Community installation complete
+  - public npm installation succeeds from clean environments
+  - Linux macOS and Windows evidence is recorded
+  - all officially supported Node.js major versions are tested
+  - paths with spaces and monorepository behavior are tested
+  - single and multiple OpenAPI or MCP inputs are tested
+  - invalid input and large input within documented limits are tested
+  - PASS FAIL exit codes and report paths are verified
+  - Community operation does not require a TimeProofs backend
+  - Action installation is tested outside the TimeProofs repository
+  - failures and unsupported cases are documented honestly
 Required evidence:
-  - Validate public Community installation evidence
+  - OS and Node.js matrix
+  - external-repository workflow runs
+  - PASS FAIL exit-code evidence
+  - report path evidence
+  - offline or backend-independent evidence
+  - unsupported-case register
 
 ### AR-COM-009 - Prepare GitHub Marketplace listing compliance
 - Type: CODEX_WORK_ITEM
@@ -2129,11 +2283,22 @@ Required evidence:
 - Depends on: AR-COM-007
 
 Deliverables:
-  - Prepare GitHub Marketplace listing compliance
+  - Marketplace metadata and branding compliance
+  - factual listing copy
+  - version and permission guidance
+  - listing evidence checklist
 Acceptance criteria:
-  - Prepare GitHub Marketplace listing compliance complete
+  - Marketplace metadata requirements are satisfied
+  - branding and repository links are valid
+  - listing copy states static-analysis scope and mandatory limitation
+  - listing does not claim certification guaranteed safety or GitHub validation
+  - immutable tag and SHA pinning guidance is included
+  - minimum permissions are visible
 Required evidence:
-  - Prepare GitHub Marketplace listing compliance evidence
+  - Marketplace metadata review
+  - listing copy review
+  - branding and links review
+  - version pinning and permissions review
 
 ### AR-ONB-EPIC - Community onboarding
 - Type: EPIC
@@ -2167,9 +2332,13 @@ Required evidence:
 Deliverables:
   - Add local scan onboarding command
 Acceptance criteria:
-  - Add local scan onboarding command complete
+  - canonical local OpenAPI and MCP scan commands work without global installation
+  - errors are actionable
+  - no signup token upload or TimeProofs backend is required
 Required evidence:
-  - Add local scan onboarding command evidence
+  - clean local scan evidence
+  - OpenAPI and MCP command evidence
+  - error output evidence
 
 ### AR-ONB-002 - Add init workflow generator
 - Type: CODEX_WORK_ITEM
@@ -2185,9 +2354,19 @@ Required evidence:
 Deliverables:
   - Add init workflow generator
 Acceptance criteria:
-  - Add init workflow generator complete
+  - init detects OpenAPI and MCP files
+  - files are shown before writing
+  - confirmation is required
+  - Community workflow is generated
+  - a local scan is run
+  - Pro policy is not generated
+  - rollback or cleanup is documented
 Required evidence:
-  - Add init workflow generator evidence
+  - detection evidence
+  - confirmation evidence
+  - generated workflow
+  - local scan evidence
+  - cleanup evidence
 
 ### AR-ONB-003 - Add demo command and fixtures
 - Type: CODEX_WORK_ITEM
@@ -2203,9 +2382,14 @@ Required evidence:
 Deliverables:
   - Add demo command and fixtures
 Acceptance criteria:
-  - Add demo command and fixtures complete
+  - demo works without network access to TimeProofs
+  - demo includes a useful PASS and FAIL path
+  - fixtures are deterministic and documented
+  - demo output points to the next CI step
 Required evidence:
-  - Add demo command and fixtures evidence
+  - deterministic demo evidence
+  - PASS and FAIL demo output
+  - fixture documentation
 
 ### AR-ONB-004 - Publish three-minute tutorial
 - Type: CODEX_WORK_ITEM
@@ -2221,9 +2405,128 @@ Required evidence:
 Deliverables:
   - Publish three-minute tutorial
 Acceptance criteria:
-  - Publish three-minute tutorial complete
+  - one canonical discover run init commit first-run path is documented
+  - flow is timed from a clean environment
+  - target is under three minutes
+  - no signup card token upload or global install is required
+  - tutorial links from public discovery surfaces
+  - rollback or cleanup is documented
 Required evidence:
-  - Publish three-minute tutorial evidence
+  - dated clean-environment timing
+  - first successful GitHub run
+  - public tutorial links
+  - cleanup instructions
+
+### AR-PILOT-EPIC - External Community pilot and differentiation
+- Type: EPIC
+- Status: PLANNED
+- Owner: CODEX_AND_JEASON
+- Milestone: M4
+- Horizon: BEFORE_PRO_TECHNICAL_COMPLETION
+- Workstream: MARKET
+- Weight: 8
+- Execution batch: None
+- Depends on: AR-COM-008, AR-ONB-004
+
+Deliverables:
+  - None
+Acceptance criteria:
+  - child tasks are tracked
+Required evidence:
+  - child tasks tracked in ledger
+
+### AR-MARKET-PILOT-001 - Prepare external Community pilot kit and evidence registry
+- Type: CODEX_WORK_ITEM
+- Status: PLANNED
+- Owner: CODEX
+- Milestone: M4
+- Horizon: BEFORE_PRO_TECHNICAL_COMPLETION
+- Workstream: MARKET
+- Weight: 3
+- Execution batch: ARB-MARKET-PILOT-001
+- Depends on: AR-COM-008, AR-ONB-004
+
+Deliverables:
+  - tester guide
+  - pilot evidence registry
+  - false-positive and false-negative register
+  - abandonment and feature-request register
+  - before fix after case template
+  - consent and confidentiality checklist
+  - outreach candidate worksheet
+  - voluntary redacted feedback procedure
+Acceptance criteria:
+  - pilot kit can record five distinct external users and three real repositories
+  - OpenAPI and MCP usage are recorded separately
+  - first use and 30-day reuse fields exist
+  - real issue fix and after-result evidence can be recorded
+  - false positives false negatives abandonment and feature requests are captured
+  - payment-signal context and real price presentation can be recorded
+  - public quote and case publication require consent
+  - no automatic outreach invented evidence silent telemetry or default full-contract upload is introduced
+Required evidence:
+  - completed empty pilot templates
+  - threshold-to-evidence mapping
+  - consent and redaction review
+  - no-telemetry review
+
+### AR-MARKET-PILOT-001H - Validate five-user external Community pilot
+- Type: OWNER_ACTION
+- Status: OWNER_ACTION_REQUIRED
+- Owner: JEASON
+- Milestone: M4
+- Horizon: BEFORE_PRO_TECHNICAL_COMPLETION
+- Workstream: MARKET
+- Weight: 3
+- Execution batch: None
+- Depends on: AR-MARKET-PILOT-001
+
+Deliverables:
+  - None
+Acceptance criteria:
+  - at least five distinct external Community users
+  - at least three real external repositories or contract surfaces
+  - at least one real OpenAPI use
+  - at least one real MCP use
+  - at least two measurable 30-day return or reuse signals where the observation window permits
+  - at least one useful real issue detected and corrected
+  - false positives false negatives abandonment reasons and feature requests recorded honestly
+  - at least one explicit signal identifies a function for which an external user may pay
+  - project accounts fixtures automated installs and TimeProofs repository runs are excluded
+Required evidence:
+  - pseudonymized pilot-user records
+  - repository or contract-surface records
+  - OpenAPI and MCP usage evidence
+  - reuse evidence or pending observation status
+  - real issue fix and after-result evidence
+  - feedback and abandonment register
+  - payment-function signal context
+
+### AR-MARKET-PILOT-002 - Decide whether AgentReady proceeds to Pro implementation
+- Type: DECISION_GATE
+- Status: DECISION_REQUIRED
+- Owner: CODEX_AND_JEASON
+- Milestone: M4
+- Horizon: BEFORE_PRO_TECHNICAL_COMPLETION
+- Workstream: MARKET
+- Weight: 3
+- Execution batch: None
+- Depends on: AR-MARKET-PILOT-001H, AR-ENG-005
+
+Deliverables:
+  - None
+Acceptance criteria:
+  - pilot threshold evidence reviewed
+  - benchmark thresholds and final results reviewed
+  - agent-specific differentiation evidence reviewed
+  - MCP static coverage and limitations reviewed
+  - false positives false negatives reuse abandonment and feature requests reviewed
+  - continue correct pause pivot or reject decision recorded
+Required evidence:
+  - pilot decision record
+  - benchmark review
+  - differentiation review
+  - selected outcome and owner approval
 
 ### AR-ENG-EPIC - Engine benchmark and quality
 - Type: EPIC
@@ -2255,11 +2558,23 @@ Required evidence:
 - Depends on: AR-COM-008
 
 Deliverables:
-  - Add benchmark corpus architecture and annotation schema
+  - safe and dangerous OpenAPI corpus schema
+  - safe and dangerous MCP corpus schema
+  - human annotation schema
+  - representative general-validator and linter baseline schema
+  - MCP static coverage classification schema
 Acceptance criteria:
-  - Add benchmark corpus architecture and annotation schema complete
+  - corpus supports safe dangerous ambiguous false-positive and false-negative cases
+  - OpenAPI and MCP cases are separated
+  - human labels and disagreements can be recorded
+  - baseline comparison fields are reproducible and tool versions are recorded
+  - MCP risks can be classified as detected partially detectable or statically non-detectable
+  - external pilot findings can be incorporated without confidential data
 Required evidence:
-  - Add benchmark corpus architecture and annotation schema evidence
+  - corpus and annotation schema
+  - baseline comparison schema
+  - MCP coverage schema
+  - sample reproducible fixtures
 
 ### AR-ENG-001H - Validate human benchmark annotations
 - Type: OWNER_ACTION
@@ -2375,7 +2690,12 @@ Required evidence:
 Deliverables:
   - Publish reproducible benchmark report and limitations
 Acceptance criteria:
-  - Publish reproducible benchmark report and limitations complete
+  - reproducible final report publishes precision recall false-positive false-negative performance and reproducibility results
+  - representative general validation or linting baselines are versioned and reproduced
+  - agent-specific differentiation is stated factually from measured cases
+  - MCP coverage matrix distinguishes detected partially detectable and statically non-detectable risks
+  - limitations and complementary runtime categories are explicit
+  - external pilot findings are included only with consent and without confidential data
 Required evidence:
   - Publish reproducible benchmark report and limitations evidence
 
@@ -2406,7 +2726,7 @@ Required evidence:
 - Workstream: PRO
 - Weight: 8
 - Execution batch: None
-- Depends on: AR-ENG-005
+- Depends on: AR-MARKET-PILOT-002
 
 Deliverables:
   - None
@@ -2424,7 +2744,7 @@ Required evidence:
 - Workstream: PRO
 - Weight: 3
 - Execution batch: ARB-PRO-001
-- Depends on: AR-ENG-005
+- Depends on: AR-MARKET-PILOT-002
 
 Deliverables:
   - Add versioned AgentReady policy configuration
@@ -2568,7 +2888,7 @@ Required evidence:
 - Workstream: LIC
 - Weight: 8
 - Execution batch: None
-- Depends on: AR-PRO-008
+- Depends on: AR-PRO-008, AR-MARKET-002
 
 Deliverables:
   - None
@@ -2586,7 +2906,7 @@ Required evidence:
 - Workstream: LIC
 - Weight: 3
 - Execution batch: ARB-LIC-001
-- Depends on: AR-PRO-008
+- Depends on: AR-PRO-008, AR-MARKET-002
 
 Deliverables:
   - Implement entitlement data model
@@ -5026,16 +5346,34 @@ Acceptance criteria:
 Required evidence:
   - owner launch approval or correction decision
 
+### AR-MARKET-EPIC - Commercial validation and evidence gates
+- Type: EPIC
+- Status: PLANNED
+- Owner: CODEX_AND_JEASON
+- Milestone: M5
+- Horizon: BEFORE_PRO_FIRST_SALE
+- Workstream: MARKET
+- Weight: 8
+- Execution batch: None
+- Depends on: AR-MARKET-PILOT-002
+
+Deliverables:
+  - None
+Acceptance criteria:
+  - child tasks are tracked
+Required evidence:
+  - child tasks tracked in ledger
+
 ### AR-MARKET-001A - Validate ten external Community users
 - Type: DECISION_GATE
 - Status: DECISION_REQUIRED
 - Owner: JEASON
-- Milestone: M7
-- Horizon: BEFORE_GLOBAL_LAUNCH
+- Milestone: M5
+- Horizon: BEFORE_PRO_FIRST_SALE
 - Workstream: MARKET
 - Weight: 3
 - Execution batch: None
-- Depends on: AR-COM-008
+- Depends on: AR-MARKET-PILOT-002
 
 Deliverables:
   - None
@@ -5059,8 +5397,8 @@ Required evidence:
 - Type: DECISION_GATE
 - Status: DECISION_REQUIRED
 - Owner: JEASON
-- Milestone: M7
-- Horizon: BEFORE_GLOBAL_LAUNCH
+- Milestone: M5
+- Horizon: BEFORE_PRO_FIRST_SALE
 - Workstream: MARKET
 - Weight: 3
 - Execution batch: None
@@ -5083,6 +5421,33 @@ Required evidence:
   - response obtained
   - exchange context
   - publication authorization if needed
+
+### AR-MARKET-002 - Authorize licensing Stripe and account implementation
+- Type: DECISION_GATE
+- Status: DECISION_REQUIRED
+- Owner: CODEX_AND_JEASON
+- Milestone: M5
+- Horizon: BEFORE_PRO_FIRST_SALE
+- Workstream: MARKET
+- Weight: 3
+- Execution batch: None
+- Depends on: AR-MARKET-001A, AR-MARKET-001B, AR-MARKET-001D
+
+Deliverables:
+  - None
+Acceptance criteria:
+  - ten external Community users gate passed
+  - three explicit Pro payment signals gate passed at the real price and scope
+  - credible external value case gate passed
+  - benchmark and differentiation evidence accepted
+  - owner authorizes or refuses commercial infrastructure implementation
+  - continue correct pause pivot or reject decision recorded
+Required evidence:
+  - commercial infrastructure authorization decision
+  - ten-user evidence review
+  - payment-signal evidence review
+  - value-case evidence review
+  - benchmark and differentiation review
 
 ### AR-MARKET-001C - Complete first external Pro sale
 - Type: DECISION_GATE
@@ -5119,8 +5484,8 @@ Required evidence:
 - Type: DECISION_GATE
 - Status: DECISION_REQUIRED
 - Owner: CODEX_AND_JEASON
-- Milestone: M7
-- Horizon: BEFORE_GLOBAL_LAUNCH
+- Milestone: M5
+- Horizon: BEFORE_PRO_FIRST_SALE
 - Workstream: MARKET
 - Weight: 3
 - Execution batch: None

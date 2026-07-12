@@ -37,7 +37,7 @@ Impact: The ledger now requires `AR-ENG-001T`, `AR-MARKET-001A`, `AR-MARKET-001B
 Supersedes: vague market-validation intentions without explicit thresholds.
 Status: ACTIVE
 
-These gates do not block Community publication, Pro technical construction, or the initial Pro sale path. They block only claims that AgentReady is globally validated or category-established.
+This decision is refined by DL-2026-07-12-VALIDATION-GATES. The final global-validation thresholds remain active, while earlier pilot and commercial-infrastructure gates now control future execution.
 
 ## 2026-07-10 - Shift-left contract security
 
@@ -198,3 +198,14 @@ Reason: The product must not depend only on founder memory.
 Impact: Due diligence discipline is permanent.
 Supersedes: informal operations.
 Status: ACTIVE
+
+## 2026-07-12 - Earlier validation gates before Pro and commercial infrastructure
+
+Decision ID: DL-2026-07-12-VALIDATION-GATES
+Decision: Preserve the static-first Community/Pro strategy while moving external evidence and explicit decision gates earlier in the execution sequence.
+Reason: The principal remaining risk is not the ability to build AgentReady, but whether external developers adopt it, reuse it, value its agent-specific findings and express willingness to pay.
+Impact: The next action remains `ARB-COM-002`; Community distribution, installation and onboarding are strengthened; one Codex pilot-preparation batch is added; a five-user pilot plus benchmark evidence blocks Pro implementation; ten external users, three explicit payment signals and one credible value case block licensing, Stripe and account construction; dynamic analysis remains post-revenue and demand-gated.
+Supersedes: the part of DL-2026-07-11-COMMERCIAL-BENCHMARK-THRESHOLDS that allowed Pro and commercial infrastructure to proceed without earlier external evidence.
+Status: ACTIVE
+
+Completed publication evidence, the npm package, immutable tag, GitHub prerelease and Community/Pro feature boundary are unchanged.
