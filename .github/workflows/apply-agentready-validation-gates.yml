@@ -25,7 +25,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: docs-agentready-strengthen-validation-gates
-          fetch-depth: 0
+          fetch-depth: 1
+          show-progress: false
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -36,7 +37,10 @@ jobs:
         run: node scripts/apply-agentready-validation-gates.mjs
 
       - name: Rebuild canonical ledger
-        run: node scripts/rebuild-agentready-ledger-data.mjs
+        shell: bash
+        run: |
+          set -o pipefail
+          node scripts/rebuild-agentready-ledger-data.mjs 2>&1 | tee /tmp/agentready-rebuild.log
 
       - name: Generate ledger views
         run: |
