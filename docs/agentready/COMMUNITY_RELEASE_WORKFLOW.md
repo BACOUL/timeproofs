@@ -81,6 +81,27 @@ permissions:
 
 No write permission is granted.
 
+## Controlled Publication Handoff
+
+The GitHub Actions workflow remains candidate-only, read-only and technically
+incapable of publishing. Real publication is a separate approved procedure:
+
+```txt
+approved exact artifact
+-> Codex preflight
+-> JEASON manual npm publish with private owner 2FA
+-> public npm verification
+-> immutable tag at approved source commit
+-> GitHub Release
+-> public installation test
+-> evidence recorded
+-> human review before merge
+```
+
+Codex may prepare and verify the release execution. JEASON performs the first
+`npm publish` locally with owner 2FA. No password, 2FA code, recovery code,
+token or secret may be sent to Codex, GitHub, a pull request, logs or files.
+
 ## Runtime
 
 Runner:
@@ -278,12 +299,14 @@ Version:
 
 ```txt
 VERSION: 0.1.0-alpha.0
+PUBLICATION APPROVED: YES
+APPROVED BY: JEASON
+APPROVAL DATE: 2026-07-12
 NPM DIST-TAG: alpha
 LATEST TAG MODIFIED: NO
 FIRST PUBLICATION AUTH: manual npm CLI with owner 2FA
 NPM TOKEN: none
 FUTURE AUTH: Trusted Publishing OIDC after initial package creation
-PUBLICATION APPROVED: NO
 ```
 
 NPM DIST-TAG:
@@ -316,12 +339,6 @@ FUTURE AUTH:
 Trusted Publishing OIDC after initial package creation
 ```
 
-PUBLICATION APPROVED:
-
-```txt
-NO
-```
-
 Planned future tag:
 
 ```txt
@@ -334,7 +351,9 @@ Tag status:
 not created
 ```
 
-The Community release workflow prepares and validates the release candidate. Actual tag creation remains blocked until all publication requirements and explicit release approval are satisfied.
+The Community release workflow prepares and validates the release candidate.
+Actual tag creation remains outside this workflow and is allowed only in the
+controlled publication handoff after npm publication succeeds.
 
 ## Future Rollback Procedure
 
@@ -350,22 +369,23 @@ Rollback is not active in this candidate-only workflow because no public artifac
 
 ## Publication Blockers
 
-- final Community tarball content not approved.
-- explicit release approval not granted.
-- no public tag exists.
-- no GitHub Release exists.
-- trusted publishing provenance not configured for publication.
+- final Community tarball content approved.
+- explicit publication approval granted.
+- npm publication not yet executed.
+- immutable tag not yet created.
+- GitHub Release not yet created.
+- trusted publishing provenance not configured for future automated publication.
 
 ## Required Approvals Before Publication
 
-Before publication can be considered:
+Before controlled publication executes:
 
-- final Community tarball contents must be approved;
-- final source commit must be approved;
-- final tarball SHA-256 must be approved;
-- release notes must be reviewed;
-- immutable tag target commit must be approved;
-- explicit release approval must be recorded.
+- Codex must verify the approved exact artifact and checksum;
+- JEASON must perform the first npm publication manually with private owner 2FA;
+- Codex must verify public npm availability under `alpha`;
+- Codex must verify `latest` was not created or modified;
+- the immutable tag must point exactly to `150da23932c1fb9433cb3d546904f03c18c909e9`;
+- the GitHub Release must reference the approved artifact and evidence.
 
 ## Mandatory Limitation
 

@@ -254,7 +254,7 @@ Required evidence:
 ### ARB-COM-001 - Publish Community CLI and immutable release
 - Status: READY
 - Spec status: EXECUTION_READY
-- Owner: CODEX
+- Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Work items: AR-COM-006
@@ -266,10 +266,15 @@ Required evidence:
 Deliverables:
   - Publish Community CLI and immutable release
 Acceptance criteria:
-  - publication only from approved commit
-  - immutable tag and GitHub Release only when approved
+  - Codex verifies the exact approved artifact before publication
+  - JEASON performs the manual npm publish checkpoint with private owner 2FA
+  - publication occurs only under npm dist-tag alpha
+  - latest is not created, moved or modified
+  - immutable tag and GitHub Release are created only after npm publication is confirmed
   - public install tested
 Required evidence:
+  - approved tarball SHA-256 verification
+  - JEASON npm publication confirmation without secrets
   - npm package URL
   - immutable tag
   - GitHub Release URL
@@ -2027,7 +2032,7 @@ Required evidence:
 ### AR-COM-006 - Publish Community CLI and immutable release
 - Type: CODEX_WORK_ITEM
 - Status: READY
-- Owner: CODEX
+- Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Workstream: COM
@@ -2038,10 +2043,15 @@ Required evidence:
 Deliverables:
   - Publish Community CLI and immutable release
 Acceptance criteria:
-  - publication only from approved commit
-  - immutable tag and GitHub Release only when approved
+  - Codex verifies the exact approved artifact before publication
+  - JEASON performs the manual npm publish checkpoint with private owner 2FA
+  - publication occurs only under npm dist-tag alpha
+  - latest is not created, moved or modified
+  - immutable tag and GitHub Release are created only after npm publication is confirmed
   - public install tested
 Required evidence:
+  - approved tarball SHA-256 verification
+  - JEASON npm publication confirmation without secrets
   - npm package URL
   - immutable tag
   - GitHub Release URL

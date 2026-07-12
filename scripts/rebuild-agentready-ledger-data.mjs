@@ -89,6 +89,11 @@ function task(input) {
     evidence: input.evidence ?? [],
     execution_batch_id: input.execution_batch_id ?? null,
     manual_actions: input.manual_actions ?? [],
+    authorized_actions: input.authorized_actions ?? [],
+    forbidden_actions: input.forbidden_actions ?? [],
+    codex_preflight_steps: input.codex_preflight_steps ?? [],
+    owner_checkpoint_steps: input.owner_checkpoint_steps ?? [],
+    post_confirmation_steps: input.post_confirmation_steps ?? [],
     external_verification: input.external_verification ?? null,
     decision_gate: input.decision_gate ?? null,
     validation_thresholds: input.validation_thresholds ?? null,
@@ -118,6 +123,55 @@ const external = (parent_id, id, milestone, horizon, workstream, title, topic, o
 const decisionGate = (parent_id, id, milestone, horizon, workstream, title, options = {}) => manual(parent_id, id, "DECISION_GATE", milestone, horizon, workstream, title, options.owner ?? "JEASON", options.status ?? "DECISION_REQUIRED", { ...options, decision_gate: { metrics: options.metrics ?? [], review_date: options.review_date ?? null, allowed_outcomes: options.allowed_outcomes ?? ["CONTINUE", "CORRECT", "PAUSE", "PIVOT", "REJECT"], selected_outcome: options.selected_outcome ?? null, owner_approval: options.owner_approval ?? null } });
 const recurring = (parent_id, id, milestone, horizon, workstream, title, options = {}) => task({ parent_id, id, task_type: "RECURRING_OPERATION", milestone, delivery_horizon: horizon, workstream, title, status: "RECURRING", owner: options.owner ?? "CODEX_AND_JEASON", weight: options.weight ?? 2, source_documents: options.source_documents ?? [doc.change], recurrence: { frequency: options.frequency ?? "MONTHLY", last_completed_at: null, next_due_at: null, completion_evidence: [] }, acceptance_criteria: ["recurring review completed"], required_commands: ["node scripts/validate-agentready-execution-system.mjs"], required_evidence: ["dated review evidence"], manual_actions: ["record recurring review evidence"] });
 
+const communityPublicationManualActions = [
+  "Codex verifies the approved artifact, checksum, package, version, source commit and alpha dist-tag before any publication.",
+  "JEASON runs the exact npm publish command locally and enters owner 2FA privately in his own terminal.",
+  "JEASON must never send or store his npm password, 2FA code, recovery codes or authentication secrets.",
+  "After npm publication succeeds, Codex verifies the public npm package before creating the authorized immutable Git tag and GitHub Release."
+];
+const communityPublicationAuthorizedActions = [
+  "publish the exact approved tarball as @timeproofs/agentready@0.1.0-alpha.0 under npm dist-tag alpha, through the JEASON manual checkpoint",
+  "create immutable Git tag v0.1.0-alpha.0 pointing exactly to commit 150da23932c1fb9433cb3d546904f03c18c909e9 after npm publication succeeds",
+  "create the corresponding GitHub Release after npm publication succeeds",
+  "attach or reference the exact approved tarball, checksum and approved release notes"
+];
+const communityPublicationForbiddenActions = [
+  "do not publish from the PR head or the current governance merge commit",
+  "do not rebuild, modify or replace the approved tarball",
+  "do not publish another package version",
+  "do not create, move or modify the npm latest dist-tag",
+  "do not create or store an npm token",
+  "do not request, receive, print or store a password, 2FA code or recovery code",
+  "do not create the Git tag before npm publication is confirmed",
+  "do not point v0.1.0-alpha.0 to any commit other than 150da23932c1fb9433cb3d546904f03c18c909e9",
+  "do not create the GitHub Release before npm publication is confirmed",
+  "do not merge the publication PR automatically"
+];
+const communityPublicationCodexPreflightSteps = [
+  "verify the approved source commit 150da23932c1fb9433cb3d546904f03c18c909e9",
+  "retrieve or use only the approved tarball",
+  "recalculate the tarball SHA-256 and confirm it is exactly 602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe",
+  "confirm package @timeproofs/agentready, version 0.1.0-alpha.0, public access and npm dist-tag alpha",
+  "confirm latest will not be created, moved or modified",
+  "prepare the exact npm publish command",
+  "stop before any owner 2FA entry"
+];
+const communityPublicationOwnerCheckpointSteps = [
+  "JEASON must verify the local SHA-256 is exactly 602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe before publishing",
+  "JEASON runs npm publish \"<path-to-approved-tarball>\" --access public --tag alpha in his own local terminal",
+  "JEASON enters npm 2FA only in his own terminal",
+  "JEASON never communicates the 2FA code, password, recovery code or token to Codex",
+  "Codex waits for JEASON's npm publication result before continuing"
+];
+const communityPublicationPostConfirmationSteps = [
+  "verify the public npm package page exists",
+  "verify @timeproofs/agentready@0.1.0-alpha.0 exists under alpha",
+  "verify latest was not created or modified",
+  "create v0.1.0-alpha.0 pointing exactly to 150da23932c1fb9433cb3d546904f03c18c909e9",
+  "create the corresponding GitHub Release",
+  "record npm, tag, GitHub Release and public installation evidence in the publication PR"
+];
+
 const milestones = [
   ["M1", "Governance locked", "IN_PROGRESS", "BEFORE_COMMUNITY_PUBLICATION", ["sources of truth defined", "canonical ledger valid", "generated views synchronized", "change control defined", "next action identifiable"], [["M1-SOURCES", "sources of truth defined", ["AR-GOV-003"]], ["M1-LEDGER", "canonical ledger valid", ["AR-GOV-003"]], ["M1-VIEWS", "generated views synchronized", ["AR-GOV-003"]], ["M1-CHANGE", "change control defined", ["AR-GOV-003"]], ["M1-NEXT", "next action identifiable", ["AR-GOV-003"]]]],
   ["M2", "Community publication blockers resolved", "PLANNED", "BEFORE_COMMUNITY_PUBLICATION", ["npm scope controlled or alternative approved", "license approved", "ProofSpec references classified and treated", "npm security defined", "provenance defined", "publication explicitly approvable"], [["M2-NPM-SCOPE", "npm scope controlled or alternative approved", ["AR-COM-001"], true], ["M2-LICENSE", "license approved", ["AR-COM-003"], true], ["M2-PROOFSPEC", "ProofSpec references classified and treated", ["AR-COM-004"], true], ["M2-NPM-SECURITY", "npm security defined", ["AR-COM-002"], true], ["M2-PROVENANCE", "provenance defined", ["AR-COM-005"], true], ["M2-APPROVAL", "publication explicitly approvable", ["AR-COM-006A"], true]]],
@@ -142,7 +196,7 @@ legalReview("AR-COM-EPIC", "AR-COM-003", "M2", "BEFORE_COMMUNITY_PUBLICATION", "
 legalReview("AR-COM-EPIC", "AR-COM-004", "M2", "BEFORE_COMMUNITY_PUBLICATION", "Treat package-public ProofSpec references", { status: "DONE", depends_on: ["AR-GOV-003"], blocks: ["AR-COM-006"], source_documents: [doc.proofspec, "packaging/agentready-community/LICENSE", "packaging/agentready-community/README.md"], acceptance_criteria: ["legacy references removed, renamed or legally justified for package-public files", "root LICENSE excluded from Community tarball", "root README excluded from Community tarball", "ProofSpec references absent from Community tarball"], required_evidence: ["legal treatment decision", "updated package-public audit", "staged package validation"], evidence: [{ type: "package_public_reference_treatment", date: "2026-07-11", package_boundary: "Community package built from dedicated staging directory", root_license_excluded: true, root_readme_excluded: true, proofspec_absent_from_tarball: true, package_public_audit_updated: true, publication: false }] });
 ownerAction("AR-COM-EPIC", "AR-COM-005", "M2", "BEFORE_COMMUNITY_PUBLICATION", "OWNER", "Approve final Community tarball content", { status: "DONE", depends_on: ["AR-COM-003", "AR-COM-004"], blocks: ["AR-COM-006"], source_documents: [doc.tarball], acceptance_criteria: ["corrected alpha-channel tarball file list reviewed", "corrected alpha-channel checksum approved", "npm dist-tag alpha verified", "publication remains unauthorized"], required_evidence: ["approved corrected tarball SHA-256", "approved corrected source commit", "owner approval confirming npm dist-tag alpha"], evidence: [{ type: "owner_tarball_approval", date: "2026-07-11", approver: "JEASON", package: "@timeproofs/agentready", version: "0.1.0-alpha.0", source_commit: "61a5dab90afe6363f7ea386712bb8cdc48e9f665", tarball_sha256: "f1381d16277707cfc5d1005ed5e865139aa5a1ed0fcc1fb7de35c2f1a5eab77d", zip_sha256: "9bd533ae306e2c511af6af2d7aad7031916d6f24eae3ed4b21cd5364e1dd12c1", workflow: "AgentReady Community Release Candidate", workflow_run: "13", file_count: 21, publication_authorized: false, superseded: true, superseded_date: "2026-07-11", superseded_reason: "release channel corrected to alpha, changing the tarball content", approval_text: "«J’approuve le contenu final du tarball AgentReady Community 0.1.0-alpha.0, lié au commit 61a5dab90afe6363f7ea386712bb8cdc48e9f665 et au SHA-256 f1381d16277707cfc5d1005ed5e865139aa5a1ed0fcc1fb7de35c2f1a5eab77d. Cette approbation n’autorise pas encore sa publication.»" }, { type: "owner_tarball_approval", date: "2026-07-11", approver: "JEASON", package: "@timeproofs/agentready", version: "0.1.0-alpha.0", source_commit: "150da23932c1fb9433cb3d546904f03c18c909e9", tarball_sha256: "602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe", zip_sha256: "1a318eab6a7af3a313da820546b36c4392b58502a025e8bd0a8a06ba45a3c248", workflow: "AgentReady Community Release Candidate", source_branch: "timeproofs", npm_dist_tag: "alpha", file_count: 21, publication_authorized: false, superseded: false, technical_evidence: ["manifest references approved source commit", "tarball SHA-256 matches manifest and .sha256 file", "GitHub Actions ZIP SHA-256 matches controlled ZIP", "package_name = @timeproofs/agentready", "version = 0.1.0-alpha.0", "package_publish_access = public", "package_publish_registry = https://registry.npmjs.org/", "package_publish_tag = alpha", "publication_ready = false", "package contains exactly 21 files", "no private: true in Community package", "root repository package remains private", "license Apache-2.0", "NOTICE present", "dependencies empty", "README commands explicitly use @alpha", "no forbidden historical ProofSpec references", "no secret or token", "no Pro, Stripe, backend or dashboard component", "no dangerous path or symlink", "npm publish --dry-run --access public --tag alpha PASS", "no real publication performed"], approval_text: "«J’approuve le contenu final corrigé du tarball AgentReady Community 0.1.0-alpha.0, lié au commit 150da23932c1fb9433cb3d546904f03c18c909e9 et au SHA-256 602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe, destiné au dist-tag npm alpha. Cette approbation n’autorise pas encore sa publication.»" }] });
 decisionGate("AR-COM-EPIC", "AR-COM-006A", "M2", "BEFORE_COMMUNITY_PUBLICATION", "OWNER", "Explicit Community publication approval", { status: "DONE", depends_on: ["AR-COM-001", "AR-COM-002", "AR-COM-003", "AR-COM-004", "AR-COM-005"], blocks: ["AR-COM-006"], source_documents: ["docs/agentready/COMMUNITY_PUBLICATION_APPROVAL_CHECKLIST.md"], acceptance_criteria: ["PUBLICATION APPROVED explicitly set by owner"], required_evidence: ["approved commit", "approved version", "approved tarball SHA-256", "approval date"], evidence: [{ type: "owner_publication_approval", date: "2026-07-12", approver: "JEASON", package: "@timeproofs/agentready", version: "0.1.0-alpha.0", approved_source_commit: "150da23932c1fb9433cb3d546904f03c18c909e9", approved_tarball_sha256: "602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe", approved_zip_sha256: "1a318eab6a7af3a313da820546b36c4392b58502a025e8bd0a8a06ba45a3c248", npm_dist_tag: "alpha", immutable_git_tag: "v0.1.0-alpha.0", github_release_authorized: true, latest_authorized: false, artifact_modification_authorized: false, other_version_authorized: false, first_publication_auth: "manual npm CLI with owner 2FA", npm_token: "none", selected_outcome: "CONTINUE", approval_text: "«J’autorise explicitement la publication publique de @timeproofs/agentready version 0.1.0-alpha.0, exclusivement sous le dist-tag npm alpha, à partir du commit source approuvé 150da23932c1fb9433cb3d546904f03c18c909e9 et du tarball dont le SHA-256 est 602799c5dd20ada03f2ee5e27048bacd865a71654e1c09f8119a484c837da6fe. J’autorise également la création du tag Git immuable v0.1.0-alpha.0 et de la GitHub Release correspondante. Cette autorisation ne permet pas de publier sous latest, de modifier l’artefact approuvé ou de publier une autre version. Approbation donnée par JEASON le 12 juillet 2026.»" }], metrics: ["all blockers RESOLVED", "tarball approved", "license approved"], review_date: "2026-07-12", selected_outcome: "CONTINUE", owner_approval: true });
-codex("AR-COM-EPIC", "AR-COM-006", "M3", "BEFORE_COMMUNITY_PUBLICATION", "COM", "Publish Community CLI and immutable release", { status: "READY", weight: 5, depends_on: ["AR-COM-001", "AR-COM-002", "AR-COM-003", "AR-COM-004", "AR-COM-005", "AR-COM-006A"], blocks: ["AR-COM-008", "AR-COM-007"], source_documents: [doc.policy, doc.release], branch: "release-agentready-community-cli", pr_title: "release(agentready): publish Community CLI and immutable release", allowed_paths: ["package.json", "CHANGELOG.md", "docs/agentready/**"], forbidden_paths: ["agentready-core/**", "bin/**", "*.html", "LICENSE"], acceptance_criteria: ["publication only from approved commit", "immutable tag and GitHub Release only when approved", "public install tested"], required_commands: ["node cli/tests/run-agentready-package-smoke-test.mjs"], required_evidence: ["npm package URL", "immutable tag", "GitHub Release URL", "public installation test"], scope_justification: "Weight 5 justified: release publication is a single atomic release boundary after owner approval." });
+codex("AR-COM-EPIC", "AR-COM-006", "M3", "BEFORE_COMMUNITY_PUBLICATION", "COM", "Publish Community CLI and immutable release", { status: "READY", owner: "CODEX_AND_JEASON", weight: 5, depends_on: ["AR-COM-001", "AR-COM-002", "AR-COM-003", "AR-COM-004", "AR-COM-005", "AR-COM-006A"], blocks: ["AR-COM-008", "AR-COM-007"], source_documents: [doc.policy, doc.release], branch: "release-agentready-community-cli", pr_title: "release(agentready): publish Community CLI and immutable release", allowed_paths: ["CHANGELOG.md", "docs/agentready/**"], forbidden_paths: ["package.json", "packaging/agentready-community/**", "agentready-core/**", "bin/**", ".github/workflows/**", ".github/actions/**", "LICENSE", "NOTICE", "*.html"], acceptance_criteria: ["Codex verifies the exact approved artifact before publication", "JEASON performs the manual npm publish checkpoint with private owner 2FA", "publication occurs only under npm dist-tag alpha", "latest is not created, moved or modified", "immutable tag and GitHub Release are created only after npm publication is confirmed", "public install tested"], required_commands: ["node cli/tests/run-agentready-package-smoke-test.mjs"], required_evidence: ["approved tarball SHA-256 verification", "JEASON npm publication confirmation without secrets", "npm package URL", "immutable tag", "GitHub Release URL", "public installation test"], manual_actions: communityPublicationManualActions, authorized_actions: communityPublicationAuthorizedActions, forbidden_actions: communityPublicationForbiddenActions, codex_preflight_steps: communityPublicationCodexPreflightSteps, owner_checkpoint_steps: communityPublicationOwnerCheckpointSteps, post_confirmation_steps: communityPublicationPostConfirmationSteps, scope_justification: "Weight 5 justified: release publication is a single atomic release boundary after owner approval and private owner 2FA checkpoint." });
 for (const row of [
   ["AR-COM-007", "Publish public AgentReady GitHub Action distribution", "feat-distribution-agentready-marketplace-action", "feat(distribution): publish AgentReady GitHub Marketplace action", ["AR-COM-006"], [doc.action, doc.actionUsage]],
   ["AR-COM-008", "Validate public Community installation", "qa-community-public-installation", "qa(community): validate public AgentReady installation", ["AR-COM-006"], [doc.cli]],
@@ -282,6 +336,11 @@ function createExecutionBatch(input) {
     rollback_boundary: input.rollback_boundary ?? `Revert ${input.id} without reverting unrelated batches.`,
     scope_justification: input.scope_justification ?? (multipleWorkstreams ? "Batch groups compatible workstreams with one shared review and rollback boundary." : "Batch groups compatible work items with one shared review and rollback boundary."),
     manual_actions: input.manual_actions ?? unique(items.flatMap((item) => item.manual_actions || [])),
+    authorized_actions: input.authorized_actions ?? unique(items.flatMap((item) => item.authorized_actions || [])),
+    forbidden_actions: input.forbidden_actions ?? unique(items.flatMap((item) => item.forbidden_actions || [])),
+    codex_preflight_steps: input.codex_preflight_steps ?? unique(items.flatMap((item) => item.codex_preflight_steps || [])),
+    owner_checkpoint_steps: input.owner_checkpoint_steps ?? unique(items.flatMap((item) => item.owner_checkpoint_steps || [])),
+    post_confirmation_steps: input.post_confirmation_steps ?? unique(items.flatMap((item) => item.post_confirmation_steps || [])),
     external_verifications: input.external_verifications ?? unique(items.filter((item) => item.external_verification?.required).map((item) => item.external_verification.topic)),
     evidence: input.evidence ?? [],
     notes: input.notes ?? "",
@@ -334,7 +393,7 @@ createBatch("ARB-GOV-003", "Add canonical AgentReady execution system", ["AR-GOV
 });
 
 const batchDefinitions = [
-  ["ARB-COM-001", "Publish Community CLI and immutable release", ["AR-COM-006"], { status: "READY", spec_status: "EXECUTION_READY", scope_justification: "Atomic release boundary after owner and legal approval." }],
+  ["ARB-COM-001", "Publish Community CLI and immutable release", ["AR-COM-006"], { status: "READY", owner: "CODEX_AND_JEASON", spec_status: "EXECUTION_READY", scope_justification: "Atomic release boundary after owner, legal and private 2FA checkpoint approval." }],
   ["ARB-COM-002", "Publish public GitHub Action distribution", ["AR-COM-007", "AR-COM-009"]],
   ["ARB-COM-003", "Validate public Community installation", ["AR-COM-008"]],
   ["ARB-ONB-001", "Ship Community onboarding commands and tutorial", ["AR-ONB-001", "AR-ONB-002", "AR-ONB-003", "AR-ONB-004"]],
