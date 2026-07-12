@@ -77,7 +77,7 @@ uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0
 Full-SHA reference to be populated after owner publication:
 
 ```yaml
-uses: BACOUL/timeproofs@<FULL_ACTION_RELEASE_COMMIT_SHA>
+uses: BACOUL/timeproofs@d6634d0fbbe1fced510fc49d8871d52a3dc7f348
 ```
 
 ## Community Capabilities

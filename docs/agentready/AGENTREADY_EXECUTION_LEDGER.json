@@ -14944,7 +14944,7 @@
       "objective": "Publish public GitHub Action distribution.",
       "milestone": "M3",
       "delivery_horizon": "BEFORE_COMMUNITY_PUBLICATION",
-      "status": "IN_REVIEW",
+      "status": "DONE",
       "spec_status": "EXECUTION_READY",
       "owner": "CODEX_AND_JEASON",
       "work_item_ids": [
@@ -14996,7 +14996,7 @@
         "all automated validations pass before the owner checkpoint",
         "owner publishes only the approved immutable Action commit",
         "post-publication public Action run passes",
-        "release listing and site evidence are recorded before merge",
+        "release listing and site evidence are recorded, with the documented default-branch sequencing exception",
         "existing npm package release and tag remain unchanged"
       ],
       "independent_test_plan": [
@@ -15086,8 +15086,34 @@
         "current GitHub Marketplace root metadata and publication requirements",
         "public Marketplace listing availability"
       ],
-      "evidence": [],
-      "notes": "If the Marketplace UI rejects repository composition or metadata, stop and return through change control rather than bypassing validation.",
+      "evidence": [
+        {
+          "type": "github_action_marketplace_publication",
+          "pr": 129,
+          "merge_sha": "3070e7827e8118ca62ad6cdb7c37deff9ef24b47",
+          "approved_implementation_sha": "d6634d0fbbe1fced510fc49d8871d52a3dc7f348",
+          "git_tag": "agentready-action-v0.1.0-alpha.0",
+          "git_tag_target": "d6634d0fbbe1fced510fc49d8871d52a3dc7f348",
+          "remote_tag_verified": true,
+          "github_release_url": "https://github.com/BACOUL/timeproofs/releases/tag/agentready-action-v0.1.0-alpha.0",
+          "github_release_prerelease": true,
+          "github_release_draft": false,
+          "marketplace_url": "https://github.com/marketplace/actions/agentready-ci-gate-by-timeproofs",
+          "marketplace_published": true,
+          "marketplace_categories": [
+            "Continuous integration",
+            "Security"
+          ],
+          "public_tag_workflow_run": "https://github.com/BACOUL/timeproofs/actions/runs/29207232357",
+          "openapi_public_tag_smoke": "PASS",
+          "mcp_public_tag_smoke": "PASS",
+          "full_sha_reference": "BACOUL/timeproofs@d6634d0fbbe1fced510fc49d8871d52a3dc7f348",
+          "owner_agreement_accepted_privately": true,
+          "owner_2fa_completed_privately": true,
+          "new_npm_operation_executed": false
+        }
+      ],
+      "notes": "PR #129 merged the validated root Action. Marketplace publication succeeded after the documented default-branch sequencing exception. The immutable tag remains fixed, public OpenAPI and MCP tag smoke tests passed, and no npm operation occurred.",
       "source_documents": [
         "docs/agentready/GITHUB_ACTION_VERSIONING.md",
         "docs/agentready/GITHUB_ACTION_USAGE.md",
@@ -22395,6 +22421,13 @@
       "status": "HISTORICAL",
       "task_ids": [
         "AR-GOV-001"
+      ]
+    },
+    {
+      "document": "docs/agentready/AGENTREADY_ACTION_PUBLICATION_EVIDENCE.md",
+      "status": "ACTIVE",
+      "task_ids": [
+        "AR-GOV-003"
       ]
     },
     {

@@ -327,42 +327,21 @@ The completed batch must contain:
 
 ## Action Release Evidence Record
 
-Status: PRE_OWNER_CHECKPOINT
+Status: PUBLISHED_AND_VERIFIED
 
-Root metadata audit:
+Final publication fields:
 
-- root metadata file: `/action.yml`
-- nested metadata file: removed after internal reference migration
-- name candidate: `AgentReady CI Gate by TimeProofs`
-- author: `TimeProofs`
-- description: `Static CI gate for agent-facing OpenAPI and MCP contracts.`
-- branding: `shield` / `blue`
-- inputs: `file`, `type`, `min-score`, `fail-on`, `out`
-- outputs: `score`, `status`, `report-path`, `contract-path`
-- runtime: composite Action wrapping the existing CLI
-- backend, account, secret and telemetry dependency: none
-
-Reference migration inventory:
-
-- internal workflows use `uses: ./`
-- public examples use `uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0`
-- full-SHA examples use `uses: BACOUL/timeproofs@<FULL_ACTION_RELEASE_COMMIT_SHA>` until the owner-published tag target is verified
-- historical nested references are labeled as historical source layout only
-
-Pre-owner checkpoint fields:
-
-- Approved implementation SHA: `PENDING_OWNER_APPROVAL`
-- Reserved immutable Action tag: `agentready-action-v0.1.0-alpha.0`
-- Immutable Action tag target: `PENDING_OWNER_ACTION`
-- GitHub prerelease URL: `PENDING_OWNER_CONFIRMATION`
-- Marketplace URL: `PENDING_OWNER_CONFIRMATION`
-- Public tag workflow run: `PENDING_OWNER_CONFIRMATION`
-- Full-SHA usage example: `PENDING_OWNER_CONFIRMATION`
-- Owner Marketplace agreement and private 2FA attestation: `PENDING_OWNER_CONFIRMATION`
-
-Automated validation evidence is recorded in the implementation PR before the
-owner checkpoint. Final public evidence must be recorded after JEASON provides
-the public GitHub Release URL and Marketplace URL.
+- Approved implementation SHA: `d6634d0fbbe1fced510fc49d8871d52a3dc7f348`
+- Immutable Action tag: `agentready-action-v0.1.0-alpha.0`
+- Immutable Action tag target: `d6634d0fbbe1fced510fc49d8871d52a3dc7f348`
+- GitHub prerelease URL: https://github.com/BACOUL/timeproofs/releases/tag/agentready-action-v0.1.0-alpha.0
+- Marketplace URL: https://github.com/marketplace/actions/agentready-ci-gate-by-timeproofs
+- Public tag workflow run: https://github.com/BACOUL/timeproofs/actions/runs/29207232357
+- Full-SHA usage example: `uses: BACOUL/timeproofs@d6634d0fbbe1fced510fc49d8871d52a3dc7f348`
+- Owner Marketplace agreement: accepted privately
+- Owner 2FA: completed privately; no secret recorded
+- npm operation during this release: none
+- Detailed evidence: [AGENTREADY_ACTION_PUBLICATION_EVIDENCE.md](./AGENTREADY_ACTION_PUBLICATION_EVIDENCE.md)
 
 Compromised-release response:
 
