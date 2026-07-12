@@ -281,26 +281,39 @@ Required evidence:
   - GitHub Release URL
 
 ### ARB-COM-002 - Publish public GitHub Action distribution
-- Status: PLANNED
-- Spec status: SKELETON
-- Owner: CODEX
+- Status: READY
+- Spec status: EXECUTION_READY
+- Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Work items: AR-COM-007, AR-COM-009
 - Depends on batches: ARB-COM-001
-- Depends on tasks: None
+- Depends on tasks: AR-COM-006
 - Branch: feat-distribution-agentready-marketplace-action
 - PR title: feat(distribution): publish AgentReady GitHub Marketplace action
 
 Deliverables:
-  - Publish public AgentReady GitHub Action distribution
-  - Prepare GitHub Marketplace listing compliance
+  - root Marketplace-compatible action.yml
+  - shared root and nested Action execution entrypoint
+  - root-reference and compatibility integration tests
+  - Marketplace compliance and owner checklist
+  - draft v0.1.0-alpha.1 Action release notes
 Acceptance criteria:
-  - Publish public AgentReady GitHub Action distribution complete
-  - Prepare GitHub Marketplace listing compliance complete
+  - one root action.yml exists and passes metadata validation
+  - root and nested action references use one shared execution implementation
+  - root Action integration passes OpenAPI MCP policy-failure and usage-error cases
+  - documentation distinguishes Action tag v0.1.0-alpha.1 from bundled CLI 0.1.0-alpha.0
+  - GitHub Marketplace eligibility is checked after merge before any listing publication
+  - owner explicitly decides repository structure exact tag listing title categories and publication
+  - no npm operation and no release operation occurs in the implementation PR
 Required evidence:
-  - Publish public AgentReady GitHub Action distribution evidence
-  - Prepare GitHub Marketplace listing compliance evidence
+  - implementation PR with reviewed root Action metadata
+  - AgentReady Action Integration workflow success
+  - Marketplace compliance matrix
+  - GitHub Marketplace Everything looks good validation or exact blocker
+  - owner decision for current versus dedicated Action repository
+  - owner approval for exact v0.1.0-alpha.1 tag and listing publication
+  - post-publication public consumer workflow evidence
 
 ### ARB-COM-003 - Validate public Community installation
 - Status: PLANNED
@@ -2093,11 +2106,25 @@ Required evidence:
 - Depends on: AR-COM-006
 
 Deliverables:
-  - Publish public AgentReady GitHub Action distribution
+  - root action.yml Marketplace entrypoint
+  - shared Action execution entrypoint
+  - root and nested Action integration coverage
+  - immutable alpha Action usage documentation
+  - draft Action release notes for v0.1.0-alpha.1
 Acceptance criteria:
-  - Publish public AgentReady GitHub Action distribution complete
+  - root action.yml exposes the same documented inputs and outputs as the nested compatibility action
+  - root metadata contains Marketplace-safe name description and branding
+  - root and nested metadata delegate to one shared implementation to prevent behavior drift
+  - integration workflow validates root uses ./ and nested compatibility usage on ubuntu-latest with Node.js 20
+  - PASS policy FAIL and usage-error behavior preserve documented exit semantics and outputs
+  - public documentation uses the exact future immutable Action tag v0.1.0-alpha.1 and states that bundled CLI remains 0.1.0-alpha.0
+  - implementation PR performs no npm publication tag release or Marketplace publication
 Required evidence:
-  - Publish public AgentReady GitHub Action distribution evidence
+  - root action metadata validation
+  - root-reference integration workflow success
+  - nested compatibility integration success
+  - documented Action tag and bundled CLI version distinction
+  - no publication action executed
 
 ### AR-COM-008 - Validate public Community installation
 - Type: CODEX_WORK_ITEM
@@ -2129,11 +2156,24 @@ Required evidence:
 - Depends on: AR-COM-007
 
 Deliverables:
-  - Prepare GitHub Marketplace listing compliance
+  - Marketplace compliance matrix
+  - owner publication checklist
+  - repository-structure decision gate
+  - release and rollback procedure
 Acceptance criteria:
-  - Prepare GitHub Marketplace listing compliance complete
+  - compliance matrix covers public repository root metadata unique name branding release tag categories 2FA and Developer Agreement requirements
+  - current monorepo structure is recorded as an explicit Marketplace eligibility risk
+  - owner must verify GitHub reports Everything looks good before publication
+  - owner must decide current repository versus dedicated Action repository before publication
+  - Marketplace publication remains a separate owner checkpoint after implementation PR merge
+  - no stable or moving major tag is created for the alpha release
 Required evidence:
-  - Prepare GitHub Marketplace listing compliance evidence
+  - completed compliance matrix
+  - owner repository-structure decision
+  - GitHub Marketplace validation result
+  - approved exact Action tag v0.1.0-alpha.1
+  - approved categories and listing title
+  - public listing or documented blocker evidence
 
 ### AR-ONB-EPIC - Community onboarding
 - Type: EPIC

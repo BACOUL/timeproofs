@@ -82,9 +82,9 @@ for (const requiredCommand of [
 assert.match(workflow, /git diff --exit-code --/);
 assert.ok(workflow.includes("assert.equal(completedBatch?.status, 'DONE')"));
 assert.ok(workflow.includes("assert.equal(next?.batch?.id, 'ARB-COM-002')"));
-assert.ok(workflow.includes("assert.equal(next?.action_type, 'SPECIFICATION_REFINEMENT_REQUIRED')"));
-assert.ok(workflow.includes("assert.notEqual(nextBatch?.spec_status, 'EXECUTION_READY')"));
-assert.match(workflow, /No CODEX execution batch is currently authorized/);
+assert.ok(workflow.includes("assert.equal(next?.action_type, 'READY')"));
+assert.ok(workflow.includes("assert.equal(nextBatch?.spec_status, 'EXECUTION_READY')"));
+assert.match(workflow, /Repository: BACOUL\\\/timeproofs/);
 assert.match(workflow, /assert\.equal\(manifest\.community_license,\s*'Apache-2\.0'\)/);
 assert.match(workflow, /assert\.equal\(manifest\.tarball\.entry_count,\s*21\)/);
 assert.match(workflow, /assert\.equal\(manifest\.package_private,\s*false\)/);
