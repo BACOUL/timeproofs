@@ -373,7 +373,7 @@ Required evidence:
   - owner visual review before merge
 
 ### ARB-SITE-GLOBAL-002 - Publish global product scanners CI and planned pricing foundation
-- Status: IN_REVIEW
+- Status: BLOCKED
 - Spec status: EXECUTION_READY
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
