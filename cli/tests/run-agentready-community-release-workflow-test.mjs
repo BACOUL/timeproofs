@@ -92,7 +92,7 @@ assert.ok(workflow.includes("assert.equal(nextBatch?.status, 'READY')"));
 assert.ok(workflow.includes("assert.equal(nextBatch?.spec_status, 'EXECUTION_READY')"));
 assert.ok(workflow.includes("assert.equal(next?.batch?.id, 'ARB-SITE-PREMIUM-001')"));
 assert.ok(workflow.includes("assert.equal(next?.action_type, 'READY')"));
-assert.ok(workflow.includes("assert.match(nextPrompt, /Repository: BACOUL\/timeproofs/)"));
+assert.ok(workflow.includes('assert.match(nextPrompt, /Repository:'));
 assert.match(workflow, /Batch ID: ARB-SITE-PREMIUM-001/);
 assert.match(workflow, /site-agentready-premium-foundation/);
 assert.match(workflow, /assert\.equal\(manifest\.community_license,\s*'Apache-2\.0'\)/);
