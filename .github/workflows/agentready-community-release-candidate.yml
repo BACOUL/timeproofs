@@ -39,14 +39,14 @@ jobs:
             git show origin/timeproofs:.github/workflows/agentready-community-release-candidate.yml > .github/workflows/agentready-community-release-candidate.yml
             python3 <<'PY'
           from pathlib import Path
-          import textwrap
 
           workflow_text = Path('.github/workflows/refine-arb-com-002.yml').read_text(encoding='utf-8')
           start_marker = "          python3 <<'PY'\n"
           end_marker = "\n          PY\n\n      - name: Regenerate and validate governance"
           start = workflow_text.index(start_marker) + len(start_marker)
           end = workflow_text.index(end_marker, start)
-          embedded = textwrap.dedent(workflow_text[start:end])
+          raw = workflow_text[start:end]
+          embedded = "\n".join(line[10:] if line.startswith("          ") else line for line in raw.splitlines())
           exec(compile(embedded, 'embedded-arb-com-002-refinement.py', 'exec'))
           PY
           } > /tmp/refine.log 2>&1 || {
@@ -66,7 +66,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/agentready/ARB_COM_002_REFINEMENT_FAILURE.log
-          git commit -m "chore(agentready): capture ARB-COM-002 refinement failure"
+          git diff --cached --quiet || git commit -m "chore(agentready): capture ARB-COM-002 refinement failure"
           git push origin HEAD:docs-agentready-refine-arb-com-002
 
       - name: Regenerate and validate governance
