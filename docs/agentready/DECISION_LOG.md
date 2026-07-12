@@ -197,4 +197,14 @@ Decision: Architecture, releases, dependencies, incidents, and operations must b
 Reason: The product must not depend only on founder memory.
 Impact: Due diligence discipline is permanent.
 Supersedes: informal operations.
+
+## 2026-07-12 - Earlier validation gates before Pro and commercial infrastructure
+
+Decision ID: DL-2026-07-12-VALIDATION-GATES
+Decision: Preserve the static-first Community/Pro strategy while moving external evidence and explicit decision gates earlier in the execution sequence.
+Reason: The principal remaining risk is not the ability to build AgentReady, but whether external developers adopt it, reuse it, value its agent-specific findings and express willingness to pay.
+Impact: The next action remains `ARB-COM-002`; Community distribution, installation and onboarding are strengthened; one Codex pilot-preparation batch is added; a five-user pilot plus benchmark evidence blocks Pro implementation; ten external users, three explicit payment signals and one credible value case block licensing, Stripe and account construction; dynamic analysis remains post-revenue and demand-gated.
+Supersedes: the part of DL-2026-07-11-COMMERCIAL-BENCHMARK-THRESHOLDS that allowed Pro and commercial infrastructure to proceed without earlier external evidence.
 Status: ACTIVE
+
+Completed publication evidence, the npm package, immutable tag, GitHub prerelease and Community/Pro feature boundary are unchanged.
