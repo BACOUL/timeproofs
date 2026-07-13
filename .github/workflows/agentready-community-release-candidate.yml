@@ -105,24 +105,21 @@ jobs:
           assert.equal(standardBatch?.base_branch, 'site-agentready-global-product');
           assert.equal(standardBatch?.stacked_base_head_sha, '1a71cb469e608d548b42c5884a4165563216733b');
           assert.equal(standardBatch?.stacked_execution_can_continue, true);
-          assert.equal(trustBatch?.status, 'READY');
+          assert.equal(trustBatch?.status, 'IN_REVIEW');
           assert.equal(trustBatch?.spec_status, 'EXECUTION_READY');
           assert.equal(trustBatch?.owner, 'CODEX_AND_JEASON');
           assert.equal(trustBatch?.base_branch, 'site-agentready-global-standard');
           assert.equal(trustBatch?.branch, 'site-agentready-global-trust');
           assert.equal(trustBatch?.pr_title, 'site(trust): publish company and legal foundation');
           assert.equal(trustBatch?.stacked_on_batch, 'ARB-SITE-GLOBAL-003');
+          assert.equal(trustBatch?.pr_number, 136);
           assert.equal(next?.kind, 'batch');
           assert.equal(next?.batch?.id, 'ARB-SITE-GLOBAL-004');
-          assert.equal(next?.action_type, 'READY');
-          assert.equal(counts.execution_batches.immediately_executable, 1);
-          assert.match(nextPrompt, /Repository: BACOUL\/timeproofs/);
-          assert.match(nextPrompt, /Batch ID: ARB-SITE-GLOBAL-004/);
-          assert.match(nextPrompt, /Base: site-agentready-global-standard/);
-          assert.match(nextPrompt, /Exact approved base head: b0946d3fb4403b1281171dd955aa2438f733086a/);
-          assert.match(nextPrompt, /Branch: site-agentready-global-trust/);
-          assert.match(nextPrompt, /Draft PR target: site-agentready-global-standard/);
-          assert.doesNotMatch(nextPrompt, /No CODEX execution batch is currently authorized/);
+          assert.equal(next?.action_type, 'REVIEW_OR_MERGE');
+          assert.equal(counts.execution_batches.immediately_executable, 0);
+          assert.match(nextPrompt, /No CODEX execution batch is currently authorized/);
+          assert.match(nextPrompt, /JEASON - ARB-SITE-GLOBAL-004 - Publish company trust security privacy and legal foundation/);
+          assert.doesNotMatch(nextPrompt, /Repository: BACOUL\/timeproofs/);
           NODE
 
       - name: Verify package metadata
