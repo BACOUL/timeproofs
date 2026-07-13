@@ -96,6 +96,9 @@ for (const [file, required] of [
   ["agentready-cli.html", "@timeproofs/agentready@alpha"],
   ["agentready-cli.html", "0.1.0-alpha.0"],
   ["agentready-cli.html", "Exit code"],
+  ["agentready-cli.html", "Stdout only; this command does not write a Markdown file."],
+  ["agentready-cli.html", "summary"],
+  ["agentready-cli.html", "tool_count"],
   ["agentready-action.html", "BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0"],
   ["agentready-action.html", "BACOUL/timeproofs@d6634d0fbbe1fced510fc49d8871d52a3dc7f348"],
   ["agentready-action.html", "contents: read"],
@@ -103,6 +106,8 @@ for (const [file, required] of [
   ["agentready-action.html", "report-path"],
   ["agentready-adoption.html", "No account or upload required for Community"],
   ["agentready-contributing.html", "No response time"],
+  ["agentready-contributing.html", "Open a GitHub Issue"],
+  ["agentready-contributing.html", "Submit a pull request"],
   ["agentready-troubleshooting.html", "Exit code"],
   ["agentready-troubleshooting.html", "paths with spaces"],
   ["agentready-json.html", "agentready.json"],
@@ -145,6 +150,9 @@ for (const forbidden of [
   "standards body",
   "service level agreement",
   "response time guarantee",
+  "GitHub discussion",
+  "GitHub Discussions",
+  "discussion path",
   "trusted by",
   "customer logo",
   "hosted scanner required",
@@ -189,6 +197,14 @@ if (provenance.results.mcpBad.score !== 63) fail("MCP bad score changed");
 if (provenance.results.mcpBad.exitCode !== 1) fail("MCP bad exit code changed");
 if (provenance.results.mcpFixed.score !== 90) fail("MCP fixed score changed");
 if (provenance.results.mcpFixed.exitCode !== 0) fail("MCP fixed exit code changed");
+
+const cliHtml = read("agentready-cli.html");
+if (/agentready report &lt;agentready\.json&gt;[\\s\\S]*Markdown report output/.test(cliHtml)) {
+  fail("agentready report documentation must not claim Markdown report output");
+}
+if (/agentready report &lt;agentready\.json&gt;[\\s\\S]*write[s]? a Markdown file/i.test(cliHtml) && !cliHtml.includes("does not write a Markdown file")) {
+  fail("agentready report documentation has ambiguous Markdown file wording");
+}
 
 const ctaReport = JSON.parse(read(`${evidenceRoot}/cta-link-report.json`));
 if (ctaReport.status !== "PASS") fail("CTA report is not PASS");

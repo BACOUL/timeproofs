@@ -95,6 +95,10 @@ CLI command reference:
 - Documents only current Community commands: scan openapi, scan mcp, simulate and report.
 - Uses @timeproofs/agentready@alpha.
 - Does not document account, login, upload, hosted scanner or Pro commands.
+- Corrected `agentready report <agentready.json>` behavior: reads an existing
+  AgentReady JSON file and prints score, status, tool count and risk counters
+  to stdout. With `--json`, it prints a JSON object containing `summary` and
+  `tool_count`. It does not write a Markdown file.
 
 GitHub Action usage:
 
@@ -111,6 +115,9 @@ agentready.json and Markdown reports:
 Contribution and support:
 
 - Contribution guidance is limited to real public repository capabilities.
+- Published contribution paths are limited to opening a GitHub Issue for a
+  reproducible problem and submitting a pull request when appropriate.
+- GitHub Discussions is not presented as an available or confirmed channel.
 - No response time, SLA, support commitment, partnership, bounty, certification route or maintainer-acceptance promise is made.
 
 Community and Pro:
