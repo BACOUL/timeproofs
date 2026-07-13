@@ -130,3 +130,34 @@ Sequence preserved:
 `ARB-SITE-GLOBAL-006` and `ARB-SITE-GLOBAL-007` remain blocked until the
 current stacked-site state is reviewed and reconciled according to the
 canonical ledger.
+
+Owner acceptance:
+
+On 2026-07-13, JEASON reviewed and accepted the reconciliation report for PR
+#132 and PR #134.
+
+Accepted facts:
+
+- PR #132 remains open and draft.
+- PR #134 remains open and draft.
+- No site PR has been merged.
+- PR #134 current head is
+  `5c211bd4b4795c379f85da5548f2c493e546cbbb`.
+- The inspected production routes currently match the PR #134 product and
+  pricing foundation.
+- The obsolete `149 EUR` review offer and `499 EUR` Fix Pack were not detected
+  on the inspected production routes.
+- The early production promotion is accepted only as a temporary production
+  alignment exception.
+- This acceptance does not mean that the full premium/global-standard site is
+  complete.
+- The strict sequence `ARB-SITE-GLOBAL-003` through `ARB-SITE-GLOBAL-007`
+  remains mandatory.
+
+Canonical execution effect:
+
+- `ARB-SITE-PREMIUM-001` remains `IN_REVIEW` as PR #132, the stack foundation.
+- `ARB-SITE-GLOBAL-002` is recorded as implemented and `IN_REVIEW` as PR #134.
+- Neither batch is `DONE` until its PR is merged and reconciled.
+- The next site batch may only proceed through the canonical ledger and
+  generated next-action process.

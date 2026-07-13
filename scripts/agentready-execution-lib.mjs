@@ -154,8 +154,17 @@ function taskDependenciesDone(task, tasks) {
   return (task.depends_on || []).every((id) => isDependencySatisfied(tasks.get(id)));
 }
 
+function batchDependencySatisfiedForStack(dep, batch) {
+  if (!dep) return false;
+  if (dep.status === "DONE") return true;
+  return batch.stacked_execution_authorized === true
+    && batch.stacked_on_batch === dep.id
+    && dep.status === "IN_REVIEW"
+    && dep.stacked_execution_can_continue === true;
+}
+
 function dependencyBatchesDone(batch, batches) {
-  return (batch.depends_on_batches || []).every((id) => batches.get(id)?.status === "DONE");
+  return (batch.depends_on_batches || []).every((id) => batchDependencySatisfiedForStack(batches.get(id), batch));
 }
 
 function isExecutionReadyBatch(batch, ledger) {
@@ -255,7 +264,7 @@ export function promptCounts(ledger) {
 
 export function selectNextAction(ledger) {
   const tasks = taskMap(ledger);
-  const inReviewBatch = (ledger.execution_batches || []).find((batch) => batch.status === "IN_REVIEW");
+  const inReviewBatch = (ledger.execution_batches || []).find((batch) => batch.status === "IN_REVIEW" && batch.stacked_execution_can_continue !== true);
   if (inReviewBatch) {
     return {
       kind: "batch",
@@ -768,7 +777,7 @@ function validateBatches(ledger, add) {
     if (batch.status === "READY") {
       add(batch.spec_status === "EXECUTION_READY", `${batch.id} READY but not EXECUTION_READY`);
       for (const dep of batch.depends_on_tasks || []) add(isDependencySatisfied(tasks.get(dep)), `${batch.id} READY but task dependency ${dep} is not satisfied`);
-      for (const dep of batch.depends_on_batches || []) add(batches.get(dep)?.status === "DONE", `${batch.id} READY but batch dependency ${dep} is not DONE`);
+      for (const dep of batch.depends_on_batches || []) add(batchDependencySatisfiedForStack(batches.get(dep), batch), `${batch.id} READY but batch dependency ${dep} is not satisfied`);
     }
     add((batch.work_item_ids || []).length <= 8 || (batch.scope_justification || "").includes("exceeds eight"), `${batch.id} exceeds eight work items without justification`);
     const batchTasks = (batch.work_item_ids || []).map((id) => tasks.get(id)).filter(Boolean);

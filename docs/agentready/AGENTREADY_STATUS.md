@@ -8,7 +8,7 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 ## Summary
 - Total tasks: 207
 - Total weighted progress: 31/742 (4.2%)
-- Next action: ARB-SITE-PREMIUM-001 - Build global site shell navigation and footer
+- Next action: ARB-SITE-GLOBAL-003 - Publish AgentReady standard rules and governance foundation
 
 ## Detailed Work Items
 Total detailed Codex work items: 157
@@ -18,9 +18,9 @@ Remaining detailed Codex work items: 154
 ## Execution Batches
 Total planned Codex execution batches: 80
 Completed Codex execution batches: 5
-Execution batches currently in review: 0
-Execution batches not yet issued: 75
-Immediately executable Codex prompts: 1
+Execution batches currently in review: 2
+Execution batches not yet issued: 73
+Immediately executable Codex prompts: 0
 Average work items per batch: 1.96
 Largest batch size: 6
 Batches with more than five work items: 2
@@ -38,7 +38,7 @@ Execution batches post-revenue: 1
 ## Prompt Day Capacity
 Community days at 5 prompts/day: 2
 Community days at 6 prompts/day: 2
-Pro technical days at 5 prompts/day: 5
+Pro technical days at 5 prompts/day: 4
 Pro technical days at 6 prompts/day: 4
 First-sale days at 5 prompts/day: 7
 First-sale days at 6 prompts/day: 6

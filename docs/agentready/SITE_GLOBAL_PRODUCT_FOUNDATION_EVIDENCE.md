@@ -162,7 +162,7 @@ JEASON must review the combined product and pricing preview before merge.
 
 ## Production Reconciliation - 2026-07-13
 
-Status: TEMPORARY PRODUCTION ALIGNMENT EXCEPTION RECORDED
+Status: TEMPORARY PRODUCTION ALIGNMENT EXCEPTION ACCEPTED BY OWNER
 
 Expected commit:
 
@@ -206,3 +206,17 @@ This record does not complete the full global-site stack. It records only that
 the Product, Community, planned Pro and pricing foundation appears aligned on
 production as a temporary exception before the remaining global-site batches
 are complete.
+
+Owner acceptance:
+
+On 2026-07-13, JEASON reviewed and accepted this reconciliation report. The
+acceptance confirms that PR #132 and PR #134 remain open draft PRs, no site PR
+has been merged, PR #134 head
+`5c211bd4b4795c379f85da5548f2c493e546cbbb` is the current reviewed head, and
+the inspected production routes currently match the PR #134 product and pricing
+foundation without the obsolete `149 EUR` review offer or `499 EUR` Fix Pack.
+
+This acceptance is limited to the temporary production alignment exception. It
+does not mark `ARB-SITE-PREMIUM-001`, `ARB-SITE-GLOBAL-002` or the full
+premium/global-standard site as complete. The strict sequence
+`ARB-SITE-GLOBAL-003` through `ARB-SITE-GLOBAL-007` remains mandatory.
