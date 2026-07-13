@@ -142,7 +142,7 @@ Generated artifacts:
 - `cta-link-report.json`: `PASS`, no local route is missing.
 - `keyboard-focus-report.json`: `PASS`, focus reaches skip link, brand, navigation and CTAs.
 - `no-javascript-report.json`: `PASS`, core static content remains visible without JavaScript.
-- Combined preview URL: provided in the PR body and final response because the local port is environment-specific.
+- Combined preview URL: `https://timeproofs-git-site-agentready-global-product-jeason1.vercel.app/`
 
 The core content of the product, pricing and documentation pages is static HTML. Browser scanner execution still requires JavaScript, but each scanner page exposes the coverage, limitations and reproducible example before the upload control.
 
