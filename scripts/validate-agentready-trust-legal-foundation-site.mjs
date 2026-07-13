@@ -83,6 +83,16 @@ const allHtml = pages.map(read).join("\n");
 for (const required of [
   "TO_BE_COMPLETED",
   "OWNER_VERIFICATION_REQUIRED",
+  "Jeason Alexandre Bacoul",
+  "Entrepreneur individuel, France",
+  "999356439",
+  "3 rue de l'Église de Louppy, 55000 Les Hauts-de-Chée, France",
+  "Franchise en base de TVA",
+  "contact@certif-scope.com",
+  "Vercel Inc.",
+  "440 N Barranca Ave #4133, Covina, CA 91723, United States",
+  "public business telephone",
+  "No response time",
   "Community is available for free",
   "Pro is planned",
   "not purchasable",
@@ -103,6 +113,7 @@ for (const required of [
 
 for (const forbidden of [
   "hello@timeproofs.io",
+  "contact@timeproofs.io",
   "mailto:",
   "our registered office is",
   "we employ",
@@ -123,9 +134,15 @@ for (const forbidden of [
   if (allHtml.includes(forbidden)) fail(`trust/legal pages contain forbidden claim: ${forbidden}`);
 }
 
-assertIncludes("responsible-disclosure.html", "No unverified address");
+assertIncludes("responsible-disclosure.html", "contact@certif-scope.com");
+assertIncludes("responsible-disclosure.html", "No response time, bounty, SLA, guaranteed fix or certification is promised");
 assertIncludes("privacy.html", "do not require uploading");
-assertIncludes("legal.html", "Publisher legal identity");
+assertIncludes("privacy.html", "Jeason Alexandre Bacoul, TimeProofs, entrepreneur individuel");
+assertIncludes("privacy.html", "contact@certif-scope.com");
+assertIncludes("legal.html", "Jeason Alexandre Bacoul");
+assertIncludes("legal.html", "SIREN");
+assertIncludes("legal.html", "999356439");
+assertIncludes("legal.html", "Public business telephone");
 assertIncludes("agentready-data-flow.html", "Data-flow matrix");
 assertIncludes("support.html", "No SLA promised");
 
@@ -174,7 +191,12 @@ if (noJsReport.status !== "PASS") fail("no-JavaScript report is not PASS");
 
 const sourceInventory = JSON.parse(read("docs/agentready/evidence/site-global-trust-legal-foundation/source-inventory.json"));
 if (sourceInventory.status !== "PASS_WITH_BLOCKERS") fail("source inventory must preserve missing-fact blockers");
-if (!sourceInventory.missingLegalFacts.includes("publisher legal identity")) fail("missing publisher legal identity blocker is absent");
-if (!sourceInventory.missingLegalFacts.includes("public contact address")) fail("missing public contact blocker is absent");
+if (sourceInventory.ownerSuppliedPublisherFacts?.operator !== "Jeason Alexandre Bacoul") fail("owner-supplied operator fact is missing");
+if (sourceInventory.ownerSuppliedPublisherFacts?.publicContact !== "contact@certif-scope.com") fail("owner-supplied public contact is missing");
+if (sourceInventory.verifiedHostingFacts?.provider !== "Vercel Inc.") fail("verified hosting provider is missing");
+if (!sourceInventory.missingLegalFacts.includes("public business telephone number")) fail("missing public business telephone blocker is absent");
+if (!sourceInventory.missingLegalFacts.includes("hosting telephone number")) fail("missing hosting telephone blocker is absent");
+if (sourceInventory.missingLegalFacts.includes("publisher legal identity")) fail("publisher legal identity must no longer be listed as missing");
+if (sourceInventory.missingLegalFacts.includes("public contact address")) fail("public contact address must no longer be listed as missing");
 
 console.log("AgentReady trust/legal foundation site validation: PASS");
