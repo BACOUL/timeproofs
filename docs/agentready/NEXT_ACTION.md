@@ -7,9 +7,9 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 Batch ID: ARB-SITE-GLOBAL-005
 Title: Publish developer documentation adoption examples and contribution foundation
-Action owner: CODEX_AND_JEASON
-Action type: READY
-Status: READY
+Action owner: JEASON
+Action type: REVIEW_OR_MERGE
+Status: IN_REVIEW
 Specification: EXECUTION_READY
 Objective:
 Publish developer documentation, adoption, examples and contribution paths for AgentReady Community without changing engine, CLI, package, Action, scoring, rule semantics, billing, accounts, backend or runtime behavior.

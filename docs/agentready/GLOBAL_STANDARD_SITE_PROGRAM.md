@@ -89,7 +89,7 @@ Rules:
 
 ## ARB-SITE-GLOBAL-003 Specification Refinement
 
-Status: EXECUTION_READY SPECIFICATION ONLY
+Status: IN_REVIEW IMPLEMENTATION DRAFT
 
 Refinement date: 2026-07-13
 
@@ -429,7 +429,7 @@ Status: EXECUTION_READY SPECIFICATION ONLY
 
 Refinement date: 2026-07-13
 
-Future base branch: `site-agentready-global-trust`
+Base branch: `site-agentready-global-trust`
 
 Historical GLOBAL-004 reviewed public-content head:
 `11c488ff98ecb4509dd8bbf916840bf8c9edce77`
@@ -440,20 +440,22 @@ Previous GLOBAL-005 reconciliation head:
 Exact executable parent head:
 `50415ac768194a1448cc1081b1b9a60b3b299b96`
 
-Future implementation branch: `site-agentready-global-docs-adoption`
+Implementation branch: `site-agentready-global-docs-adoption`
 
-Future draft PR target: `site-agentready-global-trust`
+Draft PR target: `site-agentready-global-trust`
 
-Future PR title: `site(docs): publish developer documentation and adoption foundation`
+Draft PR: #137
+
+PR title: `site(docs): publish developer documentation and adoption foundation`
 
 Objective: publish developer documentation, adoption, examples and contribution
 paths without changing engine, CLI, package, Action, scoring, rule semantics,
 npm, tags, releases, Marketplace, billing, accounts, backend or runtime
 behavior.
 
-### Future Developer Documentation Surfaces
+### Developer Documentation Surfaces
 
-The future implementation must create or align these public routes and
+The implementation creates or aligns these public routes and
 surfaces:
 
 - `agentready-docs.html` - developer documentation hub and start page;
@@ -474,9 +476,9 @@ surfaces:
 - `sitemap.xml` and internal links only for real routes created or aligned by
   the batch.
 
-### Future Developer Documentation Acceptance Requirements
+### Developer Documentation Acceptance Requirements
 
-The future implementation must satisfy all of the following:
+The implementation must satisfy all of the following:
 
 1. Developer entry points route users to browser scanner, CLI, GitHub Action,
    reports, examples, standard and trust surfaces.
@@ -513,9 +515,9 @@ The future implementation must satisfy all of the following:
     billing, account, backend, hosted scanning or runtime behavior changes
     occur.
 
-### Future Developer Documentation Evidence Requirements
+### Developer Documentation Evidence Requirements
 
-The future implementation must record:
+The implementation must record:
 
 - developer documentation source inventory;
 - route map for docs, scanner, CLI, Action, report, examples, adoption,
@@ -535,6 +537,19 @@ The future implementation must record:
 - 320px overflow evidence;
 - preview URL;
 - validator and deterministic regeneration results.
+
+### ARB-SITE-GLOBAL-005 Draft Implementation Review State
+
+- PR #137 is the stacked draft implementation PR for
+  `site-agentready-global-docs-adoption` targeting
+  `site-agentready-global-trust`.
+- `ARB-SITE-GLOBAL-005` is `IN_REVIEW` after implementation, evidence and
+  validation are recorded.
+- `ARB-SITE-GLOBAL-005` is not `DONE` until PR #137 is reviewed, merged and
+  reconciled through the canonical execution system.
+- `ARB-SITE-GLOBAL-004` remains `IN_REVIEW` and not `DONE`.
+- `ARB-SITE-GLOBAL-006` remains a planned skeleton and is not activated by this
+  developer-documentation implementation.
 
 ### Developers And Adoption
 

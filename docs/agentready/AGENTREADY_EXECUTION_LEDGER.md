@@ -525,7 +525,7 @@ Required evidence:
   - validator and deterministic regeneration results
 
 ### ARB-SITE-GLOBAL-005 - Publish developer documentation adoption examples and contribution foundation
-- Status: READY
+- Status: IN_REVIEW
 - Spec status: EXECUTION_READY
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
@@ -535,7 +535,7 @@ Required evidence:
 - Depends on tasks: None
 - Branch: site-agentready-global-docs-adoption
 - PR title: site(docs): publish developer documentation and adoption foundation
-
+- PR: #137
 Deliverables:
   - Developer documentation hub aligned with product, standard, trust and Community surfaces
   - Browser scanner usage guidance for OpenAPI and MCP local scans without replacing the real scanners
@@ -2879,7 +2879,7 @@ Required evidence:
 
 ### AR-SITE-GLOBAL-005 - Publish developer documentation adoption examples and contribution foundation
 - Type: CODEX_WORK_ITEM
-- Status: READY
+- Status: IN_REVIEW
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
@@ -2887,7 +2887,7 @@ Required evidence:
 - Weight: 5
 - Execution batch: ARB-SITE-GLOBAL-005
 - Depends on: None
-
+- PR: #137
 Deliverables:
   - Developer documentation hub aligned with product, standard, trust and Community surfaces
   - Browser scanner usage guidance for OpenAPI and MCP local scans without replacing the real scanners

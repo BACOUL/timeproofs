@@ -832,11 +832,11 @@ for (const [id, title, branch, prTitle] of [
   const isDocsAdoption = id === "AR-SITE-GLOBAL-005";
   codex("AR-SITE-PREMIUM-EPIC", id, "M3", "BEFORE_COMMUNITY_PUBLICATION", "SITE", title, {
   decision_ids: [...decisionIds, "DL-2026-07-13-GLOBAL-STANDARD-SITE-BEFORE-VALIDATION"],
-  status: isStandardFoundation || isTrustFoundation ? "IN_REVIEW" : isDocsAdoption ? "READY" : "PLANNED",
+  status: isStandardFoundation || isTrustFoundation || isDocsAdoption ? "IN_REVIEW" : "PLANNED",
   spec_status: isStandardFoundation || isTrustFoundation || isDocsAdoption ? "EXECUTION_READY" : "SKELETON",
   owner: isStandardFoundation || isTrustFoundation || isDocsAdoption ? "CODEX_AND_JEASON" : "CODEX",
   weight: 5,
-  pr_number: isStandardFoundation ? 135 : isTrustFoundation ? 136 : undefined,
+  pr_number: isStandardFoundation ? 135 : isTrustFoundation ? 136 : isDocsAdoption ? 137 : undefined,
   source_documents: isStandardFoundation ? standardFoundationSources : isTrustFoundation ? trustFoundationSources : isDocsAdoption ? docsAdoptionSources : [doc.globalSite, doc.ia, doc.copy],
   branch,
   pr_title: prTitle,
@@ -854,7 +854,7 @@ for (const [id, title, branch, prTitle] of [
   codex_preflight_steps: isStandardFoundation ? standardFoundationPreflight : isTrustFoundation ? trustFoundationPreflight : isDocsAdoption ? docsAdoptionPreflight : undefined,
   external_verifications: isTrustFoundation ? ["JEASON verifies any public contact path before it is presented as usable", "JEASON or legal counsel verifies publisher identity legal notice and privacy facts before final review"] : undefined,
   final_response_format: isTrustFoundation ? trustFoundationResponseFormat : isDocsAdoption ? docsAdoptionResponseFormat : undefined,
-  evidence: isStandardFoundation ? [{ type: "draft_pr_implementation_review", pr: 135, branch: "site-agentready-global-standard", status: "IN_REVIEW", implemented: true, merge_authorized: false, evidence_document: "docs/agentready/SITE_GLOBAL_STANDARD_FOUNDATION_EVIDENCE.md", routes: ["agentready-standard.html", "agentready-rule-codes.html", "agentready-json.html", "agentready-examples.html", "agentready-resources.html", "agentready-sample-report.html"], validator: "scripts/validate-agentready-standard-foundation-site.mjs" }] : isTrustFoundation ? [{ type: "draft_pr_implementation_review", pr: 136, branch: "site-agentready-global-trust", status: "IN_REVIEW", implemented: true, merge_authorized: false, evidence_document: "docs/agentready/SITE_GLOBAL_TRUST_LEGAL_FOUNDATION_EVIDENCE.md", routes: ["about.html", "trust.html", "security.html", "responsible-disclosure.html", "privacy.html", "terms.html", "legal.html", "limitations.html", "agentready-data-flow.html", "support.html"], validator: "scripts/validate-agentready-trust-legal-foundation-site.mjs", preview_url: "https://timeproofs-git-site-agentready-global-trust-jeason1.vercel.app/", owner_review_required: true, batch_done: false }] : undefined,
+  evidence: isStandardFoundation ? [{ type: "draft_pr_implementation_review", pr: 135, branch: "site-agentready-global-standard", status: "IN_REVIEW", implemented: true, merge_authorized: false, evidence_document: "docs/agentready/SITE_GLOBAL_STANDARD_FOUNDATION_EVIDENCE.md", routes: ["agentready-standard.html", "agentready-rule-codes.html", "agentready-json.html", "agentready-examples.html", "agentready-resources.html", "agentready-sample-report.html"], validator: "scripts/validate-agentready-standard-foundation-site.mjs" }] : isTrustFoundation ? [{ type: "draft_pr_implementation_review", pr: 136, branch: "site-agentready-global-trust", status: "IN_REVIEW", implemented: true, merge_authorized: false, evidence_document: "docs/agentready/SITE_GLOBAL_TRUST_LEGAL_FOUNDATION_EVIDENCE.md", routes: ["about.html", "trust.html", "security.html", "responsible-disclosure.html", "privacy.html", "terms.html", "legal.html", "limitations.html", "agentready-data-flow.html", "support.html"], validator: "scripts/validate-agentready-trust-legal-foundation-site.mjs", preview_url: "https://timeproofs-git-site-agentready-global-trust-jeason1.vercel.app/", owner_review_required: true, batch_done: false }] : isDocsAdoption ? [{ type: "draft_pr_implementation_review", pr: 137, branch: "site-agentready-global-docs-adoption", status: "IN_REVIEW", implemented: true, merge_authorized: false, evidence_document: "docs/agentready/SITE_GLOBAL_DEVELOPER_DOCS_FOUNDATION_EVIDENCE.md", routes: ["agentready-docs.html", "agentready.html", "agentready-mcp.html", "agentready-ci.html", "agentready-json.html", "agentready-examples.html", "agentready-resources.html", "agentready-sample-report.html", "agentready-cli.html", "agentready-action.html", "agentready-adoption.html", "agentready-contributing.html", "agentready-troubleshooting.html"], validator: "scripts/validate-agentready-developer-docs-foundation-site.mjs", preview_url: "https://timeproofs-git-site-agentready-global-docs-adoption-jeason1.vercel.app/", owner_review_required: true, batch_done: false }] : undefined,
   rollback_boundary: isStandardFoundation ? "Revert ARB-SITE-GLOBAL-003 without reverting PR #132 shell or PR #134 product foundation." : isTrustFoundation ? "Revert ARB-SITE-GLOBAL-004 without reverting PR #132 shell, PR #134 product foundation or PR #135 standard foundation." : isDocsAdoption ? "Revert ARB-SITE-GLOBAL-005 without reverting PR #132 shell, PR #134 product foundation, PR #135 standard foundation or PR #136 trust/legal foundation." : `Revert ${id} without reverting earlier stacked site batches.`,
   scope_justification: isStandardFoundation ? "Weight 5 justified: one reviewable public standard foundation spanning standard overview, rule dictionary, scoring, versioning, governance and reference implementation surfaces with one stacked preview and rollback boundary." : isTrustFoundation ? "Weight 5 justified: one reviewable trust/legal foundation spanning publisher identity, security, privacy, disclosure, terms, data flows and support boundaries with one stacked preview and rollback boundary." : isDocsAdoption ? "Weight 5 justified: one reviewable developer-documentation and adoption foundation spanning scanner usage, CLI, Action, report, examples, contribution and troubleshooting surfaces with one stacked preview and rollback boundary." : "Weight 5 justified: planned global-site batch retained as a non-executable skeleton until the preceding stacked batch is reviewed."
   });
@@ -1310,9 +1310,10 @@ const batchDefinitions = [
     notes: `PR #136 implements the trust/legal foundation on site-agentready-global-trust and remains open and unmerged. JEASON accepted the company, trust, security, privacy and legal foundation as a stacked implementation layer at public-content review head ${trustLegalReviewedPublicContentHead}. The current reconciled PR #136 head used as the executable parent for ARB-SITE-GLOBAL-005 is ${trustLegalCurrentReconciledHead}. This is not legal advice or final legal certification. The batch remains IN_REVIEW and is not DONE until PR #136 is merged and reconciled, but owner review is complete for stacked continuation to ARB-SITE-GLOBAL-005.`
   }],
   ["ARB-SITE-GLOBAL-005", "Publish developer documentation adoption examples and contribution foundation", ["AR-SITE-GLOBAL-005"], {
-    status: "READY",
+    status: "IN_REVIEW",
     spec_status: "EXECUTION_READY",
     owner: "CODEX_AND_JEASON",
+    pr_number: 137,
     objective: "Publish developer documentation, adoption, examples and contribution paths for AgentReady Community without changing engine, CLI, package, Action, scoring, rule semantics, billing, accounts, backend or runtime behavior.",
     base_branch: "site-agentready-global-trust",
     pr_base_branch: "site-agentready-global-trust",
@@ -1334,7 +1335,22 @@ const batchDefinitions = [
         reason: "The parent branch advanced by one canonical executable-base correction commit after the previous GLOBAL-005 reconciliation; the implementation branch must include the corrected execution ledger, workflow guards, rebuild generator and NEXT_CODEX_PROMPT update.",
         implementation_started: false,
         branch_created: true,
-        pr_created: false
+        pr_created: true,
+        pr_number: 137
+      },
+      {
+        type: "draft_pr_implementation_review",
+        pr: 137,
+        branch: "site-agentready-global-docs-adoption",
+        status: "IN_REVIEW",
+        implemented: true,
+        merge_authorized: false,
+        evidence_document: "docs/agentready/SITE_GLOBAL_DEVELOPER_DOCS_FOUNDATION_EVIDENCE.md",
+        routes: ["agentready-docs.html", "agentready.html", "agentready-mcp.html", "agentready-ci.html", "agentready-json.html", "agentready-examples.html", "agentready-resources.html", "agentready-sample-report.html", "agentready-cli.html", "agentready-action.html", "agentready-adoption.html", "agentready-contributing.html", "agentready-troubleshooting.html"],
+        validator: "scripts/validate-agentready-developer-docs-foundation-site.mjs",
+        preview_url: "https://timeproofs-git-site-agentready-global-docs-adoption-jeason1.vercel.app/",
+        owner_review_required: true,
+        batch_done: false
       }
     ],
     deliverables: docsAdoptionDeliverables,

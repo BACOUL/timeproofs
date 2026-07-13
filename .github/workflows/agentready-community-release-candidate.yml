@@ -120,7 +120,7 @@ jobs:
           assert.equal(trustOwnerAcceptance?.previous_reconciled_head, '943d9fea90748a0496ce872dc48b14253eb3a16b');
           assert.equal(trustOwnerAcceptance?.current_reconciled_head, '50415ac768194a1448cc1081b1b9a60b3b299b96');
           assert.equal(trustBatch?.stacked_child_head_sha, '50415ac768194a1448cc1081b1b9a60b3b299b96');
-          assert.equal(docsBatch?.status, 'READY');
+          assert.equal(docsBatch?.status, 'IN_REVIEW');
           assert.equal(docsBatch?.spec_status, 'EXECUTION_READY');
           assert.equal(docsBatch?.owner, 'CODEX_AND_JEASON');
           assert.equal(docsBatch?.base_branch, 'site-agentready-global-trust');
@@ -128,16 +128,14 @@ jobs:
           assert.equal(docsBatch?.pr_title, 'site(docs): publish developer documentation and adoption foundation');
           assert.equal(docsBatch?.stacked_on_batch, 'ARB-SITE-GLOBAL-004');
           assert.equal(docsBatch?.stacked_base_head_sha, '50415ac768194a1448cc1081b1b9a60b3b299b96');
+          assert.equal(docsBatch?.pr_number, 137);
           assert.equal(next?.kind, 'batch');
           assert.equal(next?.batch?.id, 'ARB-SITE-GLOBAL-005');
-          assert.equal(next?.action_type, 'READY');
-          assert.equal(counts.execution_batches.immediately_executable, 1);
-          assert.match(nextPrompt, /Repository: BACOUL\/timeproofs/);
-          assert.match(nextPrompt, /Batch ID: ARB-SITE-GLOBAL-005/);
-          assert.match(nextPrompt, /Base: site-agentready-global-trust/);
-          assert.match(nextPrompt, /Exact approved base head: 50415ac768194a1448cc1081b1b9a60b3b299b96/);
-          assert.match(nextPrompt, /Branch: site-agentready-global-docs-adoption/);
-          assert.match(nextPrompt, /Draft PR target: site-agentready-global-trust/);
+          assert.equal(next?.action_type, 'REVIEW_OR_MERGE');
+          assert.equal(next?.action_owner, 'JEASON');
+          assert.equal(counts.execution_batches.immediately_executable, 0);
+          assert.match(nextPrompt, /No CODEX execution batch is currently authorized/);
+          assert.match(nextPrompt, /JEASON - ARB-SITE-GLOBAL-005 - Publish developer documentation adoption examples and contribution foundation/);
           NODE
 
       - name: Verify package metadata

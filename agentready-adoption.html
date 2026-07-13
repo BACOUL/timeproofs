@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <title>AgentReady Adoption Guide | TimeProofs</title>
+  <meta name="description" content="Adopt AgentReady from browser scan to local CLI and repository CI without account, upload, backend or Pro purchase." />
+  <link rel="canonical" href="https://timeproofs.io/agentready-adoption.html" />
+  <link rel="stylesheet" href="/assets/site-nav.css" />
+  <link rel="stylesheet" href="/assets/agentready-product.css" />
+  <link rel="stylesheet" href="/assets/agentready-standard.css" />
+  <link rel="stylesheet" href="/assets/agentready-developer.css" />
+</head>
+<body class="agp-body ags-body">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="ar-shell" role="banner"><div class="ar-shell__inner"><a class="ar-brand" href="/"><img src="/assets/logo.png" alt="" /><span class="ar-brand__text"><span class="ar-brand__top">TimeProofs</span><span class="ar-brand__product">AgentReady</span></span></a><nav class="ar-desktop-nav" aria-label="Primary navigation"><a class="ar-nav-link" href="/agentready-docs.html">Docs</a><a class="ar-nav-link" href="/agentready.html">OpenAPI</a><a class="ar-nav-link" href="/agentready-mcp.html">MCP</a><a class="ar-nav-link" href="/agentready-cli.html">CLI</a><a class="ar-nav-link" href="/agentready-action.html">Action</a><a class="ar-nav-cta" href="/agentready.html">Start scan</a></nav></div></header>
+  <main id="main" class="ags-main">
+    <div class="agd-hero"><section class="ags-hero"><div class="ags-hero__copy"><p class="ags-kicker">Adoption path</p><h1>Move from first scan to CI gate without changing your runtime.</h1><p class="ags-lede">AgentReady Community is free and available for browser, CLI and GitHub Action usage. The adoption path is static and local-first: scan a contract, read the report, fix the contract, then enforce policy in CI.</p></div><div class="ags-hero__panel"><div class="ags-signal"><span>Step 1</span><strong>Browser scan</strong></div><div class="ags-signal"><span>Step 2</span><strong>CLI verification</strong></div><div class="ags-signal"><span>Step 3</span><strong>Repository CI gate</strong></div></div></section></div>
+    <nav class="ags-local-nav" aria-label="Developer documentation pages"><a href="/agentready-docs.html">Docs hub</a><a href="/agentready.html">OpenAPI scanner</a><a href="/agentready-mcp.html">MCP scanner</a><a href="/agentready-cli.html">CLI</a><a href="/agentready-action.html">Action</a><a href="/agentready-troubleshooting.html">Troubleshooting</a></nav>
+    <section class="ags-section">
+      <ol class="agd-step-list">
+        <li><strong>1. Pick the contract surface.</strong> Use <a href="/agentready.html">OpenAPI scanner</a> for REST APIs and <a href="/agentready-mcp.html">MCP scanner</a> for MCP tool definitions. The browser scanners keep selected files local and do not call endpoints.</li>
+        <li><strong>2. Reproduce with the CLI.</strong> Run <code>npx @timeproofs/agentready@alpha scan openapi ./openapi.json --out ./agentready-output --min-score 75 --fail-on critical</code> or the equivalent MCP command.</li>
+        <li><strong>3. Review the outputs.</strong> Use <a href="/agentready-json.html">agentready.json</a> for structured CI evidence and <a href="/agentready-sample-report.html">Markdown reports</a> for human review.</li>
+        <li><strong>4. Fix the contract.</strong> Add confirmation boundaries, bounded parameters, clear tool descriptions, rollback guidance and narrow permissions where findings require them.</li>
+        <li><strong>5. Add CI.</strong> Use the <a href="/agentready-action.html">GitHub Action</a> with <code>permissions: contents: read</code> and pin by immutable tag or full SHA.</li>
+        <li><strong>6. Keep limitations visible.</strong> A PASS is release evidence for selected static rules and policy, not a certification or runtime guarantee.</li>
+      </ol>
+    </section>
+    <section class="ags-section ags-split">
+      <div><h2>No account or upload required for Community.</h2><p>The current Community path does not require signup, a TimeProofs backend, API upload, secret, Pro purchase or billing setup. Pro is planned and not purchasable.</p></div>
+      <div class="agd-warning"><strong>Do not hide unresolved risk.</strong><p>Controlled high findings may remain visible even when the recommended policy passes. Treat the report as engineering evidence for review, not as proof of complete safety.</p></div>
+    </section>
+    <section class="ags-section ags-limits"><p>TimeProofs AgentReady does not guarantee that an AI agent will never fail. It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.</p></section>
+  </main>
+  <footer class="ar-footer" role="contentinfo"><div class="ar-footer__inner"><div class="ar-footer__brand"><strong>TimeProofs AgentReady</strong><p>Adoption guidance for free Community browser, CLI and CI usage.</p></div><div class="ar-footer__groups"><section class="ar-footer__group"><h2>Developers</h2><a href="/agentready-docs.html">Docs hub</a><a href="/agentready-cli.html">CLI</a><a href="/agentready-action.html">GitHub Action</a><a href="/agentready-troubleshooting.html">Troubleshooting</a></section></div></div></footer>
+  <script src="/assets/site-nav.js" defer></script>
+</body>
+</html>

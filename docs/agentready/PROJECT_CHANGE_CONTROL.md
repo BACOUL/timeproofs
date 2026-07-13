@@ -279,3 +279,37 @@ Reason:
   `11c488ff98ecb4509dd8bbf916840bf8c9edce77`.
 - No developer-documentation page implementation is included in this
   reconciliation commit.
+
+## ARB-SITE-GLOBAL-005 Draft Implementation Opened - 2026-07-13
+
+Status: IN_REVIEW
+
+The stacked developer-documentation implementation is recorded in draft PR
+#137 on:
+
+`site-agentready-global-docs-adoption`
+
+targeting:
+
+`site-agentready-global-trust`
+
+The implementation branch was created from the actual executable parent head:
+
+`50415ac768194a1448cc1081b1b9a60b3b299b96`
+
+Scope:
+
+- developer documentation hub;
+- browser OpenAPI and MCP scanner usage;
+- CLI installation and command reference;
+- GitHub Action installation and immutable pinning;
+- `agentready.json` and Markdown report interpretation;
+- reproducible OpenAPI and MCP examples;
+- adoption, contribution, troubleshooting and limitations guidance.
+
+Governance boundary:
+
+- `ARB-SITE-GLOBAL-004` remains `IN_REVIEW` and not `DONE`;
+- `ARB-SITE-GLOBAL-005` is `IN_REVIEW` and not `DONE`;
+- `ARB-SITE-GLOBAL-006` remains a planned skeleton until PR #137 is reviewed,
+  merged and reconciled through the canonical execution system.
