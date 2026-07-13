@@ -89,7 +89,7 @@ Rules:
 
 ## ARB-SITE-GLOBAL-003 Specification Refinement
 
-Status: EXECUTION_READY SPECIFICATION ONLY
+Status: IN_REVIEW IMPLEMENTATION DRAFT
 
 Refinement date: 2026-07-13
 
@@ -393,7 +393,7 @@ Reviewed head:
 `11c488ff98ecb4509dd8bbf916840bf8c9edce77`
 
 Current reconciled PR #136 head:
-`943d9fea90748a0496ce872dc48b14253eb3a16b`
+`50415ac768194a1448cc1081b1b9a60b3b299b96`
 
 Reviewed preview:
 `https://timeproofs-git-site-agentready-global-trust-jeason1.vercel.app/`
@@ -429,28 +429,33 @@ Status: EXECUTION_READY SPECIFICATION ONLY
 
 Refinement date: 2026-07-13
 
-Future base branch: `site-agentready-global-trust`
+Base branch: `site-agentready-global-trust`
 
 Historical GLOBAL-004 reviewed public-content head:
 `11c488ff98ecb4509dd8bbf916840bf8c9edce77`
 
-Exact executable parent head:
+Previous GLOBAL-005 reconciliation head:
 `943d9fea90748a0496ce872dc48b14253eb3a16b`
 
-Future implementation branch: `site-agentready-global-docs-adoption`
+Exact executable parent head:
+`50415ac768194a1448cc1081b1b9a60b3b299b96`
 
-Future draft PR target: `site-agentready-global-trust`
+Implementation branch: `site-agentready-global-docs-adoption`
 
-Future PR title: `site(docs): publish developer documentation and adoption foundation`
+Draft PR target: `site-agentready-global-trust`
+
+Draft PR: #137
+
+PR title: `site(docs): publish developer documentation and adoption foundation`
 
 Objective: publish developer documentation, adoption, examples and contribution
 paths without changing engine, CLI, package, Action, scoring, rule semantics,
 npm, tags, releases, Marketplace, billing, accounts, backend or runtime
 behavior.
 
-### Future Developer Documentation Surfaces
+### Developer Documentation Surfaces
 
-The future implementation must create or align these public routes and
+The implementation creates or aligns these public routes and
 surfaces:
 
 - `agentready-docs.html` - developer documentation hub and start page;
@@ -471,9 +476,9 @@ surfaces:
 - `sitemap.xml` and internal links only for real routes created or aligned by
   the batch.
 
-### Future Developer Documentation Acceptance Requirements
+### Developer Documentation Acceptance Requirements
 
-The future implementation must satisfy all of the following:
+The implementation must satisfy all of the following:
 
 1. Developer entry points route users to browser scanner, CLI, GitHub Action,
    reports, examples, standard and trust surfaces.
@@ -510,9 +515,9 @@ The future implementation must satisfy all of the following:
     billing, account, backend, hosted scanning or runtime behavior changes
     occur.
 
-### Future Developer Documentation Evidence Requirements
+### Developer Documentation Evidence Requirements
 
-The future implementation must record:
+The implementation must record:
 
 - developer documentation source inventory;
 - route map for docs, scanner, CLI, Action, report, examples, adoption,
@@ -532,6 +537,75 @@ The future implementation must record:
 - 320px overflow evidence;
 - preview URL;
 - validator and deterministic regeneration results.
+
+### ARB-SITE-GLOBAL-005 Draft Implementation Review State
+
+- PR #137 is the stacked draft implementation PR for
+  `site-agentready-global-docs-adoption` targeting
+  `site-agentready-global-trust`.
+- `ARB-SITE-GLOBAL-005` is `IN_REVIEW` after implementation, evidence and
+  validation are recorded.
+- JEASON accepted the stacked developer documentation, adoption, examples and
+  contribution foundation on 2026-07-13 at reviewed public-content head
+  `6b22fda5e6a5d3a39bddc6dc04a479e228b7199e`.
+- `ARB-SITE-GLOBAL-005` is not `DONE` until PR #137 is merged and reconciled
+  through the canonical execution system.
+- `ARB-SITE-GLOBAL-004` remains `IN_REVIEW` and not `DONE`.
+- Owner review is complete for stacked continuation to `ARB-SITE-GLOBAL-006`.
+
+### ARB-SITE-GLOBAL-006 Specification Refinement
+
+Status: READY
+
+Specification: EXECUTION_READY
+
+Title: Publish SEO GEO AI-first structured data and international architecture
+
+Future branch:
+
+`site-agentready-global-discovery`
+
+Draft PR target:
+
+`site-agentready-global-docs-adoption`
+
+Future PR title:
+
+`site(discovery): publish SEO GEO and international architecture`
+
+The future implementation branch must be created from
+`site-agentready-global-docs-adoption` only after verifying that the reviewed
+GLOBAL-005 public-content head is an ancestor:
+
+`git merge-base --is-ancestor 6b22fda5e6a5d3a39bddc6dc04a479e228b7199e HEAD`
+
+The future batch must not require the parent branch HEAD to equal the
+governance-reconciliation commit that generated this specification. The
+reviewed public-content head remains the acceptance anchor; later canonical
+reconciliation commits may exist on the parent branch.
+
+GLOBAL-006 covers:
+
+- technical SEO for real public routes;
+- unique titles, descriptions, canonical URLs and heading hierarchy;
+- sitemap and robots alignment;
+- factual JSON-LD structured data;
+- extractible definitions and short answers for AI assistants;
+- machine-readable primary-source mappings;
+- author, version, date and source metadata where useful;
+- stable TimeProofs and AgentReady entity naming;
+- essential content that remains usable without JavaScript;
+- international route architecture with English as the current canonical
+  language;
+- French architecture preparation without fake translations;
+- `hreflang` only for routes that are truly translated;
+- audits against doorway pages, artificial localized content and official
+  standards-body claims.
+
+GLOBAL-006 must not implement the later full SEO content-cluster, competitive,
+post-launch monitoring or international translation program. It must not change
+engine, CLI, package, Action, npm, tag, Release, Marketplace, billing, account,
+backend, hosted scanning, telemetry or runtime behavior.
 
 ### Developers And Adoption
 

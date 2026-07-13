@@ -8,7 +8,7 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 ## Summary
 - Total tasks: 207
 - Total weighted progress: 31/742 (4.2%)
-- Next action: ARB-SITE-GLOBAL-005 - Publish developer documentation adoption examples and contribution foundation
+- Next action: ARB-SITE-GLOBAL-006 - Publish SEO GEO AI-first structured data and international architecture
 
 ## Detailed Work Items
 Total detailed Codex work items: 157
@@ -18,8 +18,8 @@ Remaining detailed Codex work items: 154
 ## Execution Batches
 Total planned Codex execution batches: 80
 Completed Codex execution batches: 5
-Execution batches currently in review: 4
-Execution batches not yet issued: 71
+Execution batches currently in review: 5
+Execution batches not yet issued: 70
 Immediately executable Codex prompts: 1
 Average work items per batch: 1.96
 Largest batch size: 6
@@ -36,14 +36,14 @@ Execution batches post-launch: 9
 Execution batches post-revenue: 1
 
 ## Prompt Day Capacity
-Community days at 5 prompts/day: 2
+Community days at 5 prompts/day: 1
 Community days at 6 prompts/day: 1
 Pro technical days at 5 prompts/day: 4
 Pro technical days at 6 prompts/day: 3
-First-sale days at 5 prompts/day: 7
-First-sale days at 6 prompts/day: 6
-Global-launch days at 5 prompts/day: 13
-Global-launch days at 6 prompts/day: 11
+First-sale days at 5 prompts/day: 6
+First-sale days at 6 prompts/day: 5
+Global-launch days at 5 prompts/day: 12
+Global-launch days at 6 prompts/day: 10
 
 These figures count planned execution batches only.
 They do not include owner, legal, security or external actions, waiting time, human review or unplanned correction prompts.
@@ -73,8 +73,8 @@ Credible public value cases required: 1
 - M8 Category-building active: 0/98 (0%)
 
 ## Document Coverage
-Active documents discovered: 75
-Active documents covered: 75
+Active documents discovered: 76
+Active documents covered: 76
 Uncovered active documents: 0
 Historical documents excluded: 36
 Generated documents excluded: 6

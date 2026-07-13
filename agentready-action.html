@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <title>AgentReady GitHub Action Guide | TimeProofs</title>
+  <meta name="description" content="Install the public AgentReady Marketplace Action with immutable tag and full-SHA pinning guidance." />
+  <link rel="canonical" href="https://timeproofs.io/agentready-action.html" />
+  <link rel="stylesheet" href="/assets/site-nav.css" />
+  <link rel="stylesheet" href="/assets/agentready-product.css" />
+  <link rel="stylesheet" href="/assets/agentready-standard.css" />
+  <link rel="stylesheet" href="/assets/agentready-developer.css" />
+</head>
+<body class="agp-body ags-body">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="ar-shell" role="banner"><div class="ar-shell__inner"><a class="ar-brand" href="/"><img src="/assets/logo.png" alt="" /><span class="ar-brand__text"><span class="ar-brand__top">TimeProofs</span><span class="ar-brand__product">AgentReady</span></span></a><nav class="ar-desktop-nav" aria-label="Primary navigation"><a class="ar-nav-link" href="/agentready-docs.html">Docs</a><a class="ar-nav-link" href="/agentready-cli.html">CLI</a><a class="ar-nav-link" href="/agentready-ci.html">CI Gate</a><a class="ar-nav-link" href="/agentready-json.html">agentready.json</a><a class="ar-nav-link" href="/trust.html">Trust</a><a class="ar-nav-cta" href="/agentready-adoption.html">Adopt</a></nav><details class="ar-mobile-nav"><summary class="ar-mobile-summary" aria-label="Open navigation menu" aria-expanded="false"><span></span>Menu</summary><nav class="ar-mobile-panel" aria-label="Mobile navigation"><a href="/agentready-docs.html">Documentation</a><a href="/agentready-cli.html">CLI reference</a><a href="/agentready-action.html">GitHub Action guide</a><a href="/agentready-ci.html">CI Gate</a><a href="/agentready-examples.html">Examples</a><a href="/agentready-troubleshooting.html">Troubleshooting</a></nav></details></div></header>
+  <main id="main" class="ags-main">
+    <div class="agd-hero"><section class="ags-hero"><div class="ags-hero__copy"><p class="ags-kicker">Public Marketplace Action</p><h1>Run AgentReady in GitHub Actions with read-only permissions.</h1><p class="ags-lede">The public Action wraps the same static CLI checks and writes score, status, report path and contract path outputs. It runs inside your workflow workspace and does not call TimeProofs services. No hosted scanner is required for Community CI usage.</p><div class="ags-actions"><a class="ags-button" href="https://github.com/marketplace/actions/agentready-ci-gate-by-timeproofs">Open Marketplace listing</a><a class="ags-button ags-button--secondary" href="/agentready-ci.html">Read CI behavior</a></div></div><div class="ags-hero__panel"><div class="ags-signal"><span>Immutable tag</span><strong>agentready-action-v0.1.0-alpha.0</strong></div><div class="ags-signal"><span>Full SHA</span><strong>d6634d0fbbe1fced510fc49d8871d52a3dc7f348</strong></div><div class="ags-signal"><span>Minimum permission</span><strong>contents: read</strong></div></div></section></div>
+    <nav class="ags-local-nav" aria-label="Developer documentation pages"><a href="/agentready-docs.html">Docs hub</a><a href="/agentready-cli.html">CLI</a><a href="/agentready-action.html">GitHub Action</a><a href="/agentready-json.html">agentready.json</a><a href="/agentready-examples.html">Examples</a><a href="/agentready-troubleshooting.html">Troubleshooting</a></nav>
+    <section class="ags-section ags-split">
+      <div><p class="ags-kicker">Canonical workflow</p><h2>Declare only <code>contents: read</code>.</h2><p>This workflow scans an OpenAPI file and fails when the selected policy fails. It requires checkout and Node.js 20, but no TimeProofs account, token, secret, hosted scanner or Pro purchase.</p></div>
+      <pre class="agd-command"><code>name: AgentReady
+on: [pull_request]
+permissions:
+  contents: read
+jobs:
+  agentready:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - id: agentready
+        uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0
+        with:
+          type: openapi
+          file: ./openapi.json
+          min-score: '75'
+          fail-on: critical
+          out: agentready-output</code></pre>
+    </section>
+    <section class="ags-section ags-split">
+      <div><h2>Pin by full commit SHA when you need maximum precision.</h2><p>The immutable tag is readable. The full SHA pins the exact published Action implementation commit recorded in governance evidence.</p></div>
+      <pre class="agd-command"><code>uses: BACOUL/timeproofs@d6634d0fbbe1fced510fc49d8871d52a3dc7f348</code></pre>
+    </section>
+    <section class="ags-section">
+      <div class="agd-matrix">
+        <article><h3>Inputs</h3><p><code>file</code>, <code>type</code>, <code>min-score</code>, <code>fail-on</code> and <code>out</code>. Type must be <code>openapi</code> or <code>mcp</code>.</p></article>
+        <article><h3>Outputs</h3><p><code>score</code>, <code>status</code>, <code>report-path</code> and <code>contract-path</code>. Valid policy failures preserve generated outputs when the scan completes.</p></article>
+        <article><h3>Policy failure</h3><p>Exit code <code>1</code> means the scan was valid but policy failed. Use uploaded artifacts or workflow logs to review generated report paths.</p></article>
+        <article><h3>Supply-chain boundary</h3><p>No moving major tag is authorized for this alpha. The Marketplace listing is a distribution channel, not a GitHub security certification.</p></article>
+      </div>
+    </section>
+    <section class="ags-section ags-limits"><p>TimeProofs AgentReady does not guarantee that an AI agent will never fail. It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.</p><p>The Action performs static pre-deployment analysis. It is not a runtime firewall, IAM system, hosted scanner, audit or certification.</p></section>
+  </main>
+  <footer class="ar-footer" role="contentinfo"><div class="ar-footer__inner"><div class="ar-footer__brand"><strong>TimeProofs AgentReady</strong><p>Public GitHub Action and CLI docs for static OpenAPI and MCP readiness checks.</p></div><div class="ar-footer__groups"><section class="ar-footer__group"><h2>Developers</h2><a href="/agentready-docs.html">Docs hub</a><a href="/agentready-cli.html">CLI</a><a href="/agentready-action.html">GitHub Action</a><a href="/agentready-adoption.html">Adoption guide</a></section><section class="ar-footer__group"><h2>Reference</h2><a href="/agentready-json.html">agentready.json</a><a href="/agentready-rule-codes.html">Rule codes</a><a href="/agentready-sample-report.html">Sample report</a><a href="/limitations.html">Limitations</a></section></div></div></footer>
+  <script src="/assets/site-nav.js" defer></script>
+</body>
+</html>

@@ -253,3 +253,110 @@ Reason:
 - `ARB-SITE-GLOBAL-004` remains `IN_REVIEW` and not `DONE`.
 - `ARB-SITE-GLOBAL-005` remains the selected `READY` / `EXECUTION_READY`
   executable batch.
+
+## ARB-SITE-GLOBAL-005 Child-Branch Base Reconciliation - 2026-07-13
+
+Status: RECORDED
+
+The previously recorded `ARB-SITE-GLOBAL-005` reconciliation head remains:
+
+`943d9fea90748a0496ce872dc48b14253eb3a16b`
+
+The actual executable parent head used to create
+`site-agentready-global-docs-adoption` is:
+
+`50415ac768194a1448cc1081b1b9a60b3b299b96`
+
+Reason:
+
+- The parent branch advanced by one canonical executable-base correction commit
+  after the previous generated prompt.
+- The future developer-documentation implementation must include the corrected
+  execution ledger, workflow guards, rebuild generator and generated
+  `NEXT_CODEX_PROMPT.md` update.
+- This reconciliation is recorded on the child branch and its draft PR only.
+- The public-content review head for `ARB-SITE-GLOBAL-004` remains
+  `11c488ff98ecb4509dd8bbf916840bf8c9edce77`.
+- No developer-documentation page implementation is included in this
+  reconciliation commit.
+
+## ARB-SITE-GLOBAL-005 Draft Implementation Opened - 2026-07-13
+
+Status: IN_REVIEW
+
+The stacked developer-documentation implementation is recorded in draft PR
+#137 on:
+
+`site-agentready-global-docs-adoption`
+
+targeting:
+
+`site-agentready-global-trust`
+
+The implementation branch was created from the actual executable parent head:
+
+`50415ac768194a1448cc1081b1b9a60b3b299b96`
+
+Scope:
+
+- developer documentation hub;
+- browser OpenAPI and MCP scanner usage;
+- CLI installation and command reference;
+- GitHub Action installation and immutable pinning;
+- `agentready.json` and Markdown report interpretation;
+- reproducible OpenAPI and MCP examples;
+- adoption, contribution, troubleshooting and limitations guidance.
+
+Governance boundary:
+
+- `ARB-SITE-GLOBAL-004` remains `IN_REVIEW` and not `DONE`;
+- `ARB-SITE-GLOBAL-005` is `IN_REVIEW` and not `DONE`;
+- `ARB-SITE-GLOBAL-006` remains a planned skeleton until PR #137 is reviewed,
+  merged and reconciled through the canonical execution system.
+
+## ARB-SITE-GLOBAL-005 Owner Acceptance And GLOBAL-006 Readiness - 2026-07-13
+
+Decision:
+
+JEASON accepted the stacked developer documentation, adoption, examples and
+contribution foundation implemented in PR #137 on:
+
+`site-agentready-global-docs-adoption`
+
+Reviewed public-content head:
+
+`6b22fda5e6a5d3a39bddc6dc04a479e228b7199e`
+
+Canonical effect:
+
+- `ARB-SITE-GLOBAL-005` remains `IN_REVIEW`;
+- `ARB-SITE-GLOBAL-005` is not `DONE` because PR #137 remains open, draft and
+  unmerged;
+- owner review is accepted for stacked continuation;
+- `ARB-SITE-GLOBAL-006` becomes the next executable batch with
+  specification `EXECUTION_READY`.
+
+The GLOBAL-006 implementation-parent model uses the reviewed GLOBAL-005
+public-content head as a required ancestor, not as an exact parent HEAD lock.
+The future implementation branch must verify:
+
+`git merge-base --is-ancestor 6b22fda5e6a5d3a39bddc6dc04a479e228b7199e HEAD`
+
+Future implementation branch:
+
+`site-agentready-global-discovery`
+
+Future draft PR target:
+
+`site-agentready-global-docs-adoption`
+
+Future PR title:
+
+`site(discovery): publish SEO GEO and international architecture`
+
+Boundary:
+
+- no GLOBAL-006 page implementation is performed by this reconciliation;
+- no site PR is merged;
+- no npm, tag, Release, Marketplace, engine, CLI, package, Action, billing,
+  account, backend or runtime operation is authorized by this record.

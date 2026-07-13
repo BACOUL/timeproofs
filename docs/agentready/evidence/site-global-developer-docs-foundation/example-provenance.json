@@ -1,0 +1,82 @@
+{
+  "status": "PASS",
+  "generated_at": "2026-07-13T21:07:50.835Z",
+  "command_runtime": "local repository CLI, Node.js runtime",
+  "policy": {
+    "min_score": 75,
+    "fail_on": "critical"
+  },
+  "results": {
+    "openapiBad": {
+      "fixture": "agentready-examples/commercial/openapi-refund-risk.bad.json",
+      "command": "node bin/agentready.js scan openapi agentready-examples/commercial/openapi-refund-risk.bad.json --out <tmp>/openapi-bad --min-score 75 --fail-on critical --json",
+      "score": 54,
+      "status": "Needs fixes",
+      "exitCode": 1,
+      "risk_counts": {
+        "critical": 1,
+        "high": 4,
+        "medium": 6,
+        "low": 0
+      },
+      "displayed_rules": [
+        "AR009",
+        "AR001",
+        "AR002",
+        "AR006",
+        "AR008",
+        "AR005",
+        "AR007"
+      ],
+      "excerpt": "refundOrder policy FAIL with one critical finding and generated Markdown plus agentready.json output"
+    },
+    "openapiFixed": {
+      "fixture": "agentready-examples/commercial/openapi-refund-risk.fixed.json",
+      "command": "node bin/agentready.js scan openapi agentready-examples/commercial/openapi-refund-risk.fixed.json --out <tmp>/openapi-fixed --min-score 75 --fail-on critical --json",
+      "score": 84,
+      "status": "Minor fixes",
+      "exitCode": 0,
+      "risk_counts": {
+        "critical": 0,
+        "high": 3,
+        "medium": 0,
+        "low": 0
+      },
+      "excerpt": "requestOrderRefundWithApproval policy PASS with generated Markdown plus agentready.json output"
+    },
+    "mcpBad": {
+      "fixture": "agentready-examples/commercial/mcp-email-risk.bad.json",
+      "command": "node bin/agentready.js scan mcp agentready-examples/commercial/mcp-email-risk.bad.json --out <tmp>/mcp-bad --min-score 75 --fail-on critical --json",
+      "score": 63,
+      "status": "Needs fixes",
+      "exitCode": 1,
+      "risk_counts": {
+        "critical": 1,
+        "high": 3,
+        "medium": 4,
+        "low": 0
+      },
+      "displayed_rules": [
+        "AR003",
+        "AR002",
+        "AR006",
+        "AR005"
+      ],
+      "excerpt": "send_email policy FAIL with one critical finding and generated Markdown plus agentready.json output"
+    },
+    "mcpFixed": {
+      "fixture": "agentready-examples/commercial/mcp-email-risk.fixed.json",
+      "command": "node bin/agentready.js scan mcp agentready-examples/commercial/mcp-email-risk.fixed.json --out <tmp>/mcp-fixed --min-score 75 --fail-on critical --json",
+      "score": 90,
+      "status": "AgentReady",
+      "exitCode": 0,
+      "risk_counts": {
+        "critical": 0,
+        "high": 2,
+        "medium": 0,
+        "low": 0
+      },
+      "excerpt": "send_confirmed_external_email policy PASS with generated Markdown plus agentready.json output"
+    }
+  }
+}

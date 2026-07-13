@@ -525,7 +525,7 @@ Required evidence:
   - validator and deterministic regeneration results
 
 ### ARB-SITE-GLOBAL-005 - Publish developer documentation adoption examples and contribution foundation
-- Status: READY
+- Status: IN_REVIEW
 - Spec status: EXECUTION_READY
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
@@ -535,7 +535,7 @@ Required evidence:
 - Depends on tasks: None
 - Branch: site-agentready-global-docs-adoption
 - PR title: site(docs): publish developer documentation and adoption foundation
-
+- PR: #137
 Deliverables:
   - Developer documentation hub aligned with product, standard, trust and Community surfaces
   - Browser scanner usage guidance for OpenAPI and MCP local scans without replacing the real scanners
@@ -584,24 +584,64 @@ Required evidence:
   - preview URL
   - validator and deterministic regeneration results
 
-### ARB-SITE-GLOBAL-006 - Publish SEO GEO AI-first and international foundation
-- Status: PLANNED
-- Spec status: SKELETON
-- Owner: CODEX
+### ARB-SITE-GLOBAL-006 - Publish SEO GEO AI-first structured data and international architecture
+- Status: READY
+- Spec status: EXECUTION_READY
+- Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Work items: AR-SITE-GLOBAL-006
 - Depends on batches: ARB-SITE-GLOBAL-005
 - Depends on tasks: None
 - Branch: site-agentready-global-discovery
-- PR title: site(discovery): publish SEO GEO and international foundation
+- PR title: site(discovery): publish SEO GEO and international architecture
 
 Deliverables:
-  - Publish SEO GEO AI-first and international foundation
+  - Technical SEO foundation for the stacked public AgentReady site
+  - Unique page titles descriptions canonical URLs and heading hierarchy for implemented public routes
+  - Sitemap and robots alignment for real routes only
+  - Factual JSON-LD structured data for TimeProofs AgentReady pages without invented organization, certification, review or standards-body claims
+  - Extractible definitions, concise answers and machine-readable primary-source references for AI assistants
+  - Author, version, reviewed-date and source-mapping metadata for public method, product, trust and developer documentation surfaces
+  - Stable TimeProofs and AgentReady entity naming across product, standard, trust and developer pages
+  - International route architecture with English as the current canonical language and French paths prepared only where real translation is not implied
+  - Hreflang policy that emits alternate links only for routes that are truly translated
+  - Evidence register and validator for SEO, GEO, AI-first, structured-data and international architecture
 Acceptance criteria:
-  - Publish SEO GEO AI-first and international foundation complete after preceding stacked site batch is reviewed
+  - every modified or created indexable route has a unique title, description, canonical URL, one primary search intent and a valid heading hierarchy
+  - sitemap.xml and robots.txt include only real routes and do not expose preview-only, duplicate, fake translation or doorway pages
+  - JSON-LD structured data is factual, valid and limited to claims supported by repository evidence
+  - extractible definitions and answer blocks explain TimeProofs, AgentReady, Community, Pro, static analysis, AR rule codes, scoring, PASS/FAIL, browser scanner, CLI and GitHub Action without inventing proof, certification, standard-body recognition or guaranteed safety
+  - machine-readable primary-source references map important public claims to existing authoritative repository documents
+  - author, version and reviewed-date metadata is present where useful and does not imply legal review, certification or an independent standards body
+  - TimeProofs and AgentReady entity naming is stable and consistent across product, standard, trust and developer surfaces
+  - English remains the canonical language for current public content
+  - French route architecture is prepared without publishing fake, machine-generated or artificial localized content
+  - hreflang links appear only when an actual translated route exists and no empty alternate or planned translation is advertised as live
+  - no doorway pages, thin SEO pages, fake localized pages or artificial keyword pages are added
+  - core content remains usable without JavaScript and no 320px horizontal overflow is introduced
+  - product, Community, planned Pro, trust, privacy, legal, developer and standard claims remain consistent with the reviewed stacked site layers
+  - no engine, CLI, package, Action, scoring, severity, AR001 through AR010 semantic, npm, tag, Release, Marketplace, billing, account, backend, hosted scanning, telemetry or runtime behavior changes occur
 Required evidence:
-  - Publish SEO GEO AI-first and international foundation evidence
+  - SEO and GEO source inventory
+  - route metadata matrix with title description canonical URL search intent indexability and heading hierarchy
+  - sitemap and robots audit
+  - JSON-LD structured-data audit and validation output
+  - AI-assistant extractible definitions and answers inventory
+  - machine-readable primary-source mapping
+  - author version date and source metadata audit
+  - TimeProofs and AgentReady entity naming audit
+  - international route architecture and language policy
+  - hreflang audit confirming alternates only for truly translated routes
+  - doorway thin-page and fake-localization audit
+  - no official standards-body recognition certification benchmark customer testimonial or guaranteed-safety claim audit
+  - CTA and internal-link report
+  - desktop and mobile screenshots for primary affected route groups
+  - keyboard accessibility report
+  - no-JavaScript evidence
+  - 320px overflow evidence
+  - preview URL
+  - validator and deterministic regeneration results
 
 ### ARB-SITE-GLOBAL-007 - Validate complete global standard site
 - Status: PLANNED
@@ -2879,7 +2919,7 @@ Required evidence:
 
 ### AR-SITE-GLOBAL-005 - Publish developer documentation adoption examples and contribution foundation
 - Type: CODEX_WORK_ITEM
-- Status: READY
+- Status: IN_REVIEW
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
@@ -2887,7 +2927,7 @@ Required evidence:
 - Weight: 5
 - Execution batch: ARB-SITE-GLOBAL-005
 - Depends on: None
-
+- PR: #137
 Deliverables:
   - Developer documentation hub aligned with product, standard, trust and Community surfaces
   - Browser scanner usage guidance for OpenAPI and MCP local scans without replacing the real scanners
@@ -2936,10 +2976,10 @@ Required evidence:
   - preview URL
   - validator and deterministic regeneration results
 
-### AR-SITE-GLOBAL-006 - Publish SEO GEO AI-first and international foundation
+### AR-SITE-GLOBAL-006 - Publish SEO GEO AI-first structured data and international architecture
 - Type: CODEX_WORK_ITEM
-- Status: PLANNED
-- Owner: CODEX
+- Status: READY
+- Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Workstream: SITE
@@ -2948,11 +2988,51 @@ Required evidence:
 - Depends on: None
 
 Deliverables:
-  - Publish SEO GEO AI-first and international foundation
+  - Technical SEO foundation for the stacked public AgentReady site
+  - Unique page titles descriptions canonical URLs and heading hierarchy for implemented public routes
+  - Sitemap and robots alignment for real routes only
+  - Factual JSON-LD structured data for TimeProofs AgentReady pages without invented organization, certification, review or standards-body claims
+  - Extractible definitions, concise answers and machine-readable primary-source references for AI assistants
+  - Author, version, reviewed-date and source-mapping metadata for public method, product, trust and developer documentation surfaces
+  - Stable TimeProofs and AgentReady entity naming across product, standard, trust and developer pages
+  - International route architecture with English as the current canonical language and French paths prepared only where real translation is not implied
+  - Hreflang policy that emits alternate links only for routes that are truly translated
+  - Evidence register and validator for SEO, GEO, AI-first, structured-data and international architecture
 Acceptance criteria:
-  - Publish SEO GEO AI-first and international foundation complete after preceding stacked site batch is reviewed
+  - every modified or created indexable route has a unique title, description, canonical URL, one primary search intent and a valid heading hierarchy
+  - sitemap.xml and robots.txt include only real routes and do not expose preview-only, duplicate, fake translation or doorway pages
+  - JSON-LD structured data is factual, valid and limited to claims supported by repository evidence
+  - extractible definitions and answer blocks explain TimeProofs, AgentReady, Community, Pro, static analysis, AR rule codes, scoring, PASS/FAIL, browser scanner, CLI and GitHub Action without inventing proof, certification, standard-body recognition or guaranteed safety
+  - machine-readable primary-source references map important public claims to existing authoritative repository documents
+  - author, version and reviewed-date metadata is present where useful and does not imply legal review, certification or an independent standards body
+  - TimeProofs and AgentReady entity naming is stable and consistent across product, standard, trust and developer surfaces
+  - English remains the canonical language for current public content
+  - French route architecture is prepared without publishing fake, machine-generated or artificial localized content
+  - hreflang links appear only when an actual translated route exists and no empty alternate or planned translation is advertised as live
+  - no doorway pages, thin SEO pages, fake localized pages or artificial keyword pages are added
+  - core content remains usable without JavaScript and no 320px horizontal overflow is introduced
+  - product, Community, planned Pro, trust, privacy, legal, developer and standard claims remain consistent with the reviewed stacked site layers
+  - no engine, CLI, package, Action, scoring, severity, AR001 through AR010 semantic, npm, tag, Release, Marketplace, billing, account, backend, hosted scanning, telemetry or runtime behavior changes occur
 Required evidence:
-  - Publish SEO GEO AI-first and international foundation evidence
+  - SEO and GEO source inventory
+  - route metadata matrix with title description canonical URL search intent indexability and heading hierarchy
+  - sitemap and robots audit
+  - JSON-LD structured-data audit and validation output
+  - AI-assistant extractible definitions and answers inventory
+  - machine-readable primary-source mapping
+  - author version date and source metadata audit
+  - TimeProofs and AgentReady entity naming audit
+  - international route architecture and language policy
+  - hreflang audit confirming alternates only for truly translated routes
+  - doorway thin-page and fake-localization audit
+  - no official standards-body recognition certification benchmark customer testimonial or guaranteed-safety claim audit
+  - CTA and internal-link report
+  - desktop and mobile screenshots for primary affected route groups
+  - keyboard accessibility report
+  - no-JavaScript evidence
+  - 320px overflow evidence
+  - preview URL
+  - validator and deterministic regeneration results
 
 ### AR-SITE-GLOBAL-007 - Validate complete global standard site
 - Type: CODEX_WORK_ITEM

@@ -6,17 +6,17 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 # Next Codex Prompt
 
 Repository: BACOUL/timeproofs
-Base: site-agentready-global-trust
-Exact approved base head: 943d9fea90748a0496ce872dc48b14253eb3a16b
-Batch ID: ARB-SITE-GLOBAL-005
-Work item IDs: AR-SITE-GLOBAL-005
+Base: site-agentready-global-docs-adoption
+
+Batch ID: ARB-SITE-GLOBAL-006
+Work item IDs: AR-SITE-GLOBAL-006
 Owner: CODEX_AND_JEASON
 Milestone: M3
 Horizon: BEFORE_COMMUNITY_PUBLICATION
-Objective: Publish developer documentation, adoption, examples and contribution paths for AgentReady Community without changing engine, CLI, package, Action, scoring, rule semantics, billing, accounts, backend or runtime behavior.
-Branch: site-agentready-global-docs-adoption
-PR title: site(docs): publish developer documentation and adoption foundation
-Draft PR target: site-agentready-global-trust
+Objective: Publish the technical SEO, GEO, AI-first structured data and international architecture foundation for the stacked AgentReady public site without changing product behavior, distribution state, billing, accounts, backend or runtime systems.
+Branch: site-agentready-global-discovery
+PR title: site(discovery): publish SEO GEO and international architecture
+Draft PR target: site-agentready-global-docs-adoption
 
 Documents sources:
   - docs/agentready/AGENTREADY_MASTER_PLAN.md
@@ -25,49 +25,42 @@ Documents sources:
   - docs/agentready/PROJECT_CHANGE_CONTROL.md
   - docs/agentready/GLOBAL_STANDARD_SITE_PROGRAM.md
   - docs/agentready/PUBLIC_SITE_INFORMATION_ARCHITECTURE.md
+  - docs/agentready/PREMIUM_SITE_REQUIREMENTS.md
   - docs/agentready/SITE_COPY_GUIDE.md
-  - docs/agentready/DISTRIBUTION_ADOPTION_AND_STANDARDIZATION_STRATEGY.md
-  - docs/agentready/CLI_PUBLIC_DISTRIBUTION.md
-  - docs/agentready/GITHUB_ACTION_USAGE.md
-  - docs/agentready/GITHUB_ACTION_VERSIONING.md
-  - docs/agentready/AGENTREADY_JSON_SPEC.md
+  - docs/agentready/SEO_GEO_AI_FIRST_REQUIREMENTS.md
   - docs/agentready/AGENTREADY_RULE_CODES.md
-  - docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md
-  - docs/agentready/MCP_VERSION_COMPATIBILITY_POLICY.md
-  - docs/agentready/PRIVACY_TELEMETRY_SUPPORT_AND_TRUST_MODEL.md
-  - README.md
-  - agentready-docs.html
-  - agentready.html
-  - agentready-mcp.html
-  - agentready-ci.html
-  - agentready-json.html
-  - agentready-examples.html
-  - agentready-resources.html
-  - agentready-sample-report.html
-  - action.yml
-  - package.json
+  - docs/agentready/AGENTREADY_JSON_SPEC.md
+  - docs/agentready/GITHUB_ACTION_USAGE.md
+  - docs/agentready/DISTRIBUTION_ADOPTION_AND_STANDARDIZATION_STRATEGY.md
+  - docs/agentready/SITE_GLOBAL_DEVELOPER_DOCS_FOUNDATION_EVIDENCE.md
+  - docs/agentready/SITE_GLOBAL_STANDARD_FOUNDATION_EVIDENCE.md
+  - docs/agentready/SITE_GLOBAL_TRUST_LEGAL_FOUNDATION_EVIDENCE.md
+  - sitemap.xml
+  - robots.txt
 
 Dependencies:
-  - ARB-SITE-GLOBAL-004
+  - ARB-SITE-GLOBAL-005
 
 Deliverables:
-  - Developer documentation hub aligned with product, standard, trust and Community surfaces
-  - Browser scanner usage guidance for OpenAPI and MCP local scans without replacing the real scanners
-  - CLI installation and command reference for the published Community package
-  - GitHub Action installation guide with immutable tag and full-SHA pinning guidance
-  - agentready.json and Markdown report interpretation guide
-  - OpenAPI and MCP examples using reproducible fixtures and real output provenance
-  - Integration and adoption guide from first browser scan to CLI and repository CI
-  - Contribution process guidance based only on current repository capabilities
-  - Troubleshooting and limitations guide that preserves static-analysis boundaries
-  - Cross-links between product, standard, trust, examples, report and developer documentation surfaces
-  - Evidence register and validator for the developer documentation and adoption foundation
+  - Technical SEO foundation for the stacked public AgentReady site
+  - Unique page titles descriptions canonical URLs and heading hierarchy for implemented public routes
+  - Sitemap and robots alignment for real routes only
+  - Factual JSON-LD structured data for TimeProofs AgentReady pages without invented organization, certification, review or standards-body claims
+  - Extractible definitions, concise answers and machine-readable primary-source references for AI assistants
+  - Author, version, reviewed-date and source-mapping metadata for public method, product, trust and developer documentation surfaces
+  - Stable TimeProofs and AgentReady entity naming across product, standard, trust and developer pages
+  - International route architecture with English as the current canonical language and French paths prepared only where real translation is not implied
+  - Hreflang policy that emits alternate links only for routes that are truly translated
+  - Evidence register and validator for SEO, GEO, AI-first, structured-data and international architecture
 
 Routes or surfaces:
-  - agentready-docs.html
+  - index.html
   - agentready.html
   - agentready-mcp.html
   - agentready-ci.html
+  - agentready-docs.html
+  - agentready-standard.html
+  - agentready-rule-codes.html
   - agentready-json.html
   - agentready-examples.html
   - agentready-resources.html
@@ -77,8 +70,23 @@ Routes or surfaces:
   - agentready-adoption.html
   - agentready-contributing.html
   - agentready-troubleshooting.html
+  - about.html
+  - trust.html
+  - security.html
+  - responsible-disclosure.html
+  - privacy.html
+  - terms.html
+  - legal.html
+  - limitations.html
+  - agentready-data-flow.html
+  - support.html
+  - product.html
+  - community.html
+  - pro.html
+  - pricing.html
   - sitemap.xml
-  - shared developer documentation assets where necessary
+  - robots.txt
+  - shared SEO, GEO, structured-data and international-architecture assets where necessary
 
 Allowed paths:
   - assets/**
@@ -104,88 +112,90 @@ Forbidden paths:
   - NOTICE
 
 Acceptance criteria by work item:
-  - AR-SITE-GLOBAL-005: developer documentation entry points clearly route users to browser scanner, CLI, GitHub Action, reports, examples, standard and trust surfaces; browser scanner usage covers OpenAPI and MCP local-first behavior without replacing or degrading the real scanners; CLI documentation covers install and npx usage for @timeproofs/agentready@alpha and command behavior that exists today; GitHub Action documentation uses the public Marketplace Action, immutable Action tag and full-SHA pinning guidance already recorded in governance evidence; the canonical consumer workflow declares only permissions: contents: read unless a documented example explicitly requires otherwise; agentready.json and Markdown report interpretation explain score, status, findings, AR rule codes, PASS/FAIL and policy limitations consistently with the standard pages; OpenAPI and MCP examples use reproducible fixtures, commands and outputs from the current repository rather than invented findings; integration and adoption guidance moves from browser scan to CLI to repository CI without requiring signup, upload, token, account, backend or Pro purchase; contribution guidance is limited to real repository capabilities and does not promise governance processes, response times, partnerships or maintainer acceptance that do not exist; troubleshooting guidance covers invalid input, policy failure, output paths, path spaces, local environment issues and GitHub Action failures without changing CLI behavior; limitations remain explicit: AgentReady is static analysis, not a runtime firewall, IAM system, legal advice, audit, certification or guaranteed safety; Community is shown as free and available; Pro remains planned and not purchasable; Team, Agency and Enterprise are not presented as available; all public examples preserve the approved package version, npm alpha tag, Action facts and documented latest exception without performing npm, tag, Release or Marketplace operations; page bodies use varied premium documentation composition and remain mobile-friendly, keyboard accessible, usable without JavaScript for core content and free of 320px horizontal overflow; all CTA destinations and internal links resolve to existing or newly created real routes with no dead placeholder links presented as finished pages; no engine, CLI, package, Action, scoring, severity, AR001 through AR010 semantic, billing, account, backend, hosted scanning or runtime behavior changes occur
+  - AR-SITE-GLOBAL-006: every modified or created indexable route has a unique title, description, canonical URL, one primary search intent and a valid heading hierarchy; sitemap.xml and robots.txt include only real routes and do not expose preview-only, duplicate, fake translation or doorway pages; JSON-LD structured data is factual, valid and limited to claims supported by repository evidence; extractible definitions and answer blocks explain TimeProofs, AgentReady, Community, Pro, static analysis, AR rule codes, scoring, PASS/FAIL, browser scanner, CLI and GitHub Action without inventing proof, certification, standard-body recognition or guaranteed safety; machine-readable primary-source references map important public claims to existing authoritative repository documents; author, version and reviewed-date metadata is present where useful and does not imply legal review, certification or an independent standards body; TimeProofs and AgentReady entity naming is stable and consistent across product, standard, trust and developer surfaces; English remains the canonical language for current public content; French route architecture is prepared without publishing fake, machine-generated or artificial localized content; hreflang links appear only when an actual translated route exists and no empty alternate or planned translation is advertised as live; no doorway pages, thin SEO pages, fake localized pages or artificial keyword pages are added; core content remains usable without JavaScript and no 320px horizontal overflow is introduced; product, Community, planned Pro, trust, privacy, legal, developer and standard claims remain consistent with the reviewed stacked site layers; no engine, CLI, package, Action, scoring, severity, AR001 through AR010 semantic, npm, tag, Release, Marketplace, billing, account, backend, hosted scanning, telemetry or runtime behavior changes occur
 
 Batch acceptance criteria:
-  - developer documentation entry points clearly route users to browser scanner, CLI, GitHub Action, reports, examples, standard and trust surfaces
-  - browser scanner usage covers OpenAPI and MCP local-first behavior without replacing or degrading the real scanners
-  - CLI documentation covers install and npx usage for @timeproofs/agentready@alpha and command behavior that exists today
-  - GitHub Action documentation uses the public Marketplace Action, immutable Action tag and full-SHA pinning guidance already recorded in governance evidence
-  - the canonical consumer workflow declares only permissions: contents: read unless a documented example explicitly requires otherwise
-  - agentready.json and Markdown report interpretation explain score, status, findings, AR rule codes, PASS/FAIL and policy limitations consistently with the standard pages
-  - OpenAPI and MCP examples use reproducible fixtures, commands and outputs from the current repository rather than invented findings
-  - integration and adoption guidance moves from browser scan to CLI to repository CI without requiring signup, upload, token, account, backend or Pro purchase
-  - contribution guidance is limited to real repository capabilities and does not promise governance processes, response times, partnerships or maintainer acceptance that do not exist
-  - troubleshooting guidance covers invalid input, policy failure, output paths, path spaces, local environment issues and GitHub Action failures without changing CLI behavior
-  - limitations remain explicit: AgentReady is static analysis, not a runtime firewall, IAM system, legal advice, audit, certification or guaranteed safety
-  - Community is shown as free and available; Pro remains planned and not purchasable; Team, Agency and Enterprise are not presented as available
-  - all public examples preserve the approved package version, npm alpha tag, Action facts and documented latest exception without performing npm, tag, Release or Marketplace operations
-  - page bodies use varied premium documentation composition and remain mobile-friendly, keyboard accessible, usable without JavaScript for core content and free of 320px horizontal overflow
-  - all CTA destinations and internal links resolve to existing or newly created real routes with no dead placeholder links presented as finished pages
-  - no engine, CLI, package, Action, scoring, severity, AR001 through AR010 semantic, billing, account, backend, hosted scanning or runtime behavior changes occur
+  - every modified or created indexable route has a unique title, description, canonical URL, one primary search intent and a valid heading hierarchy
+  - sitemap.xml and robots.txt include only real routes and do not expose preview-only, duplicate, fake translation or doorway pages
+  - JSON-LD structured data is factual, valid and limited to claims supported by repository evidence
+  - extractible definitions and answer blocks explain TimeProofs, AgentReady, Community, Pro, static analysis, AR rule codes, scoring, PASS/FAIL, browser scanner, CLI and GitHub Action without inventing proof, certification, standard-body recognition or guaranteed safety
+  - machine-readable primary-source references map important public claims to existing authoritative repository documents
+  - author, version and reviewed-date metadata is present where useful and does not imply legal review, certification or an independent standards body
+  - TimeProofs and AgentReady entity naming is stable and consistent across product, standard, trust and developer surfaces
+  - English remains the canonical language for current public content
+  - French route architecture is prepared without publishing fake, machine-generated or artificial localized content
+  - hreflang links appear only when an actual translated route exists and no empty alternate or planned translation is advertised as live
+  - no doorway pages, thin SEO pages, fake localized pages or artificial keyword pages are added
+  - core content remains usable without JavaScript and no 320px horizontal overflow is introduced
+  - product, Community, planned Pro, trust, privacy, legal, developer and standard claims remain consistent with the reviewed stacked site layers
+  - no engine, CLI, package, Action, scoring, severity, AR001 through AR010 semantic, npm, tag, Release, Marketplace, billing, account, backend, hosted scanning, telemetry or runtime behavior changes occur
 
 Commands:
   - node scripts/validate-agentready-site-navigation.mjs
-  - node scripts/validate-agentready-developer-docs-foundation-site.mjs
+  - node scripts/validate-agentready-seo-geo-foundation-site.mjs
   - node scripts/validate-agentready-strategy-docs.mjs
   - node scripts/validate-agentready-execution-system.mjs
   - node cli/tests/run-agentready-community-release-workflow-test.mjs
-  - node cli/tests/run-agentready-cli-tests.mjs
-  - node cli/tests/run-agentready-action-smoke-test.mjs
   - git diff --check
 
 Independent test plan:
-  - inventory current developer documentation, scanner, CLI, Action, example, contribution and troubleshooting sources before page edits
-  - run real OpenAPI and MCP example commands before displaying any score, finding, report excerpt or JSON excerpt
-  - verify CLI documentation against current CLI tests and behavior without modifying CLI implementation
-  - verify GitHub Action documentation against action.yml, Marketplace evidence and immutable tag/full-SHA governance records
-  - verify agentready.json and Markdown report explanations against AGENTREADY_JSON_SPEC.md and real generated outputs
-  - verify contribution and support copy avoids unsupported process, support, SLA, governance, partnership or maintainer-acceptance promises
+  - inventory current route metadata, headings, canonical URLs, robots, sitemap and structured data before page edits
+  - verify every extractible definition or AI-answer block against authoritative source documents
+  - validate JSON-LD with local structured-data checks and avoid unsupported organization, certification, review, aggregate rating or standards-body claims
+  - validate sitemap and robots against real route availability and preview-indexing boundaries
+  - verify English remains canonical and French architecture does not publish fake translations
+  - verify hreflang appears only for routes that are truly translated
+  - audit no doorway pages, fake localized pages, thin SEO pages, fake customers, benchmark results, certifications or guaranteed-safety claims were introduced
   - validate all CTA destinations and internal links
-  - test desktop, mobile, keyboard, no-JavaScript and 320px layouts for every developer documentation route
+  - test desktop, mobile, keyboard, no-JavaScript and 320px layouts for affected route groups
   - verify no engine, CLI, package, Action, npm, tag, Release, Marketplace, billing, account, backend or runtime behavior changed
   - rerun deterministic governance regeneration and execution-system validators
 
 Required evidence:
-  - developer documentation source inventory
-  - route map for docs scanner CLI Action report examples adoption contribution troubleshooting and limitations surfaces
-  - real OpenAPI example provenance with fixture path command score status and output excerpt
-  - real MCP example provenance with fixture path command score status and output excerpt
-  - CLI command reference audit against current CLI behavior
-  - GitHub Action usage and immutable pinning audit against current Marketplace evidence
-  - agentready.json and Markdown report interpretation audit
-  - contribution process source mapping and unsupported-promise audit
-  - troubleshooting and limitations audit
-  - Community and planned Pro consistency audit
+  - SEO and GEO source inventory
+  - route metadata matrix with title description canonical URL search intent indexability and heading hierarchy
+  - sitemap and robots audit
+  - JSON-LD structured-data audit and validation output
+  - AI-assistant extractible definitions and answers inventory
+  - machine-readable primary-source mapping
+  - author version date and source metadata audit
+  - TimeProofs and AgentReady entity naming audit
+  - international route architecture and language policy
+  - hreflang audit confirming alternates only for truly translated routes
+  - doorway thin-page and fake-localization audit
+  - no official standards-body recognition certification benchmark customer testimonial or guaranteed-safety claim audit
   - CTA and internal-link report
-  - desktop and mobile screenshots
+  - desktop and mobile screenshots for primary affected route groups
   - keyboard accessibility report
   - no-JavaScript evidence
   - 320px overflow evidence
   - preview URL
   - validator and deterministic regeneration results
 
-Rollback: Revert ARB-SITE-GLOBAL-005 without reverting PR #132 shell, PR #134 product foundation, PR #135 standard foundation or PR #136 trust/legal foundation.
+Rollback: Revert ARB-SITE-GLOBAL-006 without reverting PR #132 shell, PR #134 product foundation, PR #135 standard foundation, PR #136 trust/legal foundation or PR #137 developer documentation foundation.
 
 Manual actions:
-  - JEASON reviews the combined developer documentation and adoption preview
-  - JEASON confirms contribution and troubleshooting copy does not promise unsupported support, governance or partner processes
+  - JEASON reviews the SEO, GEO, structured-data and international-architecture preview
+  - JEASON confirms no official standards-body, certification, customer, benchmark or guaranteed-safety claim was introduced
+  - JEASON confirms the French architecture does not present untranslated or artificial localized content as live translations
 
 Authorized external actions:
-  - create or align static developer documentation, browser scanner usage, CLI, GitHub Action, report, examples, adoption, contribution and troubleshooting surfaces
-  - add factual local diagrams or static assets derived from current repository sources
-  - add or update validators for developer documentation, examples, adoption and contribution accuracy
-  - update sitemap, robots and internal links only for real routes created or aligned by this batch
+  - create or align static SEO metadata, JSON-LD, sitemap, robots, internal-link and AI-first answer surfaces for real public routes
+  - add factual local diagrams or static assets derived from current repository sources where they improve extractibility
+  - add or update validators for SEO, GEO, structured-data, no-JavaScript, hreflang and route metadata accuracy
+  - update docs/agentready evidence registers for route metadata, source mapping, structured data and international architecture
 
 ## Preliminary Codex steps
 
-  - verify branch site-agentready-global-trust is at exact executable parent head 943d9fea90748a0496ce872dc48b14253eb3a16b
-  - confirm the accepted ARB-SITE-GLOBAL-004 public-content review head remains recorded as 11c488ff98ecb4509dd8bbf916840bf8c9edce77
-  - create branch site-agentready-global-docs-adoption from that exact parent head
-  - open a draft PR targeting site-agentready-global-trust before broad page edits
-  - inventory current developer documentation routes, scanner usage, CLI usage, GitHub Action usage, agentready.json documentation, examples, contribution guidance and troubleshooting copy
-  - inventory real OpenAPI and MCP fixtures and commands before displaying any score, finding, report excerpt or JSON excerpt
-  - verify PR #132, #134, #135 and #136 remain open draft and unmerged
+  - fetch origin and synchronize the parent branch site-agentready-global-docs-adoption
+  - verify git merge-base --is-ancestor 6b22fda5e6a5d3a39bddc6dc04a479e228b7199e HEAD before creating the implementation branch
+  - record 6b22fda5e6a5d3a39bddc6dc04a479e228b7199e as the required reviewed ancestor for ARB-SITE-GLOBAL-006
+  - create branch site-agentready-global-discovery from the current site-agentready-global-docs-adoption HEAD that contains that reviewed ancestor
+  - open a draft PR targeting site-agentready-global-docs-adoption before broad page edits
+  - inventory current titles descriptions canonical links robots sitemap structured data headings language signals and public entity naming
+  - inventory TimeProofs and AgentReady definitions, AI-answerable explanations and primary-source documents before writing extractible answer content
+  - inventory existing English routes and any truly translated routes before adding hreflang
+  - verify PR #132, #134, #135, #136 and #137 remain open draft and unmerged
   - confirm no npm, Action, tag, Release, Marketplace, engine, CLI, package, billing, account, backend or runtime operation is required
 
 
@@ -202,22 +212,24 @@ Forbidden actions:
   - do not create, move or delete tags
   - do not create or modify GitHub Releases or Marketplace operations
   - do not implement billing, accounts, backend, hosted scanning, telemetry or upload systems
-  - do not implement the full SEO, GEO or international batch
-  - do not present Pro as purchasable or Team, Agency or Enterprise as available
-  - do not invent customers, benchmarks, certifications, standards-body recognition, support commitments or governance processes
+  - do not implement the full post-launch SEO content cluster, competitive pages or experimental llms.txt/AGENTS.md program
+  - do not create doorway pages, fake translated pages, artificial localized content or thin SEO pages
+  - do not add external fonts, frontend frameworks, analytics trackers or telemetry
+  - do not claim official standards-body recognition, independent certification, benchmark validation, customers, testimonials or guaranteed safety
   - do not merge any site PR
 
 Response format:
 - branch name
 - draft PR number and URL
-- base branch and exact approved base head
+- base branch and required reviewed ancestor
 - exact head SHA
-- files changed grouped by developer docs routes shared assets validators governance and evidence
-- summary of each developer documentation, scanner, CLI, Action, report, examples, adoption, contribution and troubleshooting route
-- exact source of every displayed example score finding report excerpt or JSON excerpt
-- CLI and GitHub Action fact mapping
-- agentready.json and report interpretation mapping
-- contribution and troubleshooting boundary audit
+- files changed grouped by route metadata, structured data, sitemap robots, validators, governance and evidence
+- summary of SEO and GEO changes by route group
+- JSON-LD structured-data audit
+- AI-answer extractibility and primary-source mapping
+- entity naming audit
+- international route and hreflang audit
+- no doorway fake-translation thin-page or standards-body claim audit
 - local validation results
 - GitHub workflow results
 - preview URL

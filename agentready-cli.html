@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <title>AgentReady CLI Reference | TimeProofs</title>
+  <meta name="description" content="Install and run the published AgentReady Community CLI alpha for local OpenAPI and MCP static scans." />
+  <link rel="canonical" href="https://timeproofs.io/agentready-cli.html" />
+  <link rel="stylesheet" href="/assets/site-nav.css" />
+  <link rel="stylesheet" href="/assets/agentready-product.css" />
+  <link rel="stylesheet" href="/assets/agentready-standard.css" />
+  <link rel="stylesheet" href="/assets/agentready-developer.css" />
+</head>
+<body class="agp-body ags-body">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="ar-shell" role="banner">
+    <div class="ar-shell__inner">
+      <a class="ar-brand" href="/" aria-label="TimeProofs AgentReady home"><img src="/assets/logo.png" alt="" /><span class="ar-brand__text"><span class="ar-brand__top">TimeProofs</span><span class="ar-brand__product">AgentReady</span></span></a>
+      <nav class="ar-desktop-nav" aria-label="Primary navigation">
+        <a class="ar-nav-link" href="/agentready-docs.html">Docs</a>
+        <a class="ar-nav-link" href="/agentready.html">OpenAPI</a>
+        <a class="ar-nav-link" href="/agentready-mcp.html">MCP</a>
+        <a class="ar-nav-link" href="/agentready-ci.html">CI Gate</a>
+        <a class="ar-nav-link" href="/agentready-standard.html">Standard</a>
+        <a class="ar-nav-link" href="/trust.html">Trust</a>
+        <a class="ar-nav-cta" href="/agentready-adoption.html">Adopt</a>
+      </nav>
+      <details class="ar-mobile-nav">
+        <summary class="ar-mobile-summary" aria-label="Open navigation menu" aria-expanded="false"><span></span>Menu</summary>
+        <nav class="ar-mobile-panel" aria-label="Mobile navigation">
+          <a href="/agentready-docs.html">Documentation</a>
+          <a href="/agentready.html">OpenAPI scanner</a>
+          <a href="/agentready-mcp.html">MCP scanner</a>
+          <a href="/agentready-ci.html">GitHub CI Gate</a>
+          <a href="/agentready-cli.html">CLI reference</a>
+          <a href="/agentready-action.html">Action guide</a>
+          <a href="/agentready-adoption.html">Adoption guide</a>
+          <a href="/agentready-contributing.html">Contributing</a>
+          <a href="/agentready-troubleshooting.html">Troubleshooting</a>
+        </nav>
+      </details>
+    </div>
+  </header>
+  <main id="main" class="ags-main">
+    <div class="agd-hero">
+      <section class="ags-hero">
+        <div class="ags-hero__copy">
+          <p class="ags-kicker">Community CLI alpha</p>
+          <h1>Run AgentReady from a terminal before contracts reach CI.</h1>
+          <p class="ags-lede">The published Community CLI scans local OpenAPI and MCP files, writes Markdown and JSON outputs, and exits with policy status. It does not call live APIs, MCP servers, LLMs or a hosted TimeProofs backend.</p>
+          <div class="ags-actions"><a class="ags-button" href="#commands">View commands</a><a class="ags-button ags-button--secondary" href="/agentready-examples.html">Reproduce examples</a></div>
+        </div>
+        <div class="ags-hero__panel">
+          <div class="ags-signal"><span>Package</span><strong>@timeproofs/agentready@0.1.0-alpha.0</strong></div>
+          <div class="ags-signal"><span>Install channel</span><strong>npm dist-tag alpha</strong></div>
+          <div class="ags-signal"><span>Runtime</span><strong>Node.js 20 or newer</strong></div>
+        </div>
+      </section>
+    </div>
+    <nav class="ags-local-nav" aria-label="Developer documentation pages">
+      <a href="/agentready-docs.html">Docs hub</a>
+      <a href="/agentready-cli.html">CLI</a>
+      <a href="/agentready-action.html">GitHub Action</a>
+      <a href="/agentready-json.html">agentready.json</a>
+      <a href="/agentready-examples.html">Examples</a>
+      <a href="/agentready-troubleshooting.html">Troubleshooting</a>
+    </nav>
+    <section id="commands" class="ags-section ags-split">
+      <div>
+        <p class="ags-kicker">Install and version</p>
+        <h2>Use the alpha tag explicitly.</h2>
+        <p>Community is available for free. The current alpha must be installed or run with the explicit <code>@alpha</code> tag. npm currently also exposes <code>latest: 0.1.0-alpha.0</code> as a documented temporary exception, but new prereleases must use <code>alpha</code>.</p>
+      </div>
+      <pre class="agd-command"><code>npm install @timeproofs/agentready@alpha
+npx @timeproofs/agentready@alpha --help
+npx @timeproofs/agentready@alpha --version</code></pre>
+    </section>
+    <section class="ags-section">
+      <div class="ags-section-head">
+        <p class="ags-kicker">Implemented command reference</p>
+        <h2>The CLI exposes scan, simulate and report commands.</h2>
+        <p>These forms are verified against the current CLI help output. This page does not document unimplemented account, login, upload, Pro or hosted-scanner commands.</p>
+      </div>
+      <div class="ags-table-wrap">
+        <table class="agd-table">
+          <thead><tr><th>Command</th><th>Purpose</th><th>Outputs</th></tr></thead>
+          <tbody>
+            <tr><td><code>agentready scan openapi &lt;file&gt;</code></td><td>Static OpenAPI scan with optional <code>--out</code>, <code>--min-score</code> and <code>--fail-on</code>.</td><td><code>agentready-report.md</code> and <code>agentready.json</code>.</td></tr>
+            <tr><td><code>agentready scan mcp &lt;file&gt;</code></td><td>Static MCP tools JSON scan with the same policy options.</td><td><code>agentready-mcp-report.md</code> and <code>agentready-mcp.json</code>.</td></tr>
+            <tr><td><code>agentready simulate &lt;agentready.json&gt; &lt;scenario.json&gt;</code></td><td>Static scenario simulation against a previously generated AgentReady result.</td><td><code>agentready-simulation.json</code>.</td></tr>
+            <tr><td><code>agentready report &lt;agentready.json&gt;</code></td><td>Read an existing AgentReady JSON file and print score, status, tool count and risk counters to stdout. With <code>--json</code>, print a JSON object containing <code>summary</code> and <code>tool_count</code>.</td><td>Stdout only; this command does not write a Markdown file.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section class="ags-section ags-split">
+      <div>
+        <h2>CI policy semantics</h2>
+        <p>The recommended Community gate is <code>--min-score 75 --fail-on critical</code>. Exit code <code>0</code> means scan and policy passed. Exit code <code>1</code> means the scan was valid but policy failed. Exit code <code>2</code> means invalid input or CLI usage error. Exit code <code>3</code> means unexpected internal error.</p>
+      </div>
+      <pre class="agd-command"><code>npx @timeproofs/agentready@alpha scan openapi ./openapi.json --out ./agentready-output --min-score 75 --fail-on critical
+npx @timeproofs/agentready@alpha scan mcp ./mcp-tools.json --out ./agentready-output --min-score 75 --fail-on critical</code></pre>
+    </section>
+    <section class="ags-section ags-limits">
+      <p>TimeProofs AgentReady does not guarantee that an AI agent will never fail. It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.</p>
+      <p>A local CLI PASS means the selected static engine, ruleset and policy did not detect a covered blocking risk in that input at scan time. It is not a runtime safety guarantee.</p>
+    </section>
+  </main>
+  <footer class="ar-footer" role="contentinfo"><div class="ar-footer__inner"><div class="ar-footer__brand"><strong>TimeProofs AgentReady</strong><p>Static readiness gate for agent-facing OpenAPI and MCP contracts. Community is available for free. Pro is planned and not purchasable.</p></div><div class="ar-footer__groups"><section class="ar-footer__group"><h2>Developers</h2><a href="/agentready-docs.html">Docs hub</a><a href="/agentready-cli.html">CLI</a><a href="/agentready-action.html">GitHub Action</a><a href="/agentready-adoption.html">Adoption guide</a></section><section class="ar-footer__group"><h2>Reference</h2><a href="/agentready-json.html">agentready.json</a><a href="/agentready-rule-codes.html">Rule codes</a><a href="/agentready-sample-report.html">Sample report</a><a href="/limitations.html">Limitations</a></section></div></div></footer>
+  <script src="/assets/site-nav.js" defer></script>
+</body>
+</html>
