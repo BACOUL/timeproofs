@@ -5,6 +5,8 @@ Batch: ARB-SITE-GLOBAL-003
 PR: #135
 Base branch: site-agentready-global-product
 Actual stacked base head: 1a71cb469e608d548b42c5884a4165563216733b
+Principal public-page implementation commit: c32d1134ce649dfdcaf99ed990f2e9a5f3b5427c
+Current reviewed PR #135 public-content head after navigation and evidence correction: 149ef90f5fe1460e113dfbc079b0596fe538753e
 
 ## Source Inventory
 
@@ -75,8 +77,10 @@ No-JavaScript report: docs/agentready/evidence/site-global-standard-foundation/n
 320px overflow report: docs/agentready/evidence/site-global-standard-foundation/overflow-320-report.json
 CTA report: docs/agentready/evidence/site-global-standard-foundation/cta-link-report.json
 
+Screenshot provenance: existing desktop, mobile and no-JavaScript screenshots were generated at the principal public-page implementation commit c32d1134ce649dfdcaf99ed990f2e9a5f3b5427c. The later reviewed head 149ef90f5fe1460e113dfbc079b0596fe538753e changed public rule-link destinations and evidence records only; it did not change visual layout, page composition or public copy. Screenshots were therefore not regenerated for this evidence-only reconciliation.
+
 ## Preview
 
-Combined stacked preview URL: https://timeproofs-git-site-agentready-global-standard-jeason1.vercel.app/
+Reviewed combined stacked preview URL: https://timeproofs-git-site-agentready-global-standard-jeason1.vercel.app/
 
-Preview corresponds to PR #135 and implementation head c32d1134ce649dfdcaf99ed990f2e9a5f3b5427c.
+The current preview is reviewed against PR #135 after the navigation and evidence correction head 149ef90f5fe1460e113dfbc079b0596fe538753e. The principal public-page implementation remains c32d1134ce649dfdcaf99ed990f2e9a5f3b5427c; this distinction prevents the preview evidence from being read as corresponding only to the earlier implementation commit.
