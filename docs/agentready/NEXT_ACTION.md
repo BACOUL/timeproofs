@@ -5,31 +5,33 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 # Next Action
 
-Batch ID: ARB-SITE-GLOBAL-005
-Title: Publish developer documentation adoption examples and contribution foundation
-Action owner: JEASON
-Action type: REVIEW_OR_MERGE
-Status: IN_REVIEW
+Batch ID: ARB-SITE-GLOBAL-006
+Title: Publish SEO GEO AI-first structured data and international architecture
+Action owner: CODEX_AND_JEASON
+Action type: READY
+Status: READY
 Specification: EXECUTION_READY
 Objective:
-Publish developer documentation, adoption, examples and contribution paths for AgentReady Community without changing engine, CLI, package, Action, scoring, rule semantics, billing, accounts, backend or runtime behavior.
+Publish the technical SEO, GEO, AI-first structured data and international architecture foundation for the stacked AgentReady public site without changing product behavior, distribution state, billing, accounts, backend or runtime systems.
 
 Work items:
-  - AR-SITE-GLOBAL-005
+  - AR-SITE-GLOBAL-006
 
 Required evidence:
-  - developer documentation source inventory
-  - route map for docs scanner CLI Action report examples adoption contribution troubleshooting and limitations surfaces
-  - real OpenAPI example provenance with fixture path command score status and output excerpt
-  - real MCP example provenance with fixture path command score status and output excerpt
-  - CLI command reference audit against current CLI behavior
-  - GitHub Action usage and immutable pinning audit against current Marketplace evidence
-  - agentready.json and Markdown report interpretation audit
-  - contribution process source mapping and unsupported-promise audit
-  - troubleshooting and limitations audit
-  - Community and planned Pro consistency audit
+  - SEO and GEO source inventory
+  - route metadata matrix with title description canonical URL search intent indexability and heading hierarchy
+  - sitemap and robots audit
+  - JSON-LD structured-data audit and validation output
+  - AI-assistant extractible definitions and answers inventory
+  - machine-readable primary-source mapping
+  - author version date and source metadata audit
+  - TimeProofs and AgentReady entity naming audit
+  - international route architecture and language policy
+  - hreflang audit confirming alternates only for truly translated routes
+  - doorway thin-page and fake-localization audit
+  - no official standards-body recognition certification benchmark customer testimonial or guaranteed-safety claim audit
   - CTA and internal-link report
-  - desktop and mobile screenshots
+  - desktop and mobile screenshots for primary affected route groups
   - keyboard accessibility report
   - no-JavaScript evidence
   - 320px overflow evidence
@@ -37,14 +39,15 @@ Required evidence:
   - validator and deterministic regeneration results
 
 Manual actions:
-  - JEASON reviews the combined developer documentation and adoption preview
-  - JEASON confirms contribution and troubleshooting copy does not promise unsupported support, governance or partner processes
+  - JEASON reviews the SEO, GEO, structured-data and international-architecture preview
+  - JEASON confirms no official standards-body, certification, customer, benchmark or guaranteed-safety claim was introduced
+  - JEASON confirms the French architecture does not present untranslated or artificial localized content as live translations
 
 Authorized external actions:
-  - create or align static developer documentation, browser scanner usage, CLI, GitHub Action, report, examples, adoption, contribution and troubleshooting surfaces
-  - add factual local diagrams or static assets derived from current repository sources
-  - add or update validators for developer documentation, examples, adoption and contribution accuracy
-  - update sitemap, robots and internal links only for real routes created or aligned by this batch
+  - create or align static SEO metadata, JSON-LD, sitemap, robots, internal-link and AI-first answer surfaces for real public routes
+  - add factual local diagrams or static assets derived from current repository sources where they improve extractibility
+  - add or update validators for SEO, GEO, structured-data, no-JavaScript, hreflang and route metadata accuracy
+  - update docs/agentready evidence registers for route metadata, source mapping, structured data and international architecture
 
 Forbidden actions:
   - do not modify the AgentReady engine
@@ -55,8 +58,9 @@ Forbidden actions:
   - do not create, move or delete tags
   - do not create or modify GitHub Releases or Marketplace operations
   - do not implement billing, accounts, backend, hosted scanning, telemetry or upload systems
-  - do not implement the full SEO, GEO or international batch
-  - do not present Pro as purchasable or Team, Agency or Enterprise as available
-  - do not invent customers, benchmarks, certifications, standards-body recognition, support commitments or governance processes
+  - do not implement the full post-launch SEO content cluster, competitive pages or experimental llms.txt/AGENTS.md program
+  - do not create doorway pages, fake translated pages, artificial localized content or thin SEO pages
+  - do not add external fonts, frontend frameworks, analytics trackers or telemetry
+  - do not claim official standards-body recognition, independent certification, benchmark validation, customers, testimonials or guaranteed safety
   - do not merge any site PR
 

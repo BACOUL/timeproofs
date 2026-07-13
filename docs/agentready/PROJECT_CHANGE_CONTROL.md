@@ -313,3 +313,50 @@ Governance boundary:
 - `ARB-SITE-GLOBAL-005` is `IN_REVIEW` and not `DONE`;
 - `ARB-SITE-GLOBAL-006` remains a planned skeleton until PR #137 is reviewed,
   merged and reconciled through the canonical execution system.
+
+## ARB-SITE-GLOBAL-005 Owner Acceptance And GLOBAL-006 Readiness - 2026-07-13
+
+Decision:
+
+JEASON accepted the stacked developer documentation, adoption, examples and
+contribution foundation implemented in PR #137 on:
+
+`site-agentready-global-docs-adoption`
+
+Reviewed public-content head:
+
+`6b22fda5e6a5d3a39bddc6dc04a479e228b7199e`
+
+Canonical effect:
+
+- `ARB-SITE-GLOBAL-005` remains `IN_REVIEW`;
+- `ARB-SITE-GLOBAL-005` is not `DONE` because PR #137 remains open, draft and
+  unmerged;
+- owner review is accepted for stacked continuation;
+- `ARB-SITE-GLOBAL-006` becomes the next executable batch with
+  specification `EXECUTION_READY`.
+
+The GLOBAL-006 implementation-parent model uses the reviewed GLOBAL-005
+public-content head as a required ancestor, not as an exact parent HEAD lock.
+The future implementation branch must verify:
+
+`git merge-base --is-ancestor 6b22fda5e6a5d3a39bddc6dc04a479e228b7199e HEAD`
+
+Future implementation branch:
+
+`site-agentready-global-discovery`
+
+Future draft PR target:
+
+`site-agentready-global-docs-adoption`
+
+Future PR title:
+
+`site(discovery): publish SEO GEO and international architecture`
+
+Boundary:
+
+- no GLOBAL-006 page implementation is performed by this reconciliation;
+- no site PR is merged;
+- no npm, tag, Release, Marketplace, engine, CLI, package, Action, billing,
+  account, backend or runtime operation is authorized by this record.

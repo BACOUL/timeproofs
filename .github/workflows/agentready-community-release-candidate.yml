@@ -89,7 +89,9 @@ jobs:
           const standardBatch = batches.get('ARB-SITE-GLOBAL-003');
           const trustBatch = batches.get('ARB-SITE-GLOBAL-004');
           const docsBatch = batches.get('ARB-SITE-GLOBAL-005');
+          const seoBatch = batches.get('ARB-SITE-GLOBAL-006');
           const trustOwnerAcceptance = (trustBatch?.evidence || []).find((entry) => entry.type === 'owner_review_acceptance');
+          const docsOwnerAcceptance = (docsBatch?.evidence || []).find((entry) => entry.type === 'owner_review_acceptance');
           const next = selectNextAction(ledger);
           const nextPrompt = generatedContents(ledger)['docs/agentready/NEXT_CODEX_PROMPT.md'];
           const counts = promptCounts(ledger);
@@ -129,13 +131,29 @@ jobs:
           assert.equal(docsBatch?.stacked_on_batch, 'ARB-SITE-GLOBAL-004');
           assert.equal(docsBatch?.stacked_base_head_sha, '50415ac768194a1448cc1081b1b9a60b3b299b96');
           assert.equal(docsBatch?.pr_number, 137);
+          assert.equal(docsBatch?.stacked_execution_can_continue, true);
+          assert.equal(docsBatch?.stacked_child_head_sha, '6b22fda5e6a5d3a39bddc6dc04a479e228b7199e');
+          assert.equal(docsOwnerAcceptance?.reviewed_public_content_head, '6b22fda5e6a5d3a39bddc6dc04a479e228b7199e');
+          assert.equal(docsOwnerAcceptance?.owner_review_complete_for_stacked_continuation, true);
+          assert.equal(seoBatch?.status, 'READY');
+          assert.equal(seoBatch?.spec_status, 'EXECUTION_READY');
+          assert.equal(seoBatch?.owner, 'CODEX_AND_JEASON');
+          assert.equal(seoBatch?.base_branch, 'site-agentready-global-docs-adoption');
+          assert.equal(seoBatch?.branch, 'site-agentready-global-discovery');
+          assert.equal(seoBatch?.pr_title, 'site(discovery): publish SEO GEO and international architecture');
+          assert.equal(seoBatch?.stacked_on_batch, 'ARB-SITE-GLOBAL-005');
+          assert.equal(seoBatch?.stacked_required_ancestor_sha, '6b22fda5e6a5d3a39bddc6dc04a479e228b7199e');
           assert.equal(next?.kind, 'batch');
-          assert.equal(next?.batch?.id, 'ARB-SITE-GLOBAL-005');
-          assert.equal(next?.action_type, 'REVIEW_OR_MERGE');
-          assert.equal(next?.action_owner, 'JEASON');
-          assert.equal(counts.execution_batches.immediately_executable, 0);
-          assert.match(nextPrompt, /No CODEX execution batch is currently authorized/);
-          assert.match(nextPrompt, /JEASON - ARB-SITE-GLOBAL-005 - Publish developer documentation adoption examples and contribution foundation/);
+          assert.equal(next?.batch?.id, 'ARB-SITE-GLOBAL-006');
+          assert.equal(next?.action_type, 'READY');
+          assert.equal(next?.action_owner, 'CODEX_AND_JEASON');
+          assert.equal(counts.execution_batches.immediately_executable, 1);
+          assert.match(nextPrompt, /Batch ID: ARB-SITE-GLOBAL-006/);
+          assert.match(nextPrompt, /Base: site-agentready-global-docs-adoption/);
+          assert.match(nextPrompt, /Branch: site-agentready-global-discovery/);
+          assert.match(nextPrompt, /Draft PR target: site-agentready-global-docs-adoption/);
+          assert.match(nextPrompt, /git merge-base --is-ancestor 6b22fda5e6a5d3a39bddc6dc04a479e228b7199e HEAD/);
+          assert.doesNotMatch(nextPrompt, /Exact approved base head: 6b22fda5e6a5d3a39bddc6dc04a479e228b7199e/);
           NODE
 
       - name: Verify package metadata
