@@ -95,7 +95,9 @@ Refinement date: 2026-07-13
 
 Future base branch: `site-agentready-global-product`
 
-Approved base head: `6a0beff94240c255e40915f14b8a916fa1e13ce7`
+Previous product implementation head: `6a0beff94240c255e40915f14b8a916fa1e13ce7`
+
+Actual implementation branch base head: `1a71cb469e608d548b42c5884a4165563216733b`
 
 Future implementation branch: `site-agentready-global-standard`
 
@@ -104,6 +106,8 @@ Future draft PR target: `site-agentready-global-product`
 Future PR title: `site(standard): publish AgentReady standard foundation`
 
 This refinement authorizes only the future implementation prompt generated from the canonical ledger. It does not implement the pages, create a child branch, merge a site PR, or change the AgentReady engine, CLI, npm package, GitHub Action, tags, releases, Marketplace state, billing, accounts or runtime behavior.
+
+The previous product implementation head is retained as historical evidence. The actual implementation branch base head includes the required canonical specification-refinement commit and must be used when creating `site-agentready-global-standard`.
 
 ### Source Inventory
 
@@ -150,6 +154,224 @@ This refinement intentionally does not:
 - alter rule semantics, severity, scoring, CLI behavior or engine behavior;
 - perform npm, Action, tag, Release, Marketplace, billing, account or runtime operations;
 - mark ARB-SITE-GLOBAL-003 implemented, in review or done.
+
+## ARB-SITE-GLOBAL-003 Owner Acceptance
+
+Status: OWNER REVIEW ACCEPTED - STACKED PR IN REVIEW
+
+Acceptance date: 2026-07-13
+
+Owner reviewer: JEASON
+
+Reviewed branch: `site-agentready-global-standard`
+
+Reviewed public-content commit: `25636982cd944d3e947081740d5226f692c83741`
+
+Production URL: `https://timeproofs.io/`
+
+Accepted facts:
+
+- The production deployment was manually promoted and verified.
+- The homepage displays the new "Public method" presentation.
+- `agentready-docs.html` displays `agentready_version: "0.1"`.
+- `agentready-docs.html` displays `score: 72`.
+- `agentready-docs.html` displays `status: "Minor fixes"`.
+- JEASON accepts the visual and factual presentation of ARB-SITE-GLOBAL-003.
+- No claim of formal standards-body recognition, independent certification or guaranteed safety was approved.
+- No PR was merged.
+
+Canonical effect:
+
+- ARB-SITE-GLOBAL-003 remains `IN_REVIEW` because PR #135 is open and unmerged.
+- The owner review is complete for stacked continuation.
+- The batch is not `DONE` until PR #135 is merged and reconciled.
+- The next stacked batch may proceed only through the canonical generated prompt.
+
+## ARB-SITE-GLOBAL-004 Specification Refinement
+
+Status: EXECUTION_READY SPECIFICATION ONLY
+
+Refinement date: 2026-07-13
+
+Future base branch: `site-agentready-global-standard`
+
+Current approved public-content head for the parent stack:
+`25636982cd944d3e947081740d5226f692c83741`
+
+Actual executable stacked base head for the future GLOBAL-004 branch:
+`405255d516d62504587410aa50386b3f3ecab389`
+
+Future implementation branch: `site-agentready-global-trust`
+
+Future draft PR target: `site-agentready-global-standard`
+
+Future PR title: `site(trust): publish company and legal foundation`
+
+This refinement authorizes only the future implementation prompt generated
+from the canonical ledger. It does not create the implementation branch,
+open the implementation PR, implement pages, merge any site PR, or change the
+AgentReady engine, CLI, npm package, GitHub Action, tags, releases,
+Marketplace state, billing, accounts, licensing, backend or runtime behavior.
+
+The owner-reviewed public-content commit remains recorded separately from the
+future implementation base. The future implementation must branch from the
+executable PR #135 head that contains this specification refinement, generated
+execution views and matching CI workflow guard. If PR #135 advances before the
+implementation branch is created, the base head must be reconciled again before
+implementation.
+
+### Trust And Legal Source Inventory
+
+Authoritative or factual sources for the future trust/legal foundation are:
+
+- `AGENTREADY_MASTER_PLAN.md`, `EXECUTION_SEQUENCE.md`,
+  `PROJECT_CHANGE_CONTROL.md`, `DECISION_LOG.md` and this program for
+  execution sequence, stacked PR policy, owner decisions and forbidden claims;
+- `PUBLIC_SITE_INFORMATION_ARCHITECTURE.md`, `PREMIUM_SITE_REQUIREMENTS.md`
+  and `SITE_COPY_GUIDE.md` for page intent, product positioning and copy
+  boundaries;
+- `LEGAL_PRIVACY_AND_COOKIE_REQUIREMENTS.md` for required legal identity,
+  contact, privacy, cookie, processor, retention and DPA facts that remain
+  incomplete until verified;
+- `PRIVACY_TELEMETRY_SUPPORT_AND_TRUST_MODEL.md` for no silent Community
+  telemetry, accepted signals, future support boundaries and the instruction
+  not to claim "No data is ever sent.";
+- `LEGAL_IP_AND_LIABILITY_STRATEGY.md` for static-analysis limitation,
+  liability posture, open-core boundary and unsupported guarantee claims;
+- `SECURITY.md` for the current private security/privacy reporting address
+  `security@timeproofs.io`, scope and mandatory limitation;
+- `privacy.html`, `legal.html` and `terms.html` for existing public draft
+  legal, privacy and terms copy;
+- `agentready.html` and `agentready-mcp.html` for browser scanner data flow:
+  selected files are read locally, static examples may fetch public fixtures,
+  and the static page does not upload the selected file to a TimeProofs
+  backend;
+- `bin/agentready.js`, CLI tests and current documentation for local CLI file
+  behavior;
+- `action.yml`, `GITHUB_ACTION_USAGE.md`,
+  `GITHUB_ACTION_VERSIONING.md` and
+  `AGENTREADY_ACTION_PUBLICATION_EVIDENCE.md` for GitHub Action inputs,
+  outputs, local repository execution, minimum permissions, Marketplace facts
+  and no hosted scanner dependency;
+- `package.json`, `COMMUNITY_LICENSE_DECISION.md`,
+  `COMMUNITY_PUBLICATION_POLICY.md` and root `LICENSE` for package name,
+  version, root repository license boundary, Apache-2.0 Community package
+  boundary and npm publication facts;
+- public repository metadata and existing footer/navigation destinations for
+  current GitHub, privacy, terms and product paths.
+
+### Trust And Legal Gaps Or Conflicts
+
+- Publisher legal identity, legal form, professional address, SIREN/SIRET,
+  VAT number, publication director, hosting provider details and general
+  contact email are explicitly `TO_BE_COMPLETED` or draft-only. The future
+  implementation must not invent them.
+- `SECURITY.md` contains `security@timeproofs.io`; this may be used for
+  responsible disclosure only if JEASON confirms it is active and usable for
+  that public purpose.
+- `privacy.html` and `legal.html` still describe several production-launch
+  fields as incomplete. The trust/legal implementation must either complete
+  only verified facts or mark the exact blocker.
+- `LEGAL_IP_AND_LIABILITY_STRATEGY.md` still says no final legal license was
+  chosen in that earlier context. This is stale for the Community npm package
+  boundary after the later Apache-2.0 decision, while the root repository
+  license boundary remains separate.
+- Current public copy can say browser Community scans do not require a
+  TimeProofs backend or selected-file upload. It must not make a broad
+  "zero data collection" claim because hosting logs, public npm statistics,
+  public GitHub activity and voluntary feedback may exist.
+- Hosting provider and retention details are not fully documented; retention
+  periods must be omitted or marked `TO_BE_COMPLETED` unless verified.
+- Support, incident, billing, privacy, legal and vulnerability channels are
+  desired categories, but not all are verified public channels today.
+- No company, legal entity, employee count, office, customer, partner, audit,
+  certification, insurance, standards-body recognition or guarantee is
+  supported by current repository evidence.
+
+### Future Trust And Legal Routes
+
+The future implementation must publish or align these routes:
+
+- `about.html` - publisher and project identity, factual scope and missing
+  legal facts if still unverified;
+- `trust.html` - Trust Center hub linking security, privacy, terms, legal
+  notice, responsible disclosure, data flow, limitations and support
+  boundaries;
+- `security.html` - actual static-analysis architecture, threat boundaries,
+  non-goals and no hosted scanner requirement;
+- `responsible-disclosure.html` - real verified disclosure contact path or
+  explicit blocker if not verified;
+- `privacy.html` - website, browser scanner, CLI, GitHub Action, npm,
+  Vercel/GitHub, optional future Pro and voluntary-feedback data flows;
+- `terms.html` - terms of use and user responsibilities without pretending
+  paid Pro services are purchasable;
+- `legal.html` - legal notice using only verified publisher facts and clear
+  `TO_BE_COMPLETED` blockers where facts remain missing;
+- `limitations.html` - static-analysis, non-firewall, non-IAM,
+  non-certification and no-guarantee boundaries;
+- `agentready-data-flow.html` - data-flow matrix for website, browser scanner,
+  CLI, GitHub Action, npm package, repository and hosting surfaces;
+- `support.html` - support boundaries and real channels only where approved;
+- `sitemap.xml` and internal links only for real routes created or aligned by
+  the batch.
+
+### Future Trust And Legal Acceptance Requirements
+
+The future implementation must satisfy all of the following:
+
+1. Publisher and project identity are factual and consistent.
+2. No company, legal entity, office, employee count, customer, partner,
+   certification, audit, insurance or standards-body recognition is invented.
+3. Contact details are published only when already approved and real.
+4. Security explains the actual architecture and threat boundaries.
+5. Responsible disclosure provides a real, usable contact path only when
+   verified.
+6. Privacy distinguishes browser, CLI, GitHub Action, npm package, website,
+   hosting and optional future Pro data flows.
+7. Local browser scanning claims are technically accurate.
+8. No "zero data collection" claim is made unless every relevant surface
+   supports it.
+9. Cookies, analytics, hosting logs and third-party processors are described
+   factually.
+10. Retention periods are stated only when supported by current configuration
+    or policy.
+11. Legal notice and terms distinguish publisher, product, open-source
+    components and planned commercial services.
+12. Limitations state that AgentReady is static analysis, not a runtime
+    firewall, IAM system, certification or safety guarantee.
+13. Community and planned Pro claims remain consistent with approved product
+    pages.
+14. Existing working scanners and public routes are preserved.
+15. Pages remain static, mobile-friendly, keyboard accessible, usable without
+    JavaScript for core content and free of 320px overflow.
+16. No external font, frontend framework, analytics tracker, telemetry system,
+    account system, billing system, backend or hosted scanner is added.
+17. No engine, CLI, package, Action, scoring, severity or AR001-AR010
+    semantic behavior changes occur.
+
+### Future Trust And Legal Evidence Requirements
+
+The future implementation must record:
+
+- legal and trust source inventory;
+- stale or conflicting claim register;
+- publisher-identity mapping;
+- public route map;
+- data-flow matrix for website, browser scanner, CLI, GitHub Action, npm,
+  Vercel and GitHub;
+- processor and external-service inventory;
+- cookie and analytics audit;
+- privacy-claim audit;
+- security-claim audit;
+- responsible-disclosure contact verification or blocker;
+- certification and guaranteed-safety claim audit;
+- desktop and mobile screenshots;
+- keyboard accessibility report;
+- no-JavaScript evidence;
+- 320px overflow evidence;
+- CTA and internal-link report;
+- preview or production URL;
+- validator and deterministic regeneration results.
 
 ### Developers And Adoption
 

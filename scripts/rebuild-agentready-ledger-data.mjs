@@ -78,6 +78,7 @@ function task(input) {
     title: input.title,
     objective: input.objective ?? `${input.title}.`,
     status: input.status ?? "PLANNED",
+    ...(input.spec_status ? { spec_status: input.spec_status } : {}),
     owner: input.owner ?? "CODEX",
     weight: input.weight ?? 3,
     depends_on: input.depends_on ?? [],
@@ -434,7 +435,7 @@ const standardFoundationForbiddenActions = [
   "do not merge any site PR"
 ];
 const standardFoundationPreflight = [
-  "synchronize to exact PR #134 head 6a0beff94240c255e40915f14b8a916fa1e13ce7",
+  "synchronize to exact PR #134 head 1a71cb469e608d548b42c5884a4165563216733b",
   "create branch site-agentready-global-standard from site-agentready-global-product at that exact head",
   "open a draft PR targeting site-agentready-global-product before broad page edits",
   "inventory all public and internal sources for AgentReady definition AR001-AR010 severity score PASS FAIL versioning governance namespace and implementation behavior",
@@ -463,6 +464,183 @@ const standardFoundationResponseFormat = [
   "confirmation that no npm tag Release Marketplace engine CLI billing account package or runtime operation occurred"
 ];
 
+const trustFoundationSources = [
+  doc.master,
+  doc.sequence,
+  doc.decision,
+  doc.change,
+  doc.globalSite,
+  doc.ia,
+  doc.premium,
+  doc.copy,
+  doc.legal,
+  doc.legalReq,
+  doc.privacy,
+  doc.policy,
+  doc.license,
+  doc.actionUsage,
+  doc.action,
+  doc.json,
+  "README.md",
+  "SECURITY.md",
+  "privacy.html",
+  "legal.html",
+  "terms.html",
+  "package.json",
+  "action.yml",
+  "LICENSE"
+];
+const trustFoundationSurfaces = [
+  "about.html",
+  "trust.html",
+  "security.html",
+  "responsible-disclosure.html",
+  "privacy.html",
+  "terms.html",
+  "legal.html",
+  "limitations.html",
+  "agentready-data-flow.html",
+  "support.html",
+  "sitemap.xml",
+  "shared trust/legal assets where needed"
+];
+const trustFoundationDeliverables = [
+  "About and publisher page with factual project identity and no invented legal entity",
+  "Trust Center hub linking security privacy terms legal disclosure limitations data-flow and support boundaries",
+  "Security page explaining actual static local-first architecture threat boundaries and non-goals",
+  "Responsible disclosure page using only a verified real contact path or clearly blocking publication until verified",
+  "Privacy page distinguishing website browser scanner CLI GitHub Action npm package Vercel and GitHub data flows",
+  "Terms and limitations pages distinguishing static analysis from runtime firewall IAM certification or safety guarantee",
+  "Legal notice page with only approved publisher legal facts and TO_BE_COMPLETED where facts remain missing",
+  "Data-flow explanation for browser scanner CLI GitHub Action npm package website hosting and public repository surfaces",
+  "Contact and support boundary page without inventing support commitments or unapproved contact details",
+  "Evidence register and validators for trust legal privacy security and claim accuracy"
+];
+const trustFoundationAcceptance = [
+  "publisher and project identity are factual and consistent across About Trust Legal Terms Privacy Security and footer surfaces",
+  "no company legal entity office employee count customer partner certification audit insurance or standards-body recognition is invented",
+  "contact details are published only when already approved and real; otherwise the page states that the channel is not yet public and records the blocker",
+  "security explains the actual architecture and threat boundaries: static analysis local/browser-first behavior CLI local files GitHub Action local repository execution npm package and no hosted scanner requirement",
+  "responsible disclosure provides a real usable contact path only if verified from an approved source such as SECURITY.md and owner confirmation",
+  "privacy distinguishes browser scanner CLI GitHub Action npm package website hosting Vercel/GitHub logs and optional future Pro data flows",
+  "local browser scanning claims are technically accurate and match the current HTML implementation: selected files are read locally, static examples may be fetched, no submitted endpoint is called and no selected file is uploaded by the static page",
+  "no zero-data-collection claim is made; website hosting logs public npm counts public repository activity and voluntary feedback are described factually where applicable",
+  "cookies analytics hosting logs and third-party processors are described factually and without retention periods unless current configuration or policy supports them",
+  "retention periods are TO_BE_COMPLETED or omitted unless validated by current policy or configuration",
+  "legal notice and terms distinguish publisher identity product status open-source Community components Apache-2.0 package boundary root repository licensing history and planned commercial services",
+  "limitations explicitly state that AgentReady is static analysis and not a runtime firewall IAM system certification legal advice audit or safety guarantee",
+  "Community and planned Pro claims remain consistent with the approved product and pricing pages: Community available free, Pro planned and not purchasable",
+  "existing working scanners public routes shared shell navigation and footer remain functional",
+  "public pages remain static mobile-friendly keyboard accessible usable without JavaScript for core content and free of horizontal overflow at 320 pixels",
+  "no external font frontend framework analytics tracker telemetry account system billing system backend hosted scanner upload dependency or new processor is added",
+  "no engine CLI package Action scoring severity or AR001 through AR010 semantic behavior changes occur"
+];
+const trustFoundationCommands = [
+  "node scripts/validate-agentready-site-navigation.mjs",
+  "node scripts/validate-agentready-trust-legal-foundation-site.mjs",
+  "node scripts/validate-agentready-strategy-docs.mjs",
+  "node scripts/validate-agentready-execution-system.mjs",
+  "git diff --check"
+];
+const trustFoundationTests = [
+  "inventory all legal trust privacy security publisher contact and support sources before page edits",
+  "build a stale and conflicting claim register for publisher identity contact details legal notice privacy security and terms",
+  "map every public trust/legal route to authoritative source documents or mark missing facts as blockers",
+  "verify browser scanner data flow against current agentready.html and agentready-mcp.html implementation",
+  "verify CLI data flow against bin/agentready.js and current CLI tests",
+  "verify GitHub Action data flow against action.yml and current Action documentation",
+  "verify npm package and license facts against package.json packaging decisions Community license documents and root LICENSE boundary",
+  "verify no analytics tracker external font framework telemetry backend upload account billing or hosted scanning dependency was added",
+  "verify contact and responsible-disclosure channels are real approved and usable before publishing them as public channels",
+  "verify cookies analytics hosting logs processors and retention copy does not overstate unknown facts",
+  "verify every page preserves mandatory AgentReady limitation and does not claim certification guaranteed safety formal standards recognition customers audits insurance or legal advice",
+  "test desktop and mobile layouts for every trust/legal route",
+  "test keyboard focus order and visible focus",
+  "test core content without JavaScript",
+  "verify no horizontal overflow at 320 pixels",
+  "validate all CTA destinations and internal links",
+  "compare the complete preview against the PR #135 standard foundation baseline"
+];
+const trustFoundationEvidence = [
+  "legal and trust source inventory",
+  "stale and conflicting claim register",
+  "publisher identity mapping with missing legal facts explicitly marked",
+  "public route map and information architecture",
+  "data-flow matrix for website browser scanner CLI GitHub Action npm package Vercel and GitHub",
+  "processor and external-service inventory",
+  "cookie and analytics audit",
+  "privacy-claim audit including no zero-data-collection overclaim",
+  "security-claim audit",
+  "responsible-disclosure contact verification or blocker",
+  "certification formal-standard and guaranteed-safety claim audit",
+  "desktop and mobile screenshots",
+  "keyboard accessibility report",
+  "no-JavaScript evidence",
+  "320px overflow evidence",
+  "CTA and internal-link report",
+  "production or preview URL",
+  "validator and deterministic regeneration results"
+];
+const trustFoundationForbiddenPaths = [
+  "agentready-core/**",
+  "cli/** where behavior would change",
+  "bin/**",
+  "package.json",
+  "action.yml",
+  "packaging/**",
+  "server/**",
+  "api/**",
+  "billing/**",
+  "account/**",
+  ".github/workflows/** unless a separately identified stale validation guard requires a separately authorized correction",
+  "LICENSE",
+  "NOTICE"
+];
+const trustFoundationForbiddenActions = [
+  "do not implement routes or systems outside the GLOBAL-004 trust legal privacy security and support scope",
+  "do not invent publisher legal identity legal form registration number VAT address office employees customers partners certifications audits insurance or standards-body recognition",
+  "do not publish unapproved contact details",
+  "do not claim zero data collection across all surfaces",
+  "do not state retention periods unless supported by current configuration or policy",
+  "do not claim AgentReady is a runtime firewall IAM system legal advice audit certification or safety guarantee",
+  "do not present Pro as purchasable or change Community and Pro scope",
+  "do not add external fonts frontend frameworks analytics trackers telemetry account billing backend hosted scanning upload dependencies or new processors",
+  "do not change engine CLI package Action scoring severity or AR001 through AR010 semantics",
+  "do not perform npm tag Release Marketplace billing account licensing backend or runtime operations",
+  "do not merge any site PR"
+];
+const trustFoundationPreflight = [
+  "synchronize to exact PR #135 head that contains the GLOBAL-004 specification refinement",
+  "create branch site-agentready-global-trust from site-agentready-global-standard at the recorded stacked base head",
+  "open a draft PR targeting site-agentready-global-standard before broad page edits",
+  "inventory privacy.html legal.html terms.html SECURITY.md README.md package.json action.yml root LICENSE and active AgentReady governance documents",
+  "inventory browser scanner CLI GitHub Action npm package Vercel and GitHub data flows from current repository evidence",
+  "record stale incomplete or conflicting legal trust security privacy contact support and publisher facts as blockers rather than guessing",
+  "verify PR #132 PR #134 and PR #135 remain open draft and unmerged",
+  "confirm no npm Action tag Release Marketplace engine CLI package billing account backend or runtime operation is required"
+];
+const trustFoundationResponseFormat = [
+  "branch name",
+  "draft PR number and URL",
+  "base branch and exact approved base head",
+  "exact head SHA",
+  "files changed grouped by trust pages legal pages shared assets validators governance and evidence",
+  "source inventory and conflicts recorded",
+  "summary of each trust legal privacy security disclosure support and data-flow route",
+  "publisher identity mapping and missing facts",
+  "privacy and data-flow matrix summary",
+  "responsible-disclosure contact verification result",
+  "claim audits for certification guaranteed safety zero-data overclaims and formal standards recognition",
+  "local validation results",
+  "GitHub workflow results",
+  "preview URL",
+  "desktop and mobile evidence paths",
+  "keyboard no-JavaScript and 320px overflow evidence",
+  "remaining owner or legal review points",
+  "confirmation that no implementation branch beyond the authorized batch branch was created",
+  "confirmation that no npm tag Release Marketplace engine CLI billing account package or runtime operation occurred"
+];
+
 for (const [id, title, branch, prTitle] of [
   ["AR-SITE-GLOBAL-003", "Publish AgentReady standard rules and governance foundation", "site-agentready-global-standard", "site(standard): publish AgentReady standard foundation"],
   ["AR-SITE-GLOBAL-004", "Publish company trust security privacy and legal foundation", "site-agentready-global-trust", "site(trust): publish company and legal foundation"],
@@ -471,29 +649,34 @@ for (const [id, title, branch, prTitle] of [
   ["AR-SITE-GLOBAL-007", "Validate complete global standard site", "qa-agentready-global-standard-site", "qa(site): validate complete global standard site"]
 ]) {
   const isStandardFoundation = id === "AR-SITE-GLOBAL-003";
+  const isTrustFoundation = id === "AR-SITE-GLOBAL-004";
   codex("AR-SITE-PREMIUM-EPIC", id, "M3", "BEFORE_COMMUNITY_PUBLICATION", "SITE", title, {
   decision_ids: [...decisionIds, "DL-2026-07-13-GLOBAL-STANDARD-SITE-BEFORE-VALIDATION"],
-  status: isStandardFoundation ? "READY" : "PLANNED",
-  spec_status: isStandardFoundation ? "EXECUTION_READY" : "SKELETON",
-  owner: isStandardFoundation ? "CODEX_AND_JEASON" : "CODEX",
+  status: isStandardFoundation ? "IN_REVIEW" : isTrustFoundation ? "READY" : "PLANNED",
+  spec_status: isStandardFoundation || isTrustFoundation ? "EXECUTION_READY" : "SKELETON",
+  owner: isStandardFoundation || isTrustFoundation ? "CODEX_AND_JEASON" : "CODEX",
   weight: 5,
-  source_documents: isStandardFoundation ? standardFoundationSources : [doc.globalSite, doc.ia, doc.copy],
+  pr_number: isStandardFoundation ? 135 : undefined,
+  source_documents: isStandardFoundation ? standardFoundationSources : isTrustFoundation ? trustFoundationSources : [doc.globalSite, doc.ia, doc.copy],
   branch,
   pr_title: prTitle,
-  allowed_paths: isStandardFoundation ? ["assets/**", "*.html", "docs/agentready/**", "scripts/**", "sitemap.xml", "robots.txt"] : ["assets/**", "*.html", "docs/agentready/**", "scripts/**", "sitemap.xml"],
-  forbidden_paths: isStandardFoundation ? standardFoundationForbiddenPaths : ["agentready-core/**", "bin/**", "package.json", "action.yml", ".github/workflows/**", "server/**", "api/**", "LICENSE", "NOTICE"],
-  deliverables: isStandardFoundation ? standardFoundationDeliverables : [title],
-  estimated_files_or_surfaces: isStandardFoundation ? standardFoundationSurfaces : undefined,
-  acceptance_criteria: isStandardFoundation ? standardFoundationAcceptance : [`${title} complete after preceding stacked site batch is reviewed`],
-  required_commands: isStandardFoundation ? standardFoundationCommands : undefined,
-  independent_test_plan: isStandardFoundation ? standardFoundationTests : undefined,
-  required_evidence: isStandardFoundation ? standardFoundationEvidence : undefined,
-  manual_actions: isStandardFoundation ? ["JEASON reviews the AgentReady standard foundation preview and confirms no formal-standards or certification claim was introduced"] : undefined,
-  authorized_actions: isStandardFoundation ? ["create real static public standard, rule, JSON, examples, resources and sample-report surfaces", "add factual local diagrams or static assets when they are derived from current authoritative documents", "add or update validators for the standard foundation pages", "update sitemap robots and internal links only for real routes created by this batch"] : undefined,
-  forbidden_actions: isStandardFoundation ? standardFoundationForbiddenActions : undefined,
-  codex_preflight_steps: isStandardFoundation ? standardFoundationPreflight : undefined,
-  rollback_boundary: isStandardFoundation ? "Revert ARB-SITE-GLOBAL-003 without reverting PR #132 shell or PR #134 product foundation." : `Revert ${id} without reverting earlier stacked site batches.`,
-  scope_justification: isStandardFoundation ? "Weight 5 justified: one reviewable public standard foundation spanning standard overview, rule dictionary, scoring, versioning, governance and reference implementation surfaces with one stacked preview and rollback boundary." : "Weight 5 justified: planned global-site batch retained as a non-executable skeleton until the preceding stacked batch is reviewed."
+  allowed_paths: isStandardFoundation || isTrustFoundation ? ["assets/**", "*.html", "docs/agentready/**", "scripts/**", "sitemap.xml", "robots.txt"] : ["assets/**", "*.html", "docs/agentready/**", "scripts/**", "sitemap.xml"],
+  forbidden_paths: isStandardFoundation ? standardFoundationForbiddenPaths : isTrustFoundation ? trustFoundationForbiddenPaths : ["agentready-core/**", "bin/**", "package.json", "action.yml", ".github/workflows/**", "server/**", "api/**", "LICENSE", "NOTICE"],
+  deliverables: isStandardFoundation ? standardFoundationDeliverables : isTrustFoundation ? trustFoundationDeliverables : [title],
+  estimated_files_or_surfaces: isStandardFoundation ? standardFoundationSurfaces : isTrustFoundation ? trustFoundationSurfaces : undefined,
+  acceptance_criteria: isStandardFoundation ? standardFoundationAcceptance : isTrustFoundation ? trustFoundationAcceptance : [`${title} complete after preceding stacked site batch is reviewed`],
+  required_commands: isStandardFoundation ? standardFoundationCommands : isTrustFoundation ? trustFoundationCommands : undefined,
+  independent_test_plan: isStandardFoundation ? standardFoundationTests : isTrustFoundation ? trustFoundationTests : undefined,
+  required_evidence: isStandardFoundation ? standardFoundationEvidence : isTrustFoundation ? trustFoundationEvidence : undefined,
+  manual_actions: isStandardFoundation ? ["JEASON reviews the AgentReady standard foundation preview and confirms no formal-standards or certification claim was introduced"] : isTrustFoundation ? ["JEASON verifies publisher identity, legal notice facts, public contact paths and responsible-disclosure contact before final review", "JEASON reviews the complete trust/legal preview and confirms no invented legal, privacy, security, support, certification, audit or guarantee claim was introduced"] : undefined,
+  authorized_actions: isStandardFoundation ? ["create real static public standard, rule, JSON, examples, resources and sample-report surfaces", "add factual local diagrams or static assets when they are derived from current authoritative documents", "add or update validators for the standard foundation pages", "update sitemap robots and internal links only for real routes created by this batch"] : isTrustFoundation ? ["create or align static About Trust Security Responsible disclosure Privacy Terms Legal notice Limitations Data flow and Support boundary pages", "add factual local diagrams or static assets derived from current repository sources", "add or update validators for trust legal privacy security and claim accuracy", "update sitemap robots and internal links only for real routes created or aligned by this batch"] : undefined,
+  forbidden_actions: isStandardFoundation ? standardFoundationForbiddenActions : isTrustFoundation ? trustFoundationForbiddenActions : undefined,
+  codex_preflight_steps: isStandardFoundation ? standardFoundationPreflight : isTrustFoundation ? trustFoundationPreflight : undefined,
+  external_verifications: isTrustFoundation ? ["JEASON verifies any public contact path before it is presented as usable", "JEASON or legal counsel verifies publisher identity legal notice and privacy facts before final review"] : undefined,
+  final_response_format: isTrustFoundation ? trustFoundationResponseFormat : undefined,
+  evidence: isStandardFoundation ? [{ type: "draft_pr_implementation_review", pr: 135, branch: "site-agentready-global-standard", status: "IN_REVIEW", implemented: true, merge_authorized: false, evidence_document: "docs/agentready/SITE_GLOBAL_STANDARD_FOUNDATION_EVIDENCE.md", routes: ["agentready-standard.html", "agentready-rule-codes.html", "agentready-json.html", "agentready-examples.html", "agentready-resources.html", "agentready-sample-report.html"], validator: "scripts/validate-agentready-standard-foundation-site.mjs" }] : undefined,
+  rollback_boundary: isStandardFoundation ? "Revert ARB-SITE-GLOBAL-003 without reverting PR #132 shell or PR #134 product foundation." : isTrustFoundation ? "Revert ARB-SITE-GLOBAL-004 without reverting PR #132 shell, PR #134 product foundation or PR #135 standard foundation." : `Revert ${id} without reverting earlier stacked site batches.`,
+  scope_justification: isStandardFoundation ? "Weight 5 justified: one reviewable public standard foundation spanning standard overview, rule dictionary, scoring, versioning, governance and reference implementation surfaces with one stacked preview and rollback boundary." : isTrustFoundation ? "Weight 5 justified: one reviewable trust/legal foundation spanning publisher identity, security, privacy, disclosure, terms, data flows and support boundaries with one stacked preview and rollback boundary." : "Weight 5 justified: planned global-site batch retained as a non-executable skeleton until the preceding stacked batch is reviewed."
   });
 }
 codex("AR-SITE-PREMIUM-EPIC", "AR-SITE-PREMIUM-002", "M3", "BEFORE_COMMUNITY_PUBLICATION", "SITE", "Redesign homepage and core product pages", {
@@ -782,7 +965,7 @@ const batchDefinitions = [
     notes: "PR #134 is implemented and in review on the stacked child branch. JEASON accepted the production reconciliation as a temporary alignment exception only; the batch is not DONE and the full premium/global-standard site is not complete."
   }],
   ["ARB-SITE-GLOBAL-003", "Publish AgentReady standard rules and governance foundation", ["AR-SITE-GLOBAL-003"], {
-    status: "READY",
+    status: "IN_REVIEW",
     spec_status: "EXECUTION_READY",
     owner: "CODEX_AND_JEASON",
     objective: "Publish the public AgentReady standard, rule-code, severity, scoring, versioning, governance, namespace and reference-implementation foundation without changing engine, CLI, package, Action or runtime behavior.",
@@ -790,6 +973,7 @@ const batchDefinitions = [
     pr_base_branch: "site-agentready-global-product",
     branch: "site-agentready-global-standard",
     pr_title: "site(standard): publish AgentReady standard foundation",
+    pr_number: 135,
     deliverables: standardFoundationDeliverables,
     acceptance_criteria: standardFoundationAcceptance,
     independent_test_plan: standardFoundationTests,
@@ -804,13 +988,96 @@ const batchDefinitions = [
     rollback_boundary: "Revert ARB-SITE-GLOBAL-003 without reverting PR #132 shell or PR #134 product foundation.",
     scope_justification: "Weight 5 justified: one reviewable public standard foundation spanning standard overview, rule dictionary, scoring, versioning, governance and reference implementation surfaces with one stacked preview and rollback boundary.",
     stacked_execution_authorized: true,
+    stacked_execution_can_continue: true,
     stacked_on_batch: "ARB-SITE-GLOBAL-002",
     stacked_base_pr: 134,
-    stacked_base_head_sha: "6a0beff94240c255e40915f14b8a916fa1e13ce7",
+    stacked_base_head_sha: "1a71cb469e608d548b42c5884a4165563216733b",
+    stacked_child_pr: 135,
+    stacked_child_head_sha: "25636982cd944d3e947081740d5226f692c83741",
     depends_on_batches: ["ARB-SITE-GLOBAL-002"],
-    notes: "Specification refined only. Future implementation must create a draft PR targeting site-agentready-global-product and must not merge any site PR during the batch."
+    evidence: [
+      {
+        type: "stacked_base_synchronization",
+        date: "2026-07-13",
+        previous_product_implementation_head: "6a0beff94240c255e40915f14b8a916fa1e13ce7",
+        actual_implementation_branch_base_head: "1a71cb469e608d548b42c5884a4165563216733b",
+        reason: "The parent branch advanced by one canonical specification-refinement commit that is required before executing ARB-SITE-GLOBAL-003."
+      },
+      {
+        type: "draft_pr_implementation_review",
+        date: "2026-07-13",
+        pr: 135,
+        branch: "site-agentready-global-standard",
+        status: "IN_REVIEW",
+        implemented: true,
+        merge_authorized: false,
+        evidence_document: "docs/agentready/SITE_GLOBAL_STANDARD_FOUNDATION_EVIDENCE.md",
+        routes: ["agentready-standard.html", "agentready-rule-codes.html", "agentready-json.html", "agentready-examples.html", "agentready-resources.html", "agentready-sample-report.html"],
+        validator: "scripts/validate-agentready-standard-foundation-site.mjs"
+      },
+      {
+        type: "owner_review_acceptance",
+        date: "2026-07-13",
+        reviewer: "JEASON",
+        production_url: "https://timeproofs.io/",
+        reviewed_source_branch: "site-agentready-global-standard",
+        reviewed_public_content_commit: "25636982cd944d3e947081740d5226f692c83741",
+        production_deployment_manually_promoted_and_verified: true,
+        homepage_public_method_presentation_verified: true,
+        agentready_docs_displayed_agentready_version: "0.1",
+        agentready_docs_displayed_score: 72,
+        agentready_docs_displayed_status: "Minor fixes",
+        visual_and_factual_presentation_accepted: true,
+        formal_standards_body_recognition_approved: false,
+        independent_certification_approved: false,
+        guaranteed_safety_approved: false,
+        pr_merged: false,
+        merge_authorized: false,
+        batch_done: false,
+        stacked_execution_can_continue: true
+      }
+    ],
+    notes: "PR #135 implements the AgentReady standard foundation and remains open and unmerged. JEASON accepted the visual and factual presentation on 2026-07-13, including the manually promoted production deployment, but this does not mark the batch DONE because the stacked PR has not been merged and reconciled. Stacked execution may continue to ARB-SITE-GLOBAL-004."
   }],
-  ["ARB-SITE-GLOBAL-004", "Publish company trust security privacy and legal foundation", ["AR-SITE-GLOBAL-004"], { status: "PLANNED", spec_status: "SKELETON", base_branch: "site-agentready-global-standard", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-003", depends_on_batches: ["ARB-SITE-GLOBAL-003"] }],
+  ["ARB-SITE-GLOBAL-004", "Publish company trust security privacy and legal foundation", ["AR-SITE-GLOBAL-004"], {
+    status: "READY",
+    spec_status: "EXECUTION_READY",
+    owner: "CODEX_AND_JEASON",
+    objective: "Publish the public AgentReady company, trust, security, privacy and legal foundation from verified repository facts without inventing legal identity, contact, certification, support or data-processing claims.",
+    base_branch: "site-agentready-global-standard",
+    pr_base_branch: "site-agentready-global-standard",
+    branch: "site-agentready-global-trust",
+    pr_title: "site(trust): publish company and legal foundation",
+    deliverables: trustFoundationDeliverables,
+    acceptance_criteria: trustFoundationAcceptance,
+    independent_test_plan: trustFoundationTests,
+    required_commands: trustFoundationCommands,
+    required_evidence: trustFoundationEvidence,
+    manual_actions: ["JEASON verifies publisher identity, legal notice facts, public contact paths and responsible-disclosure contact before final review", "JEASON reviews the complete trust/legal preview and confirms no invented legal, privacy, security, support, certification, audit or guarantee claim was introduced"],
+    authorized_actions: ["create or align static About Trust Security Responsible disclosure Privacy Terms Legal notice Limitations Data flow and Support boundary pages", "add factual local diagrams or static assets derived from current repository sources", "add or update validators for trust legal privacy security and claim accuracy", "update sitemap robots and internal links only for real routes created or aligned by this batch"],
+    forbidden_actions: trustFoundationForbiddenActions,
+    codex_preflight_steps: trustFoundationPreflight,
+    external_verifications: ["JEASON verifies any public contact path before it is presented as usable", "JEASON or legal counsel verifies publisher identity legal notice and privacy facts before final review"],
+    final_response_format: trustFoundationResponseFormat,
+    rollback_boundary: "Revert ARB-SITE-GLOBAL-004 without reverting PR #132 shell, PR #134 product foundation or PR #135 standard foundation.",
+    scope_justification: "Weight 5 justified: one reviewable trust/legal foundation spanning publisher identity, security, privacy, responsible disclosure, terms, data flows and support boundaries with one stacked preview and rollback boundary.",
+    stacked_execution_authorized: true,
+    stacked_on_batch: "ARB-SITE-GLOBAL-003",
+    stacked_base_pr: 135,
+    stacked_base_head_sha: "405255d516d62504587410aa50386b3f3ecab389",
+    depends_on_batches: ["ARB-SITE-GLOBAL-003"],
+    evidence: [
+      {
+        type: "specification_refinement",
+        date: "2026-07-13",
+        source_inventory: "Publisher, trust, security, privacy, responsible-disclosure, terms, legal, data-flow, support, IP/license and limitation sources inventoried in GLOBAL_STANDARD_SITE_PROGRAM.md.",
+        implementation_started: false,
+        branch_created: false,
+        pr_created: false
+      }
+    ],
+    notes: "The owner-approved public-content commit is 25636982cd944d3e947081740d5226f692c83741. The executable stacked base for ARB-SITE-GLOBAL-004 is 405255d516d62504587410aa50386b3f3ecab389 because it contains the owner-acceptance/specification refinement and the matching CI guard. If PR #135 advances before execution, the base must be reconciled again before implementation."
+  }],
   ["ARB-SITE-GLOBAL-005", "Publish developer documentation adoption examples and contribution foundation", ["AR-SITE-GLOBAL-005"], { status: "PLANNED", spec_status: "SKELETON", base_branch: "site-agentready-global-trust", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-004", depends_on_batches: ["ARB-SITE-GLOBAL-004"] }],
   ["ARB-SITE-GLOBAL-006", "Publish SEO GEO AI-first and international foundation", ["AR-SITE-GLOBAL-006"], { status: "PLANNED", spec_status: "SKELETON", base_branch: "site-agentready-global-docs-adoption", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-005", depends_on_batches: ["ARB-SITE-GLOBAL-005"] }],
   ["ARB-SITE-GLOBAL-007", "Validate complete global standard site", ["AR-SITE-GLOBAL-007"], { status: "PLANNED", spec_status: "SKELETON", owner: "CODEX_AND_JEASON", base_branch: "site-agentready-global-discovery", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-006", depends_on_batches: ["ARB-SITE-GLOBAL-006"] }],
