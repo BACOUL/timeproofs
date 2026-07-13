@@ -99,7 +99,7 @@ assert.ok(workflow.includes("assert.equal(productBatch?.pr_number, 134)"));
 assert.ok(workflow.includes("assert.equal(standardBatch?.status, 'READY')"));
 assert.ok(workflow.includes("assert.equal(standardBatch?.spec_status, 'EXECUTION_READY')"));
 assert.ok(workflow.includes("assert.equal(standardBatch?.base_branch, 'site-agentready-global-product')"));
-assert.ok(workflow.includes("assert.equal(standardBatch?.stacked_base_head_sha, '6a0beff94240c255e40915f14b8a916fa1e13ce7')"));
+assert.ok(workflow.includes("assert.equal(standardBatch?.stacked_base_head_sha, '1a71cb469e608d548b42c5884a4165563216733b')"));
 assert.ok(workflow.includes("assert.equal(next?.batch?.id, 'ARB-SITE-GLOBAL-003')"));
 assert.ok(workflow.includes("assert.equal(next?.action_type, 'READY')"));
 assert.ok(workflow.includes("assert.equal(counts.execution_batches.immediately_executable, 1)"));

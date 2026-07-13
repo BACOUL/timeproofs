@@ -95,7 +95,9 @@ Refinement date: 2026-07-13
 
 Future base branch: `site-agentready-global-product`
 
-Approved base head: `6a0beff94240c255e40915f14b8a916fa1e13ce7`
+Previous product implementation head: `6a0beff94240c255e40915f14b8a916fa1e13ce7`
+
+Actual implementation branch base head: `1a71cb469e608d548b42c5884a4165563216733b`
 
 Future implementation branch: `site-agentready-global-standard`
 
@@ -104,6 +106,8 @@ Future draft PR target: `site-agentready-global-product`
 Future PR title: `site(standard): publish AgentReady standard foundation`
 
 This refinement authorizes only the future implementation prompt generated from the canonical ledger. It does not implement the pages, create a child branch, merge a site PR, or change the AgentReady engine, CLI, npm package, GitHub Action, tags, releases, Marketplace state, billing, accounts or runtime behavior.
+
+The previous product implementation head is retained as historical evidence. The actual implementation branch base head includes the required canonical specification-refinement commit and must be used when creating `site-agentready-global-standard`.
 
 ### Source Inventory
 

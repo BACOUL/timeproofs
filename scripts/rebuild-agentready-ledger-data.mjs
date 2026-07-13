@@ -434,7 +434,7 @@ const standardFoundationForbiddenActions = [
   "do not merge any site PR"
 ];
 const standardFoundationPreflight = [
-  "synchronize to exact PR #134 head 6a0beff94240c255e40915f14b8a916fa1e13ce7",
+  "synchronize to exact PR #134 head 1a71cb469e608d548b42c5884a4165563216733b",
   "create branch site-agentready-global-standard from site-agentready-global-product at that exact head",
   "open a draft PR targeting site-agentready-global-product before broad page edits",
   "inventory all public and internal sources for AgentReady definition AR001-AR010 severity score PASS FAIL versioning governance namespace and implementation behavior",
@@ -806,9 +806,16 @@ const batchDefinitions = [
     stacked_execution_authorized: true,
     stacked_on_batch: "ARB-SITE-GLOBAL-002",
     stacked_base_pr: 134,
-    stacked_base_head_sha: "6a0beff94240c255e40915f14b8a916fa1e13ce7",
+    stacked_base_head_sha: "1a71cb469e608d548b42c5884a4165563216733b",
     depends_on_batches: ["ARB-SITE-GLOBAL-002"],
-    notes: "Specification refined only. Future implementation must create a draft PR targeting site-agentready-global-product and must not merge any site PR during the batch."
+    evidence: [{
+      type: "stacked_base_synchronization",
+      date: "2026-07-13",
+      previous_product_implementation_head: "6a0beff94240c255e40915f14b8a916fa1e13ce7",
+      actual_implementation_branch_base_head: "1a71cb469e608d548b42c5884a4165563216733b",
+      reason: "The parent branch advanced by one canonical specification-refinement commit that is required before executing ARB-SITE-GLOBAL-003."
+    }],
+    notes: "Specification refined only. Previous product implementation head 6a0beff94240c255e40915f14b8a916fa1e13ce7 remains historical evidence; actual implementation branch base is 1a71cb469e608d548b42c5884a4165563216733b. Future implementation must create a draft PR targeting site-agentready-global-product and must not merge any site PR during the batch."
   }],
   ["ARB-SITE-GLOBAL-004", "Publish company trust security privacy and legal foundation", ["AR-SITE-GLOBAL-004"], { status: "PLANNED", spec_status: "SKELETON", base_branch: "site-agentready-global-standard", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-003", depends_on_batches: ["ARB-SITE-GLOBAL-003"] }],
   ["ARB-SITE-GLOBAL-005", "Publish developer documentation adoption examples and contribution foundation", ["AR-SITE-GLOBAL-005"], { status: "PLANNED", spec_status: "SKELETON", base_branch: "site-agentready-global-trust", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-004", depends_on_batches: ["ARB-SITE-GLOBAL-004"] }],
