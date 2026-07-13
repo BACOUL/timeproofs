@@ -993,7 +993,7 @@ const batchDefinitions = [
     stacked_base_pr: 134,
     stacked_base_head_sha: "1a71cb469e608d548b42c5884a4165563216733b",
     stacked_child_pr: 135,
-    stacked_child_head_sha: "25636982cd944d3e947081740d5226f692c83741",
+    stacked_child_head_sha: "b0946d3fb4403b1281171dd955aa2438f733086a",
     depends_on_batches: ["ARB-SITE-GLOBAL-002"],
     evidence: [
       {
@@ -1037,7 +1037,7 @@ const batchDefinitions = [
         stacked_execution_can_continue: true
       }
     ],
-    notes: "PR #135 implements the AgentReady standard foundation and remains open and unmerged. JEASON accepted the visual and factual presentation on 2026-07-13, including the manually promoted production deployment, but this does not mark the batch DONE because the stacked PR has not been merged and reconciled. Stacked execution may continue to ARB-SITE-GLOBAL-004."
+    notes: "PR #135 implements the AgentReady standard foundation and remains open and unmerged. JEASON accepted the visual and factual presentation on 2026-07-13 at public-content commit 25636982cd944d3e947081740d5226f692c83741, including the manually promoted production deployment, but this does not mark the batch DONE because the stacked PR has not been merged and reconciled. The final parent PR #135 head used to create ARB-SITE-GLOBAL-004 is b0946d3fb4403b1281171dd955aa2438f733086a. Stacked execution may continue to ARB-SITE-GLOBAL-004."
   }],
   ["ARB-SITE-GLOBAL-004", "Publish company trust security privacy and legal foundation", ["AR-SITE-GLOBAL-004"], {
     status: "READY",
@@ -1064,7 +1064,7 @@ const batchDefinitions = [
     stacked_execution_authorized: true,
     stacked_on_batch: "ARB-SITE-GLOBAL-003",
     stacked_base_pr: 135,
-    stacked_base_head_sha: "405255d516d62504587410aa50386b3f3ecab389",
+    stacked_base_head_sha: "b0946d3fb4403b1281171dd955aa2438f733086a",
     depends_on_batches: ["ARB-SITE-GLOBAL-003"],
     evidence: [
       {
@@ -1076,7 +1076,7 @@ const batchDefinitions = [
         pr_created: false
       }
     ],
-    notes: "The owner-approved public-content commit is 25636982cd944d3e947081740d5226f692c83741. The executable stacked base for ARB-SITE-GLOBAL-004 is 405255d516d62504587410aa50386b3f3ecab389 because it contains the owner-acceptance/specification refinement and the matching CI guard. If PR #135 advances before execution, the base must be reconciled again before implementation."
+    notes: "The owner-approved public-content commit is 25636982cd944d3e947081740d5226f692c83741. The final parent PR #135 head used to create ARB-SITE-GLOBAL-004 is b0946d3fb4403b1281171dd955aa2438f733086a. The executable stacked base contains the owner-acceptance/specification refinement and the matching CI guard. If PR #135 advances before execution, the base must be reconciled again before implementation."
   }],
   ["ARB-SITE-GLOBAL-005", "Publish developer documentation adoption examples and contribution foundation", ["AR-SITE-GLOBAL-005"], { status: "PLANNED", spec_status: "SKELETON", base_branch: "site-agentready-global-trust", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-004", depends_on_batches: ["ARB-SITE-GLOBAL-004"] }],
   ["ARB-SITE-GLOBAL-006", "Publish SEO GEO AI-first and international foundation", ["AR-SITE-GLOBAL-006"], { status: "PLANNED", spec_status: "SKELETON", base_branch: "site-agentready-global-docs-adoption", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-005", depends_on_batches: ["ARB-SITE-GLOBAL-005"] }],

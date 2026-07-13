@@ -199,7 +199,7 @@ Current approved public-content head for the parent stack:
 `25636982cd944d3e947081740d5226f692c83741`
 
 Actual executable stacked base head for the future GLOBAL-004 branch:
-`405255d516d62504587410aa50386b3f3ecab389`
+`b0946d3fb4403b1281171dd955aa2438f733086a`
 
 Future implementation branch: `site-agentready-global-trust`
 
