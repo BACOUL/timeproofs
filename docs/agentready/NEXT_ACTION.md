@@ -7,9 +7,9 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 Batch ID: ARB-SITE-GLOBAL-003
 Title: Publish AgentReady standard rules and governance foundation
-Action owner: CODEX_AND_JEASON
-Action type: READY
-Status: READY
+Action owner: JEASON
+Action type: REVIEW_OR_MERGE
+Status: IN_REVIEW
 Specification: EXECUTION_READY
 Objective:
 Publish the public AgentReady standard, rule-code, severity, scoring, versioning, governance, namespace and reference-implementation foundation without changing engine, CLI, package, Action or runtime behavior.

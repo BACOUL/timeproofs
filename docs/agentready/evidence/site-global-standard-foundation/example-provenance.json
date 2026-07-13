@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "generated_from_current_engine": true,
+  "commands": {
+    "openapi_bad": "node bin/agentready.js scan openapi agentready-examples/commercial/openapi-refund-risk.bad.json --min-score 75 --fail-on critical",
+    "openapi_fixed": "node bin/agentready.js scan openapi agentready-examples/commercial/openapi-refund-risk.fixed.json --min-score 75 --fail-on critical",
+    "mcp_bad": "node bin/agentready.js scan mcp agentready-examples/commercial/mcp-email-risk.bad.json --min-score 75 --fail-on critical",
+    "mcp_fixed": "node bin/agentready.js scan mcp agentready-examples/commercial/mcp-email-risk.fixed.json --min-score 75 --fail-on critical"
+  },
+  "results": {
+    "openapiBad": {
+      "exitCode": 1,
+      "output": "AgentReady OPENAPI scan\nScore: 54/100\nStatus: Needs fixes\nOperations/tools: 1\nRisks: critical=1, high=4, medium=6, low=0\n\nTop findings:\n- [critical] AR002_MISSING_CONFIRMATION_BOUNDARY (missing_human_confirmation_flow) — refundOrder\n- [high] AR001_UNBOUNDED_WRITE_ACTION (unbounded_parameter) — refundOrder\n- [high] AR006_MISSING_DRY_RUN_OR_PREVIEW (irreversible_action) — refundOrder\n- [high] AR005_SENSITIVE_DATA_EXPOSURE (sensitive_data_exposure) — refundOrder\n- [high] AR007_OVERBROAD_TOOL_SCOPE (overbroad_permission) — refundOrder\n\nPolicy: FAIL\n- score 54 is below --min-score 75\n- 1 critical+ risk(s) detected"
+    },
+    "openapiFixed": {
+      "exitCode": 0,
+      "output": "AgentReady OPENAPI scan\nScore: 84/100\nStatus: Minor fixes\nOperations/tools: 1\nRisks: critical=0, high=3, medium=0, low=0\n\nTop findings:\n- [high] AR006_MISSING_DRY_RUN_OR_PREVIEW (irreversible_action) — requestOrderRefundWithApproval\n- [high] AR005_SENSITIVE_DATA_EXPOSURE (sensitive_data_exposure) — requestOrderRefundWithApproval\n- [high] AR007_OVERBROAD_TOOL_SCOPE (overbroad_permission) — requestOrderRefundWithApproval\n\nPolicy: PASS"
+    },
+    "mcpBad": {
+      "exitCode": 1,
+      "output": "AgentReady MCP scan\nScore: 63/100\nStatus: Needs fixes\nOperations/tools: 1\nRisks: critical=1, high=3, medium=4, low=0\n\nTop findings:\n- [critical] AR002_MISSING_CONFIRMATION_BOUNDARY (missing_human_confirmation_flow) — send_email\n- [high] AR005_SENSITIVE_DATA_EXPOSURE (sensitive_data_exposure) — send_email\n- [high] AR007_OVERBROAD_TOOL_SCOPE (overbroad_permission) — send_email\n- [high] AR003_DESTRUCTIVE_OPERATION_AMBIGUOUS (mcp_dangerous_tool_weak_description) — send_email\n- [medium] AR009_UNCLEAR_AGENT_INSTRUCTIONS (ambiguous_tool_description) — send_email\n\nPolicy: FAIL\n- score 63 is below --min-score 75\n- 1 critical+ risk(s) detected"
+    },
+    "mcpFixed": {
+      "exitCode": 0,
+      "output": "AgentReady MCP scan\nScore: 90/100\nStatus: AgentReady\nOperations/tools: 1\nRisks: critical=0, high=2, medium=0, low=0\n\nTop findings:\n- [high] AR005_SENSITIVE_DATA_EXPOSURE (sensitive_data_exposure) — send_confirmed_external_email\n- [high] AR007_OVERBROAD_TOOL_SCOPE (overbroad_permission) — send_confirmed_external_email\n\nPolicy: PASS"
+    }
+  }
+}

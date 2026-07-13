@@ -4,9 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="index,follow" />
-  <title>AgentReady Reproducible Examples | TimeProofs</title>
-  <meta name="description" content="Reproducible OpenAPI and MCP examples for AgentReady rule codes, scores and PASS/FAIL behavior." />
-  <link rel="canonical" href="https://timeproofs.io/agentready-examples.html" />
+  <title>AgentReady Standard Overview | TimeProofs</title>
+  <meta name="description" content="Public AgentReady method overview for static pre-deployment analysis of agent-facing OpenAPI and MCP contracts." />
+  <link rel="canonical" href="https://timeproofs.io/agentready-standard.html" />
   <link rel="stylesheet" href="/assets/site-nav.css" />
   <link rel="stylesheet" href="/assets/agentready-product.css" />
   <link rel="stylesheet" href="/assets/agentready-standard.css" />
@@ -75,16 +75,23 @@
   </header>
   <main id="main" class="ags-main">
 
-    <section class="ags-hero ags-hero--examples">
+    <section class="ags-hero ags-hero--standard">
       <div class="ags-hero__copy">
-        <p class="ags-kicker">Reproducible fixtures</p>
-        <h1>Examples use repository fixtures and the current reference scanner.</h1>
-        <p class="ags-lede">Every score or finding shown here is generated from a local fixture path and command recorded in the evidence file.</p>
-        <div class="ags-actions"><a class="ags-button" href="#openapi-refund">OpenAPI refund example</a><a class="ags-button ags-button--secondary" href="#mcp-email">MCP email example</a></div>
+        <p class="ags-kicker">AgentReady public method</p>
+        <h1>Static readiness rules for agent-facing OpenAPI and MCP contracts.</h1>
+        <p class="ags-lede">AgentReady checks whether contracts expose clear, bounded and reviewable tools before autonomous agents can use them. It is a pre-deployment static analysis method, not a runtime control plane.</p>
+        <div class="ags-actions">
+          <a class="ags-button" href="/agentready-rule-codes.html">Read AR001-AR010</a>
+          <a class="ags-button ags-button--secondary" href="/agentready-json.html">View agentready.json v0.1</a>
+        </div>
       </div>
-      <div class="ags-example-stat"><span>Policy</span><strong>min-score 75 / fail-on critical</strong><span>Sources</span><strong>agentready-examples/commercial</strong></div>
+      <div class="ags-hero__panel" aria-label="AgentReady method boundaries">
+        <div class="ags-signal"><span>Input</span><strong>OpenAPI or MCP contract</strong></div>
+        <div class="ags-signal"><span>Analysis</span><strong>Static rules, score, policy gate</strong></div>
+        <div class="ags-signal"><span>Output</span><strong>agentready.json and Markdown report</strong></div>
+      </div>
     </section>
-
+    
         <nav class="ags-local-nav" aria-label="AgentReady standard pages">
           <a href="/agentready-standard.html">Standard overview</a>
           <a href="/agentready-rule-codes.html">Rule codes</a>
@@ -93,86 +100,48 @@
           <a href="/agentready-sample-report.html">Sample report</a>
           <a href="/agentready-resources.html">Resources</a>
         </nav>
-    <section class="ags-section ags-example-pair" id="openapi-refund">
+    <section class="ags-section ags-split">
       <div>
-        <p class="ags-kicker">OpenAPI bad fixture</p>
-        <h2>Refund operation before remediation</h2>
-        <p>Fixture: <code>agentready-examples/commercial/openapi-refund-risk.bad.json</code></p>
-<pre><code>AgentReady OPENAPI scan
-Score: 54/100
-Status: Needs fixes
-Operations/tools: 1
-Risks: critical=1, high=4, medium=6, low=0
-
-Top findings:
-- [critical] AR002_MISSING_CONFIRMATION_BOUNDARY (missing_human_confirmation_flow) — refundOrder
-- [high] AR001_UNBOUNDED_WRITE_ACTION (unbounded_parameter) — refundOrder
-- [high] AR006_MISSING_DRY_RUN_OR_PREVIEW (irreversible_action) — refundOrder
-- [high] AR005_SENSITIVE_DATA_EXPOSURE (sensitive_data_exposure) — refundOrder
-- [high] AR007_OVERBROAD_TOOL_SCOPE (overbroad_permission) — refundOrder
-
-Policy: FAIL
-- score 54 is below --min-score 75
-- 1 critical+ risk(s) detected</code></pre>
+        <p class="ags-kicker">Canonical definition</p>
+        <h2>What AgentReady is</h2>
+        <p>AgentReady is a static readiness gate for agent-facing contracts. It inspects OpenAPI operations and MCP tool definitions before deployment and reports structural risks that could make an agent choose, parameterize or execute a tool incorrectly.</p>
+        <p>The current reference implementation runs locally in the browser scanner, npm CLI and GitHub Action. It does not require a TimeProofs account, a hosted scanner, API upload or secrets for Community use.</p>
       </div>
-      <div>
-        <p class="ags-kicker">OpenAPI fixed fixture</p>
-        <h2>Refund operation after contract tightening</h2>
-        <p>Fixture: <code>agentready-examples/commercial/openapi-refund-risk.fixed.json</code></p>
-<pre><code>AgentReady OPENAPI scan
-Score: 84/100
-Status: Minor fixes
-Operations/tools: 1
-Risks: critical=0, high=3, medium=0, low=0
-
-Top findings:
-- [high] AR006_MISSING_DRY_RUN_OR_PREVIEW (irreversible_action) — requestOrderRefundWithApproval
-- [high] AR005_SENSITIVE_DATA_EXPOSURE (sensitive_data_exposure) — requestOrderRefundWithApproval
-- [high] AR007_OVERBROAD_TOOL_SCOPE (overbroad_permission) — requestOrderRefundWithApproval
-
-Policy: PASS</code></pre>
+      <div class="ags-not-list">
+        <h2>What AgentReady is not</h2>
+        <ul>
+          <li>Not a runtime firewall, gateway or IAM system.</li>
+          <li>Not a live API, live MCP server or LLM evaluator.</li>
+          <li>Not a security certification or compliance certificate.</li>
+          <li>Not a guarantee that an AI agent will never fail.</li>
+          <li>Not a claim of recognition by any formal standards body.</li>
+        </ul>
       </div>
     </section>
-    <section class="ags-section ags-example-pair" id="mcp-email">
-      <div>
-        <p class="ags-kicker">MCP bad fixture</p>
-        <h2>Email tool before remediation</h2>
-        <p>Fixture: <code>agentready-examples/commercial/mcp-email-risk.bad.json</code></p>
-<pre><code>AgentReady MCP scan
-Score: 63/100
-Status: Needs fixes
-Operations/tools: 1
-Risks: critical=1, high=3, medium=4, low=0
-
-Top findings:
-- [critical] AR002_MISSING_CONFIRMATION_BOUNDARY (missing_human_confirmation_flow) — send_email
-- [high] AR005_SENSITIVE_DATA_EXPOSURE (sensitive_data_exposure) — send_email
-- [high] AR007_OVERBROAD_TOOL_SCOPE (overbroad_permission) — send_email
-- [high] AR003_DESTRUCTIVE_OPERATION_AMBIGUOUS (mcp_dangerous_tool_weak_description) — send_email
-- [medium] AR009_UNCLEAR_AGENT_INSTRUCTIONS (ambiguous_tool_description) — send_email
-
-Policy: FAIL
-- score 63 is below --min-score 75
-- 1 critical+ risk(s) detected</code></pre>
-      </div>
-      <div>
-        <p class="ags-kicker">MCP fixed fixture</p>
-        <h2>Email tool after contract tightening</h2>
-        <p>Fixture: <code>agentready-examples/commercial/mcp-email-risk.fixed.json</code></p>
-<pre><code>AgentReady MCP scan
-Score: 90/100
-Status: AgentReady
-Operations/tools: 1
-Risks: critical=0, high=2, medium=0, low=0
-
-Top findings:
-- [high] AR005_SENSITIVE_DATA_EXPOSURE (sensitive_data_exposure) — send_confirmed_external_email
-- [high] AR007_OVERBROAD_TOOL_SCOPE (overbroad_permission) — send_confirmed_external_email
-
-Policy: PASS</code></pre>
-      </div>
+    <section class="ags-proof-strip" aria-label="Standard boundaries">
+      <div><span>Source scope</span><strong>OpenAPI and MCP</strong></div>
+      <div><span>Current contract</span><strong>agentready.json v0.1</strong></div>
+      <div><span>Rule namespace</span><strong>AR001-AR010</strong></div>
+      <div><span>Runtime boundary</span><strong>No live execution</strong></div>
     </section>
-    <section class="ags-section ags-limits"><h2>Example limitations</h2><p>These examples prove reproducibility of current fixtures only. They are not benchmarks, customer case studies or scientific validation.</p><p>TimeProofs AgentReady does not guarantee that an AI agent will never fail. It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.</p></section>
+    <section class="ags-section ags-diagram-section">
+      <div>
+        <p class="ags-kicker">Reference implementation relationship</p>
+        <h2>Method, rules and implementation are separate surfaces.</h2>
+        <p>The public method defines the vocabulary, result contract and governance expectations. The current scanner is the reference implementation that applies those rules to static OpenAPI and MCP inputs. The CLI, browser scanner and GitHub Action are distribution paths for that implementation.</p>
+      </div>
+      <img class="ags-diagram" src="/assets/agentready-standard-flow.svg" alt="Diagram showing contracts flowing through static AgentReady rules to reports, CI policy and remediation." />
+    </section>
+    <section class="ags-section ags-index-grid">
+      <article><h3>Normative public sources</h3><p>Rule identifiers, agentready.json v0.1, policy semantics, namespace ownership and change control are the stable public surfaces for this foundation.</p><a href="/agentready-rule-codes.html">Rule codes</a></article>
+      <article><h3>Explanatory material</h3><p>Examples, report walkthroughs and resource guides explain how to use the method without adding rule semantics or changing scanner behavior.</p><a href="/agentready-examples.html">Examples</a></article>
+      <article><h3>Governance boundary</h3><p>Rule changes require recorded review and change control. No public page may invent a standards body, certification authority or official global-standard status.</p><a href="/agentready-resources.html#governance">Governance resources</a></article>
+    </section>
+    <section class="ags-section ags-limits">
+      <h2>Limitations that remain in scope</h2>
+      <p>TimeProofs AgentReady does not guarantee that an AI agent will never fail. It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.</p>
+      <p>Runtime behavior, dynamically constructed capabilities, live authorization policy, production data boundaries and human operating discipline may not be detectable from a static contract. Passing AgentReady is useful evidence for release review, but it is not a complete safety proof.</p>
+    </section>
   </main>
 <footer class="ar-footer" role="contentinfo">
     <div class="ar-footer__inner">

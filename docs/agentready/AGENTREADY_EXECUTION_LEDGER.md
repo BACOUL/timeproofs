@@ -408,7 +408,7 @@ Required evidence:
   - combined preview URL
 
 ### ARB-SITE-GLOBAL-003 - Publish AgentReady standard rules and governance foundation
-- Status: READY
+- Status: IN_REVIEW
 - Spec status: EXECUTION_READY
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
@@ -418,7 +418,7 @@ Required evidence:
 - Depends on tasks: None
 - Branch: site-agentready-global-standard
 - PR title: site(standard): publish AgentReady standard foundation
-
+- PR: #135
 Deliverables:
   - public AgentReady standard overview with concise canonical definition and what-it-is-not boundary
   - public specification index distinguishing normative sources from explanatory material
@@ -2681,7 +2681,7 @@ Required evidence:
 
 ### AR-SITE-GLOBAL-003 - Publish AgentReady standard rules and governance foundation
 - Type: CODEX_WORK_ITEM
-- Status: READY
+- Status: IN_REVIEW
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
@@ -2689,7 +2689,7 @@ Required evidence:
 - Weight: 5
 - Execution batch: ARB-SITE-GLOBAL-003
 - Depends on: None
-
+- PR: #135
 Deliverables:
   - public AgentReady standard overview with concise canonical definition and what-it-is-not boundary
   - public specification index distinguishing normative sources from explanatory material
