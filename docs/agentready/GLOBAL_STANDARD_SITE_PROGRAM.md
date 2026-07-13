@@ -393,7 +393,7 @@ Reviewed head:
 `11c488ff98ecb4509dd8bbf916840bf8c9edce77`
 
 Current reconciled PR #136 head:
-`943d9fea90748a0496ce872dc48b14253eb3a16b`
+`50415ac768194a1448cc1081b1b9a60b3b299b96`
 
 Reviewed preview:
 `https://timeproofs-git-site-agentready-global-trust-jeason1.vercel.app/`
@@ -434,8 +434,11 @@ Future base branch: `site-agentready-global-trust`
 Historical GLOBAL-004 reviewed public-content head:
 `11c488ff98ecb4509dd8bbf916840bf8c9edce77`
 
-Exact executable parent head:
+Previous GLOBAL-005 reconciliation head:
 `943d9fea90748a0496ce872dc48b14253eb3a16b`
+
+Exact executable parent head:
+`50415ac768194a1448cc1081b1b9a60b3b299b96`
 
 Future implementation branch: `site-agentready-global-docs-adoption`
 

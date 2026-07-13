@@ -115,8 +115,9 @@ assert.ok(workflow.includes("assert.equal(trustBatch?.stacked_on_batch, 'ARB-SIT
 assert.ok(workflow.includes("assert.equal(trustBatch?.pr_number, 136)"));
 assert.ok(workflow.includes("assert.equal(trustBatch?.stacked_execution_can_continue, true)"));
 assert.ok(workflow.includes("assert.equal(trustOwnerAcceptance?.reviewed_head, '11c488ff98ecb4509dd8bbf916840bf8c9edce77')"));
-assert.ok(workflow.includes("assert.equal(trustOwnerAcceptance?.current_reconciled_head, '943d9fea90748a0496ce872dc48b14253eb3a16b')"));
-assert.ok(workflow.includes("assert.equal(trustBatch?.stacked_child_head_sha, '943d9fea90748a0496ce872dc48b14253eb3a16b')"));
+assert.ok(workflow.includes("assert.equal(trustOwnerAcceptance?.previous_reconciled_head, '943d9fea90748a0496ce872dc48b14253eb3a16b')"));
+assert.ok(workflow.includes("assert.equal(trustOwnerAcceptance?.current_reconciled_head, '50415ac768194a1448cc1081b1b9a60b3b299b96')"));
+assert.ok(workflow.includes("assert.equal(trustBatch?.stacked_child_head_sha, '50415ac768194a1448cc1081b1b9a60b3b299b96')"));
 assert.ok(workflow.includes("assert.equal(docsBatch?.status, 'READY')"));
 assert.ok(workflow.includes("assert.equal(docsBatch?.spec_status, 'EXECUTION_READY')"));
 assert.ok(workflow.includes("assert.equal(docsBatch?.owner, 'CODEX_AND_JEASON')"));
@@ -124,14 +125,14 @@ assert.ok(workflow.includes("assert.equal(docsBatch?.base_branch, 'site-agentrea
 assert.ok(workflow.includes("assert.equal(docsBatch?.branch, 'site-agentready-global-docs-adoption')"));
 assert.ok(workflow.includes("assert.equal(docsBatch?.pr_title, 'site(docs): publish developer documentation and adoption foundation')"));
 assert.ok(workflow.includes("assert.equal(docsBatch?.stacked_on_batch, 'ARB-SITE-GLOBAL-004')"));
-assert.ok(workflow.includes("assert.equal(docsBatch?.stacked_base_head_sha, '943d9fea90748a0496ce872dc48b14253eb3a16b')"));
+assert.ok(workflow.includes("assert.equal(docsBatch?.stacked_base_head_sha, '50415ac768194a1448cc1081b1b9a60b3b299b96')"));
 assert.ok(workflow.includes("assert.equal(next?.batch?.id, 'ARB-SITE-GLOBAL-005')"));
 assert.ok(workflow.includes("assert.equal(next?.action_type, 'READY')"));
 assert.ok(workflow.includes("assert.equal(counts.execution_batches.immediately_executable, 1)"));
 assert.match(workflow, /assert\.match\(nextPrompt,\s*\/Repository: BACOUL\\\/timeproofs\/\)/);
 assert.match(workflow, /Batch ID: ARB-SITE-GLOBAL-005/);
 assert.match(workflow, /Base: site-agentready-global-trust/);
-assert.match(workflow, /Exact approved base head: 943d9fea90748a0496ce872dc48b14253eb3a16b/);
+assert.match(workflow, /Exact approved base head: 50415ac768194a1448cc1081b1b9a60b3b299b96/);
 assert.match(workflow, /Branch: site-agentready-global-docs-adoption/);
 assert.match(workflow, /Draft PR target: site-agentready-global-trust/);
 assert.match(workflow, /assert\.equal\(manifest\.community_license,\s*'Apache-2\.0'\)/);

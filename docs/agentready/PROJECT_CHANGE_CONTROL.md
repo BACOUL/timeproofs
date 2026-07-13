@@ -253,3 +253,29 @@ Reason:
 - `ARB-SITE-GLOBAL-004` remains `IN_REVIEW` and not `DONE`.
 - `ARB-SITE-GLOBAL-005` remains the selected `READY` / `EXECUTION_READY`
   executable batch.
+
+## ARB-SITE-GLOBAL-005 Child-Branch Base Reconciliation - 2026-07-13
+
+Status: RECORDED
+
+The previously recorded `ARB-SITE-GLOBAL-005` reconciliation head remains:
+
+`943d9fea90748a0496ce872dc48b14253eb3a16b`
+
+The actual executable parent head used to create
+`site-agentready-global-docs-adoption` is:
+
+`50415ac768194a1448cc1081b1b9a60b3b299b96`
+
+Reason:
+
+- The parent branch advanced by one canonical executable-base correction commit
+  after the previous generated prompt.
+- The future developer-documentation implementation must include the corrected
+  execution ledger, workflow guards, rebuild generator and generated
+  `NEXT_CODEX_PROMPT.md` update.
+- This reconciliation is recorded on the child branch and its draft PR only.
+- The public-content review head for `ARB-SITE-GLOBAL-004` remains
+  `11c488ff98ecb4509dd8bbf916840bf8c9edce77`.
+- No developer-documentation page implementation is included in this
+  reconciliation commit.

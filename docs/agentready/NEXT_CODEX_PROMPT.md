@@ -7,7 +7,7 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 Repository: BACOUL/timeproofs
 Base: site-agentready-global-trust
-Exact approved base head: 943d9fea90748a0496ce872dc48b14253eb3a16b
+Exact approved base head: 50415ac768194a1448cc1081b1b9a60b3b299b96
 Batch ID: ARB-SITE-GLOBAL-005
 Work item IDs: AR-SITE-GLOBAL-005
 Owner: CODEX_AND_JEASON
@@ -179,8 +179,9 @@ Authorized external actions:
 
 ## Preliminary Codex steps
 
-  - verify branch site-agentready-global-trust is at exact executable parent head 943d9fea90748a0496ce872dc48b14253eb3a16b
+  - verify branch site-agentready-global-trust is at exact executable parent head 50415ac768194a1448cc1081b1b9a60b3b299b96
   - confirm the accepted ARB-SITE-GLOBAL-004 public-content review head remains recorded as 11c488ff98ecb4509dd8bbf916840bf8c9edce77
+  - confirm the previous ARB-SITE-GLOBAL-005 reconciliation head remains recorded as 943d9fea90748a0496ce872dc48b14253eb3a16b
   - create branch site-agentready-global-docs-adoption from that exact parent head
   - open a draft PR targeting site-agentready-global-trust before broad page edits
   - inventory current developer documentation routes, scanner usage, CLI usage, GitHub Action usage, agentready.json documentation, examples, contribution guidance and troubleshooting copy

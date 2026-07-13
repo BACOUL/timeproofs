@@ -776,10 +776,12 @@ const docsAdoptionForbiddenActions = [
   "do not merge any site PR"
 ];
 const trustLegalReviewedPublicContentHead = "11c488ff98ecb4509dd8bbf916840bf8c9edce77";
-const trustLegalCurrentReconciledHead = "943d9fea90748a0496ce872dc48b14253eb3a16b";
+const trustLegalPreviousReconciledHead = "943d9fea90748a0496ce872dc48b14253eb3a16b";
+const trustLegalCurrentReconciledHead = "50415ac768194a1448cc1081b1b9a60b3b299b96";
 const docsAdoptionPreflight = [
   `verify branch site-agentready-global-trust is at exact executable parent head ${trustLegalCurrentReconciledHead}`,
   `confirm the accepted ARB-SITE-GLOBAL-004 public-content review head remains recorded as ${trustLegalReviewedPublicContentHead}`,
+  `confirm the previous ARB-SITE-GLOBAL-005 reconciliation head remains recorded as ${trustLegalPreviousReconciledHead}`,
   "create branch site-agentready-global-docs-adoption from that exact parent head",
   "open a draft PR targeting site-agentready-global-trust before broad page edits",
   "inventory current developer documentation routes, scanner usage, CLI usage, GitHub Action usage, agentready.json documentation, examples, contribution guidance and troubleshooting copy",
@@ -1282,6 +1284,7 @@ const batchDefinitions = [
         branch_reviewed: "site-agentready-global-trust",
         pr: 136,
         reviewed_head: trustLegalReviewedPublicContentHead,
+        previous_reconciled_head: trustLegalPreviousReconciledHead,
         current_reconciled_head: trustLegalCurrentReconciledHead,
         preview_url: "https://timeproofs-git-site-agentready-global-trust-jeason1.vercel.app/",
         company_trust_security_privacy_legal_foundation_accepted: true,
@@ -1325,11 +1328,12 @@ const batchDefinitions = [
         type: "stacked_executable_base_reconciliation",
         date: "2026-07-13",
         previous_public_content_review_head: trustLegalReviewedPublicContentHead,
+        previous_reconciled_head: trustLegalPreviousReconciledHead,
         actual_executable_parent_head: trustLegalCurrentReconciledHead,
         base_branch: "site-agentready-global-trust",
-        reason: "The parent branch advanced by the canonical owner-acceptance reconciliation commit; the GLOBAL-005 implementation branch must include that reconciliation, generated execution views and current workflow guards.",
+        reason: "The parent branch advanced by one canonical executable-base correction commit after the previous GLOBAL-005 reconciliation; the implementation branch must include the corrected execution ledger, workflow guards, rebuild generator and NEXT_CODEX_PROMPT update.",
         implementation_started: false,
-        branch_created: false,
+        branch_created: true,
         pr_created: false
       }
     ],
