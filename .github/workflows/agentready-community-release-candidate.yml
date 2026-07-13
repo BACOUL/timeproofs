@@ -79,25 +79,35 @@ jobs:
             docs/agentready/OWNER_AND_EXTERNAL_ACTIONS.md
           node --input-type=module <<'NODE'
           import assert from 'node:assert/strict';
-          import { generatedContents, readLedger, selectNextAction } from './scripts/agentready-execution-lib.mjs';
+          import { generatedContents, promptCounts, readLedger, selectNextAction } from './scripts/agentready-execution-lib.mjs';
 
           const ledger = readLedger();
           const batches = new Map((ledger.execution_batches || []).map((batch) => [batch.id, batch]));
           const completedBatch = batches.get('ARB-COM-002');
-          const nextBatch = batches.get('ARB-SITE-PREMIUM-001');
+          const premiumBatch = batches.get('ARB-SITE-PREMIUM-001');
+          const productBatch = batches.get('ARB-SITE-GLOBAL-002');
+          const standardBatch = batches.get('ARB-SITE-GLOBAL-003');
           const next = selectNextAction(ledger);
           const nextPrompt = generatedContents(ledger)['docs/agentready/NEXT_CODEX_PROMPT.md'];
+          const counts = promptCounts(ledger);
 
           assert.equal(completedBatch?.status, 'DONE');
-          assert.equal(nextBatch?.id, 'ARB-SITE-PREMIUM-001');
-          assert.equal(nextBatch?.status, 'READY');
-          assert.equal(nextBatch?.spec_status, 'EXECUTION_READY');
+          assert.equal(premiumBatch?.status, 'IN_REVIEW');
+          assert.equal(premiumBatch?.spec_status, 'EXECUTION_READY');
+          assert.equal(premiumBatch?.pr_number, 132);
+          assert.equal(productBatch?.status, 'IN_REVIEW');
+          assert.equal(productBatch?.spec_status, 'EXECUTION_READY');
+          assert.equal(productBatch?.pr_number, 134);
+          assert.equal(standardBatch?.status, 'PLANNED');
+          assert.equal(standardBatch?.spec_status, 'SKELETON');
           assert.equal(next?.kind, 'batch');
-          assert.equal(next?.batch?.id, 'ARB-SITE-PREMIUM-001');
-          assert.equal(next?.action_type, 'READY');
-          assert.match(nextPrompt, /Repository: BACOUL\/timeproofs/);
-          assert.match(nextPrompt, /Batch ID: ARB-SITE-PREMIUM-001/);
-          assert.match(nextPrompt, /site-agentready-premium-foundation/);
+          assert.equal(next?.batch?.id, 'ARB-SITE-GLOBAL-003');
+          assert.equal(next?.action_type, 'SPECIFICATION_REFINEMENT_REQUIRED');
+          assert.equal(counts.execution_batches.immediately_executable, 0);
+          assert.match(nextPrompt, /No CODEX execution batch is currently authorized/);
+          assert.match(nextPrompt, /ARB-SITE-GLOBAL-003/);
+          assert.match(nextPrompt, /not EXECUTION_READY/);
+          assert.doesNotMatch(nextPrompt, /Repository: BACOUL\/timeproofs/);
           NODE
 
       - name: Verify package metadata
