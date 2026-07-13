@@ -1,6 +1,6 @@
 # AgentReady Standard Foundation Evidence
 
-Status: OWNER REVIEW REQUIRED
+Status: OWNER REVIEW ACCEPTED - STACKED PR IN REVIEW
 Batch: ARB-SITE-GLOBAL-003
 PR: #135
 Base branch: site-agentready-global-product
@@ -9,6 +9,7 @@ Principal public-page implementation commit: c32d1134ce649dfdcaf99ed990f2e9a5f3b
 Public navigation correction commit: 149ef90f5fe1460e113dfbc079b0596fe538753e
 Evidence reconciliation commit: f46f060fdea15322ec48d55db983dbe50355611c
 Production-coherence page correction commits: e6ef4df6454d883083f81b31be70b6ef02dca2a0 and 77a5144061711f112ae87b7d4228b30f0d38a156
+Owner-reviewed public-content commit: 25636982cd944d3e947081740d5226f692c83741
 
 ## Source Inventory
 
@@ -90,6 +91,36 @@ Screenshot provenance: existing desktop, mobile and no-JavaScript screenshots we
 - The complete agentready.json public specification remains linked from agentready-docs.html.
 - Validation history: AgentReady Community Release Candidate workflow runs #116 through #119 completed successfully during the correction sequence.
 - All Vercel commit statuses completed successfully for the correction sequence.
+
+## Owner Review Acceptance
+
+Reviewer: JEASON
+
+Review date: 2026-07-13
+
+Production URL: https://timeproofs.io/
+
+Reviewed source branch: site-agentready-global-standard
+
+Reviewed public-content commit: 25636982cd944d3e947081740d5226f692c83741
+
+Recorded owner facts:
+
+- The production deployment was manually promoted and verified.
+- The homepage displays the new "Public method" presentation.
+- `agentready-docs.html` displays `agentready_version: "0.1"`.
+- `agentready-docs.html` displays `score: 72`.
+- `agentready-docs.html` displays `status: "Minor fixes"`.
+- JEASON accepts the visual and factual presentation of ARB-SITE-GLOBAL-003.
+- No claim of formal standards-body recognition, independent certification or guaranteed safety was approved.
+- No PR was merged.
+
+Canonical execution effect:
+
+- ARB-SITE-GLOBAL-003 remains `IN_REVIEW` because PR #135 is still open and unmerged.
+- The owner review is complete for stacked continuation purposes.
+- The batch is not `DONE` until its PR is merged and reconciled according to the canonical stacked-site policy.
+- Stacked execution may continue to ARB-SITE-GLOBAL-004 after canonical regeneration.
 
 ## Preview
 

@@ -464,9 +464,9 @@ Required evidence:
   - validator and deterministic regeneration results
 
 ### ARB-SITE-GLOBAL-004 - Publish company trust security privacy and legal foundation
-- Status: PLANNED
-- Spec status: SKELETON
-- Owner: CODEX
+- Status: READY
+- Spec status: EXECUTION_READY
+- Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Work items: AR-SITE-GLOBAL-004
@@ -476,11 +476,53 @@ Required evidence:
 - PR title: site(trust): publish company and legal foundation
 
 Deliverables:
-  - Publish company trust security privacy and legal foundation
+  - About and publisher page with factual project identity and no invented legal entity
+  - Trust Center hub linking security privacy terms legal disclosure limitations data-flow and support boundaries
+  - Security page explaining actual static local-first architecture threat boundaries and non-goals
+  - Responsible disclosure page using only a verified real contact path or clearly blocking publication until verified
+  - Privacy page distinguishing website browser scanner CLI GitHub Action npm package Vercel and GitHub data flows
+  - Terms and limitations pages distinguishing static analysis from runtime firewall IAM certification or safety guarantee
+  - Legal notice page with only approved publisher legal facts and TO_BE_COMPLETED where facts remain missing
+  - Data-flow explanation for browser scanner CLI GitHub Action npm package website hosting and public repository surfaces
+  - Contact and support boundary page without inventing support commitments or unapproved contact details
+  - Evidence register and validators for trust legal privacy security and claim accuracy
 Acceptance criteria:
-  - Publish company trust security privacy and legal foundation complete after preceding stacked site batch is reviewed
+  - publisher and project identity are factual and consistent across About Trust Legal Terms Privacy Security and footer surfaces
+  - no company legal entity office employee count customer partner certification audit insurance or standards-body recognition is invented
+  - contact details are published only when already approved and real; otherwise the page states that the channel is not yet public and records the blocker
+  - security explains the actual architecture and threat boundaries: static analysis local/browser-first behavior CLI local files GitHub Action local repository execution npm package and no hosted scanner requirement
+  - responsible disclosure provides a real usable contact path only if verified from an approved source such as SECURITY.md and owner confirmation
+  - privacy distinguishes browser scanner CLI GitHub Action npm package website hosting Vercel/GitHub logs and optional future Pro data flows
+  - local browser scanning claims are technically accurate and match the current HTML implementation: selected files are read locally, static examples may be fetched, no submitted endpoint is called and no selected file is uploaded by the static page
+  - no zero-data-collection claim is made; website hosting logs public npm counts public repository activity and voluntary feedback are described factually where applicable
+  - cookies analytics hosting logs and third-party processors are described factually and without retention periods unless current configuration or policy supports them
+  - retention periods are TO_BE_COMPLETED or omitted unless validated by current policy or configuration
+  - legal notice and terms distinguish publisher identity product status open-source Community components Apache-2.0 package boundary root repository licensing history and planned commercial services
+  - limitations explicitly state that AgentReady is static analysis and not a runtime firewall IAM system certification legal advice audit or safety guarantee
+  - Community and planned Pro claims remain consistent with the approved product and pricing pages: Community available free, Pro planned and not purchasable
+  - existing working scanners public routes shared shell navigation and footer remain functional
+  - public pages remain static mobile-friendly keyboard accessible usable without JavaScript for core content and free of horizontal overflow at 320 pixels
+  - no external font frontend framework analytics tracker telemetry account system billing system backend hosted scanner upload dependency or new processor is added
+  - no engine CLI package Action scoring severity or AR001 through AR010 semantic behavior changes occur
 Required evidence:
-  - Publish company trust security privacy and legal foundation evidence
+  - legal and trust source inventory
+  - stale and conflicting claim register
+  - publisher identity mapping with missing legal facts explicitly marked
+  - public route map and information architecture
+  - data-flow matrix for website browser scanner CLI GitHub Action npm package Vercel and GitHub
+  - processor and external-service inventory
+  - cookie and analytics audit
+  - privacy-claim audit including no zero-data-collection overclaim
+  - security-claim audit
+  - responsible-disclosure contact verification or blocker
+  - certification formal-standard and guaranteed-safety claim audit
+  - desktop and mobile screenshots
+  - keyboard accessibility report
+  - no-JavaScript evidence
+  - 320px overflow evidence
+  - CTA and internal-link report
+  - production or preview URL
+  - validator and deterministic regeneration results
 
 ### ARB-SITE-GLOBAL-005 - Publish developer documentation adoption examples and contribution foundation
 - Status: PLANNED
@@ -2736,8 +2778,8 @@ Required evidence:
 
 ### AR-SITE-GLOBAL-004 - Publish company trust security privacy and legal foundation
 - Type: CODEX_WORK_ITEM
-- Status: PLANNED
-- Owner: CODEX
+- Status: READY
+- Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Workstream: SITE
@@ -2746,11 +2788,53 @@ Required evidence:
 - Depends on: None
 
 Deliverables:
-  - Publish company trust security privacy and legal foundation
+  - About and publisher page with factual project identity and no invented legal entity
+  - Trust Center hub linking security privacy terms legal disclosure limitations data-flow and support boundaries
+  - Security page explaining actual static local-first architecture threat boundaries and non-goals
+  - Responsible disclosure page using only a verified real contact path or clearly blocking publication until verified
+  - Privacy page distinguishing website browser scanner CLI GitHub Action npm package Vercel and GitHub data flows
+  - Terms and limitations pages distinguishing static analysis from runtime firewall IAM certification or safety guarantee
+  - Legal notice page with only approved publisher legal facts and TO_BE_COMPLETED where facts remain missing
+  - Data-flow explanation for browser scanner CLI GitHub Action npm package website hosting and public repository surfaces
+  - Contact and support boundary page without inventing support commitments or unapproved contact details
+  - Evidence register and validators for trust legal privacy security and claim accuracy
 Acceptance criteria:
-  - Publish company trust security privacy and legal foundation complete after preceding stacked site batch is reviewed
+  - publisher and project identity are factual and consistent across About Trust Legal Terms Privacy Security and footer surfaces
+  - no company legal entity office employee count customer partner certification audit insurance or standards-body recognition is invented
+  - contact details are published only when already approved and real; otherwise the page states that the channel is not yet public and records the blocker
+  - security explains the actual architecture and threat boundaries: static analysis local/browser-first behavior CLI local files GitHub Action local repository execution npm package and no hosted scanner requirement
+  - responsible disclosure provides a real usable contact path only if verified from an approved source such as SECURITY.md and owner confirmation
+  - privacy distinguishes browser scanner CLI GitHub Action npm package website hosting Vercel/GitHub logs and optional future Pro data flows
+  - local browser scanning claims are technically accurate and match the current HTML implementation: selected files are read locally, static examples may be fetched, no submitted endpoint is called and no selected file is uploaded by the static page
+  - no zero-data-collection claim is made; website hosting logs public npm counts public repository activity and voluntary feedback are described factually where applicable
+  - cookies analytics hosting logs and third-party processors are described factually and without retention periods unless current configuration or policy supports them
+  - retention periods are TO_BE_COMPLETED or omitted unless validated by current policy or configuration
+  - legal notice and terms distinguish publisher identity product status open-source Community components Apache-2.0 package boundary root repository licensing history and planned commercial services
+  - limitations explicitly state that AgentReady is static analysis and not a runtime firewall IAM system certification legal advice audit or safety guarantee
+  - Community and planned Pro claims remain consistent with the approved product and pricing pages: Community available free, Pro planned and not purchasable
+  - existing working scanners public routes shared shell navigation and footer remain functional
+  - public pages remain static mobile-friendly keyboard accessible usable without JavaScript for core content and free of horizontal overflow at 320 pixels
+  - no external font frontend framework analytics tracker telemetry account system billing system backend hosted scanner upload dependency or new processor is added
+  - no engine CLI package Action scoring severity or AR001 through AR010 semantic behavior changes occur
 Required evidence:
-  - Publish company trust security privacy and legal foundation evidence
+  - legal and trust source inventory
+  - stale and conflicting claim register
+  - publisher identity mapping with missing legal facts explicitly marked
+  - public route map and information architecture
+  - data-flow matrix for website browser scanner CLI GitHub Action npm package Vercel and GitHub
+  - processor and external-service inventory
+  - cookie and analytics audit
+  - privacy-claim audit including no zero-data-collection overclaim
+  - security-claim audit
+  - responsible-disclosure contact verification or blocker
+  - certification formal-standard and guaranteed-safety claim audit
+  - desktop and mobile screenshots
+  - keyboard accessibility report
+  - no-JavaScript evidence
+  - 320px overflow evidence
+  - CTA and internal-link report
+  - production or preview URL
+  - validator and deterministic regeneration results
 
 ### AR-SITE-GLOBAL-005 - Publish developer documentation adoption examples and contribution foundation
 - Type: CODEX_WORK_ITEM

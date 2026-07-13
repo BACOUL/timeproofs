@@ -161,3 +161,35 @@ Canonical execution effect:
 - Neither batch is `DONE` until its PR is merged and reconciled.
 - The next site batch may only proceed through the canonical ledger and
   generated next-action process.
+
+## ARB-SITE-GLOBAL-003 Owner Review Acceptance - 2026-07-13
+
+Status: RECORDED
+
+On 2026-07-13, JEASON accepted the visual and factual presentation of
+`ARB-SITE-GLOBAL-003` for the current stacked public-standard foundation.
+
+Recorded facts:
+
+- Production URL reviewed: `https://timeproofs.io/`.
+- Reviewed source branch: `site-agentready-global-standard`.
+- Reviewed public-content commit:
+  `25636982cd944d3e947081740d5226f692c83741`.
+- The production deployment was manually promoted and verified.
+- The homepage displays the new "Public method" presentation.
+- `agentready-docs.html` displays `agentready_version: "0.1"`.
+- `agentready-docs.html` displays `score: 72`.
+- `agentready-docs.html` displays `status: "Minor fixes"`.
+- No claim of formal standards-body recognition, independent certification or
+  guaranteed safety was approved.
+- No PR was merged.
+
+Canonical execution effect:
+
+- `ARB-SITE-GLOBAL-003` remains `IN_REVIEW` because PR #135 is still open and
+  unmerged.
+- The owner review is complete for stacked-continuation purposes.
+- `ARB-SITE-GLOBAL-003` is not `DONE` until PR #135 is merged and reconciled.
+- Stacked execution may continue to the next canonical batch,
+  `ARB-SITE-GLOBAL-004`, if its specification is `EXECUTION_READY` and the
+  generated next action authorizes it.

@@ -5,56 +5,58 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 # Next Action
 
-Batch ID: ARB-SITE-GLOBAL-003
-Title: Publish AgentReady standard rules and governance foundation
-Action owner: JEASON
-Action type: REVIEW_OR_MERGE
-Status: IN_REVIEW
+Batch ID: ARB-SITE-GLOBAL-004
+Title: Publish company trust security privacy and legal foundation
+Action owner: CODEX_AND_JEASON
+Action type: READY
+Status: READY
 Specification: EXECUTION_READY
 Objective:
-Publish the public AgentReady standard, rule-code, severity, scoring, versioning, governance, namespace and reference-implementation foundation without changing engine, CLI, package, Action or runtime behavior.
+Publish the public AgentReady company, trust, security, privacy and legal foundation from verified repository facts without inventing legal identity, contact, certification, support or data-processing claims.
 
 Work items:
-  - AR-SITE-GLOBAL-003
+  - AR-SITE-GLOBAL-004
 
 Required evidence:
-  - source inventory for AgentReady definition AR001-AR010 severity scoring status versioning governance and reference implementation behavior
-  - conflict and stale-source register with acceptance requirements rather than guessed resolutions
-  - route map and information architecture for standard rules JSON examples resources and sample-report surfaces
-  - AR001 through AR010 mapping table to finding codes severity categories and current implementation coverage
-  - example provenance with fixture path command output and reproduction notes for every displayed score finding or JSON excerpt
-  - normative versus explanatory content review
-  - limitation and no-certification claim audit
-  - CTA and internal-link report
-  - desktop and mobile screenshots for every primary standard surface
+  - legal and trust source inventory
+  - stale and conflicting claim register
+  - publisher identity mapping with missing legal facts explicitly marked
+  - public route map and information architecture
+  - data-flow matrix for website browser scanner CLI GitHub Action npm package Vercel and GitHub
+  - processor and external-service inventory
+  - cookie and analytics audit
+  - privacy-claim audit including no zero-data-collection overclaim
+  - security-claim audit
+  - responsible-disclosure contact verification or blocker
+  - certification formal-standard and guaranteed-safety claim audit
+  - desktop and mobile screenshots
   - keyboard accessibility report
   - no-JavaScript evidence
   - 320px overflow evidence
-  - complete stacked preview URL
+  - CTA and internal-link report
+  - production or preview URL
   - validator and deterministic regeneration results
 
 Manual actions:
-  - JEASON reviews the AgentReady standard foundation preview and confirms no formal-standards or certification claim was introduced
+  - JEASON verifies publisher identity, legal notice facts, public contact paths and responsible-disclosure contact before final review
+  - JEASON reviews the complete trust/legal preview and confirms no invented legal, privacy, security, support, certification, audit or guarantee claim was introduced
 
 Authorized external actions:
-  - create real static public standard, rule, JSON, examples, resources and sample-report surfaces
-  - add factual local diagrams or static assets when they are derived from current authoritative documents
-  - add or update validators for the standard foundation pages
-  - update sitemap robots and internal links only for real routes created by this batch
+  - create or align static About Trust Security Responsible disclosure Privacy Terms Legal notice Limitations Data flow and Support boundary pages
+  - add factual local diagrams or static assets derived from current repository sources
+  - add or update validators for trust legal privacy security and claim accuracy
+  - update sitemap robots and internal links only for real routes created or aligned by this batch
 
 Forbidden actions:
-  - do not change engine behavior
-  - do not change CLI behavior
-  - do not add new AR rule semantics
-  - do not change scoring
-  - do not change severity unless separately approved through canonical change control
-  - do not perform any npm operation
-  - do not change Action metadata tags Releases or Marketplace state
-  - do not add billing accounts licensing backend hosted scanning telemetry or upload dependency
-  - do not invent customers testimonials logos benchmark results legal identities foundations committees standards bodies or certifications
-  - do not claim AgentReady has formal standards-body recognition
-  - do not claim guaranteed safety
-  - do not use external fonts frontend frameworks analytics trackers or telemetry
-  - do not silently change Community or Pro scope
+  - do not implement routes or systems outside the GLOBAL-004 trust legal privacy security and support scope
+  - do not invent publisher legal identity legal form registration number VAT address office employees customers partners certifications audits insurance or standards-body recognition
+  - do not publish unapproved contact details
+  - do not claim zero data collection across all surfaces
+  - do not state retention periods unless supported by current configuration or policy
+  - do not claim AgentReady is a runtime firewall IAM system legal advice audit certification or safety guarantee
+  - do not present Pro as purchasable or change Community and Pro scope
+  - do not add external fonts frontend frameworks analytics trackers telemetry account billing backend hosted scanning upload dependencies or new processors
+  - do not change engine CLI package Action scoring severity or AR001 through AR010 semantics
+  - do not perform npm tag Release Marketplace billing account licensing backend or runtime operations
   - do not merge any site PR
 
