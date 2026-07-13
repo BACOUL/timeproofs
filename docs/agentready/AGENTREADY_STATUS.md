@@ -8,7 +8,7 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 ## Summary
 - Total tasks: 207
 - Total weighted progress: 31/742 (4.2%)
-- Next action: ARB-SITE-GLOBAL-004 - Publish company trust security privacy and legal foundation
+- Next action: ARB-SITE-GLOBAL-005 - Publish developer documentation adoption examples and contribution foundation
 
 ## Detailed Work Items
 Total detailed Codex work items: 157
@@ -18,8 +18,8 @@ Remaining detailed Codex work items: 154
 ## Execution Batches
 Total planned Codex execution batches: 80
 Completed Codex execution batches: 5
-Execution batches currently in review: 3
-Execution batches not yet issued: 72
+Execution batches currently in review: 4
+Execution batches not yet issued: 71
 Immediately executable Codex prompts: 1
 Average work items per batch: 1.96
 Largest batch size: 6
@@ -37,7 +37,7 @@ Execution batches post-revenue: 1
 
 ## Prompt Day Capacity
 Community days at 5 prompts/day: 2
-Community days at 6 prompts/day: 2
+Community days at 6 prompts/day: 1
 Pro technical days at 5 prompts/day: 4
 Pro technical days at 6 prompts/day: 3
 First-sale days at 5 prompts/day: 7
@@ -73,8 +73,8 @@ Credible public value cases required: 1
 - M8 Category-building active: 0/98 (0%)
 
 ## Document Coverage
-Active documents discovered: 74
-Active documents covered: 74
+Active documents discovered: 75
+Active documents covered: 75
 Uncovered active documents: 0
 Historical documents excluded: 36
 Generated documents excluded: 6

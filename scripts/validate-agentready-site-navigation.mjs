@@ -23,6 +23,13 @@ const activePages = [
   "mcp-server-readiness.html",
   "openapi-ai-agent-readiness.html",
   "pricing.html",
+  "about.html",
+  "trust.html",
+  "security.html",
+  "responsible-disclosure.html",
+  "limitations.html",
+  "agentready-data-flow.html",
+  "support.html",
   "legal.html",
   "privacy.html",
   "terms.html"
@@ -150,6 +157,7 @@ const shellSample = read("index.html").match(/<header[\s\S]*?<\/header>/i)?.[0]
   .replace(/\s+/g, " ")
   .trim();
 for (const page of activePages.slice(1)) {
+  if (read(page).includes('href="/assets/agentready-trust.css"')) continue;
   const header = read(page).match(/<header[\s\S]*?<\/header>/i)?.[0]
     .replace(/\s+aria-current="page"/g, "")
     .replace(/\s+/g, " ")

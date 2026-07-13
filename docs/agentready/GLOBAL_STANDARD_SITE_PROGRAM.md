@@ -199,7 +199,7 @@ Current approved public-content head for the parent stack:
 `25636982cd944d3e947081740d5226f692c83741`
 
 Actual executable stacked base head for the future GLOBAL-004 branch:
-`405255d516d62504587410aa50386b3f3ecab389`
+`b0946d3fb4403b1281171dd955aa2438f733086a`
 
 Future implementation branch: `site-agentready-global-trust`
 
@@ -262,16 +262,20 @@ Authoritative or factual sources for the future trust/legal foundation are:
 
 ### Trust And Legal Gaps Or Conflicts
 
-- Publisher legal identity, legal form, professional address, SIREN/SIRET,
-  VAT number, publication director, hosting provider details and general
-  contact email are explicitly `TO_BE_COMPLETED` or draft-only. The future
-  implementation must not invent them.
-- `SECURITY.md` contains `security@timeproofs.io`; this may be used for
-  responsible disclosure only if JEASON confirms it is active and usable for
-  that public purpose.
-- `privacy.html` and `legal.html` still describe several production-launch
-  fields as incomplete. The trust/legal implementation must either complete
-  only verified facts or mark the exact blocker.
+- Owner-supplied facts now confirm the operator, publication director,
+  TimeProofs business name, legal form, SIREN, postal address, VAT regime and
+  public legal/privacy/reporting contact for the GLOBAL-004 public layer.
+- `contact@certif-scope.com` is the owner-confirmed public legal, privacy and
+  responsible-disclosure contact. Do not use `hello@timeproofs.io` or assume
+  `contact@timeproofs.io` is active.
+- Public business telephone, Vercel telephone number, exact TimeProofs Vercel
+  project configuration, Vercel log-retention periods and unsupported privacy
+  legal bases, recipients and retention details remain explicit blockers.
+- Earlier references to `security@timeproofs.io` are not sufficient for the
+  public responsible-disclosure channel after JEASON confirmed
+  `contact@certif-scope.com`.
+- `privacy.html` and `legal.html` must continue to distinguish verified facts
+  from final-reliance blockers until all missing facts are completed.
 - `LEGAL_IP_AND_LIABILITY_STRATEGY.md` still says no final legal license was
   chosen in that earlier context. This is stale for the Community npm package
   boundary after the later Apache-2.0 decision, while the root repository
@@ -371,6 +375,162 @@ The future implementation must record:
 - 320px overflow evidence;
 - CTA and internal-link report;
 - preview or production URL;
+- validator and deterministic regeneration results.
+
+## ARB-SITE-GLOBAL-004 Owner Acceptance
+
+Status: OWNER REVIEW ACCEPTED - STACKED PR IN REVIEW
+
+Acceptance date: 2026-07-13
+
+Owner reviewer: JEASON
+
+Reviewed branch: `site-agentready-global-trust`
+
+Reviewed PR: #136
+
+Reviewed head:
+`11c488ff98ecb4509dd8bbf916840bf8c9edce77`
+
+Current reconciled PR #136 head:
+`943d9fea90748a0496ce872dc48b14253eb3a16b`
+
+Reviewed preview:
+`https://timeproofs-git-site-agentready-global-trust-jeason1.vercel.app/`
+
+Accepted facts:
+
+- The company, trust, security, privacy and legal foundation is accepted as a
+  stacked implementation layer.
+- Owner-confirmed publisher and contact facts are accepted.
+- No invented legal, privacy, security, audit, certification, support or
+  guaranteed-safety claim was identified.
+- Unresolved telephone, Vercel configuration, retention, legal bases,
+  recipients and retention details remain recorded as final-reliance blockers.
+- This acceptance is not legal advice or final legal certification.
+- No PR was merged.
+
+Canonical effect:
+
+- `ARB-SITE-GLOBAL-004` remains `IN_REVIEW` because PR #136 is open and
+  unmerged.
+- The owner review is complete for stacked-continuation purposes.
+- `ARB-SITE-GLOBAL-004` is not `DONE` until PR #136 is merged and reconciled.
+- Stacked execution may continue to `ARB-SITE-GLOBAL-005` through the
+  canonical generated prompt.
+- The reviewed public-content head is retained as historical owner-review
+  evidence. The executable parent head for `ARB-SITE-GLOBAL-005` is the current
+  reconciled PR #136 head because it includes the owner-acceptance
+  reconciliation, generated execution views and workflow guards.
+
+## ARB-SITE-GLOBAL-005 Specification Refinement
+
+Status: EXECUTION_READY SPECIFICATION ONLY
+
+Refinement date: 2026-07-13
+
+Future base branch: `site-agentready-global-trust`
+
+Historical GLOBAL-004 reviewed public-content head:
+`11c488ff98ecb4509dd8bbf916840bf8c9edce77`
+
+Exact executable parent head:
+`943d9fea90748a0496ce872dc48b14253eb3a16b`
+
+Future implementation branch: `site-agentready-global-docs-adoption`
+
+Future draft PR target: `site-agentready-global-trust`
+
+Future PR title: `site(docs): publish developer documentation and adoption foundation`
+
+Objective: publish developer documentation, adoption, examples and contribution
+paths without changing engine, CLI, package, Action, scoring, rule semantics,
+npm, tags, releases, Marketplace, billing, accounts, backend or runtime
+behavior.
+
+### Future Developer Documentation Surfaces
+
+The future implementation must create or align these public routes and
+surfaces:
+
+- `agentready-docs.html` - developer documentation hub and start page;
+- `agentready.html` - browser OpenAPI scanner usage and local-first guidance;
+- `agentready-mcp.html` - browser MCP scanner usage and accepted input format;
+- `agentready-ci.html` - GitHub Action installation, policy behavior and
+  immutable pinning;
+- `agentready-json.html` - agentready.json and report interpretation;
+- `agentready-examples.html` - reproducible OpenAPI and MCP examples;
+- `agentready-resources.html` - links between product, standard, trust and
+  developer resources;
+- `agentready-sample-report.html` - report walkthrough and output fields;
+- `agentready-cli.html` - CLI install and command reference;
+- `agentready-action.html` - Action setup details if separate from the CI page;
+- `agentready-adoption.html` - adoption path from browser scan to repository CI;
+- `agentready-contributing.html` - contribution process and boundaries;
+- `agentready-troubleshooting.html` - troubleshooting and limitations;
+- `sitemap.xml` and internal links only for real routes created or aligned by
+  the batch.
+
+### Future Developer Documentation Acceptance Requirements
+
+The future implementation must satisfy all of the following:
+
+1. Developer entry points route users to browser scanner, CLI, GitHub Action,
+   reports, examples, standard and trust surfaces.
+2. Browser scanner guidance preserves real OpenAPI and MCP local-first scanner
+   behavior.
+3. CLI documentation covers only currently implemented installation and command
+   behavior for `@timeproofs/agentready@alpha`.
+4. GitHub Action documentation uses current Marketplace facts, immutable Action
+   tag and full-SHA pinning guidance.
+5. The canonical consumer workflow declares only `permissions: contents: read`
+   unless a clearly scoped example requires otherwise.
+6. `agentready.json` and Markdown report explanations match the current
+   public schema and real outputs.
+7. OpenAPI and MCP examples use reproducible repository fixtures, commands and
+   outputs.
+8. Adoption guidance requires no signup, upload, token, account, backend or
+   Pro purchase.
+9. Contribution guidance is limited to real repository capabilities and makes
+   no unsupported support, response-time, partnership, governance or maintainer
+   acceptance promise.
+10. Troubleshooting covers invalid input, policy failure, output paths, path
+    spaces, local environment issues and GitHub Action failures without CLI
+    behavior changes.
+11. Limitations remain explicit: AgentReady is static analysis, not a runtime
+    firewall, IAM system, legal advice, audit, certification or safety
+    guarantee.
+12. Community remains free and available; Pro remains planned and not
+    purchasable; Team, Agency and Enterprise are not presented as available.
+13. Examples preserve approved package, npm alpha, Action and latest-exception
+    facts without performing distribution operations.
+14. Pages remain static, mobile-friendly, keyboard accessible, usable without
+    JavaScript for core content and free of 320px overflow.
+15. No engine, CLI, package, Action, scoring, severity, AR001-AR010 semantic,
+    billing, account, backend, hosted scanning or runtime behavior changes
+    occur.
+
+### Future Developer Documentation Evidence Requirements
+
+The future implementation must record:
+
+- developer documentation source inventory;
+- route map for docs, scanner, CLI, Action, report, examples, adoption,
+  contribution, troubleshooting and limitations surfaces;
+- real OpenAPI and MCP example provenance with fixture paths, commands, scores,
+  statuses and output excerpts;
+- CLI command reference audit;
+- GitHub Action usage and immutable pinning audit;
+- `agentready.json` and Markdown report interpretation audit;
+- contribution process source mapping and unsupported-promise audit;
+- troubleshooting and limitations audit;
+- Community and planned Pro consistency audit;
+- CTA and internal-link report;
+- desktop and mobile screenshots;
+- keyboard accessibility report;
+- no-JavaScript evidence;
+- 320px overflow evidence;
+- preview URL;
 - validator and deterministic regeneration results.
 
 ### Developers And Adoption

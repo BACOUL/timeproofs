@@ -464,7 +464,7 @@ Required evidence:
   - validator and deterministic regeneration results
 
 ### ARB-SITE-GLOBAL-004 - Publish company trust security privacy and legal foundation
-- Status: READY
+- Status: IN_REVIEW
 - Spec status: EXECUTION_READY
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
@@ -474,7 +474,7 @@ Required evidence:
 - Depends on tasks: None
 - Branch: site-agentready-global-trust
 - PR title: site(trust): publish company and legal foundation
-
+- PR: #136
 Deliverables:
   - About and publisher page with factual project identity and no invented legal entity
   - Trust Center hub linking security privacy terms legal disclosure limitations data-flow and support boundaries
@@ -525,9 +525,9 @@ Required evidence:
   - validator and deterministic regeneration results
 
 ### ARB-SITE-GLOBAL-005 - Publish developer documentation adoption examples and contribution foundation
-- Status: PLANNED
-- Spec status: SKELETON
-- Owner: CODEX
+- Status: READY
+- Spec status: EXECUTION_READY
+- Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Work items: AR-SITE-GLOBAL-005
@@ -537,11 +537,52 @@ Required evidence:
 - PR title: site(docs): publish developer documentation and adoption foundation
 
 Deliverables:
-  - Publish developer documentation adoption examples and contribution foundation
+  - Developer documentation hub aligned with product, standard, trust and Community surfaces
+  - Browser scanner usage guidance for OpenAPI and MCP local scans without replacing the real scanners
+  - CLI installation and command reference for the published Community package
+  - GitHub Action installation guide with immutable tag and full-SHA pinning guidance
+  - agentready.json and Markdown report interpretation guide
+  - OpenAPI and MCP examples using reproducible fixtures and real output provenance
+  - Integration and adoption guide from first browser scan to CLI and repository CI
+  - Contribution process guidance based only on current repository capabilities
+  - Troubleshooting and limitations guide that preserves static-analysis boundaries
+  - Cross-links between product, standard, trust, examples, report and developer documentation surfaces
+  - Evidence register and validator for the developer documentation and adoption foundation
 Acceptance criteria:
-  - Publish developer documentation adoption examples and contribution foundation complete after preceding stacked site batch is reviewed
+  - developer documentation entry points clearly route users to browser scanner, CLI, GitHub Action, reports, examples, standard and trust surfaces
+  - browser scanner usage covers OpenAPI and MCP local-first behavior without replacing or degrading the real scanners
+  - CLI documentation covers install and npx usage for @timeproofs/agentready@alpha and command behavior that exists today
+  - GitHub Action documentation uses the public Marketplace Action, immutable Action tag and full-SHA pinning guidance already recorded in governance evidence
+  - the canonical consumer workflow declares only permissions: contents: read unless a documented example explicitly requires otherwise
+  - agentready.json and Markdown report interpretation explain score, status, findings, AR rule codes, PASS/FAIL and policy limitations consistently with the standard pages
+  - OpenAPI and MCP examples use reproducible fixtures, commands and outputs from the current repository rather than invented findings
+  - integration and adoption guidance moves from browser scan to CLI to repository CI without requiring signup, upload, token, account, backend or Pro purchase
+  - contribution guidance is limited to real repository capabilities and does not promise governance processes, response times, partnerships or maintainer acceptance that do not exist
+  - troubleshooting guidance covers invalid input, policy failure, output paths, path spaces, local environment issues and GitHub Action failures without changing CLI behavior
+  - limitations remain explicit: AgentReady is static analysis, not a runtime firewall, IAM system, legal advice, audit, certification or guaranteed safety
+  - Community is shown as free and available; Pro remains planned and not purchasable; Team, Agency and Enterprise are not presented as available
+  - all public examples preserve the approved package version, npm alpha tag, Action facts and documented latest exception without performing npm, tag, Release or Marketplace operations
+  - page bodies use varied premium documentation composition and remain mobile-friendly, keyboard accessible, usable without JavaScript for core content and free of 320px horizontal overflow
+  - all CTA destinations and internal links resolve to existing or newly created real routes with no dead placeholder links presented as finished pages
+  - no engine, CLI, package, Action, scoring, severity, AR001 through AR010 semantic, billing, account, backend, hosted scanning or runtime behavior changes occur
 Required evidence:
-  - Publish developer documentation adoption examples and contribution foundation evidence
+  - developer documentation source inventory
+  - route map for docs scanner CLI Action report examples adoption contribution troubleshooting and limitations surfaces
+  - real OpenAPI example provenance with fixture path command score status and output excerpt
+  - real MCP example provenance with fixture path command score status and output excerpt
+  - CLI command reference audit against current CLI behavior
+  - GitHub Action usage and immutable pinning audit against current Marketplace evidence
+  - agentready.json and Markdown report interpretation audit
+  - contribution process source mapping and unsupported-promise audit
+  - troubleshooting and limitations audit
+  - Community and planned Pro consistency audit
+  - CTA and internal-link report
+  - desktop and mobile screenshots
+  - keyboard accessibility report
+  - no-JavaScript evidence
+  - 320px overflow evidence
+  - preview URL
+  - validator and deterministic regeneration results
 
 ### ARB-SITE-GLOBAL-006 - Publish SEO GEO AI-first and international foundation
 - Status: PLANNED
@@ -2778,7 +2819,7 @@ Required evidence:
 
 ### AR-SITE-GLOBAL-004 - Publish company trust security privacy and legal foundation
 - Type: CODEX_WORK_ITEM
-- Status: READY
+- Status: IN_REVIEW
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
@@ -2786,7 +2827,7 @@ Required evidence:
 - Weight: 5
 - Execution batch: ARB-SITE-GLOBAL-004
 - Depends on: None
-
+- PR: #136
 Deliverables:
   - About and publisher page with factual project identity and no invented legal entity
   - Trust Center hub linking security privacy terms legal disclosure limitations data-flow and support boundaries
@@ -2838,8 +2879,8 @@ Required evidence:
 
 ### AR-SITE-GLOBAL-005 - Publish developer documentation adoption examples and contribution foundation
 - Type: CODEX_WORK_ITEM
-- Status: PLANNED
-- Owner: CODEX
+- Status: READY
+- Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Workstream: SITE
@@ -2848,11 +2889,52 @@ Required evidence:
 - Depends on: None
 
 Deliverables:
-  - Publish developer documentation adoption examples and contribution foundation
+  - Developer documentation hub aligned with product, standard, trust and Community surfaces
+  - Browser scanner usage guidance for OpenAPI and MCP local scans without replacing the real scanners
+  - CLI installation and command reference for the published Community package
+  - GitHub Action installation guide with immutable tag and full-SHA pinning guidance
+  - agentready.json and Markdown report interpretation guide
+  - OpenAPI and MCP examples using reproducible fixtures and real output provenance
+  - Integration and adoption guide from first browser scan to CLI and repository CI
+  - Contribution process guidance based only on current repository capabilities
+  - Troubleshooting and limitations guide that preserves static-analysis boundaries
+  - Cross-links between product, standard, trust, examples, report and developer documentation surfaces
+  - Evidence register and validator for the developer documentation and adoption foundation
 Acceptance criteria:
-  - Publish developer documentation adoption examples and contribution foundation complete after preceding stacked site batch is reviewed
+  - developer documentation entry points clearly route users to browser scanner, CLI, GitHub Action, reports, examples, standard and trust surfaces
+  - browser scanner usage covers OpenAPI and MCP local-first behavior without replacing or degrading the real scanners
+  - CLI documentation covers install and npx usage for @timeproofs/agentready@alpha and command behavior that exists today
+  - GitHub Action documentation uses the public Marketplace Action, immutable Action tag and full-SHA pinning guidance already recorded in governance evidence
+  - the canonical consumer workflow declares only permissions: contents: read unless a documented example explicitly requires otherwise
+  - agentready.json and Markdown report interpretation explain score, status, findings, AR rule codes, PASS/FAIL and policy limitations consistently with the standard pages
+  - OpenAPI and MCP examples use reproducible fixtures, commands and outputs from the current repository rather than invented findings
+  - integration and adoption guidance moves from browser scan to CLI to repository CI without requiring signup, upload, token, account, backend or Pro purchase
+  - contribution guidance is limited to real repository capabilities and does not promise governance processes, response times, partnerships or maintainer acceptance that do not exist
+  - troubleshooting guidance covers invalid input, policy failure, output paths, path spaces, local environment issues and GitHub Action failures without changing CLI behavior
+  - limitations remain explicit: AgentReady is static analysis, not a runtime firewall, IAM system, legal advice, audit, certification or guaranteed safety
+  - Community is shown as free and available; Pro remains planned and not purchasable; Team, Agency and Enterprise are not presented as available
+  - all public examples preserve the approved package version, npm alpha tag, Action facts and documented latest exception without performing npm, tag, Release or Marketplace operations
+  - page bodies use varied premium documentation composition and remain mobile-friendly, keyboard accessible, usable without JavaScript for core content and free of 320px horizontal overflow
+  - all CTA destinations and internal links resolve to existing or newly created real routes with no dead placeholder links presented as finished pages
+  - no engine, CLI, package, Action, scoring, severity, AR001 through AR010 semantic, billing, account, backend, hosted scanning or runtime behavior changes occur
 Required evidence:
-  - Publish developer documentation adoption examples and contribution foundation evidence
+  - developer documentation source inventory
+  - route map for docs scanner CLI Action report examples adoption contribution troubleshooting and limitations surfaces
+  - real OpenAPI example provenance with fixture path command score status and output excerpt
+  - real MCP example provenance with fixture path command score status and output excerpt
+  - CLI command reference audit against current CLI behavior
+  - GitHub Action usage and immutable pinning audit against current Marketplace evidence
+  - agentready.json and Markdown report interpretation audit
+  - contribution process source mapping and unsupported-promise audit
+  - troubleshooting and limitations audit
+  - Community and planned Pro consistency audit
+  - CTA and internal-link report
+  - desktop and mobile screenshots
+  - keyboard accessibility report
+  - no-JavaScript evidence
+  - 320px overflow evidence
+  - preview URL
+  - validator and deterministic regeneration results
 
 ### AR-SITE-GLOBAL-006 - Publish SEO GEO AI-first and international foundation
 - Type: CODEX_WORK_ITEM

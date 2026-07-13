@@ -640,6 +640,183 @@ const trustFoundationResponseFormat = [
   "confirmation that no implementation branch beyond the authorized batch branch was created",
   "confirmation that no npm tag Release Marketplace engine CLI billing account package or runtime operation occurred"
 ];
+const docsAdoptionSources = [
+  doc.master,
+  doc.sequence,
+  doc.decision,
+  doc.change,
+  doc.globalSite,
+  doc.ia,
+  doc.copy,
+  doc.adoption,
+  doc.cli,
+  doc.actionUsage,
+  doc.action,
+  doc.json,
+  doc.rules,
+  doc.commercial,
+  doc.mcp,
+  doc.privacy,
+  "README.md",
+  "agentready-docs.html",
+  "agentready.html",
+  "agentready-mcp.html",
+  "agentready-ci.html",
+  "agentready-json.html",
+  "agentready-examples.html",
+  "agentready-resources.html",
+  "agentready-sample-report.html",
+  "action.yml",
+  "package.json"
+];
+const docsAdoptionDeliverables = [
+  "Developer documentation hub aligned with product, standard, trust and Community surfaces",
+  "Browser scanner usage guidance for OpenAPI and MCP local scans without replacing the real scanners",
+  "CLI installation and command reference for the published Community package",
+  "GitHub Action installation guide with immutable tag and full-SHA pinning guidance",
+  "agentready.json and Markdown report interpretation guide",
+  "OpenAPI and MCP examples using reproducible fixtures and real output provenance",
+  "Integration and adoption guide from first browser scan to CLI and repository CI",
+  "Contribution process guidance based only on current repository capabilities",
+  "Troubleshooting and limitations guide that preserves static-analysis boundaries",
+  "Cross-links between product, standard, trust, examples, report and developer documentation surfaces",
+  "Evidence register and validator for the developer documentation and adoption foundation"
+];
+const docsAdoptionSurfaces = [
+  "agentready-docs.html",
+  "agentready.html",
+  "agentready-mcp.html",
+  "agentready-ci.html",
+  "agentready-json.html",
+  "agentready-examples.html",
+  "agentready-resources.html",
+  "agentready-sample-report.html",
+  "agentready-cli.html",
+  "agentready-action.html",
+  "agentready-adoption.html",
+  "agentready-contributing.html",
+  "agentready-troubleshooting.html",
+  "sitemap.xml",
+  "shared developer documentation assets where necessary"
+];
+const docsAdoptionAcceptance = [
+  "developer documentation entry points clearly route users to browser scanner, CLI, GitHub Action, reports, examples, standard and trust surfaces",
+  "browser scanner usage covers OpenAPI and MCP local-first behavior without replacing or degrading the real scanners",
+  "CLI documentation covers install and npx usage for @timeproofs/agentready@alpha and command behavior that exists today",
+  "GitHub Action documentation uses the public Marketplace Action, immutable Action tag and full-SHA pinning guidance already recorded in governance evidence",
+  "the canonical consumer workflow declares only permissions: contents: read unless a documented example explicitly requires otherwise",
+  "agentready.json and Markdown report interpretation explain score, status, findings, AR rule codes, PASS/FAIL and policy limitations consistently with the standard pages",
+  "OpenAPI and MCP examples use reproducible fixtures, commands and outputs from the current repository rather than invented findings",
+  "integration and adoption guidance moves from browser scan to CLI to repository CI without requiring signup, upload, token, account, backend or Pro purchase",
+  "contribution guidance is limited to real repository capabilities and does not promise governance processes, response times, partnerships or maintainer acceptance that do not exist",
+  "troubleshooting guidance covers invalid input, policy failure, output paths, path spaces, local environment issues and GitHub Action failures without changing CLI behavior",
+  "limitations remain explicit: AgentReady is static analysis, not a runtime firewall, IAM system, legal advice, audit, certification or guaranteed safety",
+  "Community is shown as free and available; Pro remains planned and not purchasable; Team, Agency and Enterprise are not presented as available",
+  "all public examples preserve the approved package version, npm alpha tag, Action facts and documented latest exception without performing npm, tag, Release or Marketplace operations",
+  "page bodies use varied premium documentation composition and remain mobile-friendly, keyboard accessible, usable without JavaScript for core content and free of 320px horizontal overflow",
+  "all CTA destinations and internal links resolve to existing or newly created real routes with no dead placeholder links presented as finished pages",
+  "no engine, CLI, package, Action, scoring, severity, AR001 through AR010 semantic, billing, account, backend, hosted scanning or runtime behavior changes occur"
+];
+const docsAdoptionCommands = [
+  "node scripts/validate-agentready-site-navigation.mjs",
+  "node scripts/validate-agentready-developer-docs-foundation-site.mjs",
+  "node scripts/validate-agentready-strategy-docs.mjs",
+  "node scripts/validate-agentready-execution-system.mjs",
+  "node cli/tests/run-agentready-community-release-workflow-test.mjs",
+  "node cli/tests/run-agentready-cli-tests.mjs",
+  "node cli/tests/run-agentready-action-smoke-test.mjs",
+  "git diff --check"
+];
+const docsAdoptionEvidence = [
+  "developer documentation source inventory",
+  "route map for docs scanner CLI Action report examples adoption contribution troubleshooting and limitations surfaces",
+  "real OpenAPI example provenance with fixture path command score status and output excerpt",
+  "real MCP example provenance with fixture path command score status and output excerpt",
+  "CLI command reference audit against current CLI behavior",
+  "GitHub Action usage and immutable pinning audit against current Marketplace evidence",
+  "agentready.json and Markdown report interpretation audit",
+  "contribution process source mapping and unsupported-promise audit",
+  "troubleshooting and limitations audit",
+  "Community and planned Pro consistency audit",
+  "CTA and internal-link report",
+  "desktop and mobile screenshots",
+  "keyboard accessibility report",
+  "no-JavaScript evidence",
+  "320px overflow evidence",
+  "preview URL",
+  "validator and deterministic regeneration results"
+];
+const docsAdoptionForbiddenPaths = [
+  "agentready-core/**",
+  "cli/** where behavior would change",
+  "bin/**",
+  "package.json",
+  "action.yml",
+  ".github/workflows/** unless a separately identified stale validation guard requires a separately authorized correction",
+  "packaging/**",
+  "server/**",
+  "api/**",
+  "billing/**",
+  "account/**",
+  "LICENSE",
+  "NOTICE"
+];
+const docsAdoptionForbiddenActions = [
+  "do not modify the AgentReady engine",
+  "do not modify CLI behavior",
+  "do not modify scoring, severity or AR001 through AR010 semantics",
+  "do not modify package.json or action.yml",
+  "do not perform npm operations or change package publication state",
+  "do not create, move or delete tags",
+  "do not create or modify GitHub Releases or Marketplace operations",
+  "do not implement billing, accounts, backend, hosted scanning, telemetry or upload systems",
+  "do not implement the full SEO, GEO or international batch",
+  "do not present Pro as purchasable or Team, Agency or Enterprise as available",
+  "do not invent customers, benchmarks, certifications, standards-body recognition, support commitments or governance processes",
+  "do not merge any site PR"
+];
+const trustLegalReviewedPublicContentHead = "11c488ff98ecb4509dd8bbf916840bf8c9edce77";
+const trustLegalCurrentReconciledHead = "943d9fea90748a0496ce872dc48b14253eb3a16b";
+const docsAdoptionPreflight = [
+  `verify branch site-agentready-global-trust is at exact executable parent head ${trustLegalCurrentReconciledHead}`,
+  `confirm the accepted ARB-SITE-GLOBAL-004 public-content review head remains recorded as ${trustLegalReviewedPublicContentHead}`,
+  "create branch site-agentready-global-docs-adoption from that exact parent head",
+  "open a draft PR targeting site-agentready-global-trust before broad page edits",
+  "inventory current developer documentation routes, scanner usage, CLI usage, GitHub Action usage, agentready.json documentation, examples, contribution guidance and troubleshooting copy",
+  "inventory real OpenAPI and MCP fixtures and commands before displaying any score, finding, report excerpt or JSON excerpt",
+  "verify PR #132, #134, #135 and #136 remain open draft and unmerged",
+  "confirm no npm, Action, tag, Release, Marketplace, engine, CLI, package, billing, account, backend or runtime operation is required"
+];
+const docsAdoptionManualActions = [
+  "JEASON reviews the combined developer documentation and adoption preview",
+  "JEASON confirms contribution and troubleshooting copy does not promise unsupported support, governance or partner processes"
+];
+const docsAdoptionAuthorizedActions = [
+  "create or align static developer documentation, browser scanner usage, CLI, GitHub Action, report, examples, adoption, contribution and troubleshooting surfaces",
+  "add factual local diagrams or static assets derived from current repository sources",
+  "add or update validators for developer documentation, examples, adoption and contribution accuracy",
+  "update sitemap, robots and internal links only for real routes created or aligned by this batch"
+];
+const docsAdoptionResponseFormat = [
+  "branch name",
+  "draft PR number and URL",
+  "base branch and exact approved base head",
+  "exact head SHA",
+  "files changed grouped by developer docs routes shared assets validators governance and evidence",
+  "summary of each developer documentation, scanner, CLI, Action, report, examples, adoption, contribution and troubleshooting route",
+  "exact source of every displayed example score finding report excerpt or JSON excerpt",
+  "CLI and GitHub Action fact mapping",
+  "agentready.json and report interpretation mapping",
+  "contribution and troubleshooting boundary audit",
+  "local validation results",
+  "GitHub workflow results",
+  "preview URL",
+  "desktop and mobile evidence paths",
+  "keyboard no-JavaScript and 320px overflow evidence",
+  "remaining owner-review points",
+  "confirmation that no npm tag Release Marketplace engine CLI billing account package or runtime operation occurred",
+  "confirmation that no PR was merged"
+];
 
 for (const [id, title, branch, prTitle] of [
   ["AR-SITE-GLOBAL-003", "Publish AgentReady standard rules and governance foundation", "site-agentready-global-standard", "site(standard): publish AgentReady standard foundation"],
@@ -650,33 +827,34 @@ for (const [id, title, branch, prTitle] of [
 ]) {
   const isStandardFoundation = id === "AR-SITE-GLOBAL-003";
   const isTrustFoundation = id === "AR-SITE-GLOBAL-004";
+  const isDocsAdoption = id === "AR-SITE-GLOBAL-005";
   codex("AR-SITE-PREMIUM-EPIC", id, "M3", "BEFORE_COMMUNITY_PUBLICATION", "SITE", title, {
   decision_ids: [...decisionIds, "DL-2026-07-13-GLOBAL-STANDARD-SITE-BEFORE-VALIDATION"],
-  status: isStandardFoundation ? "IN_REVIEW" : isTrustFoundation ? "READY" : "PLANNED",
-  spec_status: isStandardFoundation || isTrustFoundation ? "EXECUTION_READY" : "SKELETON",
-  owner: isStandardFoundation || isTrustFoundation ? "CODEX_AND_JEASON" : "CODEX",
+  status: isStandardFoundation || isTrustFoundation ? "IN_REVIEW" : isDocsAdoption ? "READY" : "PLANNED",
+  spec_status: isStandardFoundation || isTrustFoundation || isDocsAdoption ? "EXECUTION_READY" : "SKELETON",
+  owner: isStandardFoundation || isTrustFoundation || isDocsAdoption ? "CODEX_AND_JEASON" : "CODEX",
   weight: 5,
-  pr_number: isStandardFoundation ? 135 : undefined,
-  source_documents: isStandardFoundation ? standardFoundationSources : isTrustFoundation ? trustFoundationSources : [doc.globalSite, doc.ia, doc.copy],
+  pr_number: isStandardFoundation ? 135 : isTrustFoundation ? 136 : undefined,
+  source_documents: isStandardFoundation ? standardFoundationSources : isTrustFoundation ? trustFoundationSources : isDocsAdoption ? docsAdoptionSources : [doc.globalSite, doc.ia, doc.copy],
   branch,
   pr_title: prTitle,
-  allowed_paths: isStandardFoundation || isTrustFoundation ? ["assets/**", "*.html", "docs/agentready/**", "scripts/**", "sitemap.xml", "robots.txt"] : ["assets/**", "*.html", "docs/agentready/**", "scripts/**", "sitemap.xml"],
-  forbidden_paths: isStandardFoundation ? standardFoundationForbiddenPaths : isTrustFoundation ? trustFoundationForbiddenPaths : ["agentready-core/**", "bin/**", "package.json", "action.yml", ".github/workflows/**", "server/**", "api/**", "LICENSE", "NOTICE"],
-  deliverables: isStandardFoundation ? standardFoundationDeliverables : isTrustFoundation ? trustFoundationDeliverables : [title],
-  estimated_files_or_surfaces: isStandardFoundation ? standardFoundationSurfaces : isTrustFoundation ? trustFoundationSurfaces : undefined,
-  acceptance_criteria: isStandardFoundation ? standardFoundationAcceptance : isTrustFoundation ? trustFoundationAcceptance : [`${title} complete after preceding stacked site batch is reviewed`],
-  required_commands: isStandardFoundation ? standardFoundationCommands : isTrustFoundation ? trustFoundationCommands : undefined,
-  independent_test_plan: isStandardFoundation ? standardFoundationTests : isTrustFoundation ? trustFoundationTests : undefined,
-  required_evidence: isStandardFoundation ? standardFoundationEvidence : isTrustFoundation ? trustFoundationEvidence : undefined,
-  manual_actions: isStandardFoundation ? ["JEASON reviews the AgentReady standard foundation preview and confirms no formal-standards or certification claim was introduced"] : isTrustFoundation ? ["JEASON verifies publisher identity, legal notice facts, public contact paths and responsible-disclosure contact before final review", "JEASON reviews the complete trust/legal preview and confirms no invented legal, privacy, security, support, certification, audit or guarantee claim was introduced"] : undefined,
-  authorized_actions: isStandardFoundation ? ["create real static public standard, rule, JSON, examples, resources and sample-report surfaces", "add factual local diagrams or static assets when they are derived from current authoritative documents", "add or update validators for the standard foundation pages", "update sitemap robots and internal links only for real routes created by this batch"] : isTrustFoundation ? ["create or align static About Trust Security Responsible disclosure Privacy Terms Legal notice Limitations Data flow and Support boundary pages", "add factual local diagrams or static assets derived from current repository sources", "add or update validators for trust legal privacy security and claim accuracy", "update sitemap robots and internal links only for real routes created or aligned by this batch"] : undefined,
-  forbidden_actions: isStandardFoundation ? standardFoundationForbiddenActions : isTrustFoundation ? trustFoundationForbiddenActions : undefined,
-  codex_preflight_steps: isStandardFoundation ? standardFoundationPreflight : isTrustFoundation ? trustFoundationPreflight : undefined,
+  allowed_paths: isStandardFoundation || isTrustFoundation || isDocsAdoption ? ["assets/**", "*.html", "docs/agentready/**", "scripts/**", "sitemap.xml", "robots.txt"] : ["assets/**", "*.html", "docs/agentready/**", "scripts/**", "sitemap.xml"],
+  forbidden_paths: isStandardFoundation ? standardFoundationForbiddenPaths : isTrustFoundation ? trustFoundationForbiddenPaths : isDocsAdoption ? docsAdoptionForbiddenPaths : ["agentready-core/**", "bin/**", "package.json", "action.yml", ".github/workflows/**", "server/**", "api/**", "LICENSE", "NOTICE"],
+  deliverables: isStandardFoundation ? standardFoundationDeliverables : isTrustFoundation ? trustFoundationDeliverables : isDocsAdoption ? docsAdoptionDeliverables : [title],
+  estimated_files_or_surfaces: isStandardFoundation ? standardFoundationSurfaces : isTrustFoundation ? trustFoundationSurfaces : isDocsAdoption ? docsAdoptionSurfaces : undefined,
+  acceptance_criteria: isStandardFoundation ? standardFoundationAcceptance : isTrustFoundation ? trustFoundationAcceptance : isDocsAdoption ? docsAdoptionAcceptance : [`${title} complete after preceding stacked site batch is reviewed`],
+  required_commands: isStandardFoundation ? standardFoundationCommands : isTrustFoundation ? trustFoundationCommands : isDocsAdoption ? docsAdoptionCommands : undefined,
+  independent_test_plan: isStandardFoundation ? standardFoundationTests : isTrustFoundation ? trustFoundationTests : isDocsAdoption ? docsAdoptionAcceptance : undefined,
+  required_evidence: isStandardFoundation ? standardFoundationEvidence : isTrustFoundation ? trustFoundationEvidence : isDocsAdoption ? docsAdoptionEvidence : undefined,
+  manual_actions: isStandardFoundation ? ["JEASON reviews the AgentReady standard foundation preview and confirms no formal-standards or certification claim was introduced"] : isTrustFoundation ? ["JEASON verifies publisher identity, legal notice facts, public contact paths and responsible-disclosure contact before final review", "JEASON reviews the complete trust/legal preview and confirms no invented legal, privacy, security, support, certification, audit or guarantee claim was introduced"] : isDocsAdoption ? docsAdoptionManualActions : undefined,
+  authorized_actions: isStandardFoundation ? ["create real static public standard, rule, JSON, examples, resources and sample-report surfaces", "add factual local diagrams or static assets when they are derived from current authoritative documents", "add or update validators for the standard foundation pages", "update sitemap robots and internal links only for real routes created by this batch"] : isTrustFoundation ? ["create or align static About Trust Security Responsible disclosure Privacy Terms Legal notice Limitations Data flow and Support boundary pages", "add factual local diagrams or static assets derived from current repository sources", "add or update validators for trust legal privacy security and claim accuracy", "update sitemap robots and internal links only for real routes created or aligned by this batch"] : isDocsAdoption ? docsAdoptionAuthorizedActions : undefined,
+  forbidden_actions: isStandardFoundation ? standardFoundationForbiddenActions : isTrustFoundation ? trustFoundationForbiddenActions : isDocsAdoption ? docsAdoptionForbiddenActions : undefined,
+  codex_preflight_steps: isStandardFoundation ? standardFoundationPreflight : isTrustFoundation ? trustFoundationPreflight : isDocsAdoption ? docsAdoptionPreflight : undefined,
   external_verifications: isTrustFoundation ? ["JEASON verifies any public contact path before it is presented as usable", "JEASON or legal counsel verifies publisher identity legal notice and privacy facts before final review"] : undefined,
-  final_response_format: isTrustFoundation ? trustFoundationResponseFormat : undefined,
-  evidence: isStandardFoundation ? [{ type: "draft_pr_implementation_review", pr: 135, branch: "site-agentready-global-standard", status: "IN_REVIEW", implemented: true, merge_authorized: false, evidence_document: "docs/agentready/SITE_GLOBAL_STANDARD_FOUNDATION_EVIDENCE.md", routes: ["agentready-standard.html", "agentready-rule-codes.html", "agentready-json.html", "agentready-examples.html", "agentready-resources.html", "agentready-sample-report.html"], validator: "scripts/validate-agentready-standard-foundation-site.mjs" }] : undefined,
-  rollback_boundary: isStandardFoundation ? "Revert ARB-SITE-GLOBAL-003 without reverting PR #132 shell or PR #134 product foundation." : isTrustFoundation ? "Revert ARB-SITE-GLOBAL-004 without reverting PR #132 shell, PR #134 product foundation or PR #135 standard foundation." : `Revert ${id} without reverting earlier stacked site batches.`,
-  scope_justification: isStandardFoundation ? "Weight 5 justified: one reviewable public standard foundation spanning standard overview, rule dictionary, scoring, versioning, governance and reference implementation surfaces with one stacked preview and rollback boundary." : isTrustFoundation ? "Weight 5 justified: one reviewable trust/legal foundation spanning publisher identity, security, privacy, disclosure, terms, data flows and support boundaries with one stacked preview and rollback boundary." : "Weight 5 justified: planned global-site batch retained as a non-executable skeleton until the preceding stacked batch is reviewed."
+  final_response_format: isTrustFoundation ? trustFoundationResponseFormat : isDocsAdoption ? docsAdoptionResponseFormat : undefined,
+  evidence: isStandardFoundation ? [{ type: "draft_pr_implementation_review", pr: 135, branch: "site-agentready-global-standard", status: "IN_REVIEW", implemented: true, merge_authorized: false, evidence_document: "docs/agentready/SITE_GLOBAL_STANDARD_FOUNDATION_EVIDENCE.md", routes: ["agentready-standard.html", "agentready-rule-codes.html", "agentready-json.html", "agentready-examples.html", "agentready-resources.html", "agentready-sample-report.html"], validator: "scripts/validate-agentready-standard-foundation-site.mjs" }] : isTrustFoundation ? [{ type: "draft_pr_implementation_review", pr: 136, branch: "site-agentready-global-trust", status: "IN_REVIEW", implemented: true, merge_authorized: false, evidence_document: "docs/agentready/SITE_GLOBAL_TRUST_LEGAL_FOUNDATION_EVIDENCE.md", routes: ["about.html", "trust.html", "security.html", "responsible-disclosure.html", "privacy.html", "terms.html", "legal.html", "limitations.html", "agentready-data-flow.html", "support.html"], validator: "scripts/validate-agentready-trust-legal-foundation-site.mjs", preview_url: "https://timeproofs-git-site-agentready-global-trust-jeason1.vercel.app/", owner_review_required: true, batch_done: false }] : undefined,
+  rollback_boundary: isStandardFoundation ? "Revert ARB-SITE-GLOBAL-003 without reverting PR #132 shell or PR #134 product foundation." : isTrustFoundation ? "Revert ARB-SITE-GLOBAL-004 without reverting PR #132 shell, PR #134 product foundation or PR #135 standard foundation." : isDocsAdoption ? "Revert ARB-SITE-GLOBAL-005 without reverting PR #132 shell, PR #134 product foundation, PR #135 standard foundation or PR #136 trust/legal foundation." : `Revert ${id} without reverting earlier stacked site batches.`,
+  scope_justification: isStandardFoundation ? "Weight 5 justified: one reviewable public standard foundation spanning standard overview, rule dictionary, scoring, versioning, governance and reference implementation surfaces with one stacked preview and rollback boundary." : isTrustFoundation ? "Weight 5 justified: one reviewable trust/legal foundation spanning publisher identity, security, privacy, disclosure, terms, data flows and support boundaries with one stacked preview and rollback boundary." : isDocsAdoption ? "Weight 5 justified: one reviewable developer-documentation and adoption foundation spanning scanner usage, CLI, Action, report, examples, contribution and troubleshooting surfaces with one stacked preview and rollback boundary." : "Weight 5 justified: planned global-site batch retained as a non-executable skeleton until the preceding stacked batch is reviewed."
   });
 }
 codex("AR-SITE-PREMIUM-EPIC", "AR-SITE-PREMIUM-002", "M3", "BEFORE_COMMUNITY_PUBLICATION", "SITE", "Redesign homepage and core product pages", {
@@ -993,7 +1171,7 @@ const batchDefinitions = [
     stacked_base_pr: 134,
     stacked_base_head_sha: "1a71cb469e608d548b42c5884a4165563216733b",
     stacked_child_pr: 135,
-    stacked_child_head_sha: "25636982cd944d3e947081740d5226f692c83741",
+    stacked_child_head_sha: "b0946d3fb4403b1281171dd955aa2438f733086a",
     depends_on_batches: ["ARB-SITE-GLOBAL-002"],
     evidence: [
       {
@@ -1037,12 +1215,13 @@ const batchDefinitions = [
         stacked_execution_can_continue: true
       }
     ],
-    notes: "PR #135 implements the AgentReady standard foundation and remains open and unmerged. JEASON accepted the visual and factual presentation on 2026-07-13, including the manually promoted production deployment, but this does not mark the batch DONE because the stacked PR has not been merged and reconciled. Stacked execution may continue to ARB-SITE-GLOBAL-004."
+    notes: "PR #135 implements the AgentReady standard foundation and remains open and unmerged. JEASON accepted the visual and factual presentation on 2026-07-13 at public-content commit 25636982cd944d3e947081740d5226f692c83741, including the manually promoted production deployment, but this does not mark the batch DONE because the stacked PR has not been merged and reconciled. The final parent PR #135 head used to create ARB-SITE-GLOBAL-004 is b0946d3fb4403b1281171dd955aa2438f733086a. Stacked execution may continue to ARB-SITE-GLOBAL-004."
   }],
   ["ARB-SITE-GLOBAL-004", "Publish company trust security privacy and legal foundation", ["AR-SITE-GLOBAL-004"], {
-    status: "READY",
+    status: "IN_REVIEW",
     spec_status: "EXECUTION_READY",
     owner: "CODEX_AND_JEASON",
+    pr_number: 136,
     objective: "Publish the public AgentReady company, trust, security, privacy and legal foundation from verified repository facts without inventing legal identity, contact, certification, support or data-processing claims.",
     base_branch: "site-agentready-global-standard",
     pr_base_branch: "site-agentready-global-standard",
@@ -1062,23 +1241,125 @@ const batchDefinitions = [
     rollback_boundary: "Revert ARB-SITE-GLOBAL-004 without reverting PR #132 shell, PR #134 product foundation or PR #135 standard foundation.",
     scope_justification: "Weight 5 justified: one reviewable trust/legal foundation spanning publisher identity, security, privacy, responsible disclosure, terms, data flows and support boundaries with one stacked preview and rollback boundary.",
     stacked_execution_authorized: true,
+    stacked_execution_can_continue: true,
     stacked_on_batch: "ARB-SITE-GLOBAL-003",
     stacked_base_pr: 135,
-    stacked_base_head_sha: "405255d516d62504587410aa50386b3f3ecab389",
+    stacked_base_head_sha: "b0946d3fb4403b1281171dd955aa2438f733086a",
+    stacked_child_pr: 136,
+    stacked_child_branch: "site-agentready-global-trust",
+    stacked_child_head_sha: trustLegalCurrentReconciledHead,
     depends_on_batches: ["ARB-SITE-GLOBAL-003"],
     evidence: [
       {
-        type: "specification_refinement",
+        type: "stacked_base_reconciliation",
         date: "2026-07-13",
-        source_inventory: "Publisher, trust, security, privacy, responsible-disclosure, terms, legal, data-flow, support, IP/license and limitation sources inventoried in GLOBAL_STANDARD_SITE_PROGRAM.md.",
+        previous_recorded_base_head: "405255d516d62504587410aa50386b3f3ecab389",
+        actual_parent_pr_135_head: "b0946d3fb4403b1281171dd955aa2438f733086a",
+        owner_reviewed_public_content_commit: "25636982cd944d3e947081740d5226f692c83741",
+        reconciled_on_child_branch_only: true,
+        branch_created: true,
+        pr_created: true,
+        pr: 136
+      },
+      {
+        type: "draft_pr_implementation_review",
+        pr: 136,
+        branch: "site-agentready-global-trust",
+        status: "IN_REVIEW",
+        implemented: true,
+        merge_authorized: false,
+        batch_done: false,
+        evidence_document: "docs/agentready/SITE_GLOBAL_TRUST_LEGAL_FOUNDATION_EVIDENCE.md",
+        preview_url: "https://timeproofs-git-site-agentready-global-trust-jeason1.vercel.app/",
+        routes: ["about.html", "trust.html", "security.html", "responsible-disclosure.html", "privacy.html", "terms.html", "legal.html", "limitations.html", "agentready-data-flow.html", "support.html"],
+        validator: "scripts/validate-agentready-trust-legal-foundation-site.mjs",
+        owner_review_required: true
+      },
+      {
+        type: "owner_review_acceptance",
+        date: "2026-07-13",
+        reviewer: "JEASON",
+        branch_reviewed: "site-agentready-global-trust",
+        pr: 136,
+        reviewed_head: trustLegalReviewedPublicContentHead,
+        current_reconciled_head: trustLegalCurrentReconciledHead,
+        preview_url: "https://timeproofs-git-site-agentready-global-trust-jeason1.vercel.app/",
+        company_trust_security_privacy_legal_foundation_accepted: true,
+        stacked_implementation_layer_accepted: true,
+        owner_confirmed_publisher_and_contact_facts_accepted: true,
+        invented_legal_privacy_security_audit_certification_support_or_guaranteed_safety_claims_identified: false,
+        unresolved_final_reliance_blockers: [
+          "public business telephone",
+          "Vercel project configuration",
+          "Vercel log retention",
+          "unsupported legal bases",
+          "unsupported recipients",
+          "unsupported retention details"
+        ],
+        legal_advice_or_final_legal_certification: false,
+        pr_merged: false,
+        merge_authorized: false,
+        batch_done: false,
+        owner_review_complete_for_stacked_continuation: true,
+        stacked_execution_can_continue: true
+      }
+    ],
+    notes: `PR #136 implements the trust/legal foundation on site-agentready-global-trust and remains open and unmerged. JEASON accepted the company, trust, security, privacy and legal foundation as a stacked implementation layer at public-content review head ${trustLegalReviewedPublicContentHead}. The current reconciled PR #136 head used as the executable parent for ARB-SITE-GLOBAL-005 is ${trustLegalCurrentReconciledHead}. This is not legal advice or final legal certification. The batch remains IN_REVIEW and is not DONE until PR #136 is merged and reconciled, but owner review is complete for stacked continuation to ARB-SITE-GLOBAL-005.`
+  }],
+  ["ARB-SITE-GLOBAL-005", "Publish developer documentation adoption examples and contribution foundation", ["AR-SITE-GLOBAL-005"], {
+    status: "READY",
+    spec_status: "EXECUTION_READY",
+    owner: "CODEX_AND_JEASON",
+    objective: "Publish developer documentation, adoption, examples and contribution paths for AgentReady Community without changing engine, CLI, package, Action, scoring, rule semantics, billing, accounts, backend or runtime behavior.",
+    base_branch: "site-agentready-global-trust",
+    pr_base_branch: "site-agentready-global-trust",
+    branch: "site-agentready-global-docs-adoption",
+    pr_title: "site(docs): publish developer documentation and adoption foundation",
+    stacked_execution_authorized: true,
+    stacked_on_batch: "ARB-SITE-GLOBAL-004",
+    stacked_base_pr: 136,
+    stacked_base_head_sha: trustLegalCurrentReconciledHead,
+    depends_on_batches: ["ARB-SITE-GLOBAL-004"],
+    evidence: [
+      {
+        type: "stacked_executable_base_reconciliation",
+        date: "2026-07-13",
+        previous_public_content_review_head: trustLegalReviewedPublicContentHead,
+        actual_executable_parent_head: trustLegalCurrentReconciledHead,
+        base_branch: "site-agentready-global-trust",
+        reason: "The parent branch advanced by the canonical owner-acceptance reconciliation commit; the GLOBAL-005 implementation branch must include that reconciliation, generated execution views and current workflow guards.",
         implementation_started: false,
         branch_created: false,
         pr_created: false
       }
     ],
-    notes: "The owner-approved public-content commit is 25636982cd944d3e947081740d5226f692c83741. The executable stacked base for ARB-SITE-GLOBAL-004 is 405255d516d62504587410aa50386b3f3ecab389 because it contains the owner-acceptance/specification refinement and the matching CI guard. If PR #135 advances before execution, the base must be reconciled again before implementation."
+    deliverables: docsAdoptionDeliverables,
+    acceptance_criteria: docsAdoptionAcceptance,
+    independent_test_plan: [
+      "inventory current developer documentation, scanner, CLI, Action, example, contribution and troubleshooting sources before page edits",
+      "run real OpenAPI and MCP example commands before displaying any score, finding, report excerpt or JSON excerpt",
+      "verify CLI documentation against current CLI tests and behavior without modifying CLI implementation",
+      "verify GitHub Action documentation against action.yml, Marketplace evidence and immutable tag/full-SHA governance records",
+      "verify agentready.json and Markdown report explanations against AGENTREADY_JSON_SPEC.md and real generated outputs",
+      "verify contribution and support copy avoids unsupported process, support, SLA, governance, partnership or maintainer-acceptance promises",
+      "validate all CTA destinations and internal links",
+      "test desktop, mobile, keyboard, no-JavaScript and 320px layouts for every developer documentation route",
+      "verify no engine, CLI, package, Action, npm, tag, Release, Marketplace, billing, account, backend or runtime behavior changed",
+      "rerun deterministic governance regeneration and execution-system validators"
+    ],
+    required_commands: docsAdoptionCommands,
+    required_evidence: docsAdoptionEvidence,
+    manual_actions: docsAdoptionManualActions,
+    authorized_actions: docsAdoptionAuthorizedActions,
+    forbidden_actions: docsAdoptionForbiddenActions,
+    codex_preflight_steps: docsAdoptionPreflight,
+    final_response_format: docsAdoptionResponseFormat,
+    source_documents: docsAdoptionSources,
+    allowed_paths: ["assets/**", "*.html", "docs/agentready/**", "scripts/**", "sitemap.xml", "robots.txt"],
+    forbidden_paths: docsAdoptionForbiddenPaths,
+    rollback_boundary: "Revert ARB-SITE-GLOBAL-005 without reverting PR #132 shell, PR #134 product foundation, PR #135 standard foundation or PR #136 trust/legal foundation.",
+    scope_justification: "Weight 5 justified: one reviewable developer-documentation and adoption foundation spanning scanner usage, CLI, Action, report, examples, contribution and troubleshooting surfaces with one stacked preview and rollback boundary."
   }],
-  ["ARB-SITE-GLOBAL-005", "Publish developer documentation adoption examples and contribution foundation", ["AR-SITE-GLOBAL-005"], { status: "PLANNED", spec_status: "SKELETON", base_branch: "site-agentready-global-trust", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-004", depends_on_batches: ["ARB-SITE-GLOBAL-004"] }],
   ["ARB-SITE-GLOBAL-006", "Publish SEO GEO AI-first and international foundation", ["AR-SITE-GLOBAL-006"], { status: "PLANNED", spec_status: "SKELETON", base_branch: "site-agentready-global-docs-adoption", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-005", depends_on_batches: ["ARB-SITE-GLOBAL-005"] }],
   ["ARB-SITE-GLOBAL-007", "Validate complete global standard site", ["AR-SITE-GLOBAL-007"], { status: "PLANNED", spec_status: "SKELETON", owner: "CODEX_AND_JEASON", base_branch: "site-agentready-global-discovery", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-006", depends_on_batches: ["ARB-SITE-GLOBAL-006"] }],
   ["ARB-COM-003", "Validate public Community installation", ["AR-COM-008"], { depends_on_batches: ["ARB-SITE-GLOBAL-007"] }],

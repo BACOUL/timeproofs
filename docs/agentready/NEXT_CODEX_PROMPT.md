@@ -6,17 +6,17 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 # Next Codex Prompt
 
 Repository: BACOUL/timeproofs
-Base: site-agentready-global-standard
-Exact approved base head: 405255d516d62504587410aa50386b3f3ecab389
-Batch ID: ARB-SITE-GLOBAL-004
-Work item IDs: AR-SITE-GLOBAL-004
+Base: site-agentready-global-trust
+Exact approved base head: 943d9fea90748a0496ce872dc48b14253eb3a16b
+Batch ID: ARB-SITE-GLOBAL-005
+Work item IDs: AR-SITE-GLOBAL-005
 Owner: CODEX_AND_JEASON
 Milestone: M3
 Horizon: BEFORE_COMMUNITY_PUBLICATION
-Objective: Publish the public AgentReady company, trust, security, privacy and legal foundation from verified repository facts without inventing legal identity, contact, certification, support or data-processing claims.
-Branch: site-agentready-global-trust
-PR title: site(trust): publish company and legal foundation
-Draft PR target: site-agentready-global-standard
+Objective: Publish developer documentation, adoption, examples and contribution paths for AgentReady Community without changing engine, CLI, package, Action, scoring, rule semantics, billing, accounts, backend or runtime behavior.
+Branch: site-agentready-global-docs-adoption
+PR title: site(docs): publish developer documentation and adoption foundation
+Draft PR target: site-agentready-global-trust
 
 Documents sources:
   - docs/agentready/AGENTREADY_MASTER_PLAN.md
@@ -25,53 +25,60 @@ Documents sources:
   - docs/agentready/PROJECT_CHANGE_CONTROL.md
   - docs/agentready/GLOBAL_STANDARD_SITE_PROGRAM.md
   - docs/agentready/PUBLIC_SITE_INFORMATION_ARCHITECTURE.md
-  - docs/agentready/PREMIUM_SITE_REQUIREMENTS.md
   - docs/agentready/SITE_COPY_GUIDE.md
-  - docs/agentready/LEGAL_IP_AND_LIABILITY_STRATEGY.md
-  - docs/agentready/LEGAL_PRIVACY_AND_COOKIE_REQUIREMENTS.md
-  - docs/agentready/PRIVACY_TELEMETRY_SUPPORT_AND_TRUST_MODEL.md
-  - docs/agentready/COMMUNITY_PUBLICATION_POLICY.md
-  - docs/agentready/COMMUNITY_LICENSE_DECISION.md
+  - docs/agentready/DISTRIBUTION_ADOPTION_AND_STANDARDIZATION_STRATEGY.md
+  - docs/agentready/CLI_PUBLIC_DISTRIBUTION.md
   - docs/agentready/GITHUB_ACTION_USAGE.md
   - docs/agentready/GITHUB_ACTION_VERSIONING.md
   - docs/agentready/AGENTREADY_JSON_SPEC.md
+  - docs/agentready/AGENTREADY_RULE_CODES.md
+  - docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md
+  - docs/agentready/MCP_VERSION_COMPATIBILITY_POLICY.md
+  - docs/agentready/PRIVACY_TELEMETRY_SUPPORT_AND_TRUST_MODEL.md
   - README.md
-  - SECURITY.md
-  - privacy.html
-  - legal.html
-  - terms.html
-  - package.json
+  - agentready-docs.html
+  - agentready.html
+  - agentready-mcp.html
+  - agentready-ci.html
+  - agentready-json.html
+  - agentready-examples.html
+  - agentready-resources.html
+  - agentready-sample-report.html
   - action.yml
-  - LICENSE
+  - package.json
 
 Dependencies:
-  - ARB-SITE-GLOBAL-003
+  - ARB-SITE-GLOBAL-004
 
 Deliverables:
-  - About and publisher page with factual project identity and no invented legal entity
-  - Trust Center hub linking security privacy terms legal disclosure limitations data-flow and support boundaries
-  - Security page explaining actual static local-first architecture threat boundaries and non-goals
-  - Responsible disclosure page using only a verified real contact path or clearly blocking publication until verified
-  - Privacy page distinguishing website browser scanner CLI GitHub Action npm package Vercel and GitHub data flows
-  - Terms and limitations pages distinguishing static analysis from runtime firewall IAM certification or safety guarantee
-  - Legal notice page with only approved publisher legal facts and TO_BE_COMPLETED where facts remain missing
-  - Data-flow explanation for browser scanner CLI GitHub Action npm package website hosting and public repository surfaces
-  - Contact and support boundary page without inventing support commitments or unapproved contact details
-  - Evidence register and validators for trust legal privacy security and claim accuracy
+  - Developer documentation hub aligned with product, standard, trust and Community surfaces
+  - Browser scanner usage guidance for OpenAPI and MCP local scans without replacing the real scanners
+  - CLI installation and command reference for the published Community package
+  - GitHub Action installation guide with immutable tag and full-SHA pinning guidance
+  - agentready.json and Markdown report interpretation guide
+  - OpenAPI and MCP examples using reproducible fixtures and real output provenance
+  - Integration and adoption guide from first browser scan to CLI and repository CI
+  - Contribution process guidance based only on current repository capabilities
+  - Troubleshooting and limitations guide that preserves static-analysis boundaries
+  - Cross-links between product, standard, trust, examples, report and developer documentation surfaces
+  - Evidence register and validator for the developer documentation and adoption foundation
 
 Routes or surfaces:
-  - about.html
-  - trust.html
-  - security.html
-  - responsible-disclosure.html
-  - privacy.html
-  - terms.html
-  - legal.html
-  - limitations.html
-  - agentready-data-flow.html
-  - support.html
+  - agentready-docs.html
+  - agentready.html
+  - agentready-mcp.html
+  - agentready-ci.html
+  - agentready-json.html
+  - agentready-examples.html
+  - agentready-resources.html
+  - agentready-sample-report.html
+  - agentready-cli.html
+  - agentready-action.html
+  - agentready-adoption.html
+  - agentready-contributing.html
+  - agentready-troubleshooting.html
   - sitemap.xml
-  - shared trust/legal assets where needed
+  - shared developer documentation assets where necessary
 
 Allowed paths:
   - assets/**
@@ -87,123 +94,117 @@ Forbidden paths:
   - bin/**
   - package.json
   - action.yml
+  - .github/workflows/** unless a separately identified stale validation guard requires a separately authorized correction
   - packaging/**
   - server/**
   - api/**
   - billing/**
   - account/**
-  - .github/workflows/** unless a separately identified stale validation guard requires a separately authorized correction
   - LICENSE
   - NOTICE
 
 Acceptance criteria by work item:
-  - AR-SITE-GLOBAL-004: publisher and project identity are factual and consistent across About Trust Legal Terms Privacy Security and footer surfaces; no company legal entity office employee count customer partner certification audit insurance or standards-body recognition is invented; contact details are published only when already approved and real; otherwise the page states that the channel is not yet public and records the blocker; security explains the actual architecture and threat boundaries: static analysis local/browser-first behavior CLI local files GitHub Action local repository execution npm package and no hosted scanner requirement; responsible disclosure provides a real usable contact path only if verified from an approved source such as SECURITY.md and owner confirmation; privacy distinguishes browser scanner CLI GitHub Action npm package website hosting Vercel/GitHub logs and optional future Pro data flows; local browser scanning claims are technically accurate and match the current HTML implementation: selected files are read locally, static examples may be fetched, no submitted endpoint is called and no selected file is uploaded by the static page; no zero-data-collection claim is made; website hosting logs public npm counts public repository activity and voluntary feedback are described factually where applicable; cookies analytics hosting logs and third-party processors are described factually and without retention periods unless current configuration or policy supports them; retention periods are TO_BE_COMPLETED or omitted unless validated by current policy or configuration; legal notice and terms distinguish publisher identity product status open-source Community components Apache-2.0 package boundary root repository licensing history and planned commercial services; limitations explicitly state that AgentReady is static analysis and not a runtime firewall IAM system certification legal advice audit or safety guarantee; Community and planned Pro claims remain consistent with the approved product and pricing pages: Community available free, Pro planned and not purchasable; existing working scanners public routes shared shell navigation and footer remain functional; public pages remain static mobile-friendly keyboard accessible usable without JavaScript for core content and free of horizontal overflow at 320 pixels; no external font frontend framework analytics tracker telemetry account system billing system backend hosted scanner upload dependency or new processor is added; no engine CLI package Action scoring severity or AR001 through AR010 semantic behavior changes occur
+  - AR-SITE-GLOBAL-005: developer documentation entry points clearly route users to browser scanner, CLI, GitHub Action, reports, examples, standard and trust surfaces; browser scanner usage covers OpenAPI and MCP local-first behavior without replacing or degrading the real scanners; CLI documentation covers install and npx usage for @timeproofs/agentready@alpha and command behavior that exists today; GitHub Action documentation uses the public Marketplace Action, immutable Action tag and full-SHA pinning guidance already recorded in governance evidence; the canonical consumer workflow declares only permissions: contents: read unless a documented example explicitly requires otherwise; agentready.json and Markdown report interpretation explain score, status, findings, AR rule codes, PASS/FAIL and policy limitations consistently with the standard pages; OpenAPI and MCP examples use reproducible fixtures, commands and outputs from the current repository rather than invented findings; integration and adoption guidance moves from browser scan to CLI to repository CI without requiring signup, upload, token, account, backend or Pro purchase; contribution guidance is limited to real repository capabilities and does not promise governance processes, response times, partnerships or maintainer acceptance that do not exist; troubleshooting guidance covers invalid input, policy failure, output paths, path spaces, local environment issues and GitHub Action failures without changing CLI behavior; limitations remain explicit: AgentReady is static analysis, not a runtime firewall, IAM system, legal advice, audit, certification or guaranteed safety; Community is shown as free and available; Pro remains planned and not purchasable; Team, Agency and Enterprise are not presented as available; all public examples preserve the approved package version, npm alpha tag, Action facts and documented latest exception without performing npm, tag, Release or Marketplace operations; page bodies use varied premium documentation composition and remain mobile-friendly, keyboard accessible, usable without JavaScript for core content and free of 320px horizontal overflow; all CTA destinations and internal links resolve to existing or newly created real routes with no dead placeholder links presented as finished pages; no engine, CLI, package, Action, scoring, severity, AR001 through AR010 semantic, billing, account, backend, hosted scanning or runtime behavior changes occur
 
 Batch acceptance criteria:
-  - publisher and project identity are factual and consistent across About Trust Legal Terms Privacy Security and footer surfaces
-  - no company legal entity office employee count customer partner certification audit insurance or standards-body recognition is invented
-  - contact details are published only when already approved and real; otherwise the page states that the channel is not yet public and records the blocker
-  - security explains the actual architecture and threat boundaries: static analysis local/browser-first behavior CLI local files GitHub Action local repository execution npm package and no hosted scanner requirement
-  - responsible disclosure provides a real usable contact path only if verified from an approved source such as SECURITY.md and owner confirmation
-  - privacy distinguishes browser scanner CLI GitHub Action npm package website hosting Vercel/GitHub logs and optional future Pro data flows
-  - local browser scanning claims are technically accurate and match the current HTML implementation: selected files are read locally, static examples may be fetched, no submitted endpoint is called and no selected file is uploaded by the static page
-  - no zero-data-collection claim is made; website hosting logs public npm counts public repository activity and voluntary feedback are described factually where applicable
-  - cookies analytics hosting logs and third-party processors are described factually and without retention periods unless current configuration or policy supports them
-  - retention periods are TO_BE_COMPLETED or omitted unless validated by current policy or configuration
-  - legal notice and terms distinguish publisher identity product status open-source Community components Apache-2.0 package boundary root repository licensing history and planned commercial services
-  - limitations explicitly state that AgentReady is static analysis and not a runtime firewall IAM system certification legal advice audit or safety guarantee
-  - Community and planned Pro claims remain consistent with the approved product and pricing pages: Community available free, Pro planned and not purchasable
-  - existing working scanners public routes shared shell navigation and footer remain functional
-  - public pages remain static mobile-friendly keyboard accessible usable without JavaScript for core content and free of horizontal overflow at 320 pixels
-  - no external font frontend framework analytics tracker telemetry account system billing system backend hosted scanner upload dependency or new processor is added
-  - no engine CLI package Action scoring severity or AR001 through AR010 semantic behavior changes occur
+  - developer documentation entry points clearly route users to browser scanner, CLI, GitHub Action, reports, examples, standard and trust surfaces
+  - browser scanner usage covers OpenAPI and MCP local-first behavior without replacing or degrading the real scanners
+  - CLI documentation covers install and npx usage for @timeproofs/agentready@alpha and command behavior that exists today
+  - GitHub Action documentation uses the public Marketplace Action, immutable Action tag and full-SHA pinning guidance already recorded in governance evidence
+  - the canonical consumer workflow declares only permissions: contents: read unless a documented example explicitly requires otherwise
+  - agentready.json and Markdown report interpretation explain score, status, findings, AR rule codes, PASS/FAIL and policy limitations consistently with the standard pages
+  - OpenAPI and MCP examples use reproducible fixtures, commands and outputs from the current repository rather than invented findings
+  - integration and adoption guidance moves from browser scan to CLI to repository CI without requiring signup, upload, token, account, backend or Pro purchase
+  - contribution guidance is limited to real repository capabilities and does not promise governance processes, response times, partnerships or maintainer acceptance that do not exist
+  - troubleshooting guidance covers invalid input, policy failure, output paths, path spaces, local environment issues and GitHub Action failures without changing CLI behavior
+  - limitations remain explicit: AgentReady is static analysis, not a runtime firewall, IAM system, legal advice, audit, certification or guaranteed safety
+  - Community is shown as free and available; Pro remains planned and not purchasable; Team, Agency and Enterprise are not presented as available
+  - all public examples preserve the approved package version, npm alpha tag, Action facts and documented latest exception without performing npm, tag, Release or Marketplace operations
+  - page bodies use varied premium documentation composition and remain mobile-friendly, keyboard accessible, usable without JavaScript for core content and free of 320px horizontal overflow
+  - all CTA destinations and internal links resolve to existing or newly created real routes with no dead placeholder links presented as finished pages
+  - no engine, CLI, package, Action, scoring, severity, AR001 through AR010 semantic, billing, account, backend, hosted scanning or runtime behavior changes occur
 
 Commands:
   - node scripts/validate-agentready-site-navigation.mjs
-  - node scripts/validate-agentready-trust-legal-foundation-site.mjs
+  - node scripts/validate-agentready-developer-docs-foundation-site.mjs
   - node scripts/validate-agentready-strategy-docs.mjs
   - node scripts/validate-agentready-execution-system.mjs
+  - node cli/tests/run-agentready-community-release-workflow-test.mjs
+  - node cli/tests/run-agentready-cli-tests.mjs
+  - node cli/tests/run-agentready-action-smoke-test.mjs
   - git diff --check
 
 Independent test plan:
-  - inventory all legal trust privacy security publisher contact and support sources before page edits
-  - build a stale and conflicting claim register for publisher identity contact details legal notice privacy security and terms
-  - map every public trust/legal route to authoritative source documents or mark missing facts as blockers
-  - verify browser scanner data flow against current agentready.html and agentready-mcp.html implementation
-  - verify CLI data flow against bin/agentready.js and current CLI tests
-  - verify GitHub Action data flow against action.yml and current Action documentation
-  - verify npm package and license facts against package.json packaging decisions Community license documents and root LICENSE boundary
-  - verify no analytics tracker external font framework telemetry backend upload account billing or hosted scanning dependency was added
-  - verify contact and responsible-disclosure channels are real approved and usable before publishing them as public channels
-  - verify cookies analytics hosting logs processors and retention copy does not overstate unknown facts
-  - verify every page preserves mandatory AgentReady limitation and does not claim certification guaranteed safety formal standards recognition customers audits insurance or legal advice
-  - test desktop and mobile layouts for every trust/legal route
-  - test keyboard focus order and visible focus
-  - test core content without JavaScript
-  - verify no horizontal overflow at 320 pixels
+  - inventory current developer documentation, scanner, CLI, Action, example, contribution and troubleshooting sources before page edits
+  - run real OpenAPI and MCP example commands before displaying any score, finding, report excerpt or JSON excerpt
+  - verify CLI documentation against current CLI tests and behavior without modifying CLI implementation
+  - verify GitHub Action documentation against action.yml, Marketplace evidence and immutable tag/full-SHA governance records
+  - verify agentready.json and Markdown report explanations against AGENTREADY_JSON_SPEC.md and real generated outputs
+  - verify contribution and support copy avoids unsupported process, support, SLA, governance, partnership or maintainer-acceptance promises
   - validate all CTA destinations and internal links
-  - compare the complete preview against the PR #135 standard foundation baseline
+  - test desktop, mobile, keyboard, no-JavaScript and 320px layouts for every developer documentation route
+  - verify no engine, CLI, package, Action, npm, tag, Release, Marketplace, billing, account, backend or runtime behavior changed
+  - rerun deterministic governance regeneration and execution-system validators
 
 Required evidence:
-  - legal and trust source inventory
-  - stale and conflicting claim register
-  - publisher identity mapping with missing legal facts explicitly marked
-  - public route map and information architecture
-  - data-flow matrix for website browser scanner CLI GitHub Action npm package Vercel and GitHub
-  - processor and external-service inventory
-  - cookie and analytics audit
-  - privacy-claim audit including no zero-data-collection overclaim
-  - security-claim audit
-  - responsible-disclosure contact verification or blocker
-  - certification formal-standard and guaranteed-safety claim audit
+  - developer documentation source inventory
+  - route map for docs scanner CLI Action report examples adoption contribution troubleshooting and limitations surfaces
+  - real OpenAPI example provenance with fixture path command score status and output excerpt
+  - real MCP example provenance with fixture path command score status and output excerpt
+  - CLI command reference audit against current CLI behavior
+  - GitHub Action usage and immutable pinning audit against current Marketplace evidence
+  - agentready.json and Markdown report interpretation audit
+  - contribution process source mapping and unsupported-promise audit
+  - troubleshooting and limitations audit
+  - Community and planned Pro consistency audit
+  - CTA and internal-link report
   - desktop and mobile screenshots
   - keyboard accessibility report
   - no-JavaScript evidence
   - 320px overflow evidence
-  - CTA and internal-link report
-  - production or preview URL
+  - preview URL
   - validator and deterministic regeneration results
 
-Rollback: Revert ARB-SITE-GLOBAL-004 without reverting PR #132 shell, PR #134 product foundation or PR #135 standard foundation.
+Rollback: Revert ARB-SITE-GLOBAL-005 without reverting PR #132 shell, PR #134 product foundation, PR #135 standard foundation or PR #136 trust/legal foundation.
 
 Manual actions:
-  - JEASON verifies publisher identity, legal notice facts, public contact paths and responsible-disclosure contact before final review
-  - JEASON reviews the complete trust/legal preview and confirms no invented legal, privacy, security, support, certification, audit or guarantee claim was introduced
+  - JEASON reviews the combined developer documentation and adoption preview
+  - JEASON confirms contribution and troubleshooting copy does not promise unsupported support, governance or partner processes
 
 Authorized external actions:
-  - create or align static About Trust Security Responsible disclosure Privacy Terms Legal notice Limitations Data flow and Support boundary pages
+  - create or align static developer documentation, browser scanner usage, CLI, GitHub Action, report, examples, adoption, contribution and troubleshooting surfaces
   - add factual local diagrams or static assets derived from current repository sources
-  - add or update validators for trust legal privacy security and claim accuracy
-  - update sitemap robots and internal links only for real routes created or aligned by this batch
+  - add or update validators for developer documentation, examples, adoption and contribution accuracy
+  - update sitemap, robots and internal links only for real routes created or aligned by this batch
 
 ## Preliminary Codex steps
 
-  - synchronize to exact PR #135 head that contains the GLOBAL-004 specification refinement
-  - create branch site-agentready-global-trust from site-agentready-global-standard at the recorded stacked base head
-  - open a draft PR targeting site-agentready-global-standard before broad page edits
-  - inventory privacy.html legal.html terms.html SECURITY.md README.md package.json action.yml root LICENSE and active AgentReady governance documents
-  - inventory browser scanner CLI GitHub Action npm package Vercel and GitHub data flows from current repository evidence
-  - record stale incomplete or conflicting legal trust security privacy contact support and publisher facts as blockers rather than guessing
-  - verify PR #132 PR #134 and PR #135 remain open draft and unmerged
-  - confirm no npm Action tag Release Marketplace engine CLI package billing account backend or runtime operation is required
+  - verify branch site-agentready-global-trust is at exact executable parent head 943d9fea90748a0496ce872dc48b14253eb3a16b
+  - confirm the accepted ARB-SITE-GLOBAL-004 public-content review head remains recorded as 11c488ff98ecb4509dd8bbf916840bf8c9edce77
+  - create branch site-agentready-global-docs-adoption from that exact parent head
+  - open a draft PR targeting site-agentready-global-trust before broad page edits
+  - inventory current developer documentation routes, scanner usage, CLI usage, GitHub Action usage, agentready.json documentation, examples, contribution guidance and troubleshooting copy
+  - inventory real OpenAPI and MCP fixtures and commands before displaying any score, finding, report excerpt or JSON excerpt
+  - verify PR #132, #134, #135 and #136 remain open draft and unmerged
+  - confirm no npm, Action, tag, Release, Marketplace, engine, CLI, package, billing, account, backend or runtime operation is required
 
 
 
 External verifications:
-  - JEASON verifies any public contact path before it is presented as usable
-  - JEASON or legal counsel verifies publisher identity legal notice and privacy facts before final review
+  - None
 
 Forbidden actions:
-  - do not implement routes or systems outside the GLOBAL-004 trust legal privacy security and support scope
-  - do not invent publisher legal identity legal form registration number VAT address office employees customers partners certifications audits insurance or standards-body recognition
-  - do not publish unapproved contact details
-  - do not claim zero data collection across all surfaces
-  - do not state retention periods unless supported by current configuration or policy
-  - do not claim AgentReady is a runtime firewall IAM system legal advice audit certification or safety guarantee
-  - do not present Pro as purchasable or change Community and Pro scope
-  - do not add external fonts frontend frameworks analytics trackers telemetry account billing backend hosted scanning upload dependencies or new processors
-  - do not change engine CLI package Action scoring severity or AR001 through AR010 semantics
-  - do not perform npm tag Release Marketplace billing account licensing backend or runtime operations
+  - do not modify the AgentReady engine
+  - do not modify CLI behavior
+  - do not modify scoring, severity or AR001 through AR010 semantics
+  - do not modify package.json or action.yml
+  - do not perform npm operations or change package publication state
+  - do not create, move or delete tags
+  - do not create or modify GitHub Releases or Marketplace operations
+  - do not implement billing, accounts, backend, hosted scanning, telemetry or upload systems
+  - do not implement the full SEO, GEO or international batch
+  - do not present Pro as purchasable or Team, Agency or Enterprise as available
+  - do not invent customers, benchmarks, certifications, standards-body recognition, support commitments or governance processes
   - do not merge any site PR
 
 Response format:
@@ -211,19 +212,18 @@ Response format:
 - draft PR number and URL
 - base branch and exact approved base head
 - exact head SHA
-- files changed grouped by trust pages legal pages shared assets validators governance and evidence
-- source inventory and conflicts recorded
-- summary of each trust legal privacy security disclosure support and data-flow route
-- publisher identity mapping and missing facts
-- privacy and data-flow matrix summary
-- responsible-disclosure contact verification result
-- claim audits for certification guaranteed safety zero-data overclaims and formal standards recognition
+- files changed grouped by developer docs routes shared assets validators governance and evidence
+- summary of each developer documentation, scanner, CLI, Action, report, examples, adoption, contribution and troubleshooting route
+- exact source of every displayed example score finding report excerpt or JSON excerpt
+- CLI and GitHub Action fact mapping
+- agentready.json and report interpretation mapping
+- contribution and troubleshooting boundary audit
 - local validation results
 - GitHub workflow results
 - preview URL
 - desktop and mobile evidence paths
 - keyboard no-JavaScript and 320px overflow evidence
-- remaining owner or legal review points
-- confirmation that no implementation branch beyond the authorized batch branch was created
+- remaining owner-review points
 - confirmation that no npm tag Release Marketplace engine CLI billing account package or runtime operation occurred
+- confirmation that no PR was merged
 
