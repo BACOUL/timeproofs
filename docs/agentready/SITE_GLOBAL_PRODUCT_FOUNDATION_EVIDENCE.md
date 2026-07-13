@@ -159,3 +159,50 @@ TimeProofs AgentReady does not guarantee that an AI agent will never fail. It id
 ## Owner Review
 
 JEASON must review the combined product and pricing preview before merge.
+
+## Production Reconciliation - 2026-07-13
+
+Status: TEMPORARY PRODUCTION ALIGNMENT EXCEPTION RECORDED
+
+Expected commit:
+
+`13abbcd4e85c0937550ecaded3cb5b253577b0c4`
+
+Checked production routes:
+
+| Route | HTTP status | Observed production title | Expected PR #134 title | Obsolete copy detected |
+| --- | ---: | --- | --- | --- |
+| `/` | 200 | `TimeProofs AgentReady - static readiness gate for agent-facing APIs and MCP tools` | `TimeProofs AgentReady - static readiness gate for agent-facing APIs and MCP tools` | No |
+| `/product.html` | 200 | `AgentReady Product Overview - TimeProofs` | `AgentReady Product Overview - TimeProofs` | No |
+| `/community.html` | 200 | `AgentReady Community - Free local contract readiness` | `AgentReady Community - Free local contract readiness` | No |
+| `/pro.html` | 200 | `AgentReady Pro Planned - Pricing and availability` | `AgentReady Pro Planned - Pricing and availability` | No |
+| `/pricing.html` | 200 | `AgentReady Pricing - Community free and Pro planned` | `AgentReady Pricing - Community free and Pro planned` | No |
+| `/agentready.html` | 200 | `OpenAPI Scanner - TimeProofs AgentReady` | `OpenAPI Scanner - TimeProofs AgentReady` | No |
+| `/agentready-mcp.html` | 200 | `MCP Scanner - TimeProofs AgentReady` | `MCP Scanner - TimeProofs AgentReady` | No |
+| `/agentready-ci.html` | 200 | `AgentReady GitHub CI Gate - TimeProofs` | `AgentReady GitHub CI Gate - TimeProofs` | No |
+
+Observed production evidence:
+
+- Production server header: `Vercel`.
+- Production and PR #134 preview returned matching ETags for each inspected
+  route.
+- Expected PR #134 copy observed on production includes Product, AgentReady
+  Community, AgentReady Pro planned, `npx @timeproofs/agentready@alpha`,
+  `24 EUR`, `240 EUR`, `not purchasable` and static readiness gate language
+  where applicable.
+- Obsolete copy checked and not observed on inspected routes: manual
+  AgentReady Review offer, `149 EUR`, Fix Pack, `499 EUR`, mandatory contact
+  and email-payment offer.
+
+Interpretation:
+
+The current public HTTP evidence does not show an active production mismatch
+on the inspected routes. Public headers do not expose a Vercel project,
+deployment commit or branch identifier, so this evidence cannot independently
+prove the private Vercel deployment selection beyond the observed matching
+content and route ETags.
+
+This record does not complete the full global-site stack. It records only that
+the Product, Community, planned Pro and pricing foundation appears aligned on
+production as a temporary exception before the remaining global-site batches
+are complete.
