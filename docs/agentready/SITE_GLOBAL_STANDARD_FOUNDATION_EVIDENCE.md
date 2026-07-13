@@ -77,4 +77,6 @@ CTA report: docs/agentready/evidence/site-global-standard-foundation/cta-link-re
 
 ## Preview
 
-Combined stacked preview URL: pending Vercel deployment for PR #135.
+Combined stacked preview URL: https://timeproofs-git-site-agentready-global-standard-jeason1.vercel.app/
+
+Preview corresponds to PR #135 and implementation head c32d1134ce649dfdcaf99ed990f2e9a5f3b5427c.
