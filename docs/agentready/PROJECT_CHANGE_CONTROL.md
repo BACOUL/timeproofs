@@ -193,3 +193,38 @@ Canonical execution effect:
 - Stacked execution may continue to the next canonical batch,
   `ARB-SITE-GLOBAL-004`, if its specification is `EXECUTION_READY` and the
   generated next action authorizes it.
+
+## ARB-SITE-GLOBAL-004 Owner Review Acceptance - 2026-07-13
+
+Status: RECORDED
+
+On 2026-07-13, JEASON accepted the company, trust, security, privacy and legal
+foundation for the current stacked trust/legal layer.
+
+Recorded facts:
+
+- Reviewed branch: `site-agentready-global-trust`.
+- Reviewed PR: #136.
+- Reviewed head:
+  `11c488ff98ecb4509dd8bbf916840bf8c9edce77`.
+- Reviewed preview:
+  `https://timeproofs-git-site-agentready-global-trust-jeason1.vercel.app/`.
+- The company, trust, security, privacy and legal foundation was accepted as a
+  stacked implementation layer.
+- Owner-confirmed publisher and contact facts were accepted.
+- No invented legal, privacy, security, audit, certification, support or
+  guaranteed-safety claim was identified.
+- Unresolved telephone, Vercel configuration, retention, legal bases,
+  recipients and retention details remain recorded as final-reliance blockers.
+- This acceptance is not legal advice or final legal certification.
+- No PR was merged.
+
+Canonical execution effect:
+
+- `ARB-SITE-GLOBAL-004` remains `IN_REVIEW` because PR #136 is still open and
+  unmerged.
+- The owner review is complete for stacked-continuation purposes.
+- `ARB-SITE-GLOBAL-004` is not `DONE` until PR #136 is merged and reconciled.
+- Stacked execution may continue to the next canonical batch,
+  `ARB-SITE-GLOBAL-005`, if its specification is `EXECUTION_READY` and the
+  generated next action authorizes it.

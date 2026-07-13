@@ -88,6 +88,7 @@ jobs:
           const productBatch = batches.get('ARB-SITE-GLOBAL-002');
           const standardBatch = batches.get('ARB-SITE-GLOBAL-003');
           const trustBatch = batches.get('ARB-SITE-GLOBAL-004');
+          const docsBatch = batches.get('ARB-SITE-GLOBAL-005');
           const next = selectNextAction(ledger);
           const nextPrompt = generatedContents(ledger)['docs/agentready/NEXT_CODEX_PROMPT.md'];
           const counts = promptCounts(ledger);
@@ -113,13 +114,26 @@ jobs:
           assert.equal(trustBatch?.pr_title, 'site(trust): publish company and legal foundation');
           assert.equal(trustBatch?.stacked_on_batch, 'ARB-SITE-GLOBAL-003');
           assert.equal(trustBatch?.pr_number, 136);
+          assert.equal(trustBatch?.stacked_execution_can_continue, true);
+          assert.equal(trustBatch?.stacked_child_head_sha, '11c488ff98ecb4509dd8bbf916840bf8c9edce77');
+          assert.equal(docsBatch?.status, 'READY');
+          assert.equal(docsBatch?.spec_status, 'EXECUTION_READY');
+          assert.equal(docsBatch?.owner, 'CODEX_AND_JEASON');
+          assert.equal(docsBatch?.base_branch, 'site-agentready-global-trust');
+          assert.equal(docsBatch?.branch, 'site-agentready-global-docs-adoption');
+          assert.equal(docsBatch?.pr_title, 'site(docs): publish developer documentation and adoption foundation');
+          assert.equal(docsBatch?.stacked_on_batch, 'ARB-SITE-GLOBAL-004');
+          assert.equal(docsBatch?.stacked_base_head_sha, '11c488ff98ecb4509dd8bbf916840bf8c9edce77');
           assert.equal(next?.kind, 'batch');
-          assert.equal(next?.batch?.id, 'ARB-SITE-GLOBAL-004');
-          assert.equal(next?.action_type, 'REVIEW_OR_MERGE');
-          assert.equal(counts.execution_batches.immediately_executable, 0);
-          assert.match(nextPrompt, /No CODEX execution batch is currently authorized/);
-          assert.match(nextPrompt, /JEASON - ARB-SITE-GLOBAL-004 - Publish company trust security privacy and legal foundation/);
-          assert.doesNotMatch(nextPrompt, /Repository: BACOUL\/timeproofs/);
+          assert.equal(next?.batch?.id, 'ARB-SITE-GLOBAL-005');
+          assert.equal(next?.action_type, 'READY');
+          assert.equal(counts.execution_batches.immediately_executable, 1);
+          assert.match(nextPrompt, /Repository: BACOUL\/timeproofs/);
+          assert.match(nextPrompt, /Batch ID: ARB-SITE-GLOBAL-005/);
+          assert.match(nextPrompt, /Base: site-agentready-global-trust/);
+          assert.match(nextPrompt, /Exact approved base head: 11c488ff98ecb4509dd8bbf916840bf8c9edce77/);
+          assert.match(nextPrompt, /Branch: site-agentready-global-docs-adoption/);
+          assert.match(nextPrompt, /Draft PR target: site-agentready-global-trust/);
           NODE
 
       - name: Verify package metadata
