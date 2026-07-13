@@ -9,6 +9,7 @@ Principal public-page implementation commit: c32d1134ce649dfdcaf99ed990f2e9a5f3b
 Public navigation correction commit: 149ef90f5fe1460e113dfbc079b0596fe538753e
 Evidence reconciliation commit: f46f060fdea15322ec48d55db983dbe50355611c
 Production-coherence page correction commits: e6ef4df6454d883083f81b31be70b6ef02dca2a0 and 77a5144061711f112ae87b7d4228b30f0d38a156
+Validated production-coherence evidence head: 71d3d50627a85f7325cdb66dea1a4b510f32578f
 
 ## Source Inventory
 
@@ -88,6 +89,8 @@ Screenshot provenance: existing desktop, mobile and no-JavaScript screenshots we
 - The documentation example now uses agentready_version 0.1.
 - The documentation score 72 now maps to Minor fixes, consistent with the published 70-84 status band.
 - The complete agentready.json public specification remains linked from agentready-docs.html.
+- AgentReady Community Release Candidate workflow run #116 completed successfully for the validated coherence head.
+- All Vercel commit statuses completed successfully for the validated coherence head.
 
 ## Preview
 
