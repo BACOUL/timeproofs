@@ -41,6 +41,7 @@ const doc = {
   billing: "docs/agentready/AUTOMATED_PURCHASE_AND_BILLING_FLOW.md",
   premium: "docs/agentready/PREMIUM_SITE_REQUIREMENTS.md",
   premiumRedesign: "docs/agentready/PREMIUM_SITE_REDESIGN_EXECUTION_SPEC.md",
+  globalSite: "docs/agentready/GLOBAL_STANDARD_SITE_PROGRAM.md",
   ia: "docs/agentready/PUBLIC_SITE_INFORMATION_ARCHITECTURE.md",
   copy: "docs/agentready/SITE_COPY_GUIDE.md",
   seo: "docs/agentready/SEO_GEO_AI_FIRST_REQUIREMENTS.md",
@@ -179,7 +180,7 @@ const communityPublicationPostConfirmationSteps = [
 const milestones = [
   ["M1", "Governance locked", "IN_PROGRESS", "BEFORE_COMMUNITY_PUBLICATION", ["sources of truth defined", "canonical ledger valid", "generated views synchronized", "change control defined", "next action identifiable"], [["M1-SOURCES", "sources of truth defined", ["AR-GOV-003"]], ["M1-LEDGER", "canonical ledger valid", ["AR-GOV-003"]], ["M1-VIEWS", "generated views synchronized", ["AR-GOV-003"]], ["M1-CHANGE", "change control defined", ["AR-GOV-003"]], ["M1-NEXT", "next action identifiable", ["AR-GOV-003"]]]],
   ["M2", "Community publication blockers resolved", "PLANNED", "BEFORE_COMMUNITY_PUBLICATION", ["npm scope controlled or alternative approved", "license approved", "ProofSpec references classified and treated", "npm security defined", "provenance defined", "publication explicitly approvable"], [["M2-NPM-SCOPE", "npm scope controlled or alternative approved", ["AR-COM-001"], true], ["M2-LICENSE", "license approved", ["AR-COM-003"], true], ["M2-PROOFSPEC", "ProofSpec references classified and treated", ["AR-COM-004"], true], ["M2-NPM-SECURITY", "npm security defined", ["AR-COM-002"], true], ["M2-PROVENANCE", "provenance defined", ["AR-COM-005"], true], ["M2-APPROVAL", "publication explicitly approvable", ["AR-COM-006A"], true]]],
-  ["M3", "Community publicly usable", "PLANNED", "BEFORE_COMMUNITY_PUBLICATION", ["npm package published", "immutable tag", "GitHub Release", "public installation tested", "public Action usable", "premium product shell and core pages validated", "onboarding documented", "no signup", "no payment"], [["M3-NPM-PUBLISH", "npm package published", ["AR-COM-006"]], ["M3-TAG-RELEASE", "immutable tag and GitHub Release", ["AR-COM-006"]], ["M3-PUBLIC-INSTALL", "public installation tested", ["AR-COM-008"]], ["M3-ACTION", "public Action usable", ["AR-COM-007", "AR-COM-009"]], ["M3-PREMIUM-SITE", "premium product shell and core pages validated", ["AR-SITE-PREMIUM-001", "AR-SITE-PREMIUM-002", "AR-SITE-PREMIUM-003"]], ["M3-ONBOARDING", "onboarding documented without signup or payment", ["AR-ONB-001", "AR-ONB-002", "AR-ONB-003", "AR-ONB-004"]]]],
+  ["M3", "Community publicly usable", "PLANNED", "BEFORE_COMMUNITY_PUBLICATION", ["npm package published", "immutable tag", "GitHub Release", "public installation tested", "public Action usable", "global product standard trust documentation and discovery site validated", "onboarding documented", "no signup", "no payment"], [["M3-NPM-PUBLISH", "npm package published", ["AR-COM-006"]], ["M3-TAG-RELEASE", "immutable tag and GitHub Release", ["AR-COM-006"]], ["M3-PUBLIC-INSTALL", "public installation tested", ["AR-COM-008"]], ["M3-ACTION", "public Action usable", ["AR-COM-007", "AR-COM-009"]], ["M3-GLOBAL-SITE", "global product standard trust documentation and discovery site validated", ["AR-SITE-PREMIUM-001", "AR-SITE-GLOBAL-002", "AR-SITE-GLOBAL-003", "AR-SITE-GLOBAL-004", "AR-SITE-GLOBAL-005", "AR-SITE-GLOBAL-006", "AR-SITE-GLOBAL-007"]], ["M3-ONBOARDING", "onboarding documented without signup or payment", ["AR-ONB-001", "AR-ONB-002", "AR-ONB-003", "AR-ONB-004"]]]],
   ["M4", "External pilot and engine benchmark established", "PLANNED", "BEFORE_PRO_TECHNICAL_COMPLETION", ["external pilot kit", "five-user external pilot", "OpenAPI and MCP corpora", "human annotations", "benchmark acceptance thresholds frozen before final evaluation", "precision and recall", "false-positive and false-negative rates", "performance", "reproducibility", "differentiation evidence", "MCP static coverage matrix", "explicit pre-Pro decision", "AR001 AR003 AR008 AR010 treated or documented"], [["M4-PILOT-KIT", "external pilot kit and evidence registry", ["AR-MARKET-PILOT-001"]], ["M4-PILOT-EVIDENCE", "five-user external pilot evidence", ["AR-MARKET-PILOT-001H"], true], ["M4-CORPUS", "OpenAPI and MCP corpora and harness", ["AR-ENG-001"]], ["M4-HUMAN-LABELS", "human annotations validated", ["AR-ENG-001H"], true], ["M4-THRESHOLDS", "benchmark acceptance thresholds frozen before final evaluation", ["AR-ENG-001T"], true], ["M4-METRICS", "precision recall false positive and false negative rates", ["AR-ENG-002"]], ["M4-AR-FIXES", "AR001 AR003 AR008 AR010 treated or documented", ["AR-ENG-003"]], ["M4-PERFORMANCE", "performance and reproducibility", ["AR-ENG-004", "AR-ENG-005"]], ["M4-DIFFERENTIATION", "factual differentiation evidence and MCP static coverage matrix", ["AR-ENG-005"]], ["M4-PRO-DECISION", "explicit decision before Pro implementation", ["AR-MARKET-PILOT-002"], true]]],
   ["M5", "Pro technically complete", "PLANNED", "BEFORE_PRO_TECHNICAL_COMPLETION", ["versioned policy", "baseline", "new-risks-only", "SARIF", "pull request annotations", "local structured exceptions", "tests"], [["M5-POLICY", "versioned policy", ["AR-PRO-001"]], ["M5-BASELINE", "baseline comparison", ["AR-PRO-002"]], ["M5-NEW-RISKS", "new-risks-only mode", ["AR-PRO-003"]], ["M5-SARIF", "SARIF export", ["AR-PRO-004"]], ["M5-PR-ANNOTATIONS", "pull request annotations", ["AR-PRO-005"]], ["M5-EXCEPTIONS", "local structured exceptions", ["AR-PRO-006", "AR-PRO-007"]], ["M5-TESTS", "MVP Pro integration tests", ["AR-PRO-008"]]]],
   ["M6", "Pro commercially sellable", "PLANNED", "BEFORE_PRO_FIRST_SALE", ["commercial infrastructure approval", "license and entitlements", "activation", "five repositories", "offline behavior", "minimal account", "Checkout", "subscription lifecycle", "portal", "emails", "legal", "support", "refund", "controlled purchase"], [["M6-MARKET-GATE", "ten-user payment-signal and value-case gate approved", ["AR-MARKET-002"], true], ["M6-ENTITLEMENTS", "license and entitlements", ["AR-LIC-001", "AR-LIC-003"]], ["M6-ACTIVATION", "activation and recovery", ["AR-LIC-006", "AR-BILL-013"]], ["M6-FIVE-REPOS", "five repositories and pseudonymization", ["AR-LIC-005"]], ["M6-OFFLINE", "offline behavior", ["AR-LIC-004"]], ["M6-ACCOUNT", "minimal account", ["AR-BILL-004"]], ["M6-CHECKOUT", "Checkout monthly and annual", ["AR-BILL-002", "AR-BILL-003"]], ["M6-WEBHOOKS", "webhooks", ["AR-BILL-005"]], ["M6-PROVISIONING", "entitlement provisioning", ["AR-BILL-006"]], ["M6-PORTAL", "Customer Portal", ["AR-BILL-007"]], ["M6-RENEWAL", "renewal", ["AR-BILL-008"]], ["M6-FAILED-PAYMENT", "failed payment", ["AR-BILL-009", "AR-LIC-004"]], ["M6-CANCEL-DOWNGRADE", "cancellation and downgrade", ["AR-BILL-010", "AR-LIC-007"]], ["M6-REFUND", "refund", ["AR-BILL-011"]], ["M6-EMAILS", "transactional emails", ["AR-BILL-012"]], ["M6-DELETION", "account deletion and data", ["AR-BILL-014"]], ["M6-VAT-INVOICES", "VAT invoices reconciliation", ["AR-FIN-001"], true], ["M6-LEGAL", "legal privacy liability", ["AR-LEG-001"], true], ["M6-SUPPORT", "support", ["AR-SUPPORT-001", "AR-SUPPORT-002"]], ["M6-SECURITY", "security signoff", ["AR-SEC-001", "AR-SEC-002", "AR-SEC-003", "AR-SEC-004"], true], ["M6-CONTROLLED-PURCHASE", "controlled purchase", ["AR-BILL-015"]]]],
@@ -255,13 +256,13 @@ codex("AR-COM-EPIC", "AR-COM-009", "M3", "BEFORE_COMMUNITY_PUBLICATION", "COM", 
   required_commands: ["node cli/tests/run-agentready-action-smoke-test.mjs", "node scripts/validate-agentready-action-marketplace-readiness.mjs", "node scripts/validate-agentready-strategy-docs.mjs", "node scripts/validate-agentready-execution-system.mjs"],
   required_evidence: ["root metadata review", "unique-name UI result", "listing copy review", "branding and category review", "version pinning and permissions review", "GitHub Release URL", "Marketplace URL", "owner checkpoint attestation", "public listing verification"]
 });
-epic("AR-SITE-PREMIUM-EPIC", "M3", "BEFORE_COMMUNITY_PUBLICATION", "SITE", "Premium public product site before external validation", ["AR-COM-006"]);
-codex("AR-SITE-PREMIUM-EPIC", "AR-SITE-PREMIUM-001", "M3", "BEFORE_COMMUNITY_PUBLICATION", "SITE", "Build premium design system navigation and footer", {
-  decision_ids: [...decisionIds, "DL-2026-07-12-PREMIUM-SITE-BEFORE-VALIDATION"],
+epic("AR-SITE-PREMIUM-EPIC", "M3", "BEFORE_COMMUNITY_PUBLICATION", "SITE", "Global standard public site before external validation", ["AR-COM-006"]);
+codex("AR-SITE-PREMIUM-EPIC", "AR-SITE-PREMIUM-001", "M3", "BEFORE_COMMUNITY_PUBLICATION", "SITE", "Build global site shell navigation and footer", {
+  decision_ids: [...decisionIds, "DL-2026-07-12-PREMIUM-SITE-BEFORE-VALIDATION", "DL-2026-07-13-GLOBAL-STANDARD-SITE-BEFORE-VALIDATION"],
   status: "IN_REVIEW",
   owner: "CODEX_AND_JEASON",
   weight: 5,
-  source_documents: [doc.premium, doc.ia, doc.premiumRedesign, doc.copy],
+  source_documents: [doc.premium, doc.ia, doc.premiumRedesign, doc.globalSite, doc.copy],
   branch: "site-agentready-premium-foundation",
   pr_title: "site(agentready): build premium design system and navigation",
   pr_number: 132,
@@ -273,13 +274,228 @@ codex("AR-SITE-PREMIUM-EPIC", "AR-SITE-PREMIUM-001", "M3", "BEFORE_COMMUNITY_PUB
   required_commands: ["node scripts/validate-agentready-site-navigation.mjs", "node scripts/validate-agentready-strategy-docs.mjs", "node scripts/validate-agentready-execution-system.mjs", "git diff --check"],
   independent_test_plan: ["inventory every active indexable AgentReady page and existing nav footer variant", "run static link and duplicate-shell validation", "test desktop menus by pointer and keyboard", "test mobile menu at 320 375 768 and 900 pixel widths", "test Escape outside click focus containment focus restoration and body scroll lock", "test with reduced motion and JavaScript disabled for critical links", "record before and after desktop and mobile evidence", "confirm no page-body redesign or product-code change entered the batch"],
   required_evidence: ["page and shell migration inventory", "desktop navigation screenshots", "mobile closed and open navigation screenshots", "keyboard and focus test matrix", "link validation report", "320px no-overflow evidence", "reduced-motion and no-JS evidence", "shared asset inventory and size summary", "owner visual review before merge"],
-  manual_actions: ["JEASON reviews desktop and mobile visual evidence before merge"],
+  manual_actions: ["JEASON reviews the complete stacked site before the stack is merged"],
   authorized_actions: ["create dependency-free shared CSS and minimal JavaScript assets", "replace duplicated active-page navigation and footer markup", "add static validators and documented visual evidence"],
   forbidden_actions: ["do not redesign homepage or page-body sections in this batch", "do not rewrite product claims beyond navigation and footer labels required for accuracy", "do not modify engine CLI Action package npm tags billing accounts backend or runtime behavior", "do not add external fonts frameworks analytics telemetry uploads or live calls", "do not create fake pages customer logos dashboards certifications or safety claims", "do not merge without owner visual review"],
   codex_preflight_steps: ["inventory all active indexable root HTML pages and current shared assets", "record every navigation and footer variant", "map every proposed menu label to an existing valid route", "identify inline shell styles that conflict with shared assets", "capture baseline desktop and mobile screenshots", "open a draft PR before broad HTML migration"],
   rollback_boundary: "Revert the shared shell assets and navigation or footer migrations without reverting Marketplace publication or product code.",
+  notes: "Approved only as a stacked technical base. Do not merge as the finished site.",
   scope_justification: "Weight 5 justified: one coherent shared-shell system across active static pages with a single visual review and rollback boundary."
 });
+codex("AR-SITE-PREMIUM-EPIC", "AR-SITE-GLOBAL-002", "M3", "BEFORE_COMMUNITY_PUBLICATION", "SITE", "Publish global product scanners CI and planned pricing foundation", {
+  decision_ids: [...decisionIds, "DL-2026-07-13-GLOBAL-STANDARD-SITE-BEFORE-VALIDATION"],
+  status: "IN_REVIEW",
+  owner: "CODEX_AND_JEASON",
+  weight: 5,
+  source_documents: [doc.globalSite, doc.premium, doc.ia, doc.copy, doc.pricing, doc.entitlements, doc.actionUsage, doc.json],
+  branch: "site-agentready-global-product",
+  pr_title: "site(agentready): publish global product and pricing foundation",
+  pr_number: 134,
+  allowed_paths: ["assets/**", "*.html", "docs/agentready/**", "scripts/**", "sitemap.xml", "robots.txt"],
+  forbidden_paths: ["agentready-core/**", "bin/**", "package.json", "action.yml", ".github/workflows/**", "packaging/**", "server/**", "api/**", "LICENSE", "NOTICE"],
+  deliverables: ["category-defining homepage", "product overview", "Community page", "planned Pro page", "truthful pricing page", "complete OpenAPI and MCP scanner presentation", "CI Gate and CLI adoption sections", "real report and agentready.json demonstrations", "complete combined preview based on PR #132"],
+  estimated_files_or_surfaces: ["index.html", "agentready.html", "agentready-mcp.html", "agentready-ci.html", "agentready-docs.html", "pricing.html", "product.html", "community.html", "pro.html", "shared product assets"],
+  acceptance_criteria: ["a new visitor understands the problem product and primary action within one viewport", "OpenAPI and MCP pages explain detection coverage and show realistic findings before file selection", "the real scanners remain functional", "browser CLI and GitHub Action paths are visible", "Community is shown as available and free", "planned Pro price is 24 EUR excluding tax monthly or 240 EUR excluding tax annually", "Pro is clearly not purchasable and unavailable features are labelled planned", "Team Agency and Enterprise are not presented as available", "real product outputs and immutable Action usage are used", "no fake proof customer benchmark certification or standard-status claim is added", "page bodies use varied premium composition rather than repetitive cards", "all pages remain usable on mobile and without JavaScript for core content"],
+  required_commands: ["node scripts/validate-agentready-site-navigation.mjs", "node scripts/validate-agentready-global-product-site.mjs", "node scripts/validate-agentready-strategy-docs.mjs", "node scripts/validate-agentready-execution-system.mjs", "git diff --check"],
+  independent_test_plan: ["test every product and commercial route", "run real OpenAPI and MCP examples", "verify price and availability copy against pricing authority", "validate all CTA destinations", "test desktop and 320 375 768 1024 pixel layouts", "test core content without JavaScript", "compare complete preview with the PR #132 shell baseline"],
+  required_evidence: ["desktop and mobile screenshots for every primary page", "real output provenance", "pricing source mapping", "CTA and link report", "no-JavaScript evidence", "combined preview URL"],
+  manual_actions: ["JEASON reviews the combined product and pricing preview"],
+  authorized_actions: ["create real static product Community and planned Pro pages", "redesign the six existing core page bodies", "add shared static product assets and validators"],
+  forbidden_actions: ["do not change engine CLI package Action workflows npm tags releases Marketplace billing accounts or runtime behavior", "do not present Pro as purchasable", "do not invent customers benchmarks legal identities or certifications", "do not merge any site PR"],
+  codex_preflight_steps: ["synchronize to exact PR #132 head 8ea9b08e9c772f151c3966288f7e82f8efe0ff10", "create the child branch from site-agentready-premium-foundation", "open a draft PR targeting site-agentready-premium-foundation before broad edits", "inventory current product claims pricing sources and working scanner behavior"],
+  rollback_boundary: "Revert the global product child PR while preserving PR #132 as the technical shell base.",
+  scope_justification: "Weight 5 justified: product, pricing, scanner presentation, CI and evidence are one reviewable public product foundation stacked on the shared shell."
+});
+const standardFoundationSources = [
+  doc.master,
+  doc.sequence,
+  doc.decision,
+  doc.change,
+  doc.globalSite,
+  doc.ia,
+  doc.premium,
+  doc.copy,
+  doc.rules,
+  doc.json,
+  doc.engine,
+  doc.ruleFormat,
+  doc.mcp,
+  doc.actionUsage,
+  doc.action,
+  doc.commercial
+];
+const standardFoundationSurfaces = [
+  "agentready-standard.html",
+  "agentready-rule-codes.html",
+  "agentready-json.html",
+  "agentready-examples.html",
+  "agentready-resources.html",
+  "agentready-sample-report.html",
+  "sitemap.xml",
+  "shared standard assets and diagrams"
+];
+const standardFoundationDeliverables = [
+  "public AgentReady standard overview with concise canonical definition and what-it-is-not boundary",
+  "public specification index distinguishing normative sources from explanatory material",
+  "complete AR001 through AR010 public rule coverage based only on current rule codes and implementation behavior",
+  "public severity model with critical high medium and low meanings and limitations",
+  "public scoring and result model covering score status PASS FAIL min-score fail-on and 100/100 limitations",
+  "versioning and compatibility section for engine ruleset schema policy source version input hash commit and scan date",
+  "governance change-control namespace and contribution principles without invented authority or certification",
+  "reference implementation explanation linking method rules output schema CLI browser scanner and GitHub Action",
+  "premium static no-JavaScript public presentation with mobile keyboard and 320px overflow evidence"
+];
+const standardFoundationAcceptance = [
+  "the standard overview defines AgentReady as static pre-deployment readiness analysis for agent-facing OpenAPI and MCP contracts",
+  "the overview states what AgentReady is not: not a runtime firewall gateway IAM system hosted scanner certification or guaranteed safety proof",
+  "the specification index links stable public sources for rules schemas methodology versioning governance limitations and reference implementation",
+  "normative and explanatory content are clearly distinguished",
+  "AR001 through AR010 are all covered with stable identifier title risk detected affected source type trigger meaning severity remediation guidance and limitations",
+  "bad and fixed examples are included only where current repository fixtures or documented outputs make them reproducible",
+  "severity definitions cover critical high medium and low without implying universal security certification",
+  "scoring explains AgentReady score status PASS FAIL min-score fail-on and the difference between score and CI blocking policy",
+  "100 out of 100 and PASS are explicitly limited and do not imply complete safety",
+  "versioning covers engine ruleset AgentReady schema policy source protocol or version and historical-result freshness",
+  "governance names the current publisher and change-control process without inventing a standards body committee legal entity or independent certification authority",
+  "namespace and contribution principles explain AR identifier stability ownership future reservations and real repository issue paths only",
+  "reference implementation copy distinguishes the method rules output schema CLI browser scanner and GitHub Action",
+  "OpenAPI and MCP coverage boundaries and non-detectable runtime or dynamically constructed capabilities are stated clearly",
+  "all pages use varied premium composition code and specification surfaces rather than a repetitive card catalogue",
+  "core content remains available without JavaScript and passes mobile keyboard link and 320px overflow checks",
+  "no engine CLI scoring severity rule semantics package Action workflow npm tag Release Marketplace billing account backend or runtime behavior changes are introduced"
+];
+const standardFoundationCommands = [
+  "node scripts/validate-agentready-site-navigation.mjs",
+  "node scripts/validate-agentready-standard-foundation-site.mjs",
+  "node scripts/validate-agentready-strategy-docs.mjs",
+  "node scripts/validate-agentready-execution-system.mjs",
+  "git diff --check"
+];
+const standardFoundationTests = [
+  "inventory public standard routes and verify each selected route exists or is intentionally created by this batch",
+  "verify every AR001 through AR010 public rule entry maps to docs/agentready/AGENTREADY_RULE_CODES.md and agentready-core/types.js",
+  "verify severity and score copy against docs/agentready/AGENTREADY_SCORE_MODEL.md and current engine constants",
+  "verify PASS FAIL min-score fail-on and exit-code copy against docs/agentready/AGENTREADY_JSON_SPEC.md and current CLI behavior",
+  "verify versioning and compatibility copy against docs/agentready/MCP_VERSION_COMPATIBILITY_POLICY.md and agentready.json v0.1",
+  "verify governance and namespace copy against PROJECT_CHANGE_CONTROL.md and RULE_FORMAT_AND_GOVERNANCE.md",
+  "verify public examples use only reproducible fixtures or documented outputs and record source commands",
+  "verify all CTA and internal links between product standard rules JSON examples limitations and developer docs",
+  "test desktop and 320 375 768 and 1024 pixel layouts",
+  "test keyboard focus order and visible focus on the new and modified routes",
+  "test core content without JavaScript",
+  "verify no horizontal overflow at 320 pixels",
+  "compare the complete preview with PR #134 product foundation"
+];
+const standardFoundationEvidence = [
+  "source inventory for AgentReady definition AR001-AR010 severity scoring status versioning governance and reference implementation behavior",
+  "conflict and stale-source register with acceptance requirements rather than guessed resolutions",
+  "route map and information architecture for standard rules JSON examples resources and sample-report surfaces",
+  "AR001 through AR010 mapping table to finding codes severity categories and current implementation coverage",
+  "example provenance with fixture path command output and reproduction notes for every displayed score finding or JSON excerpt",
+  "normative versus explanatory content review",
+  "limitation and no-certification claim audit",
+  "CTA and internal-link report",
+  "desktop and mobile screenshots for every primary standard surface",
+  "keyboard accessibility report",
+  "no-JavaScript evidence",
+  "320px overflow evidence",
+  "complete stacked preview URL",
+  "validator and deterministic regeneration results"
+];
+const standardFoundationForbiddenPaths = [
+  "agentready-core/**",
+  "cli/** where behavior would change",
+  "bin/**",
+  "package.json",
+  "action.yml",
+  "packaging/**",
+  "server/**",
+  "api/**",
+  "billing/**",
+  "account/**",
+  ".github/workflows/** unless a separately identified stale validation guard requires a separately authorized correction",
+  "LICENSE",
+  "NOTICE"
+];
+const standardFoundationForbiddenActions = [
+  "do not change engine behavior",
+  "do not change CLI behavior",
+  "do not add new AR rule semantics",
+  "do not change scoring",
+  "do not change severity unless separately approved through canonical change control",
+  "do not perform any npm operation",
+  "do not change Action metadata tags Releases or Marketplace state",
+  "do not add billing accounts licensing backend hosted scanning telemetry or upload dependency",
+  "do not invent customers testimonials logos benchmark results legal identities foundations committees standards bodies or certifications",
+  "do not claim AgentReady has formal standards-body recognition",
+  "do not claim guaranteed safety",
+  "do not use external fonts frontend frameworks analytics trackers or telemetry",
+  "do not silently change Community or Pro scope",
+  "do not merge any site PR"
+];
+const standardFoundationPreflight = [
+  "synchronize to exact PR #134 head 6a0beff94240c255e40915f14b8a916fa1e13ce7",
+  "create branch site-agentready-global-standard from site-agentready-global-product at that exact head",
+  "open a draft PR targeting site-agentready-global-product before broad page edits",
+  "inventory all public and internal sources for AgentReady definition AR001-AR010 severity score PASS FAIL versioning governance namespace and implementation behavior",
+  "record duplicated stale incomplete or conflicting sources as blockers or explicit acceptance requirements",
+  "verify PR #132 and PR #134 remain open draft and unmerged",
+  "confirm no npm Action tag Release Marketplace engine CLI package billing account backend or runtime operation is required"
+];
+const standardFoundationResponseFormat = [
+  "branch name",
+  "draft PR number and URL",
+  "base branch and exact approved base head",
+  "exact head SHA",
+  "files changed grouped by standard pages shared assets validators governance and evidence",
+  "source inventory and conflicts recorded",
+  "summary of each standard route or surface",
+  "exact source of every displayed example score finding report excerpt or JSON excerpt",
+  "AR001 through AR010 mapping evidence",
+  "severity scoring PASS FAIL and versioning source mapping",
+  "local validation results",
+  "GitHub workflow results",
+  "preview URL",
+  "desktop and mobile evidence paths",
+  "keyboard no-JavaScript and 320px overflow evidence",
+  "remaining owner-review points",
+  "confirmation that no implementation branch beyond the authorized batch branch was created",
+  "confirmation that no npm tag Release Marketplace engine CLI billing account package or runtime operation occurred"
+];
+
+for (const [id, title, branch, prTitle] of [
+  ["AR-SITE-GLOBAL-003", "Publish AgentReady standard rules and governance foundation", "site-agentready-global-standard", "site(standard): publish AgentReady standard foundation"],
+  ["AR-SITE-GLOBAL-004", "Publish company trust security privacy and legal foundation", "site-agentready-global-trust", "site(trust): publish company and legal foundation"],
+  ["AR-SITE-GLOBAL-005", "Publish developer documentation adoption examples and contribution foundation", "site-agentready-global-docs-adoption", "site(docs): publish developer documentation and adoption foundation"],
+  ["AR-SITE-GLOBAL-006", "Publish SEO GEO AI-first and international foundation", "site-agentready-global-discovery", "site(discovery): publish SEO GEO and international foundation"],
+  ["AR-SITE-GLOBAL-007", "Validate complete global standard site", "qa-agentready-global-standard-site", "qa(site): validate complete global standard site"]
+]) {
+  const isStandardFoundation = id === "AR-SITE-GLOBAL-003";
+  codex("AR-SITE-PREMIUM-EPIC", id, "M3", "BEFORE_COMMUNITY_PUBLICATION", "SITE", title, {
+  decision_ids: [...decisionIds, "DL-2026-07-13-GLOBAL-STANDARD-SITE-BEFORE-VALIDATION"],
+  status: isStandardFoundation ? "READY" : "PLANNED",
+  spec_status: isStandardFoundation ? "EXECUTION_READY" : "SKELETON",
+  owner: isStandardFoundation ? "CODEX_AND_JEASON" : "CODEX",
+  weight: 5,
+  source_documents: isStandardFoundation ? standardFoundationSources : [doc.globalSite, doc.ia, doc.copy],
+  branch,
+  pr_title: prTitle,
+  allowed_paths: isStandardFoundation ? ["assets/**", "*.html", "docs/agentready/**", "scripts/**", "sitemap.xml", "robots.txt"] : ["assets/**", "*.html", "docs/agentready/**", "scripts/**", "sitemap.xml"],
+  forbidden_paths: isStandardFoundation ? standardFoundationForbiddenPaths : ["agentready-core/**", "bin/**", "package.json", "action.yml", ".github/workflows/**", "server/**", "api/**", "LICENSE", "NOTICE"],
+  deliverables: isStandardFoundation ? standardFoundationDeliverables : [title],
+  estimated_files_or_surfaces: isStandardFoundation ? standardFoundationSurfaces : undefined,
+  acceptance_criteria: isStandardFoundation ? standardFoundationAcceptance : [`${title} complete after preceding stacked site batch is reviewed`],
+  required_commands: isStandardFoundation ? standardFoundationCommands : undefined,
+  independent_test_plan: isStandardFoundation ? standardFoundationTests : undefined,
+  required_evidence: isStandardFoundation ? standardFoundationEvidence : undefined,
+  manual_actions: isStandardFoundation ? ["JEASON reviews the AgentReady standard foundation preview and confirms no formal-standards or certification claim was introduced"] : undefined,
+  authorized_actions: isStandardFoundation ? ["create real static public standard, rule, JSON, examples, resources and sample-report surfaces", "add factual local diagrams or static assets when they are derived from current authoritative documents", "add or update validators for the standard foundation pages", "update sitemap robots and internal links only for real routes created by this batch"] : undefined,
+  forbidden_actions: isStandardFoundation ? standardFoundationForbiddenActions : undefined,
+  codex_preflight_steps: isStandardFoundation ? standardFoundationPreflight : undefined,
+  rollback_boundary: isStandardFoundation ? "Revert ARB-SITE-GLOBAL-003 without reverting PR #132 shell or PR #134 product foundation." : `Revert ${id} without reverting earlier stacked site batches.`,
+  scope_justification: isStandardFoundation ? "Weight 5 justified: one reviewable public standard foundation spanning standard overview, rule dictionary, scoring, versioning, governance and reference implementation surfaces with one stacked preview and rollback boundary." : "Weight 5 justified: planned global-site batch retained as a non-executable skeleton until the preceding stacked batch is reviewed."
+  });
+}
 codex("AR-SITE-PREMIUM-EPIC", "AR-SITE-PREMIUM-002", "M3", "BEFORE_COMMUNITY_PUBLICATION", "SITE", "Redesign homepage and core product pages", {
   decision_ids: [...decisionIds, "DL-2026-07-12-PREMIUM-SITE-BEFORE-VALIDATION"],
   weight: 5,
@@ -467,10 +683,20 @@ function createExecutionBatch(input) {
     codex_preflight_steps: input.codex_preflight_steps ?? unique(items.flatMap((item) => item.codex_preflight_steps || [])),
     owner_checkpoint_steps: input.owner_checkpoint_steps ?? unique(items.flatMap((item) => item.owner_checkpoint_steps || [])),
     post_confirmation_steps: input.post_confirmation_steps ?? unique(items.flatMap((item) => item.post_confirmation_steps || [])),
+    final_response_format: input.final_response_format ?? [],
     external_verifications: input.external_verifications ?? unique(items.filter((item) => item.external_verification?.required).map((item) => item.external_verification.topic)),
     evidence: input.evidence ?? [],
     notes: input.notes ?? "",
-    source_documents: sourceDocs
+    source_documents: sourceDocs,
+    ...(input.base_branch ? { base_branch: input.base_branch } : {}),
+    ...(input.pr_base_branch ? { pr_base_branch: input.pr_base_branch } : {}),
+    ...(input.stacked_execution_authorized !== undefined ? { stacked_execution_authorized: input.stacked_execution_authorized } : {}),
+    ...(input.stacked_execution_can_continue !== undefined ? { stacked_execution_can_continue: input.stacked_execution_can_continue } : {}),
+    ...(input.stacked_on_batch ? { stacked_on_batch: input.stacked_on_batch } : {}),
+    ...(input.stacked_base_pr ? { stacked_base_pr: input.stacked_base_pr } : {}),
+    ...(input.stacked_base_head_sha ? { stacked_base_head_sha: input.stacked_base_head_sha } : {}),
+    ...(input.stacked_child_pr ? { stacked_child_pr: input.stacked_child_pr } : {}),
+    ...(input.stacked_child_head_sha ? { stacked_child_head_sha: input.stacked_child_head_sha } : {})
   };
   executionBatches.push(batch);
   return batch;
@@ -521,10 +747,74 @@ createBatch("ARB-GOV-003", "Add canonical AgentReady execution system", ["AR-GOV
 const batchDefinitions = [
   ["ARB-COM-001", "Publish Community CLI and immutable release", ["AR-COM-006"], { status: "DONE", owner: "CODEX_AND_JEASON", spec_status: "EXECUTION_READY", pr_number: 124, evidence: [{ type: "publication_release_execution", pr: 124, merge_sha: "1338f0568925829cfc6455ab8def57f650591574", npm_publication: "SUCCESS", package: "@timeproofs/agentready", version: "0.1.0-alpha.0", alpha_dist_tag: "0.1.0-alpha.0", unexpected_latest_dist_tag: "0.1.0-alpha.0", latest_removal_result: "E400", owner_decision: "ACCEPT_TEMPORARILY", latest_temporarily_accepted_until: "first stable release", future_prereleases_dist_tag: "alpha", git_tag_created: true, git_tag: "v0.1.0-alpha.0", git_tag_target: "150da23932c1fb9433cb3d546904f03c18c909e9", remote_tag_verified: true, github_release_created: true, github_release_url: "https://github.com/BACOUL/timeproofs/releases/tag/v0.1.0-alpha.0", github_release_prerelease: true, github_release_draft: false, github_release_latest: false, release_notes_match_validated_file: true, new_npm_operation_authorized: false, new_npm_operation_executed: false }], notes: "PR #124 merged the release evidence. npm publication succeeded with a documented latest exception accepted temporarily by JEASON. The immutable Git tag and GitHub prerelease exist and point to the approved source commit; no new npm operation is authorized.", scope_justification: "Atomic release boundary after owner, legal and private 2FA checkpoint approval." }],
   ["ARB-COM-002", "Publish public GitHub Action distribution", ["AR-COM-007", "AR-COM-009"], { status: "DONE", spec_status: "EXECUTION_READY", owner: "CODEX_AND_JEASON", branch: "feat-distribution-agentready-marketplace-action", pr_title: "feat(distribution): publish AgentReady GitHub Marketplace action", pr_number: 129, allowed_paths: ["action.yml", ".github/actions/agentready/action.yml", ".github/workflows/**", "cli/tests/**", "scripts/**", "docs/agentready/**", "README.md", "AGENTREADY_PROJECT_CONTEXT.md", "CHANGELOG.md", "index.html", "pricing.html", "agentready-ci.html"], forbidden_paths: ["agentready-core/**", "bin/**", "package.json", "packaging/agentready-community/**", "LICENSE", "NOTICE", "server/**", "api/**"], deliverables: ["canonical root Marketplace Action", "migrated workflows and tests", "tag-pinned and SHA-pinned public workflows", "Marketplace prerelease and listing", "supply-chain and rollback documentation", "current public-site alignment", "immutable evidence record"], acceptance_criteria: ["all AR-COM-007 and AR-COM-009 criteria pass", "all automated validations pass before the owner checkpoint", "owner publishes only the approved immutable Action commit", "post-publication public Action run passes", "release listing and site evidence are recorded, with the documented default-branch sequencing exception", "existing npm package release and tag remain unchanged"], independent_test_plan: ["preflight existing Action behavior", "validate root migration and metadata", "run complete regression suite", "validate active site copy", "perform owner Marketplace checkpoint", "verify public tag listing and full-SHA references", "rerun deterministic governance generation"], required_commands: ["node agentready-core/tests/run-agentready-core-tests.mjs", "node cli/tests/run-agentready-cli-tests.mjs", "node cli/tests/run-agentready-action-smoke-test.mjs", "node cli/tests/run-agentready-package-smoke-test.mjs", "node cli/tests/run-agentready-community-release-workflow-test.mjs", "node scripts/validate-agentready-action-marketplace-readiness.mjs", "node scripts/rebuild-agentready-ledger-data.mjs", "node scripts/generate-agentready-ledger-views.mjs --write", "node scripts/generate-agentready-status.mjs --write", "node scripts/generate-agentready-next-action.mjs --write", "node scripts/generate-agentready-next-prompt.mjs --write", "node scripts/validate-agentready-strategy-docs.mjs", "node scripts/validate-agentready-execution-system.mjs", "git diff --check"], required_evidence: ["root metadata audit", "reference migration inventory", "test and workflow evidence", "approved implementation SHA", "immutable Action tag target", "GitHub prerelease URL", "Marketplace URL", "public tag workflow run", "full-SHA example", "permissions and supply-chain review", "site alignment report", "rollback procedure"], rollback_boundary: "Before tagging, revert or close the PR. After Marketplace publication, preserve the immutable tag and audit trail, remove the affected release from Marketplace if necessary, publish a notice, and issue a corrected immutable Action tag.", manual_actions: ["JEASON approves the exact implementation commit", "JEASON accepts any required Marketplace agreement and publishes the tagged prerelease privately with 2FA", "JEASON returns public URLs only", "JEASON reviews final evidence before merge"], authorized_actions: ["prepare and validate the root Action", "migrate internal Action references", "update approved docs tests workflows and public pages", "after owner confirmation verify and record the public Action release and Marketplace listing"], forbidden_actions: ["no npm operation", "no movement or reuse of v0.1.0-alpha.0", "no moving Action major tag", "no engine CLI package billing backend or runtime changes", "no credentials or 2FA material", "no merge before final owner review"], codex_preflight_steps: ["verify existing release immutability", "run existing Action tests", "inventory nested references and stale active-site wording", "confirm root action.yml is absent", "open a draft PR"], owner_checkpoint_steps: ["approve exact implementation SHA", "accept Marketplace agreement if required", "tag exact commit as agentready-action-v0.1.0-alpha.0", "publish Marketplace prerelease with private 2FA", "provide public Release and Marketplace URLs only"], post_confirmation_steps: ["verify tag target release and listing", "run public tag reference", "record full SHA and final metadata", "replace placeholders", "record all evidence", "request final human review"], external_verifications: ["current GitHub Marketplace root metadata and publication requirements", "public Marketplace listing availability"], evidence: [{ type: "github_action_marketplace_publication", pr: 129, merge_sha: "3070e7827e8118ca62ad6cdb7c37deff9ef24b47", approved_implementation_sha: "d6634d0fbbe1fced510fc49d8871d52a3dc7f348", git_tag: "agentready-action-v0.1.0-alpha.0", git_tag_target: "d6634d0fbbe1fced510fc49d8871d52a3dc7f348", remote_tag_verified: true, github_release_url: "https://github.com/BACOUL/timeproofs/releases/tag/agentready-action-v0.1.0-alpha.0", github_release_prerelease: true, github_release_draft: false, marketplace_url: "https://github.com/marketplace/actions/agentready-ci-gate-by-timeproofs", marketplace_published: true, marketplace_categories: ["Continuous integration", "Security"], public_tag_workflow_run: "https://github.com/BACOUL/timeproofs/actions/runs/29207232357", openapi_public_tag_smoke: "PASS", mcp_public_tag_smoke: "PASS", full_sha_reference: "BACOUL/timeproofs@d6634d0fbbe1fced510fc49d8871d52a3dc7f348", owner_agreement_accepted_privately: true, owner_2fa_completed_privately: true, new_npm_operation_executed: false }], notes: "PR #129 merged the validated root Action. Marketplace publication succeeded after the documented default-branch sequencing exception. The immutable tag remains fixed, public OpenAPI and MCP tag smoke tests passed, and no npm operation occurred.", scope_justification: "Root Action distribution, Marketplace publication, evidence, and the approved site alignment form one coherent public-release boundary." }],
-  ["ARB-SITE-PREMIUM-001", "Build premium design system navigation and footer", ["AR-SITE-PREMIUM-001"], { status: "READY", spec_status: "EXECUTION_READY", owner: "CODEX_AND_JEASON", depends_on_batches: ["ARB-COM-002"] }],
-  ["ARB-SITE-PREMIUM-002", "Redesign homepage and core product pages", ["AR-SITE-PREMIUM-002"], { status: "PLANNED", spec_status: "SKELETON", depends_on_batches: ["ARB-SITE-PREMIUM-001"] }],
-  ["ARB-SITE-PREMIUM-003", "Validate premium mobile accessibility performance and SEO", ["AR-SITE-PREMIUM-003"], { status: "PLANNED", spec_status: "SKELETON", depends_on_batches: ["ARB-SITE-PREMIUM-002"] }],
-  ["ARB-COM-003", "Validate public Community installation", ["AR-COM-008"], { depends_on_batches: ["ARB-SITE-PREMIUM-003"] }],
+  ["ARB-SITE-PREMIUM-001", "Build global site shell navigation and footer", ["AR-SITE-PREMIUM-001"], {
+    status: "IN_REVIEW",
+    spec_status: "EXECUTION_READY",
+    owner: "CODEX_AND_JEASON",
+    pr_number: 132,
+    base_branch: "timeproofs",
+    depends_on_batches: ["ARB-COM-002"],
+    stacked_execution_can_continue: true,
+    evidence: [
+      { type: "stack_base", pr: 132, head_sha: "8ea9b08e9c772f151c3966288f7e82f8efe0ff10", approved_for_stacked_execution: true, merge_authorized: false },
+      { type: "owner_stacked_state_acceptance", date: "2026-07-13", approver: "JEASON", accepted_state: "PR #132 remains open draft and serves as the stacked site foundation.", pr: 132, head_sha: "8ea9b08e9c772f151c3966288f7e82f8efe0ff10", merge_authorized: false, batch_done: false, stacked_execution_can_continue: true }
+    ],
+    notes: "PR #132 remains open and draft as the stack foundation. JEASON accepted this state for stacked execution continuity only; the batch is not DONE and no merge is authorized."
+  }],
+  ["ARB-SITE-GLOBAL-002", "Publish global product scanners CI and planned pricing foundation", ["AR-SITE-GLOBAL-002"], {
+    status: "IN_REVIEW",
+    spec_status: "EXECUTION_READY",
+    owner: "CODEX_AND_JEASON",
+    pr_number: 134,
+    base_branch: "site-agentready-premium-foundation",
+    stacked_execution_authorized: true,
+    stacked_execution_can_continue: true,
+    stacked_on_batch: "ARB-SITE-PREMIUM-001",
+    stacked_base_pr: 132,
+    stacked_base_head_sha: "8ea9b08e9c772f151c3966288f7e82f8efe0ff10",
+    stacked_child_pr: 134,
+    stacked_child_head_sha: "5c211bd4b4795c379f85da5548f2c493e546cbbb",
+    depends_on_batches: ["ARB-SITE-PREMIUM-001"],
+    evidence: [
+      { type: "draft_pr_implementation_review", pr: 134, head_sha: "5c211bd4b4795c379f85da5548f2c493e546cbbb", status: "IN_REVIEW", implemented: true, merge_authorized: false },
+      { type: "owner_production_alignment_acceptance", date: "2026-07-13", approver: "JEASON", decision: "ACCEPT_TEMPORARY_PRODUCTION_ALIGNMENT_EXCEPTION", pr_132_state: "open draft", pr_134_state: "open draft", pr_134_head_sha: "5c211bd4b4795c379f85da5548f2c493e546cbbb", inspected_production_routes_match_pr_134_foundation: true, obsolete_review_offer_detected: false, obsolete_fix_pack_detected: false, temporary_exception_only: true, full_global_site_complete: false, strict_sequence_preserved: ["ARB-SITE-GLOBAL-003", "ARB-SITE-GLOBAL-004", "ARB-SITE-GLOBAL-005", "ARB-SITE-GLOBAL-006", "ARB-SITE-GLOBAL-007"], merge_authorized: false, batch_done: false, stacked_execution_can_continue: true }
+    ],
+    notes: "PR #134 is implemented and in review on the stacked child branch. JEASON accepted the production reconciliation as a temporary alignment exception only; the batch is not DONE and the full premium/global-standard site is not complete."
+  }],
+  ["ARB-SITE-GLOBAL-003", "Publish AgentReady standard rules and governance foundation", ["AR-SITE-GLOBAL-003"], {
+    status: "READY",
+    spec_status: "EXECUTION_READY",
+    owner: "CODEX_AND_JEASON",
+    objective: "Publish the public AgentReady standard, rule-code, severity, scoring, versioning, governance, namespace and reference-implementation foundation without changing engine, CLI, package, Action or runtime behavior.",
+    base_branch: "site-agentready-global-product",
+    pr_base_branch: "site-agentready-global-product",
+    branch: "site-agentready-global-standard",
+    pr_title: "site(standard): publish AgentReady standard foundation",
+    deliverables: standardFoundationDeliverables,
+    acceptance_criteria: standardFoundationAcceptance,
+    independent_test_plan: standardFoundationTests,
+    required_commands: standardFoundationCommands,
+    required_evidence: standardFoundationEvidence,
+    manual_actions: ["JEASON reviews the AgentReady standard foundation preview and confirms no formal-standards or certification claim was introduced"],
+    authorized_actions: ["create real static public standard, rule, JSON, examples, resources and sample-report surfaces", "add factual local diagrams or static assets when they are derived from current authoritative documents", "add or update validators for the standard foundation pages", "update sitemap robots and internal links only for real routes created by this batch"],
+    forbidden_actions: standardFoundationForbiddenActions,
+    codex_preflight_steps: standardFoundationPreflight,
+    external_verifications: ["None"],
+    final_response_format: standardFoundationResponseFormat,
+    rollback_boundary: "Revert ARB-SITE-GLOBAL-003 without reverting PR #132 shell or PR #134 product foundation.",
+    scope_justification: "Weight 5 justified: one reviewable public standard foundation spanning standard overview, rule dictionary, scoring, versioning, governance and reference implementation surfaces with one stacked preview and rollback boundary.",
+    stacked_execution_authorized: true,
+    stacked_on_batch: "ARB-SITE-GLOBAL-002",
+    stacked_base_pr: 134,
+    stacked_base_head_sha: "6a0beff94240c255e40915f14b8a916fa1e13ce7",
+    depends_on_batches: ["ARB-SITE-GLOBAL-002"],
+    notes: "Specification refined only. Future implementation must create a draft PR targeting site-agentready-global-product and must not merge any site PR during the batch."
+  }],
+  ["ARB-SITE-GLOBAL-004", "Publish company trust security privacy and legal foundation", ["AR-SITE-GLOBAL-004"], { status: "PLANNED", spec_status: "SKELETON", base_branch: "site-agentready-global-standard", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-003", depends_on_batches: ["ARB-SITE-GLOBAL-003"] }],
+  ["ARB-SITE-GLOBAL-005", "Publish developer documentation adoption examples and contribution foundation", ["AR-SITE-GLOBAL-005"], { status: "PLANNED", spec_status: "SKELETON", base_branch: "site-agentready-global-trust", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-004", depends_on_batches: ["ARB-SITE-GLOBAL-004"] }],
+  ["ARB-SITE-GLOBAL-006", "Publish SEO GEO AI-first and international foundation", ["AR-SITE-GLOBAL-006"], { status: "PLANNED", spec_status: "SKELETON", base_branch: "site-agentready-global-docs-adoption", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-005", depends_on_batches: ["ARB-SITE-GLOBAL-005"] }],
+  ["ARB-SITE-GLOBAL-007", "Validate complete global standard site", ["AR-SITE-GLOBAL-007"], { status: "PLANNED", spec_status: "SKELETON", owner: "CODEX_AND_JEASON", base_branch: "site-agentready-global-discovery", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-006", depends_on_batches: ["ARB-SITE-GLOBAL-006"] }],
+  ["ARB-COM-003", "Validate public Community installation", ["AR-COM-008"], { depends_on_batches: ["ARB-SITE-GLOBAL-007"] }],
   ["ARB-ONB-001", "Ship Community onboarding commands and tutorial", ["AR-ONB-001", "AR-ONB-002", "AR-ONB-003", "AR-ONB-004"], { depends_on_batches: ["ARB-COM-003"] }],
   ["ARB-MARKET-PILOT-001", "Prepare external Community pilot kit", ["AR-MARKET-PILOT-001"], { deliverables: ["tester guide", "pilot evidence registry", "false-positive and false-negative register", "abandonment and feature-request register", "before fix after case template", "consent and confidentiality checklist", "outreach candidate worksheet", "voluntary feedback procedure"], acceptance_criteria: ["all five-user pilot thresholds map to evidence fields", "templates distinguish OpenAPI and MCP use", "reuse issue fix false-positive false-negative abandonment feature-request and payment-signal evidence can be recorded", "consent redaction and confidentiality controls are explicit", "no automatic outreach invented evidence or silent telemetry is introduced"], required_evidence: ["pilot kit review", "threshold-to-evidence mapping", "consent and privacy review"], scope_justification: "One coherent documentation and evidence-system boundary for the external Community pilot." }],
   ["ARB-ENG-001", "Add benchmark corpus and annotation harness", ["AR-ENG-001"]],
@@ -652,7 +942,7 @@ const site_surfaces = surfaces.map(([planned_route, topic, task_id]) => ({ plann
 const generatedSet = new Set(generatedFiles.filter((file) => file.endsWith('.md')));
 function walk(dir) { const out = []; if (!existsSync(dir)) return out; for (const entry of readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) { const file = path.join(dir, entry.name).replaceAll(path.sep, '/'); if (entry.isDirectory()) out.push(...walk(file)); else if (entry.isFile() && entry.name.endsWith('.md')) out.push(file); } return out; }
 function read(file) { try { return readFileSync(file, 'utf8'); } catch { return ''; } }
-function taskForDoc(file) { const f = file.toLowerCase(); if (f.includes('site_premium_foundation') || f.includes('premium_site')) return ['AR-SITE-PREMIUM-001']; if (f.includes('validation_gates') || f.includes('external_pilot')) return ['AR-MARKET-PILOT-001','AR-MARKET-PILOT-002']; if (f.includes('billing') || f.includes('purchase')) return ['AR-BILL-EPIC','AR-BILL-002']; if (f.includes('pricing') || f.includes('entitlement')) return ['AR-LIC-001','AR-SITE-005']; if (f.includes('license')) return ['AR-LIC-EPIC','AR-COM-003']; if (f.includes('seo') || f.includes('geo')) return ['AR-SEO-EPIC','AR-GEO-EPIC']; if (f.includes('competitive')) return ['AR-COMP-EPIC','AR-COMP-001']; if (f.includes('rule') || f.includes('risk') || f.includes('score')) return ['AR-CAT-EPIC','AR-ENG-003']; if (f.includes('github_action') || f.includes('github-action')) return ['AR-COM-007','AR-DOC-004']; if (f.includes('json')) return ['AR-DOC-001']; if (f.includes('cli')) return ['AR-COM-006','AR-DOC-003']; if (f.includes('privacy') || f.includes('legal')) return ['AR-LEG-001','AR-SITE-019']; if (f.includes('trust') || f.includes('security')) return ['AR-SITE-017','AR-SEC-001']; if (f.includes('benchmark') || f.includes('fixture')) return ['AR-ENG-EPIC','AR-ENG-005']; if (f.includes('site') || f.includes('browser')) return ['AR-SITE-EPIC','AR-UX-001']; if (f.includes('go_to_market')) return ['AR-ACQ-001','AR-MARKET-001']; if (f.includes('onboarding')) return ['AR-ONB-EPIC','AR-ONB-004']; if (f.includes('mcp')) return ['AR-SITE-007','AR-INT-002']; return ['AR-GOV-003']; }
+function taskForDoc(file) { const f = file.toLowerCase(); if (f.includes('global_standard_site') || f.includes('site_global_product')) return ['AR-SITE-GLOBAL-002']; if (f.includes('site_premium_foundation') || f.includes('premium_site')) return ['AR-SITE-PREMIUM-001']; if (f.includes('validation_gates') || f.includes('external_pilot')) return ['AR-MARKET-PILOT-001','AR-MARKET-PILOT-002']; if (f.includes('billing') || f.includes('purchase')) return ['AR-BILL-EPIC','AR-BILL-002']; if (f.includes('pricing') || f.includes('entitlement')) return ['AR-LIC-001','AR-SITE-005']; if (f.includes('license')) return ['AR-LIC-EPIC','AR-COM-003']; if (f.includes('seo') || f.includes('geo')) return ['AR-SEO-EPIC','AR-GEO-EPIC']; if (f.includes('competitive')) return ['AR-COMP-EPIC','AR-COMP-001']; if (f.includes('rule') || f.includes('risk') || f.includes('score')) return ['AR-CAT-EPIC','AR-ENG-003']; if (f.includes('github_action') || f.includes('github-action')) return ['AR-COM-007','AR-DOC-004']; if (f.includes('json')) return ['AR-DOC-001']; if (f.includes('cli')) return ['AR-COM-006','AR-DOC-003']; if (f.includes('privacy') || f.includes('legal')) return ['AR-LEG-001','AR-SITE-019']; if (f.includes('trust') || f.includes('security')) return ['AR-SITE-017','AR-SEC-001']; if (f.includes('benchmark') || f.includes('fixture')) return ['AR-ENG-EPIC','AR-ENG-005']; if (f.includes('site') || f.includes('browser')) return ['AR-SITE-EPIC','AR-UX-001']; if (f.includes('go_to_market')) return ['AR-ACQ-001','AR-MARKET-001']; if (f.includes('onboarding')) return ['AR-ONB-EPIC','AR-ONB-004']; if (f.includes('mcp')) return ['AR-SITE-007','AR-INT-002']; return ['AR-GOV-003']; }
 const docs = [...new Set(['README.md','ROADMAP.md','AGENTREADY_PROJECT_CONTEXT.md',...walk('docs/agentready')])].sort((a, b) => a.localeCompare(b));
 const document_coverage = docs.filter((file) => !generatedSet.has(file)).map((file) => { const text = read(file); const historical = file.includes('/history/') || file.includes('/legacy/') || text.includes('Status: HISTORICAL') || text.includes('HISTORICAL') || text.includes('SUPERSEDED BY'); return { document: file, status: historical ? 'HISTORICAL' : 'ACTIVE', task_ids: historical ? ['AR-GOV-001'] : taskForDoc(file) }; });
 

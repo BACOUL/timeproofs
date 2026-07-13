@@ -3,13 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AgentReady CI Gate for AI-facing APIs and MCP tools</title>
-  <meta name="description" content="Fail the build before unsafe agent-facing OpenAPI or MCP tools are deployed. AgentReady checks structural risks, rule codes and CI policy before release." />
+  <title>AgentReady GitHub CI Gate - TimeProofs</title>
+  <meta name="description" content="Use the public AgentReady GitHub Action with minimum permissions, immutable pinning and local static analysis." />
   <meta name="robots" content="index,follow" />
   <meta name="theme-color" content="#07111f" />
   <link rel="canonical" href="https://timeproofs.io/agentready-ci.html" />
   <link rel="icon" href="/assets/favicon.ico" />
   <link rel="stylesheet" href="/assets/site-nav.css" />
+  <link rel="stylesheet" href="/assets/agentready-product.css" />
   <style>
     :root {
       --bg:#07111f;
@@ -266,7 +267,7 @@
     }
   </style>
 </head>
-<body>
+<body class="agp-body">
   <a class="ar-skip-link" href="#main">Skip to content</a>
   <header class="ar-shell" role="banner">
     <div class="ar-shell__inner">
@@ -278,6 +279,9 @@
         <details class="ar-nav-menu">
           <summary class="ar-nav-summary" aria-expanded="false">Product</summary>
           <div class="ar-menu-panel">
+            <a href="/product.html">Product overview<small>Static readiness gate for agent contracts</small></a>
+            <a href="/community.html">Community<small>Free local scanners and CI gate</small></a>
+            <a href="/pro.html">Pro planned<small>Planned policy and workflow features</small></a>
             <a href="/agentready.html">OpenAPI Scanner<small>Scan REST API contracts</small></a>
             <a href="/agentready-mcp.html">MCP Scanner<small>Check MCP tool definitions</small></a>
             <a href="/agentready-ci.html">GitHub CI Gate<small>Fail unsafe tool contracts in CI</small></a>
@@ -287,7 +291,7 @@
         <details class="ar-nav-menu">
           <summary class="ar-nav-summary" aria-expanded="false">Resources</summary>
           <div class="ar-menu-panel">
-            <a href="/agentready-docs.html">Documentation<small>Start with CLI, CI and outputs</small></a>
+            <a href="/agentready-docs.html">Documentation<small>Start with browser, CLI, CI and outputs</small></a>
             <a href="/agentready-examples.html">Examples<small>Bad/fixed fixtures and expected results</small></a>
             <a href="/docs/agentready/AGENTREADY_RULE_CODES.md">AgentReady rules<small>Stable AR001-AR010 identifiers</small></a>
             <a href="/docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md">Methodology<small>Validated bad/fixed CI behavior</small></a>
@@ -304,6 +308,9 @@
         <nav class="ar-mobile-panel" aria-label="Mobile navigation">
           <a class="ar-mobile-cta" href="/agentready.html">Scan a contract</a>
           <h2>Product</h2>
+          <a href="/product.html">Product overview</a>
+          <a href="/community.html">Community</a>
+          <a href="/pro.html">Pro planned</a>
           <a href="/agentready.html">OpenAPI Scanner</a>
           <a href="/agentready-mcp.html">MCP Scanner</a>
           <a href="/agentready-ci.html">GitHub CI Gate</a>
@@ -324,257 +331,54 @@
   </header>
 
   <main id="main">
-    <section class="hero wrap">
-      <div class="hero-grid">
+    <section class="agp-hero agp-wrap">
+      <div class="agp-hero-grid">
         <div>
-          <div class="eyebrow">Pre-deployment CI gate</div>
-          <h1>AgentReady CI Gate for AI-facing APIs and MCP tools</h1>
-          <p class="subtitle">Fail the build before unsafe agent-facing APIs or MCP tools are deployed.</p>
-          <div class="cta-row">
-            <a class="cta" href="/docs/agentready/GITHUB_ACTION_USAGE.md">View GitHub Action</a>
-            <a class="cta secondary" href="/docs/agentready/AGENTREADY_JSON_SPEC.md">Read agentready.json spec</a>
-          </div>
-          <div class="signal-row" aria-label="AgentReady foundation">
-            <span class="signal">CLI alpha</span>
-            <span class="signal">GitHub Action wrapper</span>
-            <span class="signal">AR001-AR010</span>
-            <span class="signal">agentready.json v0.1</span>
-          </div>
+          <span class="agp-kicker">GitHub CI Gate</span>
+          <h1 class="agp-title">Run AgentReady as a public GitHub Action with minimum permissions.</h1>
+          <p class="agp-subtitle">The GitHub Marketplace Action checks OpenAPI or MCP contracts in CI, writes <code>agentready.json</code> and a Markdown report, and can fail a pull request when policy thresholds are breached. AgentReady Community is available for free; AgentReady Pro is in preparation.</p>
+          <div class="agp-actions"><a class="agp-button" href="https://github.com/marketplace/actions/agentready-ci-gate-by-timeproofs">Open Marketplace Action</a><a class="agp-button secondary" href="/agentready-docs.html">Read docs</a></div>
         </div>
+        <pre class="agp-terminal"><code>permissions:
+  contents: read
 
-        <aside class="panel" aria-label="AgentReady CI gate proof">
-          <div class="panel-top">
-            <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-            <strong>Policy: --min-score 75 --fail-on critical</strong>
-          </div>
-          <div class="panel-body">
-            <div class="gate-row">
-              <div>
-                <div class="label">Bad fixture</div>
-                <div class="score">54</div>
-                <span class="badge fail">FAIL</span>
-              </div>
-              <div class="arrow">-&gt;</div>
-              <div>
-                <div class="label">Fixed fixture</div>
-                <div class="score">84</div>
-                <span class="badge pass">PASS</span>
-              </div>
-            </div>
-            <p class="muted" style="margin-top:14px;">Bad/fixed commercial fixtures prove the gate can block uncontrolled danger while allowing controlled high-risk tools to pass with visible findings.</p>
-          </div>
-        </aside>
+steps:
+  - uses: actions/checkout@v4
+  - uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0
+    with:
+      file: openapi.json
+      type: openapi
+      min-score: "75"
+      fail-on: critical
+      out: agentready-ci</code></pre>
       </div>
     </section>
-
-    <section class="section wrap">
-      <div class="section-head">
-        <h2>The problem</h2>
-        <p>AI agents increasingly call OpenAPI operations and MCP tools. Many of those surfaces are valid for humans but too vague, too broad, or too dangerous to expose without a pre-deployment check.</p>
-      </div>
-      <div class="grid three">
-        <article class="card"><h3>Vague tool choice</h3><p>Agents can select the wrong tool when names, descriptions, and usage boundaries are unclear.</p></article>
-        <article class="card"><h3>Uncontrolled side effects</h3><p>Refunds, emails, deletes, exports, and publishing flows need confirmation and limits before deployment.</p></article>
-        <article class="card"><h3>Weak recovery</h3><p>Without clear output, status, and error behavior, agents guess instead of stopping or correcting safely.</p></article>
-      </div>
+    <section class="agp-section agp-wrap agp-proof-grid">
+      <article class="agp-card"><h2>Immutable and full-SHA pinning</h2><p>Use the immutable Action tag for readable workflows or the full implementation SHA for maximum pinning precision.</p><pre class="agp-terminal"><code>uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0
+uses: BACOUL/timeproofs@d6634d0fbbe1fced510fc49d8871d52a3dc7f348</code></pre></article>
+      <article class="agp-card"><h2>Outputs</h2><ul class="agp-list"><li><code>score</code></li><li><code>status</code></li><li><code>report-path</code></li><li><code>contract-path</code></li></ul><p>Expected policy failures still preserve generated outputs and reports.</p></article>
     </section>
-
-    <section class="section wrap">
-      <div class="section-head">
-        <h2>What AgentReady checks</h2>
-        <p>The scanner looks for structural risks in the contract before an agent can use it.</p>
-      </div>
-      <div class="grid three">
-        <article class="card"><h3>Destructive actions</h3><p>Delete, refund, send, export, publish, and other high-impact operations.</p></article>
-        <article class="card"><h3>Missing confirmation boundaries</h3><p>Dangerous actions without explicit human review, preview, or approval flow.</p></article>
-        <article class="card"><h3>Unbounded write actions</h3><p>Amounts, quantities, limits, paths, recipients, or filters without safe constraints.</p></article>
-        <article class="card"><h3>Broad file, email, and refund tools</h3><p>Tools that combine too much capability or expose a scope wider than agents need.</p></article>
-        <article class="card"><h3>Missing dry-run or preview</h3><p>State-changing actions without a safe way to inspect the planned result first.</p></article>
-        <article class="card"><h3>Sensitive data exposure</h3><p>Customer, payment, authentication, or file data exposed without tight boundaries.</p></article>
-        <article class="card"><h3>Unclear agent instructions</h3><p>Missing when-to-use, when-not-to-use, output schema, or corrective error guidance.</p></article>
-      </div>
+    <section class="agp-section agp-wrap agp-split">
+      <div class="agp-section-head"><h2>PASS and policy FAIL are both intentional outcomes.</h2><p>A PASS lets the workflow proceed. A valid policy FAIL blocks the workflow while keeping report artifacts available for review.</p></div>
+      <div class="agp-flow"><div class="agp-step"><div><strong>Scan</strong><p class="agp-muted">The Action runs local static analysis only.</p></div></div><div class="agp-step"><div><strong>Use the CLI</strong><p class="agp-muted">For local runs, use <code>npx @timeproofs/agentready@alpha</code>.</p></div></div><div class="agp-step"><div><strong>Write outputs</strong><p class="agp-muted">Markdown and <code>agentready.json</code> are generated in the configured output directory.</p></div></div><div class="agp-step"><div><strong>Fail on policy</strong><p class="agp-muted">Thresholds such as critical findings can stop the build without contacting TimeProofs.</p></div></div></div>
     </section>
-
-    <section class="section wrap">
-      <div class="section-head">
-        <h2>CI Gate behavior</h2>
-        <p>The same realistic policy was applied to each commercial bad/fixed pair: <code>--min-score 75 --fail-on critical</code>.</p>
-      </div>
-      <div class="proof-table" role="region" aria-label="Commercial fixture CI gate results" tabindex="0">
-        <table>
-          <thead>
-            <tr>
-              <th>Pair</th>
-              <th>Bad</th>
-              <th>Fixed</th>
-              <th>Delta</th>
-              <th>Gate result</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Refund OpenAPI</td>
-              <td><strong>54</strong> <span class="badge fail">FAIL</span></td>
-              <td><strong>84</strong> <span class="badge pass">PASS</span></td>
-              <td class="delta">+30</td>
-              <td>Bad blocks a money-moving action without sufficient control. Fixed passes with critical risk removed.</td>
-            </tr>
-            <tr>
-              <td>Email MCP</td>
-              <td><strong>63</strong> <span class="badge fail">FAIL</span></td>
-              <td><strong>90</strong> <span class="badge pass">PASS</span></td>
-              <td class="delta">+27</td>
-              <td>Bad blocks external sending without a safe boundary. Fixed passes with explicit confirmed sending behavior.</td>
-            </tr>
-            <tr>
-              <td>Files MCP</td>
-              <td><strong>67</strong> <span class="badge fail">FAIL</span></td>
-              <td><strong>84</strong> <span class="badge pass">PASS</span></td>
-              <td class="delta">+17</td>
-              <td>Bad blocks broad file management. Fixed passes after scoped read and confirmed delete behavior are separated.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="muted" style="margin-top:12px;">See the full validation report in <a href="/docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md">Commercial Fixture CI Gate Behavior</a>.</p>
-    </section>
-
-    <section class="section wrap">
-      <div class="section-head">
-        <h2>Add it to a pull request.</h2>
-        <p>AgentReady Community is available for free through the npm alpha. AgentReady Pro is in preparation. The root GitHub Marketplace Action is prepared for the owner publication checkpoint.</p>
-      </div>
-      <div class="grid two">
-        <article class="card code-card">
-          <div class="code-title">CLI example</div>
-          <pre><code>npx @timeproofs/agentready@alpha scan openapi ./openapi.json --min-score 75 --fail-on critical</code></pre>
-        </article>
-        <article class="card code-card">
-          <div class="code-title">GitHub Marketplace Action</div>
-          <pre><code>name: AgentReady
-
-on:
-  pull_request:
-    paths:
-      - "openapi.json"
-      - "mcp-tools.json"
-
-jobs:
-  agentready:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - name: AgentReady OpenAPI CI gate
-        uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0
-        with:
-          type: openapi
-          file: ./openapi.json
-          min-score: "75"
-          fail-on: critical
-          out: agentready-output</code></pre>
-        </article>
-      </div>
-      <p class="muted" style="margin-top:12px;">The GitHub Marketplace Action is public. Pin the immutable alpha tag <code>agentready-action-v0.1.0-alpha.0</code>, or use the full verified commit SHA <code>d6634d0fbbe1fced510fc49d8871d52a3dc7f348</code> for the strongest supply-chain control.</p>
-    </section>
-
-    <section class="section wrap">
-      <div class="section-head">
-        <h2>agentready.json output</h2>
-        <p>Each scan can produce a machine-readable readiness contract for CI, reports, and future automation.</p>
-      </div>
-      <div class="grid two">
-        <article class="card">
-          <h3>Core fields</h3>
-          <ul class="list">
-            <li><code>agentready_version</code></li>
-            <li><code>score</code></li>
-            <li><code>status</code></li>
-            <li><code>risk_counts</code></li>
-            <li><code>tools[]</code></li>
-          </ul>
-        </article>
-        <article class="card">
-          <h3>Finding fields</h3>
-          <ul class="list">
-            <li><code>detected_risks</code></li>
-            <li><code>rule_codes</code></li>
-            <li><code>detected_rules</code></li>
-            <li><code>recommendations</code></li>
-          </ul>
-        </article>
-      </div>
-    </section>
-
-    <section class="section wrap">
-      <div class="section-head">
-        <h2>Rule codes</h2>
-        <p>AR001-AR010 give teams stable vocabulary for recurring agent-readiness failures. They make findings easier to discuss in pull requests, reports, and policy reviews.</p>
-      </div>
-      <div class="rule-list" aria-label="AgentReady rule code examples">
-        <div class="rule">AR001 Unbounded write action</div>
-        <div class="rule">AR002 Missing confirmation boundary</div>
-        <div class="rule">AR005 Sensitive data exposure</div>
-        <div class="rule">AR007 Overbroad tool scope</div>
-        <div class="rule">AR009 Unclear agent instructions</div>
-        <div class="rule">AR010 Missing rate or scope limit</div>
-      </div>
-      <p class="muted" style="margin-top:14px;">Read the full reference in <a href="/docs/agentready/AGENTREADY_RULE_CODES.md">AgentReady Rule Codes</a>.</p>
-    </section>
-
-    <section class="section wrap">
-      <div class="section-head">
-        <h2>Security and trust model</h2>
-        <p>AgentReady is designed for pre-deployment checks and CI-friendly artifacts, not live production interception.</p>
-      </div>
-      <div class="grid three">
-        <article class="card trust"><span class="mark">1</span><div><h3>Local-first</h3><p>Scan files locally in the browser, CLI, or CI runner.</p></div></article>
-        <article class="card trust"><span class="mark">2</span><div><h3>No live API execution</h3><p>AgentReady reads contracts. It does not call production endpoints.</p></div></article>
-        <article class="card trust"><span class="mark">3</span><div><h3>No live MCP execution</h3><p>MCP tools are inspected as definitions, not invoked as live tools.</p></div></article>
-        <article class="card trust"><span class="mark">4</span><div><h3>No LLM call required</h3><p>The current checks are static and deterministic.</p></div></article>
-        <article class="card trust"><span class="mark">5</span><div><h3>No dashboard required</h3><p>Use the scanner, CLI, reports, and CI outputs without an account flow.</p></div></article>
-        <article class="card trust"><span class="mark">6</span><div><h3>CI-friendly output</h3><p>Score, status, report path, and <code>agentready.json</code> can be used in automation.</p></div></article>
-      </div>
-    </section>
-
-    <section class="section wrap">
-      <div class="card">
-        <h2>Limitations</h2>
-        <p>TimeProofs AgentReady does not guarantee that an AI agent will never fail. It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.</p>
-      </div>
-    </section>
-
-    <section class="section wrap">
-      <div class="banner">
-        <div>
-          <h2>Add AgentReady before release.</h2>
-          <p class="muted">Start with one OpenAPI or MCP tools file, apply a policy, and keep the report as a deployment artifact.</p>
-        </div>
-        <div class="cta-row" style="margin-top:0;">
-          <a class="cta" href="/docs/agentready/GITHUB_ACTION_USAGE.md">Add AgentReady to CI</a>
-          <a class="cta secondary" href="/docs/agentready/AGENTREADY_JSON_SPEC.md">Read the spec</a>
-          <a class="cta secondary" href="/docs/agentready/AGENTREADY_RULE_CODES.md">View rule codes</a>
-        </div>
-      </div>
-    </section>
+    <section class="agp-section agp-wrap"><div class="agp-warning">TimeProofs AgentReady does not guarantee that an AI agent will never fail. It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers. The Action does not call live APIs, live MCP servers, hosted scanners, LLMs, gateways or telemetry endpoints.</div></section>
   </main>
   <footer class="ar-footer" role="contentinfo">
     <div class="ar-footer__inner">
       <div class="ar-footer__brand">
         <strong>TimeProofs AgentReady</strong>
-        <p>Pre-deployment CI gate for agent-facing OpenAPI and MCP tools. TimeProofs AgentReady does not guarantee that an AI agent will never fail. It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.</p>
+        <p>Static readiness gate for agent-facing OpenAPI and MCP contracts. TimeProofs AgentReady does not guarantee that an AI agent will never fail. It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.</p>
       </div>
       <div class="ar-footer__groups">
         <section class="ar-footer__group" aria-labelledby="ar-footer-product">
           <h2 id="ar-footer-product">Product</h2>
+          <a href="/product.html">Product overview</a>
+          <a href="/community.html">Community</a>
+          <a href="/pro.html">Pro planned</a>
           <a href="/agentready.html">OpenAPI scanner</a>
           <a href="/agentready-mcp.html">MCP scanner</a>
           <a href="/agentready-ci.html">AgentReady CI Gate</a>
-          <a href="/agentready-sample-report.html">Sample report</a>
         </section>
         <section class="ar-footer__group" aria-labelledby="ar-footer-standard">
           <h2 id="ar-footer-standard">Standard</h2>
@@ -585,9 +389,9 @@ jobs:
         </section>
         <section class="ar-footer__group" aria-labelledby="ar-footer-developers">
           <h2 id="ar-footer-developers">Developers</h2>
-          <a href="/agentready-docs.html">CLI</a>
-          <a href="/docs/agentready/GITHUB_ACTION_USAGE.md">GitHub Action</a>
-          <a href="/agentready-docs.html">Docs</a>
+          <a href="/agentready-docs.html">CLI and browser docs</a>
+          <a href="/agentready-ci.html">GitHub Action</a>
+          <a href="/agentready-sample-report.html">Sample report</a>
           <a href="https://github.com/BACOUL/timeproofs">GitHub repository</a>
         </section>
         <section class="ar-footer__group" aria-labelledby="ar-footer-trust">
@@ -595,12 +399,11 @@ jobs:
           <a href="/privacy.html">Security model</a>
           <a href="/privacy.html">Privacy</a>
           <a href="/terms.html">Terms</a>
-          <a href="mailto:hello@timeproofs.io">Contact</a>
         </section>
       </div>
       <div class="ar-footer__bottom">
-        <span>Community is available for free. Pro is in preparation.</span>
-        <span>Static scan only. No backend, no upload, no telemetry by default.</span>
+        <span>AgentReady Community is available for free. AgentReady Pro is in preparation.</span>
+        <span>Local static analysis only. No account, upload, backend or telemetry required for Community scans.</span>
       </div>
     </div>
   </footer>

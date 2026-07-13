@@ -154,8 +154,17 @@ function taskDependenciesDone(task, tasks) {
   return (task.depends_on || []).every((id) => isDependencySatisfied(tasks.get(id)));
 }
 
+function batchDependencySatisfiedForStack(dep, batch) {
+  if (!dep) return false;
+  if (dep.status === "DONE") return true;
+  return batch.stacked_execution_authorized === true
+    && batch.stacked_on_batch === dep.id
+    && dep.status === "IN_REVIEW"
+    && dep.stacked_execution_can_continue === true;
+}
+
 function dependencyBatchesDone(batch, batches) {
-  return (batch.depends_on_batches || []).every((id) => batches.get(id)?.status === "DONE");
+  return (batch.depends_on_batches || []).every((id) => batchDependencySatisfiedForStack(batches.get(id), batch));
 }
 
 function isExecutionReadyBatch(batch, ledger) {
@@ -255,7 +264,7 @@ export function promptCounts(ledger) {
 
 export function selectNextAction(ledger) {
   const tasks = taskMap(ledger);
-  const inReviewBatch = (ledger.execution_batches || []).find((batch) => batch.status === "IN_REVIEW");
+  const inReviewBatch = (ledger.execution_batches || []).find((batch) => batch.status === "IN_REVIEW" && batch.stacked_execution_can_continue !== true);
   if (inReviewBatch) {
     return {
       kind: "batch",
@@ -287,6 +296,10 @@ export function selectNextAction(ledger) {
 
 function linesFor(values) {
   return values?.length ? values.map((item) => `  - ${item}`).join("\n") : "  - None";
+}
+
+function linesForPlain(values) {
+  return values?.length ? values.map((item) => `- ${item}`).join("\n") : "- summarize files changed, validations, workflow status, draft status, and any remaining human review.";
 }
 
 function groupBy(tasks, key) {
@@ -394,9 +407,12 @@ function nextActionText(next) {
 function promptForBatch(batch, ledger) {
   const tasks = taskMap(ledger);
   const items = (batch.work_item_ids || []).map((id) => tasks.get(id)).filter(Boolean);
+  const baseBranch = batch.base_branch || "timeproofs";
+  const draftTarget = batch.pr_base_branch || baseBranch;
   return [
     `Repository: BACOUL/timeproofs`,
-    `Base: timeproofs`,
+    `Base: ${baseBranch}`,
+    batch.stacked_base_head_sha ? `Exact approved base head: ${batch.stacked_base_head_sha}` : "",
     `Batch ID: ${batch.id}`,
     `Work item IDs: ${batch.work_item_ids.join(", ")}`,
     `Owner: ${batch.owner}`,
@@ -405,6 +421,7 @@ function promptForBatch(batch, ledger) {
     `Objective: ${batch.objective}`,
     `Branch: ${batch.branch}`,
     `PR title: ${batch.pr_title}`,
+    `Draft PR target: ${draftTarget}`,
     "",
     `Documents sources:`,
     linesFor([...new Set(items.flatMap((item) => item.source_documents || []))]),
@@ -448,7 +465,7 @@ function promptForBatch(batch, ledger) {
     linesFor(batch.authorized_actions),
     "",
     batch.codex_preflight_steps?.length ? [
-      `## Étape Codex préalable`,
+      `## Preliminary Codex steps`,
       "",
       linesFor(batch.codex_preflight_steps),
       ""
@@ -472,7 +489,8 @@ function promptForBatch(batch, ledger) {
       ? [`Forbidden actions:`, linesFor(batch.forbidden_actions)].join("\n")
       : `Interdictions: stay strictly inside the batch scope, do not publish, do not create tags or releases, and do not merge the PR.`,
     "",
-    `Response format: summarize files changed, validations, workflow status, draft status, and any remaining human review.`
+    `Response format:`,
+    linesForPlain(batch.final_response_format)
   ].join("\n");
 }
 
@@ -768,7 +786,7 @@ function validateBatches(ledger, add) {
     if (batch.status === "READY") {
       add(batch.spec_status === "EXECUTION_READY", `${batch.id} READY but not EXECUTION_READY`);
       for (const dep of batch.depends_on_tasks || []) add(isDependencySatisfied(tasks.get(dep)), `${batch.id} READY but task dependency ${dep} is not satisfied`);
-      for (const dep of batch.depends_on_batches || []) add(batches.get(dep)?.status === "DONE", `${batch.id} READY but batch dependency ${dep} is not DONE`);
+      for (const dep of batch.depends_on_batches || []) add(batchDependencySatisfiedForStack(batches.get(dep), batch), `${batch.id} READY but batch dependency ${dep} is not satisfied`);
     }
     add((batch.work_item_ids || []).length <= 8 || (batch.scope_justification || "").includes("exceeds eight"), `${batch.id} exceeds eight work items without justification`);
     const batchTasks = (batch.work_item_ids || []).map((id) => tasks.get(id)).filter(Boolean);
