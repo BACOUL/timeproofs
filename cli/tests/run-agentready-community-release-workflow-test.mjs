@@ -116,7 +116,7 @@ assert.ok(workflow.includes("assert.equal(counts.execution_batches.immediately_e
 assert.match(workflow, /assert\.match\(nextPrompt,\s*\/Repository: BACOUL\\\/timeproofs\/\)/);
 assert.match(workflow, /Batch ID: ARB-SITE-GLOBAL-004/);
 assert.match(workflow, /Base: site-agentready-global-standard/);
-assert.match(workflow, /Exact approved base head: 25636982cd944d3e947081740d5226f692c83741/);
+assert.match(workflow, /Exact approved base head: 405255d516d62504587410aa50386b3f3ecab389/);
 assert.match(workflow, /Branch: site-agentready-global-trust/);
 assert.match(workflow, /Draft PR target: site-agentready-global-standard/);
 assert.match(workflow, /assert\.doesNotMatch\(nextPrompt,\s*\/No CODEX execution batch is currently authorized\/\)/);

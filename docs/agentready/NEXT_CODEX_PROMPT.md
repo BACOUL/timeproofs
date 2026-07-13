@@ -7,7 +7,7 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 Repository: BACOUL/timeproofs
 Base: site-agentready-global-standard
-Exact approved base head: 25636982cd944d3e947081740d5226f692c83741
+Exact approved base head: 405255d516d62504587410aa50386b3f3ecab389
 Batch ID: ARB-SITE-GLOBAL-004
 Work item IDs: AR-SITE-GLOBAL-004
 Owner: CODEX_AND_JEASON

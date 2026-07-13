@@ -1064,7 +1064,7 @@ const batchDefinitions = [
     stacked_execution_authorized: true,
     stacked_on_batch: "ARB-SITE-GLOBAL-003",
     stacked_base_pr: 135,
-    stacked_base_head_sha: "25636982cd944d3e947081740d5226f692c83741",
+    stacked_base_head_sha: "405255d516d62504587410aa50386b3f3ecab389",
     depends_on_batches: ["ARB-SITE-GLOBAL-003"],
     evidence: [
       {
@@ -1076,7 +1076,7 @@ const batchDefinitions = [
         pr_created: false
       }
     ],
-    notes: "The exact implementation branch base must be the current PR #135 head at the moment ARB-SITE-GLOBAL-004 is executed. This record uses the owner-approved public-content head as the current approved base for the generated prompt; if PR #135 advances before execution, the base must be reconciled before implementation."
+    notes: "The owner-approved public-content commit is 25636982cd944d3e947081740d5226f692c83741. The executable stacked base for ARB-SITE-GLOBAL-004 is 405255d516d62504587410aa50386b3f3ecab389 because it contains the owner-acceptance/specification refinement and the matching CI guard. If PR #135 advances before execution, the base must be reconciled again before implementation."
   }],
   ["ARB-SITE-GLOBAL-005", "Publish developer documentation adoption examples and contribution foundation", ["AR-SITE-GLOBAL-005"], { status: "PLANNED", spec_status: "SKELETON", base_branch: "site-agentready-global-trust", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-004", depends_on_batches: ["ARB-SITE-GLOBAL-004"] }],
   ["ARB-SITE-GLOBAL-006", "Publish SEO GEO AI-first and international foundation", ["AR-SITE-GLOBAL-006"], { status: "PLANNED", spec_status: "SKELETON", base_branch: "site-agentready-global-docs-adoption", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-005", depends_on_batches: ["ARB-SITE-GLOBAL-005"] }],

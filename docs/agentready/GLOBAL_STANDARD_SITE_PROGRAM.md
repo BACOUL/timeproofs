@@ -198,6 +198,9 @@ Future base branch: `site-agentready-global-standard`
 Current approved public-content head for the parent stack:
 `25636982cd944d3e947081740d5226f692c83741`
 
+Actual executable stacked base head for the future GLOBAL-004 branch:
+`405255d516d62504587410aa50386b3f3ecab389`
+
 Future implementation branch: `site-agentready-global-trust`
 
 Future draft PR target: `site-agentready-global-standard`
@@ -210,11 +213,12 @@ open the implementation PR, implement pages, merge any site PR, or change the
 AgentReady engine, CLI, npm package, GitHub Action, tags, releases,
 Marketplace state, billing, accounts, licensing, backend or runtime behavior.
 
-Because a Git commit cannot contain its own future SHA, the generated prompt
-records the current approved parent head and requires a base-head
-reconciliation if PR #135 advances before the implementation branch is
-created. The future implementation must use the then-current PR #135 head
-that contains this specification refinement and all generated execution views.
+The owner-reviewed public-content commit remains recorded separately from the
+future implementation base. The future implementation must branch from the
+executable PR #135 head that contains this specification refinement, generated
+execution views and matching CI workflow guard. If PR #135 advances before the
+implementation branch is created, the base head must be reconciled again before
+implementation.
 
 ### Trust And Legal Source Inventory
 
