@@ -24,6 +24,7 @@ const pages = [
   "agentready-examples.html",
   "agentready-resources.html",
   "agentready-sample-report.html",
+  "agentready-simulation.html",
   "about.html",
   "trust.html",
   "security.html",
@@ -33,7 +34,10 @@ const pages = [
   "legal.html",
   "limitations.html",
   "agentready-data-flow.html",
-  "support.html"
+  "support.html",
+  "openapi-ai-agent-readiness.html",
+  "mcp-server-readiness.html",
+  "ai-agent-tool-risk-checklist.html"
 ];
 
 const evidenceRoot = "docs/agentready/evidence/site-global-discovery-foundation";
@@ -188,8 +192,12 @@ for (const page of pages) {
 }
 
 const sitemap = read("sitemap.xml");
-for (const page of pages) {
-  if (!sitemap.includes(canonicalFor(page))) fail(`sitemap.xml is missing ${page}`);
+const expectedSitemapRoutes = pages.map(canonicalFor).sort();
+const actualSitemapRoutes = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]).sort();
+if (JSON.stringify(actualSitemapRoutes) !== JSON.stringify(expectedSitemapRoutes)) {
+  const missing = expectedSitemapRoutes.filter((route) => !actualSitemapRoutes.includes(route));
+  const extra = actualSitemapRoutes.filter((route) => !expectedSitemapRoutes.includes(route));
+  fail(`sitemap.xml route set does not match audited routes exactly; missing=${missing.join(", ") || "none"} extra=${extra.join(", ") || "none"}`);
 }
 if (sitemap.includes("timeproofs.io/fr/")) fail("sitemap.xml contains fake French route");
 if (sitemap.includes("vercel.app")) fail("sitemap.xml contains preview URL");

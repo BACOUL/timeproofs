@@ -24,7 +24,7 @@ This batch does not implement the full post-launch SEO content cluster, competit
 
 ## Route Coverage
 
-The batch covers these public routes:
+The batch covers exactly 34 public routes:
 
 - `/`
 - `/product.html`
@@ -46,6 +46,7 @@ The batch covers these public routes:
 - `/agentready-examples.html`
 - `/agentready-resources.html`
 - `/agentready-sample-report.html`
+- `/agentready-simulation.html`
 - `/about.html`
 - `/trust.html`
 - `/security.html`
@@ -56,6 +57,9 @@ The batch covers these public routes:
 - `/limitations.html`
 - `/agentready-data-flow.html`
 - `/support.html`
+- `/openapi-ai-agent-readiness.html`
+- `/mcp-server-readiness.html`
+- `/ai-agent-tool-risk-checklist.html`
 
 ## Metadata And Structured Data
 
@@ -146,4 +150,3 @@ JEASON must review the combined preview and confirm:
 - the English-only international architecture is acceptable until real translations are reviewed;
 - no fake localized, doorway or thin SEO page has been introduced;
 - the stacked site sequence remains intact and no site PR has been merged.
-
