@@ -6,7 +6,9 @@ PR: #135
 Base branch: site-agentready-global-product
 Actual stacked base head: 1a71cb469e608d548b42c5884a4165563216733b
 Principal public-page implementation commit: c32d1134ce649dfdcaf99ed990f2e9a5f3b5427c
-Current reviewed PR #135 public-content head after navigation and evidence correction: 149ef90f5fe1460e113dfbc079b0596fe538753e
+Public navigation correction commit: 149ef90f5fe1460e113dfbc079b0596fe538753e
+Evidence reconciliation commit: f46f060fdea15322ec48d55db983dbe50355611c
+Production-coherence page correction commits: e6ef4df6454d883083f81b31be70b6ef02dca2a0 and 77a5144061711f112ae87b7d4228b30f0d38a156
 
 ## Source Inventory
 
@@ -77,10 +79,18 @@ No-JavaScript report: docs/agentready/evidence/site-global-standard-foundation/n
 320px overflow report: docs/agentready/evidence/site-global-standard-foundation/overflow-320-report.json
 CTA report: docs/agentready/evidence/site-global-standard-foundation/cta-link-report.json
 
-Screenshot provenance: existing desktop, mobile and no-JavaScript screenshots were generated at the principal public-page implementation commit c32d1134ce649dfdcaf99ed990f2e9a5f3b5427c. The later reviewed head 149ef90f5fe1460e113dfbc079b0596fe538753e changed public rule-link destinations and evidence records only; it did not change visual layout, page composition or public copy. Screenshots were therefore not regenerated for this evidence-only reconciliation.
+Screenshot provenance: existing desktop, mobile and no-JavaScript screenshots were generated at the principal public-page implementation commit c32d1134ce649dfdcaf99ed990f2e9a5f3b5427c. Later standard-page changes were link/evidence-only and did not change the six standard-page layouts. The production-coherence corrections changed only index.html and agentready-docs.html, which are outside the six-page standard-foundation screenshot set.
+
+## Production Coherence Correction
+
+- The homepage no longer describes the public standard as a future-only ambition.
+- The homepage now links directly to the public method and AR001-AR010 rule catalogue.
+- The documentation example now uses agentready_version 0.1.
+- The documentation score 72 now maps to Minor fixes, consistent with the published 70-84 status band.
+- The complete agentready.json public specification remains linked from agentready-docs.html.
 
 ## Preview
 
 Reviewed combined stacked preview URL: https://timeproofs-git-site-agentready-global-standard-jeason1.vercel.app/
 
-The current preview is reviewed against PR #135 after the navigation and evidence correction head 149ef90f5fe1460e113dfbc079b0596fe538753e. The principal public-page implementation remains c32d1134ce649dfdcaf99ed990f2e9a5f3b5427c; this distinction prevents the preview evidence from being read as corresponding only to the earlier implementation commit.
+The preview follows the latest site-agentready-global-standard branch deployment. GitHub Actions and Vercel checks must remain green before owner acceptance.
