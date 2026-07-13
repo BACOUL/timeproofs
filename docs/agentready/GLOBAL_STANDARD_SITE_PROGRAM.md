@@ -392,6 +392,9 @@ Reviewed PR: #136
 Reviewed head:
 `11c488ff98ecb4509dd8bbf916840bf8c9edce77`
 
+Current reconciled PR #136 head:
+`943d9fea90748a0496ce872dc48b14253eb3a16b`
+
 Reviewed preview:
 `https://timeproofs-git-site-agentready-global-trust-jeason1.vercel.app/`
 
@@ -415,6 +418,10 @@ Canonical effect:
 - `ARB-SITE-GLOBAL-004` is not `DONE` until PR #136 is merged and reconciled.
 - Stacked execution may continue to `ARB-SITE-GLOBAL-005` through the
   canonical generated prompt.
+- The reviewed public-content head is retained as historical owner-review
+  evidence. The executable parent head for `ARB-SITE-GLOBAL-005` is the current
+  reconciled PR #136 head because it includes the owner-acceptance
+  reconciliation, generated execution views and workflow guards.
 
 ## ARB-SITE-GLOBAL-005 Specification Refinement
 
@@ -424,8 +431,11 @@ Refinement date: 2026-07-13
 
 Future base branch: `site-agentready-global-trust`
 
-Exact executable parent head:
+Historical GLOBAL-004 reviewed public-content head:
 `11c488ff98ecb4509dd8bbf916840bf8c9edce77`
+
+Exact executable parent head:
+`943d9fea90748a0496ce872dc48b14253eb3a16b`
 
 Future implementation branch: `site-agentready-global-docs-adoption`
 

@@ -775,8 +775,11 @@ const docsAdoptionForbiddenActions = [
   "do not invent customers, benchmarks, certifications, standards-body recognition, support commitments or governance processes",
   "do not merge any site PR"
 ];
+const trustLegalReviewedPublicContentHead = "11c488ff98ecb4509dd8bbf916840bf8c9edce77";
+const trustLegalCurrentReconciledHead = "943d9fea90748a0496ce872dc48b14253eb3a16b";
 const docsAdoptionPreflight = [
-  "verify branch site-agentready-global-trust is at exact approved parent head 11c488ff98ecb4509dd8bbf916840bf8c9edce77",
+  `verify branch site-agentready-global-trust is at exact executable parent head ${trustLegalCurrentReconciledHead}`,
+  `confirm the accepted ARB-SITE-GLOBAL-004 public-content review head remains recorded as ${trustLegalReviewedPublicContentHead}`,
   "create branch site-agentready-global-docs-adoption from that exact parent head",
   "open a draft PR targeting site-agentready-global-trust before broad page edits",
   "inventory current developer documentation routes, scanner usage, CLI usage, GitHub Action usage, agentready.json documentation, examples, contribution guidance and troubleshooting copy",
@@ -1244,7 +1247,7 @@ const batchDefinitions = [
     stacked_base_head_sha: "b0946d3fb4403b1281171dd955aa2438f733086a",
     stacked_child_pr: 136,
     stacked_child_branch: "site-agentready-global-trust",
-    stacked_child_head_sha: "11c488ff98ecb4509dd8bbf916840bf8c9edce77",
+    stacked_child_head_sha: trustLegalCurrentReconciledHead,
     depends_on_batches: ["ARB-SITE-GLOBAL-003"],
     evidence: [
       {
@@ -1278,7 +1281,8 @@ const batchDefinitions = [
         reviewer: "JEASON",
         branch_reviewed: "site-agentready-global-trust",
         pr: 136,
-        reviewed_head: "11c488ff98ecb4509dd8bbf916840bf8c9edce77",
+        reviewed_head: trustLegalReviewedPublicContentHead,
+        current_reconciled_head: trustLegalCurrentReconciledHead,
         preview_url: "https://timeproofs-git-site-agentready-global-trust-jeason1.vercel.app/",
         company_trust_security_privacy_legal_foundation_accepted: true,
         stacked_implementation_layer_accepted: true,
@@ -1300,7 +1304,7 @@ const batchDefinitions = [
         stacked_execution_can_continue: true
       }
     ],
-    notes: "PR #136 implements the trust/legal foundation on site-agentready-global-trust and remains open and unmerged. JEASON accepted the company, trust, security, privacy and legal foundation as a stacked implementation layer at head 11c488ff98ecb4509dd8bbf916840bf8c9edce77. This is not legal advice or final legal certification. The batch remains IN_REVIEW and is not DONE until PR #136 is merged and reconciled, but owner review is complete for stacked continuation to ARB-SITE-GLOBAL-005."
+    notes: `PR #136 implements the trust/legal foundation on site-agentready-global-trust and remains open and unmerged. JEASON accepted the company, trust, security, privacy and legal foundation as a stacked implementation layer at public-content review head ${trustLegalReviewedPublicContentHead}. The current reconciled PR #136 head used as the executable parent for ARB-SITE-GLOBAL-005 is ${trustLegalCurrentReconciledHead}. This is not legal advice or final legal certification. The batch remains IN_REVIEW and is not DONE until PR #136 is merged and reconciled, but owner review is complete for stacked continuation to ARB-SITE-GLOBAL-005.`
   }],
   ["ARB-SITE-GLOBAL-005", "Publish developer documentation adoption examples and contribution foundation", ["AR-SITE-GLOBAL-005"], {
     status: "READY",
@@ -1314,8 +1318,21 @@ const batchDefinitions = [
     stacked_execution_authorized: true,
     stacked_on_batch: "ARB-SITE-GLOBAL-004",
     stacked_base_pr: 136,
-    stacked_base_head_sha: "11c488ff98ecb4509dd8bbf916840bf8c9edce77",
+    stacked_base_head_sha: trustLegalCurrentReconciledHead,
     depends_on_batches: ["ARB-SITE-GLOBAL-004"],
+    evidence: [
+      {
+        type: "stacked_executable_base_reconciliation",
+        date: "2026-07-13",
+        previous_public_content_review_head: trustLegalReviewedPublicContentHead,
+        actual_executable_parent_head: trustLegalCurrentReconciledHead,
+        base_branch: "site-agentready-global-trust",
+        reason: "The parent branch advanced by the canonical owner-acceptance reconciliation commit; the GLOBAL-005 implementation branch must include that reconciliation, generated execution views and current workflow guards.",
+        implementation_started: false,
+        branch_created: false,
+        pr_created: false
+      }
+    ],
     deliverables: docsAdoptionDeliverables,
     acceptance_criteria: docsAdoptionAcceptance,
     independent_test_plan: [

@@ -228,3 +228,28 @@ Canonical execution effect:
 - Stacked execution may continue to the next canonical batch,
   `ARB-SITE-GLOBAL-005`, if its specification is `EXECUTION_READY` and the
   generated next action authorizes it.
+
+## ARB-SITE-GLOBAL-005 Executable Base Correction - 2026-07-13
+
+Status: RECORDED
+
+The accepted `ARB-SITE-GLOBAL-004` public-content review head remains:
+
+`11c488ff98ecb4509dd8bbf916840bf8c9edce77`
+
+The executable parent head for the future `ARB-SITE-GLOBAL-005` child branch is
+the current reconciled PR #136 head:
+
+`943d9fea90748a0496ce872dc48b14253eb3a16b`
+
+Reason:
+
+- PR #136 advanced after the public-content review through the canonical
+  owner-acceptance reconciliation commit.
+- The future `site-agentready-global-docs-adoption` branch must include that
+  reconciliation, generated execution views and current workflow guards.
+- No developer-documentation implementation branch or PR was created by this
+  correction.
+- `ARB-SITE-GLOBAL-004` remains `IN_REVIEW` and not `DONE`.
+- `ARB-SITE-GLOBAL-005` remains the selected `READY` / `EXECUTION_READY`
+  executable batch.
