@@ -306,27 +306,196 @@ codex("AR-SITE-PREMIUM-EPIC", "AR-SITE-GLOBAL-002", "M3", "BEFORE_COMMUNITY_PUBL
   rollback_boundary: "Revert the global product child PR while preserving PR #132 as the technical shell base.",
   scope_justification: "Weight 5 justified: product, pricing, scanner presentation, CI and evidence are one reviewable public product foundation stacked on the shared shell."
 });
+const standardFoundationSources = [
+  doc.master,
+  doc.sequence,
+  doc.decision,
+  doc.change,
+  doc.globalSite,
+  doc.ia,
+  doc.premium,
+  doc.copy,
+  doc.rules,
+  doc.json,
+  doc.engine,
+  doc.ruleFormat,
+  doc.mcp,
+  doc.actionUsage,
+  doc.action,
+  doc.commercial
+];
+const standardFoundationSurfaces = [
+  "agentready-standard.html",
+  "agentready-rule-codes.html",
+  "agentready-json.html",
+  "agentready-examples.html",
+  "agentready-resources.html",
+  "agentready-sample-report.html",
+  "sitemap.xml",
+  "shared standard assets and diagrams"
+];
+const standardFoundationDeliverables = [
+  "public AgentReady standard overview with concise canonical definition and what-it-is-not boundary",
+  "public specification index distinguishing normative sources from explanatory material",
+  "complete AR001 through AR010 public rule coverage based only on current rule codes and implementation behavior",
+  "public severity model with critical high medium and low meanings and limitations",
+  "public scoring and result model covering score status PASS FAIL min-score fail-on and 100/100 limitations",
+  "versioning and compatibility section for engine ruleset schema policy source version input hash commit and scan date",
+  "governance change-control namespace and contribution principles without invented authority or certification",
+  "reference implementation explanation linking method rules output schema CLI browser scanner and GitHub Action",
+  "premium static no-JavaScript public presentation with mobile keyboard and 320px overflow evidence"
+];
+const standardFoundationAcceptance = [
+  "the standard overview defines AgentReady as static pre-deployment readiness analysis for agent-facing OpenAPI and MCP contracts",
+  "the overview states what AgentReady is not: not a runtime firewall gateway IAM system hosted scanner certification or guaranteed safety proof",
+  "the specification index links stable public sources for rules schemas methodology versioning governance limitations and reference implementation",
+  "normative and explanatory content are clearly distinguished",
+  "AR001 through AR010 are all covered with stable identifier title risk detected affected source type trigger meaning severity remediation guidance and limitations",
+  "bad and fixed examples are included only where current repository fixtures or documented outputs make them reproducible",
+  "severity definitions cover critical high medium and low without implying universal security certification",
+  "scoring explains AgentReady score status PASS FAIL min-score fail-on and the difference between score and CI blocking policy",
+  "100 out of 100 and PASS are explicitly limited and do not imply complete safety",
+  "versioning covers engine ruleset AgentReady schema policy source protocol or version and historical-result freshness",
+  "governance names the current publisher and change-control process without inventing a standards body committee legal entity or independent certification authority",
+  "namespace and contribution principles explain AR identifier stability ownership future reservations and real repository issue paths only",
+  "reference implementation copy distinguishes the method rules output schema CLI browser scanner and GitHub Action",
+  "OpenAPI and MCP coverage boundaries and non-detectable runtime or dynamically constructed capabilities are stated clearly",
+  "all pages use varied premium composition code and specification surfaces rather than a repetitive card catalogue",
+  "core content remains available without JavaScript and passes mobile keyboard link and 320px overflow checks",
+  "no engine CLI scoring severity rule semantics package Action workflow npm tag Release Marketplace billing account backend or runtime behavior changes are introduced"
+];
+const standardFoundationCommands = [
+  "node scripts/validate-agentready-site-navigation.mjs",
+  "node scripts/validate-agentready-standard-foundation-site.mjs",
+  "node scripts/validate-agentready-strategy-docs.mjs",
+  "node scripts/validate-agentready-execution-system.mjs",
+  "git diff --check"
+];
+const standardFoundationTests = [
+  "inventory public standard routes and verify each selected route exists or is intentionally created by this batch",
+  "verify every AR001 through AR010 public rule entry maps to docs/agentready/AGENTREADY_RULE_CODES.md and agentready-core/types.js",
+  "verify severity and score copy against docs/agentready/AGENTREADY_SCORE_MODEL.md and current engine constants",
+  "verify PASS FAIL min-score fail-on and exit-code copy against docs/agentready/AGENTREADY_JSON_SPEC.md and current CLI behavior",
+  "verify versioning and compatibility copy against docs/agentready/MCP_VERSION_COMPATIBILITY_POLICY.md and agentready.json v0.1",
+  "verify governance and namespace copy against PROJECT_CHANGE_CONTROL.md and RULE_FORMAT_AND_GOVERNANCE.md",
+  "verify public examples use only reproducible fixtures or documented outputs and record source commands",
+  "verify all CTA and internal links between product standard rules JSON examples limitations and developer docs",
+  "test desktop and 320 375 768 and 1024 pixel layouts",
+  "test keyboard focus order and visible focus on the new and modified routes",
+  "test core content without JavaScript",
+  "verify no horizontal overflow at 320 pixels",
+  "compare the complete preview with PR #134 product foundation"
+];
+const standardFoundationEvidence = [
+  "source inventory for AgentReady definition AR001-AR010 severity scoring status versioning governance and reference implementation behavior",
+  "conflict and stale-source register with acceptance requirements rather than guessed resolutions",
+  "route map and information architecture for standard rules JSON examples resources and sample-report surfaces",
+  "AR001 through AR010 mapping table to finding codes severity categories and current implementation coverage",
+  "example provenance with fixture path command output and reproduction notes for every displayed score finding or JSON excerpt",
+  "normative versus explanatory content review",
+  "limitation and no-certification claim audit",
+  "CTA and internal-link report",
+  "desktop and mobile screenshots for every primary standard surface",
+  "keyboard accessibility report",
+  "no-JavaScript evidence",
+  "320px overflow evidence",
+  "complete stacked preview URL",
+  "validator and deterministic regeneration results"
+];
+const standardFoundationForbiddenPaths = [
+  "agentready-core/**",
+  "cli/** where behavior would change",
+  "bin/**",
+  "package.json",
+  "action.yml",
+  "packaging/**",
+  "server/**",
+  "api/**",
+  "billing/**",
+  "account/**",
+  ".github/workflows/** unless a separately identified stale validation guard requires a separately authorized correction",
+  "LICENSE",
+  "NOTICE"
+];
+const standardFoundationForbiddenActions = [
+  "do not change engine behavior",
+  "do not change CLI behavior",
+  "do not add new AR rule semantics",
+  "do not change scoring",
+  "do not change severity unless separately approved through canonical change control",
+  "do not perform any npm operation",
+  "do not change Action metadata tags Releases or Marketplace state",
+  "do not add billing accounts licensing backend hosted scanning telemetry or upload dependency",
+  "do not invent customers testimonials logos benchmark results legal identities foundations committees standards bodies or certifications",
+  "do not claim AgentReady has formal standards-body recognition",
+  "do not claim guaranteed safety",
+  "do not use external fonts frontend frameworks analytics trackers or telemetry",
+  "do not silently change Community or Pro scope",
+  "do not merge any site PR"
+];
+const standardFoundationPreflight = [
+  "synchronize to exact PR #134 head 6a0beff94240c255e40915f14b8a916fa1e13ce7",
+  "create branch site-agentready-global-standard from site-agentready-global-product at that exact head",
+  "open a draft PR targeting site-agentready-global-product before broad page edits",
+  "inventory all public and internal sources for AgentReady definition AR001-AR010 severity score PASS FAIL versioning governance namespace and implementation behavior",
+  "record duplicated stale incomplete or conflicting sources as blockers or explicit acceptance requirements",
+  "verify PR #132 and PR #134 remain open draft and unmerged",
+  "confirm no npm Action tag Release Marketplace engine CLI package billing account backend or runtime operation is required"
+];
+const standardFoundationResponseFormat = [
+  "branch name",
+  "draft PR number and URL",
+  "base branch and exact approved base head",
+  "exact head SHA",
+  "files changed grouped by standard pages shared assets validators governance and evidence",
+  "source inventory and conflicts recorded",
+  "summary of each standard route or surface",
+  "exact source of every displayed example score finding report excerpt or JSON excerpt",
+  "AR001 through AR010 mapping evidence",
+  "severity scoring PASS FAIL and versioning source mapping",
+  "local validation results",
+  "GitHub workflow results",
+  "preview URL",
+  "desktop and mobile evidence paths",
+  "keyboard no-JavaScript and 320px overflow evidence",
+  "remaining owner-review points",
+  "confirmation that no implementation branch beyond the authorized batch branch was created",
+  "confirmation that no npm tag Release Marketplace engine CLI billing account package or runtime operation occurred"
+];
+
 for (const [id, title, branch, prTitle] of [
   ["AR-SITE-GLOBAL-003", "Publish AgentReady standard rules and governance foundation", "site-agentready-global-standard", "site(standard): publish AgentReady standard foundation"],
   ["AR-SITE-GLOBAL-004", "Publish company trust security privacy and legal foundation", "site-agentready-global-trust", "site(trust): publish company and legal foundation"],
   ["AR-SITE-GLOBAL-005", "Publish developer documentation adoption examples and contribution foundation", "site-agentready-global-docs-adoption", "site(docs): publish developer documentation and adoption foundation"],
   ["AR-SITE-GLOBAL-006", "Publish SEO GEO AI-first and international foundation", "site-agentready-global-discovery", "site(discovery): publish SEO GEO and international foundation"],
   ["AR-SITE-GLOBAL-007", "Validate complete global standard site", "qa-agentready-global-standard-site", "qa(site): validate complete global standard site"]
-]) codex("AR-SITE-PREMIUM-EPIC", id, "M3", "BEFORE_COMMUNITY_PUBLICATION", "SITE", title, {
+]) {
+  const isStandardFoundation = id === "AR-SITE-GLOBAL-003";
+  codex("AR-SITE-PREMIUM-EPIC", id, "M3", "BEFORE_COMMUNITY_PUBLICATION", "SITE", title, {
   decision_ids: [...decisionIds, "DL-2026-07-13-GLOBAL-STANDARD-SITE-BEFORE-VALIDATION"],
-  status: "PLANNED",
-  spec_status: "SKELETON",
+  status: isStandardFoundation ? "READY" : "PLANNED",
+  spec_status: isStandardFoundation ? "EXECUTION_READY" : "SKELETON",
+  owner: isStandardFoundation ? "CODEX_AND_JEASON" : "CODEX",
   weight: 5,
-  source_documents: [doc.globalSite, doc.ia, doc.copy],
+  source_documents: isStandardFoundation ? standardFoundationSources : [doc.globalSite, doc.ia, doc.copy],
   branch,
   pr_title: prTitle,
-  allowed_paths: ["assets/**", "*.html", "docs/agentready/**", "scripts/**", "sitemap.xml"],
-  forbidden_paths: ["agentready-core/**", "bin/**", "package.json", "action.yml", ".github/workflows/**", "server/**", "api/**", "LICENSE", "NOTICE"],
-  deliverables: [title],
-  acceptance_criteria: [`${title} complete after preceding stacked site batch is reviewed`],
-  rollback_boundary: `Revert ${id} without reverting earlier stacked site batches.`,
-  scope_justification: "Weight 5 justified: planned global-site batch retained as a non-executable skeleton until the preceding stacked batch is reviewed."
-});
+  allowed_paths: isStandardFoundation ? ["assets/**", "*.html", "docs/agentready/**", "scripts/**", "sitemap.xml", "robots.txt"] : ["assets/**", "*.html", "docs/agentready/**", "scripts/**", "sitemap.xml"],
+  forbidden_paths: isStandardFoundation ? standardFoundationForbiddenPaths : ["agentready-core/**", "bin/**", "package.json", "action.yml", ".github/workflows/**", "server/**", "api/**", "LICENSE", "NOTICE"],
+  deliverables: isStandardFoundation ? standardFoundationDeliverables : [title],
+  estimated_files_or_surfaces: isStandardFoundation ? standardFoundationSurfaces : undefined,
+  acceptance_criteria: isStandardFoundation ? standardFoundationAcceptance : [`${title} complete after preceding stacked site batch is reviewed`],
+  required_commands: isStandardFoundation ? standardFoundationCommands : undefined,
+  independent_test_plan: isStandardFoundation ? standardFoundationTests : undefined,
+  required_evidence: isStandardFoundation ? standardFoundationEvidence : undefined,
+  manual_actions: isStandardFoundation ? ["JEASON reviews the AgentReady standard foundation preview and confirms no formal-standards or certification claim was introduced"] : undefined,
+  authorized_actions: isStandardFoundation ? ["create real static public standard, rule, JSON, examples, resources and sample-report surfaces", "add factual local diagrams or static assets when they are derived from current authoritative documents", "add or update validators for the standard foundation pages", "update sitemap robots and internal links only for real routes created by this batch"] : undefined,
+  forbidden_actions: isStandardFoundation ? standardFoundationForbiddenActions : undefined,
+  codex_preflight_steps: isStandardFoundation ? standardFoundationPreflight : undefined,
+  rollback_boundary: isStandardFoundation ? "Revert ARB-SITE-GLOBAL-003 without reverting PR #132 shell or PR #134 product foundation." : `Revert ${id} without reverting earlier stacked site batches.`,
+  scope_justification: isStandardFoundation ? "Weight 5 justified: one reviewable public standard foundation spanning standard overview, rule dictionary, scoring, versioning, governance and reference implementation surfaces with one stacked preview and rollback boundary." : "Weight 5 justified: planned global-site batch retained as a non-executable skeleton until the preceding stacked batch is reviewed."
+  });
+}
 codex("AR-SITE-PREMIUM-EPIC", "AR-SITE-PREMIUM-002", "M3", "BEFORE_COMMUNITY_PUBLICATION", "SITE", "Redesign homepage and core product pages", {
   decision_ids: [...decisionIds, "DL-2026-07-12-PREMIUM-SITE-BEFORE-VALIDATION"],
   weight: 5,
@@ -514,10 +683,13 @@ function createExecutionBatch(input) {
     codex_preflight_steps: input.codex_preflight_steps ?? unique(items.flatMap((item) => item.codex_preflight_steps || [])),
     owner_checkpoint_steps: input.owner_checkpoint_steps ?? unique(items.flatMap((item) => item.owner_checkpoint_steps || [])),
     post_confirmation_steps: input.post_confirmation_steps ?? unique(items.flatMap((item) => item.post_confirmation_steps || [])),
+    final_response_format: input.final_response_format ?? [],
     external_verifications: input.external_verifications ?? unique(items.filter((item) => item.external_verification?.required).map((item) => item.external_verification.topic)),
     evidence: input.evidence ?? [],
     notes: input.notes ?? "",
     source_documents: sourceDocs,
+    ...(input.base_branch ? { base_branch: input.base_branch } : {}),
+    ...(input.pr_base_branch ? { pr_base_branch: input.pr_base_branch } : {}),
     ...(input.stacked_execution_authorized !== undefined ? { stacked_execution_authorized: input.stacked_execution_authorized } : {}),
     ...(input.stacked_execution_can_continue !== undefined ? { stacked_execution_can_continue: input.stacked_execution_can_continue } : {}),
     ...(input.stacked_on_batch ? { stacked_on_batch: input.stacked_on_batch } : {}),
@@ -609,7 +781,35 @@ const batchDefinitions = [
     ],
     notes: "PR #134 is implemented and in review on the stacked child branch. JEASON accepted the production reconciliation as a temporary alignment exception only; the batch is not DONE and the full premium/global-standard site is not complete."
   }],
-  ["ARB-SITE-GLOBAL-003", "Publish AgentReady standard rules and governance foundation", ["AR-SITE-GLOBAL-003"], { status: "PLANNED", spec_status: "SKELETON", base_branch: "site-agentready-global-product", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-002", stacked_base_pr: 134, stacked_base_head_sha: "5c211bd4b4795c379f85da5548f2c493e546cbbb", depends_on_batches: ["ARB-SITE-GLOBAL-002"] }],
+  ["ARB-SITE-GLOBAL-003", "Publish AgentReady standard rules and governance foundation", ["AR-SITE-GLOBAL-003"], {
+    status: "READY",
+    spec_status: "EXECUTION_READY",
+    owner: "CODEX_AND_JEASON",
+    objective: "Publish the public AgentReady standard, rule-code, severity, scoring, versioning, governance, namespace and reference-implementation foundation without changing engine, CLI, package, Action or runtime behavior.",
+    base_branch: "site-agentready-global-product",
+    pr_base_branch: "site-agentready-global-product",
+    branch: "site-agentready-global-standard",
+    pr_title: "site(standard): publish AgentReady standard foundation",
+    deliverables: standardFoundationDeliverables,
+    acceptance_criteria: standardFoundationAcceptance,
+    independent_test_plan: standardFoundationTests,
+    required_commands: standardFoundationCommands,
+    required_evidence: standardFoundationEvidence,
+    manual_actions: ["JEASON reviews the AgentReady standard foundation preview and confirms no formal-standards or certification claim was introduced"],
+    authorized_actions: ["create real static public standard, rule, JSON, examples, resources and sample-report surfaces", "add factual local diagrams or static assets when they are derived from current authoritative documents", "add or update validators for the standard foundation pages", "update sitemap robots and internal links only for real routes created by this batch"],
+    forbidden_actions: standardFoundationForbiddenActions,
+    codex_preflight_steps: standardFoundationPreflight,
+    external_verifications: ["None"],
+    final_response_format: standardFoundationResponseFormat,
+    rollback_boundary: "Revert ARB-SITE-GLOBAL-003 without reverting PR #132 shell or PR #134 product foundation.",
+    scope_justification: "Weight 5 justified: one reviewable public standard foundation spanning standard overview, rule dictionary, scoring, versioning, governance and reference implementation surfaces with one stacked preview and rollback boundary.",
+    stacked_execution_authorized: true,
+    stacked_on_batch: "ARB-SITE-GLOBAL-002",
+    stacked_base_pr: 134,
+    stacked_base_head_sha: "6a0beff94240c255e40915f14b8a916fa1e13ce7",
+    depends_on_batches: ["ARB-SITE-GLOBAL-002"],
+    notes: "Specification refined only. Future implementation must create a draft PR targeting site-agentready-global-product and must not merge any site PR during the batch."
+  }],
   ["ARB-SITE-GLOBAL-004", "Publish company trust security privacy and legal foundation", ["AR-SITE-GLOBAL-004"], { status: "PLANNED", spec_status: "SKELETON", base_branch: "site-agentready-global-standard", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-003", depends_on_batches: ["ARB-SITE-GLOBAL-003"] }],
   ["ARB-SITE-GLOBAL-005", "Publish developer documentation adoption examples and contribution foundation", ["AR-SITE-GLOBAL-005"], { status: "PLANNED", spec_status: "SKELETON", base_branch: "site-agentready-global-trust", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-004", depends_on_batches: ["ARB-SITE-GLOBAL-004"] }],
   ["ARB-SITE-GLOBAL-006", "Publish SEO GEO AI-first and international foundation", ["AR-SITE-GLOBAL-006"], { status: "PLANNED", spec_status: "SKELETON", base_branch: "site-agentready-global-docs-adoption", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-005", depends_on_batches: ["ARB-SITE-GLOBAL-005"] }],

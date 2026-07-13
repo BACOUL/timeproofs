@@ -298,6 +298,10 @@ function linesFor(values) {
   return values?.length ? values.map((item) => `  - ${item}`).join("\n") : "  - None";
 }
 
+function linesForPlain(values) {
+  return values?.length ? values.map((item) => `- ${item}`).join("\n") : "- summarize files changed, validations, workflow status, draft status, and any remaining human review.";
+}
+
 function groupBy(tasks, key) {
   const out = new Map();
   for (const task of tasks) {
@@ -403,9 +407,12 @@ function nextActionText(next) {
 function promptForBatch(batch, ledger) {
   const tasks = taskMap(ledger);
   const items = (batch.work_item_ids || []).map((id) => tasks.get(id)).filter(Boolean);
+  const baseBranch = batch.base_branch || "timeproofs";
+  const draftTarget = batch.pr_base_branch || baseBranch;
   return [
     `Repository: BACOUL/timeproofs`,
-    `Base: timeproofs`,
+    `Base: ${baseBranch}`,
+    batch.stacked_base_head_sha ? `Exact approved base head: ${batch.stacked_base_head_sha}` : "",
     `Batch ID: ${batch.id}`,
     `Work item IDs: ${batch.work_item_ids.join(", ")}`,
     `Owner: ${batch.owner}`,
@@ -414,6 +421,7 @@ function promptForBatch(batch, ledger) {
     `Objective: ${batch.objective}`,
     `Branch: ${batch.branch}`,
     `PR title: ${batch.pr_title}`,
+    `Draft PR target: ${draftTarget}`,
     "",
     `Documents sources:`,
     linesFor([...new Set(items.flatMap((item) => item.source_documents || []))]),
@@ -457,7 +465,7 @@ function promptForBatch(batch, ledger) {
     linesFor(batch.authorized_actions),
     "",
     batch.codex_preflight_steps?.length ? [
-      `## Étape Codex préalable`,
+      `## Preliminary Codex steps`,
       "",
       linesFor(batch.codex_preflight_steps),
       ""
@@ -481,7 +489,8 @@ function promptForBatch(batch, ledger) {
       ? [`Forbidden actions:`, linesFor(batch.forbidden_actions)].join("\n")
       : `Interdictions: stay strictly inside the batch scope, do not publish, do not create tags or releases, and do not merge the PR.`,
     "",
-    `Response format: summarize files changed, validations, workflow status, draft status, and any remaining human review.`
+    `Response format:`,
+    linesForPlain(batch.final_response_format)
   ].join("\n");
 }
 

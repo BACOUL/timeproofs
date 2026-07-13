@@ -87,6 +87,70 @@ Rules:
 - namespace and contribution principles;
 - reference implementation relationship.
 
+## ARB-SITE-GLOBAL-003 Specification Refinement
+
+Status: EXECUTION_READY SPECIFICATION ONLY
+
+Refinement date: 2026-07-13
+
+Future base branch: `site-agentready-global-product`
+
+Approved base head: `6a0beff94240c255e40915f14b8a916fa1e13ce7`
+
+Future implementation branch: `site-agentready-global-standard`
+
+Future draft PR target: `site-agentready-global-product`
+
+Future PR title: `site(standard): publish AgentReady standard foundation`
+
+This refinement authorizes only the future implementation prompt generated from the canonical ledger. It does not implement the pages, create a child branch, merge a site PR, or change the AgentReady engine, CLI, npm package, GitHub Action, tags, releases, Marketplace state, billing, accounts or runtime behavior.
+
+### Source Inventory
+
+Authoritative sources for the future public standard foundation are:
+
+- `AGENTREADY_MASTER_PLAN.md` for the product boundary, mandatory limitation, Community and Pro separation, and forbidden claims;
+- `EXECUTION_SEQUENCE.md`, `DECISION_LOG.md` and `PROJECT_CHANGE_CONTROL.md` for sequencing, stacked PR rules and recorded owner decisions;
+- `GLOBAL_STANDARD_SITE_PROGRAM.md`, `PUBLIC_SITE_INFORMATION_ARCHITECTURE.md`, `PREMIUM_SITE_REQUIREMENTS.md` and `SITE_COPY_GUIDE.md` for public architecture, page intent, copy tone and visual expectations;
+- `AGENTREADY_RULE_CODES.md` and `agentready-core/types.js` for AR001 through AR010 names, stable identifiers, finding-code mappings, categories and current severity data;
+- `AGENTREADY_SCORE_MODEL.md`, `AGENTREADY_JSON_SPEC.md`, CLI tests and current engine constants for score, status, PASS, FAIL, `min-score`, `fail-on` and exit-code behavior;
+- `RULE_FORMAT_AND_GOVERNANCE.md`, `MCP_VERSION_COMPATIBILITY_POLICY.md` and `ENGINE_QUALITY_AND_BENCHMARK_PLAN.md` for namespace, rule-change requirements, compatibility and benchmark limitations;
+- `GITHUB_ACTION_USAGE.md`, `GITHUB_ACTION_VERSIONING.md`, `AGENTREADY_ACTION_PUBLICATION_EVIDENCE.md` and current public pages for the reference implementation relationship across browser scanner, CLI and GitHub Action.
+
+### Inventory Findings And Acceptance Requirements
+
+- Several internal documents are authoritative but not suitable as public pages verbatim. The implementation must convert them into public explanation while keeping the canonical meaning.
+- The public architecture contains overlapping routes for standard, rule codes, JSON, examples, resources and limitations. The implementation must connect these routes without duplicate or dead destinations.
+- AR001 through AR010 are stable public identifiers, but current implementation coverage is not equally mature for every rule. The implementation must state coverage limits instead of implying complete detection.
+- `ENGINE_QUALITY_AND_BENCHMARK_PLAN.md` records known rule gaps and says measured detection quality is not yet established. The implementation must not claim scientific validation, benchmark proof, certification or guaranteed security.
+- Bad and fixed examples may appear only when they are reproducible from repository fixtures, current engine output or already recorded evidence. Missing examples are acceptance blockers, not gaps to fill with invented scenarios.
+- AgentReady may be presented as a candidate method and standard ambition. It must not be presented as having formal standards-body recognition, independent certification authority status or a safety guarantee.
+- Governance may name TimeProofs and current project change control. It must not invent a foundation, committee, legal identity, third-party endorsement or contribution process that does not exist in the repository.
+
+### Future Public Surfaces
+
+The future implementation must publish or align these surfaces:
+
+- `agentready-standard.html` for the public standard overview, what AgentReady is, what it is not, scope, limitations, governance, namespace and reference implementation relationship;
+- `agentready-rule-codes.html` for complete AR001 through AR010 public rule coverage;
+- `agentready-json.html` for the public `agentready.json` v0.1 specification index and examples;
+- `agentready-examples.html` for reproducible bad/fixed examples and output provenance where fixtures exist;
+- `agentready-resources.html` for links between the method, rules, product, docs, GitHub Action and current primary sources;
+- `agentready-sample-report.html` for report and result interpretation without implying certification;
+- `sitemap.xml` and internal links only where needed for real routes created or aligned by the batch.
+
+The implementation may add static assets or validators under the allowed paths when they directly support the standard foundation and remain dependency-free.
+
+### Non-Implementation Boundary
+
+This refinement intentionally does not:
+
+- create or modify the future public standard pages;
+- redesign page bodies or navigation;
+- alter rule semantics, severity, scoring, CLI behavior or engine behavior;
+- perform npm, Action, tag, Release, Marketplace, billing, account or runtime operations;
+- mark ARB-SITE-GLOBAL-003 implemented, in review or done.
+
 ### Developers And Adoption
 
 - installation;

@@ -408,9 +408,9 @@ Required evidence:
   - combined preview URL
 
 ### ARB-SITE-GLOBAL-003 - Publish AgentReady standard rules and governance foundation
-- Status: PLANNED
-- Spec status: SKELETON
-- Owner: CODEX
+- Status: READY
+- Spec status: EXECUTION_READY
+- Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Work items: AR-SITE-GLOBAL-003
@@ -420,11 +420,48 @@ Required evidence:
 - PR title: site(standard): publish AgentReady standard foundation
 
 Deliverables:
-  - Publish AgentReady standard rules and governance foundation
+  - public AgentReady standard overview with concise canonical definition and what-it-is-not boundary
+  - public specification index distinguishing normative sources from explanatory material
+  - complete AR001 through AR010 public rule coverage based only on current rule codes and implementation behavior
+  - public severity model with critical high medium and low meanings and limitations
+  - public scoring and result model covering score status PASS FAIL min-score fail-on and 100/100 limitations
+  - versioning and compatibility section for engine ruleset schema policy source version input hash commit and scan date
+  - governance change-control namespace and contribution principles without invented authority or certification
+  - reference implementation explanation linking method rules output schema CLI browser scanner and GitHub Action
+  - premium static no-JavaScript public presentation with mobile keyboard and 320px overflow evidence
 Acceptance criteria:
-  - Publish AgentReady standard rules and governance foundation complete after preceding stacked site batch is reviewed
+  - the standard overview defines AgentReady as static pre-deployment readiness analysis for agent-facing OpenAPI and MCP contracts
+  - the overview states what AgentReady is not: not a runtime firewall gateway IAM system hosted scanner certification or guaranteed safety proof
+  - the specification index links stable public sources for rules schemas methodology versioning governance limitations and reference implementation
+  - normative and explanatory content are clearly distinguished
+  - AR001 through AR010 are all covered with stable identifier title risk detected affected source type trigger meaning severity remediation guidance and limitations
+  - bad and fixed examples are included only where current repository fixtures or documented outputs make them reproducible
+  - severity definitions cover critical high medium and low without implying universal security certification
+  - scoring explains AgentReady score status PASS FAIL min-score fail-on and the difference between score and CI blocking policy
+  - 100 out of 100 and PASS are explicitly limited and do not imply complete safety
+  - versioning covers engine ruleset AgentReady schema policy source protocol or version and historical-result freshness
+  - governance names the current publisher and change-control process without inventing a standards body committee legal entity or independent certification authority
+  - namespace and contribution principles explain AR identifier stability ownership future reservations and real repository issue paths only
+  - reference implementation copy distinguishes the method rules output schema CLI browser scanner and GitHub Action
+  - OpenAPI and MCP coverage boundaries and non-detectable runtime or dynamically constructed capabilities are stated clearly
+  - all pages use varied premium composition code and specification surfaces rather than a repetitive card catalogue
+  - core content remains available without JavaScript and passes mobile keyboard link and 320px overflow checks
+  - no engine CLI scoring severity rule semantics package Action workflow npm tag Release Marketplace billing account backend or runtime behavior changes are introduced
 Required evidence:
-  - Publish AgentReady standard rules and governance foundation evidence
+  - source inventory for AgentReady definition AR001-AR010 severity scoring status versioning governance and reference implementation behavior
+  - conflict and stale-source register with acceptance requirements rather than guessed resolutions
+  - route map and information architecture for standard rules JSON examples resources and sample-report surfaces
+  - AR001 through AR010 mapping table to finding codes severity categories and current implementation coverage
+  - example provenance with fixture path command output and reproduction notes for every displayed score finding or JSON excerpt
+  - normative versus explanatory content review
+  - limitation and no-certification claim audit
+  - CTA and internal-link report
+  - desktop and mobile screenshots for every primary standard surface
+  - keyboard accessibility report
+  - no-JavaScript evidence
+  - 320px overflow evidence
+  - complete stacked preview URL
+  - validator and deterministic regeneration results
 
 ### ARB-SITE-GLOBAL-004 - Publish company trust security privacy and legal foundation
 - Status: PLANNED
@@ -2644,8 +2681,8 @@ Required evidence:
 
 ### AR-SITE-GLOBAL-003 - Publish AgentReady standard rules and governance foundation
 - Type: CODEX_WORK_ITEM
-- Status: PLANNED
-- Owner: CODEX
+- Status: READY
+- Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Workstream: SITE
@@ -2654,11 +2691,48 @@ Required evidence:
 - Depends on: None
 
 Deliverables:
-  - Publish AgentReady standard rules and governance foundation
+  - public AgentReady standard overview with concise canonical definition and what-it-is-not boundary
+  - public specification index distinguishing normative sources from explanatory material
+  - complete AR001 through AR010 public rule coverage based only on current rule codes and implementation behavior
+  - public severity model with critical high medium and low meanings and limitations
+  - public scoring and result model covering score status PASS FAIL min-score fail-on and 100/100 limitations
+  - versioning and compatibility section for engine ruleset schema policy source version input hash commit and scan date
+  - governance change-control namespace and contribution principles without invented authority or certification
+  - reference implementation explanation linking method rules output schema CLI browser scanner and GitHub Action
+  - premium static no-JavaScript public presentation with mobile keyboard and 320px overflow evidence
 Acceptance criteria:
-  - Publish AgentReady standard rules and governance foundation complete after preceding stacked site batch is reviewed
+  - the standard overview defines AgentReady as static pre-deployment readiness analysis for agent-facing OpenAPI and MCP contracts
+  - the overview states what AgentReady is not: not a runtime firewall gateway IAM system hosted scanner certification or guaranteed safety proof
+  - the specification index links stable public sources for rules schemas methodology versioning governance limitations and reference implementation
+  - normative and explanatory content are clearly distinguished
+  - AR001 through AR010 are all covered with stable identifier title risk detected affected source type trigger meaning severity remediation guidance and limitations
+  - bad and fixed examples are included only where current repository fixtures or documented outputs make them reproducible
+  - severity definitions cover critical high medium and low without implying universal security certification
+  - scoring explains AgentReady score status PASS FAIL min-score fail-on and the difference between score and CI blocking policy
+  - 100 out of 100 and PASS are explicitly limited and do not imply complete safety
+  - versioning covers engine ruleset AgentReady schema policy source protocol or version and historical-result freshness
+  - governance names the current publisher and change-control process without inventing a standards body committee legal entity or independent certification authority
+  - namespace and contribution principles explain AR identifier stability ownership future reservations and real repository issue paths only
+  - reference implementation copy distinguishes the method rules output schema CLI browser scanner and GitHub Action
+  - OpenAPI and MCP coverage boundaries and non-detectable runtime or dynamically constructed capabilities are stated clearly
+  - all pages use varied premium composition code and specification surfaces rather than a repetitive card catalogue
+  - core content remains available without JavaScript and passes mobile keyboard link and 320px overflow checks
+  - no engine CLI scoring severity rule semantics package Action workflow npm tag Release Marketplace billing account backend or runtime behavior changes are introduced
 Required evidence:
-  - Publish AgentReady standard rules and governance foundation evidence
+  - source inventory for AgentReady definition AR001-AR010 severity scoring status versioning governance and reference implementation behavior
+  - conflict and stale-source register with acceptance requirements rather than guessed resolutions
+  - route map and information architecture for standard rules JSON examples resources and sample-report surfaces
+  - AR001 through AR010 mapping table to finding codes severity categories and current implementation coverage
+  - example provenance with fixture path command output and reproduction notes for every displayed score finding or JSON excerpt
+  - normative versus explanatory content review
+  - limitation and no-certification claim audit
+  - CTA and internal-link report
+  - desktop and mobile screenshots for every primary standard surface
+  - keyboard accessibility report
+  - no-JavaScript evidence
+  - 320px overflow evidence
+  - complete stacked preview URL
+  - validator and deterministic regeneration results
 
 ### AR-SITE-GLOBAL-004 - Publish company trust security privacy and legal foundation
 - Type: CODEX_WORK_ITEM
