@@ -7,9 +7,9 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 Batch ID: ARB-SITE-GLOBAL-004
 Title: Publish company trust security privacy and legal foundation
-Action owner: CODEX_AND_JEASON
-Action type: READY
-Status: READY
+Action owner: JEASON
+Action type: REVIEW_OR_MERGE
+Status: IN_REVIEW
 Specification: EXECUTION_READY
 Objective:
 Publish the public AgentReady company, trust, security, privacy and legal foundation from verified repository facts without inventing legal identity, contact, certification, support or data-processing claims.

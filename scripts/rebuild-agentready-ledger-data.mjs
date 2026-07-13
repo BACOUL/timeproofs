@@ -652,11 +652,11 @@ for (const [id, title, branch, prTitle] of [
   const isTrustFoundation = id === "AR-SITE-GLOBAL-004";
   codex("AR-SITE-PREMIUM-EPIC", id, "M3", "BEFORE_COMMUNITY_PUBLICATION", "SITE", title, {
   decision_ids: [...decisionIds, "DL-2026-07-13-GLOBAL-STANDARD-SITE-BEFORE-VALIDATION"],
-  status: isStandardFoundation ? "IN_REVIEW" : isTrustFoundation ? "READY" : "PLANNED",
+  status: isStandardFoundation || isTrustFoundation ? "IN_REVIEW" : "PLANNED",
   spec_status: isStandardFoundation || isTrustFoundation ? "EXECUTION_READY" : "SKELETON",
   owner: isStandardFoundation || isTrustFoundation ? "CODEX_AND_JEASON" : "CODEX",
   weight: 5,
-  pr_number: isStandardFoundation ? 135 : undefined,
+  pr_number: isStandardFoundation ? 135 : isTrustFoundation ? 136 : undefined,
   source_documents: isStandardFoundation ? standardFoundationSources : isTrustFoundation ? trustFoundationSources : [doc.globalSite, doc.ia, doc.copy],
   branch,
   pr_title: prTitle,
@@ -674,7 +674,7 @@ for (const [id, title, branch, prTitle] of [
   codex_preflight_steps: isStandardFoundation ? standardFoundationPreflight : isTrustFoundation ? trustFoundationPreflight : undefined,
   external_verifications: isTrustFoundation ? ["JEASON verifies any public contact path before it is presented as usable", "JEASON or legal counsel verifies publisher identity legal notice and privacy facts before final review"] : undefined,
   final_response_format: isTrustFoundation ? trustFoundationResponseFormat : undefined,
-  evidence: isStandardFoundation ? [{ type: "draft_pr_implementation_review", pr: 135, branch: "site-agentready-global-standard", status: "IN_REVIEW", implemented: true, merge_authorized: false, evidence_document: "docs/agentready/SITE_GLOBAL_STANDARD_FOUNDATION_EVIDENCE.md", routes: ["agentready-standard.html", "agentready-rule-codes.html", "agentready-json.html", "agentready-examples.html", "agentready-resources.html", "agentready-sample-report.html"], validator: "scripts/validate-agentready-standard-foundation-site.mjs" }] : undefined,
+  evidence: isStandardFoundation ? [{ type: "draft_pr_implementation_review", pr: 135, branch: "site-agentready-global-standard", status: "IN_REVIEW", implemented: true, merge_authorized: false, evidence_document: "docs/agentready/SITE_GLOBAL_STANDARD_FOUNDATION_EVIDENCE.md", routes: ["agentready-standard.html", "agentready-rule-codes.html", "agentready-json.html", "agentready-examples.html", "agentready-resources.html", "agentready-sample-report.html"], validator: "scripts/validate-agentready-standard-foundation-site.mjs" }] : isTrustFoundation ? [{ type: "draft_pr_implementation_review", pr: 136, branch: "site-agentready-global-trust", status: "IN_REVIEW", implemented: true, merge_authorized: false, evidence_document: "docs/agentready/SITE_GLOBAL_TRUST_LEGAL_FOUNDATION_EVIDENCE.md", routes: ["about.html", "trust.html", "security.html", "responsible-disclosure.html", "privacy.html", "terms.html", "legal.html", "limitations.html", "agentready-data-flow.html", "support.html"], validator: "scripts/validate-agentready-trust-legal-foundation-site.mjs", preview_url: "https://timeproofs-git-site-agentready-global-trust-jeason1.vercel.app/", owner_review_required: true, batch_done: false }] : undefined,
   rollback_boundary: isStandardFoundation ? "Revert ARB-SITE-GLOBAL-003 without reverting PR #132 shell or PR #134 product foundation." : isTrustFoundation ? "Revert ARB-SITE-GLOBAL-004 without reverting PR #132 shell, PR #134 product foundation or PR #135 standard foundation." : `Revert ${id} without reverting earlier stacked site batches.`,
   scope_justification: isStandardFoundation ? "Weight 5 justified: one reviewable public standard foundation spanning standard overview, rule dictionary, scoring, versioning, governance and reference implementation surfaces with one stacked preview and rollback boundary." : isTrustFoundation ? "Weight 5 justified: one reviewable trust/legal foundation spanning publisher identity, security, privacy, disclosure, terms, data flows and support boundaries with one stacked preview and rollback boundary." : "Weight 5 justified: planned global-site batch retained as a non-executable skeleton until the preceding stacked batch is reviewed."
   });
@@ -1040,9 +1040,10 @@ const batchDefinitions = [
     notes: "PR #135 implements the AgentReady standard foundation and remains open and unmerged. JEASON accepted the visual and factual presentation on 2026-07-13 at public-content commit 25636982cd944d3e947081740d5226f692c83741, including the manually promoted production deployment, but this does not mark the batch DONE because the stacked PR has not been merged and reconciled. The final parent PR #135 head used to create ARB-SITE-GLOBAL-004 is b0946d3fb4403b1281171dd955aa2438f733086a. Stacked execution may continue to ARB-SITE-GLOBAL-004."
   }],
   ["ARB-SITE-GLOBAL-004", "Publish company trust security privacy and legal foundation", ["AR-SITE-GLOBAL-004"], {
-    status: "READY",
+    status: "IN_REVIEW",
     spec_status: "EXECUTION_READY",
     owner: "CODEX_AND_JEASON",
+    pr_number: 136,
     objective: "Publish the public AgentReady company, trust, security, privacy and legal foundation from verified repository facts without inventing legal identity, contact, certification, support or data-processing claims.",
     base_branch: "site-agentready-global-standard",
     pr_base_branch: "site-agentready-global-standard",
@@ -1065,18 +1066,37 @@ const batchDefinitions = [
     stacked_on_batch: "ARB-SITE-GLOBAL-003",
     stacked_base_pr: 135,
     stacked_base_head_sha: "b0946d3fb4403b1281171dd955aa2438f733086a",
+    stacked_child_pr: 136,
+    stacked_child_branch: "site-agentready-global-trust",
     depends_on_batches: ["ARB-SITE-GLOBAL-003"],
     evidence: [
       {
-        type: "specification_refinement",
+        type: "stacked_base_reconciliation",
         date: "2026-07-13",
-        source_inventory: "Publisher, trust, security, privacy, responsible-disclosure, terms, legal, data-flow, support, IP/license and limitation sources inventoried in GLOBAL_STANDARD_SITE_PROGRAM.md.",
-        implementation_started: false,
-        branch_created: false,
-        pr_created: false
+        previous_recorded_base_head: "405255d516d62504587410aa50386b3f3ecab389",
+        actual_parent_pr_135_head: "b0946d3fb4403b1281171dd955aa2438f733086a",
+        owner_reviewed_public_content_commit: "25636982cd944d3e947081740d5226f692c83741",
+        reconciled_on_child_branch_only: true,
+        branch_created: true,
+        pr_created: true,
+        pr: 136
+      },
+      {
+        type: "draft_pr_implementation_review",
+        pr: 136,
+        branch: "site-agentready-global-trust",
+        status: "IN_REVIEW",
+        implemented: true,
+        merge_authorized: false,
+        batch_done: false,
+        evidence_document: "docs/agentready/SITE_GLOBAL_TRUST_LEGAL_FOUNDATION_EVIDENCE.md",
+        preview_url: "https://timeproofs-git-site-agentready-global-trust-jeason1.vercel.app/",
+        routes: ["about.html", "trust.html", "security.html", "responsible-disclosure.html", "privacy.html", "terms.html", "legal.html", "limitations.html", "agentready-data-flow.html", "support.html"],
+        validator: "scripts/validate-agentready-trust-legal-foundation-site.mjs",
+        owner_review_required: true
       }
     ],
-    notes: "The owner-approved public-content commit is 25636982cd944d3e947081740d5226f692c83741. The final parent PR #135 head used to create ARB-SITE-GLOBAL-004 is b0946d3fb4403b1281171dd955aa2438f733086a. The executable stacked base contains the owner-acceptance/specification refinement and the matching CI guard. If PR #135 advances before execution, the base must be reconciled again before implementation."
+    notes: "PR #136 implements the trust/legal foundation on site-agentready-global-trust and remains open and unmerged. The owner-approved public-content commit inherited from GLOBAL-003 is 25636982cd944d3e947081740d5226f692c83741. The final parent PR #135 head used to create ARB-SITE-GLOBAL-004 is b0946d3fb4403b1281171dd955aa2438f733086a. The batch is not DONE until owner/legal review, merge and canonical reconciliation complete. ARB-SITE-GLOBAL-005 must not begin from this in-review state."
   }],
   ["ARB-SITE-GLOBAL-005", "Publish developer documentation adoption examples and contribution foundation", ["AR-SITE-GLOBAL-005"], { status: "PLANNED", spec_status: "SKELETON", base_branch: "site-agentready-global-trust", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-004", depends_on_batches: ["ARB-SITE-GLOBAL-004"] }],
   ["ARB-SITE-GLOBAL-006", "Publish SEO GEO AI-first and international foundation", ["AR-SITE-GLOBAL-006"], { status: "PLANNED", spec_status: "SKELETON", base_branch: "site-agentready-global-docs-adoption", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-005", depends_on_batches: ["ARB-SITE-GLOBAL-005"] }],

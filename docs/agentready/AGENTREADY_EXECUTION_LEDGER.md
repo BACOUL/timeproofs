@@ -464,7 +464,7 @@ Required evidence:
   - validator and deterministic regeneration results
 
 ### ARB-SITE-GLOBAL-004 - Publish company trust security privacy and legal foundation
-- Status: READY
+- Status: IN_REVIEW
 - Spec status: EXECUTION_READY
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
@@ -474,7 +474,7 @@ Required evidence:
 - Depends on tasks: None
 - Branch: site-agentready-global-trust
 - PR title: site(trust): publish company and legal foundation
-
+- PR: #136
 Deliverables:
   - About and publisher page with factual project identity and no invented legal entity
   - Trust Center hub linking security privacy terms legal disclosure limitations data-flow and support boundaries
@@ -2778,7 +2778,7 @@ Required evidence:
 
 ### AR-SITE-GLOBAL-004 - Publish company trust security privacy and legal foundation
 - Type: CODEX_WORK_ITEM
-- Status: READY
+- Status: IN_REVIEW
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
@@ -2786,7 +2786,7 @@ Required evidence:
 - Weight: 5
 - Execution batch: ARB-SITE-GLOBAL-004
 - Depends on: None
-
+- PR: #136
 Deliverables:
   - About and publisher page with factual project identity and no invented legal entity
   - Trust Center hub linking security privacy terms legal disclosure limitations data-flow and support boundaries
