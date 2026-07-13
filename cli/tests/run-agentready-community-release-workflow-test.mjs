@@ -105,7 +105,8 @@ assert.ok(workflow.includes("assert.equal(next?.batch?.id, 'ARB-SITE-GLOBAL-003'
 assert.ok(workflow.includes("assert.equal(next?.action_type, 'REVIEW_OR_MERGE')"));
 assert.ok(workflow.includes("assert.equal(counts.execution_batches.immediately_executable, 0)"));
 assert.match(workflow, /assert\.match\(nextPrompt,\s*\/No CODEX execution batch is currently authorized\/\)/);
-assert.match(workflow, /Current next action belongs to JEASON - ARB-SITE-GLOBAL-003/);
+assert.match(workflow, /The current next action belongs to:/);
+assert.match(workflow, /JEASON - ARB-SITE-GLOBAL-003/);
 assert.match(workflow, /assert\.doesNotMatch\(nextPrompt,\s*\/Repository: BACOUL\\\/timeproofs\/\)/);
 assert.match(workflow, /assert\.equal\(manifest\.community_license,\s*'Apache-2\.0'\)/);
 assert.match(workflow, /assert\.equal\(manifest\.tarball\.entry_count,\s*21\)/);

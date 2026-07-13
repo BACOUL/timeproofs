@@ -108,7 +108,8 @@ jobs:
           assert.equal(next?.action_type, 'REVIEW_OR_MERGE');
           assert.equal(counts.execution_batches.immediately_executable, 0);
           assert.match(nextPrompt, /No CODEX execution batch is currently authorized/);
-          assert.match(nextPrompt, /Current next action belongs to JEASON - ARB-SITE-GLOBAL-003/);
+          assert.match(nextPrompt, /The current next action belongs to:/);
+          assert.match(nextPrompt, /JEASON - ARB-SITE-GLOBAL-003/);
           assert.doesNotMatch(nextPrompt, /Repository: BACOUL\/timeproofs/);
           NODE
 
