@@ -90,7 +90,6 @@ jobs:
           const next = selectNextAction(ledger);
           const nextPrompt = generatedContents(ledger)['docs/agentready/NEXT_CODEX_PROMPT.md'];
           const counts = promptCounts(ledger);
-          const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
           assert.equal(completedBatch?.status, 'DONE');
           assert.equal(premiumBatch?.status, 'IN_REVIEW');
@@ -99,22 +98,18 @@ jobs:
           assert.equal(productBatch?.status, 'IN_REVIEW');
           assert.equal(productBatch?.spec_status, 'EXECUTION_READY');
           assert.equal(productBatch?.pr_number, 134);
-          assert.equal(standardBatch?.status, 'READY');
+          assert.equal(standardBatch?.status, 'IN_REVIEW');
           assert.equal(standardBatch?.spec_status, 'EXECUTION_READY');
+          assert.equal(standardBatch?.pr_number, 135);
           assert.equal(standardBatch?.base_branch, 'site-agentready-global-product');
           assert.equal(standardBatch?.stacked_base_head_sha, '1a71cb469e608d548b42c5884a4165563216733b');
           assert.equal(next?.kind, 'batch');
           assert.equal(next?.batch?.id, 'ARB-SITE-GLOBAL-003');
-          assert.equal(next?.action_type, 'READY');
-          assert.equal(counts.execution_batches.immediately_executable, 1);
-          assert.match(nextPrompt, /Repository: BACOUL\/timeproofs/);
-          assert.match(nextPrompt, /ARB-SITE-GLOBAL-003/);
-          assert.match(nextPrompt, new RegExp(`Base: ${escapeRegExp(standardBatch.base_branch)}`));
-          assert.match(nextPrompt, new RegExp(`Exact approved base head: ${escapeRegExp(standardBatch.stacked_base_head_sha)}`));
-          assert.match(nextPrompt, new RegExp(`Branch: ${escapeRegExp(standardBatch.branch)}`));
-          assert.match(nextPrompt, new RegExp(`PR title: ${escapeRegExp(standardBatch.pr_title)}`));
-          assert.match(nextPrompt, new RegExp(`Draft PR target: ${escapeRegExp(standardBatch.base_branch)}`));
-          assert.doesNotMatch(nextPrompt, /No CODEX execution batch is currently authorized/);
+          assert.equal(next?.action_type, 'REVIEW_OR_MERGE');
+          assert.equal(counts.execution_batches.immediately_executable, 0);
+          assert.match(nextPrompt, /No CODEX execution batch is currently authorized/);
+          assert.match(nextPrompt, /Current next action belongs to JEASON - ARB-SITE-GLOBAL-003/);
+          assert.doesNotMatch(nextPrompt, /Repository: BACOUL\/timeproofs/);
           NODE
 
       - name: Verify package metadata
