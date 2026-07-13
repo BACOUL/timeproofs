@@ -553,15 +553,15 @@ The implementation must record:
 - `ARB-SITE-GLOBAL-004` remains `IN_REVIEW` and not `DONE`.
 - Owner review is complete for stacked continuation to `ARB-SITE-GLOBAL-006`.
 
-### ARB-SITE-GLOBAL-006 Specification Refinement
+### ARB-SITE-GLOBAL-006 Draft Implementation Review State
 
-Status: READY
+Status: IN_REVIEW
 
 Specification: EXECUTION_READY
 
 Title: Publish SEO GEO AI-first structured data and international architecture
 
-Future branch:
+Implementation branch:
 
 `site-agentready-global-discovery`
 
@@ -569,20 +569,26 @@ Draft PR target:
 
 `site-agentready-global-docs-adoption`
 
-Future PR title:
+Draft PR:
+
+PR #138
+
+PR title:
 
 `site(discovery): publish SEO GEO and international architecture`
 
-The future implementation branch must be created from
-`site-agentready-global-docs-adoption` only after verifying that the reviewed
-GLOBAL-005 public-content head is an ancestor:
+Actual implementation base:
 
-`git merge-base --is-ancestor 6b22fda5e6a5d3a39bddc6dc04a479e228b7199e HEAD`
+`3cb404b133ee1db01024dc9cba52cd7f8b1faeed`
 
-The future batch must not require the parent branch HEAD to equal the
-governance-reconciliation commit that generated this specification. The
-reviewed public-content head remains the acceptance anchor; later canonical
-reconciliation commits may exist on the parent branch.
+Reviewed GLOBAL-005 public-content ancestor:
+
+`6b22fda5e6a5d3a39bddc6dc04a479e228b7199e`
+
+PR #138 implements this batch as a stacked draft PR and remains open and
+unmerged. The batch is not `DONE` until PR #138 is reviewed, merged and
+reconciled through the canonical execution system. `ARB-SITE-GLOBAL-007` is
+not activated while this batch remains in review.
 
 GLOBAL-006 covers:
 

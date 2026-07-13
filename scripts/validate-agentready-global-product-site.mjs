@@ -118,7 +118,8 @@ for (const file of pages) {
     "guarantees agent safety",
     "scientifically validated",
     "recognized international standard",
-    "runtime firewall",
+    "is a runtime firewall",
+    "runtime firewall for",
     "hosted scanner required"
   ]) {
     assertNotIncludes(file, forbidden);

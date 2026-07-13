@@ -135,25 +135,25 @@ jobs:
           assert.equal(docsBatch?.stacked_child_head_sha, '6b22fda5e6a5d3a39bddc6dc04a479e228b7199e');
           assert.equal(docsOwnerAcceptance?.reviewed_public_content_head, '6b22fda5e6a5d3a39bddc6dc04a479e228b7199e');
           assert.equal(docsOwnerAcceptance?.owner_review_complete_for_stacked_continuation, true);
-          assert.equal(seoBatch?.status, 'READY');
+          assert.equal(seoBatch?.status, 'IN_REVIEW');
           assert.equal(seoBatch?.spec_status, 'EXECUTION_READY');
           assert.equal(seoBatch?.owner, 'CODEX_AND_JEASON');
           assert.equal(seoBatch?.base_branch, 'site-agentready-global-docs-adoption');
           assert.equal(seoBatch?.branch, 'site-agentready-global-discovery');
           assert.equal(seoBatch?.pr_title, 'site(discovery): publish SEO GEO and international architecture');
+          assert.equal(seoBatch?.pr_number, 138);
           assert.equal(seoBatch?.stacked_on_batch, 'ARB-SITE-GLOBAL-005');
+          assert.equal(seoBatch?.stacked_base_head_sha, '3cb404b133ee1db01024dc9cba52cd7f8b1faeed');
           assert.equal(seoBatch?.stacked_required_ancestor_sha, '6b22fda5e6a5d3a39bddc6dc04a479e228b7199e');
           assert.equal(next?.kind, 'batch');
           assert.equal(next?.batch?.id, 'ARB-SITE-GLOBAL-006');
-          assert.equal(next?.action_type, 'READY');
-          assert.equal(next?.action_owner, 'CODEX_AND_JEASON');
-          assert.equal(counts.execution_batches.immediately_executable, 1);
-          assert.match(nextPrompt, /Batch ID: ARB-SITE-GLOBAL-006/);
-          assert.match(nextPrompt, /Base: site-agentready-global-docs-adoption/);
-          assert.match(nextPrompt, /Branch: site-agentready-global-discovery/);
-          assert.match(nextPrompt, /Draft PR target: site-agentready-global-docs-adoption/);
-          assert.match(nextPrompt, /git merge-base --is-ancestor 6b22fda5e6a5d3a39bddc6dc04a479e228b7199e HEAD/);
-          assert.doesNotMatch(nextPrompt, /Exact approved base head: 6b22fda5e6a5d3a39bddc6dc04a479e228b7199e/);
+          assert.equal(next?.action_type, 'REVIEW_OR_MERGE');
+          assert.equal(next?.action_owner, 'JEASON');
+          assert.equal(counts.execution_batches.immediately_executable, 0);
+          assert.match(nextPrompt, /No CODEX execution batch is currently authorized/);
+          assert.match(nextPrompt, /JEASON - ARB-SITE-GLOBAL-006 - Publish SEO GEO AI-first structured data and international architecture/);
+          assert.doesNotMatch(nextPrompt, /Batch ID: ARB-SITE-GLOBAL-007/);
+          assert.doesNotMatch(nextPrompt, /Branch: qa-agentready-global-standard-site/);
           NODE
 
       - name: Verify package metadata

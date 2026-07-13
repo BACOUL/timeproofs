@@ -360,3 +360,45 @@ Boundary:
 - no site PR is merged;
 - no npm, tag, Release, Marketplace, engine, CLI, package, Action, billing,
   account, backend or runtime operation is authorized by this record.
+
+## ARB-SITE-GLOBAL-006 Draft Implementation Opened - 2026-07-14
+
+Status: IN_REVIEW
+
+The stacked SEO, GEO, AI-first structured data and international architecture
+implementation is recorded in draft PR #138 on:
+
+`site-agentready-global-discovery`
+
+targeting:
+
+`site-agentready-global-docs-adoption`
+
+The implementation branch was created from the actual parent head:
+
+`3cb404b133ee1db01024dc9cba52cd7f8b1faeed`
+
+The required reviewed GLOBAL-005 public-content ancestor remains:
+
+`6b22fda5e6a5d3a39bddc6dc04a479e228b7199e`
+
+Scope:
+
+- unique titles, descriptions, canonical URLs and route intent;
+- factual JSON-LD for real public routes;
+- extractible AI-answer blocks and primary-source mappings;
+- author, AgentReady version, reviewed-date and language metadata;
+- sitemap and robots alignment;
+- English canonical language policy and no fake translations;
+- no `hreflang` alternates until genuine translations exist;
+- unsupported-claim, doorway-page, no-JavaScript and 320 px evidence.
+
+Governance boundary:
+
+- `ARB-SITE-GLOBAL-005` remains `IN_REVIEW` and not `DONE`;
+- `ARB-SITE-GLOBAL-006` is `IN_REVIEW` and not `DONE`;
+- `ARB-SITE-GLOBAL-007` is not activated until PR #138 is reviewed, merged and
+  reconciled through the canonical execution system;
+- no site PR is merged;
+- no npm, tag, Release, Marketplace, engine, CLI, package, Action, billing,
+  account, backend or runtime operation is authorized by this record.

@@ -585,7 +585,7 @@ Required evidence:
   - validator and deterministic regeneration results
 
 ### ARB-SITE-GLOBAL-006 - Publish SEO GEO AI-first structured data and international architecture
-- Status: READY
+- Status: IN_REVIEW
 - Spec status: EXECUTION_READY
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
@@ -595,7 +595,7 @@ Required evidence:
 - Depends on tasks: None
 - Branch: site-agentready-global-discovery
 - PR title: site(discovery): publish SEO GEO and international architecture
-
+- PR: #138
 Deliverables:
   - Technical SEO foundation for the stacked public AgentReady site
   - Unique page titles descriptions canonical URLs and heading hierarchy for implemented public routes
@@ -2978,7 +2978,7 @@ Required evidence:
 
 ### AR-SITE-GLOBAL-006 - Publish SEO GEO AI-first structured data and international architecture
 - Type: CODEX_WORK_ITEM
-- Status: READY
+- Status: IN_REVIEW
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
@@ -2986,7 +2986,7 @@ Required evidence:
 - Weight: 5
 - Execution batch: ARB-SITE-GLOBAL-006
 - Depends on: None
-
+- PR: #138
 Deliverables:
   - Technical SEO foundation for the stacked public AgentReady site
   - Unique page titles descriptions canonical URLs and heading hierarchy for implemented public routes

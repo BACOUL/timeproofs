@@ -7,9 +7,9 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 
 Batch ID: ARB-SITE-GLOBAL-006
 Title: Publish SEO GEO AI-first structured data and international architecture
-Action owner: CODEX_AND_JEASON
-Action type: READY
-Status: READY
+Action owner: JEASON
+Action type: REVIEW_OR_MERGE
+Status: IN_REVIEW
 Specification: EXECUTION_READY
 Objective:
 Publish the technical SEO, GEO, AI-first structured data and international architecture foundation for the stacked AgentReady public site without changing product behavior, distribution state, billing, accounts, backend or runtime systems.
