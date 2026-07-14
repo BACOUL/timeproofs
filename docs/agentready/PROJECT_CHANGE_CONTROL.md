@@ -397,8 +397,74 @@ Governance boundary:
 
 - `ARB-SITE-GLOBAL-005` remains `IN_REVIEW` and not `DONE`;
 - `ARB-SITE-GLOBAL-006` is `IN_REVIEW` and not `DONE`;
-- `ARB-SITE-GLOBAL-007` is not activated until PR #138 is reviewed, merged and
-  reconciled through the canonical execution system;
+- `ARB-SITE-GLOBAL-007` is not activated until PR #138 owner review is accepted
+  and reconciled through the canonical execution system;
+- no site PR is merged;
+- no npm, tag, Release, Marketplace, engine, CLI, package, Action, billing,
+  account, backend or runtime operation is authorized by this record.
+
+## ARB-SITE-GLOBAL-006 Owner Acceptance And GLOBAL-007 Readiness - 2026-07-14
+
+Status: RECORDED
+
+Decision:
+
+JEASON accepted the corrected mobile visual hierarchy and the 34-route
+SEO/GEO, JSON-LD, AI-answer, source mapping and international architecture
+foundation implemented in PR #138 on:
+
+`site-agentready-global-discovery`
+
+Reviewed public-content head:
+
+`2d07223132dc5ec009b8c38a68a7b4aacb0a6163`
+
+Recorded facts:
+
+- JEASON visually reviewed the corrected mobile production rendering.
+- The production promotion of this branch was intentional.
+- No rollback is requested.
+- The AgentReady hero, H1, value proposition and primary CTAs appear before the
+  compact "AgentReady at a glance" discovery section.
+- The corrected visual hierarchy is accepted.
+- The 34-route SEO/GEO, JSON-LD, AI-answer, source mapping and international
+  architecture foundation is accepted as a stacked implementation layer.
+- English-only canonical architecture is accepted until genuine reviewed
+  translations exist.
+- No unsupported standards-body, certification, customer, benchmark or
+  guaranteed-safety claim was identified.
+- This acceptance does not authorize merging the stacked PRs.
+
+Canonical effect:
+
+- `ARB-SITE-GLOBAL-006` remains `IN_REVIEW`;
+- `ARB-SITE-GLOBAL-006` is not `DONE` because PR #138 remains open, draft and
+  unmerged;
+- owner review is accepted for stacked continuation;
+- `ARB-SITE-GLOBAL-007` becomes the next executable batch with specification
+  `EXECUTION_READY`.
+
+The GLOBAL-007 implementation-parent model uses the reviewed GLOBAL-006
+public-content head as a required ancestor, not as an exact parent HEAD lock.
+The future implementation branch must verify:
+
+`git merge-base --is-ancestor 2d07223132dc5ec009b8c38a68a7b4aacb0a6163 HEAD`
+
+Future implementation branch:
+
+`qa-agentready-global-standard-site`
+
+Future draft PR target:
+
+`site-agentready-global-discovery`
+
+Future PR title:
+
+`qa(site): validate complete global standard site`
+
+Boundary:
+
+- no GLOBAL-007 page implementation is performed by this reconciliation;
 - no site PR is merged;
 - no npm, tag, Release, Marketplace, engine, CLI, package, Action, billing,
   account, backend or runtime operation is authorized by this record.

@@ -820,6 +820,7 @@ const docsAdoptionResponseFormat = [
   "confirmation that no PR was merged"
 ];
 const docsAdoptionReviewedPublicContentHead = "6b22fda5e6a5d3a39bddc6dc04a479e228b7199e";
+const seoGeoReviewedPublicContentHead = "2d07223132dc5ec009b8c38a68a7b4aacb0a6163";
 const seoGeoSources = [
   doc.master,
   doc.sequence,
@@ -858,6 +859,10 @@ const seoGeoSurfaces = [
   "agentready.html",
   "agentready-mcp.html",
   "agentready-ci.html",
+  "agentready-simulation.html",
+  "openapi-ai-agent-readiness.html",
+  "mcp-server-readiness.html",
+  "ai-agent-tool-risk-checklist.html",
   "agentready-docs.html",
   "agentready-standard.html",
   "agentready-rule-codes.html",
@@ -1007,6 +1012,178 @@ const seoGeoResponseFormat = [
   "confirmation that no npm tag Release Marketplace engine CLI billing account package or runtime operation occurred",
   "confirmation that no PR was merged"
 ];
+const globalQaSources = [
+  doc.master,
+  doc.sequence,
+  doc.decision,
+  doc.change,
+  doc.globalSite,
+  doc.ia,
+  doc.premium,
+  doc.copy,
+  doc.seo,
+  doc.rules,
+  doc.json,
+  doc.actionUsage,
+  doc.adoption,
+  "docs/agentready/SITE_PREMIUM_FOUNDATION_EVIDENCE.md",
+  "docs/agentready/SITE_GLOBAL_PRODUCT_FOUNDATION_EVIDENCE.md",
+  "docs/agentready/SITE_GLOBAL_STANDARD_FOUNDATION_EVIDENCE.md",
+  "docs/agentready/SITE_GLOBAL_TRUST_LEGAL_FOUNDATION_EVIDENCE.md",
+  "docs/agentready/SITE_GLOBAL_DEVELOPER_DOCS_FOUNDATION_EVIDENCE.md",
+  "docs/agentready/SITE_GLOBAL_DISCOVERY_FOUNDATION_EVIDENCE.md",
+  "sitemap.xml",
+  "robots.txt"
+];
+const globalQaSurfaces = [
+  "complete stacked public site covering PR #132 shell navigation footer",
+  "GLOBAL-002 product and pricing pages",
+  "GLOBAL-003 public standard, rules, JSON, examples, resources and sample report pages",
+  "GLOBAL-004 company, trust, security, privacy, disclosure, legal, data-flow, limitations and support pages",
+  "GLOBAL-005 developer documentation, CLI, Action, adoption, contribution and troubleshooting pages",
+  "GLOBAL-006 SEO, GEO, JSON-LD, AI-answer and international architecture surfaces",
+  "all indexable routes in sitemap.xml",
+  "browser OpenAPI scanner",
+  "browser MCP scanner",
+  "simulation route",
+  "all shared navigation, menu and footer links",
+  "mobile, accessibility, performance, content, legal-data and discoverability evidence registers"
+];
+const globalQaDeliverables = [
+  "Complete stacked-site QA implementation for the AgentReady public site",
+  "Mobile and responsive QA across 320px, 360px, 390px, 412px and tablet widths",
+  "Accessibility QA for keyboard navigation, focus, landmarks, headings, forms, contrast, reduced motion and no-JavaScript core content",
+  "Performance QA with static asset inventory, image and script weight review, no external framework/font verification and reproducible measurements",
+  "Content consistency QA across product, standard, trust, developer and discovery layers",
+  "Legal and data consistency QA across company facts, privacy, security, disclosure, terms and data-flow routes",
+  "Discoverability QA for sitemap, robots, canonical URLs, metadata, JSON-LD, Open Graph, Twitter metadata, discovery answers and source citations",
+  "Functional QA for scanners, simulation, CLI documentation examples, GitHub Action examples, reports, agentready.json, menu and footer links",
+  "Evidence register, route and viewport matrix, screenshots and validator for the complete combined stack"
+];
+const globalQaAcceptance = [
+  "the complete combined stack from PR #132, GLOBAL-002, GLOBAL-003, GLOBAL-004, GLOBAL-005 and GLOBAL-006 is validated as one public site without marking any stacked PR as merged",
+  "320px, 360px, 390px, 412px and tablet layouts have no horizontal overflow, readable typography, usable CTA sizing and spacing, working navigation and menu behavior, usable scanners and forms, and wrapped long code, filenames, URLs and tables",
+  "keyboard-only navigation, visible focus, skip link, semantic landmarks, one H1 per route, heading hierarchy, form labels, instructions, error and result announcements, contrast, reduced-motion behavior and no-JavaScript core content are verified",
+  "native details and menu patterns remain accessible without adding JavaScript-only essential behavior",
+  "static asset inventory, image dimensions and compression, CSS and JavaScript weight, no external font or frontend framework, no unnecessary blocking resource, production and preview HTTP behavior and Lighthouse or equivalent measurements are recorded with thresholds and limitations",
+  "AgentReady and TimeProofs terminology remains consistent; Community is free and available; Pro is planned and not purchasable; and no duplicated, contradictory, dead-placeholder, unsupported-promise, customer, benchmark, certification, standards-body or guaranteed-safety copy remains",
+  "company facts, privacy, data-flow, legal, terms, security and disclosure statements stay consistent with actual browser, CLI, GitHub Action, npm, Vercel and GitHub behavior, and unresolved legal blockers remain explicit",
+  "sitemap routes, robots rules, canonical URLs, unique titles and descriptions, factual JSON-LD, Open Graph and Twitter metadata, discovery answer placement after primary content, English canonical architecture, no fake translation, no unsupported hreflang and no doorway or thin page are verified",
+  "all internal source citations and CTA destinations resolve without broken routes",
+  "OpenAPI scanner, MCP scanner, simulation route, CLI documentation examples, GitHub Action examples, report and agentready.json surfaces, menu and footer links, no-JavaScript routes and production HTTP 200 checks for every indexable route are recorded",
+  "no engine, CLI, package, Action, scoring, severity, AR001 through AR010 semantic, npm, tag, Release, Marketplace, billing, account, backend, hosted scanning, telemetry, upload or runtime behavior changes occur"
+];
+const globalQaCommands = [
+  "node scripts/rebuild-agentready-ledger-data.mjs",
+  "node scripts/generate-agentready-ledger-views.mjs --write",
+  "node scripts/generate-agentready-status.mjs --write",
+  "node scripts/generate-agentready-next-action.mjs --write",
+  "node scripts/generate-agentready-next-prompt.mjs --write",
+  "node scripts/validate-agentready-site-navigation.mjs",
+  "node scripts/validate-agentready-global-product-site.mjs",
+  "node scripts/validate-agentready-standard-foundation-site.mjs",
+  "node scripts/validate-agentready-trust-legal-foundation-site.mjs",
+  "node scripts/validate-agentready-developer-docs-foundation-site.mjs",
+  "node scripts/validate-agentready-seo-geo-foundation-site.mjs",
+  "node scripts/validate-agentready-global-site-qa.mjs",
+  "node scripts/validate-agentready-action-marketplace-readiness.mjs",
+  "node scripts/validate-agentready-strategy-docs.mjs",
+  "node scripts/validate-agentready-execution-system.mjs",
+  "node cli/tests/run-agentready-community-release-workflow-test.mjs",
+  "git diff --check"
+];
+const globalQaEvidence = [
+  "complete stacked-site source inventory",
+  "route and viewport matrix covering every indexable route at 320px, 360px, 390px, 412px, tablet and desktop widths",
+  "mobile overflow, typography, CTA spacing, navigation, scanner, form, long-code, filename, URL and table wrapping report",
+  "keyboard accessibility report with focus, skip-link, landmark, one-H1, heading, form, announcement, contrast and reduced-motion checks",
+  "no-JavaScript evidence for core content and native details or menu behavior",
+  "performance asset inventory, CSS and JavaScript weight report, image dimensions and compression review, no external font or framework audit and Lighthouse or equivalent reproducible measurements",
+  "production and preview HTTP behavior report",
+  "content consistency and unsupported-claim audit",
+  "company legal data privacy security terms disclosure and data-flow consistency audit",
+  "discoverability audit for exact sitemap route match, robots, canonical URLs, titles, descriptions, JSON-LD, Open Graph, Twitter metadata, discovery answer placement, English-only canonical architecture, hreflang absence and no doorway or thin page",
+  "functional QA report for OpenAPI scanner, MCP scanner, simulation, CLI documentation examples, GitHub Action examples, reports, agentready.json surfaces, menu and footer links",
+  "production HTTP 200 report for every indexable route",
+  "CTA and internal-link report",
+  "desktop and mobile screenshots",
+  "preview URL",
+  "validator and deterministic regeneration results",
+  "JEASON final stacked-site review record"
+];
+const globalQaForbiddenPaths = [
+  "agentready-core/**",
+  "cli/** where behavior would change",
+  "bin/**",
+  "package.json",
+  "action.yml",
+  ".github/workflows/** unless a separately identified stale validation guard requires a separately authorized correction",
+  "packaging/**",
+  "server/**",
+  "api/**",
+  "billing/**",
+  "account/**",
+  "LICENSE",
+  "NOTICE"
+];
+const globalQaForbiddenActions = [
+  "do not modify the AgentReady engine",
+  "do not modify CLI behavior",
+  "do not modify scoring, severity or AR001 through AR010 semantics",
+  "do not modify package.json or action.yml",
+  "do not perform npm operations or change package publication state",
+  "do not create, move or delete tags",
+  "do not create or modify GitHub Releases or Marketplace operations",
+  "do not implement billing, accounts, backend, hosted scanning, telemetry or upload systems",
+  "do not add analytics trackers, external fonts or frontend frameworks",
+  "do not create a full post-launch SEO content cluster, competitive comparison pages, fake translations, doorway pages or thin keyword pages",
+  "do not claim official standards-body recognition, independent certification, benchmark validation, customers, testimonials or guaranteed safety",
+  "do not merge any site PR"
+];
+const globalQaPreflight = [
+  "fetch origin and synchronize the parent branch site-agentready-global-discovery",
+  `verify git merge-base --is-ancestor ${seoGeoReviewedPublicContentHead} HEAD before creating the implementation branch`,
+  `record ${seoGeoReviewedPublicContentHead} as the required reviewed ancestor for ARB-SITE-GLOBAL-007`,
+  "create branch qa-agentready-global-standard-site from the current site-agentready-global-discovery HEAD that contains that reviewed ancestor",
+  "open a draft PR targeting site-agentready-global-discovery before broad QA fixes or evidence work",
+  "verify PR #132, #134, #135, #136, #137 and #138 remain open draft and unmerged",
+  "inventory the complete combined stack, sitemap, robots, route metadata, scanners, forms, menu, footer, evidence registers and validators before editing",
+  "confirm no npm, Action, tag, Release, Marketplace, engine, CLI, package, billing, account, backend or runtime operation is required"
+];
+const globalQaManualActions = [
+  "JEASON reviews the complete combined global-site QA preview and evidence",
+  "JEASON confirms whether the stacked site can proceed to later Community installation validation without merging any site PR in this batch",
+  "JEASON reviews remaining legal-data blockers before any final production reliance"
+];
+const globalQaAuthorizedActions = [
+  "perform complete static QA of the stacked public site and update factual evidence",
+  "make narrowly scoped static page, asset, metadata or link corrections when required by the QA acceptance criteria",
+  "add or update validators for mobile, accessibility, performance, content, legal-data, discoverability and functional QA",
+  "record desktop, mobile, keyboard, no-JavaScript, 320px overflow, performance, route and HTTP evidence"
+];
+const globalQaResponseFormat = [
+  "branch name",
+  "draft PR number and URL",
+  "base branch and required reviewed ancestor",
+  "exact head SHA",
+  "files changed grouped by QA fixes, validators, governance and evidence",
+  "route and viewport matrix summary",
+  "mobile and responsive QA results",
+  "accessibility QA results",
+  "performance QA results",
+  "content consistency QA results",
+  "legal and data consistency QA results",
+  "discoverability QA results",
+  "functional scanner and route QA results",
+  "local validation results",
+  "GitHub workflow results",
+  "preview URL",
+  "desktop and mobile evidence paths",
+  "keyboard no-JavaScript and 320px overflow evidence",
+  "remaining JEASON or legal-review points",
+  "confirmation that no npm tag Release Marketplace engine CLI billing account package Action scoring rule or runtime operation occurred",
+  "confirmation that no PR was merged"
+];
 
 for (const [id, title, branch, prTitle] of [
   ["AR-SITE-GLOBAL-003", "Publish AgentReady standard rules and governance foundation", "site-agentready-global-standard", "site(standard): publish AgentReady standard foundation"],
@@ -1019,30 +1196,32 @@ for (const [id, title, branch, prTitle] of [
   const isTrustFoundation = id === "AR-SITE-GLOBAL-004";
   const isDocsAdoption = id === "AR-SITE-GLOBAL-005";
   const isSeoGeo = id === "AR-SITE-GLOBAL-006";
+  const isGlobalQa = id === "AR-SITE-GLOBAL-007";
+  const isActiveStackedSiteWork = isStandardFoundation || isTrustFoundation || isDocsAdoption || isSeoGeo || isGlobalQa;
   codex("AR-SITE-PREMIUM-EPIC", id, "M3", "BEFORE_COMMUNITY_PUBLICATION", "SITE", title, {
   decision_ids: [...decisionIds, "DL-2026-07-13-GLOBAL-STANDARD-SITE-BEFORE-VALIDATION"],
-  status: isStandardFoundation || isTrustFoundation || isDocsAdoption || isSeoGeo ? "IN_REVIEW" : "PLANNED",
-  spec_status: isStandardFoundation || isTrustFoundation || isDocsAdoption || isSeoGeo ? "EXECUTION_READY" : "SKELETON",
-  owner: isStandardFoundation || isTrustFoundation || isDocsAdoption || isSeoGeo ? "CODEX_AND_JEASON" : "CODEX",
+  status: isGlobalQa ? "READY" : isStandardFoundation || isTrustFoundation || isDocsAdoption || isSeoGeo ? "IN_REVIEW" : "PLANNED",
+  spec_status: isActiveStackedSiteWork ? "EXECUTION_READY" : "SKELETON",
+  owner: isActiveStackedSiteWork ? "CODEX_AND_JEASON" : "CODEX",
   weight: 5,
   pr_number: isStandardFoundation ? 135 : isTrustFoundation ? 136 : isDocsAdoption ? 137 : isSeoGeo ? 138 : undefined,
-  source_documents: isStandardFoundation ? standardFoundationSources : isTrustFoundation ? trustFoundationSources : isDocsAdoption ? docsAdoptionSources : isSeoGeo ? seoGeoSources : [doc.globalSite, doc.ia, doc.copy],
+  source_documents: isStandardFoundation ? standardFoundationSources : isTrustFoundation ? trustFoundationSources : isDocsAdoption ? docsAdoptionSources : isSeoGeo ? seoGeoSources : isGlobalQa ? globalQaSources : [doc.globalSite, doc.ia, doc.copy],
   branch,
   pr_title: prTitle,
-  allowed_paths: isStandardFoundation || isTrustFoundation || isDocsAdoption || isSeoGeo ? ["assets/**", "*.html", "docs/agentready/**", "scripts/**", "sitemap.xml", "robots.txt"] : ["assets/**", "*.html", "docs/agentready/**", "scripts/**", "sitemap.xml"],
-  forbidden_paths: isStandardFoundation ? standardFoundationForbiddenPaths : isTrustFoundation ? trustFoundationForbiddenPaths : isDocsAdoption ? docsAdoptionForbiddenPaths : isSeoGeo ? seoGeoForbiddenPaths : ["agentready-core/**", "bin/**", "package.json", "action.yml", ".github/workflows/**", "server/**", "api/**", "LICENSE", "NOTICE"],
-  deliverables: isStandardFoundation ? standardFoundationDeliverables : isTrustFoundation ? trustFoundationDeliverables : isDocsAdoption ? docsAdoptionDeliverables : isSeoGeo ? seoGeoDeliverables : [title],
-  estimated_files_or_surfaces: isStandardFoundation ? standardFoundationSurfaces : isTrustFoundation ? trustFoundationSurfaces : isDocsAdoption ? docsAdoptionSurfaces : isSeoGeo ? seoGeoSurfaces : undefined,
-  acceptance_criteria: isStandardFoundation ? standardFoundationAcceptance : isTrustFoundation ? trustFoundationAcceptance : isDocsAdoption ? docsAdoptionAcceptance : isSeoGeo ? seoGeoAcceptance : [`${title} complete after preceding stacked site batch is reviewed`],
-  required_commands: isStandardFoundation ? standardFoundationCommands : isTrustFoundation ? trustFoundationCommands : isDocsAdoption ? docsAdoptionCommands : isSeoGeo ? seoGeoCommands : undefined,
-  independent_test_plan: isStandardFoundation ? standardFoundationTests : isTrustFoundation ? trustFoundationTests : isDocsAdoption ? docsAdoptionAcceptance : isSeoGeo ? seoGeoAcceptance : undefined,
-  required_evidence: isStandardFoundation ? standardFoundationEvidence : isTrustFoundation ? trustFoundationEvidence : isDocsAdoption ? docsAdoptionEvidence : isSeoGeo ? seoGeoEvidence : undefined,
-  manual_actions: isStandardFoundation ? ["JEASON reviews the AgentReady standard foundation preview and confirms no formal-standards or certification claim was introduced"] : isTrustFoundation ? ["JEASON verifies publisher identity, legal notice facts, public contact paths and responsible-disclosure contact before final review", "JEASON reviews the complete trust/legal preview and confirms no invented legal, privacy, security, support, certification, audit or guarantee claim was introduced"] : isDocsAdoption ? docsAdoptionManualActions : isSeoGeo ? seoGeoManualActions : undefined,
-  authorized_actions: isStandardFoundation ? ["create real static public standard, rule, JSON, examples, resources and sample-report surfaces", "add factual local diagrams or static assets when they are derived from current authoritative documents", "add or update validators for the standard foundation pages", "update sitemap robots and internal links only for real routes created by this batch"] : isTrustFoundation ? ["create or align static About Trust Security Responsible disclosure Privacy Terms Legal notice Limitations Data flow and Support boundary pages", "add factual local diagrams or static assets derived from current repository sources", "add or update validators for trust legal privacy security and claim accuracy", "update sitemap robots and internal links only for real routes created or aligned by this batch"] : isDocsAdoption ? docsAdoptionAuthorizedActions : isSeoGeo ? seoGeoAuthorizedActions : undefined,
-  forbidden_actions: isStandardFoundation ? standardFoundationForbiddenActions : isTrustFoundation ? trustFoundationForbiddenActions : isDocsAdoption ? docsAdoptionForbiddenActions : isSeoGeo ? seoGeoForbiddenActions : undefined,
-  codex_preflight_steps: isStandardFoundation ? standardFoundationPreflight : isTrustFoundation ? trustFoundationPreflight : isDocsAdoption ? docsAdoptionPreflight : isSeoGeo ? seoGeoPreflight : undefined,
+  allowed_paths: isActiveStackedSiteWork ? ["assets/**", "*.html", "docs/agentready/**", "scripts/**", "sitemap.xml", "robots.txt"] : ["assets/**", "*.html", "docs/agentready/**", "scripts/**", "sitemap.xml"],
+  forbidden_paths: isStandardFoundation ? standardFoundationForbiddenPaths : isTrustFoundation ? trustFoundationForbiddenPaths : isDocsAdoption ? docsAdoptionForbiddenPaths : isSeoGeo ? seoGeoForbiddenPaths : isGlobalQa ? globalQaForbiddenPaths : ["agentready-core/**", "bin/**", "package.json", "action.yml", ".github/workflows/**", "server/**", "api/**", "LICENSE", "NOTICE"],
+  deliverables: isStandardFoundation ? standardFoundationDeliverables : isTrustFoundation ? trustFoundationDeliverables : isDocsAdoption ? docsAdoptionDeliverables : isSeoGeo ? seoGeoDeliverables : isGlobalQa ? globalQaDeliverables : [title],
+  estimated_files_or_surfaces: isStandardFoundation ? standardFoundationSurfaces : isTrustFoundation ? trustFoundationSurfaces : isDocsAdoption ? docsAdoptionSurfaces : isSeoGeo ? seoGeoSurfaces : isGlobalQa ? globalQaSurfaces : undefined,
+  acceptance_criteria: isStandardFoundation ? standardFoundationAcceptance : isTrustFoundation ? trustFoundationAcceptance : isDocsAdoption ? docsAdoptionAcceptance : isSeoGeo ? seoGeoAcceptance : isGlobalQa ? globalQaAcceptance : [`${title} complete after preceding stacked site batch is reviewed`],
+  required_commands: isStandardFoundation ? standardFoundationCommands : isTrustFoundation ? trustFoundationCommands : isDocsAdoption ? docsAdoptionCommands : isSeoGeo ? seoGeoCommands : isGlobalQa ? globalQaCommands : undefined,
+  independent_test_plan: isStandardFoundation ? standardFoundationTests : isTrustFoundation ? trustFoundationTests : isDocsAdoption ? docsAdoptionAcceptance : isSeoGeo ? seoGeoAcceptance : isGlobalQa ? globalQaAcceptance : undefined,
+  required_evidence: isStandardFoundation ? standardFoundationEvidence : isTrustFoundation ? trustFoundationEvidence : isDocsAdoption ? docsAdoptionEvidence : isSeoGeo ? seoGeoEvidence : isGlobalQa ? globalQaEvidence : undefined,
+  manual_actions: isStandardFoundation ? ["JEASON reviews the AgentReady standard foundation preview and confirms no formal-standards or certification claim was introduced"] : isTrustFoundation ? ["JEASON verifies publisher identity, legal notice facts, public contact paths and responsible-disclosure contact before final review", "JEASON reviews the complete trust/legal preview and confirms no invented legal, privacy, security, support, certification, audit or guarantee claim was introduced"] : isDocsAdoption ? docsAdoptionManualActions : isSeoGeo ? seoGeoManualActions : isGlobalQa ? globalQaManualActions : undefined,
+  authorized_actions: isStandardFoundation ? ["create real static public standard, rule, JSON, examples, resources and sample-report surfaces", "add factual local diagrams or static assets when they are derived from current authoritative documents", "add or update validators for the standard foundation pages", "update sitemap robots and internal links only for real routes created by this batch"] : isTrustFoundation ? ["create or align static About Trust Security Responsible disclosure Privacy Terms Legal notice Limitations Data flow and Support boundary pages", "add factual local diagrams or static assets derived from current repository sources", "add or update validators for trust legal privacy security and claim accuracy", "update sitemap robots and internal links only for real routes created or aligned by this batch"] : isDocsAdoption ? docsAdoptionAuthorizedActions : isSeoGeo ? seoGeoAuthorizedActions : isGlobalQa ? globalQaAuthorizedActions : undefined,
+  forbidden_actions: isStandardFoundation ? standardFoundationForbiddenActions : isTrustFoundation ? trustFoundationForbiddenActions : isDocsAdoption ? docsAdoptionForbiddenActions : isSeoGeo ? seoGeoForbiddenActions : isGlobalQa ? globalQaForbiddenActions : undefined,
+  codex_preflight_steps: isStandardFoundation ? standardFoundationPreflight : isTrustFoundation ? trustFoundationPreflight : isDocsAdoption ? docsAdoptionPreflight : isSeoGeo ? seoGeoPreflight : isGlobalQa ? globalQaPreflight : undefined,
   external_verifications: isTrustFoundation ? ["JEASON verifies any public contact path before it is presented as usable", "JEASON or legal counsel verifies publisher identity legal notice and privacy facts before final review"] : undefined,
-  final_response_format: isTrustFoundation ? trustFoundationResponseFormat : isDocsAdoption ? docsAdoptionResponseFormat : isSeoGeo ? seoGeoResponseFormat : undefined,
+  final_response_format: isTrustFoundation ? trustFoundationResponseFormat : isDocsAdoption ? docsAdoptionResponseFormat : isSeoGeo ? seoGeoResponseFormat : isGlobalQa ? globalQaResponseFormat : undefined,
   evidence: isStandardFoundation ? [{ type: "draft_pr_implementation_review", pr: 135, branch: "site-agentready-global-standard", status: "IN_REVIEW", implemented: true, merge_authorized: false, evidence_document: "docs/agentready/SITE_GLOBAL_STANDARD_FOUNDATION_EVIDENCE.md", routes: ["agentready-standard.html", "agentready-rule-codes.html", "agentready-json.html", "agentready-examples.html", "agentready-resources.html", "agentready-sample-report.html"], validator: "scripts/validate-agentready-standard-foundation-site.mjs" }] : isTrustFoundation ? [{ type: "draft_pr_implementation_review", pr: 136, branch: "site-agentready-global-trust", status: "IN_REVIEW", implemented: true, merge_authorized: false, evidence_document: "docs/agentready/SITE_GLOBAL_TRUST_LEGAL_FOUNDATION_EVIDENCE.md", routes: ["about.html", "trust.html", "security.html", "responsible-disclosure.html", "privacy.html", "terms.html", "legal.html", "limitations.html", "agentready-data-flow.html", "support.html"], validator: "scripts/validate-agentready-trust-legal-foundation-site.mjs", preview_url: "https://timeproofs-git-site-agentready-global-trust-jeason1.vercel.app/", owner_review_required: true, batch_done: false }] : isDocsAdoption ? [{ type: "draft_pr_implementation_review", pr: 137, branch: "site-agentready-global-docs-adoption", status: "IN_REVIEW", implemented: true, merge_authorized: false, evidence_document: "docs/agentready/SITE_GLOBAL_DEVELOPER_DOCS_FOUNDATION_EVIDENCE.md", routes: ["agentready-docs.html", "agentready.html", "agentready-mcp.html", "agentready-ci.html", "agentready-json.html", "agentready-examples.html", "agentready-resources.html", "agentready-sample-report.html", "agentready-cli.html", "agentready-action.html", "agentready-adoption.html", "agentready-contributing.html", "agentready-troubleshooting.html"], validator: "scripts/validate-agentready-developer-docs-foundation-site.mjs", preview_url: "https://timeproofs-git-site-agentready-global-docs-adoption-jeason1.vercel.app/", owner_review_required: true, batch_done: false }] : isSeoGeo ? [{ type: "draft_pr_implementation_review", pr: 138, branch: "site-agentready-global-discovery", status: "IN_REVIEW", implemented: true, merge_authorized: false, actual_implementation_base_sha: "3cb404b133ee1db01024dc9cba52cd7f8b1faeed", required_reviewed_ancestor_sha: docsAdoptionReviewedPublicContentHead, evidence_document: "docs/agentready/SITE_GLOBAL_DISCOVERY_FOUNDATION_EVIDENCE.md", routes: seoGeoSurfaces.filter((surface) => surface.endsWith(".html")), validator: "scripts/validate-agentready-seo-geo-foundation-site.mjs", preview_url: "https://timeproofs-git-site-agentready-global-discovery-jeason1.vercel.app/", owner_review_required: true, batch_done: false }] : undefined,
   rollback_boundary: isStandardFoundation ? "Revert ARB-SITE-GLOBAL-003 without reverting PR #132 shell or PR #134 product foundation." : isTrustFoundation ? "Revert ARB-SITE-GLOBAL-004 without reverting PR #132 shell, PR #134 product foundation or PR #135 standard foundation." : isDocsAdoption ? "Revert ARB-SITE-GLOBAL-005 without reverting PR #132 shell, PR #134 product foundation, PR #135 standard foundation or PR #136 trust/legal foundation." : isSeoGeo ? "Revert ARB-SITE-GLOBAL-006 without reverting PR #132 shell, PR #134 product foundation, PR #135 standard foundation, PR #136 trust/legal foundation or PR #137 developer documentation foundation." : `Revert ${id} without reverting earlier stacked site batches.`,
   scope_justification: isStandardFoundation ? "Weight 5 justified: one reviewable public standard foundation spanning standard overview, rule dictionary, scoring, versioning, governance and reference implementation surfaces with one stacked preview and rollback boundary." : isTrustFoundation ? "Weight 5 justified: one reviewable trust/legal foundation spanning publisher identity, security, privacy, disclosure, terms, data flows and support boundaries with one stacked preview and rollback boundary." : isDocsAdoption ? "Weight 5 justified: one reviewable developer-documentation and adoption foundation spanning scanner usage, CLI, Action, report, examples, contribution and troubleshooting surfaces with one stacked preview and rollback boundary." : isSeoGeo ? "Weight 5 justified: one reviewable SEO, GEO, AI-first, structured-data and international-architecture foundation spanning active public route metadata, source mapping, structured data, language architecture and evidence with one stacked preview and rollback boundary." : "Weight 5 justified: planned global-site batch retained as a non-executable skeleton until the preceding stacked batch is reviewed."
@@ -1603,6 +1782,7 @@ const batchDefinitions = [
     pr_title: "site(discovery): publish SEO GEO and international architecture",
     pr_number: 138,
     stacked_execution_authorized: true,
+    stacked_execution_can_continue: true,
     stacked_on_batch: "ARB-SITE-GLOBAL-005",
     stacked_base_head_sha: "3cb404b133ee1db01024dc9cba52cd7f8b1faeed",
     stacked_required_ancestor_sha: docsAdoptionReviewedPublicContentHead,
@@ -1632,12 +1812,101 @@ const batchDefinitions = [
     final_response_format: seoGeoResponseFormat,
     allowed_paths: ["assets/**", "*.html", "docs/agentready/**", "scripts/**", "sitemap.xml", "robots.txt"],
     forbidden_paths: seoGeoForbiddenPaths,
-    evidence: [{ type: "draft_pr_implementation_review", pr: 138, branch: "site-agentready-global-discovery", status: "IN_REVIEW", implemented: true, merge_authorized: false, actual_implementation_base_sha: "3cb404b133ee1db01024dc9cba52cd7f8b1faeed", required_reviewed_ancestor_sha: docsAdoptionReviewedPublicContentHead, evidence_document: "docs/agentready/SITE_GLOBAL_DISCOVERY_FOUNDATION_EVIDENCE.md", routes: seoGeoSurfaces.filter((surface) => surface.endsWith(".html")), validator: "scripts/validate-agentready-seo-geo-foundation-site.mjs", preview_url: "https://timeproofs-git-site-agentready-global-discovery-jeason1.vercel.app/", owner_review_required: true, batch_done: false }],
+    evidence: [
+      {
+        type: "draft_pr_implementation_review",
+        pr: 138,
+        branch: "site-agentready-global-discovery",
+        status: "IN_REVIEW",
+        implemented: true,
+        merge_authorized: false,
+        actual_implementation_base_sha: "3cb404b133ee1db01024dc9cba52cd7f8b1faeed",
+        required_reviewed_ancestor_sha: docsAdoptionReviewedPublicContentHead,
+        evidence_document: "docs/agentready/SITE_GLOBAL_DISCOVERY_FOUNDATION_EVIDENCE.md",
+        routes: seoGeoSurfaces.filter((surface) => surface.endsWith(".html")),
+        validator: "scripts/validate-agentready-seo-geo-foundation-site.mjs",
+        preview_url: "https://timeproofs-git-site-agentready-global-discovery-jeason1.vercel.app/",
+        owner_review_required: true,
+        batch_done: false
+      },
+      {
+        type: "owner_review_acceptance",
+        date: "2026-07-14",
+        reviewer: "JEASON",
+        branch_reviewed: "site-agentready-global-discovery",
+        pr: 138,
+        reviewed_public_content_head: seoGeoReviewedPublicContentHead,
+        production_promotion_intentional: true,
+        rollback_requested: false,
+        corrected_mobile_production_rendering_reviewed: true,
+        hero_h1_value_proposition_and_primary_ctas_before_discovery_answer: true,
+        corrected_visual_hierarchy_accepted: true,
+        seo_geo_json_ld_ai_answer_source_mapping_and_international_architecture_foundation_accepted: true,
+        route_count: 34,
+        english_only_canonical_architecture_accepted_until_genuine_reviewed_translations_exist: true,
+        unsupported_standards_body_certification_customer_benchmark_or_guaranteed_safety_claim_identified: false,
+        merge_authorized: false,
+        pr_merged: false,
+        batch_done: false,
+        owner_review_complete_for_stacked_continuation: true,
+        stacked_execution_can_continue: true
+      }
+    ],
     rollback_boundary: "Revert ARB-SITE-GLOBAL-006 without reverting PR #132 shell, PR #134 product foundation, PR #135 standard foundation, PR #136 trust/legal foundation or PR #137 developer documentation foundation.",
     scope_justification: "Weight 5 justified: one reviewable SEO, GEO, AI-first, structured-data and international-architecture foundation spanning active public route metadata, source mapping, structured data, language architecture and evidence with one stacked preview and rollback boundary.",
-    notes: "PR #138 implements the SEO, GEO, AI-first structured data and international architecture foundation on site-agentready-global-discovery and remains open and unmerged. The batch remains IN_REVIEW and is not DONE until PR #138 is reviewed, merged and reconciled. ARB-SITE-GLOBAL-007 is not activated."
+    notes: `PR #138 implements the SEO, GEO, AI-first structured data and international architecture foundation on site-agentready-global-discovery and remains open and unmerged. JEASON accepted the corrected mobile visual hierarchy and 34-route discovery foundation at reviewed public-content head ${seoGeoReviewedPublicContentHead}. The batch remains IN_REVIEW and is not DONE until PR #138 is merged and reconciled, but owner review is complete for stacked continuation to ARB-SITE-GLOBAL-007.`
   }],
-  ["ARB-SITE-GLOBAL-007", "Validate complete global standard site", ["AR-SITE-GLOBAL-007"], { status: "PLANNED", spec_status: "SKELETON", owner: "CODEX_AND_JEASON", base_branch: "site-agentready-global-discovery", stacked_execution_authorized: true, stacked_on_batch: "ARB-SITE-GLOBAL-006", depends_on_batches: ["ARB-SITE-GLOBAL-006"] }],
+  ["ARB-SITE-GLOBAL-007", "Complete global mobile accessibility performance content legal-data and discoverability QA", ["AR-SITE-GLOBAL-007"], {
+    status: "READY",
+    spec_status: "EXECUTION_READY",
+    owner: "CODEX_AND_JEASON",
+    objective: "Complete global mobile, accessibility, performance, content, legal-data and discoverability QA for the complete stacked AgentReady public site.",
+    base_branch: "site-agentready-global-discovery",
+    pr_base_branch: "site-agentready-global-discovery",
+    branch: "qa-agentready-global-standard-site",
+    pr_title: "qa(site): validate complete global standard site",
+    stacked_execution_authorized: true,
+    stacked_on_batch: "ARB-SITE-GLOBAL-006",
+    stacked_required_ancestor_sha: seoGeoReviewedPublicContentHead,
+    depends_on_batches: ["ARB-SITE-GLOBAL-006"],
+    source_documents: globalQaSources,
+    deliverables: globalQaDeliverables,
+    acceptance_criteria: globalQaAcceptance,
+    independent_test_plan: [
+      "inventory the complete combined stacked site before QA changes",
+      "test every indexable route at 320px, 360px, 390px, 412px, tablet and desktop widths",
+      "run keyboard, focus, skip-link, landmark, heading, form, announcement, contrast and reduced-motion checks",
+      "run no-JavaScript checks for core content and native details or menu behavior",
+      "measure static asset, image, CSS and JavaScript weight and run Lighthouse or equivalent reproducible performance checks",
+      "audit product, standard, trust, developer and discovery copy for consistency, duplicated claims, dead placeholders and unsupported promises",
+      "audit legal and data statements against verified publisher facts and actual browser, CLI, Action, npm, Vercel and GitHub data flows",
+      "audit sitemap, robots, canonical URLs, titles, descriptions, JSON-LD, Open Graph, Twitter metadata, discovery answer placement, hreflang and unsupported claims",
+      "run functional OpenAPI scanner, MCP scanner, simulation, CLI documentation example, GitHub Action example, report, agentready.json, menu and footer checks",
+      "verify production HTTP 200 for every indexable route",
+      "rerun deterministic governance regeneration and execution-system validators"
+    ],
+    required_commands: globalQaCommands,
+    required_evidence: globalQaEvidence,
+    manual_actions: globalQaManualActions,
+    authorized_actions: globalQaAuthorizedActions,
+    forbidden_actions: globalQaForbiddenActions,
+    codex_preflight_steps: globalQaPreflight,
+    final_response_format: globalQaResponseFormat,
+    allowed_paths: ["assets/**", "*.html", "docs/agentready/**", "scripts/**", "sitemap.xml", "robots.txt"],
+    forbidden_paths: globalQaForbiddenPaths,
+    evidence: [{
+      type: "execution_ready_specification",
+      date: "2026-07-14",
+      required_reviewed_ancestor_sha: seoGeoReviewedPublicContentHead,
+      parent_branch: "site-agentready-global-discovery",
+      branch: "qa-agentready-global-standard-site",
+      draft_pr_target: "site-agentready-global-discovery",
+      implementation_started: false
+    }],
+    rollback_boundary: "Revert ARB-SITE-GLOBAL-007 without reverting PR #132 shell, PR #134 product foundation, PR #135 standard foundation, PR #136 trust/legal foundation, PR #137 developer documentation foundation or PR #138 discovery foundation.",
+    scope_justification: "Weight 5 justified: one complete QA pass across the already stacked public site layers with shared route, viewport, accessibility, performance, content, legal-data, discoverability and functional evidence.",
+    notes: "GLOBAL-007 is the next executable stacked QA batch. Its implementation branch must be created from the current site-agentready-global-discovery head that contains the reviewed GLOBAL-006 public-content ancestor, not from a self-referential reconciliation SHA."
+  }],
   ["ARB-COM-003", "Validate public Community installation", ["AR-COM-008"], { depends_on_batches: ["ARB-SITE-GLOBAL-007"] }],
   ["ARB-ONB-001", "Ship Community onboarding commands and tutorial", ["AR-ONB-001", "AR-ONB-002", "AR-ONB-003", "AR-ONB-004"], { depends_on_batches: ["ARB-COM-003"] }],
   ["ARB-MARKET-PILOT-001", "Prepare external Community pilot kit", ["AR-MARKET-PILOT-001"], { deliverables: ["tester guide", "pilot evidence registry", "false-positive and false-negative register", "abandonment and feature-request register", "before fix after case template", "consent and confidentiality checklist", "outreach candidate worksheet", "voluntary feedback procedure"], acceptance_criteria: ["all five-user pilot thresholds map to evidence fields", "templates distinguish OpenAPI and MCP use", "reuse issue fix false-positive false-negative abandonment feature-request and payment-signal evidence can be recorded", "consent redaction and confidentiality controls are explicit", "no automatic outreach invented evidence or silent telemetry is introduced"], required_evidence: ["pilot kit review", "threshold-to-evidence mapping", "consent and privacy review"], scope_justification: "One coherent documentation and evidence-system boundary for the external Community pilot." }],

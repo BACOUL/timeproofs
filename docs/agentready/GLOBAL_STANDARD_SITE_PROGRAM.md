@@ -586,9 +586,9 @@ Reviewed GLOBAL-005 public-content ancestor:
 `6b22fda5e6a5d3a39bddc6dc04a479e228b7199e`
 
 PR #138 implements this batch as a stacked draft PR and remains open and
-unmerged. The batch is not `DONE` until PR #138 is reviewed, merged and
-reconciled through the canonical execution system. `ARB-SITE-GLOBAL-007` is
-not activated while this batch remains in review.
+unmerged. The batch is not `DONE` until PR #138 is merged and reconciled
+through the canonical execution system. Owner review can still authorize
+stacked continuation without merging PR #138.
 
 GLOBAL-006 covers:
 
@@ -612,6 +612,94 @@ GLOBAL-006 must not implement the later full SEO content-cluster, competitive,
 post-launch monitoring or international translation program. It must not change
 engine, CLI, package, Action, npm, tag, Release, Marketplace, billing, account,
 backend, hosted scanning, telemetry or runtime behavior.
+
+### ARB-SITE-GLOBAL-006 Owner Acceptance And GLOBAL-007 Readiness
+
+Status: OWNER REVIEW ACCEPTED - STACKED PR IN REVIEW
+
+Acceptance date: 2026-07-14
+
+Owner reviewer: JEASON
+
+Reviewed branch: `site-agentready-global-discovery`
+
+Reviewed PR: #138
+
+Reviewed public-content head:
+
+`2d07223132dc5ec009b8c38a68a7b4aacb0a6163`
+
+Accepted facts:
+
+- JEASON visually reviewed the corrected mobile production rendering.
+- The production promotion of this branch was intentional.
+- No rollback is requested.
+- The AgentReady hero, H1, value proposition and primary CTAs appear before the
+  compact "AgentReady at a glance" discovery section.
+- The corrected visual hierarchy is accepted.
+- The 34-route SEO/GEO, JSON-LD, AI-answer, source mapping and international
+  architecture foundation is accepted as a stacked implementation layer.
+- English-only canonical architecture is accepted until genuine reviewed
+  translations exist.
+- No unsupported standards-body, certification, customer, benchmark or
+  guaranteed-safety claim was identified.
+- This acceptance does not authorize merging the stacked PRs.
+
+Canonical effect:
+
+- `ARB-SITE-GLOBAL-006` remains `IN_REVIEW` because PR #138 is open and
+  unmerged.
+- `ARB-SITE-GLOBAL-006` is not `DONE` until PR #138 is merged and reconciled.
+- Owner review is complete for stacked continuation to `ARB-SITE-GLOBAL-007`.
+- `ARB-SITE-GLOBAL-007` becomes `READY` with specification `EXECUTION_READY`.
+
+### ARB-SITE-GLOBAL-007 Specification
+
+Status: READY
+
+Specification: EXECUTION_READY
+
+Objective:
+
+Complete global mobile, accessibility, performance, content, legal-data and
+discoverability QA for the complete stacked AgentReady public site.
+
+Future implementation branch:
+
+`qa-agentready-global-standard-site`
+
+Future draft PR target:
+
+`site-agentready-global-discovery`
+
+Future PR title:
+
+`qa(site): validate complete global standard site`
+
+Execution parent model:
+
+- Parent branch: `site-agentready-global-discovery`.
+- Required reviewed ancestor:
+  `2d07223132dc5ec009b8c38a68a7b4aacb0a6163`.
+- The future implementation branch must be created from the current parent
+  branch head after this governance reconciliation.
+- The future implementation branch must verify:
+  `git merge-base --is-ancestor 2d07223132dc5ec009b8c38a68a7b4aacb0a6163 HEAD`.
+- The prompt must not require parent HEAD equality with the reconciliation
+  commit itself.
+
+GLOBAL-007 validates the complete combined stack:
+
+- PR #132 shell, navigation and footer;
+- GLOBAL-002 product and pricing;
+- GLOBAL-003 public standard;
+- GLOBAL-004 trust, legal, privacy and security;
+- GLOBAL-005 developer documentation and adoption;
+- GLOBAL-006 SEO, GEO, AI-first and international architecture.
+
+GLOBAL-007 acceptance covers mobile and responsive QA, accessibility,
+performance, content consistency, legal/data consistency, discoverability and
+functional scanner, simulation, CLI, Action, report and route behavior.
 
 ### Developers And Adoption
 
