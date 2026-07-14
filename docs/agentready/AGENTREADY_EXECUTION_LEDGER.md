@@ -585,7 +585,7 @@ Required evidence:
   - validator and deterministic regeneration results
 
 ### ARB-SITE-GLOBAL-006 - Publish SEO GEO AI-first structured data and international architecture
-- Status: READY
+- Status: IN_REVIEW
 - Spec status: EXECUTION_READY
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
@@ -595,7 +595,7 @@ Required evidence:
 - Depends on tasks: None
 - Branch: site-agentready-global-discovery
 - PR title: site(discovery): publish SEO GEO and international architecture
-
+- PR: #138
 Deliverables:
   - Technical SEO foundation for the stacked public AgentReady site
   - Unique page titles descriptions canonical URLs and heading hierarchy for implemented public routes
@@ -643,9 +643,9 @@ Required evidence:
   - preview URL
   - validator and deterministic regeneration results
 
-### ARB-SITE-GLOBAL-007 - Validate complete global standard site
-- Status: PLANNED
-- Spec status: SKELETON
+### ARB-SITE-GLOBAL-007 - Complete global mobile accessibility performance content legal-data and discoverability QA
+- Status: READY
+- Spec status: EXECUTION_READY
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
@@ -656,11 +656,45 @@ Required evidence:
 - PR title: qa(site): validate complete global standard site
 
 Deliverables:
-  - Validate complete global standard site
+  - Complete stacked-site QA implementation for the AgentReady public site
+  - Mobile and responsive QA across 320px, 360px, 390px, 412px and tablet widths
+  - Accessibility QA for keyboard navigation, focus, landmarks, headings, forms, contrast, reduced motion and no-JavaScript core content
+  - Performance QA with static asset inventory, image and script weight review, no external framework/font verification and reproducible measurements
+  - Content consistency QA across product, standard, trust, developer and discovery layers
+  - Legal and data consistency QA across company facts, privacy, security, disclosure, terms and data-flow routes
+  - Discoverability QA for sitemap, robots, canonical URLs, metadata, JSON-LD, Open Graph, Twitter metadata, discovery answers and source citations
+  - Functional QA for scanners, simulation, CLI documentation examples, GitHub Action examples, reports, agentready.json, menu and footer links
+  - Evidence register, route and viewport matrix, screenshots and validator for the complete combined stack
 Acceptance criteria:
-  - Validate complete global standard site complete after preceding stacked site batch is reviewed
+  - the complete combined stack from PR #132, GLOBAL-002, GLOBAL-003, GLOBAL-004, GLOBAL-005 and GLOBAL-006 is validated as one public site without marking any stacked PR as merged
+  - 320px, 360px, 390px, 412px and tablet layouts have no horizontal overflow, readable typography, usable CTA sizing and spacing, working navigation and menu behavior, usable scanners and forms, and wrapped long code, filenames, URLs and tables
+  - keyboard-only navigation, visible focus, skip link, semantic landmarks, one H1 per route, heading hierarchy, form labels, instructions, error and result announcements, contrast, reduced-motion behavior and no-JavaScript core content are verified
+  - native details and menu patterns remain accessible without adding JavaScript-only essential behavior
+  - static asset inventory, image dimensions and compression, CSS and JavaScript weight, no external font or frontend framework, no unnecessary blocking resource, production and preview HTTP behavior and Lighthouse or equivalent measurements are recorded with thresholds and limitations
+  - AgentReady and TimeProofs terminology remains consistent; Community is free and available; Pro is planned and not purchasable; and no duplicated, contradictory, dead-placeholder, unsupported-promise, customer, benchmark, certification, standards-body or guaranteed-safety copy remains
+  - company facts, privacy, data-flow, legal, terms, security and disclosure statements stay consistent with actual browser, CLI, GitHub Action, npm, Vercel and GitHub behavior, and unresolved legal blockers remain explicit
+  - sitemap routes, robots rules, canonical URLs, unique titles and descriptions, factual JSON-LD, Open Graph and Twitter metadata, discovery answer placement after primary content, English canonical architecture, no fake translation, no unsupported hreflang and no doorway or thin page are verified
+  - all internal source citations and CTA destinations resolve without broken routes
+  - OpenAPI scanner, MCP scanner, simulation route, CLI documentation examples, GitHub Action examples, report and agentready.json surfaces, menu and footer links, no-JavaScript routes and production HTTP 200 checks for every indexable route are recorded
+  - no engine, CLI, package, Action, scoring, severity, AR001 through AR010 semantic, npm, tag, Release, Marketplace, billing, account, backend, hosted scanning, telemetry, upload or runtime behavior changes occur
 Required evidence:
-  - Validate complete global standard site evidence
+  - complete stacked-site source inventory
+  - route and viewport matrix covering every indexable route at 320px, 360px, 390px, 412px, tablet and desktop widths
+  - mobile overflow, typography, CTA spacing, navigation, scanner, form, long-code, filename, URL and table wrapping report
+  - keyboard accessibility report with focus, skip-link, landmark, one-H1, heading, form, announcement, contrast and reduced-motion checks
+  - no-JavaScript evidence for core content and native details or menu behavior
+  - performance asset inventory, CSS and JavaScript weight report, image dimensions and compression review, no external font or framework audit and Lighthouse or equivalent reproducible measurements
+  - production and preview HTTP behavior report
+  - content consistency and unsupported-claim audit
+  - company legal data privacy security terms disclosure and data-flow consistency audit
+  - discoverability audit for exact sitemap route match, robots, canonical URLs, titles, descriptions, JSON-LD, Open Graph, Twitter metadata, discovery answer placement, English-only canonical architecture, hreflang absence and no doorway or thin page
+  - functional QA report for OpenAPI scanner, MCP scanner, simulation, CLI documentation examples, GitHub Action examples, reports, agentready.json surfaces, menu and footer links
+  - production HTTP 200 report for every indexable route
+  - CTA and internal-link report
+  - desktop and mobile screenshots
+  - preview URL
+  - validator and deterministic regeneration results
+  - JEASON final stacked-site review record
 
 ### ARB-COM-003 - Validate public Community installation
 - Status: PLANNED
@@ -2978,7 +3012,7 @@ Required evidence:
 
 ### AR-SITE-GLOBAL-006 - Publish SEO GEO AI-first structured data and international architecture
 - Type: CODEX_WORK_ITEM
-- Status: READY
+- Status: IN_REVIEW
 - Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
@@ -2986,7 +3020,7 @@ Required evidence:
 - Weight: 5
 - Execution batch: ARB-SITE-GLOBAL-006
 - Depends on: None
-
+- PR: #138
 Deliverables:
   - Technical SEO foundation for the stacked public AgentReady site
   - Unique page titles descriptions canonical URLs and heading hierarchy for implemented public routes
@@ -3036,8 +3070,8 @@ Required evidence:
 
 ### AR-SITE-GLOBAL-007 - Validate complete global standard site
 - Type: CODEX_WORK_ITEM
-- Status: PLANNED
-- Owner: CODEX
+- Status: READY
+- Owner: CODEX_AND_JEASON
 - Milestone: M3
 - Horizon: BEFORE_COMMUNITY_PUBLICATION
 - Workstream: SITE
@@ -3046,11 +3080,45 @@ Required evidence:
 - Depends on: None
 
 Deliverables:
-  - Validate complete global standard site
+  - Complete stacked-site QA implementation for the AgentReady public site
+  - Mobile and responsive QA across 320px, 360px, 390px, 412px and tablet widths
+  - Accessibility QA for keyboard navigation, focus, landmarks, headings, forms, contrast, reduced motion and no-JavaScript core content
+  - Performance QA with static asset inventory, image and script weight review, no external framework/font verification and reproducible measurements
+  - Content consistency QA across product, standard, trust, developer and discovery layers
+  - Legal and data consistency QA across company facts, privacy, security, disclosure, terms and data-flow routes
+  - Discoverability QA for sitemap, robots, canonical URLs, metadata, JSON-LD, Open Graph, Twitter metadata, discovery answers and source citations
+  - Functional QA for scanners, simulation, CLI documentation examples, GitHub Action examples, reports, agentready.json, menu and footer links
+  - Evidence register, route and viewport matrix, screenshots and validator for the complete combined stack
 Acceptance criteria:
-  - Validate complete global standard site complete after preceding stacked site batch is reviewed
+  - the complete combined stack from PR #132, GLOBAL-002, GLOBAL-003, GLOBAL-004, GLOBAL-005 and GLOBAL-006 is validated as one public site without marking any stacked PR as merged
+  - 320px, 360px, 390px, 412px and tablet layouts have no horizontal overflow, readable typography, usable CTA sizing and spacing, working navigation and menu behavior, usable scanners and forms, and wrapped long code, filenames, URLs and tables
+  - keyboard-only navigation, visible focus, skip link, semantic landmarks, one H1 per route, heading hierarchy, form labels, instructions, error and result announcements, contrast, reduced-motion behavior and no-JavaScript core content are verified
+  - native details and menu patterns remain accessible without adding JavaScript-only essential behavior
+  - static asset inventory, image dimensions and compression, CSS and JavaScript weight, no external font or frontend framework, no unnecessary blocking resource, production and preview HTTP behavior and Lighthouse or equivalent measurements are recorded with thresholds and limitations
+  - AgentReady and TimeProofs terminology remains consistent; Community is free and available; Pro is planned and not purchasable; and no duplicated, contradictory, dead-placeholder, unsupported-promise, customer, benchmark, certification, standards-body or guaranteed-safety copy remains
+  - company facts, privacy, data-flow, legal, terms, security and disclosure statements stay consistent with actual browser, CLI, GitHub Action, npm, Vercel and GitHub behavior, and unresolved legal blockers remain explicit
+  - sitemap routes, robots rules, canonical URLs, unique titles and descriptions, factual JSON-LD, Open Graph and Twitter metadata, discovery answer placement after primary content, English canonical architecture, no fake translation, no unsupported hreflang and no doorway or thin page are verified
+  - all internal source citations and CTA destinations resolve without broken routes
+  - OpenAPI scanner, MCP scanner, simulation route, CLI documentation examples, GitHub Action examples, report and agentready.json surfaces, menu and footer links, no-JavaScript routes and production HTTP 200 checks for every indexable route are recorded
+  - no engine, CLI, package, Action, scoring, severity, AR001 through AR010 semantic, npm, tag, Release, Marketplace, billing, account, backend, hosted scanning, telemetry, upload or runtime behavior changes occur
 Required evidence:
-  - Validate complete global standard site evidence
+  - complete stacked-site source inventory
+  - route and viewport matrix covering every indexable route at 320px, 360px, 390px, 412px, tablet and desktop widths
+  - mobile overflow, typography, CTA spacing, navigation, scanner, form, long-code, filename, URL and table wrapping report
+  - keyboard accessibility report with focus, skip-link, landmark, one-H1, heading, form, announcement, contrast and reduced-motion checks
+  - no-JavaScript evidence for core content and native details or menu behavior
+  - performance asset inventory, CSS and JavaScript weight report, image dimensions and compression review, no external font or framework audit and Lighthouse or equivalent reproducible measurements
+  - production and preview HTTP behavior report
+  - content consistency and unsupported-claim audit
+  - company legal data privacy security terms disclosure and data-flow consistency audit
+  - discoverability audit for exact sitemap route match, robots, canonical URLs, titles, descriptions, JSON-LD, Open Graph, Twitter metadata, discovery answer placement, English-only canonical architecture, hreflang absence and no doorway or thin page
+  - functional QA report for OpenAPI scanner, MCP scanner, simulation, CLI documentation examples, GitHub Action examples, reports, agentready.json surfaces, menu and footer links
+  - production HTTP 200 report for every indexable route
+  - CTA and internal-link report
+  - desktop and mobile screenshots
+  - preview URL
+  - validator and deterministic regeneration results
+  - JEASON final stacked-site review record
 
 ### AR-SITE-PREMIUM-002 - Redesign homepage and core product pages
 - Type: CODEX_WORK_ITEM

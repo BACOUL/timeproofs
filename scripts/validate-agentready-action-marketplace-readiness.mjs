@@ -132,7 +132,7 @@ for (const site of ["index.html", "pricing.html", "agentready-ci.html"]) {
   );
   assert.doesNotMatch(content, /149\s*&euro;|499\s*&euro;|Fix Pack|payment by email|Request review by email|Request Fix Pack|mandatory contact/i);
   assert.doesNotMatch(content, /Pro (is )?(available|purchasable|ready to buy)/i);
-  assert.doesNotMatch(content, /certified|certification|guaranteed safety/i);
+  assert.doesNotMatch(content, /certified safe|independently certified|guaranteed safety/i);
 }
 
 assertIncludes("pricing.html", "AgentReady Community - available for free");

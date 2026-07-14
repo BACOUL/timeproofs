@@ -8,7 +8,7 @@ docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
 ## Summary
 - Total tasks: 207
 - Total weighted progress: 31/742 (4.2%)
-- Next action: ARB-SITE-GLOBAL-006 - Publish SEO GEO AI-first structured data and international architecture
+- Next action: ARB-SITE-GLOBAL-007 - Complete global mobile accessibility performance content legal-data and discoverability QA
 
 ## Detailed Work Items
 Total detailed Codex work items: 157
@@ -18,8 +18,8 @@ Remaining detailed Codex work items: 154
 ## Execution Batches
 Total planned Codex execution batches: 80
 Completed Codex execution batches: 5
-Execution batches currently in review: 5
-Execution batches not yet issued: 70
+Execution batches currently in review: 6
+Execution batches not yet issued: 69
 Immediately executable Codex prompts: 1
 Average work items per batch: 1.96
 Largest batch size: 6
@@ -38,7 +38,7 @@ Execution batches post-revenue: 1
 ## Prompt Day Capacity
 Community days at 5 prompts/day: 1
 Community days at 6 prompts/day: 1
-Pro technical days at 5 prompts/day: 4
+Pro technical days at 5 prompts/day: 3
 Pro technical days at 6 prompts/day: 3
 First-sale days at 5 prompts/day: 6
 First-sale days at 6 prompts/day: 5
@@ -73,8 +73,8 @@ Credible public value cases required: 1
 - M8 Category-building active: 0/98 (0%)
 
 ## Document Coverage
-Active documents discovered: 76
-Active documents covered: 76
+Active documents discovered: 77
+Active documents covered: 77
 Uncovered active documents: 0
 Historical documents excluded: 36
 Generated documents excluded: 6
