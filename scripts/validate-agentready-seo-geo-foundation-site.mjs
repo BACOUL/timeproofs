@@ -57,6 +57,7 @@ const evidenceFiles = [
   `${evidenceRoot}/unsupported-claims-audit.json`,
   `${evidenceRoot}/cta-link-report.json`,
   `${evidenceRoot}/keyboard-focus-report.json`,
+  `${evidenceRoot}/route-hierarchy-report.json`,
   `${evidenceRoot}/no-javascript-report.json`,
   `${evidenceRoot}/overflow-320-report.json`
 ];
@@ -153,11 +154,30 @@ for (const page of pages) {
 
   const canonical = html.match(/<link rel="canonical" href="([^"]+)"/i)?.[1];
   if (canonical !== canonicalFor(page)) fail(`${page} has incorrect canonical URL: ${canonical}`);
-  if ((html.match(/<h1\b/gi) || []).length !== 1) fail(`${page} must have exactly one h1`);
-  if (!/<main\b[^>]*\bid=["']main["']/i.test(html)) fail(`${page} does not expose main#main`);
+  const h1Matches = [...html.matchAll(/<h1\b/gi)];
+  if (h1Matches.length !== 1) fail(`${page} must have exactly one h1`);
+  const mainMatch = html.match(/<main\b[^>]*\bid=["']main["'][^>]*>/i);
+  if (!mainMatch) fail(`${page} does not expose main#main`);
+  const mainOpenIndex = mainMatch.index;
+  const mainContentIndex = mainOpenIndex + mainMatch[0].length;
+  const mainCloseIndex = html.indexOf("</main>", mainContentIndex);
+  if (mainCloseIndex === -1) fail(`${page} is missing closing </main>`);
 
-  const answer = html.match(/<section class="ar-discovery-answer"[\s\S]*?<\/section>/i)?.[0] || "";
+  const answerMatch = html.match(/<section class="ar-discovery-answer"[\s\S]*?<\/section>/i);
+  const answer = answerMatch?.[0] || "";
   if (!answer) fail(`${page} is missing extractible discovery answer`);
+  const answerIndex = answerMatch.index;
+  if (answerIndex < mainContentIndex || answerIndex > mainCloseIndex) fail(`${page} discovery answer is not inside main#main`);
+  if (answerIndex + answer.length > mainCloseIndex) fail(`${page} discovery answer is not fully before </main>`);
+  if (h1Matches[0].index > answerIndex) fail(`${page} h1 appears after discovery answer`);
+  const firstSectionMatch = html.slice(mainContentIndex, mainCloseIndex).match(/<section\b/i);
+  if (!firstSectionMatch) fail(`${page} main does not contain a section before the footer`);
+  const firstSectionIndex = mainContentIndex + firstSectionMatch.index;
+  if (firstSectionIndex === answerIndex) fail(`${page} discovery answer is the first section in main`);
+  if (!/<h2[^>]*>AgentReady at a glance<\/h2>/i.test(answer)) fail(`${page} discovery answer uses a visitor-facing heading other than AgentReady at a glance`);
+  if (/search engines|AI assistants/i.test(answer.match(/<h2[^>]*>([\s\S]*?)<\/h2>/i)?.[1] || "")) {
+    fail(`${page} discovery answer heading exposes search or AI assistant wording`);
+  }
   for (const snippet of requiredAnswerSnippets) {
     if (!answer.includes(snippet)) fail(`${page} discovery answer is missing: ${snippet}`);
   }
@@ -214,6 +234,7 @@ for (const token of [
   "overflow-wrap: anywhere",
   "@media (max-width: 680px)",
   ":focus-visible",
+  ".ar-discovery-source-details",
   "letter-spacing: 0"
 ]) {
   if (!css.includes(token)) fail(`discovery CSS is missing ${token}`);
@@ -240,6 +261,7 @@ for (const evidencePath of [
   `${evidenceRoot}/unsupported-claims-audit.json`,
   `${evidenceRoot}/cta-link-report.json`,
   `${evidenceRoot}/keyboard-focus-report.json`,
+  `${evidenceRoot}/route-hierarchy-report.json`,
   `${evidenceRoot}/no-javascript-report.json`,
   `${evidenceRoot}/overflow-320-report.json`
 ]) {
@@ -270,6 +292,12 @@ if (unsupportedClaims.findings.length !== 0) fail("unsupported-claims audit has 
 
 const ctaReport = assertStatusPass(`${evidenceRoot}/cta-link-report.json`);
 if (!ctaReport.routes.every((route) => route.brokenLinks.length === 0)) fail("CTA report contains broken links");
+
+const hierarchyReport = assertStatusPass(`${evidenceRoot}/route-hierarchy-report.json`);
+if (hierarchyReport.routes.length !== pages.length) fail("route hierarchy report has wrong route count");
+if (!hierarchyReport.routes.every((route) => route.h1_before_discovery && route.discovery_inside_main && !route.discovery_first_section && route.primary_content_before_discovery)) {
+  fail("route hierarchy report contains a page where discovery answer precedes primary content");
+}
 
 const overflowReport = assertStatusPass(`${evidenceRoot}/overflow-320-report.json`);
 if (!overflowReport.routes.every((route) => route.overflow === false)) fail("320px overflow report contains overflow");

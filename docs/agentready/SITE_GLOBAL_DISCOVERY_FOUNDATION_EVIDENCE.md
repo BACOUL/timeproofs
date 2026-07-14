@@ -77,7 +77,9 @@ Evidence:
 
 ## AI-Answer And Primary-Source Mapping
 
-Each covered route contains an extractible answer block that states:
+Each covered route contains an extractible answer block with the visitor-facing heading `AgentReady at a glance`. The block remains machine-extractible through static HTML, `.ar-discovery-answer`, `data-agentready-answer`, JSON-LD and source citations, but it is no longer the first substantive content in `<main>`.
+
+Each covered route states:
 
 - AgentReady is a product and candidate open standard.
 - AgentReady performs static pre-deployment analysis.
@@ -94,6 +96,25 @@ Evidence:
 - `docs/agentready/evidence/site-global-discovery-foundation/ai-answer-inventory.json`
 - `docs/agentready/evidence/site-global-discovery-foundation/primary-source-map.json`
 - `docs/agentready/evidence/site-global-discovery-foundation/source-inventory.json`
+
+## Route Hierarchy
+
+The discovery answer was moved near the end of each covered `<main>` so the page hero, H1, primary product value, CTA or main content appears first in source order. On `index.html`, the visible source order is:
+
+1. header;
+2. AgentReady hero;
+3. H1;
+4. subtitle;
+5. primary CTAs;
+6. reproducible result preview;
+7. product and adoption sections;
+8. limitations;
+9. discovery answer;
+10. footer.
+
+Evidence:
+
+- `docs/agentready/evidence/site-global-discovery-foundation/route-hierarchy-report.json`
 
 ## International Architecture
 
@@ -135,6 +156,7 @@ Evidence:
 
 - `docs/agentready/evidence/site-global-discovery-foundation/cta-link-report.json`
 - `docs/agentready/evidence/site-global-discovery-foundation/keyboard-focus-report.json`
+- `docs/agentready/evidence/site-global-discovery-foundation/route-hierarchy-report.json`
 - `docs/agentready/evidence/site-global-discovery-foundation/no-javascript-report.json`
 - `docs/agentready/evidence/site-global-discovery-foundation/overflow-320-report.json`
 - `docs/agentready/evidence/site-global-discovery-foundation/desktop/`
