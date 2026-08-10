@@ -30,9 +30,9 @@ Core thesis: individually valid protocol objects can compose into a globally inc
 
 ## D-004 — Initial wedge
 
-**Status:** DECISION
+**Status:** DECISION, REFINED BY D-013
 
-Initial wedge: **UCP ↔ AP2 Consistency Validator**.
+Initial wedge: UCP ↔ AP2 composition.
 
 This is a wedge, not the permanent company boundary.
 
@@ -110,7 +110,7 @@ The following are deliberately not frozen yet:
 - hosted vs local verification boundary
 - signing requirements for evidence bundles
 - data retention defaults
-- exact first invariant set
+- exact first blocking invariant set
 - exact first buyer segment
 - final website information architecture
 - whether a product dashboard is needed at all in V1
@@ -118,6 +118,26 @@ The following are deliberately not frozen yet:
 
 These require evidence before becoming decisions.
 
+## D-013 — Do not duplicate UCP/AP2 conformance as the company wedge
+
+**Status:** DECISION
+
+The first normative audit confirmed that current UCP AP2 Mandates already owns several local guarantees: merchant authorization/signature, checkout mandate presence/signature, mandate expiry, basic checkout-scope binding, and AP2 security-lock/downgrade prevention.
+
+TimeProofs may test these for compatibility or defense-in-depth, but MUST NOT present them as the strategic cross-protocol gap.
+
+The UCP↔AP2 wedge is therefore refined to **cross-object consistency and evidence closure around the composed transaction**, especially payment projection, execution binding, receipt closure, lifecycle propagation and downstream business-result preservation.
+
+See `docs/research/UCP_AP2_GAP_MATRIX.md`.
+
+## D-014 — Blocking invariants require normative evidence and ambiguity fixtures
+
+**Status:** DECISION
+
+No invariant may become a BLOCK rule until it has exact protocol/version scope, source fields/derivation, normative references, allowed transformations, canonicalization semantics, PASS/BLOCK/UNKNOWN/version-unsupported fixtures, and a known enforcement point.
+
+If semantics are uncertain, classify the candidate as RESEARCH rather than guessing.
+
 ---
 
-Add new decisions sequentially. Never edit old decisions to make history look cleaner; mark superseded decisions explicitly.
+Add new decisions sequentially. Never edit old decisions to make history look cleaner; mark superseded/refined decisions explicitly.
