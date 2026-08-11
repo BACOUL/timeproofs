@@ -79,8 +79,8 @@ UCP Orders can legitimately evolve. Order invariants are lifecycle-aware; `curre
 `TIMEPROOFS_PRODUCT_CONSTITUTION.md` is canonical for company thesis. Protocol research may refine adapters, mappings, evidence and pack contents but cannot silently redefine the company. Frozen product model: `ProtocolObject → Binding → Invariant → Evidence → Decision`.
 
 ## D-020 — Execute milestones in canonical order
-**Status:** DECISION, UPDATED BY D-021/D-022/D-023/D-024
-`docs/startup/EXECUTION_PLAN.md` is the canonical implementation sequence. M0–M3 and M2.1 are complete. Current active milestone is M4.
+**Status:** DECISION, UPDATED BY D-021/D-022/D-023/D-024/D-026
+`docs/startup/EXECUTION_PLAN.md` is the canonical implementation sequence. M0–M4 and M2.1 are complete. Current active milestone is M5.
 
 ## D-021 — M1 complete; conservative seven-rule shortlist
 **Status:** DECISION
@@ -124,6 +124,14 @@ M3 compatibility was reviewed and no invariant semantics changed. See `docs/prod
 ## D-025 — AgentReady is explicitly legacy on the relaunch branch
 **Status:** DECISION
 AgentReady-era code, README/package/site metadata remain temporarily to avoid destructive migration before the new core is executable. They are non-canonical for the relaunch. Current product truth comes from the TimeProofs constitution/current-state/execution/decision documents. See `LEGACY_AGENTREADY.md`.
+
+## D-026 — M4 fixture corpus is the executable regression contract
+**Status:** DECISION
+M4 is complete. The first source-of-truth corpus lives in `fixtures/ucp-ap2/v0.1/` and freezes expected PASS/BLOCK/UNKNOWN behavior before engine implementation.
+
+Required cases include exact projection PASS, amount mismatch BLOCK, currency mismatch BLOCK, missing checkout UNKNOWN/MISSING_OBJECT, unsupported version UNKNOWN/UNSUPPORTED_VERSION, missing authoritative total UNKNOWN/MISSING_EVIDENCE and unsupported FX UNKNOWN/UNSUPPORTED_TRANSFORMATION.
+
+M5 implementation must satisfy this corpus without silently weakening M3 semantics. Any expected-result change requires an explicit pack-spec/decision update.
 
 ---
 Add new decisions sequentially. Never rewrite history to make it look cleaner; supersede/refine decisions explicitly.
