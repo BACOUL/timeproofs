@@ -172,6 +172,30 @@ Order invariants must be lifecycle-aware. Initial order creation may be compared
 
 See `docs/research/M1_1_PAYMENT_ORDER_AUDIT.md`.
 
+## D-019 — Freeze company thesis separately from evolving pack research
+
+**Status:** DECISION
+
+`TIMEPROOFS_PRODUCT_CONSTITUTION.md` is now the canonical product-thesis document.
+
+Protocol research may refine adapters, mappings, evidence requirements and Invariant Pack contents, but MUST NOT silently redefine the company category or strategic product destination.
+
+The frozen product model is:
+
+`ProtocolObject → Binding → Invariant → Evidence → Decision`.
+
+Changing the company away from Cross-Protocol Consistency Infrastructure, replacing this core model, or turning TimeProofs into one of its explicit non-goals requires an explicit founder-level decision recorded here.
+
+## D-020 — Execute milestones in canonical order
+
+**Status:** DECISION
+
+`docs/startup/EXECUTION_PLAN.md` is the canonical implementation sequence.
+
+Current milestone is M1. New engine implementation should not begin broadly until M1 exit criteria are satisfied. Research can refine the first pack without changing the constitutional product thesis.
+
+`docs/startup/CURRENT_STATE.md` must reflect the current milestone and immediate next task for handoff continuity.
+
 ---
 
 Add new decisions sequentially. Never edit old decisions to make history look cleaner; mark superseded/refined decisions explicitly.
