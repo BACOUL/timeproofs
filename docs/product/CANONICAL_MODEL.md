@@ -1,36 +1,37 @@
 # TimeProofs — Canonical Transaction Model
 
-Status: M2 canonical model
+Status: M2.1 hardened canonical model
 Branch: `relaunch/invariant-engine`
 
 ## Purpose
 
-TimeProofs models an agentic transaction as a graph of protocol/provider artifacts and explicit relations between them. The core model must remain independent of UCP, AP2, A2A, MCP, payment rails, and future business protocols.
+TimeProofs models an agentic transaction as a graph of protocol/provider artifacts and explicit relations between them. The core model remains independent of UCP, AP2, A2A, MCP, payment rails and future business protocols.
 
-The canonical pipeline is:
+Canonical pipeline:
 
 `ProtocolObject → BindingEdge → InvariantDefinition → EvidenceItem → EvaluationResult → Decision`
 
-The model MUST preserve raw source provenance and MUST NOT force all systems into one universal transaction identifier.
+The model preserves source provenance and does not force one universal transaction ID.
 
 ## Design principles
 
-1. Source artifacts are immutable inputs to evaluation.
-2. Canonical values never replace or erase raw source values.
-3. Protocol and schema versions are explicit.
-4. Canonicalization is adapter-owned and version-aware.
-5. Unsupported or ambiguous mapping produces `UNKNOWN`, never guessed truth.
-6. One economic transaction is represented by an object graph.
-7. Every decision is reproducible from declared inputs, pack version, and evidence.
-8. Core structures contain no UCP/AP2-specific fields.
-9. Time and lifecycle state are first-class when an invariant depends on them.
-10. Core enforcement is deterministic; LLM output cannot be authoritative for PASS/BLOCK.
+1. Source artifacts are immutable evaluation inputs.
+2. Every evaluated artifact has an explicit snapshot identity/digest.
+3. Canonical values never replace raw source values.
+4. Protocol, adapter, pack and core-schema versions are explicit.
+5. Canonicalization is adapter-owned and version-aware.
+6. Unsupported or ambiguous mapping produces `UNKNOWN`, never guessed truth.
+7. One economic transaction is represented by an object graph.
+8. Every decision is reproducible from declared artifact snapshots, versions, evidence, evaluation time and policy.
+9. Core structures contain no UCP/AP2-specific fields.
+10. Time/lifecycle state are first-class where needed.
+11. Core enforcement is deterministic; LLM output cannot be authoritative for PASS/BLOCK.
 
 ## 1. ProtocolObject
 
-A `ProtocolObject` represents one source artifact from a protocol, provider, or business system.
+A `ProtocolObject` represents one source artifact from a protocol, provider or business system.
 
-Required conceptual fields:
+Conceptual form:
 
 ```json
 {
@@ -44,6 +45,16 @@ Required conceptual fields:
   },
   "external_id": "checkout_123",
   "observed_at": "2026-08-11T09:00:00Z",
+  "snapshot": {
+    "digest": {
+      "algorithm": "sha256",
+      "value": "...",
+      "scope": "RAW_BYTES"
+    },
+    "media_type": "application/json",
+    "byte_length": 1234,
+    "source_ref": null
+  },
   "raw": {},
   "canonical": {},
   "integrity": {},
@@ -51,19 +62,47 @@ Required conceptual fields:
 }
 ```
 
-### Rules
+### Snapshot rule
 
-- `object_id` is TimeProofs-local and identifies the supplied artifact instance.
-- `external_id` is optional because some signed objects may not expose a convenient business identifier.
-- `raw` MUST preserve the source payload or a lossless reference to it.
-- `canonical` contains only adapter-derived values required for cross-object comparison.
-- `integrity` MAY contain signatures, hashes, JWS/SD-JWT references, or verification status.
-- `provenance` records how the object was obtained: supplied file, API response, webhook, provider query, test fixture, etc.
-- A canonical field MUST be traceable back to one or more raw source paths.
+Two artifacts with the same business identifier are not considered the same evaluated artifact unless their snapshot identity proves it.
 
-## 2. TransactionGraph
+Digest scope is explicit:
 
-A transaction is not a flat record. It is:
+- `RAW_BYTES` when original bytes are available;
+- `CANONICAL_JSON` when deterministic canonical JSON is the evaluated representation;
+- `EXTERNAL_IMMUTABLE_REF` only when an adapter can establish immutability of the referenced source.
+
+`object_id` is TimeProofs-local. `external_id` is optional. `raw` preserves the source payload or lossless evaluation representation. `canonical` contains adapter-derived comparable values. Every canonical field used by an invariant must trace back to source evidence.
+
+## 2. Evaluation envelope
+
+A complete machine evaluation has required reproducibility metadata:
+
+```json
+{
+  "core_schema_version": "...",
+  "evaluation_id": "eval_...",
+  "metadata": {
+    "pack": { "id": "ucp-ap2", "version": "..." },
+    "adapters": [
+      { "id": "ucp", "version": "..." },
+      { "id": "ap2", "version": "..." }
+    ],
+    "evaluated_at": "2026-08-11T09:01:00Z",
+    "policy": {}
+  },
+  "graph": {},
+  "invariants": [],
+  "results": [],
+  "decision": "PASS"
+}
+```
+
+The root schema requires these fields; an empty object is not a valid TimeProofs evaluation.
+
+## 3. TransactionGraph
+
+A transaction is not a flat record. It is a graph of artifact snapshots and explicit edges:
 
 ```text
 ProtocolObject A ──BindingEdge──> ProtocolObject B
@@ -71,39 +110,27 @@ ProtocolObject A ──BindingEdge──> ProtocolObject B
       └────────BindingEdge─────────────┘
 ```
 
-Conceptual form:
+`graph_id` is a TimeProofs evaluation handle, not a universal ecosystem transaction ID.
 
-```json
-{
-  "graph_id": "graph_...",
-  "evaluation_time": "2026-08-11T09:01:00Z",
-  "objects": [],
-  "bindings": [],
-  "context": {}
-}
-```
+## 4. Canonical values
 
-`graph_id` is a TimeProofs evaluation handle, not a claim that a universal economic transaction ID exists in the ecosystem.
-
-## 3. Canonical value representation
-
-Adapters MAY expose comparable values using a small set of canonical value classes:
+Adapters may expose small canonical value classes such as:
 
 - money: `{ amount_minor, currency }`
 - timestamp: RFC3339/UTC plus source timezone metadata when needed
-- identifier: normalized string plus namespace
-- entity reference: namespace + stable source identifier where available
+- namespaced identifier
+- entity reference where stable identity exists
 - boolean
 - integer/decimal
 - set/list with explicit ordering semantics
 - lifecycle state with source taxonomy preserved
 - hash/reference
 
-Canonicalization MUST NOT silently convert semantically uncertain values. Example: a merchant display name and a PSP beneficiary legal entity are not automatically the same `entity` merely because their strings resemble each other.
+Canonicalization must not silently collapse semantically uncertain values. A merchant display name and a PSP legal beneficiary are not the same entity merely because strings resemble each other.
 
-## 4. Canonical field provenance
+## 5. Canonical field provenance
 
-Every derived field used by an invariant MUST be explainable:
+Every derived field used by an invariant is explainable through source object, source path, derivation identifier and snapshot digest.
 
 ```json
 {
@@ -119,89 +146,44 @@ Every derived field used by an invariant MUST be explainable:
 }
 ```
 
-The `derivation` identifier is versioned by the relevant adapter/pack.
+## 6. PASS / BLOCK / UNKNOWN examples
 
-## 5. Example graph — PASS
+PASS: exact checkout snapshot is bound to an AP2 payment artifact and amount/currency projection matches.
 
-```text
-obj_checkout
- UCP checkout total = 760 EUR
-      │
-      ├── exact-authorized-state ──> obj_payment_mandate
-      │                              AP2 amount = 760 EUR
-      │
-      └── currency-projection ─────> EUR
-```
+BLOCK: exact binding is valid and complete evidence proves payment projection amount differs.
 
-Evaluation:
+UNKNOWN: an invariant requires executed payment amount but only a receipt without executed amount evidence is present.
 
-- total projection: PASS
-- currency projection: PASS
-- resulting decision: PASS
+UNKNOWN must include a structured reason such as `MISSING_EVIDENCE`, `UNSUPPORTED_VERSION` or `AMBIGUOUS_BINDING`.
 
-## 6. Example graph — BLOCK
-
-```text
-obj_checkout
- UCP checkout total = 760 EUR
-      │
-      └── payment-projection ──────> obj_payment_mandate
-                                     AP2 amount = 810 EUR
-```
-
-Evidence is complete and values are unambiguous.
-
-Evaluation:
-
-`TP-CX-001 = BLOCK`
-
-## 7. Example graph — UNKNOWN
-
-```text
-obj_payment_mandate
- amount = 760 EUR
-      │
-      └── execution-evidence ──────> obj_payment_receipt
-                                      success receipt, but no executed amount
-```
-
-If the invariant asks whether the PSP actually executed exactly 760 EUR and no provider/network evidence containing executed amount is supplied, result is:
-
-`UNKNOWN`
-
-TimeProofs MUST NOT infer equality from receipt success alone.
-
-## 8. Core versus adapters versus packs
+## 7. Core versus adapters versus packs
 
 ### Core owns
-
-- graph structure
-- generic object metadata
+- evaluation envelope and graph structure
+- generic object/snapshot metadata
 - generic binding representation
 - invariant evaluation contract
-- evidence representation
-- result/decision aggregation
+- evidence/result/decision structures
 
 ### Adapter owns
-
-- parsing
-- schema/version recognition
-- source validation where needed
+- parsing and version recognition
 - canonical field extraction
 - raw→canonical provenance
+- artifact snapshot construction
+- protocol-local integrity/conformance input where needed
 
 ### Invariant Pack owns
-
-- which objects should be related
-- which canonical fields are compared
-- allowable transformations
-- predicates
+- relationships to evaluate
+- canonical fields/predicates
+- allowed transformations
 - evidence requirements
-- severity/default action
 - supported version combinations
+- default severity/action
 
-This separation is mandatory so adding A2A/MCP/Travel/Procurement packs does not require redesigning core structures.
+This separation is mandatory so A2A/MCP/Travel/Procurement can be added without core redesign.
 
-## 9. M2 freeze rule
+## 8. M2.1 freeze rule
 
-M3 may add protocol-specific semantics, but it MUST NOT add UCP/AP2-specific properties to the generic `ProtocolObject`, `BindingEdge`, `EvidenceItem`, `EvaluationResult`, or `Decision` structures unless M2 is explicitly reopened through the Decision Log.
+M2.1 fixes structural defects found before fixture/engine implementation: required evaluation envelope, immutable artifact snapshot identity, explicit pack/adapter/core versions and structured UNKNOWN reasons.
+
+M3 semantics remain compatible. Future pack work MUST NOT add protocol-specific fields to generic core objects unless a new documented structural defect explicitly reopens the model through the Decision Log.
