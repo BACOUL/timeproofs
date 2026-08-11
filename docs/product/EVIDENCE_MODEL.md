@@ -1,10 +1,25 @@
 # TimeProofs — Evidence Model
 
-Status: M2 canonical model
+Status: M2.1 hardened canonical model
 
 ## Purpose
 
-TimeProofs decisions must be explainable from explicit evidence. Evidence is not a prose explanation added after the fact; it is structured input to evaluation and the basis of every result.
+TimeProofs decisions must be explainable from explicit evidence. Evidence is not prose added after the fact; it is structured input to evaluation and the basis of every result.
+
+## Artifact snapshots
+
+Every `ProtocolObject` MUST identify the exact artifact snapshot that was evaluated.
+
+A snapshot carries a digest with:
+
+- algorithm;
+- digest value;
+- digest scope: `RAW_BYTES`, `CANONICAL_JSON`, or `EXTERNAL_IMMUTABLE_REF`;
+- optional media type, byte length and immutable source reference.
+
+This means TimeProofs can distinguish two artifacts that share the same business ID but differ in bytes/content.
+
+If raw bytes are available, `RAW_BYTES` is preferred. If only a parsed JSON value is available, a deterministic canonical-JSON digest may be used, but the scope MUST say so. An external immutable reference is acceptable only when the adapter can establish its immutability semantics.
 
 ## EvidenceItem
 
@@ -45,7 +60,7 @@ Packs and adapters may add namespaced kinds, but generic consumers must still be
 
 ## Evidence requirements
 
-An invariant declares the evidence required for deterministic PASS/BLOCK.
+An invariant declares evidence required for deterministic PASS/BLOCK.
 
 Example:
 
@@ -56,82 +71,77 @@ requires:
 - checkout currency
 - payment mandate amount
 - payment mandate currency
-- deterministic binding to authorized checkout state
+- deterministic binding to exact authorized checkout snapshot
 ```
 
 If one required element is unavailable or semantically ambiguous, the invariant MUST normally produce `UNKNOWN`, not PASS.
 
 ## Provenance
 
-Evidence must retain:
+Evidence must retain enough information to answer:
 
-- source object
-- source path or provider query
-- observation time
-- protocol/provider version
-- normalization/derivation identifier
-- integrity verification where applicable
+> Which exact artifact snapshot, field, mapping and version led to this decision?
 
-The system MUST be able to answer: "Which exact bytes/fields led to this decision?"
+Required reproducibility context includes:
+
+- artifact snapshot digest;
+- source object;
+- source path or provider query;
+- observation time;
+- protocol/provider version;
+- adapter ID/version;
+- pack ID/version;
+- normalization/derivation identifier;
+- integrity verification where applicable;
+- evaluation time and policy inputs.
+
+Canonical values never erase raw provenance.
 
 ## External evidence
 
 Some invariants cannot be proven from protocol artifacts alone.
 
-Example: current AP2 PaymentReceipt confirms status and references the closed mandate but does not itself carry executed amount/currency. Therefore an invariant that verifies the actually executed amount may require PSP/network evidence.
+Example: an AP2 PaymentReceipt can bind to a closed mandate and report payment status while not itself proving executed amount/currency. An invariant that verifies executed economics therefore needs provider/network evidence.
 
-External evidence adapters are a strategic extension point. They may query or ingest authoritative state from:
-
-- PSPs
-- payment networks
-- merchant backends
-- order systems
-- travel reservation systems
-- procurement/ERP systems
-- future business protocol providers
+Evidence adapters are a strategic extension point and may query or ingest authoritative state from PSPs, payment networks, merchant backends, order systems, travel reservation systems, procurement/ERP systems and future business protocols.
 
 ## Evidence freshness
 
-An EvidenceItem has an `observed_at` timestamp. Packs may declare freshness requirements for mutable facts.
+An EvidenceItem has `observed_at`. Packs may declare freshness requirements for mutable facts. Authentic but stale evidence is not current truth.
 
-A stale but authentic observation is not equivalent to current truth.
-
-If freshness is required and cannot be established, result is `UNKNOWN` unless the pack defines a stronger failure rule.
+If required freshness cannot be established, the result is `UNKNOWN` with `unknown_reason=STALE_EVIDENCE` unless an explicit pack policy defines otherwise.
 
 ## Integrity
 
-Evidence MAY carry:
+Evidence MAY carry source hashes, signature/JWS/SD-JWT verification results, signed issuer identity, provider response identifiers and immutable event IDs.
 
-- source hash
-- signature/JWS/SD-JWT verification result
-- signed issuer identity
-- provider response identifier
-- immutable event ID
-
-Core does not assume that every evidence item is cryptographically signed. The pack defines the minimum integrity level for each invariant.
+Core does not assume all evidence is cryptographically signed. The pack defines the integrity level required for each invariant.
 
 ## Evidence bundle
 
-An evaluation may emit an evidence bundle containing:
+An evaluation bundle must be reproducible and identify its model and execution versions:
 
 ```json
 {
+  "core_schema_version": "...",
   "evaluation_id": "eval_...",
-  "graph_id": "graph_...",
-  "pack": { "id": "ucp-ap2", "version": "0.1.0" },
-  "objects": [],
-  "bindings": [],
-  "evidence": [],
+  "metadata": {
+    "pack": { "id": "ucp-ap2", "version": "0.1.0" },
+    "adapters": [{ "id": "ucp", "version": "..." }, { "id": "ap2", "version": "..." }],
+    "evaluated_at": "..."
+  },
+  "graph": {},
+  "invariants": [],
   "results": [],
   "decision": "BLOCK"
 }
 ```
 
-Signing of TimeProofs evidence bundles is deliberately not mandatory in M2. If added later, it must not change the underlying evidence semantics.
+Signing TimeProofs evidence bundles is not mandatory at this stage. If added later, signing must wrap the existing evidence semantics rather than redefine them.
 
 ## Privacy rule
 
-Evidence retention is separate from evaluation. Local verification may process evidence without transmitting or retaining it. Future cloud retention policies must be explicit and data-minimizing.
+Evidence retention is separate from evaluation. Local verification may process evidence without transmitting or retaining it. Future cloud retention must be explicit and data-minimizing.
 
 ## Non-goal
 
