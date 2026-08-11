@@ -3,7 +3,11 @@
   "$id": "https://timeproofs.io/schemas/timeproofs-core.schema.json",
   "title": "TimeProofs Core Model",
   "type": "object",
+  "required": ["core_schema_version", "evaluation_id", "metadata", "graph", "invariants", "results", "decision"],
   "properties": {
+    "core_schema_version": { "type": "string", "minLength": 1 },
+    "evaluation_id": { "type": "string", "minLength": 1 },
+    "metadata": { "$ref": "#/$defs/EvaluationMetadata" },
     "graph": { "$ref": "#/$defs/TransactionGraph" },
     "invariants": {
       "type": "array",
@@ -15,7 +19,61 @@
     },
     "decision": { "$ref": "#/$defs/Decision" }
   },
+  "additionalProperties": false,
   "$defs": {
+    "Digest": {
+      "type": "object",
+      "required": ["algorithm", "value", "scope"],
+      "properties": {
+        "algorithm": { "enum": ["sha256", "sha384", "sha512"] },
+        "value": { "type": "string", "minLength": 1 },
+        "scope": { "enum": ["RAW_BYTES", "CANONICAL_JSON", "EXTERNAL_IMMUTABLE_REF"] }
+      },
+      "additionalProperties": false
+    },
+    "ArtifactSnapshot": {
+      "type": "object",
+      "required": ["digest"],
+      "properties": {
+        "digest": { "$ref": "#/$defs/Digest" },
+        "media_type": { "type": ["string", "null"] },
+        "byte_length": { "type": ["integer", "null"], "minimum": 0 },
+        "source_ref": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "PackDescriptor": {
+      "type": "object",
+      "required": ["id", "version"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "AdapterDescriptor": {
+      "type": "object",
+      "required": ["id", "version"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "EvaluationMetadata": {
+      "type": "object",
+      "required": ["pack", "adapters", "evaluated_at"],
+      "properties": {
+        "pack": { "$ref": "#/$defs/PackDescriptor" },
+        "adapters": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/AdapterDescriptor" }
+        },
+        "evaluated_at": { "type": "string", "format": "date-time" },
+        "policy": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
     "SourceDescriptor": {
       "type": "object",
       "required": ["namespace", "object_type", "protocol_version"],
@@ -30,12 +88,13 @@
     },
     "ProtocolObject": {
       "type": "object",
-      "required": ["object_id", "source", "observed_at", "raw", "canonical", "provenance"],
+      "required": ["object_id", "source", "observed_at", "snapshot", "raw", "canonical", "provenance"],
       "properties": {
         "object_id": { "type": "string", "minLength": 1 },
         "source": { "$ref": "#/$defs/SourceDescriptor" },
         "external_id": { "type": ["string", "null"] },
         "observed_at": { "type": "string", "format": "date-time" },
+        "snapshot": { "$ref": "#/$defs/ArtifactSnapshot" },
         "raw": {},
         "canonical": { "type": "object" },
         "integrity": { "type": "object" },
@@ -70,9 +129,7 @@
         "to_object_id": { "type": "string", "minLength": 1 },
         "relation": { "type": "string", "minLength": 1 },
         "basis": { "type": "string", "minLength": 1 },
-        "confidence": {
-          "enum": ["DETERMINISTIC", "DECLARED", "DERIVED", "AMBIGUOUS"]
-        },
+        "confidence": { "enum": ["DETERMINISTIC", "DECLARED", "DERIVED", "AMBIGUOUS"] },
         "evidence_ids": {
           "type": "array",
           "items": { "type": "string" }
@@ -88,18 +145,8 @@
       "properties": {
         "invariant_id": { "type": "string", "minLength": 1 },
         "name": { "type": "string", "minLength": 1 },
-        "class": {
-          "enum": ["CONFORMANCE", "CROSS_OBJECT", "EVIDENCE", "LIFECYCLE", "BUSINESS_COMPLETION", "RESEARCH"]
-        },
-        "pack": {
-          "type": "object",
-          "required": ["id", "version"],
-          "properties": {
-            "id": { "type": "string" },
-            "version": { "type": "string" }
-          },
-          "additionalProperties": false
-        },
+        "class": { "enum": ["CONFORMANCE", "CROSS_OBJECT", "EVIDENCE", "LIFECYCLE", "BUSINESS_COMPLETION", "RESEARCH"] },
+        "pack": { "$ref": "#/$defs/PackDescriptor" },
         "applies_to": { "type": "object" },
         "inputs": { "type": "array" },
         "predicate": { "type": "object" },
@@ -109,12 +156,33 @@
       },
       "additionalProperties": false
     },
+    "UnknownReason": {
+      "enum": [
+        "MISSING_OBJECT",
+        "MISSING_EVIDENCE",
+        "UNSUPPORTED_VERSION",
+        "UNSUPPORTED_TRANSFORMATION",
+        "AMBIGUOUS_BINDING",
+        "AMBIGUOUS_MAPPING",
+        "STALE_EVIDENCE",
+        "SELECTIVE_DISCLOSURE",
+        "INSUFFICIENT_LIFECYCLE_CONTEXT",
+        "INTEGRITY_UNVERIFIED",
+        "OTHER"
+      ]
+    },
     "EvaluationResult": {
       "type": "object",
       "required": ["invariant_id", "status", "reason_code", "message", "evidence_ids", "evaluated_at"],
       "properties": {
         "invariant_id": { "type": "string" },
         "status": { "$ref": "#/$defs/Decision" },
+        "unknown_reason": {
+          "anyOf": [
+            { "$ref": "#/$defs/UnknownReason" },
+            { "type": "null" }
+          ]
+        },
         "reason_code": { "type": "string" },
         "message": { "type": "string" },
         "evidence_ids": {
@@ -124,6 +192,13 @@
         "evaluated_at": { "type": "string", "format": "date-time" },
         "details": { "type": "object" }
       },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "UNKNOWN" } }, "required": ["status"] },
+          "then": { "required": ["unknown_reason"], "properties": { "unknown_reason": { "$ref": "#/$defs/UnknownReason" } } },
+          "else": { "properties": { "unknown_reason": { "type": "null" } } }
+        }
+      ],
       "additionalProperties": false
     },
     "Decision": {
