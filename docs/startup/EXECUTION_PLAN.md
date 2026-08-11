@@ -13,9 +13,10 @@ Completed:
 - M2 canonical transaction model;
 - M2.1 foundation hardening;
 - M3 UCP/AP2 Invariant Pack v0.1 specification;
-- M4 fixture corpus/regression contract.
+- M4 fixture corpus/regression contract;
+- M5 deterministic Verify engine with green GitHub Actions regression.
 
-Current active milestone: **M5 — Deterministic Verify Engine**.
+Current active milestone: **M6 — UCP/AP2 adapters + CLI/SDK**.
 
 Legacy AgentReady assets remain temporarily but are non-canonical for the relaunch.
 
@@ -24,15 +25,8 @@ Legacy AgentReady assets remain temporarily but are non-canonical for the relaun
 ## M0 — Product constitution and operating system
 **Status: COMPLETE**
 
-Freeze company thesis, product boundaries, decision process, handoff and benchmark standard.
-
 ## M1 — UCP/AP2 normative composition audit
 **Status: COMPLETE**
-
-Primary artifacts:
-- `docs/research/UCP_AP2_GAP_MATRIX.md`
-- `docs/research/M1_1_PAYMENT_ORDER_AUDIT.md`
-- `docs/research/M1_COMPLETION_REPORT.md`
 
 ## M2 — Canonical transaction model
 **Status: COMPLETE, HARDENED BY M2.1**
@@ -59,55 +53,81 @@ Artifacts: `packs/ucp-ap2/`.
 
 Source of truth: `fixtures/ucp-ap2/v0.1/`.
 
-Frozen cases cover:
-- PASS exact projection;
-- BLOCK amount mismatch;
-- BLOCK currency mismatch;
-- UNKNOWN missing checkout;
-- UNKNOWN unsupported version;
-- UNKNOWN missing authoritative total;
-- UNKNOWN unsupported FX transformation.
-
-Every case declares expected per-invariant and aggregate result before engine code. See `fixtures/ucp-ap2/v0.1/M4_COMPLETION_REPORT.md`.
+Frozen cases cover PASS exact projection, BLOCK amount mismatch, BLOCK currency mismatch, UNKNOWN missing checkout, unsupported version, missing total and unsupported FX.
 
 ## M5 — Deterministic Verify engine
+**Status: COMPLETE**
+
+Implemented:
+- deterministic evaluator;
+- TP-CX-003/002/001 execution;
+- structured UNKNOWN propagation;
+- deterministic aggregation;
+- full fixture regression runner;
+- npm test command;
+- GitHub Actions regression workflow.
+
+Validation proof:
+- workflow `TimeProofs Core Regression`;
+- successful run id `31543423839`;
+- Node 22;
+- conclusion `success`.
+
+See `timeproofs-core/M5_COMPLETION_REPORT.md`.
+
+## M6 — UCP/AP2 adapters + CLI/SDK
 **Status: ACTIVE**
 
 ### Goal
-Implement the smallest deterministic evaluator that satisfies M4 without changing pack semantics.
+Turn fixture-shaped internal inputs into real, local developer ingestion for supported UCP/AP2 artifacts without moving protocol semantics into the generic core.
 
-### Initial modules
-- input/fixture ingestion;
-- supported-profile gate;
-- canonical extraction interface;
-- exact-state prerequisite evaluator;
-- TP-CX-001/002 evaluator;
-- structured UNKNOWN reason propagation;
-- decision aggregator;
-- machine-readable evaluation result;
-- regression runner.
+### Required deliverables
+- adapter contract/interface;
+- UCP Checkout adapter;
+- AP2 PaymentMandate adapter;
+- exact machine-recognizable supported profile/version policy;
+- raw artifact validation/parsing;
+- immutable artifact snapshot/digest generation;
+- canonical field extraction with provenance;
+- native binding/integrity verification interface;
+- normalized transaction input builder;
+- JS/TS SDK entry point;
+- CLI `timeproofs verify`;
+- JSON output;
+- human-readable terminal output;
+- typed/stable error taxonomy;
+- adapter tests and end-to-end CLI tests;
+- green CI for new M6 tests.
 
-### Explicit exclusions
-No auth, billing, hosted database, dashboard, cloud control plane, website relaunch or broad provider integrations.
+### Required developer workflow
+A developer must be able to supply supported local artifacts and receive a useful result without a TimeProofs account.
+
+Target shape (subject to M6 interface freeze):
+
+`timeproofs verify --ucp checkout.json --ap2 payment-mandate.json --json`
+
+### Boundaries
+- M5 core aggregation/evaluation remains protocol-agnostic.
+- Adapters own protocol recognition, validation, source mapping and provenance.
+- Do not use research profile strings as production protocol identifiers.
+- Do not claim cryptographic verification unless the adapter actually verifies the protocol-native mechanism.
+- Unsupported or ambiguous profiles yield explicit unsupported/UNKNOWN behavior, never guessed parsing.
 
 ### Exit criteria
-- all M4 cases pass deterministically;
-- same inputs + versions + evaluation time yield same structured result;
-- UNKNOWN reasons match corpus expectations;
-- BLOCK precedence is correct;
-- core evaluator does not depend on LLM output;
-- protocol-specific extraction is isolated from generic aggregation/evaluation contracts;
-- machine output records core schema, pack, adapters and evidence identity.
-
-## M6 — UCP/AP2 adapters + CLI/SDK
-**Status: NOT STARTED**
-
-Freeze exact machine-recognizable protocol profile identifiers and give developers a local `timeproofs verify <transaction-artifacts>` path.
+- supported real-format artifacts parse deterministically;
+- unsupported profiles are rejected/UNKNOWN explicitly;
+- snapshot digests are generated from declared serialization scope;
+- canonical values preserve source paths/provenance;
+- CLI and SDK reach the same core result;
+- end-to-end PASS/BLOCK/UNKNOWN tests exist;
+- local quickstart works without signup;
+- all M4/M5 regressions remain green;
+- M6 GitHub Actions checks are green.
 
 ## M7 — CI integration
 **Status: NOT STARTED**
 
-Stable exit codes, GitHub Action/equivalent, artifact output and reproducible local/CI behavior.
+Stable product exit codes, GitHub Action/equivalent, artifact output and reproducible local/CI behavior. The M5 regression workflow is an internal quality gate, not yet the M7 customer-facing integration.
 
 ## M8 — Enforce runtime
 **Status: NOT STARTED**
