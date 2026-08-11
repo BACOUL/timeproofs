@@ -8,8 +8,6 @@ This file records material product/company decisions so future contributors and 
 
 TimeProofs remains the primary brand. `AgentReady` is not the relaunch category or primary product name.
 
-Reason: TimeProofs is broad enough to support evidence, temporal validity, cross-object consistency and protocol composition without locking the company to the old readiness-scanner product.
-
 ## D-002 — Reuse the existing repository
 
 **Status:** DECISION
@@ -17,8 +15,6 @@ Reason: TimeProofs is broad enough to support evidence, temporal validity, cross
 Repository: `BACOUL/timeproofs`.
 
 Relaunch work happens on `relaunch/invariant-engine` until ready.
-
-Existing AgentReady assets may be reused selectively, but old architecture/product assumptions are not constraints.
 
 ## D-003 — Company category target
 
@@ -55,8 +51,6 @@ Primary states:
 - BLOCK
 - UNKNOWN
 
-LLMs may assist research, mapping, authoring or explanation, but deterministic rules/evidence own core enforcement.
-
 ## D-007 — Invariant Packs are the moat hypothesis
 
 **Status:** HYPOTHESIS / STRATEGIC DIRECTION
@@ -64,8 +58,6 @@ LLMs may assist research, mapping, authoring or explanation, but deterministic r
 The generic comparison engine is not expected to be defensible.
 
 The moat hypothesis is a versioned, verified corpus of mappings, invariants, canonicalization rules, edge cases, fixtures and compatibility knowledge across protocol/provider pairs.
-
-This hypothesis must be continuously tested against standardization and competitors.
 
 ## D-008 — Do not become a scanner/dashboard business
 
@@ -80,8 +72,6 @@ Observation and CI are acceptable adoption modes; inline enforcement is the stra
 **Status:** DECISION
 
 Product, website, docs, API/SDK, pricing, onboarding, UX and operations must be benchmarked against category-leading global infrastructure companies before major decisions.
-
-Do not use generic SaaS or generic AI-generated product patterns by default.
 
 ## D-010 — English-first developer product
 
@@ -116,19 +106,13 @@ The following are deliberately not frozen yet:
 - whether a product dashboard is needed at all in V1
 - whether external pack authors are ever supported
 
-These require evidence before becoming decisions.
-
 ## D-013 — Do not duplicate UCP/AP2 conformance as the company wedge
 
 **Status:** DECISION
 
-The first normative audit confirmed that current UCP AP2 Mandates already owns several local guarantees: merchant authorization/signature, checkout mandate presence/signature, mandate expiry, basic checkout-scope binding, and AP2 security-lock/downgrade prevention.
+Current UCP/AP2 owns several local guarantees such as merchant authorization/signature, checkout mandate presence/signature, expiry, basic checkout-scope binding and downgrade prevention.
 
 TimeProofs may test these for compatibility or defense-in-depth, but MUST NOT present them as the strategic cross-protocol gap.
-
-The UCP↔AP2 wedge is therefore refined to **cross-object consistency and evidence closure around the composed transaction**, especially payment projection, execution binding, receipt closure, lifecycle propagation and downstream business-result preservation.
-
-See `docs/research/UCP_AP2_GAP_MATRIX.md`.
 
 ## D-014 — Blocking invariants require normative evidence and ambiguity fixtures
 
@@ -136,15 +120,11 @@ See `docs/research/UCP_AP2_GAP_MATRIX.md`.
 
 No invariant may become a BLOCK rule until it has exact protocol/version scope, source fields/derivation, normative references, allowed transformations, canonicalization semantics, PASS/BLOCK/UNKNOWN/version-unsupported fixtures, and a known enforcement point.
 
-If semantics are uncertain, classify the candidate as RESEARCH rather than guessing.
-
 ## D-015 — Treat AP2 cryptographic checkout binding as existing infrastructure
 
 **Status:** DECISION
 
 Current AP2 v0.2 closed PaymentMandates contain a `transaction_id` derived from the exact signed checkout JWT. TimeProofs MUST NOT claim that AP2 lacks checkout↔PaymentMandate identity binding.
-
-The remaining opportunity is semantic projection consistency across already-bound objects: for example, whether `payment_amount` is a valid projection of the merchant-authorized checkout.
 
 ## D-016 — UCP authoritative grand total drives the first payment projection rule
 
@@ -152,53 +132,47 @@ The remaining opportunity is semantic projection consistency across already-boun
 
 The first amount invariant must compare AP2 `payment_amount.amount` with the authoritative UCP checkout `totals[type=total].amount`, after currency validation.
 
-TimeProofs MUST NOT reconstruct the payable amount by summing only known subtotal/tax/shipping/discount components because UCP supports extensible totals and treats the grand-total entry as authoritative.
-
 ## D-017 — AP2 PaymentReceipt is not proof of executed amount by itself
 
 **Status:** DECISION
 
 Current AP2 PaymentReceipt binds to a closed PaymentMandate through `reference` and exposes payment/PSP/network identifiers, but does not contain executed amount or currency.
 
-Therefore a future `EXECUTED_PAYMENT_MATCHES_APPROVED_MANDATE` invariant requires provider/network evidence in addition to AP2 receipt evidence. TimeProofs must return UNKNOWN when the required execution evidence is unavailable rather than infer success from the receipt alone.
+A future executed-payment invariant therefore requires provider/network evidence; missing execution evidence yields UNKNOWN.
 
 ## D-018 — Order consistency is temporal, not strict final-state equality
 
 **Status:** DECISION
 
-UCP Orders can legitimately evolve after placement through edits, exchanges, fulfillment events and monetary adjustments. TimeProofs MUST NOT enforce `current order == original checkout` as a generic invariant.
+UCP Orders can legitimately evolve after placement. TimeProofs MUST NOT enforce `current order == original checkout` as a generic invariant.
 
-Order invariants must be lifecycle-aware. Initial order creation may be compared against authorized checkout state, while later divergence must be evaluated against valid events/adjustments and evaluation time.
-
-See `docs/research/M1_1_PAYMENT_ORDER_AUDIT.md`.
+Order invariants must be lifecycle-aware.
 
 ## D-019 — Freeze company thesis separately from evolving pack research
 
 **Status:** DECISION
 
-`TIMEPROOFS_PRODUCT_CONSTITUTION.md` is now the canonical product-thesis document.
+`TIMEPROOFS_PRODUCT_CONSTITUTION.md` is the canonical product-thesis document.
 
 Protocol research may refine adapters, mappings, evidence requirements and Invariant Pack contents, but MUST NOT silently redefine the company category or strategic product destination.
 
-The frozen product model is:
+Frozen product model:
 
 `ProtocolObject → Binding → Invariant → Evidence → Decision`.
 
-Changing the company away from Cross-Protocol Consistency Infrastructure, replacing this core model, or turning TimeProofs into one of its explicit non-goals requires an explicit founder-level decision recorded here.
-
 ## D-020 — Execute milestones in canonical order
 
-**Status:** DECISION, UPDATED BY D-021
+**Status:** DECISION, UPDATED BY D-021 AND D-022
 
 `docs/startup/EXECUTION_PLAN.md` is the canonical implementation sequence.
 
-M1 exit criteria have now been satisfied sufficiently to proceed. Current active milestone is M2. `docs/startup/CURRENT_STATE.md` must reflect the current milestone and immediate next task for handoff continuity.
+M1 and M2 are complete. Current active milestone is M3.
 
 ## D-021 — M1 complete; carry a conservative seven-rule design shortlist into M2/M3
 
 **Status:** DECISION
 
-M1 is complete enough to begin the canonical model. The current design shortlist is:
+M1 shortlist:
 
 - `TP-CX-001 PAYMENT_TOTAL_PROJECTS_AUTHORIZED_CHECKOUT`
 - `TP-CX-002 PAYMENT_CURRENCY_PROJECTS_AUTHORIZED_CHECKOUT`
@@ -210,9 +184,43 @@ M1 is complete enough to begin the canonical model. The current design shortlist
 
 Only TP-CX-001 and TP-CX-002 are immediate artifact-only blocking candidates. M3 must still freeze exact production semantics/versions/fixtures before they become production rules.
 
-AP2 open work, including JCS cart-to-payment binding and stronger execution/payee checks, is treated as standard evolution rather than as a threat to the company thesis. TimeProofs must not depend on raw cryptographic binding gaps for defensibility.
+## D-022 — M2 canonical transaction model is frozen
 
-See `docs/research/M1_COMPLETION_REPORT.md`.
+**Status:** DECISION
+
+M2 is complete and the canonical core model is now frozen for M3 implementation design.
+
+Core primitives:
+
+- `ProtocolObject`
+- `BindingEdge`
+- `InvariantDefinition`
+- `EvidenceItem`
+- `EvaluationResult`
+- `Decision`
+- `TransactionGraph`
+
+Architectural rules:
+
+1. A composed transaction is represented as an evidence-backed object graph, not a universal economic transaction ID.
+2. Raw source artifacts/provenance are preserved; canonical values are derived overlays.
+3. Protocol/provider versions and effective evaluation time are explicit.
+4. Binding confidence is explicit (`DETERMINISTIC`, `DECLARED`, `DERIVED`, `AMBIGUOUS`).
+5. Unsupported or ambiguous mappings produce `UNKNOWN`; TimeProofs never guesses a deterministic relation.
+6. External provider evidence is structurally distinct from protocol-native evidence.
+7. Core contains no UCP/AP2-specific business fields; packs own protocol semantics.
+8. Overall default decision ordering is `BLOCK > UNKNOWN > WARN > PASS` so incomplete evidence cannot be hidden by passing sibling checks.
+9. LLM-generated explanations may summarize structured results but cannot determine or upgrade PASS/BLOCK.
+10. M3 may define UCP/AP2 pack semantics but MUST NOT modify the M2 core model unless a structural defect is explicitly documented and M2 is reopened through this Decision Log.
+
+Canonical artifacts:
+
+- `docs/product/CANONICAL_MODEL.md`
+- `docs/product/BINDING_MODEL.md`
+- `docs/product/EVIDENCE_MODEL.md`
+- `docs/product/DECISION_MODEL.md`
+- `docs/product/M2_COMPLETION_REPORT.md`
+- `schemas/timeproofs-core.schema.json`
 
 ---
 
