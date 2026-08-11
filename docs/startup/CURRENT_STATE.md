@@ -1,6 +1,6 @@
 # TimeProofs — Current State
 
-Last updated: 2026-08-11
+Last updated: 2026-08-12
 Branch: `relaunch/invariant-engine`
 
 ## Where the project is
@@ -11,7 +11,7 @@ Branch: `relaunch/invariant-engine`
 
 **Initial wedge:** UCP ↔ AP2 composition consistency focused on semantic/economic cross-object consistency and evidence closure rather than generic protocol conformance.
 
-**Current milestone:** M5 — Deterministic Verify Engine.
+**Current milestone:** M6 — UCP/AP2 adapters + CLI/SDK.
 
 ## Completed milestones
 
@@ -21,50 +21,75 @@ Branch: `relaunch/invariant-engine`
 - M2.1 — foundation hardening: COMPLETE
 - M3 — UCP/AP2 Invariant Pack v0.1 specification: COMPLETE
 - M4 — fixture corpus and regression contract: COMPLETE
-- M5 — deterministic Verify Engine: IMPLEMENTATION PRESENT, EXECUTION VALIDATION PENDING
+- M5 — deterministic Verify Engine: COMPLETE
+- M6 — UCP/AP2 adapters + CLI/SDK: ACTIVE
 
-## M5 implementation now present
+## M5 completion proof
 
-New product code:
+Implemented:
 - `timeproofs-core/index.js`
 - `timeproofs-core/tests/run-fixture-regression.mjs`
 - `timeproofs-core/README.md`
+- `npm run test:timeproofs-core`
+- `.github/workflows/timeproofs-core-regression.yml`
 
-Root package now exposes `npm run test:timeproofs-core` while retaining AgentReady metadata as explicitly legacy.
+The regression runner checks aggregate verdicts, per-invariant statuses, declared reason codes, declared UNKNOWN reasons, and UNKNOWN/null consistency.
 
-Implemented behavior:
-- deterministic TP-CX-003 prerequisite evaluation interface;
-- deterministic TP-CX-002 currency projection;
-- deterministic TP-CX-001 authoritative total projection;
-- structured UNKNOWN propagation;
-- unsupported transformation handling;
-- deterministic aggregate ordering `BLOCK > UNKNOWN > WARN > PASS`;
-- regression runner reading the frozen M4 manifest and checking per-rule status, UNKNOWN reason and aggregate decision.
+GitHub Actions validated the frozen M4 corpus successfully on Node 22:
+- workflow: `TimeProofs Core Regression`
+- successful run id: `31543423839`
+- successful head: `28d1eaeae88628749c323e2b1d3c29be78e0e05f`
 
-Important boundary: M5 does not pretend that a raw `transaction_id` alone performs AP2 cryptographic verification. Real protocol parsing/native binding verification and exact supported version recognition belong to M6 adapters.
-
-## M5 completion gate
-
-M5 must NOT be marked COMPLETE until the regression command has actually executed successfully against all frozen M4 fixtures in a Node >=20 environment:
-
-`npm run test:timeproofs-core`
-
-If execution exposes a mismatch, fix implementation unless the fixture itself demonstrably contradicts the frozen M3 specification; do not weaken semantics merely to make tests green.
+See `timeproofs-core/M5_COMPLETION_REPORT.md`.
 
 ## Frozen core
 
 `ProtocolObject → BindingEdge → InvariantDefinition → EvidenceItem → EvaluationResult → Decision`
 
-Required properties include artifact digests, explicit pack/adapter/schema versions, evaluation time, provenance and structured UNKNOWN reasons. Primary verdicts remain PASS/WARN/BLOCK/UNKNOWN.
+Primary verdicts remain PASS/WARN/BLOCK/UNKNOWN. UNKNOWN is explicit and structured. The first engine remains deterministic and does not use an LLM as decision authority.
+
+## Frozen first executable pack
+
+1. `TP-CX-003 PAYMENT_PROJECTION_REFERENCES_EXACT_AUTHORIZED_STATE`
+2. `TP-CX-002 PAYMENT_CURRENCY_PROJECTS_AUTHORIZED_CHECKOUT`
+3. `TP-CX-001 PAYMENT_TOTAL_PROJECTS_AUTHORIZED_CHECKOUT`
+
+M5 satisfies the frozen M4 artifact corpus for these rules.
+
+## M6 objective
+
+Replace research-fixture assumptions with real developer-facing protocol ingestion while preserving the core boundary.
+
+M6 must deliver:
+1. real UCP Checkout adapter;
+2. real AP2 PaymentMandate adapter;
+3. exact profile/version recognition strategy;
+4. raw artifact snapshot/digest generation;
+5. raw→canonical provenance;
+6. protocol-native exact-state/binding verification interface;
+7. public local Verify input model;
+8. CLI `timeproofs verify ...`;
+9. initial JS/TS SDK surface;
+10. JSON output suitable for future CI/runtime;
+11. developer errors that distinguish invalid input, unsupported profile and UNKNOWN evaluation;
+12. clean tests without coupling protocol parsing into `timeproofs-core`.
+
+Research profile strings such as `ucp-current-m1` and `ap2-v0.2-m1` remain fixture-only and MUST NOT become production protocol version identifiers.
 
 ## Legacy boundary
 
-AgentReady-era root package/site/docs remain temporarily. They are not product truth. See `LEGACY_AGENTREADY.md`.
+AgentReady-era root package/site/docs remain temporarily and are non-canonical. Do not extend AgentReady while implementing M6. See `LEGACY_AGENTREADY.md`.
 
 ## Immediate next task
 
-Execute and validate the M5 regression suite. Only after green execution: write M5 completion report, mark M5 complete, activate M6 adapters + CLI/SDK.
+Design and implement M6 adapters before polishing CLI presentation:
+- define adapter contracts;
+- inspect current canonical UCP/AP2 machine schemas;
+- pin supported source profiles;
+- implement parsing/canonical extraction/provenance;
+- feed canonical graph inputs into the already-green M5 engine;
+- then expose the minimal CLI/SDK workflow.
 
 ## One-line status
 
-> M0–M4 and M2.1 complete; first TimeProofs engine code exists; M5 awaits actual regression execution before completion.
+> M0–M5 plus M2.1 hardening complete with green regression CI; M6 real UCP/AP2 adapters + CLI/SDK is active.
