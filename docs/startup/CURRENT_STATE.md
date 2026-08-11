@@ -13,42 +13,72 @@ TimeProofs product direction is frozen at the constitutional level.
 
 **Initial wedge:** UCP ↔ AP2 composition consistency, focused on cross-object semantic/economic consistency and evidence closure rather than generic protocol conformance.
 
-**Current milestone:** M2 — Canonical Transaction Model.
+**Current milestone:** M3 — UCP/AP2 Invariant Pack v0.1 specification.
 
-No new TimeProofs engine code has been implemented yet. Legacy AgentReady code remains intact and isolated.
+No new TimeProofs evaluation engine has been implemented yet. Legacy AgentReady code remains intact and isolated.
 
 ## Completed foundation
 
 - branch `relaunch/invariant-engine` created;
-- master relaunch context created;
-- product constitution created;
-- startup operating system created;
-- decision log created;
-- handoff protocol created;
-- benchmark policy created;
-- canonical execution plan created;
-- AI/contributor entrypoint created;
+- master relaunch context and product constitution created;
+- startup operating system, handoff, benchmark policy and execution plan created;
+- M1 UCP/AP2 normative audit completed;
 - UCP/AP2 gap matrix with 30 relationships created;
 - payment/order audit M1.1 created;
 - M1 completion report created;
-- M1 exit criteria passed sufficiently to begin M2.
+- M2 canonical transaction model completed;
+- machine-readable core model schema created.
 
-## M1 result now locked
+## M1 result locked
 
-1. TimeProofs must not duplicate UCP/AP2 signature/expiry/basic scope conformance as its moat.
-2. Current AP2 already provides strong checkout↔PaymentMandate cryptographic identity binding; open AP2 work is strengthening this further. TimeProofs does not own raw binding.
-3. The company-relevant opportunity is semantic projection consistency and evidence closure across already valid/bound objects.
-4. The first deterministic amount rule uses the authoritative UCP checkout `totals[type=total].amount` and AP2 `payment_amount.amount`.
-5. Currency projection compares UCP checkout `currency` with AP2 `payment_amount.currency`.
-6. AP2 PaymentReceipt alone cannot prove executed amount/currency; stronger execution verification requires provider/network evidence.
-7. UCP Order reconciliation is lifecycle-aware; `checkout_id` is a key binding, but current order state may legitimately evolve after placement.
-8. Marketplace/payee entity equivalence, FX, split settlement, partial capture and similar transformations remain RESEARCH/UNKNOWN until explicitly modeled.
-9. Missing or selectively undisclosed evidence must produce `UNKNOWN`, never guessed PASS.
-10. Standard-local improvements are treated as inputs/adapters, not as reasons to change the TimeProofs company thesis.
+1. TimeProofs does not duplicate UCP/AP2 signature/expiry/basic scope conformance as its moat.
+2. AP2 already provides strong checkout↔PaymentMandate cryptographic identity binding; TimeProofs does not own raw binding.
+3. Company value is semantic projection consistency and evidence closure across already valid/bound objects.
+4. Missing or selectively undisclosed evidence produces `UNKNOWN`, never guessed PASS.
+5. Lifecycle and external execution evidence are modeled separately from static object equality.
 
 See `docs/research/M1_COMPLETION_REPORT.md`.
 
-## Frozen M1 design shortlist carried into M2/M3
+## M2 result locked
+
+Core pipeline:
+
+`ProtocolObject → BindingEdge → InvariantDefinition → EvidenceItem → EvaluationResult → Decision`
+
+Frozen primitives:
+
+- `ProtocolObject`
+- `BindingEdge`
+- `InvariantDefinition`
+- `EvidenceItem`
+- `EvaluationResult`
+- `Decision`
+- `TransactionGraph`
+
+Core rules:
+
+- raw source evidence is preserved;
+- canonical values are derived overlays with provenance;
+- protocol/provider versions are explicit;
+- one transaction is represented as an evidence-backed object graph, not a forced universal ID;
+- ambiguous/unsupported mappings produce `UNKNOWN`;
+- core contains no UCP/AP2-specific business fields;
+- evaluation time is explicit for temporal checks;
+- external evidence is distinguishable from protocol-native artifacts;
+- deterministic PASS/WARN/BLOCK/UNKNOWN is authoritative.
+
+Artifacts:
+
+- `docs/product/CANONICAL_MODEL.md`
+- `docs/product/BINDING_MODEL.md`
+- `docs/product/EVIDENCE_MODEL.md`
+- `docs/product/DECISION_MODEL.md`
+- `docs/product/M2_COMPLETION_REPORT.md`
+- `schemas/timeproofs-core.schema.json`
+
+M2 demonstrates PASS, BLOCK, UNKNOWN, lifecycle, and future A2A/MCP representation without redesigning core schemas.
+
+## M1 shortlist entering M3
 
 - `TP-CX-001 PAYMENT_TOTAL_PROJECTS_AUTHORIZED_CHECKOUT`
 - `TP-CX-002 PAYMENT_CURRENCY_PROJECTS_AUTHORIZED_CHECKOUT`
@@ -58,18 +88,14 @@ See `docs/research/M1_COMPLETION_REPORT.md`.
 - `TP-LC-002 INVALIDATED_OR_CANCELED_STATE_NOT_COMMITTED`
 - `TP-EV-002 COMPOSED_EVIDENCE_CHAIN_CLOSED`
 
-Only TP-CX-001 and TP-CX-002 are immediate artifact-only blocking candidates. The rest require structural, lifecycle or external evidence modeling and must not be oversold in V1.
+Only TP-CX-001 and TP-CX-002 are immediate artifact-only blocking candidates. M3 owns exact version scope, source fields, pack predicates, allowed transformations and production severity.
 
 ## Work not started
 
-- canonical model code;
-- binding graph code;
-- invariant engine;
-- evidence engine;
-- UCP adapter;
-- AP2 adapter;
-- invariant pack implementation;
+- UCP/AP2 pack implementation;
 - fixture corpus implementation;
+- deterministic Verify engine implementation;
+- UCP/AP2 adapters;
 - TimeProofs CLI/SDK;
 - CI integration;
 - enforcement runtime;
@@ -78,19 +104,18 @@ Only TP-CX-001 and TP-CX-002 are immediate artifact-only blocking candidates. Th
 
 ## Immediate next task
 
-Execute M2.
+Execute M3.
 
-Specifically create and freeze:
+Specifically:
 
-1. `docs/product/CANONICAL_MODEL.md`;
-2. `docs/product/BINDING_MODEL.md`;
-3. `docs/product/EVIDENCE_MODEL.md`;
-4. `docs/product/DECISION_MODEL.md`;
-5. protocol-agnostic schemas for `ProtocolObject`, `BindingEdge`, `InvariantDefinition`, `EvidenceItem`, `EvaluationResult`, and `Decision`;
-6. example transaction graphs for PASS, BLOCK, and UNKNOWN;
-7. proof that the same model can later represent A2A/MCP/business-protocol objects without redesign.
-
-Do not implement the full Verify engine before the M2 model is reviewed against the M1 shortlist.
+1. create `packs/ucp-ap2/SPEC.md`;
+2. define pack ID/version and compatibility matrix;
+3. freeze exact semantics for each included invariant;
+4. define exact inputs/canonical fields/evidence requirements;
+5. define PASS/BLOCK/UNKNOWN behavior;
+6. separate immediate v0.1 production rules from deferred evidence/lifecycle rules;
+7. define pack manifest schema;
+8. do not modify the M2 core model unless a documented structural defect is proven.
 
 ## Mandatory reading order for a new contributor
 
@@ -100,11 +125,14 @@ Do not implement the full Verify engine before the M2 model is reviewed against 
 4. `docs/startup/DECISION_LOG.md`
 5. `TIMEPROOFS_MASTER_CONTEXT.md`
 6. `docs/research/M1_COMPLETION_REPORT.md`
-7. `docs/research/UCP_AP2_GAP_MATRIX.md`
-8. `docs/research/M1_1_PAYMENT_ORDER_AUDIT.md`
-9. `docs/startup/STARTUP_OPERATING_SYSTEM.md`
-10. `docs/startup/BENCHMARK_POLICY.md`
+7. `docs/product/M2_COMPLETION_REPORT.md`
+8. `docs/product/CANONICAL_MODEL.md`
+9. `docs/product/BINDING_MODEL.md`
+10. `docs/product/EVIDENCE_MODEL.md`
+11. `docs/product/DECISION_MODEL.md`
+12. `docs/startup/STARTUP_OPERATING_SYSTEM.md`
+13. `docs/startup/BENCHMARK_POLICY.md`
 
 ## One-line status
 
-> Product thesis frozen; M1 normative audit complete enough to proceed; M2 canonical transaction model is now active; implementation has not started.
+> Product thesis frozen; M1 and M2 complete; M3 UCP/AP2 Invariant Pack specification is now active; engine implementation has not started.
