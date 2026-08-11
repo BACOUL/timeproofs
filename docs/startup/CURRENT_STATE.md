@@ -13,7 +13,7 @@ TimeProofs product direction is frozen at the constitutional level.
 
 **Initial wedge:** UCP ↔ AP2 composition consistency, focused on cross-object semantic/economic consistency and evidence closure rather than generic protocol conformance.
 
-**Current milestone:** M1 — UCP/AP2 normative composition audit.
+**Current milestone:** M2 — Canonical Transaction Model.
 
 No new TimeProofs engine code has been implemented yet. Legacy AgentReady code remains intact and isolated.
 
@@ -23,23 +23,42 @@ No new TimeProofs engine code has been implemented yet. Legacy AgentReady code r
 - master relaunch context created;
 - product constitution created;
 - startup operating system created;
-- decision log created and updated through D-018;
+- decision log created;
 - handoff protocol created;
 - benchmark policy created;
 - canonical execution plan created;
 - AI/contributor entrypoint created;
-- first UCP/AP2 gap matrix created;
-- payment/order audit M1.1 created.
+- UCP/AP2 gap matrix with 30 relationships created;
+- payment/order audit M1.1 created;
+- M1 completion report created;
+- M1 exit criteria passed sufficiently to begin M2.
 
-## Key findings already locked
+## M1 result now locked
 
 1. TimeProofs must not duplicate UCP/AP2 signature/expiry/basic scope conformance as its moat.
-2. AP2 v0.2 already provides cryptographic checkout ↔ PaymentMandate identity binding through `transaction_id` derived from the signed checkout JWT.
-3. The opportunity is semantic consistency across already-bound objects, not inventing the binding itself.
-4. The first payment-total rule should use the authoritative UCP grand total rather than reconstructing totals from a fixed set of components.
-5. AP2 PaymentReceipt alone is insufficient to prove executed amount/currency; external execution evidence may be required.
-6. Order consistency is lifecycle-aware, not naive equality with the original checkout.
-7. Blocking invariants require normative/version evidence plus PASS/BLOCK/UNKNOWN/unsupported fixtures.
+2. Current AP2 already provides strong checkout↔PaymentMandate cryptographic identity binding; open AP2 work is strengthening this further. TimeProofs does not own raw binding.
+3. The company-relevant opportunity is semantic projection consistency and evidence closure across already valid/bound objects.
+4. The first deterministic amount rule uses the authoritative UCP checkout `totals[type=total].amount` and AP2 `payment_amount.amount`.
+5. Currency projection compares UCP checkout `currency` with AP2 `payment_amount.currency`.
+6. AP2 PaymentReceipt alone cannot prove executed amount/currency; stronger execution verification requires provider/network evidence.
+7. UCP Order reconciliation is lifecycle-aware; `checkout_id` is a key binding, but current order state may legitimately evolve after placement.
+8. Marketplace/payee entity equivalence, FX, split settlement, partial capture and similar transformations remain RESEARCH/UNKNOWN until explicitly modeled.
+9. Missing or selectively undisclosed evidence must produce `UNKNOWN`, never guessed PASS.
+10. Standard-local improvements are treated as inputs/adapters, not as reasons to change the TimeProofs company thesis.
+
+See `docs/research/M1_COMPLETION_REPORT.md`.
+
+## Frozen M1 design shortlist carried into M2/M3
+
+- `TP-CX-001 PAYMENT_TOTAL_PROJECTS_AUTHORIZED_CHECKOUT`
+- `TP-CX-002 PAYMENT_CURRENCY_PROJECTS_AUTHORIZED_CHECKOUT`
+- `TP-CX-003 PAYMENT_PROJECTION_REFERENCES_EXACT_AUTHORIZED_STATE`
+- `TP-EV-001 EXECUTED_PAYMENT_MATCHES_APPROVED_MANDATE`
+- `TP-LC-001 COMMITTED_ORDER_BINDS_ORIGINATING_CHECKOUT`
+- `TP-LC-002 INVALIDATED_OR_CANCELED_STATE_NOT_COMMITTED`
+- `TP-EV-002 COMPOSED_EVIDENCE_CHAIN_CLOSED`
+
+Only TP-CX-001 and TP-CX-002 are immediate artifact-only blocking candidates. The rest require structural, lifecycle or external evidence modeling and must not be oversold in V1.
 
 ## Work not started
 
@@ -59,18 +78,19 @@ No new TimeProofs engine code has been implemented yet. Legacy AgentReady code r
 
 ## Immediate next task
 
-Finish M1.
+Execute M2.
 
-Specifically:
+Specifically create and freeze:
 
-1. inspect current canonical UCP/AP2 schemas/implementations for exact V1 fields;
-2. resolve legitimate transformations and ambiguity cases;
-3. classify the V1 shortlist;
-4. identify exact evidence required for each candidate;
-5. freeze the smallest defensible first invariant set;
-6. then begin M2 canonical model.
+1. `docs/product/CANONICAL_MODEL.md`;
+2. `docs/product/BINDING_MODEL.md`;
+3. `docs/product/EVIDENCE_MODEL.md`;
+4. `docs/product/DECISION_MODEL.md`;
+5. protocol-agnostic schemas for `ProtocolObject`, `BindingEdge`, `InvariantDefinition`, `EvidenceItem`, `EvaluationResult`, and `Decision`;
+6. example transaction graphs for PASS, BLOCK, and UNKNOWN;
+7. proof that the same model can later represent A2A/MCP/business-protocol objects without redesign.
 
-Do not begin broad product implementation until M1 exit criteria in `docs/startup/EXECUTION_PLAN.md` are met.
+Do not implement the full Verify engine before the M2 model is reviewed against the M1 shortlist.
 
 ## Mandatory reading order for a new contributor
 
@@ -79,10 +99,12 @@ Do not begin broad product implementation until M1 exit criteria in `docs/startu
 3. `docs/startup/EXECUTION_PLAN.md`
 4. `docs/startup/DECISION_LOG.md`
 5. `TIMEPROOFS_MASTER_CONTEXT.md`
-6. latest files in `docs/research/`
-7. `docs/startup/STARTUP_OPERATING_SYSTEM.md`
-8. `docs/startup/BENCHMARK_POLICY.md`
+6. `docs/research/M1_COMPLETION_REPORT.md`
+7. `docs/research/UCP_AP2_GAP_MATRIX.md`
+8. `docs/research/M1_1_PAYMENT_ORDER_AUDIT.md`
+9. `docs/startup/STARTUP_OPERATING_SYSTEM.md`
+10. `docs/startup/BENCHMARK_POLICY.md`
 
 ## One-line status
 
-> Product thesis frozen; M1 protocol audit in progress; implementation has not started.
+> Product thesis frozen; M1 normative audit complete enough to proceed; M2 canonical transaction model is now active; implementation has not started.
