@@ -79,8 +79,8 @@ UCP Orders can legitimately evolve. Order invariants are lifecycle-aware; `curre
 `TIMEPROOFS_PRODUCT_CONSTITUTION.md` is canonical for company thesis. Protocol research may refine adapters, mappings, evidence and pack contents but cannot silently redefine the company. Frozen product model: `ProtocolObject → Binding → Invariant → Evidence → Decision`.
 
 ## D-020 — Execute milestones in canonical order
-**Status:** DECISION, UPDATED BY D-021/D-022/D-023/D-024/D-026
-`docs/startup/EXECUTION_PLAN.md` is the canonical implementation sequence. M0–M4 and M2.1 are complete. Current active milestone is M5.
+**Status:** DECISION, UPDATED THROUGH D-027
+`docs/startup/EXECUTION_PLAN.md` is the canonical implementation sequence. M0–M5 and M2.1 are complete. Current active milestone is M6.
 
 ## D-021 — M1 complete; conservative seven-rule shortlist
 **Status:** DECISION
@@ -132,6 +132,23 @@ M4 is complete. The first source-of-truth corpus lives in `fixtures/ucp-ap2/v0.1
 Required cases include exact projection PASS, amount mismatch BLOCK, currency mismatch BLOCK, missing checkout UNKNOWN/MISSING_OBJECT, unsupported version UNKNOWN/UNSUPPORTED_VERSION, missing authoritative total UNKNOWN/MISSING_EVIDENCE and unsupported FX UNKNOWN/UNSUPPORTED_TRANSFORMATION.
 
 M5 implementation must satisfy this corpus without silently weakening M3 semantics. Any expected-result change requires an explicit pack-spec/decision update.
+
+## D-027 — M5 deterministic core is complete only with green executable regression
+**Status:** DECISION
+M5 is complete after executable validation, not code presence alone.
+
+The release-validation process strengthened the regression runner to check aggregate status, per-invariant status, declared reason codes, declared UNKNOWN reasons, and UNKNOWN/null consistency. A mismatch in the initial amount-check UNKNOWN classification was fixed in implementation rather than weakening the frozen fixture contract.
+
+A GitHub Actions quality gate now runs `npm run test:timeproofs-core` on TimeProofs core/fixture changes.
+
+Verified successful run:
+- workflow: `TimeProofs Core Regression`
+- run id: `31543423839`
+- head commit: `28d1eaeae88628749c323e2b1d3c29be78e0e05f`
+- Node 22
+- conclusion: `success`
+
+M6 is now active. M6 must replace fixture/research-profile assumptions with real machine-recognizable UCP/AP2 adapters while preserving the generic M5 core boundary. See `timeproofs-core/M5_COMPLETION_REPORT.md`.
 
 ---
 Add new decisions sequentially. Never rewrite history to make it look cleaner; supersede/refine decisions explicitly.
