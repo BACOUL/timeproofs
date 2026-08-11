@@ -7,18 +7,18 @@ This file defines the implementation order. Do not skip ahead unless the previou
 
 ## Current state
 
-Legacy AgentReady code remains intact and is not yet migrated. New TimeProofs engine code has not started.
+Legacy AgentReady code remains intact and is not yet migrated. New TimeProofs evaluation engine code has not started.
 
 Completed/advanced work:
 
 - product thesis and relaunch context documented;
 - startup operating system and handoff documented;
-- UCP/AP2 normative gap matrix created;
-- M1.1 payment/order audit created;
-- M1 completion report created;
-- key protocol assumptions recorded in Decision Log.
+- M1 UCP/AP2 normative audit completed;
+- M2 canonical transaction model completed;
+- machine-readable core model schema created;
+- key protocol/model assumptions recorded in Decision Log.
 
-Current active milestone: **M2 — Canonical Transaction Model**.
+Current active milestone: **M3 — UCP/AP2 Invariant Pack v0.1 specification**.
 
 ---
 
@@ -37,12 +37,8 @@ Freeze the company thesis, product boundaries, decision process and handoff mode
 - benchmark policy
 - execution plan
 
-### Exit criteria
-- another AI/developer can state the product, wedge, moat hypothesis, non-goals and current milestone without relying on conversation history;
-- product direction cannot silently drift through implementation decisions.
-
 ### Status
-**COMPLETE.** Further documentation is maintenance, not a blocker.
+**COMPLETE.**
 
 ---
 
@@ -51,35 +47,15 @@ Freeze the company thesis, product boundaries, decision process and handoff mode
 ### Goal
 Identify only the cross-object guarantees that remain valuable after accounting for current UCP/AP2 guarantees.
 
-### Work
-1. Audit canonical UCP checkout/order schemas and lifecycle.
-2. Audit AP2 Checkout/Cart/Payment mandate and PaymentReceipt semantics.
-3. Audit actual versioned binding semantics, not historical assumptions.
-4. Map legitimate economic transformations: discounts, tax, shipping, adjustments, capture semantics, marketplaces, selective disclosure.
-5. Separate:
-   - protocol conformance;
-   - cross-object consistency;
-   - authorization;
-   - execution evidence;
-   - business completion.
-6. Monitor relevant open issues/PRs so no core invariant depends on a gap already being standardized away.
-
 ### Primary artifacts
 - `docs/research/UCP_AP2_GAP_MATRIX.md`
 - `docs/research/M1_1_PAYMENT_ORDER_AUDIT.md`
 - `docs/research/M1_COMPLETION_REPORT.md`
 
-### Exit criteria
-- 30+ meaningful object relationships analyzed;
-- every V1 candidate classified as `CONFORMANCE`, `CROSS_OBJECT`, `EVIDENCE`, `LIFECYCLE`, or `RESEARCH`;
-- exact source objects/fields identified for each proposed V1 invariant sufficiently for M2/M3 design;
-- no blocking invariant based only on historical issue text when current spec has superseded it;
-- shortlist reduced to a small set of defensible V1 invariants.
-
 ### Status
-**COMPLETE ENOUGH TO PROCEED.**
+**COMPLETE.**
 
-M1 intentionally does not freeze production semantics for every rule; M3 owns the final pack specification and fixtures. The M1 result is the defensible design shortlist documented in `M1_COMPLETION_REPORT.md`.
+M1 produced the conservative seven-rule design shortlist carried into M3.
 
 ---
 
@@ -88,50 +64,39 @@ M1 intentionally does not freeze production semantics for every rule; M3 owns th
 ### Goal
 Freeze the data model used by every future pack.
 
-### Deliverables
+### Deliverables completed
 - `docs/product/CANONICAL_MODEL.md`
 - `docs/product/BINDING_MODEL.md`
 - `docs/product/EVIDENCE_MODEL.md`
 - `docs/product/DECISION_MODEL.md`
-- machine schemas for core objects
+- `docs/product/M2_COMPLETION_REPORT.md`
+- `schemas/timeproofs-core.schema.json`
 
-### Required primitives
+### Frozen primitives
 - `ProtocolObject`
 - `BindingEdge`
 - `InvariantDefinition`
 - `EvidenceItem`
 - `EvaluationResult`
 - `Decision`
+- `TransactionGraph`
 
-### Rules
+### Rules locked
 - source evidence is immutable/preserved;
 - canonical values never erase raw source provenance;
 - versions are explicit;
-- unsupported mappings produce `UNKNOWN`;
-- one economic transaction can be represented as an object graph rather than a forced universal ID;
+- unsupported/ambiguous mappings produce `UNKNOWN`;
+- one economic transaction is represented as an object graph rather than a forced universal ID;
 - core structures contain no UCP/AP2-specific business fields;
 - lifecycle/evaluation time is representable;
 - externally sourced evidence is distinguishable from protocol-native evidence;
 - conformance failure is distinguishable from cross-object invariant failure.
 
-### Required proof examples
-M2 must represent at least:
-
-1. PASS — UCP checkout total/currency projects exactly into an AP2 PaymentMandate;
-2. BLOCK — exact checkout binding is valid but payment amount differs;
-3. UNKNOWN — PaymentReceipt exists but provider evidence required to prove executed amount is absent;
-4. LIFECYCLE — UCP Order linked to checkout with later legitimate adjustments;
-5. FUTURE-PROTOCOL — an A2A or MCP `ProtocolObject` can be added without changing core schemas.
-
-### Exit criteria
-- a UCP/AP2 transaction graph can be represented without protocol-specific logic leaking into core structures;
-- model supports future A2A/MCP/business packs without schema redesign;
-- example graphs for PASS, BLOCK and UNKNOWN are documented;
-- M1 shortlist can be expressed using only the canonical primitives;
-- data model distinguishes source artifact, normalized value, relationship, evidence and evaluation decision.
+### Exit proof
+M2 documents and represents PASS, BLOCK, UNKNOWN, lifecycle evolution and a future A2A/MCP ProtocolObject without schema redesign.
 
 ### Status
-**ACTIVE.**
+**COMPLETE.**
 
 ---
 
@@ -155,7 +120,7 @@ Freeze the first pack before implementation.
 - `TP-LC-002 INVALIDATED_OR_CANCELED_STATE_NOT_COMMITTED`
 - `TP-EV-002 COMPOSED_EVIDENCE_CHAIN_CLOSED`
 
-Only the first two are immediate artifact-only blocking candidates. The rest require structural, external-evidence or lifecycle semantics before production blocking.
+Only TP-CX-001 and TP-CX-002 are immediate artifact-only blocking candidates. The rest require structural, external-evidence or lifecycle semantics before production blocking.
 
 ### Required per invariant
 - stable ID;
@@ -170,7 +135,14 @@ Only the first two are immediate artifact-only blocking candidates. The rest req
 - limitations.
 
 ### Exit criteria
-No invariant is marked production/blocking unless it satisfies the Definition of Done from the Master Context and Decision Log.
+- pack manifest and compatibility matrix are explicit;
+- v0.1 production invariant set is clearly separated from deferred/research rules;
+- every production invariant can be represented solely through M2 primitives;
+- no invariant is marked production/blocking unless it satisfies the Definition of Done from Master Context and Decision Log;
+- M4 can build fixtures without inventing semantics.
+
+### Status
+**ACTIVE.**
 
 ---
 
