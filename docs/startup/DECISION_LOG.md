@@ -138,6 +138,40 @@ No invariant may become a BLOCK rule until it has exact protocol/version scope, 
 
 If semantics are uncertain, classify the candidate as RESEARCH rather than guessing.
 
+## D-015 — Treat AP2 cryptographic checkout binding as existing infrastructure
+
+**Status:** DECISION
+
+Current AP2 v0.2 closed PaymentMandates contain a `transaction_id` derived from the exact signed checkout JWT. TimeProofs MUST NOT claim that AP2 lacks checkout↔PaymentMandate identity binding.
+
+The remaining opportunity is semantic projection consistency across already-bound objects: for example, whether `payment_amount` is a valid projection of the merchant-authorized checkout.
+
+## D-016 — UCP authoritative grand total drives the first payment projection rule
+
+**Status:** DECISION
+
+The first amount invariant must compare AP2 `payment_amount.amount` with the authoritative UCP checkout `totals[type=total].amount`, after currency validation.
+
+TimeProofs MUST NOT reconstruct the payable amount by summing only known subtotal/tax/shipping/discount components because UCP supports extensible totals and treats the grand-total entry as authoritative.
+
+## D-017 — AP2 PaymentReceipt is not proof of executed amount by itself
+
+**Status:** DECISION
+
+Current AP2 PaymentReceipt binds to a closed PaymentMandate through `reference` and exposes payment/PSP/network identifiers, but does not contain executed amount or currency.
+
+Therefore a future `EXECUTED_PAYMENT_MATCHES_APPROVED_MANDATE` invariant requires provider/network evidence in addition to AP2 receipt evidence. TimeProofs must return UNKNOWN when the required execution evidence is unavailable rather than infer success from the receipt alone.
+
+## D-018 — Order consistency is temporal, not strict final-state equality
+
+**Status:** DECISION
+
+UCP Orders can legitimately evolve after placement through edits, exchanges, fulfillment events and monetary adjustments. TimeProofs MUST NOT enforce `current order == original checkout` as a generic invariant.
+
+Order invariants must be lifecycle-aware. Initial order creation may be compared against authorized checkout state, while later divergence must be evaluated against valid events/adjustments and evaluation time.
+
+See `docs/research/M1_1_PAYMENT_ORDER_AUDIT.md`.
+
 ---
 
 Add new decisions sequentially. Never edit old decisions to make history look cleaner; mark superseded/refined decisions explicitly.
