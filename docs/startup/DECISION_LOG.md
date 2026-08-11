@@ -110,7 +110,7 @@ The following are deliberately not frozen yet:
 - hosted vs local verification boundary
 - signing requirements for evidence bundles
 - data retention defaults
-- exact first blocking invariant set
+- exact first production blocking invariant set (M3 owns final freeze)
 - exact first buyer segment
 - final website information architecture
 - whether a product dashboard is needed at all in V1
@@ -188,13 +188,31 @@ Changing the company away from Cross-Protocol Consistency Infrastructure, replac
 
 ## D-020 — Execute milestones in canonical order
 
-**Status:** DECISION
+**Status:** DECISION, UPDATED BY D-021
 
 `docs/startup/EXECUTION_PLAN.md` is the canonical implementation sequence.
 
-Current milestone is M1. New engine implementation should not begin broadly until M1 exit criteria are satisfied. Research can refine the first pack without changing the constitutional product thesis.
+M1 exit criteria have now been satisfied sufficiently to proceed. Current active milestone is M2. `docs/startup/CURRENT_STATE.md` must reflect the current milestone and immediate next task for handoff continuity.
 
-`docs/startup/CURRENT_STATE.md` must reflect the current milestone and immediate next task for handoff continuity.
+## D-021 — M1 complete; carry a conservative seven-rule design shortlist into M2/M3
+
+**Status:** DECISION
+
+M1 is complete enough to begin the canonical model. The current design shortlist is:
+
+- `TP-CX-001 PAYMENT_TOTAL_PROJECTS_AUTHORIZED_CHECKOUT`
+- `TP-CX-002 PAYMENT_CURRENCY_PROJECTS_AUTHORIZED_CHECKOUT`
+- `TP-CX-003 PAYMENT_PROJECTION_REFERENCES_EXACT_AUTHORIZED_STATE`
+- `TP-EV-001 EXECUTED_PAYMENT_MATCHES_APPROVED_MANDATE`
+- `TP-LC-001 COMMITTED_ORDER_BINDS_ORIGINATING_CHECKOUT`
+- `TP-LC-002 INVALIDATED_OR_CANCELED_STATE_NOT_COMMITTED`
+- `TP-EV-002 COMPOSED_EVIDENCE_CHAIN_CLOSED`
+
+Only TP-CX-001 and TP-CX-002 are immediate artifact-only blocking candidates. M3 must still freeze exact production semantics/versions/fixtures before they become production rules.
+
+AP2 open work, including JCS cart-to-payment binding and stronger execution/payee checks, is treated as standard evolution rather than as a threat to the company thesis. TimeProofs must not depend on raw cryptographic binding gaps for defensibility.
+
+See `docs/research/M1_COMPLETION_REPORT.md`.
 
 ---
 
