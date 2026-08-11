@@ -7,318 +7,180 @@ This file defines the implementation order. Do not skip ahead unless the previou
 
 ## Current state
 
-Legacy AgentReady code remains intact and is not yet migrated. New TimeProofs evaluation engine code has not started.
+Legacy AgentReady assets remain temporarily but are non-canonical for the relaunch. New TimeProofs evaluation engine code has not started.
 
-Completed/advanced work:
+Completed:
+- M0 product constitution/operating system;
+- M1 UCP/AP2 normative audit;
+- M2 canonical transaction model;
+- M2.1 foundation hardening;
+- M3 UCP/AP2 Invariant Pack v0.1 specification.
 
-- product thesis and relaunch context documented;
-- startup operating system and handoff documented;
-- M1 UCP/AP2 normative audit completed;
-- M2 canonical transaction model completed;
-- machine-readable core model schema created;
-- key protocol/model assumptions recorded in Decision Log.
-
-Current active milestone: **M3 — UCP/AP2 Invariant Pack v0.1 specification**.
+Current active milestone: **M4 — Fixture corpus and regression harness**.
 
 ---
 
 ## M0 — Product constitution and operating system
+**Status: COMPLETE**
 
-### Goal
-Freeze the company thesis, product boundaries, decision process and handoff model before implementation.
-
-### Deliverables
-- `TIMEPROOFS_PRODUCT_CONSTITUTION.md`
-- `TIMEPROOFS_MASTER_CONTEXT.md`
-- `AI_PROJECT_ENTRYPOINT.md`
-- startup operating system
-- decision log
-- handoff protocol
-- benchmark policy
-- execution plan
-
-### Status
-**COMPLETE.**
+Freeze company thesis, product boundaries, decision process, handoff and benchmark standard.
 
 ---
 
 ## M1 — UCP/AP2 normative composition audit
+**Status: COMPLETE**
 
-### Goal
-Identify only the cross-object guarantees that remain valuable after accounting for current UCP/AP2 guarantees.
-
-### Primary artifacts
+Primary artifacts:
 - `docs/research/UCP_AP2_GAP_MATRIX.md`
 - `docs/research/M1_1_PAYMENT_ORDER_AUDIT.md`
 - `docs/research/M1_COMPLETION_REPORT.md`
 
-### Status
-**COMPLETE.**
-
-M1 produced the conservative seven-rule design shortlist carried into M3.
+Result: conservative seven-rule design shortlist; no dependence on protocol-local gaps already being closed by standards.
 
 ---
 
 ## M2 — Canonical transaction model
+**Status: COMPLETE, HARDENED BY M2.1**
 
-### Goal
-Freeze the data model used by every future pack.
+Frozen primitives:
+- ProtocolObject
+- BindingEdge
+- InvariantDefinition
+- EvidenceItem
+- EvaluationResult
+- Decision
+- TransactionGraph
 
-### Deliverables completed
-- `docs/product/CANONICAL_MODEL.md`
-- `docs/product/BINDING_MODEL.md`
-- `docs/product/EVIDENCE_MODEL.md`
-- `docs/product/DECISION_MODEL.md`
-- `docs/product/M2_COMPLETION_REPORT.md`
-- `schemas/timeproofs-core.schema.json`
+Core is graph-based, protocol-agnostic, provenance-preserving and deterministic.
 
-### Frozen primitives
-- `ProtocolObject`
-- `BindingEdge`
-- `InvariantDefinition`
-- `EvidenceItem`
-- `EvaluationResult`
-- `Decision`
-- `TransactionGraph`
+---
 
-### Rules locked
-- source evidence is immutable/preserved;
-- canonical values never erase raw source provenance;
-- versions are explicit;
-- unsupported/ambiguous mappings produce `UNKNOWN`;
-- one economic transaction is represented as an object graph rather than a forced universal ID;
-- core structures contain no UCP/AP2-specific business fields;
-- lifecycle/evaluation time is representable;
-- externally sourced evidence is distinguishable from protocol-native evidence;
-- conformance failure is distinguishable from cross-object invariant failure.
+## M2.1 — Foundation hardening
+**Status: COMPLETE**
 
-### Exit proof
-M2 documents and represents PASS, BLOCK, UNKNOWN, lifecycle evolution and a future A2A/MCP ProtocolObject without schema redesign.
+Goal: correct structural weaknesses before public fixtures/engine/API make them expensive.
 
-### Status
-**COMPLETE.**
+Changes:
+- required evaluation root envelope;
+- required `core_schema_version` and `evaluation_id`;
+- explicit pack/adapter versions and evaluation time;
+- exact ArtifactSnapshot digest identity and digest scope;
+- structured UNKNOWN reasons under the existing UNKNOWN verdict;
+- stronger provenance/evidence reproducibility rules;
+- explicit AgentReady legacy boundary.
+
+Artifacts:
+- `docs/product/M2_1_FOUNDATION_HARDENING.md`
+- hardened `schemas/timeproofs-core.schema.json`
+- updated canonical/evidence/decision docs
+- `LEGACY_AGENTREADY.md`
+
+Exit: M3 semantics remain compatible and unchanged.
 
 ---
 
 ## M3 — UCP/AP2 Invariant Pack v0.1 specification
+**Status: COMPLETE**
 
-### Goal
-Freeze the first pack before implementation.
-
-### Deliverables
+Artifacts:
 - `packs/ucp-ap2/SPEC.md`
-- pack manifest schema
-- exact invariant IDs and semantics
-- compatibility matrix
+- `packs/ucp-ap2/manifest.json`
+- `packs/ucp-ap2/COMPATIBILITY.md`
+- `packs/ucp-ap2/M3_COMPLETION_REPORT.md`
 
-### M1 design shortlist carried into M3
-- `TP-CX-001 PAYMENT_TOTAL_PROJECTS_AUTHORIZED_CHECKOUT`
-- `TP-CX-002 PAYMENT_CURRENCY_PROJECTS_AUTHORIZED_CHECKOUT`
-- `TP-CX-003 PAYMENT_PROJECTION_REFERENCES_EXACT_AUTHORIZED_STATE`
-- `TP-EV-001 EXECUTED_PAYMENT_MATCHES_APPROVED_MANDATE`
-- `TP-LC-001 COMMITTED_ORDER_BINDS_ORIGINATING_CHECKOUT`
-- `TP-LC-002 INVALIDATED_OR_CANCELED_STATE_NOT_COMMITTED`
-- `TP-EV-002 COMPOSED_EVIDENCE_CHAIN_CLOSED`
+Initial artifact execution target:
+- TP-CX-003 exact authorized-state prerequisite;
+- TP-CX-002 currency projection, BLOCK-capable;
+- TP-CX-001 amount projection, BLOCK-capable.
 
-Only TP-CX-001 and TP-CX-002 are immediate artifact-only blocking candidates. The rest require structural, external-evidence or lifecycle semantics before production blocking.
-
-### Required per invariant
-- stable ID;
-- protocol versions;
-- exact inputs;
-- normative/product rationale;
-- canonicalization;
-- allowed transformations;
-- deterministic predicate;
-- PASS/BLOCK/UNKNOWN behavior;
-- enforcement point;
-- limitations.
-
-### Exit criteria
-- pack manifest and compatibility matrix are explicit;
-- v0.1 production invariant set is clearly separated from deferred/research rules;
-- every production invariant can be represented solely through M2 primitives;
-- no invariant is marked production/blocking unless it satisfies the Definition of Done from Master Context and Decision Log;
-- M4 can build fixtures without inventing semantics.
-
-### Status
-**ACTIVE.**
+Evidence/lifecycle rules are modeled but deferred until their evidence profiles are real.
 
 ---
 
 ## M4 — Fixture corpus and regression harness
+**Status: ACTIVE**
 
 ### Goal
-Build evidence before engine polish.
+Build the executable truth corpus before engine code.
 
-### Structure
-For every invariant:
-- PASS fixture;
-- BLOCK fixture;
-- UNKNOWN fixture;
-- unsupported-version fixture;
-- edge-case fixtures where legitimate transformations exist.
+### Minimum corpus
+- exact-state amount/currency PASS;
+- amount mismatch BLOCK;
+- currency mismatch BLOCK;
+- missing exact referenced checkout UNKNOWN;
+- unsupported protocol/profile UNKNOWN;
+- missing authoritative total UNKNOWN;
+- unsupported FX/transformation UNKNOWN;
+- evidence/lifecycle UNKNOWN examples for deferred rules.
+
+### Every fixture must contain
+- raw-like source artifacts;
+- artifact snapshot digest metadata;
+- protocol/profile/version metadata;
+- expected canonical values;
+- expected bindings;
+- expected per-invariant result;
+- expected UNKNOWN reason where applicable;
+- expected aggregate decision.
 
 ### Exit criteria
 - fixtures are source-controlled and human-inspectable;
-- expected decision/evidence is declared for every fixture;
-- regression suite can later be run against engine changes and protocol-pack updates.
+- expectations are machine-readable;
+- corpus exercises PASS/BLOCK/UNKNOWN and unsupported flows;
+- future engine can run the corpus without inventing new semantics.
 
 ---
 
 ## M5 — Deterministic Verify engine
+**Status: NOT STARTED**
 
-### Goal
-Implement the smallest protocol-agnostic core that evaluates an object graph against a pack.
+Implement only the smallest protocol-agnostic evaluator needed to satisfy M4 fixtures: ingestion, graph, invariant evaluator, evidence collection, decision aggregation, machine result.
 
-### Initial modules
-- object ingestion;
-- canonicalization interface;
-- binding graph;
-- invariant evaluator;
-- evidence collector;
-- decision aggregator;
-- machine-readable result.
-
-### Explicit exclusions
-No auth, billing, hosted database, dashboard or unrelated SaaS infrastructure.
-
-### Exit criteria
-- all M4 fixtures evaluate deterministically;
-- same input always yields same output;
-- `UNKNOWN` is first-class;
-- evidence explains every decision;
-- core does not import protocol-specific business logic directly.
+No auth, billing, database, dashboard or unrelated SaaS infrastructure.
 
 ---
 
 ## M6 — UCP/AP2 adapters + CLI/SDK
+**Status: NOT STARTED**
 
-### Goal
-Give developers a world-class local verification path.
-
-### Deliverables
-- UCP adapter;
-- AP2 adapter;
-- initial JS/TS SDK surface;
-- CLI command;
-- JSON output mode;
-- clear error/evidence UX.
-
-### Desired workflow
-`timeproofs verify <transaction-artifacts>`
-
-### Exit criteria
-- first useful verification in under 10 minutes from docs;
-- local execution requires no TimeProofs account;
-- copy-paste quickstart works on clean environment;
-- error output points to exact source evidence.
+Target developer workflow: `timeproofs verify <transaction-artifacts>`. First useful result should be achievable locally without account friction.
 
 ---
 
 ## M7 — CI integration
+**Status: NOT STARTED**
 
-### Goal
-Make consistency regression part of development/release pipelines.
-
-### Deliverables
-- GitHub Action or equivalent integration;
-- stable exit codes;
-- artifact output;
-- fixture/pack regression support.
-
-### Exit criteria
-- BLOCK fails CI when configured;
-- WARN/UNKNOWN behavior is configurable but explicit;
-- results remain reproducible locally.
+Stable exit codes, GitHub Action/equivalent, artifact output and reproducible local/CI behavior.
 
 ---
 
 ## M8 — Enforce runtime
+**Status: NOT STARTED**
 
-### Goal
-Move from validation to transaction-control infrastructure.
-
-### Deliverables
-- runtime decision API/library;
-- latency budget;
-- fail-open/fail-closed semantics;
-- version pinning;
-- pack rollback;
-- evidence persistence option;
-- production threat model.
-
-### Exit criteria
-- supported integration can ask TimeProofs before commit and receive deterministic allow/block/unknown outcome;
-- reliability behavior is documented for TimeProofs outage/ambiguity;
-- packs can be pinned and rolled back safely.
+Move from verification to pre-commit control with explicit latency, fail-open/fail-closed policy, version pinning, pack rollback and production threat model.
 
 ---
 
 ## M9 — Relaunch website + world-class docs
+**Status: NOT STARTED**
 
-### Goal
-Present the real product after the workflow is real.
-
-### Website principle
-Do not build a generic AI SaaS landing page. The centerpiece is an actual composed transaction and a cross-object violation.
-
-### Required benchmark work
-Before design, benchmark relevant category leaders for:
-- developer onboarding;
-- technical documentation;
-- evidence/debugging UX;
-- infrastructure pricing communication;
-- status/trust/security presentation.
-
-### Exit criteria
-- visitor understands the problem within one concrete example;
-- visitor can reach a working local verification path without signup friction;
-- claims reflect implemented capabilities only.
+Do not build a generic AI SaaS landing page. Center product UX on actual composed artifacts, invariant evidence and decisions. Benchmark category-leading global infrastructure products before design.
 
 ---
 
 ## M10 — Managed TimeProofs Cloud
+**Status: NOT STARTED**
 
-### Goal
-Commercialize operations that are genuinely more valuable managed than local.
-
-### Candidate paid surfaces
-- managed pack updates;
-- hosted verification/enforcement;
-- history/evidence retention;
-- signed evidence bundles;
-- private packs;
-- organization controls;
-- production connectors;
-- SLA;
-- private/on-prem deployment options where justified.
-
-### Do not build until
-there is a concrete managed-workflow need that cannot be served well by local/CI usage alone.
+Only build managed features where managed operation is materially more valuable than local/CI: hosted enforcement, pack updates, evidence retention, private packs, org controls, production connectors, SLA/on-prem where justified.
 
 ---
 
 ## Parallel company workstreams
 
-Engineering milestones do not replace company building. Alongside M1–M10, maintain explicit work on:
+Maintain explicit work on market/ICP, competitors/standards, distribution, open-source boundary, pricing/value metric, partnerships, security/reliability, legal/licensing, finance/gross margin, brand/product design benchmarks and metrics.
 
-- market/ICP research;
-- competitor and standards intelligence;
-- distribution channels;
-- open-source boundary;
-- pricing/value metric;
-- partnerships;
-- security/reliability;
-- legal/licensing;
-- finance/gross-margin model;
-- brand/product design benchmarking;
-- metrics and instrumentation.
-
-These workstreams must inform milestone decisions but must not cause random product pivots.
+These workstreams inform milestones but do not silently pivot the product.
 
 ## Change rule
 
-Research is allowed to refine **pack contents and implementation** continuously.
-
-Research does NOT silently redefine the company. Any change to the constitutional thesis requires an explicit founder decision and Decision Log entry.
+Research may refine pack contents and implementation. It does not silently redefine the company. Company-thesis changes require explicit founder decision and Decision Log entry.
