@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://timeproofs.io/schemas/timeproofs-core.schema.json",
+  "title": "TimeProofs Core Model",
+  "type": "object",
+  "properties": {
+    "graph": { "$ref": "#/$defs/TransactionGraph" },
+    "invariants": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/InvariantDefinition" }
+    },
+    "results": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/EvaluationResult" }
+    },
+    "decision": { "$ref": "#/$defs/Decision" }
+  },
+  "$defs": {
+    "SourceDescriptor": {
+      "type": "object",
+      "required": ["namespace", "object_type", "protocol_version"],
+      "properties": {
+        "namespace": { "type": "string", "minLength": 1 },
+        "object_type": { "type": "string", "minLength": 1 },
+        "protocol_version": { "type": "string", "minLength": 1 },
+        "provider": { "type": ["string", "null"] },
+        "provider_version": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "ProtocolObject": {
+      "type": "object",
+      "required": ["object_id", "source", "observed_at", "raw", "canonical", "provenance"],
+      "properties": {
+        "object_id": { "type": "string", "minLength": 1 },
+        "source": { "$ref": "#/$defs/SourceDescriptor" },
+        "external_id": { "type": ["string", "null"] },
+        "observed_at": { "type": "string", "format": "date-time" },
+        "raw": {},
+        "canonical": { "type": "object" },
+        "integrity": { "type": "object" },
+        "provenance": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "EvidenceItem": {
+      "type": "object",
+      "required": ["evidence_id", "kind", "observed_at"],
+      "properties": {
+        "evidence_id": { "type": "string", "minLength": 1 },
+        "kind": { "type": "string", "minLength": 1 },
+        "object_id": { "type": ["string", "null"] },
+        "source_path": { "type": ["string", "null"] },
+        "canonical_path": { "type": ["string", "null"] },
+        "raw_value": {},
+        "canonical_value": {},
+        "observed_at": { "type": "string", "format": "date-time" },
+        "integrity": { "type": "object" },
+        "derivation": { "type": ["string", "null"] },
+        "notes": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "BindingEdge": {
+      "type": "object",
+      "required": ["binding_id", "from_object_id", "to_object_id", "relation", "basis", "confidence", "evidence_ids"],
+      "properties": {
+        "binding_id": { "type": "string", "minLength": 1 },
+        "from_object_id": { "type": "string", "minLength": 1 },
+        "to_object_id": { "type": "string", "minLength": 1 },
+        "relation": { "type": "string", "minLength": 1 },
+        "basis": { "type": "string", "minLength": 1 },
+        "confidence": {
+          "enum": ["DETERMINISTIC", "DECLARED", "DERIVED", "AMBIGUOUS"]
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "valid_at": { "type": ["string", "null"], "format": "date-time" },
+        "pack_rule": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "InvariantDefinition": {
+      "type": "object",
+      "required": ["invariant_id", "name", "class", "pack", "inputs", "predicate", "evidence_requirements", "default_on_violation", "default_on_missing_evidence"],
+      "properties": {
+        "invariant_id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "class": {
+          "enum": ["CONFORMANCE", "CROSS_OBJECT", "EVIDENCE", "LIFECYCLE", "BUSINESS_COMPLETION", "RESEARCH"]
+        },
+        "pack": {
+          "type": "object",
+          "required": ["id", "version"],
+          "properties": {
+            "id": { "type": "string" },
+            "version": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "applies_to": { "type": "object" },
+        "inputs": { "type": "array" },
+        "predicate": { "type": "object" },
+        "evidence_requirements": { "type": "array" },
+        "default_on_violation": { "$ref": "#/$defs/Decision" },
+        "default_on_missing_evidence": { "$ref": "#/$defs/Decision" }
+      },
+      "additionalProperties": false
+    },
+    "EvaluationResult": {
+      "type": "object",
+      "required": ["invariant_id", "status", "reason_code", "message", "evidence_ids", "evaluated_at"],
+      "properties": {
+        "invariant_id": { "type": "string" },
+        "status": { "$ref": "#/$defs/Decision" },
+        "reason_code": { "type": "string" },
+        "message": { "type": "string" },
+        "evidence_ids": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "evaluated_at": { "type": "string", "format": "date-time" },
+        "details": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "Decision": {
+      "enum": ["PASS", "WARN", "BLOCK", "UNKNOWN"]
+    },
+    "TransactionGraph": {
+      "type": "object",
+      "required": ["graph_id", "evaluation_time", "objects", "bindings", "evidence", "context"],
+      "properties": {
+        "graph_id": { "type": "string", "minLength": 1 },
+        "evaluation_time": { "type": "string", "format": "date-time" },
+        "objects": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ProtocolObject" }
+        },
+        "bindings": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/BindingEdge" }
+        },
+        "evidence": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/EvidenceItem" }
+        },
+        "context": { "type": "object" }
+      },
+      "additionalProperties": false
+    }
+  }
+}
