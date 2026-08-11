@@ -13,11 +13,12 @@ Completed/advanced work:
 
 - product thesis and relaunch context documented;
 - startup operating system and handoff documented;
-- first UCP/AP2 normative gap matrix created;
+- UCP/AP2 normative gap matrix created;
 - M1.1 payment/order audit created;
+- M1 completion report created;
 - key protocol assumptions recorded in Decision Log.
 
-Current active milestone: **M1 — normative UCP/AP2 audit**.
+Current active milestone: **M2 — Canonical Transaction Model**.
 
 ---
 
@@ -41,7 +42,7 @@ Freeze the company thesis, product boundaries, decision process and handoff mode
 - product direction cannot silently drift through implementation decisions.
 
 ### Status
-**COMPLETE enough to proceed.** Further documentation is maintenance, not a blocker.
+**COMPLETE.** Further documentation is maintenance, not a blocker.
 
 ---
 
@@ -63,21 +64,22 @@ Identify only the cross-object guarantees that remain valuable after accounting 
    - business completion.
 6. Monitor relevant open issues/PRs so no core invariant depends on a gap already being standardized away.
 
-### Primary artifact
-`docs/research/UCP_AP2_GAP_MATRIX.md`
-
-### Supporting artifact
-`docs/research/M1_1_PAYMENT_ORDER_AUDIT.md`
+### Primary artifacts
+- `docs/research/UCP_AP2_GAP_MATRIX.md`
+- `docs/research/M1_1_PAYMENT_ORDER_AUDIT.md`
+- `docs/research/M1_COMPLETION_REPORT.md`
 
 ### Exit criteria
 - 30+ meaningful object relationships analyzed;
 - every V1 candidate classified as `CONFORMANCE`, `CROSS_OBJECT`, `EVIDENCE`, `LIFECYCLE`, or `RESEARCH`;
-- exact source objects/fields identified for each proposed V1 invariant;
+- exact source objects/fields identified for each proposed V1 invariant sufficiently for M2/M3 design;
 - no blocking invariant based only on historical issue text when current spec has superseded it;
 - shortlist reduced to a small set of defensible V1 invariants.
 
 ### Status
-**IN PROGRESS.**
+**COMPLETE ENOUGH TO PROCEED.**
+
+M1 intentionally does not freeze production semantics for every rule; M3 owns the final pack specification and fixtures. The M1 result is the defensible design shortlist documented in `M1_COMPLETION_REPORT.md`.
 
 ---
 
@@ -106,12 +108,30 @@ Freeze the data model used by every future pack.
 - canonical values never erase raw source provenance;
 - versions are explicit;
 - unsupported mappings produce `UNKNOWN`;
-- one economic transaction can be represented as an object graph rather than a forced universal ID.
+- one economic transaction can be represented as an object graph rather than a forced universal ID;
+- core structures contain no UCP/AP2-specific business fields;
+- lifecycle/evaluation time is representable;
+- externally sourced evidence is distinguishable from protocol-native evidence;
+- conformance failure is distinguishable from cross-object invariant failure.
+
+### Required proof examples
+M2 must represent at least:
+
+1. PASS — UCP checkout total/currency projects exactly into an AP2 PaymentMandate;
+2. BLOCK — exact checkout binding is valid but payment amount differs;
+3. UNKNOWN — PaymentReceipt exists but provider evidence required to prove executed amount is absent;
+4. LIFECYCLE — UCP Order linked to checkout with later legitimate adjustments;
+5. FUTURE-PROTOCOL — an A2A or MCP `ProtocolObject` can be added without changing core schemas.
 
 ### Exit criteria
 - a UCP/AP2 transaction graph can be represented without protocol-specific logic leaking into core structures;
 - model supports future A2A/MCP/business packs without schema redesign;
-- example graphs for PASS, BLOCK and UNKNOWN are documented.
+- example graphs for PASS, BLOCK and UNKNOWN are documented;
+- M1 shortlist can be expressed using only the canonical primitives;
+- data model distinguishes source artifact, normalized value, relationship, evidence and evaluation decision.
+
+### Status
+**ACTIVE.**
 
 ---
 
@@ -126,13 +146,16 @@ Freeze the first pack before implementation.
 - exact invariant IDs and semantics
 - compatibility matrix
 
-### Candidate families, subject to M1 evidence
-- authorized checkout total ↔ payment projection;
-- currency projection;
-- semantic payment projection;
-- current authorized state ↔ execution reference;
-- evidence-chain closure;
-- lifecycle-aware order/commit relationship.
+### M1 design shortlist carried into M3
+- `TP-CX-001 PAYMENT_TOTAL_PROJECTS_AUTHORIZED_CHECKOUT`
+- `TP-CX-002 PAYMENT_CURRENCY_PROJECTS_AUTHORIZED_CHECKOUT`
+- `TP-CX-003 PAYMENT_PROJECTION_REFERENCES_EXACT_AUTHORIZED_STATE`
+- `TP-EV-001 EXECUTED_PAYMENT_MATCHES_APPROVED_MANDATE`
+- `TP-LC-001 COMMITTED_ORDER_BINDS_ORIGINATING_CHECKOUT`
+- `TP-LC-002 INVALIDATED_OR_CANCELED_STATE_NOT_COMMITTED`
+- `TP-EV-002 COMPOSED_EVIDENCE_CHAIN_CLOSED`
+
+Only the first two are immediate artifact-only blocking candidates. The rest require structural, external-evidence or lifecycle semantics before production blocking.
 
 ### Required per invariant
 - stable ID;
