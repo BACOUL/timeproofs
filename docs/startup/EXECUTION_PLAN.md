@@ -14,12 +14,15 @@ Completed:
 - M2.1 foundation hardening;
 - M3 UCP/AP2 Invariant Pack v0.1 specification;
 - M4 fixture corpus/regression contract;
-- M5 deterministic Verify engine with green GitHub Actions regression;
-- M6 real UCP/AP2 adapters + local SDK/CLI with green end-to-end CI.
+- M5 deterministic Verify engine with green executable regression;
+- M6 real UCP/AP2 adapters + local SDK/CLI;
+- M7 customer-facing CI integration + safe result/package contract.
 
-Current active milestone: **M7 — customer-facing CI integration and package contract**.
+Current active work: **World-Class Gate pre-M8 closure**.
 
-Legacy AgentReady assets remain temporarily but are non-canonical for the relaunch.
+M8 remains **NOT STARTED** until remaining pre-M8 gate items are green or explicitly waived by founder decision.
+
+Legacy AgentReady assets remain temporarily but are non-canonical for the relaunch and are excluded from the dedicated TimeProofs package allowlist.
 
 ---
 
@@ -42,10 +45,12 @@ Added required evaluation envelope, schema/evaluation IDs, pack/adapter versions
 ## M3 — UCP/AP2 Invariant Pack v0.1 specification
 **Status: COMPLETE**
 
-Initial artifact target:
+Initial executable artifact profile:
 - TP-CX-003 exact authorized-state prerequisite;
 - TP-CX-002 currency projection, BLOCK-capable;
 - TP-CX-001 amount projection, BLOCK-capable.
+
+Compatibility is maintained in `packs/ucp-ap2/COMPATIBILITY.md`.
 
 ## M4 — Fixture corpus and regression harness
 **Status: COMPLETE**
@@ -60,7 +65,7 @@ Green executable regression proved against the frozen M4 contract. See `timeproo
 ## M6 — UCP/AP2 adapters + CLI/SDK
 **Status: COMPLETE**
 
-### Delivered
+Delivered:
 - real UCP Checkout adapter for protocol version `2026-04-08`;
 - real AP2 PaymentMandate adapter for VCT `mandate.payment.1`;
 - immutable canonical JSON SHA-256 snapshots;
@@ -70,65 +75,94 @@ Green executable regression proved against the frozen M4 contract. See `timeproo
 - CLI `timeproofs verify`;
 - human and JSON output;
 - explicit local exit codes;
-- end-to-end adapter/SDK/CLI tests;
-- full M4 + M6 GitHub Actions regression.
+- end-to-end adapter/SDK/CLI tests.
 
-Validation proof:
-- workflow `TimeProofs Core Regression`;
-- run id `31571347893`;
-- head `96ddefe88e0486b8d2be25a4a6dcae0b5bf485e4`;
-- Node 22;
-- conclusion `success`.
-
-Important boundary: M6 proves exact-state equality only when explicit checkout JWT hash evidence is supplied. It does not claim full SD-JWT/JWS/key verification. See `docs/product/M6_COMPLETION_REPORT.md`.
+Important boundary: M6 proves exact-state equality only when explicit checkout proof/JWT hash evidence is supplied. It does not claim full SD-JWT/JWS/key verification. See `docs/product/M6_COMPLETION_REPORT.md`.
 
 ## M7 — Customer-facing CI integration and package contract
+**Status: COMPLETE**
+
+### Delivered
+- root customer-facing GitHub Action;
+- stable PASS/BLOCK/UNKNOWN Action behavior;
+- public result schema/profile versioning;
+- CI-safe redacted projection;
+- bounded input size and output/input alias protection;
+- hardened credential handling;
+- cross-platform Node 22/24 regression matrix;
+- dedicated TimeProofs package allowlist;
+- clean-room pack/install/SDK/CLI smoke test;
+- explicit legacy AgentReady inventory;
+- updated security/supply-chain posture.
+
+### Validation evidence
+
+Customer Action:
+- run `31591960176` — PASS/BLOCK/UNKNOWN contract green.
+
+Cross-platform matrix:
+- run `31591704219` — Ubuntu/macOS/Windows × Node 22/24 green.
+
+Clean-room package:
+- run `31592422020` — pack/install/SDK/CLI consumer test green.
+
+See `docs/product/M7_COMPLETION_REPORT.md`.
+
+## World-Class Gate — pre-M8 closure
 **Status: ACTIVE**
 
-### Goal
-Make TimeProofs safe and predictable as a developer/CI dependency without adding hosted-service complexity.
+This is not a new product milestone. It is the quality gate between M7 and M8.
 
-### Required deliverables
-- freeze public CLI syntax and compatibility policy;
-- stable public result JSON contract and schema/versioning;
-- customer-facing GitHub Action separate from internal regression workflow;
-- Action inputs for checkout/payment/checkout-JWT evidence without credential leakage;
-- Action outputs for decision/result path and safe summary;
-- documented stable exit-code policy;
-- redaction/secrets policy;
-- generated CI artifact that excludes raw payment credentials and JWT values by default;
-- package/release structure that makes TimeProofs primary and AgentReady legacy;
-- install/quickstart documentation;
-- example workflow;
-- integration test proving PASS/BLOCK/UNKNOWN behavior;
-- green Actions checks for customer-facing integration.
+Already green:
+- product/repository boundary;
+- deterministic and adversarial core testing;
+- explicit compatibility matrix;
+- upstream UCP/AP2 schema watch;
+- CI result redaction;
+- threat model and supply-chain policy;
+- CodeQL with successful run `31592599707`;
+- multi-OS/multi-runtime regression;
+- customer PASS/BLOCK/UNKNOWN integration;
+- clean-room package installation;
+- performance baseline with successful run `31592637945`.
 
-### Safety requirements
-- do not print or upload checkout JWT/payment credential tokens by default;
-- no raw secrets in GitHub step summaries;
-- machine artifacts contain digests/references, not credential payloads, unless an explicit future secure evidence mode exists;
-- BLOCK/UNKNOWN semantics must not change between local CLI and Action;
-- unsupported profiles are explicit, never silently coerced.
+Remaining pre-M8 blockers unless explicitly waived:
+1. expand property/fuzz coverage beyond hand-written adversarial cases;
+2. review human malformed/unsupported/UNKNOWN error-message UX;
+3. freeze one canonical public install path and one canonical CI path after package naming is final;
+4. document measured maximum input/performance profile and decide whether a performance regression threshold is justified;
+5. finish safe archive/removal of legacy public AgentReady surfaces before public relaunch.
 
-### Exit criteria
-- developer can add TimeProofs to a repo with a minimal workflow;
-- Action and local CLI produce equivalent decisions;
-- PASS/BLOCK/UNKNOWN integration cases tested;
-- safe JSON artifact contract versioned;
-- secret/redaction behavior tested;
-- package/public naming ambiguity with AgentReady resolved for the TimeProofs path;
-- all M4–M6 regressions remain green;
-- M7 customer-facing Action integration is green.
+Release-time controls are tracked separately because they cannot honestly be proven until a real release exists:
+- npm Trusted Publishing/OIDC;
+- npm provenance;
+- exact-release SBOM;
+- GitHub artifact attestation/provenance;
+- immutable release/tag verification;
+- registry-install smoke test of the published artifact.
+
+Canonical gate report: `docs/startup/WORLD_CLASS_GATE_COMPLETION_REPORT.md`.
 
 ## M8 — Enforce runtime
 **Status: NOT STARTED**
 
-Pre-commit control with latency budget, fail-open/fail-closed policy, version pinning, rollback and threat model.
+M8 may begin only after the pre-M8 gate is closed or founder-waived with rationale.
+
+Planned scope:
+- inline/pre-commit enforcement architecture;
+- latency budget;
+- fail-open/fail-closed policy;
+- version pinning;
+- rollback/emergency-disable path;
+- runtime availability/SLO model;
+- enforcement audit/event model.
+
+M8 must not silently convert UNKNOWN into PASS.
 
 ## M9 — Relaunch website + world-class docs
 **Status: NOT STARTED**
 
-Center UX on actual composed artifacts, invariant evidence and decisions. Benchmark global infrastructure leaders before design.
+Center UX on actual composed artifacts, invariant evidence and decisions. Remove/redirect legacy AgentReady public surfaces before relaunch. Benchmark global infrastructure leaders before design.
 
 ## M10 — Managed TimeProofs Cloud
 **Status: NOT STARTED**
@@ -139,7 +173,20 @@ Build only managed surfaces with genuine operational value: hosted enforcement, 
 
 ## Parallel company workstreams
 
-Maintain market/ICP, competitors/standards, distribution, open-source boundary, pricing/value metric, partnerships, security/reliability, legal/licensing, finance/gross margin, product-design benchmarks and metrics. They inform milestones but do not silently pivot the product.
+Maintain current evidence for:
+- market/ICP and economic buyer;
+- protocol adoption velocity;
+- competitors/standards absorption risk;
+- distribution through protocol/dev ecosystems;
+- open-source boundary;
+- pricing/value metric;
+- partnerships;
+- security/reliability;
+- legal/licensing;
+- finance/gross margin;
+- product-design benchmarks and metrics.
+
+These workstreams inform milestones but do not silently pivot the product.
 
 ## Change rule
 
