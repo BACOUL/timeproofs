@@ -1,246 +1,105 @@
-# TimeProofs AgentReady
+# TimeProofs
 
-**TimeProofs AgentReady** is the shift-left CI gate for agent-facing contracts.
+**Cross-Protocol Consistency Infrastructure for agentic transactions.**
 
-AgentReady analyzes OpenAPI specifications and MCP tools before deployment to identify ambiguous, unbounded or insufficiently controlled agent actions.
+TimeProofs verifies that individually valid protocol objects still compose into one coherent transaction before consequential state is committed.
 
-Core promise:
+Initial executable wedge:
 
-```txt
-Fail the build before unsafe agent-facing APIs or MCP tools are deployed.
+```text
+UCP Checkout
+    ↓
+AP2 PaymentMandate
+    ↓
+TimeProofs
+    ↓
+PASS / WARN / BLOCK / UNKNOWN
 ```
 
-AgentReady checks whether APIs and MCP tools are clear, bounded, and documented enough before AI agents can use them. It is local-first and designed for CI workflows.
+The product is deterministic. No LLM is used as the authority for blocking decisions.
 
-## Source Of Truth
+## Current status
 
-The active product authority is:
+The relaunch is developed on `relaunch/invariant-engine`.
 
-```txt
-docs/agentready/AGENTREADY_MASTER_PLAN.md
-docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
+Completed foundations include:
+- frozen product constitution;
+- UCP/AP2 normative audit;
+- protocol-agnostic canonical model;
+- hardened provenance/evidence model;
+- versioned UCP↔AP2 invariant pack;
+- regression fixtures;
+- deterministic Verify engine;
+- real UCP/AP2 adapters;
+- local JS SDK and CLI;
+- customer-facing GitHub Action under active release hardening.
+
+Canonical current state: [`docs/startup/CURRENT_STATE.md`](docs/startup/CURRENT_STATE.md).
+Canonical execution plan: [`docs/startup/EXECUTION_PLAN.md`](docs/startup/EXECUTION_PLAN.md).
+Product constitution: [`TIMEPROOFS_PRODUCT_CONSTITUTION.md`](TIMEPROOFS_PRODUCT_CONSTITUTION.md).
+
+## Local verification
+
+```bash
+node bin/timeproofs.js verify \
+  --checkout checkout.json \
+  --payment-mandate payment.json \
+  --checkout-jwt-file checkout-jwt.txt
 ```
 
-If another document conflicts with the master plan, the master plan prevails.
+Machine output:
 
-`AGENTREADY_EXECUTION_LEDGER.json` is the canonical detailed execution register. Generated Markdown views must not be edited manually. Every approved known task must exist in the canonical ledger.
-
-The ledger tracks detailed `CODEX_WORK_ITEM` entries separately from Codex
-execution batches. Future prompts are generated from `execution_batches`, not
-directly from individual work items.
-
-## Product Direction
-
-This repository is focused on:
-
-```txt
-OpenAPI / MCP contract
--> AgentReady CLI or GitHub Action
--> score + status + risk counts
--> AR001-AR010 rule codes
--> agentready.json
--> CI policy PASS / FAIL
+```bash
+node bin/timeproofs.js verify ... --json
 ```
 
-The previous TimeProofs proof-of-existence website and timestamp/verify pages are historical only and no longer drive the active product surface.
+Initial exit-code contract:
+- `0` PASS/WARN
+- `2` BLOCK
+- `3` UNKNOWN
+- `4` unsupported protocol/profile
+- `1` invalid input/runtime error
 
-## Current Foundation
+## Supported initial profile
 
-Done:
+- UCP Checkout protocol version `2026-04-08`
+- AP2 PaymentMandate VCT `mandate.payment.1`
 
-- static OpenAPI scanner;
-- static MCP tools scanner;
-- AgentReady CLI alpha;
-- commercial bad/fixed CI Gate validation;
-- stable rule codes AR001-AR010;
-- GitHub Action wrapper;
-- root GitHub Marketplace Action preparation in review;
-- versioned GitHub Action preparation;
-- `agentready.json` spec v0.1;
-- `/agentready-ci` public page;
-- homepage positioning around AgentReady CI Gate;
-- Markdown report export;
-- local `agentready.json` export;
-- public docs and examples;
-- legal, privacy, and terms draft pages;
-- legacy proof runtime artifacts removed.
-- Community CLI alpha published with documented `latest` exception.
+TimeProofs does **not** infer unsupported versions or missing evidence. Missing proof becomes `UNKNOWN`.
 
-Community CLI publication has occurred for `@timeproofs/agentready@0.1.0-alpha.0` under `alpha`. The GitHub Marketplace Action remains in the owner-checkpoint batch and is not yet published as a Marketplace listing.
+## Architecture
 
-Reserved Action release reference for the owner checkpoint:
+The frozen model is:
 
-```yaml
-uses: BACOUL/timeproofs@agentready-action-v0.1.0-alpha.0
+```text
+ProtocolObject
+  → Binding
+  → Invariant
+  → Evidence
+  → EvaluationResult
+  → Decision
 ```
 
-Full-SHA reference to be populated after owner publication:
+The long-term moat hypothesis is the corpus of versioned **Invariant Packs** and evidence/adaptation knowledge across protocols and systems, not generic field comparison code.
 
-```yaml
-uses: BACOUL/timeproofs@d6634d0fbbe1fced510fc49d8871d52a3dc7f348
+## Tests
+
+```bash
+npm run test:timeproofs
 ```
 
-## Community Capabilities
+GitHub Actions also runs the regression and customer-action integration gates.
 
-Community is the free standard-adoption layer:
+## Security boundary
 
-- CLI;
-- GitHub Action;
-- OpenAPI and MCP scans;
-- score and status;
-- `--min-score` and `--fail-on` policies;
-- AR001-AR010;
-- Markdown report;
-- `agentready.json`;
-- bad/fixed examples;
-- local analysis.
+The current product verifies specific cross-object consistency properties. It does not yet claim complete SD-JWT/JWS/key-binding verification, PSP execution proof, or arbitrary protocol compatibility. Those boundaries are intentional and documented.
 
-## Self-Service Commercial Direction
+Security model: [`docs/security/THREAT_MODEL.md`](docs/security/THREAT_MODEL.md) once present in the active world-class gate.
 
-AgentReady is planned as a zero-touch B2B software product.
+## Legacy AgentReady
 
-Launch model:
+This repository previously hosted the AgentReady scanner/CI product. AgentReady assets remain for historical/migration purposes only and are not the active TimeProofs product direction. See [`LEGACY_AGENTREADY.md`](LEGACY_AGENTREADY.md).
 
-- AgentReady Community: 0 EUR.
-- AgentReady Pro: 24 EUR excl. VAT/month or 240 EUR excl. VAT/year.
+## License
 
-Team and Agency are `POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT`. They must not be displayed as available or purchasable at initial launch.
-
-These prices are an initial product decision and may evolve before real Stripe activation. Pro must not be displayed as available until its features, entitlements, billing flow, support model, legal pages, and launch QA are ready.
-
-There is no manual review offer, mandatory contact-sales step, quote workflow, manual payment path, or Enterprise plan at launch.
-
-## Public Pages
-
-```txt
-/                              Homepage
-/agentready-ci.html            AgentReady CI Gate page
-/agentready.html               OpenAPI scanner
-/agentready-mcp.html           MCP tools scanner
-/agentready-simulation.html    Static scenario simulation
-/agentready-docs.html          Public documentation
-/agentready-examples.html      Public examples
-/agentready-test.html          Static browser test harness, noindex
-/legal.html                    Legal notice draft
-/privacy.html                  Privacy draft
-/terms.html                    Terms draft
-```
-
-## Local-First Trust Model
-
-AgentReady should not require:
-
-- backend for Community scans;
-- account for Community scans;
-- payment for Community scans;
-- live API execution;
-- live MCP execution;
-- LLM calls;
-- runtime firewall.
-
-Future paid licensing must remain privacy-first: OpenAPI files, MCP definitions, full reports, and production secrets should not be sent to the license service by default.
-
-## Important Files To Read First
-
-```txt
-AGENTREADY_PROJECT_CONTEXT.md
-ROADMAP.md
-docs/agentready/README.md
-docs/agentready/AGENTREADY_MASTER_PLAN.md
-docs/agentready/EXECUTION_SEQUENCE.md
-docs/agentready/DECISION_LOG.md
-docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
-docs/agentready/AGENTREADY_STATUS.md
-docs/agentready/NEXT_ACTION.md
-docs/agentready/NEXT_CODEX_PROMPT.md
-docs/agentready/PROJECT_CHANGE_CONTROL.md
-docs/agentready/TODO_NEXT.md
-docs/agentready/REMAINING_WORK.md
-docs/agentready/LONG_TERM_PRODUCT_ROADMAP.md
-docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
-docs/agentready/SELF_SERVICE_BUSINESS_MODEL.md
-docs/agentready/PRICING_AND_ENTITLEMENTS_V0_1.md
-docs/agentready/AUTOMATED_PURCHASE_AND_BILLING_FLOW.md
-docs/agentready/LICENSE_AND_ENTITLEMENT_ARCHITECTURE.md
-docs/agentready/LEGAL_PRIVACY_AND_COOKIE_REQUIREMENTS.md
-docs/agentready/SEO_GEO_AI_FIRST_REQUIREMENTS.md
-docs/agentready/GLOBAL_LAUNCH_READINESS_MATRIX.md
-docs/agentready/AGENTREADY_JSON_SPEC.md
-docs/agentready/GITHUB_ACTION_USAGE.md
-docs/agentready/GITHUB_ACTION_VERSIONING.md
-docs/agentready/AGENTREADY_RULE_CODES.md
-docs/agentready/COMMERCIAL_FIXTURE_CI_GATE_BEHAVIOR.md
-docs/agentready/CLI_PUBLIC_DISTRIBUTION.md
-docs/agentready/COMMUNITY_RELEASE_WORKFLOW.md
-docs/agentready/COMMUNITY_RELEASE_CHECKLIST.md
-```
-
-## Current Governance Step
-
-```txt
-docs(project): add canonical AgentReady execution system
-```
-
-Planned branch:
-
-```txt
-docs-agentready-canonical-execution-system
-```
-
-This inserted governance PR creates the canonical ledger, generated status, next action, next Codex prompt, prompt counts, reconciliation scripts and change control.
-
-The prompt count is batch-based: one execution-ready batch equals one generated
-Codex prompt. Detailed work items remain individually auditable inside each
-batch.
-
-After this PR is merged and reconciled, the next action is selected by:
-
-```txt
-docs/agentready/NEXT_ACTION.md
-```
-
-If every blocker is `RESOLVED`, the next release PR may be:
-
-```txt
-feat(distribution): publish AgentReady GitHub Marketplace action
-```
-
-If any blocker remains open, the next authorized action is the owner or legal action named in `docs/agentready/COMMUNITY_PUBLICATION_BLOCKERS.md`.
-
-The locked execution order is documented in:
-
-```txt
-docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
-```
-
-## Prepared Local Package Test
-
-The CLI package is published as an alpha. Local tarball validation remains available for release discipline.
-
-```txt
-npm pack
-npm install ./timeproofs-agentready-0.1.0-alpha.0.tgz
-npx --no-install agentready --help
-npx --no-install agentready --version
-```
-
-See:
-
-```txt
-docs/agentready/CLI_PUBLIC_DISTRIBUTION.md
-```
-
-## Validation Commands
-
-```txt
-node agentready-core/tests/run-agentready-core-tests.mjs
-node cli/tests/run-agentready-cli-tests.mjs
-node cli/tests/run-agentready-action-smoke-test.mjs
-node cli/tests/run-agentready-package-smoke-test.mjs
-node cli/tests/run-agentready-community-release-workflow-test.mjs
-```
-
-## Mandatory Limitation
-
-TimeProofs AgentReady does not guarantee that an AI agent will never fail.
-It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.
+MIT. See [`LICENSE`](LICENSE).
