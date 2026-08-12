@@ -48,7 +48,7 @@ Developer-led/self-serve distribution is preferred: GitHub, package registries, 
 
 ## D-012 — Current unresolved decisions
 **Status:** OPEN
-Not frozen yet: final package names, final API shape, final pricing, open-source boundary, hosted vs local verification boundary, evidence-bundle signing, data retention defaults, exact first buyer segment, final website IA, dashboard need, external pack authoring.
+Not frozen yet: final package name, final pricing, open-source boundary, hosted vs local verification boundary, evidence-bundle signing, exact first buyer segment, final website IA, dashboard need, external pack authoring and final runtime enforcement topology.
 
 ## D-013 — Do not duplicate UCP/AP2 conformance as the company wedge
 **Status:** DECISION
@@ -79,8 +79,8 @@ UCP Orders can legitimately evolve. Order invariants are lifecycle-aware; `curre
 `TIMEPROOFS_PRODUCT_CONSTITUTION.md` is canonical for company thesis. Protocol research may refine adapters, mappings, evidence and pack contents but cannot silently redefine the company. Frozen product model: `ProtocolObject → Binding → Invariant → Evidence → Decision`.
 
 ## D-020 — Execute milestones in canonical order
-**Status:** DECISION, UPDATED THROUGH D-028
-`docs/startup/EXECUTION_PLAN.md` is the canonical implementation sequence. M0–M6 and M2.1 are complete. Current active milestone is M7.
+**Status:** DECISION, UPDATED THROUGH D-034
+`docs/startup/EXECUTION_PLAN.md` is the canonical implementation sequence. M0–M7 and M2.1 are complete. Current active work is World-Class Gate pre-M8 closure. M8 is not started.
 
 ## D-021 — M1 complete; conservative seven-rule shortlist
 **Status:** DECISION
@@ -104,69 +104,109 @@ The first executable artifact profile is:
 2. `TP-CX-002` as BLOCK-capable currency projection check;
 3. `TP-CX-001` as BLOCK-capable authoritative grand-total projection check.
 
-TP-EV-001, TP-LC-001, TP-LC-002 and TP-EV-002 remain modeled but are not oversold as artifact-only blocking rules. Unsupported FX, tips, incremental authorization, partial capture, split settlement and marketplace payout return UNKNOWN until explicit profiles exist. Canonical artifacts: `packs/ucp-ap2/SPEC.md`, `manifest.json`, `COMPATIBILITY.md`, `M3_COMPLETION_REPORT.md`.
+TP-EV-001, TP-LC-001, TP-LC-002 and TP-EV-002 remain modeled but are not oversold as artifact-only blocking rules. Unsupported FX, tips, incremental authorization, partial capture, split settlement and marketplace payout return UNKNOWN until explicit profiles exist.
 
 ## D-024 — M2.1 foundation hardening is part of the frozen core
 **Status:** DECISION
-Before fixtures/engine implementation, structural weaknesses in M2 were corrected without changing company thesis or M3 invariant semantics.
-
-Required core properties now include:
+Required core properties include:
 - non-empty required evaluation envelope;
 - `core_schema_version` and `evaluation_id`;
 - explicit pack and adapter versions;
 - exact artifact snapshot identity/digest with explicit digest scope;
 - structured `UNKNOWN` reasons while preserving PASS/WARN/BLOCK/UNKNOWN as the only primary verdicts.
 
-Initial UNKNOWN reasons: `MISSING_OBJECT`, `MISSING_EVIDENCE`, `UNSUPPORTED_VERSION`, `UNSUPPORTED_TRANSFORMATION`, `AMBIGUOUS_BINDING`, `AMBIGUOUS_MAPPING`, `STALE_EVIDENCE`, `SELECTIVE_DISCLOSURE`, `INSUFFICIENT_LIFECYCLE_CONTEXT`, `INTEGRITY_UNVERIFIED`, `OTHER`.
-
-M3 compatibility was reviewed and no invariant semantics changed. See `docs/product/M2_1_FOUNDATION_HARDENING.md`.
-
 ## D-025 — AgentReady is explicitly legacy on the relaunch branch
 **Status:** DECISION
-AgentReady-era code, README/package/site metadata remain temporarily to avoid destructive migration before the new core is executable. They are non-canonical for the relaunch. Current product truth comes from the TimeProofs constitution/current-state/execution/decision documents. See `LEGACY_AGENTREADY.md`.
+AgentReady-era code/site/docs remain temporarily for safe migration, but they are non-canonical for the relaunch. Current product truth comes from the TimeProofs constitution/current-state/execution/decision documents. Legacy surfaces are inventoried in `docs/legacy/AGENTREADY_INVENTORY.md`.
 
 ## D-026 — M4 fixture corpus is the executable regression contract
 **Status:** DECISION
 M4 is complete. The first source-of-truth corpus lives in `fixtures/ucp-ap2/v0.1/` and freezes expected PASS/BLOCK/UNKNOWN behavior before engine implementation.
 
-Required cases include exact projection PASS, amount mismatch BLOCK, currency mismatch BLOCK, missing checkout UNKNOWN/MISSING_OBJECT, unsupported version UNKNOWN/UNSUPPORTED_VERSION, missing authoritative total UNKNOWN/MISSING_EVIDENCE and unsupported FX UNKNOWN/UNSUPPORTED_TRANSFORMATION.
-
-M5 implementation must satisfy this corpus without silently weakening M3 semantics. Any expected-result change requires an explicit pack-spec/decision update.
-
 ## D-027 — M5 deterministic core is complete only with green executable regression
 **Status:** DECISION
 M5 is complete after executable validation, not code presence alone.
-
-The release-validation process strengthened the regression runner to check aggregate status, per-invariant status, declared reason codes, declared UNKNOWN reasons, and UNKNOWN/null consistency. A mismatch in the initial amount-check UNKNOWN classification was fixed in implementation rather than weakening the frozen fixture contract.
 
 Verified successful run:
 - workflow: `TimeProofs Core Regression`
 - run id: `31543423839`
 - head commit: `28d1eaeae88628749c323e2b1d3c29be78e0e05f`
-- Node 22
-- conclusion: `success`
+- conclusion: `success`.
 
 ## D-028 — M6 production ingestion supports only explicit real profiles and explicit binding evidence
 **Status:** DECISION
-M6 is complete.
-
 Initial production support is deliberately pinned to:
 - UCP Checkout protocol version `2026-04-08`, capability `dev.ucp.shopping.checkout`;
 - AP2 PaymentMandate VCT `mandate.payment.1`.
 
-Research fixture labels such as `ucp-current-m1` and `ap2-v0.2-m1` remain test-only.
-
-Production TP-CX-003 no longer treats a present `transaction_id` as proof. For the supported SHA-256 profile, the SDK requires the exact checkout JWT, computes its base64url SHA-256 hash and compares it with AP2 `transaction_id`. Missing binding evidence yields UNKNOWN/INTEGRITY_UNVERIFIED; mismatch yields BLOCK.
+Production TP-CX-003 does not treat a present `transaction_id` as proof. For the supported SHA-256 profile, the SDK requires the exact checkout proof/JWT, computes its base64url SHA-256 hash and compares it with AP2 `transaction_id`. Missing binding evidence yields UNKNOWN/INTEGRITY_UNVERIFIED; mismatch yields BLOCK.
 
 M6 does not claim SD-JWT signature/key-binding validation, merchant JWS verification, arbitrary AP2 hash algorithms, remote UCP schema composition or external payment execution proof.
 
-Developer surfaces now exist through local SDK `verifyTransaction()` and CLI `timeproofs verify`, with JSON output and stable initial exit codes. Full M4+M6 GitHub Actions regression passed:
-- run id `31571347893`
-- head `96ddefe88e0486b8d2be25a4a6dcae0b5bf485e4`
-- Node 22
+## D-029 — M7 customer-facing contract is complete only with PASS/BLOCK/UNKNOWN integration proof
+**Status:** DECISION
+M7 is COMPLETE.
+
+The public/local semantics are frozen through a customer-facing GitHub Action, versioned result contract, redacted CI-safe result and stable exit behavior.
+
+Verified successful customer Action run:
+- run id `31591960176`;
+- head `93c24e72611b2bfe2f95ffaa89c406e88c017b40`;
 - conclusion `success`.
 
-M7 is now active and must freeze the customer-facing CI/package contract while preventing raw JWT/payment credential leakage.
+The run proves PASS, BLOCK and UNKNOWN customer paths rather than only a happy path. See `docs/product/M7_COMPLETION_REPORT.md`.
+
+## D-030 — Customer CI artifacts are safe projections, not full local evidence graphs
+**Status:** DECISION
+The local SDK/core may retain rich provenance and raw artifacts for local processing, but the normal customer GitHub Action result MUST NOT export raw checkout proof/JWT, payment instrument, merchant authorization or raw protocol objects.
+
+CI-safe output uses an explicit projection/allowlist rather than generic recursive redaction.
+
+## D-031 — Public TimeProofs package is built by allowlist and tested in a clean consumer environment
+**Status:** DECISION
+The mixed historical repository is not itself the publishable package boundary.
+
+The TimeProofs package is assembled from an explicit allowlist under `packaging/timeproofs/`, preventing accidental AgentReady inclusion. A clean-room pack/install/SDK/CLI test is required.
+
+Verified successful package run:
+- run id `31592422020`;
+- head `2ed60dd931f120ef204a058cdd84c7b28373354f`;
+- conclusion `success`.
+
+## D-032 — Supported upstream schemas are locked and watched; upstream change is not automatic compatibility
+**Status:** DECISION
+Current audited schema snapshots are recorded in `protocols/upstream-lock.json` and monitored by the upstream watch workflow.
+
+Current audited blobs:
+- UCP Checkout: `e9093b0c9c6294638e3e51ce3c38ef95ea428102`;
+- AP2 PaymentMandate: `fa93b0dfd4cb50a00ecff22daa9033aa9fa6fab9`.
+
+A changed upstream schema triggers compatibility review and regression work. It does not silently expand supported profiles.
+
+## D-033 — World-Class Gate separates pre-M8 readiness from release-time provenance
+**Status:** DECISION
+Release controls that can only be proven against a real published artifact are not falsely marked complete during pre-release development.
+
+Release-time controls include:
+- npm Trusted Publishing/OIDC;
+- npm provenance;
+- exact-release SBOM;
+- GitHub artifact attestation/provenance;
+- immutable release/tag verification;
+- registry-install smoke test of the published artifact.
+
+They become mandatory when cutting the first new TimeProofs release.
+
+## D-034 — M8 remains blocked until remaining pre-M8 quality items are closed or founder-waived
+**Status:** DECISION
+Before M8 runtime enforcement starts, close or explicitly waive with rationale:
+- broader property/fuzz coverage;
+- coherent human error-message review;
+- one canonical public install path and one canonical CI path after package naming is final;
+- measured input/performance limit documentation and performance-threshold decision;
+- safe archive/removal of legacy public AgentReady surfaces.
+
+CodeQL, cross-platform/runtime CI, customer Action integration, clean-room package testing, upstream schema watch and a representative performance baseline are already green. Canonical report: `docs/startup/WORLD_CLASS_GATE_COMPLETION_REPORT.md`.
 
 ---
 Add new decisions sequentially. Never rewrite history to make it look cleaner; supersede/refine decisions explicitly.
