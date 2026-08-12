@@ -11,7 +11,7 @@ Branch: `relaunch/invariant-engine`
 
 **Initial wedge:** UCP ↔ AP2 composition consistency focused on semantic/economic cross-object consistency and evidence closure rather than generic protocol conformance.
 
-**Current milestone:** M6 — UCP/AP2 adapters + CLI/SDK.
+**Current milestone:** M7 — customer-facing CI integration and package contract.
 
 ## Completed milestones
 
@@ -22,74 +22,105 @@ Branch: `relaunch/invariant-engine`
 - M3 — UCP/AP2 Invariant Pack v0.1 specification: COMPLETE
 - M4 — fixture corpus and regression contract: COMPLETE
 - M5 — deterministic Verify Engine: COMPLETE
-- M6 — UCP/AP2 adapters + CLI/SDK: ACTIVE
+- M6 — real UCP/AP2 adapters + local SDK/CLI: COMPLETE
+- M7 — CI integration/package contract: ACTIVE
 
-## M5 completion proof
+## Current local product
 
-Implemented:
-- `timeproofs-core/index.js`
-- `timeproofs-core/tests/run-fixture-regression.mjs`
-- `timeproofs-core/README.md`
-- `npm run test:timeproofs-core`
-- `.github/workflows/timeproofs-core-regression.yml`
+Implemented production path:
+- `adapters/ucp/checkout.js`
+- `adapters/ap2/payment-mandate.js`
+- `sdk/index.js`
+- `cli/timeproofs.js`
+- `bin/timeproofs.js`
+- `timeproofs-core/canonical.js`
+- `verifyTransactionGraph()` in core
 
-The regression runner checks aggregate verdicts, per-invariant statuses, declared reason codes, declared UNKNOWN reasons, and UNKNOWN/null consistency.
+Supported initial profiles:
+- UCP `2026-04-08` Checkout (`dev.ucp.shopping.checkout`)
+- AP2 PaymentMandate VCT `mandate.payment.1`
 
-GitHub Actions validated the frozen M4 corpus successfully on Node 22:
-- workflow: `TimeProofs Core Regression`
-- successful run id: `31543423839`
-- successful head: `28d1eaeae88628749c323e2b1d3c29be78e0e05f`
+Developer flow:
 
-See `timeproofs-core/M5_COMPLETION_REPORT.md`.
+`timeproofs verify --checkout checkout.json --payment-mandate payment.json --checkout-jwt '<exact-jwt>'`
 
-## Frozen core
+Machine JSON is available with `--json`.
 
-`ProtocolObject → BindingEdge → InvariantDefinition → EvidenceItem → EvaluationResult → Decision`
+Exit codes currently frozen for M7 review:
+- 0 PASS/WARN
+- 2 BLOCK
+- 3 UNKNOWN
+- 4 unsupported protocol/profile
+- 1 invalid input/runtime error
 
-Primary verdicts remain PASS/WARN/BLOCK/UNKNOWN. UNKNOWN is explicit and structured. The first engine remains deterministic and does not use an LLM as decision authority.
+## Binding behavior
 
-## Frozen first executable pack
+Production TP-CX-003 does not PASS from transaction_id presence alone.
 
-1. `TP-CX-003 PAYMENT_PROJECTION_REFERENCES_EXACT_AUTHORIZED_STATE`
-2. `TP-CX-002 PAYMENT_CURRENCY_PROJECTS_AUTHORIZED_CHECKOUT`
-3. `TP-CX-001 PAYMENT_TOTAL_PROJECTS_AUTHORIZED_CHECKOUT`
+For the supported SHA-256 binding profile, TimeProofs hashes the exact supplied checkout JWT and compares it with AP2 `transaction_id`.
 
-M5 satisfies the frozen M4 artifact corpus for these rules.
+- verified hash → PASS prerequisite
+- mismatch → BLOCK
+- no checkout JWT → UNKNOWN / INTEGRITY_UNVERIFIED
+- unsupported binding algorithm → UNKNOWN
 
-## M6 objective
+Full SD-JWT/key/signature verification is not yet claimed.
 
-Replace research-fixture assumptions with real developer-facing protocol ingestion while preserving the core boundary.
+## Provenance
 
-M6 must deliver:
-1. real UCP Checkout adapter;
-2. real AP2 PaymentMandate adapter;
-3. exact profile/version recognition strategy;
-4. raw artifact snapshot/digest generation;
-5. raw→canonical provenance;
-6. protocol-native exact-state/binding verification interface;
-7. public local Verify input model;
-8. CLI `timeproofs verify ...`;
-9. initial JS/TS SDK surface;
-10. JSON output suitable for future CI/runtime;
-11. developer errors that distinguish invalid input, unsupported profile and UNKNOWN evaluation;
-12. clean tests without coupling protocol parsing into `timeproofs-core`.
+Real adapters create ProtocolObjects with:
+- real protocol/profile identifier;
+- canonical JSON SHA-256 artifact snapshot;
+- raw artifact;
+- canonical extraction;
+- adapter ID/version;
+- mapping provenance;
+- optional source ref.
 
-Research profile strings such as `ucp-current-m1` and `ap2-v0.2-m1` remain fixture-only and MUST NOT become production protocol version identifiers.
+## M6 validation proof
+
+GitHub Actions `TimeProofs Core Regression` runs the complete M4 + M6 suite on Node 22.
+
+Successful run:
+- run id `31571347893`
+- head `96ddefe88e0486b8d2be25a4a6dcae0b5bf485e4`
+- conclusion `success`
+
+See `docs/product/M6_COMPLETION_REPORT.md`.
+
+## Known non-claims
+
+TimeProofs does not yet claim:
+- SD-JWT signature/key-binding verification;
+- merchant authorization JWS verification;
+- arbitrary AP2 hash-algorithm support;
+- remote UCP schema composition/validation;
+- provider/network execution evidence;
+- lifecycle Order verification;
+- hosted enforcement.
+
+Missing proof remains UNKNOWN.
+
+## M7 objective
+
+Turn the local CLI/SDK into a safe customer-facing CI contract without adding a dashboard or cloud dependency.
+
+M7 must freeze and test:
+1. public CLI interface and backward-compatibility policy;
+2. customer-facing GitHub Action;
+3. action inputs/outputs;
+4. stable exit-code semantics;
+5. machine JSON result schema/version;
+6. evidence artifact policy without leaking credentials/JWTs;
+7. redaction requirements;
+8. package/release boundary separating TimeProofs from legacy AgentReady;
+9. install/quickstart flow;
+10. end-to-end CI examples and green integration tests.
 
 ## Legacy boundary
 
-AgentReady-era root package/site/docs remain temporarily and are non-canonical. Do not extend AgentReady while implementing M6. See `LEGACY_AGENTREADY.md`.
-
-## Immediate next task
-
-Design and implement M6 adapters before polishing CLI presentation:
-- define adapter contracts;
-- inspect current canonical UCP/AP2 machine schemas;
-- pin supported source profiles;
-- implement parsing/canonical extraction/provenance;
-- feed canonical graph inputs into the already-green M5 engine;
-- then expose the minimal CLI/SDK workflow.
+AgentReady-era assets remain temporarily non-canonical. M7 must begin separating public TimeProofs package/release surfaces from legacy package metadata without destructive removal before migration is safe.
 
 ## One-line status
 
-> M0–M5 plus M2.1 hardening complete with green regression CI; M6 real UCP/AP2 adapters + CLI/SDK is active.
+> M0–M6 plus M2.1 complete with green real-format adapter/SDK/CLI CI; M7 customer-facing CI integration is active.
