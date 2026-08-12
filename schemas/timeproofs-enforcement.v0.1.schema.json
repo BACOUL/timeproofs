@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://timeproofs.io/schemas/timeproofs-enforcement.v0.1.schema.json",
+  "title": "TimeProofs Enforcement Result v0.1",
+  "type": "object",
+  "required": ["enforcement_contract_version", "state", "allowed", "verification_decision", "policy", "verification"],
+  "properties": {
+    "enforcement_contract_version": { "const": "timeproofs.enforcement.v0.1" },
+    "state": { "enum": ["ALLOW", "DENY", "ERROR"] },
+    "allowed": { "type": "boolean" },
+    "verification_decision": { "enum": ["PASS", "WARN", "BLOCK", "UNKNOWN"] },
+    "reason_code": { "type": "string", "minLength": 1 },
+    "policy": {
+      "type": "object",
+      "required": ["policy_id", "deny_on", "on_error"],
+      "properties": {
+        "policy_id": { "type": "string", "minLength": 1 },
+        "deny_on": { "type": "array", "items": { "enum": ["PASS", "WARN", "BLOCK", "UNKNOWN"] }, "uniqueItems": true },
+        "on_error": { "enum": ["ERROR", "ALLOW"] }
+      },
+      "additionalProperties": false
+    },
+    "verification": { "type": "object" }
+  },
+  "allOf": [
+    { "if": { "properties": { "state": { "const": "ALLOW" } } }, "then": { "properties": { "allowed": { "const": true } } } },
+    { "if": { "properties": { "state": { "enum": ["DENY", "ERROR"] } } }, "then": { "properties": { "allowed": { "const": false } } } }
+  ],
+  "additionalProperties": true
+}
