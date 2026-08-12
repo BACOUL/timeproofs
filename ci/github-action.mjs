@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { verifyTransaction } from '../sdk/index.js';
+import { toSafeCiResult } from './safe-result.mjs';
 
 const env = process.env;
 const DEFAULT_MAX_INPUT_BYTES = 10 * 1024 * 1024;
@@ -69,20 +70,26 @@ try {
 
   if (proof && env.GITHUB_ACTIONS === 'true') process.stdout.write(`::add-mask::${proof}\n`);
 
-  const evaluation = assertSecretAbsent(verifyTransaction({
+  const evaluation = verifyTransaction({
     checkout,
     paymentMandate,
     checkoutJwt: proof,
     transformation: env.TP_TRANSFORMATION || null,
     sourceRefs: { checkout: env.TP_CHECKOUT, paymentMandate: env.TP_PAYMENT }
-  }), proof);
+  });
+  const safeResult = assertSecretAbsent(toSafeCiResult(evaluation), proof);
 
-  await fs.writeFile(output, `${JSON.stringify(evaluation, null, 2)}\n`, { mode: 0o600, flag: 'w' });
-  if (env.GITHUB_OUTPUT) await fs.appendFile(env.GITHUB_OUTPUT, `decision=${evaluation.decision}\nresult-file=${output}\n`);
-  process.stdout.write(`TimeProofs decision: ${evaluation.decision}\n`);
+  const serialized = `${JSON.stringify(safeResult, null, 2)}\n`;
+  if (serialized.includes('"raw"') || serialized.includes('payment_instrument') || serialized.includes('merchant_authorization')) {
+    fail('Safety invariant failed: unsafe protocol material reached CI output.');
+  }
 
-  if (evaluation.decision === 'BLOCK') process.exitCode = 2;
-  else if (evaluation.decision === 'UNKNOWN' && env.TP_FAIL_UNKNOWN !== 'false') process.exitCode = 3;
+  await fs.writeFile(output, serialized, { mode: 0o600, flag: 'w' });
+  if (env.GITHUB_OUTPUT) await fs.appendFile(env.GITHUB_OUTPUT, `decision=${safeResult.decision}\nresult-file=${output}\n`);
+  process.stdout.write(`TimeProofs decision: ${safeResult.decision}\n`);
+
+  if (safeResult.decision === 'BLOCK') process.exitCode = 2;
+  else if (safeResult.decision === 'UNKNOWN' && env.TP_FAIL_UNKNOWN !== 'false') process.exitCode = 3;
 } catch (e) {
   process.stderr.write(`TimeProofs error: ${e.message}\n`);
   process.exitCode = e.exitCode || (e.code === 'UNSUPPORTED_VERSION' ? 4 : 1);
