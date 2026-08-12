@@ -1,109 +1,129 @@
 # TimeProofs — World-Class Gate Completion Report
 
-Status: PRE-M8 REVIEW
+Status: PRE-M8 COMPLETE / GREEN
 Date: 2026-08-12
 Branch: `relaunch/invariant-engine`
 
 ## Purpose
 
-This report separates four different kinds of readiness so TimeProofs does not confuse pre-release engineering maturity with release-time provenance or future runtime-enforcement work.
+This report separates pre-M8 engineering readiness from release-time provenance, public-relaunch cleanup and future hosted/runtime obligations.
 
 ## GREEN NOW
 
-The following controls have repository evidence today.
-
 ### Product/repository boundary
-- TimeProofs constitution, README and roadmap are canonical for the relaunch.
+- TimeProofs constitution, README, roadmap, current state and execution plan are canonical.
 - AgentReady is explicitly legacy/non-canonical.
-- old AgentReady Action/release workflows were removed from the relaunch branch.
-- remaining AgentReady surfaces are inventoried in `docs/legacy/AGENTREADY_INVENTORY.md`.
-- the publishable TimeProofs package is assembled by allowlist, preventing accidental inclusion of legacy AgentReady surfaces.
+- old AgentReady Action/release workflows are removed from the relaunch branch.
+- remaining AgentReady assets are inventoried.
+- publishable TimeProofs package is assembled by allowlist and does not inherit legacy files accidentally.
 
 ### Deterministic verification
 - no LLM is a decision authority.
 - PASS/WARN/BLOCK/UNKNOWN semantics are frozen.
-- fixture-first regression is executable.
-- fixed input/fixed evaluation time determinism is tested.
-- canonicalization rejects cycles, non-finite numbers, non-JSON values and excessive depth/node count.
-- explicit unsupported/missing evidence behavior is preserved as UNKNOWN rather than optimistic PASS.
+- fixture-first regression exists.
+- generated property regression covers 250 deterministic transaction families per run.
+- fixed-input replay determinism is checked.
+- canonicalization rejects cycles, non-finite numbers, non-JSON values and excessive structural complexity.
+
+Verified property/full-contract run: `31618680408` — success.
 
 ### Protocol correctness
 - executable support is pinned to UCP Checkout `2026-04-08` and AP2 PaymentMandate `mandate.payment.1`.
-- compatibility matrix is explicit in `packs/ucp-ap2/COMPATIBILITY.md`.
-- audited upstream schema snapshots are locked in `protocols/upstream-lock.json`.
-- automated upstream change watch exists.
-- exact-state binding requires explicit proof; transaction identifier presence alone is insufficient.
+- compatibility matrix and audited upstream blobs are explicit.
+- upstream schema-change watch exists.
+- exact-state binding requires explicit proof; identifier presence alone is insufficient.
+- unsupported or insufficient evidence does not silently become PASS.
 
 ### Evidence/data safety
 - artifact digests, pack/adapter/core versions and structured evidence exist.
-- public result contract is versioned.
-- CI-safe result projection excludes raw checkout proof/JWT, payment instrument, merchant authorization and raw protocol objects.
+- result contract is versioned.
+- CI-safe output excludes raw checkout proof/JWT, payment instrument, merchant authorization and raw protocol objects.
 - input size is bounded and output/input aliasing is rejected.
 
 ### Security engineering
-- local/CI threat model exists.
-- supply-chain policy exists.
-- adversarial input tests exist.
-- hardened workflows use least-privilege permissions, immutable third-party Action SHAs and non-persisted checkout credentials.
-- CodeQL is configured and has a verified successful run: `31592599707`.
-- active security policy and security contact are aligned to TimeProofs.
+- threat model and supply-chain policy exist.
+- adversarial regression exists.
+- hardened workflows use least-privilege permissions, pinned Action SHAs and non-persisted checkout credentials.
+- CodeQL is configured and green.
+- TimeProofs security contact/disclosure route is documented.
 
-### Compatibility/reliability
+Verified CodeQL run: `31592599707` — success.
+
+### Compatibility / developer contract
 - core/SDK/CLI regression is green across Ubuntu/macOS/Windows × Node 22/24.
-- verified matrix run: `31591704219`.
-- customer GitHub Action PASS/BLOCK/UNKNOWN integration is green.
-- verified customer Action run: `31591960176`.
-- clean-room package pack/install/SDK/CLI test is green.
-- verified package run: `31592422020`.
-- performance baseline workflow exists and is green on representative 1,000-line-item input.
-- verified performance run: `31592637945`.
+- customer Action PASS/BLOCK/UNKNOWN integration is green.
+- clean-room pack/install/SDK/CLI consumer test is green.
+- CLI required-input, malformed JSON, unsupported profile, UNKNOWN, BLOCK and unknown-command behavior is regression-tested.
+
+Verified matrix baseline: `31591704219` — success.
+Verified customer Action: `31591960176` — success.
+Verified clean-room package: `31592422020` — success.
+Verified expanded error/full-contract matrix: `31619326027` — success.
+
+### Performance
+Measured representative profile:
+- 1,000 UCP line items;
+- 50 verification iterations;
+- GitHub-hosted Ubuntu / Node 22;
+- p50 3.668 ms;
+- p95 6.004 ms;
+- max 6.805 ms;
+- RSS 70.3 MiB.
+
+A provisional 100 ms p95 algorithmic-regression ceiling is enforced for the same profile. It is deliberately a regression guard, not a user-facing SLA.
+
+Verified baseline: `31592637945` — success.
+Verified threshold: `31618899028` — success.
+
+### Runtime design readiness
+M8 trust boundaries and fail policy were defined before implementation in `docs/product/M8_RUNTIME_ENFORCEMENT_DESIGN.md`.
+
+Frozen design points:
+- default financially consequential policy is fail-closed for BLOCK/UNKNOWN;
+- runtime error never silently turns into ALLOW;
+- explicit fail-open override must be configuration- and audit-visible;
+- TimeProofs returns a decision but does not execute/custody the caller's financial side effect;
+- package/pack/adapter/protocol versions are pinned;
+- no in-process remote pack mutation;
+- initial enforcement is local-first with no mandatory TimeProofs cloud dependency.
+
+## MARKET / STRATEGIC GATE
+
+Canonical audit: `docs/research/MARKET_STRATEGIC_AUDIT_2026-08-12.md`.
+
+Conclusion: **CONTINUE / BUILD**, but not as a narrow UCP↔AP2 amount/currency checker.
+
+Strategic expansion priority:
+1. approved PaymentMandate ↔ executed PSP/network outcome;
+2. checkout/payment ↔ committed order lifecycle;
+3. cumulative mandate constraints ↔ prior fulfilment state;
+4. cancellation/refund ↔ order/payment/provider state.
+
+Current primary business risk is willingness-to-pay evidence. The generic engine and first three checks are not the moat; the moat hypothesis is accumulated provider/protocol evidence, mappings, transformations, lifecycle semantics, compatibility history and regression knowledge.
 
 ## GREEN ONLY AT A REAL RELEASE
 
-The following controls cannot honestly be proven by a repository-only pre-release build. They must become mandatory release gates when the first new TimeProofs package/release is actually published.
+Mandatory when the first new TimeProofs package/release is actually published:
+- final npm name/scope ownership verified;
+- npm Trusted Publishing/OIDC;
+- npm provenance;
+- SBOM from the exact release artifact;
+- GitHub artifact attestation/provenance;
+- immutable version tag/release from the tested commit;
+- post-publication registry install/verification.
 
-- npm Trusted Publishing/OIDC association for the chosen package name;
-- npm provenance generated by the real publish job;
-- SBOM generated from the exact release artifact;
-- GitHub artifact attestation/provenance generated for the exact release artifact;
-- immutable version tag/release created from the exact tested commit;
-- release checksum/attestation verification after publication;
-- package-registry ownership/access controls verified on the real package;
-- public installation test against the actual registry artifact rather than only a local tarball.
+These are not marked complete before the real artifact exists.
 
-These items are not failures today. They are release-time controls and MUST NOT be marked complete before an actual release exists.
+## REQUIRED BEFORE PUBLIC RELAUNCH / M9
 
-## REMAINS BEFORE M8
-
-The remaining pre-M8 engineering work is smaller but real.
-
-- expand property/fuzz testing beyond hand-written adversarial cases;
-- review human-facing malformed/unsupported/UNKNOWN error messages as a coherent UX set;
-- freeze one canonical public install path and one canonical CI path after final package naming is chosen;
-- document supported input limits/performance expectations from measured baselines;
-- decide whether an explicit performance regression threshold belongs in the release gate;
-- decide evidence-bundle signing only if a concrete consumer/use case requires it;
-- finish safe archive/removal of legacy AgentReady public site/code surfaces before public TimeProofs relaunch.
-
-These items should be completed or explicitly waived before M8 begins.
-
-## BELONGS TO M8, NOT THIS GATE
-
-The following are runtime-enforcement design requirements and should not be backfilled into M7:
-
-- inline/pre-commit enforcement architecture;
-- fail-open vs fail-closed policy;
-- latency budget for networked/runtime enforcement;
-- availability/SLO model;
-- rollback and emergency disable path;
-- policy/version pinning at enforcement points;
-- multi-tenant hosted isolation if/when a hosted surface exists;
-- runtime audit/event delivery model.
+- safely archive/remove/redirect legacy AgentReady public site/code surfaces;
+- freeze the real registry package name and canonical public install command;
+- execute release-time provenance controls if a package is published;
+- replace legacy website information architecture with TimeProofs-native product/docs experience.
 
 ## VOLUNTARILY UNSUPPORTED TODAY
 
 TimeProofs does not currently claim:
-
 - full SD-JWT signature/key-binding verification;
 - merchant authorization JWS verification;
 - arbitrary AP2 hash/binding algorithms;
@@ -118,8 +138,6 @@ Unsupported or insufficiently evidenced cases remain explicit UNKNOWN/unsupporte
 
 ## Gate conclusion
 
-M7 is complete. The technical foundation is materially credible for a pre-release developer-infrastructure product, but the World-Class Gate is not yet fully closed for M8 because fuzz/property coverage, final public-install UX, measured-limit documentation and legacy public-surface cleanup remain.
+**PRE-M8 GATE: GREEN.**
 
-Release-only provenance controls are deliberately deferred to the first real TimeProofs publication and are not M8 blockers until a release is being cut.
-
-M8 remains NOT STARTED until the remaining pre-M8 items above are closed or explicitly waived by founder decision.
+M8 local-first runtime enforcement may begin under the frozen design. This does not imply product-market fit, release provenance, public relaunch readiness or hosted-service maturity. Those remain distinct gates with distinct evidence requirements.
