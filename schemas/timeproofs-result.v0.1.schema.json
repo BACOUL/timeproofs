@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://timeproofs.io/schemas/timeproofs-result.v0.1.schema.json",
+  "title": "TimeProofs Result Contract v0.1",
+  "type": "object",
+  "required": [
+    "result_contract_version",
+    "core_schema_version",
+    "evaluation_id",
+    "metadata",
+    "results",
+    "decision",
+    "graph"
+  ],
+  "properties": {
+    "result_contract_version": { "const": "timeproofs.result.v0.1" },
+    "core_schema_version": { "type": "string", "minLength": 1 },
+    "evaluation_id": { "type": "string", "minLength": 1 },
+    "metadata": {
+      "type": "object",
+      "required": ["pack", "adapters", "evaluated_at"],
+      "properties": {
+        "pack": {
+          "type": "object",
+          "required": ["id", "version"],
+          "properties": {
+            "id": { "type": "string" },
+            "version": { "type": "string" }
+          }
+        },
+        "adapters": { "type": "array" },
+        "evaluated_at": { "type": "string" }
+      }
+    },
+    "invariants": { "type": "array" },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["invariant_id", "status", "reason_code", "message"],
+        "properties": {
+          "invariant_id": { "type": "string" },
+          "status": { "enum": ["PASS", "WARN", "BLOCK", "UNKNOWN"] },
+          "unknown_reason": { "type": ["string", "null"] },
+          "reason_code": { "type": "string" },
+          "message": { "type": "string" }
+        }
+      }
+    },
+    "decision": { "enum": ["PASS", "WARN", "BLOCK", "UNKNOWN"] },
+    "graph": {
+      "type": "object",
+      "required": ["graph_id", "evaluation_time", "objects", "bindings", "evidence", "context"],
+      "properties": {
+        "graph_id": { "type": "string" },
+        "evaluation_time": { "type": "string" },
+        "objects": { "type": "array" },
+        "bindings": { "type": "array" },
+        "evidence": { "type": "array" },
+        "context": { "type": "object" }
+      }
+    },
+    "redaction": {
+      "type": "object",
+      "required": ["profile", "raw_protocol_objects_included", "source_refs_included", "credential_material_included"],
+      "properties": {
+        "profile": { "const": "timeproofs.ci.safe.v0.1" },
+        "raw_protocol_objects_included": { "const": false },
+        "source_refs_included": { "const": false },
+        "credential_material_included": { "const": false }
+      }
+    }
+  }
+}
