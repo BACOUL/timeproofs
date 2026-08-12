@@ -1,7 +1,10 @@
 # TimeProofs — M8 Runtime Enforcement Design
 
-Status: DESIGN FROZEN BEFORE IMPLEMENTATION
-Date: 2026-08-12
+Status: IMPLEMENTED / COMPLETE
+Date: 2026-08-13
+
+Completion evidence: `docs/product/M8_COMPLETION_REPORT.md`.
+Runtime operations: `docs/product/M8_RUNTIME_OPERATIONS.md`.
 
 ## Goal
 
@@ -14,199 +17,117 @@ The M8 primitive is:
 ## Non-goals
 
 M8 does NOT:
-
 - hold customer funds;
 - execute PSP/network payments itself;
 - store raw payment credentials;
 - become an MCP/A2A gateway;
 - infer intent with an LLM;
-- silently fetch or update invariant packs at runtime;
+- silently fetch/update invariant packs at runtime;
 - claim exactly-once external execution;
 - claim that pre-commit verification proves the provider's later executed outcome.
 
-Execution-vs-approved outcome is a separate evidence problem and the next strategic pack direction.
-
 ## Trust boundary
 
-Caller owns:
+Caller owns the agent/application, protocol objects/evidence collection, credentials, PSP execution, external side effect and authoritative compensation/rollback.
 
-- the agent/application;
-- collection of protocol objects and evidence;
-- credentials and PSP execution;
-- external side effect;
-- authoritative business rollback/compensation.
+TimeProofs owns deterministic adaptation of supported artifacts, pinned invariant/evidence semantics, the evaluation result, enforcement policy application and safe decision envelope.
 
-TimeProofs owns:
-
-- deterministic adaptation of supported artifacts;
-- pinned invariant/evidence semantics;
-- evaluation result;
-- enforcement policy application;
-- safe decision/audit envelope.
-
-## Runtime API concept
+## Canonical runtime API
 
 ```js
-const gate = await timeproofs.enforce({
-  checkout,
-  paymentMandate,
-  checkoutJwt,
-  policy: {
-    block: ['BLOCK', 'UNKNOWN']
-  }
-});
+const gate = enforceTransaction({ checkout, paymentMandate, checkoutJwt })
 
-if (gate.allowed) {
-  await callerOwnedCommit();
-}
+if (!gate.allowed) return gate
+await callerOwnedCommit()
 ```
 
-The library MUST NOT execute `callerOwnedCommit()` on behalf of the caller in the first M8 implementation. Keeping decision and side-effect ownership separate minimizes liability and avoids exactly-once claims we cannot prove.
+TimeProofs does not execute `callerOwnedCommit()`.
 
 ## Enforcement states
 
-Public enforcement result:
+Public enforcement state:
+- ALLOW
+- DENY
+- ERROR
 
-- `ALLOW` — policy permits commit;
-- `DENY` — policy prohibits commit;
-- `ERROR` — evaluation could not complete safely.
-
-The underlying verification decision remains one of:
-
+Underlying verification decision remains:
 - PASS
 - WARN
 - BLOCK
 - UNKNOWN
 
-Enforcement state never replaces verification evidence.
-
-## Default policy
-
-For financially consequential flows the default M8 policy is:
-
+Default financial policy:
 - PASS → ALLOW
-- WARN → ALLOW, with warning evidence
+- WARN → ALLOW
 - BLOCK → DENY
 - UNKNOWN → DENY
-- internal/runtime error → ERROR and no automatic allow
+- internal/runtime error → ERROR, `allowed=false`
 
-This is intentionally fail-closed for missing proof.
+A policy less restrictive than this default for BLOCK, UNKNOWN or runtime error requires an explicit non-empty `policy_id`. The normalized policy is snapshotted into the result.
 
-A caller MAY explicitly choose a fail-open policy for UNKNOWN/error in a lower-risk deployment, but:
+## Surface decision
 
-- it must be explicit in configuration;
-- it must be present in the audit result;
-- the library must never silently downgrade to fail-open.
+M8 is **SDK-first**.
 
-## Version pinning
+CLI and GitHub Action remain VERIFY/adoption surfaces. Runtime ENFORCE belongs immediately before a caller-owned consequential commit. A CLI/Action enforcement switch is deferred unless a concrete runtime integration makes it meaningful.
 
-Every enforcement evaluation records:
+## Version/update policy
 
-- core schema version;
-- TimeProofs package version;
-- invariant pack ID/version;
-- adapter IDs/versions;
-- supported protocol profiles;
-- evaluation time;
-- artifact digests.
+Every Verify/Enforce path remains version/profile explicit. M8 MUST NOT use `latest` semantics for protocol mappings or silently mutate a pack during a transaction.
 
-M8 MUST NOT use `latest` semantics for packs or protocol mappings.
-
-## Update policy
-
-No remote pack update may change an in-process enforcement decision.
-
-Future managed pack delivery, if built, must use:
-
-1. fetch outside transaction path;
-2. authenticate/verify package;
-3. stage;
-4. regression/self-check;
-5. explicit activation/version switch;
-6. rollback to previous pinned version.
+Future managed pack delivery must stage, authenticate, test, explicitly activate and remain rollbackable outside the transaction path.
 
 ## Rollback
 
-Initial rollback mechanism is package/config version pinning:
+Initial rollback is exact package/config/profile pinning. A bad version is reverted to the previous known-good version; historical decisions are not rewritten. Suspected false-block bugs require a regression before re-release.
 
-- previous known-good TimeProofs package remains installable/pinnable;
-- caller can revert the package or pack version;
-- result contract versions are explicit;
-- breaking semantic changes require major-version treatment according to release policy.
+## Latency
 
-M8 does not invent hidden dynamic configuration.
+M8 remains local-first with no required TimeProofs network dependency.
 
-## Latency budget
+Measured representative paired benchmark on GitHub Ubuntu / Node 22, 1,000 line items:
+- VERIFY p95: 2.689 ms
+- ENFORCE p95: 2.819 ms
+- measured ENFORCE overhead p95: 0.129 ms
+- overhead engineering guard: 5 ms
 
-Initial local pre-commit target uses the existing measured Verify path.
+These are regression measurements, not customer SLAs. Network/provider evidence will be benchmarked separately.
 
-Current reference benchmark:
-- 1,000 line items;
-- measured p95 6.004 ms on GitHub-hosted Ubuntu/Node 22;
-- 100 ms p95 regression ceiling.
+## Security/data
 
-M8 local enforcement SHOULD remain under the same 100 ms regression ceiling for this representative profile before any network evidence connector is included.
-
-Network/PSP evidence is measured separately and MUST NOT be folded into a misleading local-engine benchmark.
-
-## Availability model
-
-Initial M8 is local-first and has no required TimeProofs cloud dependency.
-
-Therefore availability is primarily caller process/runtime availability rather than TimeProofs service availability.
-
-If a future hosted dependency is introduced, its timeout/retry/fail policy requires a separate design and SLA. Hosted failure must never silently convert UNKNOWN/error into ALLOW.
-
-## Secret/data policy
-
-M8 follows M7 data safety:
-
-- no raw payment credentials in normal result artifacts;
-- no checkout proof/JWT in safe audit projection;
-- raw local evidence remains process-local unless caller explicitly stores it;
-- TimeProofs does not require telemetry for enforcement.
+- no raw payment credentials in normal safe artifacts;
+- no checkout proof/JWT in CI-safe projection;
+- local evidence remains process-local unless caller stores it;
+- no required telemetry;
+- malformed/hostile enforcement policies are rejected;
+- no silent fail-open fallback.
 
 ## Audit envelope
 
-Every enforcement result includes at minimum:
-
+Enforcement output exposes at minimum:
 - enforcement contract version;
-- allowed boolean/state;
-- verification decision;
-- invariant result references;
-- policy used;
-- package/pack/adapter versions;
-- artifact digests;
-- evaluation timestamp;
-- safe reason codes.
+- ALLOW/DENY/ERROR and allowed boolean;
+- underlying verification decision;
+- stable reason code;
+- normalized policy;
+- underlying verification evidence/metadata.
 
-## M8 implementation order
+## Implementation proof
 
-1. freeze enforcement result schema;
-2. implement pure `applyEnforcementPolicy(verification, policy)`;
-3. add SDK `enforceTransaction()` using existing deterministic Verify path;
-4. add PASS/WARN/BLOCK/UNKNOWN/error fixtures;
-5. add CLI optional enforcement mode only if it improves integration clarity;
-6. add customer Action enforcement option only after local semantics are frozen;
-7. benchmark and adversarial-test enforcement;
-8. document migration/rollback.
+`TimeProofs Core Regression` run `31649700249` passed on Ubuntu/macOS/Windows × Node 22/24.
 
-## M8 exit criteria
+Coverage includes PASS/WARN/BLOCK/UNKNOWN/error, explicit fail-open, malformed policies, unnamed unsafe policies, mutation resistance for normalized policy metadata, deterministic repeat behavior, security/property suites and clean-room package installation.
 
-M8 is complete only when:
+Performance run `31649724012` passed the Verify-vs-Enforce overhead guard.
 
-- default fail-closed behavior is executable and tested;
-- explicit fail-open override is visible/auditable;
-- no code path silently allows UNKNOWN/error;
-- package/pack/adapter versions are recorded;
-- safe enforcement result contract is versioned;
-- local enforcement remains deterministic;
-- security/property/cross-platform regressions remain green;
-- representative latency remains within the chosen guard;
-- TimeProofs still does not execute or custody the external financial side effect.
+## Exit verdict
 
-## Strategic link to next pack
+All M8 exit criteria are GREEN.
 
-The first M8 gate can enforce the current UCP↔AP2 pre-commit invariants.
+**M8 is COMPLETE.**
 
-The strategically important next pack should add **approved payment ↔ executed PSP/network outcome** evidence. That later capability may run after execution/reconciliation as well as before subsequent lifecycle actions. It must not be conflated with the initial pre-commit enforcement primitive.
+## Strategic next step
+
+M8 proves whether an action may run based on available authorized-state evidence. It does not prove what the PSP/provider later did.
+
+Next: **M8.1 — AP2 approved PaymentMandate ↔ executed PSP/provider outcome**, followed by the first constrained RESOLVE semantics.
