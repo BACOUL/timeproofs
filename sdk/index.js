@@ -2,7 +2,9 @@ import { adaptUcpCheckout, UCP_CHECKOUT_ADAPTER } from '../adapters/ucp/checkout
 import { adaptAp2PaymentMandate, AP2_PAYMENT_ADAPTER } from '../adapters/ap2/payment-mandate.js';
 import { sha256Base64UrlString } from '../timeproofs-core/canonical.js';
 import { verifyTransactionGraph } from '../timeproofs-core/index.js';
+import { applyEnforcementPolicy, enforcementError, DEFAULT_FINANCIAL_POLICY, TIMEPROOFS_ENFORCEMENT_CONTRACT_VERSION } from './enforcement.js';
 
+export { applyEnforcementPolicy, DEFAULT_FINANCIAL_POLICY, TIMEPROOFS_ENFORCEMENT_CONTRACT_VERSION } from './enforcement.js';
 export const TIMEPROOFS_PACK = Object.freeze({ id: 'ucp-ap2', version: '0.1.0-spec' });
 export const TIMEPROOFS_RESULT_CONTRACT_VERSION = 'timeproofs.result.v0.1';
 
@@ -61,4 +63,13 @@ export function verifyTransaction({ checkout, paymentMandate, checkoutJwt = null
       context
     }
   };
+}
+
+export function enforceTransaction(input, { policy = DEFAULT_FINANCIAL_POLICY, captureErrors = true } = {}) {
+  try {
+    return applyEnforcementPolicy(verifyTransaction(input), policy);
+  } catch (error) {
+    if (!captureErrors) throw error;
+    return enforcementError(error, policy);
+  }
 }
