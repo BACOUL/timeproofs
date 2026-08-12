@@ -7,11 +7,15 @@ Branch: `relaunch/invariant-engine`
 
 **Company:** Cross-Protocol Consistency Infrastructure for agentic transactions.
 
-**Long-term product:** Cross-Protocol Consistency & Invariant Engine.
+**Constitution-level product thesis:** `docs/product/PRODUCT_THESIS.md`.
+
+> **TimeProofs is the transaction integrity layer between what autonomous agents were authorized to do and what external systems actually executed.**
+
+**Strategic primitives:** VERIFY → ENFORCE → RESOLVE.
 
 **Initial wedge:** UCP ↔ AP2 composition consistency focused on semantic/economic cross-object consistency and evidence closure rather than generic protocol conformance.
 
-**Current milestone:** M8 — local-first runtime enforcement: ACTIVE. Implementation has not started yet.
+**Current milestone:** M8 — local-first runtime enforcement: ACTIVE. Implementation has begun.
 
 **Pre-M8 World-Class Readiness Gate:** COMPLETE / GREEN.
 
@@ -35,6 +39,7 @@ Implemented production path:
 - real UCP Checkout adapter;
 - real AP2 PaymentMandate adapter;
 - JS SDK `verifyTransaction()`;
+- JS SDK `enforceTransaction()` initial M8 implementation;
 - CLI `timeproofs verify`;
 - customer GitHub Action;
 - safe CI result projection;
@@ -48,7 +53,7 @@ Developer flow:
 
 `timeproofs verify --checkout checkout.json --payment-mandate payment.json --checkout-jwt '<exact-proof>'`
 
-Frozen exit semantics:
+Frozen verify exit semantics:
 - 0 PASS/WARN
 - 2 BLOCK
 - 3 UNKNOWN
@@ -68,6 +73,30 @@ For the supported SHA-256 binding profile, TimeProofs hashes the exact supplied 
 
 Full SD-JWT/key/signature verification is not claimed.
 
+## Product thesis boundary
+
+The UCP↔AP2 pack is a beachhead, not the company boundary.
+
+TimeProofs must evolve around cross-system transaction integrity:
+
+1. **VERIFY** — Is it valid?
+2. **ENFORCE** — Can it run?
+3. **RESOLVE** — Did it happen?
+
+The highest-priority strategic boundary is:
+
+`AUTHORIZED REALITY ↔ EXECUTED REALITY`
+
+Examples:
+- AP2 PaymentMandate ↔ PSP/network execution;
+- checkout/payment ↔ committed order;
+- cumulative mandate ↔ prior fulfilments;
+- cancellation/refund ↔ provider/order/settlement state.
+
+The governing future outcome rule is:
+
+> **Never retry an unknown side effect. Resolve it first.**
+
 ## Validation proof
 
 ### Cross-platform/runtime baseline
@@ -82,6 +111,8 @@ PASS/BLOCK/UNKNOWN customer contract verified in run `31591960176` — success.
 
 ### Package clean room
 Pack/install/SDK/CLI consumer flow verified in run `31592422020` — success.
+
+M8 packaging has since been strengthened to require the enforcement module/schema and clean-room `enforceTransaction()` behavior; the latest full matrix must be green before M8 is closed.
 
 ### CodeQL
 Run `31592599707` — success.
@@ -122,11 +153,7 @@ Canonical audit: `docs/research/MARKET_STRATEGIC_AUDIT_2026-08-12.md`.
 
 Conclusion: **CONTINUE / BUILD**, but TimeProofs must not remain a narrow UCP↔AP2 amount/currency checker.
 
-Strategic evidence-boundary priority:
-1. approved PaymentMandate ↔ executed PSP/network outcome;
-2. checkout/payment ↔ committed order lifecycle;
-3. cumulative mandate constraints ↔ prior fulfilment state;
-4. cancellation/refund ↔ order/payment/provider state.
+Canonical thesis: `docs/product/PRODUCT_THESIS.md`.
 
 Primary business uncertainty remains willingness-to-pay evidence. Technical readiness is materially ahead of commercial proof.
 
@@ -134,7 +161,7 @@ Primary business uncertainty remains willingness-to-pay evidence. Technical read
 
 Canonical design: `docs/product/M8_RUNTIME_ENFORCEMENT_DESIGN.md`.
 
-M8 will add a local-first enforcement decision layer on top of Verify.
+M8 adds a local-first enforcement decision layer on top of Verify.
 
 Frozen boundaries:
 - underlying verification remains PASS/WARN/BLOCK/UNKNOWN;
@@ -147,14 +174,16 @@ Frozen boundaries:
 - no `latest` versions or silent remote pack mutation;
 - local-first, no mandatory TimeProofs cloud dependency.
 
-Implementation order:
-1. enforcement result schema;
-2. pure policy evaluator;
-3. SDK `enforceTransaction()`;
-4. fixtures/tests;
-5. optional CLI/Action enforcement surfaces;
-6. benchmark/adversarial/cross-platform validation;
-7. M8 completion only with green executable proof.
+Current M8 implementation includes:
+- `schemas/timeproofs-enforcement.v0.1.schema.json`;
+- pure enforcement policy evaluator;
+- `enforceTransaction()` SDK;
+- default financial fail-closed policy;
+- explicit/auditable fail-open override behavior;
+- M8 regression tests;
+- enforcement module/schema in the public package allowlist.
+
+M8 remains ACTIVE until the strengthened full matrix, clean-room package enforcement contract and remaining runtime validation are green.
 
 ## Lifecycle-separated remaining work
 
@@ -175,6 +204,7 @@ TimeProofs does not yet claim:
 - arbitrary AP2 hash algorithms;
 - automatic future-version compatibility;
 - provider/network execution evidence;
+- outcome resolution against authoritative PSP/network state;
 - lifecycle Order enforcement;
 - modeled FX/tips/incremental authorization/partial capture/split settlement/marketplace payout;
 - hosted enforcement or SLA;
@@ -184,4 +214,4 @@ Missing proof remains UNKNOWN.
 
 ## One-line status
 
-> M0–M7 and the pre-M8 World-Class Gate are complete; M8 local-first runtime enforcement is active under a frozen fail-closed design, while the strategically important next evidence pack targets approved payment ↔ executed provider outcome and willingness-to-pay remains the primary company risk.
+> M0–M7 and the pre-M8 World-Class Gate are complete; M8 local-first enforcement is actively implemented under a frozen fail-closed design, and the constitution-level company direction is VERIFY → ENFORCE → RESOLVE across the boundary between authorized and executed reality.
