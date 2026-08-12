@@ -7,12 +7,20 @@ on:
     paths:
       - 'timeproofs-core/**'
       - 'fixtures/ucp-ap2/v0.1/**'
+      - 'adapters/**'
+      - 'sdk/**'
+      - 'cli/timeproofs.js'
+      - 'bin/timeproofs.js'
       - 'package.json'
       - '.github/workflows/timeproofs-core-regression.yml'
   pull_request:
     paths:
       - 'timeproofs-core/**'
       - 'fixtures/ucp-ap2/v0.1/**'
+      - 'adapters/**'
+      - 'sdk/**'
+      - 'cli/timeproofs.js'
+      - 'bin/timeproofs.js'
       - 'package.json'
 
 permissions:
@@ -29,5 +37,5 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Run TimeProofs fixture contract
-        run: npm run test:timeproofs-core
+      - name: Run TimeProofs full local contract
+        run: npm run test:timeproofs
