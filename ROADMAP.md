@@ -19,47 +19,52 @@ The product expands through versioned invariant/evidence packs across protocol a
 - M4 — fixture-first regression contract
 - M5 — deterministic Verify engine
 - M6 — real UCP/AP2 adapters + local SDK/CLI
+- M7 — customer GitHub Action + safe result/package contract
 
-## Active
+M7 completion is evidenced in `docs/product/M7_COMPLETION_REPORT.md`.
 
-### M7 — Customer CI / package contract
+## Active — World-Class Readiness Gate pre-M8 closure
 
-Current goals:
-- customer-facing GitHub Action;
-- versioned result contract;
-- safe/redacted CI output;
-- PASS/BLOCK/UNKNOWN end-to-end behavior;
-- stable exit-code semantics;
-- release/package separation from legacy AgentReady;
-- clean quickstart and release discipline.
+Already established:
+- adversarial-input safety and strict canonicalization;
+- threat model and supply-chain policy;
+- deterministic Linux/macOS/Windows × Node 22/24 regression;
+- customer Action PASS/BLOCK/UNKNOWN integration;
+- safe CI result projection;
+- TimeProofs package allowlist and clean-room consumer install test;
+- CodeQL;
+- upstream UCP/AP2 schema lock/watch and explicit compatibility matrix;
+- representative performance baseline.
 
-### World-Class Readiness Gate
+Remaining before M8 unless explicitly waived:
+- broader property/fuzz coverage;
+- coherent human error-message review;
+- final public package name and one canonical install/CI path;
+- measured supported input/performance limits and performance-threshold decision;
+- safe archive/removal of remaining public AgentReady surfaces.
 
-Before M8, TimeProofs must demonstrate:
-- adversarial-input safety;
-- threat-model coverage;
-- deterministic multi-OS/runtime regression;
-- supply-chain hardening;
-- clean package/release provenance plan;
-- repository/product-truth hygiene;
-- developer quickstart from a clean consumer context;
-- performance baseline;
-- explicit remaining non-claims.
+Release-only controls such as npm Trusted Publishing/OIDC, npm provenance, exact-release SBOM/attestations and registry-install verification become mandatory when a real new TimeProofs package is published. They are not pre-M8 blockers before such a release exists.
+
+Canonical interpretation: `docs/startup/WORLD_CLASS_GATE_COMPLETION_REPORT.md`.
 
 ## Next only after gate
 
 ### M8 — Enforce runtime
 
-Pre-commit control for consequential agentic transactions with explicit fail-open/fail-closed policy, latency budget, version pinning, rollback, runtime threat model and auditability.
+Inline/pre-commit control for consequential agentic transactions with explicit fail-open/fail-closed policy, latency budget, version pinning, rollback/emergency disable, runtime availability model and auditability.
 
 ### M9 — Relaunch website and documentation
 
-The site must be designed from TimeProofs-native product primitives (objects, bindings, invariants, evidence, decisions), benchmarked against leading global infrastructure products rather than generated from a generic SaaS template.
+The site must be designed from TimeProofs-native product primitives (objects, bindings, invariants, evidence, decisions), benchmarked against leading global infrastructure products rather than generated from a generic SaaS template. Legacy AgentReady public surfaces must be removed or safely redirected before relaunch.
 
 ### M10 — Managed TimeProofs Cloud
 
 Only managed surfaces with real operational value: hosted enforcement, managed pack updates, evidence retention, private packs, organizational controls, connectors and enterprise deployment/SLA where justified.
 
+## Parallel company validation
+
+Technical maturity is not market proof. Before significant M8/M10 infrastructure spend, keep validating protocol adoption velocity, first ICP/economic buyer, cost of cross-protocol inconsistency, competitor/standard absorption risk, distribution path and whether Invariant Packs genuinely accumulate defensible knowledge.
+
 ## Rule
 
-A milestone is not “world-class complete” because its happy path works. Feature completion and production-readiness evidence are separate gates.
+A milestone is not “world-class complete” because its happy path works. Feature completion, pre-runtime readiness and release provenance are separate gates.
