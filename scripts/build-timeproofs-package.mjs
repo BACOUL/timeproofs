@@ -9,6 +9,7 @@ const files = [
   'bin/timeproofs.js',
   'cli/timeproofs.js',
   'sdk/index.js',
+  'sdk/enforcement.js',
   'adapters/ucp/checkout.js',
   'adapters/ap2/payment-mandate.js',
   'timeproofs-core/index.js',
@@ -17,6 +18,7 @@ const files = [
   'packs/ucp-ap2/SPEC.md',
   'packs/ucp-ap2/COMPATIBILITY.md',
   'schemas/timeproofs-result.v0.1.schema.json',
+  'schemas/timeproofs-enforcement.v0.1.schema.json',
   'schemas/timeproofs-core.schema.json',
   'LICENSE'
 ];
@@ -36,7 +38,7 @@ const template = JSON.parse(await fs.readFile(path.join(root,'packaging/timeproo
 template.name = packageName;
 await fs.writeFile(path.join(out,'package.json'), `${JSON.stringify(template,null,2)}\n`);
 
-const readme = `# TimeProofs Verify\n\nCross-protocol consistency verification for agentic transactions.\n\nThis package is built from an explicit allowlist. Legacy AgentReady code is not included.\n\n## CLI\n\n\`\`\`bash\ntimeproofs verify --checkout checkout.json --payment-mandate payment.json --checkout-jwt-file checkout-proof.txt\n\`\`\`\n\n## SDK\n\n\`\`\`js\nimport { verifyTransaction } from '${packageName}';\n\`\`\`\n\nSupported initial profiles: UCP Checkout 2026-04-08 and AP2 PaymentMandate mandate.payment.1.\n`;
+const readme = `# TimeProofs\n\nCross-protocol consistency verification and local-first enforcement for agentic transactions.\n\nThis package is built from an explicit allowlist. Legacy AgentReady code is not included.\n\n## Verify CLI\n\n\`\`\`bash\ntimeproofs verify --checkout checkout.json --payment-mandate payment.json --checkout-jwt-file checkout-proof.txt\n\`\`\`\n\n## SDK\n\n\`\`\`js\nimport { verifyTransaction, enforceTransaction } from '${packageName}';\n\nconst gate = enforceTransaction({ checkout, paymentMandate, checkoutJwt });\nif (gate.allowed) await callerOwnedCommit();\n\`\`\`\n\nDefault financial enforcement is fail-closed: BLOCK and UNKNOWN deny commit; runtime errors do not silently allow. The caller retains ownership of the external side effect.\n\nSupported initial profiles: UCP Checkout 2026-04-08 and AP2 PaymentMandate mandate.payment.1.\n`;
 await fs.writeFile(path.join(out,'README.md'),readme);
 
 const forbidden = ['agentready-core','bin/agentready.js','docs/agentready','packaging/agentready-community'];
