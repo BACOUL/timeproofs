@@ -89,7 +89,7 @@ See `docs/product/M7_COMPLETION_REPORT.md`.
 
 Workflow: `TimeProofs Core Regression`
 
-Successful run:
+Successful baseline run:
 - run id `31591704219`
 - head `ad48374959a6ddf72b2116a4fe057ceb0aa1fca5`
 - conclusion `success`
@@ -98,6 +98,21 @@ Green environments:
 - Ubuntu Node 22/24
 - macOS Node 22/24
 - Windows Node 22/24
+
+### Generated property regression
+
+The full test contract now also includes 250 deterministic generated transaction families covering:
+- exact projection PASS;
+- amount mutation BLOCK;
+- currency mutation BLOCK;
+- binding mutation BLOCK;
+- absent-proof UNKNOWN;
+- fixed-input replay determinism.
+
+Verified successful run:
+- run id `31618680408`
+- head `175f92213ca722d873437749d1b911664142e663`
+- conclusion `success`.
 
 ### Customer Action
 
@@ -122,14 +137,24 @@ Successful run:
 - head `8cef869cbc895814ae6f161da691fd98337a64c4`
 - conclusion `success`
 
-### Performance baseline
+### Performance baseline and guard
 
-Successful run:
+Historical measured baseline:
 - run id `31592637945`
-- head `14e1e12fe55be71eb977188f2b967f00929ab0ae`
-- conclusion `success`
+- p50 `3.668 ms`
+- p95 `6.004 ms`
+- max `6.805 ms`
+- RSS `70.3 MiB`
+- 1,000 line items / 50 iterations / Ubuntu / Node 22.
 
-Representative benchmark includes a 1,000-line-item transaction.
+A provisional `100 ms` p95 algorithmic-regression ceiling is now enforced for that benchmark profile.
+
+Verified threshold run:
+- run id `31618899028`
+- head `7e3cbbf948f6402bf24c8fc1791afd5393c93041`
+- conclusion `success`.
+
+See `docs/product/PERFORMANCE_AND_INPUT_PROFILE.md`.
 
 ## Protocol drift control
 
@@ -143,11 +168,28 @@ Current local/CI surface includes:
 - threat model;
 - supply-chain policy;
 - adversarial regression;
+- deterministic generated property regression;
 - strict canonicalization boundaries;
 - least-privilege CI permissions;
 - pinned third-party Actions;
 - checkout credential non-persistence in hardened workflows;
 - CI-safe result projection that excludes raw checkout proof/JWT, payment instrument, merchant authorization and raw protocol objects.
+
+## Market/strategy audit
+
+The 2026-08-12 market audit concludes **CONTINUE / BUILD**, with an important constraint: TimeProofs must not remain a narrow UCP↔AP2 amount/currency checker.
+
+Current strategic expansion priority:
+1. approved PaymentMandate ↔ executed PSP/network outcome;
+2. checkout/payment ↔ committed order lifecycle;
+3. cumulative mandate constraints ↔ prior fulfilment state;
+4. cancellation/refund ↔ order/payment/provider state.
+
+Why: these boundaries remain cross-system and can accumulate provider/evidence knowledge that a single protocol owner is less likely to absorb completely.
+
+Primary business risk remains **willingness-to-pay evidence**, not current technical feasibility.
+
+Canonical audit: `docs/research/MARKET_STRATEGIC_AUDIT_2026-08-12.md`.
 
 ## Known non-claims
 
@@ -166,13 +208,11 @@ Missing proof remains UNKNOWN.
 
 ## World-Class Gate status
 
-M7 is closed, but M8 remains blocked until the remaining pre-M8 items are closed or explicitly waived:
-- broader property/fuzz testing;
-- final public install/CI UX after package naming is frozen;
+M7 is closed. Remaining pre-M8 work is now concentrated in:
 - coherent human error-message review;
-- measured input/performance limit documentation;
-- decision on performance regression threshold;
-- safe removal/archive of legacy public AgentReady surfaces.
+- final public package-name decision and one canonical install/CI path;
+- safe removal/archive of legacy public AgentReady surfaces;
+- M8 runtime trust-boundary + fail-open/fail-closed design before implementation.
 
 Release-only controls such as npm OIDC/provenance, exact-release SBOM and artifact attestations are tracked separately and can only become green during a real release.
 
@@ -182,4 +222,4 @@ See:
 
 ## One-line status
 
-> M0–M7 are complete with green real-format adapters, deterministic core, SDK/CLI, customer GitHub Action, cross-platform CI, clean-room packaging, CodeQL, upstream protocol watch and performance baseline; pre-M8 world-class closure is the active work, and M8 has not started.
+> M0–M7 are complete; generated property testing, measured performance guard and 2026 market audit are now in place; TimeProofs should continue toward cross-system outcome/evidence enforcement, while final pre-M8 developer/repository/runtime-boundary items remain open.
