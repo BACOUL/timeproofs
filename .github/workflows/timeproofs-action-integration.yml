@@ -8,7 +8,7 @@ permissions:
 jobs:
   customer-action:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 6
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -22,27 +22,30 @@ jobs:
           import fs from 'node:fs';
           import crypto from 'node:crypto';
           const dir = `${process.env.RUNNER_TEMP}/timeproofs-customer`;
-          const checkoutProof = 'timeproofs-ci-checkout-proof';
-          const transaction_id = crypto.createHash('sha256').update(checkoutProof,'utf8').digest('base64url');
+          const proof = 'timeproofs-ci-checkout-proof';
+          const transaction_id = crypto.createHash('sha256').update(proof,'utf8').digest('base64url');
           const checkout = { ucp:{version:'2026-04-08'}, id:'checkout_ci', line_items:[], status:'ready_for_complete', currency:'EUR', totals:[{type:'total',amount:760}], links:[] };
-          const payment = { vct:'mandate.payment.1', transaction_id, payee:{name:'Merchant'}, payment_amount:{currency:'EUR',amount:760}, payment_instrument:{type:'CARD',id:'pi_ci'} };
+          const basePayment = { vct:'mandate.payment.1', transaction_id, payee:{name:'Merchant'}, payment_instrument:{type:'CARD',id:'pi_ci'} };
           fs.writeFileSync(`${dir}/checkout.json`,JSON.stringify(checkout),{mode:0o600});
-          fs.writeFileSync(`${dir}/payment.json`,JSON.stringify(payment),{mode:0o600});
-          fs.writeFileSync(`${dir}/proof.txt`,checkoutProof,{mode:0o600});
+          fs.writeFileSync(`${dir}/payment-pass.json`,JSON.stringify({...basePayment,payment_amount:{currency:'EUR',amount:760}}),{mode:0o600});
+          fs.writeFileSync(`${dir}/payment-block.json`,JSON.stringify({...basePayment,payment_amount:{currency:'EUR',amount:810}}),{mode:0o600});
+          fs.writeFileSync(`${dir}/proof.txt`,proof,{mode:0o600});
           NODE
-      - name: Customer uses TimeProofs
-        id: tp
+
+      - name: PASS — customer uses TimeProofs
+        id: pass
         uses: ./
         with:
           checkout: ${{ runner.temp }}/timeproofs-customer/checkout.json
-          payment-mandate: ${{ runner.temp }}/timeproofs-customer/payment.json
+          payment-mandate: ${{ runner.temp }}/timeproofs-customer/payment-pass.json
           checkout-jwt-file: ${{ runner.temp }}/timeproofs-customer/proof.txt
-          output: ${{ runner.temp }}/timeproofs-customer/result.json
-      - name: Assert customer contract and secret safety
+          output: ${{ runner.temp }}/timeproofs-customer/result-pass.json
+
+      - name: Assert PASS contract and safe result
         shell: bash
         env:
-          DECISION: ${{ steps.tp.outputs.decision }}
-          RESULT: ${{ steps.tp.outputs.result-file }}
+          DECISION: ${{ steps.pass.outputs.decision }}
+          RESULT: ${{ steps.pass.outputs.result-file }}
         run: |
           set -euo pipefail
           test "$DECISION" = PASS
@@ -51,8 +54,53 @@ jobs:
           const proof=fs.readFileSync(`${process.env.RUNNER_TEMP}/timeproofs-customer/proof.txt`,'utf8').trim();
           const raw=fs.readFileSync(process.env.RESULT,'utf8');
           if(raw.includes(proof)) throw new Error('raw checkout proof leaked into result');
+          if(raw.includes('payment_instrument')) throw new Error('payment instrument leaked into result');
           const j=JSON.parse(raw);
           if(j.decision!=='PASS') throw new Error(`expected PASS, got ${j.decision}`);
-          if(!j.core_schema_version) throw new Error('missing core_schema_version');
-          if(!j.metadata?.pack?.version) throw new Error('missing pack version');
+          if(j.result_contract_version!=='timeproofs.result.v0.1') throw new Error('unexpected result contract');
+          if(j.redaction?.profile!=='timeproofs.ci.safe.v0.1') throw new Error('missing safe redaction profile');
           NODE
+
+      - name: BLOCK — customer uses TimeProofs
+        id: block
+        continue-on-error: true
+        uses: ./
+        with:
+          checkout: ${{ runner.temp }}/timeproofs-customer/checkout.json
+          payment-mandate: ${{ runner.temp }}/timeproofs-customer/payment-block.json
+          checkout-jwt-file: ${{ runner.temp }}/timeproofs-customer/proof.txt
+          output: ${{ runner.temp }}/timeproofs-customer/result-block.json
+
+      - name: Assert BLOCK contract
+        shell: bash
+        env:
+          OUTCOME: ${{ steps.block.outcome }}
+          DECISION: ${{ steps.block.outputs.decision }}
+          RESULT: ${{ steps.block.outputs.result-file }}
+        run: |
+          set -euo pipefail
+          test "$OUTCOME" = failure
+          test "$DECISION" = BLOCK
+          node -e "const fs=require('fs'); const j=JSON.parse(fs.readFileSync(process.env.RESULT,'utf8')); if(j.decision!=='BLOCK') process.exit(1);"
+
+      - name: UNKNOWN — customer uses TimeProofs without binding evidence
+        id: unknown
+        continue-on-error: true
+        uses: ./
+        with:
+          checkout: ${{ runner.temp }}/timeproofs-customer/checkout.json
+          payment-mandate: ${{ runner.temp }}/timeproofs-customer/payment-pass.json
+          fail-on-unknown: 'true'
+          output: ${{ runner.temp }}/timeproofs-customer/result-unknown.json
+
+      - name: Assert UNKNOWN contract
+        shell: bash
+        env:
+          OUTCOME: ${{ steps.unknown.outcome }}
+          DECISION: ${{ steps.unknown.outputs.decision }}
+          RESULT: ${{ steps.unknown.outputs.result-file }}
+        run: |
+          set -euo pipefail
+          test "$OUTCOME" = failure
+          test "$DECISION" = UNKNOWN
+          node -e "const fs=require('fs'); const j=JSON.parse(fs.readFileSync(process.env.RESULT,'utf8')); if(j.decision!=='UNKNOWN') process.exit(1); const r=j.results.find(x=>x.invariant_id==='TP-CX-003'); if(r?.unknown_reason!=='INTEGRITY_UNVERIFIED') process.exit(1);"
