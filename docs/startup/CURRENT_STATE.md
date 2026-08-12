@@ -13,11 +13,17 @@ Branch: `relaunch/invariant-engine`
 
 **Strategic primitives:** VERIFY → ENFORCE → RESOLVE.
 
+**Canonical business architecture:** `docs/startup/BUSINESS_ARCHITECTURE.md`.
+
+**Company completeness audit:** `docs/startup/COMPANY_COMPLETENESS_AUDIT.md`.
+
 **Initial wedge:** UCP ↔ AP2 composition consistency focused on semantic/economic cross-object consistency and evidence closure rather than generic protocol conformance.
 
 **Current milestone:** M8 — local-first runtime enforcement: ACTIVE. Implementation has begun.
 
 **Pre-M8 World-Class Readiness Gate:** COMPLETE / GREEN.
+
+**Company-architecture audit:** COMPLETE. No discovered gap invalidates the project; commercial proof remains materially behind technical proof.
 
 ## Completed milestones
 
@@ -31,6 +37,7 @@ Branch: `relaunch/invariant-engine`
 - M6 — real UCP/AP2 adapters + local SDK/CLI: COMPLETE
 - M7 — customer-facing CI integration and package contract: COMPLETE
 - pre-M8 World-Class Readiness Gate: COMPLETE / GREEN
+- full startup/company completeness audit: COMPLETE
 
 ## Current executable product
 
@@ -96,6 +103,36 @@ Examples:
 The governing future outcome rule is:
 
 > **Never retry an unknown side effect. Resolve it first.**
+
+## Business architecture
+
+TimeProofs should monetize transaction integrity rather than seats/reports.
+
+Long-term monetization architecture:
+- free/local developer adoption where it improves distribution and trust;
+- usage-based production VERIFY/ENFORCE on protected consequential transactions;
+- potentially higher-value RESOLVE operations where provider-specific authoritative evidence is queried;
+- managed/private packs, evidence history, organizational controls, connectors and SLA for higher-value deployments.
+
+Current candidate usage pricing envelope (HYPOTHESIS ONLY, not market validated): approximately €0.005–€0.03 per protected transaction depending on depth of protection.
+
+Revenue arithmetic is documented only to show leverage; it is not a forecast.
+
+The desired economic shape is infrastructure-grade gross margin with revenue increasing faster than founder time.
+
+## Company completeness audit — critical gaps
+
+The largest unresolved company gaps are now explicit rather than implicit:
+
+1. **P0 — willingness-to-pay / economic buyer proof**;
+2. **P1 — first provider execution boundary (approved mandate ↔ PSP/network outcome)**;
+3. **P1 — exact open-source/commercial split before serious public release**;
+4. **P1 — paid-production liability/legal posture**;
+5. **P2 — distribution channel proof**;
+6. **P2 — unit economics for RESOLVE/provider reads/storage/support**;
+7. **P2 — first meaningful PSP/platform partnership proof**.
+
+These gaps do not require a pivot today. They run in parallel with M8 and become gates before heavy M10/cloud spend.
 
 ## Validation proof
 
@@ -181,7 +218,8 @@ Current M8 implementation includes:
 - default financial fail-closed policy;
 - explicit/auditable fail-open override behavior;
 - M8 regression tests;
-- enforcement module/schema in the public package allowlist.
+- enforcement module/schema in the public package allowlist;
+- strengthened clean-room package test requiring VERIFY+ENFORCE behavior.
 
 M8 remains ACTIVE until the strengthened full matrix, clean-room package enforcement contract and remaining runtime validation are green.
 
@@ -193,8 +231,8 @@ When publishing a real TimeProofs package: verify final npm name/scope ownership
 ### Before M9/public relaunch
 Archive/remove/redirect public AgentReady surfaces and replace legacy site architecture with a TimeProofs-native experience.
 
-### Market work in parallel
-Continue gathering real ICP, incident/cost and willingness-to-pay evidence before large M10 infrastructure spend.
+### Market/company work in parallel
+Validate ICP, economic buyer, incident cost, willingness-to-pay, pricing metric, distribution and first provider/partner demand. Do not make major M10/cloud investment before the commercial validation gate in `BUSINESS_ARCHITECTURE.md` is materially satisfied.
 
 ## Known non-claims
 
@@ -208,10 +246,12 @@ TimeProofs does not yet claim:
 - lifecycle Order enforcement;
 - modeled FX/tips/incremental authorization/partial capture/split settlement/marketplace payout;
 - hosted enforcement or SLA;
-- product-market fit.
+- product-market fit;
+- validated willingness-to-pay;
+- validated published pricing.
 
 Missing proof remains UNKNOWN.
 
 ## One-line status
 
-> M0–M7 and the pre-M8 World-Class Gate are complete; M8 local-first enforcement is actively implemented under a frozen fail-closed design, and the constitution-level company direction is VERIFY → ENFORCE → RESOLVE across the boundary between authorized and executed reality.
+> M0–M7, the pre-M8 World-Class Gate and the full company-completeness audit are complete; M8 local-first enforcement remains active, while commercial proof and the first authorized↔executed provider evidence boundary are the two highest-priority company risks/opportunities in parallel.
