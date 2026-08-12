@@ -14,9 +14,10 @@ Completed:
 - M2.1 foundation hardening;
 - M3 UCP/AP2 Invariant Pack v0.1 specification;
 - M4 fixture corpus/regression contract;
-- M5 deterministic Verify engine with green GitHub Actions regression.
+- M5 deterministic Verify engine with green GitHub Actions regression;
+- M6 real UCP/AP2 adapters + local SDK/CLI with green end-to-end CI.
 
-Current active milestone: **M6 — UCP/AP2 adapters + CLI/SDK**.
+Current active milestone: **M7 — customer-facing CI integration and package contract**.
 
 Legacy AgentReady assets remain temporarily but are non-canonical for the relaunch.
 
@@ -46,88 +47,78 @@ Initial artifact target:
 - TP-CX-002 currency projection, BLOCK-capable;
 - TP-CX-001 amount projection, BLOCK-capable.
 
-Artifacts: `packs/ucp-ap2/`.
-
 ## M4 — Fixture corpus and regression harness
 **Status: COMPLETE**
 
 Source of truth: `fixtures/ucp-ap2/v0.1/`.
 
-Frozen cases cover PASS exact projection, BLOCK amount mismatch, BLOCK currency mismatch, UNKNOWN missing checkout, unsupported version, missing total and unsupported FX.
-
 ## M5 — Deterministic Verify engine
 **Status: COMPLETE**
 
-Implemented:
-- deterministic evaluator;
-- TP-CX-003/002/001 execution;
-- structured UNKNOWN propagation;
-- deterministic aggregation;
-- full fixture regression runner;
-- npm test command;
-- GitHub Actions regression workflow.
+Green executable regression proved against the frozen M4 contract. See `timeproofs-core/M5_COMPLETION_REPORT.md`.
+
+## M6 — UCP/AP2 adapters + CLI/SDK
+**Status: COMPLETE**
+
+### Delivered
+- real UCP Checkout adapter for protocol version `2026-04-08`;
+- real AP2 PaymentMandate adapter for VCT `mandate.payment.1`;
+- immutable canonical JSON SHA-256 snapshots;
+- adapter provenance and source mappings;
+- strict production TP-CX-003 binding evidence path;
+- local JS SDK `verifyTransaction()`;
+- CLI `timeproofs verify`;
+- human and JSON output;
+- explicit local exit codes;
+- end-to-end adapter/SDK/CLI tests;
+- full M4 + M6 GitHub Actions regression.
 
 Validation proof:
 - workflow `TimeProofs Core Regression`;
-- successful run id `31543423839`;
+- run id `31571347893`;
+- head `96ddefe88e0486b8d2be25a4a6dcae0b5bf485e4`;
 - Node 22;
 - conclusion `success`.
 
-See `timeproofs-core/M5_COMPLETION_REPORT.md`.
+Important boundary: M6 proves exact-state equality only when explicit checkout JWT hash evidence is supplied. It does not claim full SD-JWT/JWS/key verification. See `docs/product/M6_COMPLETION_REPORT.md`.
 
-## M6 — UCP/AP2 adapters + CLI/SDK
+## M7 — Customer-facing CI integration and package contract
 **Status: ACTIVE**
 
 ### Goal
-Turn fixture-shaped internal inputs into real, local developer ingestion for supported UCP/AP2 artifacts without moving protocol semantics into the generic core.
+Make TimeProofs safe and predictable as a developer/CI dependency without adding hosted-service complexity.
 
 ### Required deliverables
-- adapter contract/interface;
-- UCP Checkout adapter;
-- AP2 PaymentMandate adapter;
-- exact machine-recognizable supported profile/version policy;
-- raw artifact validation/parsing;
-- immutable artifact snapshot/digest generation;
-- canonical field extraction with provenance;
-- native binding/integrity verification interface;
-- normalized transaction input builder;
-- JS/TS SDK entry point;
-- CLI `timeproofs verify`;
-- JSON output;
-- human-readable terminal output;
-- typed/stable error taxonomy;
-- adapter tests and end-to-end CLI tests;
-- green CI for new M6 tests.
+- freeze public CLI syntax and compatibility policy;
+- stable public result JSON contract and schema/versioning;
+- customer-facing GitHub Action separate from internal regression workflow;
+- Action inputs for checkout/payment/checkout-JWT evidence without credential leakage;
+- Action outputs for decision/result path and safe summary;
+- documented stable exit-code policy;
+- redaction/secrets policy;
+- generated CI artifact that excludes raw payment credentials and JWT values by default;
+- package/release structure that makes TimeProofs primary and AgentReady legacy;
+- install/quickstart documentation;
+- example workflow;
+- integration test proving PASS/BLOCK/UNKNOWN behavior;
+- green Actions checks for customer-facing integration.
 
-### Required developer workflow
-A developer must be able to supply supported local artifacts and receive a useful result without a TimeProofs account.
-
-Target shape (subject to M6 interface freeze):
-
-`timeproofs verify --ucp checkout.json --ap2 payment-mandate.json --json`
-
-### Boundaries
-- M5 core aggregation/evaluation remains protocol-agnostic.
-- Adapters own protocol recognition, validation, source mapping and provenance.
-- Do not use research profile strings as production protocol identifiers.
-- Do not claim cryptographic verification unless the adapter actually verifies the protocol-native mechanism.
-- Unsupported or ambiguous profiles yield explicit unsupported/UNKNOWN behavior, never guessed parsing.
+### Safety requirements
+- do not print or upload checkout JWT/payment credential tokens by default;
+- no raw secrets in GitHub step summaries;
+- machine artifacts contain digests/references, not credential payloads, unless an explicit future secure evidence mode exists;
+- BLOCK/UNKNOWN semantics must not change between local CLI and Action;
+- unsupported profiles are explicit, never silently coerced.
 
 ### Exit criteria
-- supported real-format artifacts parse deterministically;
-- unsupported profiles are rejected/UNKNOWN explicitly;
-- snapshot digests are generated from declared serialization scope;
-- canonical values preserve source paths/provenance;
-- CLI and SDK reach the same core result;
-- end-to-end PASS/BLOCK/UNKNOWN tests exist;
-- local quickstart works without signup;
-- all M4/M5 regressions remain green;
-- M6 GitHub Actions checks are green.
-
-## M7 — CI integration
-**Status: NOT STARTED**
-
-Stable product exit codes, GitHub Action/equivalent, artifact output and reproducible local/CI behavior. The M5 regression workflow is an internal quality gate, not yet the M7 customer-facing integration.
+- developer can add TimeProofs to a repo with a minimal workflow;
+- Action and local CLI produce equivalent decisions;
+- PASS/BLOCK/UNKNOWN integration cases tested;
+- safe JSON artifact contract versioned;
+- secret/redaction behavior tested;
+- package/public naming ambiguity with AgentReady resolved for the TimeProofs path;
+- all M4–M6 regressions remain green;
+- M7 customer-facing Action integration is green.
 
 ## M8 — Enforce runtime
 **Status: NOT STARTED**
