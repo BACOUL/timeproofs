@@ -31,7 +31,6 @@ function runNode(script, env) {
 
 const proof = 'timeproofs-security-proof';
 
-// Strict canonicalization: attacker-controlled JS input must never hash lossy/non-JSON values.
 await expectThrow(() => Promise.resolve(canonicalJson({x:NaN})), 'non-finite');
 await expectThrow(() => Promise.resolve(canonicalJson({x:undefined})), 'non-JSON');
 const cyclic = {}; cyclic.self = cyclic;
@@ -40,18 +39,16 @@ let deep = {}; let cursor = deep;
 for (let i=0;i<110;i++) { cursor.next={}; cursor=cursor.next; }
 await expectThrow(() => Promise.resolve(canonicalJson(deep)), 'depth limit');
 
-// Adapter type boundaries.
 await expectThrow(() => Promise.resolve(verifyTransaction({checkout:checkout(1.5),paymentMandate:payment(proof),checkoutJwt:proof})), 'total amount');
 await expectThrow(() => Promise.resolve(verifyTransaction({checkout:checkout(76000,'eur'),paymentMandate:payment(proof),checkoutJwt:proof})), 'currency');
 await expectThrow(() => Promise.resolve(verifyTransaction({checkout:checkout(),paymentMandate:{...payment(proof),vct:'mandate.payment.future'},checkoutJwt:proof})), 'Unsupported AP2');
 await expectThrow(() => Promise.resolve(verifyTransaction({checkout:{...checkout(),totals:[{type:'total',amount:1},{type:'total',amount:1}]},paymentMandate:payment(proof),checkoutJwt:proof})), 'exactly one');
 
-// Determinism for fixed evaluatedAt.
 const a = verifyTransaction({checkout:checkout(),paymentMandate:payment(proof),checkoutJwt:proof,evaluatedAt:'2026-08-12T10:00:00Z'});
 const b = verifyTransaction({checkout:checkout(),paymentMandate:payment(proof),checkoutJwt:proof,evaluatedAt:'2026-08-12T10:00:00Z'});
 assert(JSON.stringify(a) === JSON.stringify(b), 'Fixed-input evaluation must be deterministic.');
+assert(a.result_contract_version === 'timeproofs.result.v0.1', 'SDK result contract version missing.');
 
-// Customer Action runner safety: output cannot overwrite inputs and oversized files are rejected.
 const dir = await fs.mkdtemp(path.join(os.tmpdir(),'timeproofs-security-'));
 const checkoutPath = path.join(dir,'checkout.json');
 const paymentPath = path.join(dir,'payment.json');
@@ -66,9 +63,15 @@ let run = await runNode(path.resolve('ci/github-action.mjs'), {
   TP_FAIL_UNKNOWN:'true', TP_MAX_INPUT_BYTES:'1048576'
 });
 assert(run.code === 0, `Safe Action PASS expected 0, got ${run.code}: ${run.stderr}`);
-const safeResult = await fs.readFile(resultPath,'utf8');
-assert(!safeResult.includes(proof), 'Action result must not contain raw checkout proof.');
-assert(JSON.parse(safeResult).decision === 'PASS', 'Action result must PASS.');
+const safeText = await fs.readFile(resultPath,'utf8');
+assert(!safeText.includes(proof), 'Action result must not contain raw checkout proof.');
+assert(!safeText.includes('payment_instrument'), 'Action result must not contain payment instrument payload.');
+assert(!safeText.includes('merchant_authorization'), 'Action result must not contain merchant authorization payload.');
+const safeResult = JSON.parse(safeText);
+assert(safeResult.decision === 'PASS', 'Action result must PASS.');
+assert(safeResult.result_contract_version === 'timeproofs.result.v0.1', 'Safe result contract version missing.');
+assert(safeResult.redaction?.profile === 'timeproofs.ci.safe.v0.1', 'Safe redaction profile missing.');
+assert(safeResult.graph.objects.every(o => !Object.hasOwn(o,'raw')), 'Safe result must omit raw protocol objects.');
 
 run = await runNode(path.resolve('ci/github-action.mjs'), {
   TP_CHECKOUT:checkoutPath, TP_PAYMENT:paymentPath, TP_JWT_FILE:proofPath, TP_OUTPUT:checkoutPath
