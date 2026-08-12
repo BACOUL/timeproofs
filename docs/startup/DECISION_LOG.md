@@ -48,7 +48,7 @@ Developer-led/self-serve distribution is preferred: GitHub, package registries, 
 
 ## D-012 — Current unresolved decisions
 **Status:** OPEN
-Not frozen yet: final package name, final pricing, open-source boundary, hosted vs local verification boundary, evidence-bundle signing, exact first buyer segment, final website IA, dashboard need, external pack authoring and final runtime enforcement topology.
+Not frozen yet: final package name, final pricing, open-source boundary, hosted vs local verification boundary, evidence-bundle signing, exact first buyer segment, final website IA, dashboard need, external pack authoring and final hosted/runtime topology beyond M8 local-first enforcement.
 
 ## D-013 — Do not duplicate UCP/AP2 conformance as the company wedge
 **Status:** DECISION
@@ -79,8 +79,8 @@ UCP Orders can legitimately evolve. Order invariants are lifecycle-aware; `curre
 `TIMEPROOFS_PRODUCT_CONSTITUTION.md` is canonical for company thesis. Protocol research may refine adapters, mappings, evidence and pack contents but cannot silently redefine the company. Frozen product model: `ProtocolObject → Binding → Invariant → Evidence → Decision`.
 
 ## D-020 — Execute milestones in canonical order
-**Status:** DECISION, UPDATED THROUGH D-035
-`docs/startup/EXECUTION_PLAN.md` is the canonical implementation sequence. M0–M7 and M2.1 are complete. Current active work is World-Class Gate pre-M8 closure. M8 is not started.
+**Status:** DECISION, UPDATED THROUGH D-036
+`docs/startup/EXECUTION_PLAN.md` is the canonical implementation sequence. M0–M7, M2.1 and the pre-M8 World-Class Gate are complete. M8 local-first runtime enforcement is the active milestone; implementation begins from its frozen design.
 
 ## D-021 — M1 complete; conservative seven-rule shortlist
 **Status:** DECISION
@@ -149,12 +149,7 @@ M7 is COMPLETE.
 
 The public/local semantics are frozen through a customer-facing GitHub Action, versioned result contract, redacted CI-safe result and stable exit behavior.
 
-Verified successful customer Action run:
-- run id `31591960176`;
-- head `93c24e72611b2bfe2f95ffaa89c406e88c017b40`;
-- conclusion `success`.
-
-The run proves PASS, BLOCK and UNKNOWN customer paths rather than only a happy path. See `docs/product/M7_COMPLETION_REPORT.md`.
+Verified customer Action run `31591960176`: success.
 
 ## D-030 — Customer CI artifacts are safe projections, not full local evidence graphs
 **Status:** DECISION
@@ -168,58 +163,60 @@ The mixed historical repository is not itself the publishable package boundary.
 
 The TimeProofs package is assembled from an explicit allowlist under `packaging/timeproofs/`, preventing accidental AgentReady inclusion. A clean-room pack/install/SDK/CLI test is required.
 
-Verified successful package run:
-- run id `31592422020`;
-- head `2ed60dd931f120ef204a058cdd84c7b28373354f`;
-- conclusion `success`.
+Verified package run `31592422020`: success.
 
 ## D-032 — Supported upstream schemas are locked and watched; upstream change is not automatic compatibility
 **Status:** DECISION
 Current audited schema snapshots are recorded in `protocols/upstream-lock.json` and monitored by the upstream watch workflow.
 
-Current audited blobs:
-- UCP Checkout: `e9093b0c9c6294638e3e51ce3c38ef95ea428102`;
-- AP2 PaymentMandate: `fa93b0dfd4cb50a00ecff22daa9033aa9fa6fab9`.
-
 A changed upstream schema triggers compatibility review and regression work. It does not silently expand supported profiles.
 
 ## D-033 — World-Class Gate separates pre-M8 readiness from release-time provenance
 **Status:** DECISION
-Release controls that can only be proven against a real published artifact are not falsely marked complete during pre-release development.
-
-Release-time controls include:
-- npm Trusted Publishing/OIDC;
-- npm provenance;
-- exact-release SBOM;
-- GitHub artifact attestation/provenance;
-- immutable release/tag verification;
-- registry-install smoke test of the published artifact.
-
-They become mandatory when cutting the first new TimeProofs release.
+Release controls that can only be proven against a real published artifact are not falsely marked complete during pre-release development. npm OIDC/provenance, exact-release SBOM/attestation, immutable release verification and registry-install proof become mandatory when cutting the first new TimeProofs release.
 
 ## D-034 — Generated property testing and measured performance guard are part of pre-M8 quality
 **Status:** DECISION
-The initial hand-written fixture/adversarial corpus is now supplemented by deterministic generated transaction families.
+`run-property-regression.mjs` exercises 250 generated transaction families per run and checks projection equality, amount/currency/binding perturbations, absent-proof UNKNOWN behavior and fixed-input determinism. Verified full run `31618680408`: success.
 
-`run-property-regression.mjs` exercises 250 generated transaction families per run and checks projection equality, amount/currency/binding perturbations, absent-proof UNKNOWN behavior and fixed-input determinism. It is part of `npm run test:timeproofs` and passed `TimeProofs Core Regression` run `31618680408` on head `175f92213ca722d873437749d1b911664142e663`.
+The 1,000-line-item benchmark measured p95 6.004 ms. A 100 ms p95 regression ceiling is enforced as an algorithmic guard, not a user-facing SLA. Threshold run `31618899028`: success.
 
-The 1,000-line-item benchmark measured p95 6.004 ms in the verified baseline run. A deliberately generous 100 ms p95 regression ceiling is now enforced as an algorithmic guard, not a user-facing SLA. The new threshold passed workflow run `31618899028` on head `7e3cbbf948f6402bf24c8fc1791afd5393c93041`.
+The CLI malformed/unsupported/BLOCK/UNKNOWN contract is also executable across the full suite. Run `31619326027`: success.
 
 ## D-035 — Market audit says continue, but the moat must move beyond narrow UCP/AP2 checks
 **Status:** DECISION / STRATEGIC DIRECTION
-The 2026 market audit finds sufficient evidence to continue TimeProofs: UCP adoption is accelerating, AP2 remains active, and standards/community discussions document composition, cumulative-state, runtime and outcome-ownership gaps.
+The 2026 market audit finds sufficient evidence to continue TimeProofs, but narrow amount/currency checks have high standards-absorption risk and are not a durable moat.
 
-However, narrow amount/currency checks have high standards-absorption risk and are not a durable moat.
-
-Priority strategic expansion after the initial wedge:
+Priority strategic expansion:
 1. approved PaymentMandate ↔ executed PSP/network outcome;
 2. checkout/payment ↔ committed order lifecycle;
 3. cumulative mandate constraints ↔ prior fulfilment state;
 4. cancellation/refund ↔ order/payment/provider state.
 
-The moat target is maintained cross-protocol/provider evidence and invariant knowledge, not generic verification logic. Current willingness-to-pay evidence remains weak and must be treated as the primary business risk.
+The moat target is maintained cross-protocol/provider evidence and invariant knowledge, not generic verification logic. Current willingness-to-pay evidence remains the primary business risk.
 
 Canonical audit: `docs/research/MARKET_STRATEGIC_AUDIT_2026-08-12.md`.
+
+## D-036 — Pre-M8 gate is GREEN; M8 is local-first decision enforcement, not transaction execution
+**Status:** DECISION
+The pre-M8 World-Class Readiness Gate is complete. M8 may begin.
+
+M8 design is frozen before implementation in `docs/product/M8_RUNTIME_ENFORCEMENT_DESIGN.md`.
+
+Default financially consequential policy:
+- PASS → ALLOW;
+- WARN → ALLOW with evidence;
+- BLOCK → DENY;
+- UNKNOWN → DENY;
+- internal/runtime error → ERROR and never silent ALLOW.
+
+Any fail-open override must be explicit and audit-visible.
+
+TimeProofs M8 returns an enforcement decision but MUST NOT execute or custody the caller's payment/external side effect. This preserves a narrow trust/liability boundary and avoids unsupported exactly-once claims.
+
+M8 remains local-first with pinned versions, no `latest` semantics, no silent remote pack mutation and no mandatory TimeProofs cloud dependency.
+
+Public AgentReady cleanup is reclassified as pre-M9/public-relaunch work; real-release provenance controls remain release-time gates.
 
 ---
 Add new decisions sequentially. Never rewrite history to make it look cleaner; supersede/refine decisions explicitly.
