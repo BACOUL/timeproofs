@@ -8,22 +8,25 @@ Before doing any strategic or implementation work on the TimeProofs relaunch, re
 4. `docs/startup/WORLD_CLASS_GATE.md`
 5. `docs/startup/WORLD_CLASS_GATE_COMPLETION_REPORT.md`
 6. `docs/startup/DECISION_LOG.md`
-7. `docs/product/M7_COMPLETION_REPORT.md`
-8. `TIMEPROOFS_MASTER_CONTEXT.md`
-9. `docs/research/M1_COMPLETION_REPORT.md`
-10. `docs/product/M2_1_FOUNDATION_HARDENING.md`
-11. `packs/ucp-ap2/M3_COMPLETION_REPORT.md`
-12. `packs/ucp-ap2/SPEC.md`
-13. `packs/ucp-ap2/COMPATIBILITY.md`
-14. `docs/product/M6_COMPLETION_REPORT.md`
-15. `docs/product/RESULT_CONTRACT.md`
-16. `docs/security/THREAT_MODEL.md`
-17. `docs/security/SUPPLY_CHAIN.md`
-18. `docs/legacy/AGENTREADY_INVENTORY.md`
-19. `LEGACY_AGENTREADY.md`
-20. `docs/startup/STARTUP_OPERATING_SYSTEM.md`
-21. `docs/startup/HANDOFF.md`
-22. `docs/startup/BENCHMARK_POLICY.md`
+7. `docs/product/M8_RUNTIME_ENFORCEMENT_DESIGN.md`
+8. `docs/research/MARKET_STRATEGIC_AUDIT_2026-08-12.md`
+9. `docs/product/M7_COMPLETION_REPORT.md`
+10. `TIMEPROOFS_MASTER_CONTEXT.md`
+11. `docs/research/M1_COMPLETION_REPORT.md`
+12. `docs/product/M2_1_FOUNDATION_HARDENING.md`
+13. `packs/ucp-ap2/M3_COMPLETION_REPORT.md`
+14. `packs/ucp-ap2/SPEC.md`
+15. `packs/ucp-ap2/COMPATIBILITY.md`
+16. `docs/product/M6_COMPLETION_REPORT.md`
+17. `docs/product/RESULT_CONTRACT.md`
+18. `docs/product/PERFORMANCE_AND_INPUT_PROFILE.md`
+19. `docs/security/THREAT_MODEL.md`
+20. `docs/security/SUPPLY_CHAIN.md`
+21. `docs/legacy/AGENTREADY_INVENTORY.md`
+22. `LEGACY_AGENTREADY.md`
+23. `docs/startup/STARTUP_OPERATING_SYSTEM.md`
+24. `docs/startup/HANDOFF.md`
+25. `docs/startup/BENCHMARK_POLICY.md`
 
 ## Active direction
 
@@ -33,40 +36,40 @@ The long-term product is a **Cross-Protocol Consistency & Invariant Engine**.
 
 The initial wedge is UCP ↔ AP2 composition consistency, focused on cross-object semantic/economic consistency and evidence closure rather than generic protocol conformance.
 
+The strategic next evidence boundary is approved AP2 PaymentMandate ↔ executed PSP/network outcome; this complements rather than replaces the current UCP↔AP2 pre-commit wedge.
+
 ## Current status
 
-Product thesis is frozen at the constitutional level.
+M0–M7 plus M2.1 are complete. The pre-M8 World-Class Readiness Gate is GREEN.
 
-M0–M7 plus M2.1 are complete. The active work is **World-Class Gate pre-M8 closure**. M8 runtime enforcement has NOT started.
+**M8 local-first runtime enforcement is now ACTIVE; implementation has not yet started.**
 
-The active code path includes the deterministic core, real UCP/AP2 adapters, JS SDK, CLI, TimeProofs GitHub Action, safe CI result projection, clean-room package boundary, upstream protocol watch, CodeQL and performance baseline. Legacy AgentReady assets are non-canonical and excluded from the dedicated TimeProofs package; remaining public legacy surfaces still require safe archive/removal before relaunch.
+The M8 design was frozen before code in `docs/product/M8_RUNTIME_ENFORCEMENT_DESIGN.md`.
 
-## Remaining pre-M8 blockers
+The active executable path includes deterministic core, real UCP/AP2 adapters, JS SDK, CLI, customer GitHub Action, safe CI projection, clean-room package boundary, upstream protocol watch, CodeQL, generated property regression and measured performance guard.
 
-Unless founder-waived with rationale:
+Legacy AgentReady assets are non-canonical and excluded from the TimeProofs package. Public legacy surfaces must be cleaned before M9/public relaunch, not before local M8 implementation.
 
-- broaden property/fuzz testing beyond hand-written adversarial cases;
-- review malformed/unsupported/UNKNOWN human errors as a coherent UX set;
-- freeze the final public package name and one canonical install/CI path;
-- document measured supported input/performance limits and decide whether to enforce a performance regression threshold;
-- safely archive/remove remaining public AgentReady site/code surfaces.
+## M8 rules
 
-Release-time npm OIDC/provenance, exact-artifact SBOM/attestations and registry-install proof are mandatory when a real new TimeProofs release is cut; they are not falsely treated as already complete.
+- Implement the frozen M8 design before widening scope.
+- Default financially consequential enforcement is fail-closed for BLOCK and UNKNOWN.
+- Internal/runtime error must never silently become ALLOW.
+- Explicit fail-open behavior, if supported, must be configuration-visible and audit-visible.
+- TimeProofs returns enforcement decisions; it does not execute/custody the caller's payment or external side effect in M8.
+- Do not turn M8 into a generic MCP/A2A gateway.
+- No `latest` pack/protocol semantics and no silent in-process remote pack mutation.
+- Preserve local-first operation without mandatory TimeProofs cloud dependency.
 
-## Rules for contributors and AI assistants
+## General contributor rules
 
 - Do not redefine the company because a protocol detail changes.
-- Protocol research may refine pack contents, mappings and invariant semantics.
-- Any change to company thesis/category requires explicit founder approval and Decision Log entry.
 - Always verify current protocol facts before protocol-dependent decisions.
-- Check `protocols/upstream-lock.json` before widening compatibility claims.
 - Do not infer the relaunch product from AgentReady-era files.
-- Do not default to a generic dashboard/API/landing-page pattern.
-- Do not implement a blocking invariant without the evidence/fixture requirements defined in the Decision Log, pack SPEC and Execution Plan.
-- Preserve exact artifact snapshot provenance, pack/adapter/core versions, and structured UNKNOWN reasons.
-- Do not mark a world-class gate item complete without repository or externally verifiable evidence.
-- Do not expose raw transaction credential material in CI-safe results.
-- Do not begin M8 while pre-M8 blockers remain unless a founder waiver is recorded.
+- Do not implement a BLOCK-capable invariant without its normative evidence, ambiguity fixtures and enforcement point.
+- Preserve artifact provenance, versions and structured UNKNOWN reasons.
+- Do not expose raw transaction credential material in safe CI/audit outputs.
+- Keep market/ICP/willingness-to-pay evidence separate from technical readiness claims.
 - Record material decisions in `docs/startup/DECISION_LOG.md`.
 
 Conversation memory is not canonical. The repository is.
