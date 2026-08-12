@@ -1,0 +1,46 @@
+name: TimeProofs CodeQL
+
+on:
+  push:
+    branches: [relaunch/invariant-engine]
+    paths:
+      - 'timeproofs-core/**'
+      - 'adapters/**'
+      - 'sdk/**'
+      - 'cli/timeproofs.js'
+      - 'bin/timeproofs.js'
+      - 'ci/**'
+      - 'scripts/build-timeproofs-package.mjs'
+      - '.github/workflows/codeql.yml'
+  pull_request:
+    paths:
+      - 'timeproofs-core/**'
+      - 'adapters/**'
+      - 'sdk/**'
+      - 'cli/timeproofs.js'
+      - 'bin/timeproofs.js'
+      - 'ci/**'
+  schedule:
+    - cron: '43 6 * * 3'
+
+permissions:
+  contents: read
+  security-events: write
+  packages: read
+  actions: read
+
+jobs:
+  analyze:
+    name: Analyze JavaScript/TypeScript
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: github/codeql-action/init@c4dd10e44af883a891fe31ced449bcb4a6728b9b
+        with:
+          languages: javascript-typescript
+      - uses: github/codeql-action/analyze@c4dd10e44af883a891fe31ced449bcb4a6728b9b
+        with:
+          category: '/language:javascript-typescript'
