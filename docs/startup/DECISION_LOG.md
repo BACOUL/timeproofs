@@ -48,7 +48,7 @@ Developer-led/self-serve distribution is preferred: GitHub, package registries, 
 
 ## D-012 — Current unresolved decisions
 **Status:** OPEN
-Not frozen yet: final package name, final pricing, open-source boundary, hosted vs local verification boundary, evidence-bundle signing, exact first buyer segment, final website IA, dashboard need, external pack authoring and final hosted/runtime topology beyond M8 local-first enforcement.
+Not frozen yet: final package name, final pricing, exact open-source boundary, evidence-bundle signing, exact first buyer segment, final website IA, dashboard need, external pack authoring, exact SLA/support model and final hosted/runtime topology beyond M8 local-first enforcement.
 
 ## D-013 — Do not duplicate UCP/AP2 conformance as the company wedge
 **Status:** DECISION
@@ -79,8 +79,8 @@ UCP Orders can legitimately evolve. Order invariants are lifecycle-aware; `curre
 `TIMEPROOFS_PRODUCT_CONSTITUTION.md` is canonical for company category/constitution and `docs/product/PRODUCT_THESIS.md` is canonical for the product-level transaction-integrity thesis. Protocol research may refine adapters, mappings, evidence and pack contents but cannot silently redefine the company. Frozen product model: `ProtocolObject → Binding → Invariant → Evidence → Decision`.
 
 ## D-020 — Execute milestones in canonical order
-**Status:** DECISION, UPDATED THROUGH D-036
-`docs/startup/EXECUTION_PLAN.md` is the canonical implementation sequence. M0–M7, M2.1 and the pre-M8 World-Class Gate are complete. M8 local-first runtime enforcement is the active milestone.
+**Status:** DECISION, UPDATED THROUGH D-038
+`docs/startup/EXECUTION_PLAN.md` is the canonical implementation sequence. M0–M7, M2.1, the pre-M8 World-Class Gate and the company-completeness audit are complete. M8 local-first runtime enforcement is the active milestone.
 
 ## D-021 — M1 complete; conservative seven-rule shortlist
 **Status:** DECISION
@@ -244,6 +244,24 @@ A mature resolver should distinguish COMMITTED, NOT_COMMITTED and UNKNOWN from a
 The moat hypothesis expands from Invariant Packs alone to accumulated invariant + evidence + resolver semantics and compatibility history across independent systems.
 
 The thesis has explicit kill conditions: rethink it if cross-system inconsistency is not economically meaningful, individual protocol/provider owners absorb the whole relevant boundary, integration economics prevent accumulation, or willingness-to-pay remains absent despite meaningful transaction volume.
+
+## D-038 — Business architecture is canonical; commercial proof remains a separate gate
+**Status:** DECISION / COMPANY OPERATING MODEL
+Canonical company design is now maintained in `docs/startup/BUSINESS_ARCHITECTURE.md` and audited in `docs/startup/COMPANY_COMPLETENESS_AUDIT.md`.
+
+TimeProofs should monetize transaction integrity rather than seats/reports. Preferred long-term economic architecture is:
+- free/local developer adoption where it improves distribution/trust;
+- usage-based production VERIFY/ENFORCE on consequential protected transactions/actions;
+- potentially higher-value RESOLVE operations for provider-specific authoritative outcome checks;
+- managed/private packs, evidence/history, governance, connectors and SLA as enterprise expansion.
+
+Candidate usage pricing (including the current €0.005–€0.03 modeling envelope) is a HYPOTHESIS, not a market fact. Revenue scenarios are arithmetic, not forecasts.
+
+The largest company risk remains willingness-to-pay and economic-buyer proof. Other material open gaps include provider-execution evidence, exact open-source/commercial split, paid-production liability posture, distribution proof, Resolve unit economics and first meaningful PSP/platform partnership.
+
+Technical readiness must never be used as a substitute for market or revenue proof. Significant M10/cloud spend is gated on meaningful commercial evidence.
+
+This company audit does not interrupt or pivot M8. M8 resumes from its active enforcement implementation state.
 
 ---
 Add new decisions sequentially. Never rewrite history to make it look cleaner; supersede/refine decisions explicitly.
