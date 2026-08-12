@@ -79,8 +79,8 @@ UCP Orders can legitimately evolve. Order invariants are lifecycle-aware; `curre
 `TIMEPROOFS_PRODUCT_CONSTITUTION.md` is canonical for company thesis. Protocol research may refine adapters, mappings, evidence and pack contents but cannot silently redefine the company. Frozen product model: `ProtocolObject → Binding → Invariant → Evidence → Decision`.
 
 ## D-020 — Execute milestones in canonical order
-**Status:** DECISION, UPDATED THROUGH D-027
-`docs/startup/EXECUTION_PLAN.md` is the canonical implementation sequence. M0–M5 and M2.1 are complete. Current active milestone is M6.
+**Status:** DECISION, UPDATED THROUGH D-028
+`docs/startup/EXECUTION_PLAN.md` is the canonical implementation sequence. M0–M6 and M2.1 are complete. Current active milestone is M7.
 
 ## D-021 — M1 complete; conservative seven-rule shortlist
 **Status:** DECISION
@@ -139,8 +139,6 @@ M5 is complete after executable validation, not code presence alone.
 
 The release-validation process strengthened the regression runner to check aggregate status, per-invariant status, declared reason codes, declared UNKNOWN reasons, and UNKNOWN/null consistency. A mismatch in the initial amount-check UNKNOWN classification was fixed in implementation rather than weakening the frozen fixture contract.
 
-A GitHub Actions quality gate now runs `npm run test:timeproofs-core` on TimeProofs core/fixture changes.
-
 Verified successful run:
 - workflow: `TimeProofs Core Regression`
 - run id: `31543423839`
@@ -148,7 +146,27 @@ Verified successful run:
 - Node 22
 - conclusion: `success`
 
-M6 is now active. M6 must replace fixture/research-profile assumptions with real machine-recognizable UCP/AP2 adapters while preserving the generic M5 core boundary. See `timeproofs-core/M5_COMPLETION_REPORT.md`.
+## D-028 — M6 production ingestion supports only explicit real profiles and explicit binding evidence
+**Status:** DECISION
+M6 is complete.
+
+Initial production support is deliberately pinned to:
+- UCP Checkout protocol version `2026-04-08`, capability `dev.ucp.shopping.checkout`;
+- AP2 PaymentMandate VCT `mandate.payment.1`.
+
+Research fixture labels such as `ucp-current-m1` and `ap2-v0.2-m1` remain test-only.
+
+Production TP-CX-003 no longer treats a present `transaction_id` as proof. For the supported SHA-256 profile, the SDK requires the exact checkout JWT, computes its base64url SHA-256 hash and compares it with AP2 `transaction_id`. Missing binding evidence yields UNKNOWN/INTEGRITY_UNVERIFIED; mismatch yields BLOCK.
+
+M6 does not claim SD-JWT signature/key-binding validation, merchant JWS verification, arbitrary AP2 hash algorithms, remote UCP schema composition or external payment execution proof.
+
+Developer surfaces now exist through local SDK `verifyTransaction()` and CLI `timeproofs verify`, with JSON output and stable initial exit codes. Full M4+M6 GitHub Actions regression passed:
+- run id `31571347893`
+- head `96ddefe88e0486b8d2be25a4a6dcae0b5bf485e4`
+- Node 22
+- conclusion `success`.
+
+M7 is now active and must freeze the customer-facing CI/package contract while preventing raw JWT/payment credential leakage.
 
 ---
 Add new decisions sequentially. Never rewrite history to make it look cleaner; supersede/refine decisions explicitly.
