@@ -11,7 +11,9 @@ Branch: `relaunch/invariant-engine`
 
 **Initial wedge:** UCP ↔ AP2 composition consistency focused on semantic/economic cross-object consistency and evidence closure rather than generic protocol conformance.
 
-**Current milestone:** M7 COMPLETE. World-Class Gate pre-M8 closure ACTIVE. M8 NOT STARTED.
+**Current milestone:** M8 — local-first runtime enforcement: ACTIVE. Implementation has not started yet.
+
+**Pre-M8 World-Class Readiness Gate:** COMPLETE / GREEN.
 
 ## Completed milestones
 
@@ -24,20 +26,19 @@ Branch: `relaunch/invariant-engine`
 - M5 — deterministic Verify Engine: COMPLETE
 - M6 — real UCP/AP2 adapters + local SDK/CLI: COMPLETE
 - M7 — customer-facing CI integration and package contract: COMPLETE
+- pre-M8 World-Class Readiness Gate: COMPLETE / GREEN
 
 ## Current executable product
 
 Implemented production path:
-- `adapters/ucp/checkout.js`
-- `adapters/ap2/payment-mandate.js`
-- `sdk/index.js`
-- `cli/timeproofs.js`
-- `bin/timeproofs.js`
-- `timeproofs-core/canonical.js`
-- `verifyTransactionGraph()` in core
-- `action.yml`
-- `ci/github-action.mjs`
-- `ci/safe-result.mjs`
+- deterministic core and canonicalization;
+- real UCP Checkout adapter;
+- real AP2 PaymentMandate adapter;
+- JS SDK `verifyTransaction()`;
+- CLI `timeproofs verify`;
+- customer GitHub Action;
+- safe CI result projection;
+- clean-room TimeProofs package build by allowlist.
 
 Supported initial profiles:
 - UCP `2026-04-08` Checkout (`dev.ucp.shopping.checkout`)
@@ -46,8 +47,6 @@ Supported initial profiles:
 Developer flow:
 
 `timeproofs verify --checkout checkout.json --payment-mandate payment.json --checkout-jwt '<exact-proof>'`
-
-Machine JSON is available with `--json`.
 
 Frozen exit semantics:
 - 0 PASS/WARN
@@ -58,7 +57,7 @@ Frozen exit semantics:
 
 ## Binding behavior
 
-Production TP-CX-003 does not PASS from transaction_id presence alone.
+Production TP-CX-003 does not PASS from `transaction_id` presence alone.
 
 For the supported SHA-256 binding profile, TimeProofs hashes the exact supplied checkout proof/JWT and compares it with AP2 `transaction_id`.
 
@@ -69,157 +68,120 @@ For the supported SHA-256 binding profile, TimeProofs hashes the exact supplied 
 
 Full SD-JWT/key/signature verification is not claimed.
 
-## M7 customer-facing contract
-
-M7 adds:
-- root GitHub Action;
-- versioned public result contract;
-- CI-safe redacted result profile;
-- PASS/BLOCK/UNKNOWN customer integration behavior;
-- bounded CI inputs and output/input alias protection;
-- TimeProofs package build by explicit allowlist;
-- clean-room pack/install/SDK/CLI test;
-- explicit legacy AgentReady inventory.
-
-See `docs/product/M7_COMPLETION_REPORT.md`.
-
 ## Validation proof
 
-### Cross-platform core/SDK/CLI/security matrix
-
-Workflow: `TimeProofs Core Regression`
-
-Successful baseline run:
-- run id `31591704219`
-- head `ad48374959a6ddf72b2116a4fe057ceb0aa1fca5`
-- conclusion `success`
-
-Green environments:
-- Ubuntu Node 22/24
-- macOS Node 22/24
-- Windows Node 22/24
+### Cross-platform/runtime baseline
+Verified `TimeProofs Core Regression` run `31591704219`: Ubuntu/macOS/Windows × Node 22/24 — success.
 
 ### Generated property regression
-
-The full test contract now also includes 250 deterministic generated transaction families covering:
-- exact projection PASS;
-- amount mutation BLOCK;
-- currency mutation BLOCK;
-- binding mutation BLOCK;
-- absent-proof UNKNOWN;
-- fixed-input replay determinism.
-
-Verified successful run:
-- run id `31618680408`
-- head `175f92213ca722d873437749d1b911664142e663`
-- conclusion `success`.
+250 deterministic generated transaction families test PASS, amount/currency/binding perturbations, missing-proof UNKNOWN and replay determinism.
+Verified full run `31618680408` — success.
 
 ### Customer Action
-
-Successful run:
-- run id `31591960176`
-- head `93c24e72611b2bfe2f95ffaa89c406e88c017b40`
-- conclusion `success`
-
-PASS, BLOCK and UNKNOWN customer cases are all contract-tested.
+PASS/BLOCK/UNKNOWN customer contract verified in run `31591960176` — success.
 
 ### Package clean room
-
-Successful run:
-- run id `31592422020`
-- head `2ed60dd931f120ef204a058cdd84c7b28373354f`
-- conclusion `success`
+Pack/install/SDK/CLI consumer flow verified in run `31592422020` — success.
 
 ### CodeQL
+Run `31592599707` — success.
 
-Successful run:
-- run id `31592599707`
-- head `8cef869cbc895814ae6f161da691fd98337a64c4`
-- conclusion `success`
+### CLI/error contract
+Required input, malformed JSON, unsupported profile, UNKNOWN, BLOCK and unknown-command behavior are regression-tested in the full matrix.
+Run `31619326027` — success.
 
-### Performance baseline and guard
-
-Historical measured baseline:
-- run id `31592637945`
+### Performance
+Measured 1,000-line-item / 50-iteration Ubuntu Node 22 baseline:
 - p50 `3.668 ms`
 - p95 `6.004 ms`
 - max `6.805 ms`
 - RSS `70.3 MiB`
-- 1,000 line items / 50 iterations / Ubuntu / Node 22.
 
-A provisional `100 ms` p95 algorithmic-regression ceiling is now enforced for that benchmark profile.
-
-Verified threshold run:
-- run id `31618899028`
-- head `7e3cbbf948f6402bf24c8fc1791afd5393c93041`
-- conclusion `success`.
-
-See `docs/product/PERFORMANCE_AND_INPUT_PROFILE.md`.
+A 100 ms p95 regression ceiling is enforced for that profile as an algorithmic guard, not an SLA.
+Threshold run `31618899028` — success.
 
 ## Protocol drift control
 
-Current audited upstream schema snapshots are locked in `protocols/upstream-lock.json` and checked by `timeproofs-upstream-watch.yml`.
-
-The compatibility claim is maintained in `packs/ucp-ap2/COMPATIBILITY.md`. Upstream change triggers review; it does not silently expand support.
+Audited upstream schema snapshots are locked in `protocols/upstream-lock.json` and watched automatically. Changed upstream schema means review; it never silently widens compatibility.
 
 ## Security/data posture
 
 Current local/CI surface includes:
 - threat model;
 - supply-chain policy;
-- adversarial regression;
-- deterministic generated property regression;
+- adversarial and generated property regressions;
 - strict canonicalization boundaries;
-- least-privilege CI permissions;
+- least-privilege CI;
 - pinned third-party Actions;
-- checkout credential non-persistence in hardened workflows;
-- CI-safe result projection that excludes raw checkout proof/JWT, payment instrument, merchant authorization and raw protocol objects.
+- checkout credential non-persistence;
+- CI-safe output excluding raw proof/JWT, payment instrument, merchant authorization and raw protocol objects.
 
 ## Market/strategy audit
 
-The 2026-08-12 market audit concludes **CONTINUE / BUILD**, with an important constraint: TimeProofs must not remain a narrow UCP↔AP2 amount/currency checker.
+Canonical audit: `docs/research/MARKET_STRATEGIC_AUDIT_2026-08-12.md`.
 
-Current strategic expansion priority:
+Conclusion: **CONTINUE / BUILD**, but TimeProofs must not remain a narrow UCP↔AP2 amount/currency checker.
+
+Strategic evidence-boundary priority:
 1. approved PaymentMandate ↔ executed PSP/network outcome;
 2. checkout/payment ↔ committed order lifecycle;
 3. cumulative mandate constraints ↔ prior fulfilment state;
 4. cancellation/refund ↔ order/payment/provider state.
 
-Why: these boundaries remain cross-system and can accumulate provider/evidence knowledge that a single protocol owner is less likely to absorb completely.
+Primary business uncertainty remains willingness-to-pay evidence. Technical readiness is materially ahead of commercial proof.
 
-Primary business risk remains **willingness-to-pay evidence**, not current technical feasibility.
+## M8 active design
 
-Canonical audit: `docs/research/MARKET_STRATEGIC_AUDIT_2026-08-12.md`.
+Canonical design: `docs/product/M8_RUNTIME_ENFORCEMENT_DESIGN.md`.
+
+M8 will add a local-first enforcement decision layer on top of Verify.
+
+Frozen boundaries:
+- underlying verification remains PASS/WARN/BLOCK/UNKNOWN;
+- enforcement returns ALLOW/DENY/ERROR;
+- financially consequential default: PASS→ALLOW, WARN→ALLOW, BLOCK→DENY, UNKNOWN→DENY;
+- runtime error never silently becomes ALLOW;
+- optional fail-open behavior must be explicit and audit-visible;
+- TimeProofs does not execute/custody the caller's payment or other side effect;
+- no generic MCP/A2A gateway scope;
+- no `latest` versions or silent remote pack mutation;
+- local-first, no mandatory TimeProofs cloud dependency.
+
+Implementation order:
+1. enforcement result schema;
+2. pure policy evaluator;
+3. SDK `enforceTransaction()`;
+4. fixtures/tests;
+5. optional CLI/Action enforcement surfaces;
+6. benchmark/adversarial/cross-platform validation;
+7. M8 completion only with green executable proof.
+
+## Lifecycle-separated remaining work
+
+### Release-time only
+When publishing a real TimeProofs package: verify final npm name/scope ownership, Trusted Publishing/OIDC, provenance, exact-artifact SBOM/attestation, immutable release and registry install.
+
+### Before M9/public relaunch
+Archive/remove/redirect public AgentReady surfaces and replace legacy site architecture with a TimeProofs-native experience.
+
+### Market work in parallel
+Continue gathering real ICP, incident/cost and willingness-to-pay evidence before large M10 infrastructure spend.
 
 ## Known non-claims
 
 TimeProofs does not yet claim:
-- SD-JWT signature/key-binding verification;
+- full SD-JWT signature/key-binding verification;
 - merchant authorization JWS verification;
-- arbitrary AP2 hash-algorithm support;
-- automatic compatibility with future UCP/AP2 schema versions;
+- arbitrary AP2 hash algorithms;
+- automatic future-version compatibility;
 - provider/network execution evidence;
 - lifecycle Order enforcement;
 - modeled FX/tips/incremental authorization/partial capture/split settlement/marketplace payout;
-- hosted/runtime enforcement;
-- release provenance for a new TimeProofs package that has not yet been published.
+- hosted enforcement or SLA;
+- product-market fit.
 
 Missing proof remains UNKNOWN.
 
-## World-Class Gate status
-
-M7 is closed. Remaining pre-M8 work is now concentrated in:
-- coherent human error-message review;
-- final public package-name decision and one canonical install/CI path;
-- safe removal/archive of legacy public AgentReady surfaces;
-- M8 runtime trust-boundary + fail-open/fail-closed design before implementation.
-
-Release-only controls such as npm OIDC/provenance, exact-release SBOM and artifact attestations are tracked separately and can only become green during a real release.
-
-See:
-- `docs/startup/WORLD_CLASS_GATE.md`
-- `docs/startup/WORLD_CLASS_GATE_COMPLETION_REPORT.md`
-
 ## One-line status
 
-> M0–M7 are complete; generated property testing, measured performance guard and 2026 market audit are now in place; TimeProofs should continue toward cross-system outcome/evidence enforcement, while final pre-M8 developer/repository/runtime-boundary items remain open.
+> M0–M7 and the pre-M8 World-Class Gate are complete; M8 local-first runtime enforcement is active under a frozen fail-closed design, while the strategically important next evidence pack targets approved payment ↔ executed provider outcome and willingness-to-pay remains the primary company risk.
