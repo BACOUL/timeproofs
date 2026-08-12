@@ -44,7 +44,6 @@ The first wedge is UCP↔AP2 because it is concrete and implementable. The first
 ## 4. Monetizable failure classes
 
 Potentially valuable failures include:
-
 - authorized amount ≠ executed amount;
 - authorized currency ≠ executed currency;
 - execution bound to the wrong authorized state;
@@ -54,76 +53,68 @@ Potentially valuable failures include:
 - cumulative mandate limits exceeded across multiple fulfilments;
 - missing or stale evidence where a consequential action would otherwise proceed.
 
-TimeProofs must not manufacture urgency. Commercial priority should follow measured incident frequency × cost × ownership clarity.
+Commercial priority follows measured incident frequency × cost × ownership clarity.
 
-## 5. Revenue architecture
+## 5. Commercial baseline v0.1 — HYPOTHESIS TO VALIDATE
 
-### Layer A — Community / local developer adoption
-Purpose: distribution, trust and integration habit.
+This is the current operating baseline for product and revenue design. It is deliberately concrete so engineering, packaging and distribution optimize toward one model. It is NOT a published price promise and may change with real evidence.
 
-Likely free/open surfaces:
-- local deterministic verifier;
-- CLI;
-- basic SDK;
-- public schemas;
-- selected public protocol packs and fixtures;
-- GitHub Action for development/CI.
+### Community / Developer — €0
+Purpose: remove adoption friction and create trust/integration habit.
 
-### Layer B — Production usage
-Primary value metric hypothesis: protected consequential transactions / enforced actions.
+Baseline free surfaces:
+- local deterministic core;
+- CLI and basic SDK;
+- public schemas and fixtures;
+- selected public protocol packs;
+- development/CI integration.
 
-Candidate commercial unit:
-- per verified/enforced transaction;
-- optionally per resolved outcome where resolution requires provider-specific work.
+The local core must not require a TimeProofs account or mandatory cloud call.
 
-Avoid seat-heavy pricing as the primary economic model.
+### Production — baseline €99/month
+Modeling baseline:
+- €99/month platform minimum;
+- 10,000 protected VERIFY/ENFORCE transactions included;
+- then approximately €0.01 per protected transaction.
 
-### Layer C — Managed platform
-Potential paid capabilities:
-- managed pack updates;
-- evidence retention/history;
-- private packs;
-- provider connectors;
+The protected consequential transaction/action is the primary value metric, not seats.
+
+### Resolve — premium usage
+Provider-specific outcome resolution is expected to cost and deliver more value than deterministic local verification.
+
+Modeling envelope: approximately €0.03–€0.10 per resolution where authoritative provider/system lookup and resolution semantics are involved. Final metric may distinguish simple authoritative lookup from multi-system resolution.
+
+### Business — baseline €499/month + usage
+Candidate capabilities:
 - organization/policy controls;
-- signed evidence bundles;
-- deployment controls;
-- support/SLA;
-- regional/data-residency options where justified.
+- managed provider packs;
+- evidence/history;
+- higher included volume;
+- private packs/connectors where repeatable;
+- production support.
 
-### Layer D — Enterprise commitments
-Potential annual minimums for customers requiring guaranteed availability, private deployment, custom provider packs, governance or contractual support.
+### Enterprise — baseline €15k–€25k annual minimum + usage
+For customers requiring contractual support, SLA, private deployment, governance, custom/restricted provider packs, security review or material committed volume.
 
-## 6. Pricing hypotheses — not yet market-validated
+Enterprise pricing must cover operational/support burden and must not turn the company into bespoke consulting.
 
-These are design envelopes, not published prices.
-
-Possible long-term structure:
-
-- Community: free local usage.
-- Developer/Team: low fixed monthly fee only if hosted/team value exists.
-- Production: usage-based price per protected transaction/action.
-- Resolve: higher usage price for provider-specific outcome resolution where materially valuable.
-- Enterprise: platform minimum + usage + premium capabilities.
-
-Candidate usage envelope for modeling only: approximately €0.005–€0.03 per protected transaction depending on depth of protection. This MUST be validated before publication.
-
-## 7. Revenue scenarios — arithmetic, not forecasts
+## 6. Revenue scenarios — arithmetic, not forecasts
 
 At €0.01 per protected transaction:
-- 1M transactions/month → €10k MRR;
-- 10M/month → €100k MRR;
-- 100M/month → €1M MRR.
+- 1M transactions/month → €10k usage revenue/month;
+- 10M/month → €100k/month;
+- 100M/month → €1M/month.
 
 At €0.005:
-- 2M/month → €10k MRR;
-- 20M/month → €100k MRR.
+- 2M/month → €10k/month;
+- 20M/month → €100k/month.
 
-Alternative enterprise path:
-- 50 customers × €2k MRR average = €100k MRR.
+Alternative account path:
+- 50 accounts × €2k MRR average = €100k MRR.
 
 These scenarios show economic leverage only. They do not imply attainable volume or willingness-to-pay.
 
-## 8. Gross-margin model
+## 7. Gross-margin model
 
 Target economics must resemble software infrastructure, not consulting.
 
@@ -136,34 +127,55 @@ Track:
 - incident/on-call cost;
 - enterprise deployment burden.
 
-Core deterministic verification should remain extremely low-cost. Provider-specific resolution may be materially more expensive and should be priced separately if needed.
+Core deterministic verification should remain extremely low-cost. Provider-specific resolution may be materially more expensive and is priced separately if needed.
 
 Target strategic outcome: high gross margin with revenue growing faster than founder time.
 
-## 9. Distribution architecture
+## 8. Distribution baseline v0.1 — code-first, developer-led
 
-Primary distribution should be embedded in developer workflow:
+Primary acquisition is embedded in developer workflow, not paid advertising or high-volume founder prospecting.
 
-- GitHub;
-- npm/package ecosystem;
-- protocol communities;
-- reference fixtures;
-- CI integration;
-- technical documentation;
-- issues/standards participation;
-- integrations with PSPs, agent platforms and commerce infrastructure.
+Priority order:
+
+1. **GitHub** — canonical repository, executable fixtures, edge cases, issues, reference implementation and trust surface.
+2. **npm/package ecosystem** — near-zero-friction install and repeatable local adoption.
+3. **Technical documentation** — problem-led pages answering concrete UCP/AP2/transaction-integrity questions with executable code.
+4. **CI / GitHub Action** — persistent integration habit and path from development verification to production enforcement.
+5. **Protocol communities** — UCP, AP2, MCP, A2A, x402 and adjacent ecosystems through useful fixtures, reproductions, issues and standards contributions rather than promotion spam.
+6. **Provider/platform integrations** — PSPs, payment orchestrators, commerce platforms and agent runtimes; each maintained integration should become both product capability and distribution surface.
+7. **B2B2Developer partnerships** — strategic target: one platform/PSP/runtime distributes TimeProofs to many downstream developers and transaction flows.
+
+Paid ads are not a baseline acquisition channel. Selective outbound is permitted for discovery, strategic partnerships or high-value enterprise opportunities, but the company must not require continuous founder-led cold prospecting to grow.
+
+### Desired adoption funnel
+
+`GitHub/docs/problem search → npm install → first local VERIFY → fixture/real artifact → CI → production ENFORCE → paid usage → RESOLVE/provider expansion → enterprise controls`
+
+### Content/discovery themes
+Examples of problem-led developer acquisition surfaces:
+- verifying an AP2 PaymentMandate;
+- UCP + AP2 end-to-end examples;
+- preventing authorized/executed amount mismatch;
+- handling UNKNOWN transaction outcomes;
+- retry safety for consequential agent actions;
+- PaymentMandate → PSP execution verification.
+
+Content exists to solve integration problems and drive executable adoption, not to manufacture generic SEO traffic.
+
+## 9. Distribution flywheel
 
 Desired flywheel:
+1. protocol/provider change or real edge case appears;
+2. TimeProofs publishes/maintains a fixture, invariant or resolver;
+3. developer discovers the solution through code/docs/community;
+4. developer installs locally;
+5. TimeProofs enters CI or runtime;
+6. production ENFORCE/RESOLVE creates paid usage;
+7. new operational edge cases improve packs/resolvers;
+8. compatibility knowledge and trust increase;
+9. more platforms/developers adopt TimeProofs.
 
-1. developer installs TimeProofs to solve a real integration problem;
-2. new edge cases become fixtures/invariants;
-3. packs become more valuable and reliable;
-4. protocol/provider coverage increases;
-5. TimeProofs becomes a default integration primitive;
-6. production enforcement/resolve usage grows;
-7. operational evidence improves future packs.
-
-Cold outbound may be used selectively for discovery or enterprise deals, but the business must not depend on high-volume founder-led prospecting.
+The distribution engine and moat engine should reinforce one another.
 
 ## 10. Expansion and retention
 
@@ -221,50 +233,25 @@ Exact license/split remains open until distribution and moat evidence improves.
 
 Support must not turn TimeProofs into bespoke consulting.
 
-Community:
-- docs/issues/examples.
+Community: docs/issues/examples.
+Paid production: documented support response targets, pack/provider compatibility support, incident escalation for blocking regressions.
+Enterprise: negotiated SLA/support only if pricing covers operational burden.
 
-Paid production:
-- documented support response targets;
-- pack/provider compatibility support;
-- incident escalation for blocking regressions.
-
-Enterprise:
-- negotiated SLA/support only if pricing covers operational burden.
-
-Custom invariant work must become reusable pack capability whenever possible.
+Custom invariant work should become reusable pack capability whenever possible.
 
 ## 14. Liability and trust model
 
-TimeProofs may influence financially consequential actions. Contract and product language must distinguish:
+TimeProofs may influence financially consequential actions. Contract and product language must distinguish observed evidence, deterministic invariant result, enforcement policy and caller-owned external execution.
 
-- observed evidence;
-- deterministic invariant result;
-- enforcement policy;
-- external side-effect execution owned by the caller.
+Do not claim legal compliance or guaranteed transaction correctness beyond evidence actually checked.
 
-Do not claim legal compliance or guaranteed transaction correctness beyond the evidence actually checked.
-
-Before paid production launch, define:
-- limitation of liability;
-- warranties/disclaimers;
-- DPA/privacy roles;
-- security claims;
-- incident communication;
-- customer responsibility for explicit fail-open policies.
+Before paid production launch define limitation of liability, warranties/disclaimers, DPA/privacy roles, security claims, incident communication and customer responsibility for explicit fail-open policies.
 
 ## 15. Data/evidence ownership
 
 Default principle: minimize raw transaction custody.
 
-Prefer:
-- local processing;
-- hashes/digests;
-- structured outcomes;
-- anonymized failure classes;
-- compatibility telemetry with opt-in/contractual controls.
-
-Raw payment/order payload retention should exist only when required for a paid evidence feature and with explicit retention/security controls.
+Prefer local processing, hashes/digests, structured outcomes and opt-in/contractual compatibility telemetry. Raw payment/order payload retention should exist only when required for a paid evidence feature and with explicit retention/security controls.
 
 Customer data should not be the moat if equivalent compatibility knowledge can be learned without storing sensitive payloads.
 
@@ -278,13 +265,9 @@ Strategic partner classes:
 - protocol maintainers;
 - vertical transaction platforms.
 
-Partner thesis:
-TimeProofs should complement rails rather than compete to become every rail.
+Partner thesis: TimeProofs complements rails rather than competing to become every rail.
 
-Strong partnership outcome:
-- partner exposes authoritative execution evidence;
-- TimeProofs supplies maintained cross-system invariants/resolution;
-- integration becomes a recommended/reference path.
+Strong partnership outcome: partner exposes authoritative execution evidence; TimeProofs supplies maintained cross-system invariants/resolution; integration becomes a recommended/reference path.
 
 ## 17. Metrics architecture
 
@@ -306,9 +289,9 @@ Strong partnership outcome:
 - protected transactions/month;
 - conversion local→production;
 - expansion VERIFY→ENFORCE→RESOLVE;
-- net revenue retention when meaningful;
 - revenue per production account;
-- gross margin.
+- gross margin;
+- partner-sourced transaction volume.
 
 ### Moat
 - supported protocol/provider operation pairs;
@@ -327,48 +310,30 @@ Global-first assumptions:
 - provider/regional behavior modeled by profile, not hidden assumptions;
 - future data residency only where demand justifies it.
 
-Regulatory requirements should be modeled as separate jurisdiction-aware policy/evidence layers if they become a paid need; they must not contaminate deterministic protocol semantics.
+Regulatory requirements should be separate jurisdiction-aware policy/evidence layers if they become a paid need; they must not contaminate deterministic protocol semantics.
 
 ## 19. Solo-founder operating constraint
 
-The company architecture should preserve solo-founder leverage for as long as possible:
+Good: deterministic local code, self-serve developer adoption, automated packaging/CI, usage-based revenue, reusable packs and low-touch onboarding.
 
-Good:
-- deterministic local code;
-- self-serve developer adoption;
-- automated packaging/CI;
-- usage-based revenue;
-- reusable packs;
-- low-touch onboarding.
+Danger: custom enterprise integration for every customer, premature 24/7 bespoke support, hundreds of shallow adapters, heavy cloud infrastructure before usage, or legal/compliance promises requiring a services organization.
 
-Danger:
-- custom enterprise integration for every customer;
-- 24/7 bespoke support before revenue warrants it;
-- hundreds of shallow adapters;
-- heavy cloud infrastructure before usage;
-- legal/compliance promises requiring a large services team.
-
-Hiring/funding becomes justified when demand exceeds what automation and reusable packs can support, not merely because enterprise software normally has a team.
+Hiring/funding becomes justified when demonstrated demand exceeds what automation and reusable packs can support.
 
 ## 20. Funding optionality
 
 TimeProofs should be designed to work bootstrapped through developer alpha and early production pilots.
 
-Funding becomes strategically attractive if it accelerates an already demonstrated opportunity such as:
-- multiple PSP/provider integrations requested by users;
-- high transaction volume requiring reliability investment;
-- standards/partner opportunity with a short window;
-- enterprise demand requiring support/security certification.
+Funding becomes strategically attractive if it accelerates demonstrated demand such as multiple requested provider integrations, high transaction volume, a standards/partner window or enterprise demand requiring reliability/security investment.
 
 Do not raise merely to manufacture demand.
 
 ## 21. Commercial kill conditions
 
 Reconsider or narrow the company if, after meaningful ecosystem maturation and direct validation:
-
 - consequential cross-system inconsistencies are rare or cheaply solved inside each platform;
 - protocol/provider owners expose complete end-to-end guarantees eliminating the independent layer;
-- teams consistently prefer to implement the needed invariants internally and switching cost remains trivial;
+- teams consistently prefer internal implementation and switching cost remains trivial;
 - no buyer owns the economic pain;
 - paid production usage cannot support infrastructure-grade margins;
 - provider integrations require services-heavy work that does not become reusable;
@@ -376,8 +341,7 @@ Reconsider or narrow the company if, after meaningful ecosystem maturation and d
 
 ## 22. Commercial validation gate
 
-Before significant M10/cloud spend, require evidence for at least:
-
+Before significant M10/cloud spend require evidence for at least:
 1. one clearly defined ICP with active agentic transaction flows;
 2. multiple real incidents or credible failure-cost cases;
 3. one economic buyer role that owns the risk;
@@ -390,4 +354,4 @@ Before significant M10/cloud spend, require evidence for at least:
 
 Technical readiness, market proof and revenue proof are separate.
 
-TimeProofs may be technically world-class before it has product-market fit. The repository must never convert a pricing hypothesis or revenue scenario into a claimed market fact without evidence.
+TimeProofs may be technically world-class before it has product-market fit. The repository must never convert a pricing hypothesis, distribution hypothesis or revenue scenario into a claimed market fact without evidence.
