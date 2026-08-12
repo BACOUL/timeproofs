@@ -1,54 +1,35 @@
 ---
-name: "💡 Feature Request"
-about: "Propose a new feature, enhancement, or capability for TimeProofs"
+name: "Feature request"
+about: "Propose a TimeProofs invariant, adapter, evidence, CLI/SDK or CI capability"
 title: "[FEATURE] "
 labels: enhancement
 assignees: BACOUL
 ---
 
-# Feature Request — TimeProofs
+# TimeProofs feature request
 
-## ✨ Summary
-Clearly describe the feature you want added.
+## Problem
+What concrete cross-protocol consistency, evidence, integration or developer-workflow problem needs to be solved?
 
-## 🎯 Problem to Solve
-What problem or limitation does this feature address?
+## Transaction surface
+Which protocols/systems/versions are involved?
 
-Describe the context, use case, or workflow.
+## Proposed capability
+Describe the desired invariant, adapter, evidence profile, CLI/SDK/Action behavior or operational capability.
 
-## 🧩 Proposed Solution
-Describe the solution you propose, including UX, API, UI, or SDK changes.
+## Evidence / semantics
+If this can affect a PASS/BLOCK decision, identify:
+- authoritative source objects/fields;
+- required evidence;
+- legitimate transformations/exceptions;
+- expected PASS/BLOCK/UNKNOWN cases;
+- normative protocol references.
 
-If relevant, show an example:
+## Why TimeProofs
+Explain why this belongs in cross-protocol consistency infrastructure rather than a generic scanner, dashboard, auth layer, gateway or protocol-local validator.
 
-```
-<example code, JSON, or API payload>
-```
+## Compatibility/security impact
+Describe expected result-contract, pack, adapter, performance, privacy or security implications.
 
-## 📈 Expected Impact
-How does this improve TimeProofs?
-- Developer experience?
-- Performance?
-- Security?
-- ProofSpec compliance?
-- New use cases?
-
-## 🔄 Alternatives Considered
-Have you tried other approaches? Why were they insufficient?
-
-## 📸 Mockups / Examples (optional)
-Add screenshots, diagrams, or sample JSON if useful.
-
-## 📝 Additional Context
-Anything else we should consider?
-
----
-
-### 📌 Notes
-Feature requests should align with:
-- Privacy-first architecture  
-- Open verification  
-- Edge-native simplicity  
-- ProofSpec roadmap  
-
-Full roadmap: https://timeproofs.io/roadmap.html
+## Example
+Use only synthetic/sanitized transaction data.
