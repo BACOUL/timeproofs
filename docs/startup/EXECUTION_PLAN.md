@@ -18,171 +18,140 @@ Completed:
 - M6 real UCP/AP2 adapters + local SDK/CLI;
 - M7 customer-facing CI integration + safe result/package contract;
 - pre-M8 World-Class Readiness Gate;
-- full company/business architecture completeness audit.
+- full company/business architecture completeness audit;
+- permanent anti-omission company gap register and operating architecture.
 
 Current active milestone: **M8 — local-first runtime enforcement**.
 
-The M8 design is frozen in `docs/product/M8_RUNTIME_ENFORCEMENT_DESIGN.md` and implementation is underway.
+Canonical references:
+- `docs/product/M8_RUNTIME_ENFORCEMENT_DESIGN.md`
+- `docs/startup/BUSINESS_ARCHITECTURE.md`
+- `docs/startup/COMPANY_GAP_REGISTER.md`
+- `docs/startup/METERING_BILLING_ARCHITECTURE.md`
+- `docs/product/PACK_GOVERNANCE_AND_COMPATIBILITY.md`
+- `docs/startup/INCIDENT_OBSERVABILITY_CONTINUITY.md`
+- `docs/startup/PRIVACY_TRUST_ENTERPRISE_BOUNDARY.md`
+- `docs/startup/PARTNERS_IP_MOAT_LOOP.md`
+- `docs/product/M9_WEBSITE_DOCS_VISION.md`
 
-Canonical business architecture: `docs/startup/BUSINESS_ARCHITECTURE.md`.
-Canonical company-gap audit: `docs/startup/COMPANY_COMPLETENESS_AUDIT.md`.
+Legacy AgentReady assets remain temporarily but are non-canonical and excluded from the TimeProofs package. Public legacy cleanup is required before M9/public relaunch.
 
-Legacy AgentReady assets remain temporarily but are non-canonical and excluded from the TimeProofs package. Public legacy cleanup is required before M9/public relaunch, not before local M8 implementation.
-
----
-
-## M0 — Product constitution and operating system
+## M0–M7
 **Status: COMPLETE**
-
-## M1 — UCP/AP2 normative composition audit
-**Status: COMPLETE**
-
-## M2 — Canonical transaction model
-**Status: COMPLETE, HARDENED BY M2.1**
-
-Frozen primitives: ProtocolObject, BindingEdge, InvariantDefinition, EvidenceItem, EvaluationResult, Decision, TransactionGraph.
-
-## M2.1 — Foundation hardening
-**Status: COMPLETE**
-
-## M3 — UCP/AP2 Invariant Pack v0.1 specification
-**Status: COMPLETE**
-
-Initial executable profile:
-- TP-CX-003 exact authorized-state prerequisite;
-- TP-CX-002 currency projection, BLOCK-capable;
-- TP-CX-001 amount projection, BLOCK-capable.
-
-## M4 — Fixture corpus and regression harness
-**Status: COMPLETE**
-
-Source of truth: `fixtures/ucp-ap2/v0.1/`.
-
-## M5 — Deterministic Verify engine
-**Status: COMPLETE**
-
-## M6 — UCP/AP2 adapters + CLI/SDK
-**Status: COMPLETE**
-
-Executable support is pinned to UCP Checkout `2026-04-08` and AP2 PaymentMandate `mandate.payment.1`. Exact-state production verification requires explicit checkout proof/JWT hash evidence and does not claim full SD-JWT/JWS/key verification.
-
-## M7 — Customer-facing CI integration and package contract
-**Status: COMPLETE**
-
-Delivered customer GitHub Action, safe/versioned result contracts, package allowlist, clean-room packaging, multi-OS/runtime regression, CodeQL, upstream watch and safe secret handling.
-
-See `docs/product/M7_COMPLETION_REPORT.md`.
 
 ## World-Class Gate — pre-M8
 **Status: COMPLETE / GREEN**
 
-Additional closure delivered:
-- deterministic generated property regression across 250 transaction families;
-- coherent CLI malformed/unsupported/BLOCK/UNKNOWN contract regression;
-- documented input/performance profile;
-- measured 1,000-line-item baseline;
-- enforced provisional 100 ms p95 algorithmic-regression ceiling;
-- market/strategy audit;
-- M8 trust-boundary/fail policy design frozen before code.
+Evidence includes property/full run `31618680408`, performance guard `31618899028`, CLI/error matrix `31619326027`, customer Action `31591960176`, CodeQL `31592599707` and package clean-room validation.
 
-Evidence includes:
-- property/full test run `31618680408` — success;
-- performance guard run `31618899028` — success;
-- expanded CLI/error full-matrix run `31619326027` — success.
+## Company Architecture / Anti-Omission Layer
+**Status: COMPLETE AT DESIGN LEVEL — REAL-WORLD PROOF STILL REQUIRED WHERE APPLICABLE**
 
-Canonical gate: `docs/startup/WORLD_CLASS_GATE.md`.
-Canonical report: `docs/startup/WORLD_CLASS_GATE_COMPLETION_REPORT.md`.
+The repo now explicitly governs:
+- pricing/value metric and distribution baseline;
+- metering/billing semantics;
+- pack trust lifecycle and compatibility/deprecation;
+- incidents/observability/false-block rollback;
+- business continuity;
+- privacy/data lifecycle;
+- abuse controls;
+- enterprise procurement boundaries;
+- legal/liability preparation;
+- partner economics;
+- IP/trademark/licensing gate;
+- moat telemetry loop;
+- website/docs direction.
 
-Release-time npm provenance/SBOM/attestation controls remain mandatory only when a real TimeProofs release is cut. Public AgentReady site cleanup remains mandatory before M9/public relaunch.
-
-## Company Architecture Audit
-**Status: COMPLETE — COMMERCIAL PROOF STILL OPEN**
-
-The repository now contains an explicit business architecture covering ICP/buyers, monetizable failure classes, revenue model, pricing hypotheses, unit economics, distribution, expansion/retention, moat, open-source boundary, support, liability, data ownership, partnerships, metrics, international strategy, solo-founder leverage, funding optionality and commercial kill conditions.
-
-This audit does not mark market hypotheses as facts.
-
-Top unresolved company risks:
-1. willingness-to-pay / economic-buyer proof;
-2. first approved-mandate ↔ executed-provider evidence pack;
-3. exact open-source/commercial split;
-4. paid-production liability/legal posture;
-5. distribution proof;
-6. Resolve unit economics;
-7. first meaningful platform/PSP partnership.
-
-These run in parallel with M8. Significant M10/cloud spend remains gated on real commercial evidence.
+`COMPANY_GAP_REGISTER.md` is the permanent lifecycle register. No future milestone may silently drop an item; each must be implemented, explicitly deferred to a named lifecycle gate, or deliberately unsupported.
 
 ## M8 — Local-first runtime enforcement
 **Status: ACTIVE — IMPLEMENTATION UNDERWAY**
-
-Canonical design: `docs/product/M8_RUNTIME_ENFORCEMENT_DESIGN.md`.
 
 ### Goal
 Evaluate deterministic cross-protocol invariants immediately before a consequential caller-owned commit and apply a pinned enforcement policy.
 
 ### Frozen boundaries
-- TimeProofs returns ALLOW/DENY/ERROR plus underlying PASS/WARN/BLOCK/UNKNOWN evidence;
-- default financial policy is fail-closed: BLOCK and UNKNOWN deny; runtime error never silently allows;
-- an explicit fail-open override may exist but must be configuration-visible and audit-visible;
-- TimeProofs does not execute/custody the external payment or side effect;
-- TimeProofs does not become an MCP/A2A gateway;
-- no `latest` pack/version semantics;
-- no runtime remote pack mutation;
-- rollback is explicit version/config pinning;
-- local-first, no required TimeProofs cloud dependency.
+- PASS/WARN/BLOCK/UNKNOWN verification;
+- ALLOW/DENY/ERROR enforcement;
+- default financially consequential policy: PASS→ALLOW, WARN→ALLOW, BLOCK→DENY, UNKNOWN→DENY;
+- runtime error never silently ALLOWs;
+- fail-open override explicit and audit-visible;
+- caller owns external side effect;
+- no generic MCP/A2A gateway;
+- pinned versions, no silent `latest` mutation;
+- local-first, no mandatory cloud dependency.
 
-### Implemented so far
+### Implemented
 1. enforcement result schema;
 2. pure enforcement policy evaluator;
 3. SDK `enforceTransaction()`;
 4. PASS/WARN/BLOCK/UNKNOWN/error/fail-open regression coverage;
-5. public package allowlist includes enforcement module/schema;
-6. clean-room package test strengthened to require VERIFY+ENFORCE behavior;
-7. core regression workflow widened to trigger on package/schema/pack changes.
+5. enforcement module/schema included in public package allowlist;
+6. clean-room package test requires VERIFY+ENFORCE behavior;
+7. package/schema/pack changes trigger the core regression workflow;
+8. strengthened full matrix run `31624413675` — Ubuntu/macOS/Windows × Node 22/24 — **6/6 success**.
 
 ### Remaining before M8 closure
-- latest strengthened full matrix must complete green;
-- add any missing enforcement-specific adversarial/property cases exposed by review;
-- decide whether CLI/Action enforcement surface belongs in M8 or can remain SDK-first;
-- measure/confirm enforcement overhead and keep within local latency budget;
-- finalize rollback/migration/runtime evidence documentation;
-- close M8 only on green executable proof.
+- enforcement-specific hostile policy/mutation/property cases;
+- explicit VERIFY-vs-ENFORCE overhead measurement;
+- decide and document SDK-first vs CLI/Action enforcement surface for M8;
+- bind rollback/migration/runtime evidence docs to implemented behavior;
+- close M8 only on fresh green executable proof.
+
+### M8-relevant operating gates
+Before inline paid production, incident/false-block behavior, pack pinning/rollback, abuse boundaries and continuity model must match the canonical operating docs. Full billing/legal/enterprise implementation belongs to PAID/ENTERPRISE lifecycle gates, not local M8.
 
 ### Strategic companion work
-Research the next high-value pack boundary in parallel:
+Research next high-value pack boundary:
 
 **AP2 approved PaymentMandate ↔ executed PSP/network outcome.**
 
-This is strategically stronger than adding more local UCP/AP2 field checks because it crosses independent systems and begins accumulating provider-specific evidence knowledge.
+This is the first major step toward RESOLVE and provider-specific moat accumulation.
 
 ## M9 — Relaunch website + world-class docs
 **Status: NOT STARTED**
 
+Canonical direction: `docs/product/M9_WEBSITE_DOCS_VISION.md`.
+
 Before public relaunch:
-- archive/remove/redirect legacy AgentReady public surfaces;
-- freeze actual package name/registry install path;
-- execute release provenance controls if publishing;
-- design from TimeProofs-native primitives rather than generic SaaS patterns.
+- archive/remove/redirect AgentReady public surfaces;
+- freeze actual package name/registry path;
+- finalize public support/deprecation policy;
+- freeze exact open-source/commercial split;
+- complete name/IP/license checks;
+- produce final M9 design spec before substantial frontend work;
+- execute release provenance controls if a real package is published.
+
+## PAID Production Gate
+Before charging managed production customers:
+- implement authoritative usage ledger and billing dedupe semantics;
+- spend/abuse controls;
+- legal/liability/DPA/trust package;
+- incident/support process;
+- tax/invoice/payment-provider workflow;
+- customer-data lifecycle for any hosted evidence.
+
+## ENTERPRISE Gate
+Before high-ACV contractual deployments:
+- procurement/security questionnaire repeatability;
+- economically justified SSO/RBAC/audit/PO/private deployment options;
+- SLA/support pricing that covers operational burden;
+- continuity/escalation runbooks.
+
+## RELEASE Gate
+For the first real production package:
+- final package ownership;
+- Trusted Publishing/OIDC;
+- provenance;
+- exact-artifact SBOM/attestation;
+- immutable release;
+- clean registry installation proof.
 
 ## M10 — Managed TimeProofs Cloud
 **Status: NOT STARTED / COMMERCIAL GATE REQUIRED**
 
-Build only managed surfaces with genuine operational value: managed pack updates, evidence retention, private packs, organizational controls, connectors and SLA/on-prem where justified. Do not build cloud merely because infrastructure startups usually have dashboards/APIs.
-
-M10 requires meaningful progress against the commercial validation gate in `docs/startup/BUSINESS_ARCHITECTURE.md`.
-
----
-
-## Parallel company workstreams
-
-Maintain current evidence for market/ICP/economic buyer, protocol adoption velocity, standards absorption, competitors, distribution, pricing/value metric, partnerships, security/reliability, legal/licensing, gross margin and product-design benchmarks.
-
-Canonical product thesis: `docs/product/PRODUCT_THESIS.md`.
-Canonical business architecture: `docs/startup/BUSINESS_ARCHITECTURE.md`.
-Canonical company audit: `docs/startup/COMPANY_COMPLETENESS_AUDIT.md`.
-Canonical market audit: `docs/research/MARKET_STRATEGIC_AUDIT_2026-08-12.md`.
+Build only managed surfaces with proven operational value. No heavy cloud platform until willingness-to-pay, distribution, provider demand and unit economics are materially evidenced.
 
 ## Change rule
 
-Research may refine pack contents and implementation. Company-thesis changes require explicit founder decision and Decision Log entry.
+Research may refine pack contents and implementation. Company-thesis changes require explicit founder decision and Decision Log entry. Lifecycle gap items require explicit closure/defer/out-of-scope state in `COMPANY_GAP_REGISTER.md`.
