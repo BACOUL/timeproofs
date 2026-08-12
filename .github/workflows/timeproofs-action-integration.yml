@@ -1,0 +1,52 @@
+name: TimeProofs Customer Action Integration
+on:
+  push:
+    branches: [relaunch/invariant-engine]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  customer-action:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build customer fixtures
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/timeproofs-customer"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import crypto from 'node:crypto';
+          const dir = `${process.env.RUNNER_TEMP}/timeproofs-customer`;
+          const jwt = 'eyJhbGciOiJub25lIn0.eyJjaGVja291dCI6InRwLWNpIn0.';
+          const transaction_id = crypto.createHash('sha256').update(jwt,'utf8').digest('base64url');
+          const checkout = { ucp:{version:'2026-04-08'}, id:'checkout_ci', line_items:[], status:'ready_for_complete', currency:'EUR', totals:[{type:'total',amount:760}], links:[] };
+          const payment = { transaction_id, payee:{name:'Merchant'}, payment_amount:{currency:'EUR',amount:760}, payment_instrument:{type:'CARD',id:'pi_ci'} };
+          fs.writeFileSync(`${dir}/checkout.json`,JSON.stringify(checkout));
+          fs.writeFileSync(`${dir}/payment.json`,JSON.stringify(payment));
+          fs.writeFileSync(`${dir}/jwt.txt`,jwt,{mode:0o600});
+          NODE
+      - name: Customer uses TimeProofs
+        id: tp
+        uses: ./
+        with:
+          checkout: ${{ runner.temp }}/timeproofs-customer/checkout.json
+          payment-mandate: ${{ runner.temp }}/timeproofs-customer/payment.json
+          checkout-jwt-file: ${{ runner.temp }}/timeproofs-customer/jwt.txt
+          output: ${{ runner.temp }}/timeproofs-customer/result.json
+      - name: Assert customer contract and secret safety
+        shell: bash
+        env:
+          DECISION: ${{ steps.tp.outputs.decision }}
+          RESULT: ${{ steps.tp.outputs.result-file }}
+        run: |
+          test "$DECISION" = PASS
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const jwt=fs.readFileSync(`${process.env.RUNNER_TEMP}/timeproofs-customer/jwt.txt`,'utf8').trim();
+          const raw=fs.readFileSync(process.env.RESULT,'utf8');
+          if(raw.includes(jwt)) throw new Error('raw JWT leaked into result');
+          const j=JSON.parse(raw);
+          if(j.decision!=='PASS') throw new Error(`expected PASS, got ${j.decision}`);
+          NODE
