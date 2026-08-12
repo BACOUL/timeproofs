@@ -4,6 +4,7 @@ import { sha256Base64UrlString } from '../timeproofs-core/canonical.js';
 import { verifyTransactionGraph } from '../timeproofs-core/index.js';
 
 export const TIMEPROOFS_PACK = Object.freeze({ id: 'ucp-ap2', version: '0.1.0-spec' });
+export const TIMEPROOFS_RESULT_CONTRACT_VERSION = 'timeproofs.result.v0.1';
 
 function verifyBinding(paymentObject, checkoutJwt, hashAlgorithm) {
   if (!checkoutJwt) return null;
@@ -34,6 +35,7 @@ export function verifyTransaction({ checkout, paymentMandate, checkoutJwt = null
     }
   }
   return {
+    result_contract_version: TIMEPROOFS_RESULT_CONTRACT_VERSION,
     ...evaluation,
     metadata: {
       pack: TIMEPROOFS_PACK,
