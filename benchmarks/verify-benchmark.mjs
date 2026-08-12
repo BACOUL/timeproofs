@@ -4,8 +4,10 @@ import { verifyTransaction } from '../sdk/index.js';
 
 const size = Number(process.env.TIMEPROOFS_BENCH_LINE_ITEMS || 1000);
 const iterations = Number(process.env.TIMEPROOFS_BENCH_ITERATIONS || 50);
+const p95CeilingMs = Number(process.env.TIMEPROOFS_BENCH_P95_CEILING_MS || 100);
 if (!Number.isSafeInteger(size) || size < 0 || size > 10000) throw new Error('Invalid benchmark line-item size.');
 if (!Number.isSafeInteger(iterations) || iterations < 1 || iterations > 1000) throw new Error('Invalid benchmark iteration count.');
+if (!Number.isFinite(p95CeilingMs) || p95CeilingMs <= 0) throw new Error('Invalid benchmark p95 ceiling.');
 
 const proof = 'timeproofs-benchmark-proof';
 const transaction_id = crypto.createHash('sha256').update(proof).digest('base64url');
@@ -26,7 +28,6 @@ const paymentMandate = {
   payment_instrument:{type:'CARD',id:'bench'}
 };
 
-// Warm up.
 for (let i=0;i<5;i++) verifyTransaction({checkout,paymentMandate,checkoutJwt:proof,evaluatedAt:'2026-08-12T10:00:00Z'});
 
 const samples=[];
@@ -46,6 +47,7 @@ const summary={
   p50_ms:Number(percentile(0.50).toFixed(3)),
   p95_ms:Number(percentile(0.95).toFixed(3)),
   max_ms:Number(samples.at(-1).toFixed(3)),
+  p95_ceiling_ms:p95CeilingMs,
   node:process.version,
   platform:process.platform,
   arch:process.arch,
@@ -53,8 +55,9 @@ const summary={
 };
 console.log(JSON.stringify(summary,null,2));
 
-// This is a catastrophic-regression guard, not a marketing benchmark.
-if (summary.p95_ms > 2000) {
-  console.error(`p95 ${summary.p95_ms}ms exceeds 2000ms safety ceiling.`);
+// A deliberately generous guard against meaningful algorithmic/regression drift,
+// not a marketing latency SLA. Baseline on GitHub Ubuntu/Node 22 was p95 6.004ms.
+if (summary.p95_ms > p95CeilingMs) {
+  console.error(`p95 ${summary.p95_ms}ms exceeds ${p95CeilingMs}ms regression ceiling.`);
   process.exit(2);
 }
