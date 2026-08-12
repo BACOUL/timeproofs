@@ -1,60 +1,42 @@
 ---
-name: "🐞 Bug report"
-about: "Report a problem in TimeProofs (API, Worker, UI, Docs)"
+name: "Bug report"
+about: "Report a reproducible TimeProofs core, adapter, SDK, CLI or Action problem"
 title: "[BUG] "
 labels: bug
 assignees: BACOUL
 ---
 
-# Bug Report — TimeProofs
+# TimeProofs bug report
 
-## 🔍 Description
-A clear and concise description of the issue.
+## Problem
+Describe the observed behavior and why it is incorrect.
 
-## 🧪 Steps to Reproduce
-1.  
-2.  
-3.  
+## Minimal reproduction
+Provide the smallest safe reproduction. Do **not** attach real checkout JWTs, payment credentials or merchant authorization secrets.
 
-Provide the minimal reproducible steps.
-
-## ✅ Expected Behavior
-What should have happened?
-
-## ❌ Actual Behavior
-What actually happened?
-
-## 🌐 Environment
-- Device:  
-- OS:  
-- Browser:  
-- Version:  
-- API Endpoint (if relevant):  
-
-## 📤 API Request (if applicable)
-Paste your request payload or cURL here:
-
-```
-<api request or payload>
+```text
+command / SDK call / Action inputs
 ```
 
-## 📄 API Response (if applicable)
+## Expected vs actual
+- Expected decision/status:
+- Actual decision/status:
+- Relevant invariant/reason code:
 
-```
-<api response>
-```
+## Versions
+- TimeProofs commit/package version:
+- result contract version:
+- pack version:
+- adapter versions:
+- UCP/AP2 profile versions:
+- Node version:
+- OS:
 
-## 📸 Screenshots
-If applicable, add screenshots or screen recordings.
+## Artifacts
+If protocol artifacts are needed, sanitize them and replace credentials/secrets with synthetic values. Include artifact digests when useful.
 
-## 📝 Additional Context
-Anything else we should know?
+## Regression impact
+Does this affect PASS/BLOCK/UNKNOWN semantics, compatibility, security, or only presentation?
 
----
-
-### 🔒 Security Note
-If this issue relates to **security, privacy or integrity**,  
-**do not submit here** — instead email:
-
-security@timeproofs.io  
-https://timeproofs.io/.well-known/security.txt
+## Security
+For security/privacy/integrity vulnerabilities, do not open a public issue. Follow `SECURITY.md` and contact `security@timeproofs.io`.
