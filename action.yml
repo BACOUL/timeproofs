@@ -1,162 +1,54 @@
-name: AgentReady CI Gate by TimeProofs
+name: TimeProofs Verify
+description: Verify cross-protocol consistency between UCP checkout and AP2 PaymentMandate artifacts.
 author: TimeProofs
-description: Static CI gate for agent-facing OpenAPI and MCP contracts.
-
 inputs:
-  file:
-    description: Path to the OpenAPI document or MCP tools JSON file to scan.
+  checkout:
+    description: Path to a UCP 2026-04-08 checkout JSON file.
     required: true
-  type:
-    description: Scan type. Must be openapi or mcp.
+  payment-mandate:
+    description: Path to an AP2 mandate.payment.1 JSON file.
     required: true
-  min-score:
-    description: Minimum AgentReady score required for the gate to pass.
+  checkout-jwt:
+    description: Exact checkout JWT value. Prefer a GitHub secret.
     required: false
-    default: '75'
-  fail-on:
-    description: Fail when risks at or above this severity are detected. Use critical, high, medium, low, or none.
+    default: ''
+  checkout-jwt-file:
+    description: Path to a file containing the exact checkout JWT.
     required: false
-    default: critical
-  out:
-    description: Directory where AgentReady report and contract files are written.
+    default: ''
+  transformation:
+    description: Optional declared payment transformation.
     required: false
-    default: agentready-output
-
+    default: ''
+  fail-on-unknown:
+    description: Fail when TimeProofs returns UNKNOWN.
+    required: false
+    default: 'true'
+  output:
+    description: Safe JSON result path. Raw checkout JWT is never written to this file.
+    required: false
+    default: 'timeproofs-result.json'
 outputs:
-  score:
-    description: AgentReady score returned by the scan.
-    value: ${{ steps.agentready.outputs.score }}
-  status:
-    description: AgentReady status returned by the scan.
-    value: ${{ steps.agentready.outputs.status }}
-  report-path:
-    description: Path to the generated Markdown report.
-    value: ${{ steps.agentready.outputs.report-path }}
-  contract-path:
-    description: Path to the generated agentready.json contract.
-    value: ${{ steps.agentready.outputs.contract-path }}
-
+  decision:
+    description: Aggregate decision (PASS, WARN, BLOCK, UNKNOWN).
+    value: ${{ steps.verify.outputs.decision }}
+  result-file:
+    description: Path to the safe JSON result.
+    value: ${{ steps.verify.outputs.result-file }}
 runs:
   using: composite
   steps:
-    - id: agentready
+    - id: verify
       shell: bash
       env:
-        AGENTREADY_INPUT_TYPE: ${{ inputs.type }}
-        AGENTREADY_INPUT_FILE: ${{ inputs.file }}
-        AGENTREADY_INPUT_MIN_SCORE: ${{ inputs.min-score }}
-        AGENTREADY_INPUT_FAIL_ON: ${{ inputs.fail-on }}
-        AGENTREADY_INPUT_OUT: ${{ inputs.out }}
-      run: |
-        set +e
-
-        scan_type="$AGENTREADY_INPUT_TYPE"
-        scan_file="$AGENTREADY_INPUT_FILE"
-        min_score="$AGENTREADY_INPUT_MIN_SCORE"
-        fail_on="$AGENTREADY_INPUT_FAIL_ON"
-        out_dir="$AGENTREADY_INPUT_OUT"
-
-        action_repo_root="$(cd "$GITHUB_ACTION_PATH" && pwd)"
-        result_json="$RUNNER_TEMP/agentready-result.json"
-
-        if [ "$scan_type" != "openapi" ] && [ "$scan_type" != "mcp" ]; then
-          echo "::error::AgentReady input 'type' must be 'openapi' or 'mcp'."
-          exit 2
-        fi
-
-        if [ -z "$scan_file" ]; then
-          echo "::error::AgentReady input 'file' must not be empty."
-          exit 2
-        fi
-
-        if [ -z "$out_dir" ]; then
-          echo "::error::AgentReady input 'out' must not be empty."
-          exit 2
-        fi
-
-        if ! command -v node >/dev/null 2>&1; then
-          echo "::error::Node.js 20 or newer is required to run AgentReady."
-          exit 2
-        fi
-
-        node -e "const major=Number(process.versions.node.split('.')[0]); if (major < 20) process.exit(1);"
-        if [ "$?" -ne 0 ]; then
-          echo "::error::Node.js 20 or newer is required to run AgentReady."
-          exit 2
-        fi
-
-        node -e "const n=Number(process.argv[1]); if (!Number.isFinite(n) || n < 0 || n > 100) process.exit(1);" "$min_score"
-        if [ "$?" -ne 0 ]; then
-          echo "::error::AgentReady input 'min-score' must be a number between 0 and 100."
-          exit 2
-        fi
-
-        case "$fail_on" in
-          critical|high|medium|low|none) ;;
-          *)
-            echo "::error::AgentReady input 'fail-on' must be one of: critical, high, medium, low, none."
-            exit 2
-            ;;
-        esac
-
-        cd "$GITHUB_WORKSPACE"
-
-        node "$action_repo_root/bin/agentready.js" scan "$scan_type" "$scan_file" \
-          --out "$out_dir" \
-          --min-score "$min_score" \
-          --fail-on "$fail_on" \
-          --json > "$result_json"
-        exit_code=$?
-
-        json_valid=false
-        if [ -s "$result_json" ]; then
-          node -e "const fs=require('fs'); JSON.parse(fs.readFileSync(process.argv[1], 'utf8'));" "$result_json" >/dev/null 2>&1
-          if [ "$?" -eq 0 ]; then
-            json_valid=true
-            cat "$result_json"
-          else
-            echo "::error::AgentReady CLI did not produce valid JSON output."
-          fi
-        else
-          echo "::warning::AgentReady CLI did not produce JSON output."
-        fi
-
-        if [ "$json_valid" = "false" ] && { [ "$exit_code" -eq 0 ] || [ "$exit_code" -eq 1 ]; }; then
-          exit_code=3
-        fi
-
-        score=""
-        status=""
-        if [ "$json_valid" = "true" ]; then
-          score="$(node -e "const fs=require('fs'); const j=JSON.parse(fs.readFileSync(process.argv[1],'utf8')); process.stdout.write(String(j.score ?? ''));" "$result_json")"
-          status="$(node -e "const fs=require('fs'); const j=JSON.parse(fs.readFileSync(process.argv[1],'utf8')); process.stdout.write(String(j.status ?? ''));" "$result_json")"
-        fi
-
-        if [ "$scan_type" = "mcp" ]; then
-          report_path="$out_dir/agentready-mcp-report.md"
-          contract_path="$out_dir/agentready-mcp.json"
-        else
-          report_path="$out_dir/agentready-report.md"
-          contract_path="$out_dir/agentready.json"
-        fi
-
-        if [ ! -f "$report_path" ]; then
-          report_path=""
-        fi
-
-        if [ ! -f "$contract_path" ]; then
-          contract_path=""
-        fi
-
-        {
-          echo "score=$score"
-          echo "status=$status"
-          echo "report-path=$report_path"
-          echo "contract-path=$contract_path"
-        } >> "$GITHUB_OUTPUT"
-
-        exit "$exit_code"
-
+        TP_CHECKOUT: ${{ inputs.checkout }}
+        TP_PAYMENT: ${{ inputs.payment-mandate }}
+        TP_JWT: ${{ inputs.checkout-jwt }}
+        TP_JWT_FILE: ${{ inputs.checkout-jwt-file }}
+        TP_TRANSFORMATION: ${{ inputs.transformation }}
+        TP_FAIL_UNKNOWN: ${{ inputs.fail-on-unknown }}
+        TP_OUTPUT: ${{ inputs.output }}
+      run: node "$GITHUB_ACTION_PATH/ci/github-action.mjs"
 branding:
   icon: shield
   color: blue
