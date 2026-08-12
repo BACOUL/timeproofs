@@ -1,55 +1,59 @@
-# Security Policy
+# TimeProofs Security Policy
 
-TimeProofs AgentReady is a static readiness scanner for agent-facing OpenAPI and MCP tools.
+TimeProofs is cross-protocol consistency infrastructure for agentic transactions. The current product is local/CI-first and evaluates supported UCP/AP2 artifacts without requiring a hosted TimeProofs account.
 
-It is designed to run before deployment as a CI Gate. It reads local contract files and should not execute submitted APIs, MCP tools, LLM calls, or customer systems.
+## Supported security surface
 
-## Scope
+This policy currently covers the active TimeProofs relaunch code on `relaunch/invariant-engine`, including:
 
-This policy covers:
+- `timeproofs-core/`;
+- `adapters/`;
+- `sdk/`;
+- `cli/timeproofs.js` and `bin/timeproofs.js`;
+- `ci/`;
+- the root TimeProofs GitHub Action;
+- TimeProofs schemas, invariant packs and fixtures.
 
-- browser scanner pages;
-- `agentready-core/`;
-- AgentReady CLI;
-- GitHub Action wrapper;
-- `agentready.json` v0.1 output;
-- documentation and examples in this repository.
+Legacy AgentReady code remains historical/migration material and is not the active product direction.
 
-## Security Expectations
+## Security principles
 
-AgentReady must remain:
+TimeProofs must:
 
-- static by default;
-- local/browser-first where applicable;
-- free of live API execution during scans;
-- free of live MCP execution during scans;
-- free of LLM calls during scans;
-- careful with uploaded or scanned contracts;
-- honest about limitations.
+- treat protocol artifacts as untrusted input;
+- use exact supported protocol/profile identifiers;
+- return UNKNOWN rather than infer unsupported or missing evidence;
+- keep the deterministic core free of LLM decision authority;
+- avoid remote execution/fetching in the local M0–M7 path;
+- never emit raw checkout proof/JWT or payment credential material in CI-safe output;
+- use least-privilege GitHub Actions permissions;
+- pin security/release-critical third-party Actions by immutable commit SHA;
+- preserve artifact/adapter/pack provenance needed to reproduce decisions.
 
-## Reporting
+Threat model: `docs/security/THREAT_MODEL.md`.
+Supply-chain policy: `docs/security/SUPPLY_CHAIN.md`.
 
-Please report security or privacy issues privately:
+## Reporting a vulnerability
 
-```txt
-security@timeproofs.io
-```
+Please report a suspected security or privacy vulnerability privately to:
 
-Include:
+`security@timeproofs.io`
 
-- affected file, page, CLI command, or action workflow;
-- steps to reproduce;
-- expected behavior;
-- actual behavior;
-- possible impact.
+Include, when possible:
 
-## Out Of Scope
+- affected version/commit;
+- affected CLI/SDK/Action path;
+- minimal reproduction steps;
+- expected vs actual behavior;
+- security or privacy impact;
+- whether logs/output may contain sensitive material.
 
-- Claims that AgentReady should guarantee absolute AI-agent safety.
-- Issues in forks or modified deployments not maintained here.
-- Requests to build a runtime firewall, backend, dashboard, or payment flow.
+Do not include real payment credentials or customer secrets in an initial report unless a secure channel has been agreed.
 
-## Mandatory Limitation
+## Current non-claims
 
-TimeProofs AgentReady does not guarantee that an AI agent will never fail.
-It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.
+TimeProofs does not currently claim complete AP2 SD-JWT/JWS/key-binding verification, PSP/network execution proof, hosted-runtime isolation, or absolute prevention of inconsistent transactions. Supported guarantees are limited to the explicit versioned invariants/evidence profiles implemented and tested in this repository.
+
+## Disclosure handling
+
+Public disclosure timing should be coordinated after a fix or mitigation is available. TimeProofs will not represent an unverified report as fixed until the relevant regression/security gate is green.
