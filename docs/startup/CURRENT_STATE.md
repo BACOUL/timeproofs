@@ -1,6 +1,6 @@
 # TimeProofs — Current State
 
-Last updated: 2026-08-12
+Last updated: 2026-08-13
 Branch: `relaunch/invariant-engine`
 
 ## Where the project is
@@ -13,17 +13,22 @@ Branch: `relaunch/invariant-engine`
 
 **Strategic primitives:** VERIFY → ENFORCE → RESOLVE.
 
-**Canonical business architecture:** `docs/startup/BUSINESS_ARCHITECTURE.md`.
+Canonical company documents:
+- `docs/startup/BUSINESS_ARCHITECTURE.md`
+- `docs/startup/COMPANY_COMPLETENESS_AUDIT.md`
+- `docs/startup/COMPANY_GAP_REGISTER.md`
+- `docs/startup/METERING_BILLING_ARCHITECTURE.md`
+- `docs/product/PACK_GOVERNANCE_AND_COMPATIBILITY.md`
+- `docs/startup/INCIDENT_OBSERVABILITY_CONTINUITY.md`
+- `docs/startup/PRIVACY_TRUST_ENTERPRISE_BOUNDARY.md`
+- `docs/startup/PARTNERS_IP_MOAT_LOOP.md`
+- `docs/product/M9_WEBSITE_DOCS_VISION.md`
 
-**Company completeness audit:** `docs/startup/COMPANY_COMPLETENESS_AUDIT.md`.
-
-**Initial wedge:** UCP ↔ AP2 composition consistency focused on semantic/economic cross-object consistency and evidence closure rather than generic protocol conformance.
-
-**Current milestone:** M8 — local-first runtime enforcement: ACTIVE. Implementation has begun.
+**Current milestone:** M8 — local-first runtime enforcement: ACTIVE.
 
 **Pre-M8 World-Class Readiness Gate:** COMPLETE / GREEN.
 
-**Company-architecture audit:** COMPLETE. No discovered gap invalidates the project; commercial proof remains materially behind technical proof.
+**Company architecture / anti-omission audit:** COMPLETE at design level. Commercial proof remains open.
 
 ## Completed milestones
 
@@ -38,6 +43,7 @@ Branch: `relaunch/invariant-engine`
 - M7 — customer-facing CI integration and package contract: COMPLETE
 - pre-M8 World-Class Readiness Gate: COMPLETE / GREEN
 - full startup/company completeness audit: COMPLETE
+- anti-omission operating architecture: DOCUMENTED / CANONICAL
 
 ## Current executable product
 
@@ -56,183 +62,146 @@ Supported initial profiles:
 - UCP `2026-04-08` Checkout (`dev.ucp.shopping.checkout`)
 - AP2 PaymentMandate VCT `mandate.payment.1`
 
-Developer flow:
-
-`timeproofs verify --checkout checkout.json --payment-mandate payment.json --checkout-jwt '<exact-proof>'`
-
-Frozen verify exit semantics:
-- 0 PASS/WARN
-- 2 BLOCK
-- 3 UNKNOWN
-- 4 unsupported protocol/profile
-- 1 invalid input/runtime error
-
-## Binding behavior
-
-Production TP-CX-003 does not PASS from `transaction_id` presence alone.
-
-For the supported SHA-256 binding profile, TimeProofs hashes the exact supplied checkout proof/JWT and compares it with AP2 `transaction_id`.
-
-- verified hash → PASS prerequisite
-- mismatch → BLOCK
-- no checkout proof/JWT → UNKNOWN / INTEGRITY_UNVERIFIED
-- unsupported binding algorithm/profile → explicit unsupported/UNKNOWN behavior
-
-Full SD-JWT/key/signature verification is not claimed.
-
 ## Product thesis boundary
 
 The UCP↔AP2 pack is a beachhead, not the company boundary.
 
-TimeProofs must evolve around cross-system transaction integrity:
-
+TimeProofs evolves around cross-system transaction integrity:
 1. **VERIFY** — Is it valid?
 2. **ENFORCE** — Can it run?
 3. **RESOLVE** — Did it happen?
 
-The highest-priority strategic boundary is:
+Priority boundary: `AUTHORIZED REALITY ↔ EXECUTED REALITY`.
 
-`AUTHORIZED REALITY ↔ EXECUTED REALITY`
-
-Examples:
-- AP2 PaymentMandate ↔ PSP/network execution;
-- checkout/payment ↔ committed order;
-- cumulative mandate ↔ prior fulfilments;
-- cancellation/refund ↔ provider/order/settlement state.
-
-The governing future outcome rule is:
-
+Outcome rule:
 > **Never retry an unknown side effect. Resolve it first.**
 
-## Business architecture
+## Business architecture baseline
 
-TimeProofs should monetize transaction integrity rather than seats/reports.
+Current operating hypothesis, not published/validated pricing:
+- Community/local: €0;
+- Production: €99/month, modeling 10,000 protected VERIFY/ENFORCE transactions included, then ~€0.01/protected transaction;
+- RESOLVE: modeling envelope ~€0.03–€0.10/provider-specific resolution;
+- Business: €499/month + usage;
+- Enterprise: €15k–€25k annual minimum + usage.
 
-Long-term monetization architecture:
-- free/local developer adoption where it improves distribution and trust;
-- usage-based production VERIFY/ENFORCE on protected consequential transactions;
-- potentially higher-value RESOLVE operations where provider-specific authoritative evidence is queried;
-- managed/private packs, evidence history, organizational controls, connectors and SLA for higher-value deployments.
+Primary distribution baseline:
+GitHub → npm → technical docs → CI/GitHub Action → protocol communities → provider/platform integrations → B2B2Developer partnerships.
 
-Current candidate usage pricing envelope (HYPOTHESIS ONLY, not market validated): approximately €0.005–€0.03 per protected transaction depending on depth of protection.
+## Anti-omission company architecture now explicit
 
-Revenue arithmetic is documented only to show leverage; it is not a forecast.
+The repository now contains explicit operating designs for:
+- usage metering/billing and dedupe;
+- pack trust lifecycle and compatibility/deprecation;
+- incident severity/rollback/false-block handling;
+- runtime observability;
+- solo-founder business continuity;
+- privacy lifecycle and enterprise trust boundary;
+- abuse/adversarial customer controls;
+- enterprise procurement boundaries;
+- liability baseline;
+- partner economics;
+- IP/trademark/licensing gate;
+- moat telemetry loop that favors sanitized reusable knowledge over raw customer data custody;
+- M9 website/docs design direction.
 
-The desired economic shape is infrastructure-grade gross margin with revenue increasing faster than founder time.
-
-## Company completeness audit — critical gaps
-
-The largest unresolved company gaps are now explicit rather than implicit:
-
-1. **P0 — willingness-to-pay / economic buyer proof**;
-2. **P1 — first provider execution boundary (approved mandate ↔ PSP/network outcome)**;
-3. **P1 — exact open-source/commercial split before serious public release**;
-4. **P1 — paid-production liability/legal posture**;
-5. **P2 — distribution channel proof**;
-6. **P2 — unit economics for RESOLVE/provider reads/storage/support**;
-7. **P2 — first meaningful PSP/platform partnership proof**.
-
-These gaps do not require a pivot today. They run in parallel with M8 and become gates before heavy M10/cloud spend.
+These designs do not pretend paid-production implementation exists before it is needed. `COMPANY_GAP_REGISTER.md` assigns each item to NOW/M8/M9/PAID/ENTERPRISE/M10/SCALE/RELEASE.
 
 ## Validation proof
 
-### Cross-platform/runtime baseline
-Verified `TimeProofs Core Regression` run `31591704219`: Ubuntu/macOS/Windows × Node 22/24 — success.
+### Strengthened M8 full matrix
+`TimeProofs Core Regression` run `31624413675`: Ubuntu/macOS/Windows × Node 22/24 — **6/6 success**.
 
-### Generated property regression
-250 deterministic generated transaction families test PASS, amount/currency/binding perturbations, missing-proof UNKNOWN and replay determinism.
-Verified full run `31618680408` — success.
+The run executes:
+- M4 fixtures;
+- M6 adapter/SDK/CLI tests;
+- M8 enforcement policy/SDK tests;
+- security tests;
+- 250-family generated property regression;
+- CLI/error contract;
+- package clean-room smoke requiring VERIFY + ENFORCE behavior.
 
 ### Customer Action
-PASS/BLOCK/UNKNOWN customer contract verified in run `31591960176` — success.
-
-### Package clean room
-Pack/install/SDK/CLI consumer flow verified in run `31592422020` — success.
-
-M8 packaging has since been strengthened to require the enforcement module/schema and clean-room `enforceTransaction()` behavior; the latest full matrix must be green before M8 is closed.
+PASS/BLOCK/UNKNOWN customer contract run `31591960176` — success.
 
 ### CodeQL
 Run `31592599707` — success.
 
-### CLI/error contract
-Required input, malformed JSON, unsupported profile, UNKNOWN, BLOCK and unknown-command behavior are regression-tested in the full matrix.
-Run `31619326027` — success.
-
 ### Performance
-Measured 1,000-line-item / 50-iteration Ubuntu Node 22 baseline:
+1,000-line-item baseline:
 - p50 `3.668 ms`
 - p95 `6.004 ms`
 - max `6.805 ms`
 - RSS `70.3 MiB`
 
-A 100 ms p95 regression ceiling is enforced for that profile as an algorithmic guard, not an SLA.
-Threshold run `31618899028` — success.
-
-## Protocol drift control
-
-Audited upstream schema snapshots are locked in `protocols/upstream-lock.json` and watched automatically. Changed upstream schema means review; it never silently widens compatibility.
-
-## Security/data posture
-
-Current local/CI surface includes:
-- threat model;
-- supply-chain policy;
-- adversarial and generated property regressions;
-- strict canonicalization boundaries;
-- least-privilege CI;
-- pinned third-party Actions;
-- checkout credential non-persistence;
-- CI-safe output excluding raw proof/JWT, payment instrument, merchant authorization and raw protocol objects.
-
-## Market/strategy audit
-
-Canonical audit: `docs/research/MARKET_STRATEGIC_AUDIT_2026-08-12.md`.
-
-Conclusion: **CONTINUE / BUILD**, but TimeProofs must not remain a narrow UCP↔AP2 amount/currency checker.
-
-Canonical thesis: `docs/product/PRODUCT_THESIS.md`.
-
-Primary business uncertainty remains willingness-to-pay evidence. Technical readiness is materially ahead of commercial proof.
+Provisional algorithmic guard: 100 ms p95; run `31618899028` — success. This is not a commercial SLA.
 
 ## M8 active design
 
 Canonical design: `docs/product/M8_RUNTIME_ENFORCEMENT_DESIGN.md`.
 
-M8 adds a local-first enforcement decision layer on top of Verify.
-
 Frozen boundaries:
-- underlying verification remains PASS/WARN/BLOCK/UNKNOWN;
+- verification remains PASS/WARN/BLOCK/UNKNOWN;
 - enforcement returns ALLOW/DENY/ERROR;
-- financially consequential default: PASS→ALLOW, WARN→ALLOW, BLOCK→DENY, UNKNOWN→DENY;
-- runtime error never silently becomes ALLOW;
-- optional fail-open behavior must be explicit and audit-visible;
-- TimeProofs does not execute/custody the caller's payment or other side effect;
-- no generic MCP/A2A gateway scope;
-- no `latest` versions or silent remote pack mutation;
-- local-first, no mandatory TimeProofs cloud dependency.
+- default financial policy: PASS→ALLOW, WARN→ALLOW, BLOCK→DENY, UNKNOWN→DENY;
+- runtime error never silently ALLOWs;
+- fail-open must be explicit/audit-visible;
+- TimeProofs does not execute/custody the caller's side effect;
+- no generic MCP/A2A gateway;
+- pinned versions, no silent `latest` mutation;
+- local-first, no mandatory cloud dependency.
 
 Current M8 implementation includes:
-- `schemas/timeproofs-enforcement.v0.1.schema.json`;
-- pure enforcement policy evaluator;
+- enforcement result schema;
+- pure policy evaluator;
 - `enforceTransaction()` SDK;
-- default financial fail-closed policy;
-- explicit/auditable fail-open override behavior;
-- M8 regression tests;
-- enforcement module/schema in the public package allowlist;
-- strengthened clean-room package test requiring VERIFY+ENFORCE behavior.
+- fail-closed default and explicit fail-open override;
+- regression tests;
+- enforcement module/schema in package allowlist;
+- strengthened clean-room package verification;
+- green 6-environment full matrix.
 
-M8 remains ACTIVE until the strengthened full matrix, clean-room package enforcement contract and remaining runtime validation are green.
+Remaining before M8 closure:
+- enforcement-specific hostile/policy mutation/property cases;
+- explicit VERIFY-vs-ENFORCE overhead measurement;
+- final decision on SDK-first versus CLI/Action enforcement surface;
+- rollback/migration/runtime-evidence documentation tied to implemented behavior.
 
-## Lifecycle-separated remaining work
+## Commercial/company gaps still requiring real-world proof
 
-### Release-time only
-When publishing a real TimeProofs package: verify final npm name/scope ownership, Trusted Publishing/OIDC, provenance, exact-artifact SBOM/attestation, immutable release and registry install.
+Design coverage is no longer the main gap. Evidence is.
 
-### Before M9/public relaunch
-Archive/remove/redirect public AgentReady surfaces and replace legacy site architecture with a TimeProofs-native experience.
+Highest-risk unresolved facts:
+1. willingness-to-pay;
+2. exact economic buyer;
+3. repeatable first provider execution pack (approved mandate ↔ PSP/network outcome);
+4. distribution pull;
+5. Resolve unit economics;
+6. first meaningful PSP/platform partnership;
+7. exact open-source/commercial split before broad public release.
 
-### Market/company work in parallel
-Validate ICP, economic buyer, incident cost, willingness-to-pay, pricing metric, distribution and first provider/partner demand. Do not make major M10/cloud investment before the commercial validation gate in `BUSINESS_ARCHITECTURE.md` is materially satisfied.
+## Lifecycle gates
+
+### M9/public relaunch
+- archive/remove/redirect AgentReady public surfaces;
+- finalize website/docs against `M9_WEBSITE_DOCS_VISION.md`;
+- freeze package name, public support/deprecation policy and open/commercial split;
+- complete IP/name/license checks.
+
+### Paid production
+- implement metering ledger/billing semantics;
+- legal/liability/DPA/trust package;
+- spend controls and abuse controls for managed surfaces;
+- operational incident/support model.
+
+### Release
+- Trusted Publishing/OIDC;
+- provenance;
+- SBOM/attestation;
+- immutable release and registry-install proof.
+
+### M10/scale
+No major managed-cloud spend until the commercial validation gate is materially satisfied.
 
 ## Known non-claims
 
@@ -240,18 +209,14 @@ TimeProofs does not yet claim:
 - full SD-JWT signature/key-binding verification;
 - merchant authorization JWS verification;
 - arbitrary AP2 hash algorithms;
-- automatic future-version compatibility;
 - provider/network execution evidence;
-- outcome resolution against authoritative PSP/network state;
-- lifecycle Order enforcement;
-- modeled FX/tips/incremental authorization/partial capture/split settlement/marketplace payout;
-- hosted enforcement or SLA;
+- authoritative outcome resolution;
+- hosted enforcement/SLA;
 - product-market fit;
-- validated willingness-to-pay;
-- validated published pricing.
+- validated willingness-to-pay or published pricing.
 
 Missing proof remains UNKNOWN.
 
 ## One-line status
 
-> M0–M7, the pre-M8 World-Class Gate and the full company-completeness audit are complete; M8 local-first enforcement remains active, while commercial proof and the first authorized↔executed provider evidence boundary are the two highest-priority company risks/opportunities in parallel.
+> M0–M7 and the pre-M8 quality gate are complete; the company architecture now includes explicit anti-omission policies for billing, packs, incidents, privacy, trust, enterprise, IP, continuity and moat learning; M8 enforcement is active with a green 6-environment matrix, while commercial proof and the first authorized↔executed provider boundary remain the highest-value unresolved work.
