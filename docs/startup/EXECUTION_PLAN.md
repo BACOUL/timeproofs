@@ -14,15 +14,16 @@ Completed:
 - M2.1 foundation hardening;
 - M3 UCP/AP2 Invariant Pack v0.1 specification;
 - M4 fixture corpus/regression contract;
-- M5 deterministic Verify engine with green executable regression;
+- M5 deterministic Verify engine;
 - M6 real UCP/AP2 adapters + local SDK/CLI;
-- M7 customer-facing CI integration + safe result/package contract.
+- M7 customer-facing CI integration + safe result/package contract;
+- pre-M8 World-Class Readiness Gate.
 
-Current active work: **World-Class Gate pre-M8 closure**.
+Current active milestone: **M8 — local-first runtime enforcement**.
 
-M8 remains **NOT STARTED** until remaining pre-M8 gate items are green or explicitly waived by founder decision.
+The M8 design is frozen before implementation in `docs/product/M8_RUNTIME_ENFORCEMENT_DESIGN.md`.
 
-Legacy AgentReady assets remain temporarily but are non-canonical for the relaunch and are excluded from the dedicated TimeProofs package allowlist.
+Legacy AgentReady assets remain temporarily but are non-canonical and excluded from the TimeProofs package. Public legacy cleanup is required before M9/public relaunch, not before local M8 implementation.
 
 ---
 
@@ -40,17 +41,13 @@ Frozen primitives: ProtocolObject, BindingEdge, InvariantDefinition, EvidenceIte
 ## M2.1 — Foundation hardening
 **Status: COMPLETE**
 
-Added required evaluation envelope, schema/evaluation IDs, pack/adapter versions, artifact snapshot digests, structured UNKNOWN reasons and explicit AgentReady legacy boundary.
-
 ## M3 — UCP/AP2 Invariant Pack v0.1 specification
 **Status: COMPLETE**
 
-Initial executable artifact profile:
+Initial executable profile:
 - TP-CX-003 exact authorized-state prerequisite;
 - TP-CX-002 currency projection, BLOCK-capable;
 - TP-CX-001 amount projection, BLOCK-capable.
-
-Compatibility is maintained in `packs/ucp-ap2/COMPATIBILITY.md`.
 
 ## M4 — Fixture corpus and regression harness
 **Status: COMPLETE**
@@ -60,133 +57,96 @@ Source of truth: `fixtures/ucp-ap2/v0.1/`.
 ## M5 — Deterministic Verify engine
 **Status: COMPLETE**
 
-Green executable regression proved against the frozen M4 contract. See `timeproofs-core/M5_COMPLETION_REPORT.md`.
-
 ## M6 — UCP/AP2 adapters + CLI/SDK
 **Status: COMPLETE**
 
-Delivered:
-- real UCP Checkout adapter for protocol version `2026-04-08`;
-- real AP2 PaymentMandate adapter for VCT `mandate.payment.1`;
-- immutable canonical JSON SHA-256 snapshots;
-- adapter provenance and source mappings;
-- strict production TP-CX-003 binding evidence path;
-- local JS SDK `verifyTransaction()`;
-- CLI `timeproofs verify`;
-- human and JSON output;
-- explicit local exit codes;
-- end-to-end adapter/SDK/CLI tests.
-
-Important boundary: M6 proves exact-state equality only when explicit checkout proof/JWT hash evidence is supplied. It does not claim full SD-JWT/JWS/key verification. See `docs/product/M6_COMPLETION_REPORT.md`.
+Executable support is pinned to UCP Checkout `2026-04-08` and AP2 PaymentMandate `mandate.payment.1`. Exact-state production verification requires explicit checkout proof/JWT hash evidence and does not claim full SD-JWT/JWS/key verification.
 
 ## M7 — Customer-facing CI integration and package contract
 **Status: COMPLETE**
 
-### Delivered
-- root customer-facing GitHub Action;
-- stable PASS/BLOCK/UNKNOWN Action behavior;
-- public result schema/profile versioning;
-- CI-safe redacted projection;
-- bounded input size and output/input alias protection;
-- hardened credential handling;
-- cross-platform Node 22/24 regression matrix;
-- dedicated TimeProofs package allowlist;
-- clean-room pack/install/SDK/CLI smoke test;
-- explicit legacy AgentReady inventory;
-- updated security/supply-chain posture.
-
-### Validation evidence
-
-Customer Action:
-- run `31591960176` — PASS/BLOCK/UNKNOWN contract green.
-
-Cross-platform matrix:
-- run `31591704219` — Ubuntu/macOS/Windows × Node 22/24 green.
-
-Clean-room package:
-- run `31592422020` — pack/install/SDK/CLI consumer test green.
+Delivered customer GitHub Action, safe/versioned result contracts, package allowlist, clean-room packaging, multi-OS/runtime regression, CodeQL, upstream watch and safe secret handling.
 
 See `docs/product/M7_COMPLETION_REPORT.md`.
 
-## World-Class Gate — pre-M8 closure
-**Status: ACTIVE**
+## World-Class Gate — pre-M8
+**Status: COMPLETE / GREEN**
 
-This is not a new product milestone. It is the quality gate between M7 and M8.
+Additional closure delivered:
+- deterministic generated property regression across 250 transaction families;
+- coherent CLI malformed/unsupported/BLOCK/UNKNOWN contract regression;
+- documented input/performance profile;
+- measured 1,000-line-item baseline;
+- enforced provisional 100 ms p95 algorithmic-regression ceiling;
+- market/strategy audit;
+- M8 trust-boundary/fail policy design frozen before code.
 
-Already green:
-- product/repository boundary;
-- deterministic and adversarial core testing;
-- explicit compatibility matrix;
-- upstream UCP/AP2 schema watch;
-- CI result redaction;
-- threat model and supply-chain policy;
-- CodeQL with successful run `31592599707`;
-- multi-OS/multi-runtime regression;
-- customer PASS/BLOCK/UNKNOWN integration;
-- clean-room package installation;
-- performance baseline with successful run `31592637945`.
+Evidence includes:
+- property/full test run `31618680408` — success;
+- performance guard run `31618899028` — success;
+- expanded CLI/error full-matrix run `31619326027` — success.
 
-Remaining pre-M8 blockers unless explicitly waived:
-1. expand property/fuzz coverage beyond hand-written adversarial cases;
-2. review human malformed/unsupported/UNKNOWN error-message UX;
-3. freeze one canonical public install path and one canonical CI path after package naming is final;
-4. document measured maximum input/performance profile and decide whether a performance regression threshold is justified;
-5. finish safe archive/removal of legacy public AgentReady surfaces before public relaunch.
+Canonical gate: `docs/startup/WORLD_CLASS_GATE.md`.
+Canonical report: `docs/startup/WORLD_CLASS_GATE_COMPLETION_REPORT.md`.
 
-Release-time controls are tracked separately because they cannot honestly be proven until a real release exists:
-- npm Trusted Publishing/OIDC;
-- npm provenance;
-- exact-release SBOM;
-- GitHub artifact attestation/provenance;
-- immutable release/tag verification;
-- registry-install smoke test of the published artifact.
+Release-time npm provenance/SBOM/attestation controls remain mandatory only when a real TimeProofs release is cut. Public AgentReady site cleanup remains mandatory before M9/public relaunch.
 
-Canonical gate report: `docs/startup/WORLD_CLASS_GATE_COMPLETION_REPORT.md`.
+## M8 — Local-first runtime enforcement
+**Status: ACTIVE — IMPLEMENTATION NOT YET STARTED**
 
-## M8 — Enforce runtime
-**Status: NOT STARTED**
+Canonical design: `docs/product/M8_RUNTIME_ENFORCEMENT_DESIGN.md`.
 
-M8 may begin only after the pre-M8 gate is closed or founder-waived with rationale.
+### Goal
+Evaluate deterministic cross-protocol invariants immediately before a consequential caller-owned commit and apply a pinned enforcement policy.
 
-Planned scope:
-- inline/pre-commit enforcement architecture;
-- latency budget;
-- fail-open/fail-closed policy;
-- version pinning;
-- rollback/emergency-disable path;
-- runtime availability/SLO model;
-- enforcement audit/event model.
+### Frozen boundaries
+- TimeProofs returns ALLOW/DENY/ERROR plus underlying PASS/WARN/BLOCK/UNKNOWN evidence;
+- default financial policy is fail-closed: BLOCK and UNKNOWN deny; runtime error never silently allows;
+- an explicit fail-open override may exist but must be configuration-visible and audit-visible;
+- TimeProofs does not execute/custody the external payment or side effect;
+- TimeProofs does not become an MCP/A2A gateway;
+- no `latest` pack/version semantics;
+- no runtime remote pack mutation;
+- rollback is explicit version/config pinning;
+- local-first, no required TimeProofs cloud dependency.
 
-M8 must not silently convert UNKNOWN into PASS.
+### Implementation order
+1. freeze enforcement result schema;
+2. implement pure enforcement policy evaluator;
+3. add SDK `enforceTransaction()` on top of the existing Verify path;
+4. fixtures/tests for PASS/WARN/BLOCK/UNKNOWN/error and fail-open override;
+5. add CLI/Action enforcement surfaces only after local semantics are stable;
+6. benchmark/adversarial/cross-platform validation;
+7. update rollback/migration docs and close M8 only on green execution evidence.
+
+### Strategic companion work
+Research the next high-value pack boundary in parallel:
+
+**AP2 approved PaymentMandate ↔ executed PSP/network outcome.**
+
+This is strategically stronger than adding more local UCP/AP2 field checks because it crosses independent systems and begins accumulating provider-specific evidence knowledge.
 
 ## M9 — Relaunch website + world-class docs
 **Status: NOT STARTED**
 
-Center UX on actual composed artifacts, invariant evidence and decisions. Remove/redirect legacy AgentReady public surfaces before relaunch. Benchmark global infrastructure leaders before design.
+Before public relaunch:
+- archive/remove/redirect legacy AgentReady public surfaces;
+- freeze actual package name/registry install path;
+- execute release provenance controls if publishing;
+- design from TimeProofs-native primitives rather than generic SaaS patterns.
 
 ## M10 — Managed TimeProofs Cloud
 **Status: NOT STARTED**
 
-Build only managed surfaces with genuine operational value: hosted enforcement, managed pack updates, evidence retention, private packs, org controls, connectors and SLA/on-prem where justified.
+Build only managed surfaces with genuine operational value: managed pack updates, evidence retention, private packs, organizational controls, connectors and SLA/on-prem where justified. Do not build cloud merely because infrastructure startups usually have dashboards/APIs.
 
 ---
 
 ## Parallel company workstreams
 
-Maintain current evidence for:
-- market/ICP and economic buyer;
-- protocol adoption velocity;
-- competitors/standards absorption risk;
-- distribution through protocol/dev ecosystems;
-- open-source boundary;
-- pricing/value metric;
-- partnerships;
-- security/reliability;
-- legal/licensing;
-- finance/gross margin;
-- product-design benchmarks and metrics.
+Maintain current evidence for market/ICP/economic buyer, protocol adoption velocity, standards absorption, competitors, distribution, pricing/value metric, partnerships, security/reliability, legal/licensing, gross margin and product-design benchmarks.
 
-These workstreams inform milestones but do not silently pivot the product.
+Current canonical market audit: `docs/research/MARKET_STRATEGIC_AUDIT_2026-08-12.md`.
 
 ## Change rule
 
