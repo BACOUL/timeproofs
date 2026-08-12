@@ -4,9 +4,15 @@
   "description": "Legacy AgentReady package metadata; TimeProofs relaunch is under development on relaunch/invariant-engine.",
   "private": true,
   "type": "module",
-  "bin": { "agentready": "./bin/agentready.js" },
+  "bin": {
+    "agentready": "./bin/agentready.js",
+    "timeproofs": "./bin/timeproofs.js"
+  },
   "scripts": {
     "test:timeproofs-core": "node timeproofs-core/tests/run-fixture-regression.mjs",
+    "test:timeproofs-m6": "node timeproofs-core/tests/run-m6-adapter-cli-tests.mjs",
+    "test:timeproofs": "npm run test:timeproofs-core && npm run test:timeproofs-m6",
+    "timeproofs": "node bin/timeproofs.js",
     "test:agentready-core": "node agentready-core/tests/run-agentready-core-tests.mjs",
     "test:agentready-cli": "node cli/tests/run-agentready-cli-tests.mjs",
     "test:agentready-action": "node cli/tests/run-agentready-action-smoke-test.mjs",
@@ -17,11 +23,11 @@
     "agentready:scan:openapi": "node bin/agentready.js scan openapi",
     "agentready:scan:mcp": "node bin/agentready.js scan mcp"
   },
-  "keywords": ["agentready","ai-agents","openapi","mcp","ci","ci-gate","tool-calling","agent-facing"],
+  "keywords": ["timeproofs","agentic-commerce","ucp","ap2","cross-protocol","invariants","agentready","ai-agents","mcp"],
   "repository": {"type":"git","url":"git+https://github.com/BACOUL/timeproofs.git"},
-  "homepage": "https://timeproofs.io/agentready-ci.html",
+  "homepage": "https://timeproofs.io/",
   "bugs": {"url":"https://github.com/BACOUL/timeproofs/issues"},
   "license": "SEE LICENSE IN LICENSE",
-  "files": ["bin/agentready.js","agentready-core/*.js","agentready-core/simulation/*.js"],
+  "files": ["bin/timeproofs.js","cli/timeproofs.js","sdk/*.js","timeproofs-core/*.js","adapters/**/*.js","packs/ucp-ap2/**","bin/agentready.js","agentready-core/*.js","agentready-core/simulation/*.js"],
   "engines": {"node":">=20"}
 }
