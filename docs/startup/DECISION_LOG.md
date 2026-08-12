@@ -15,20 +15,20 @@ Repository: `BACOUL/timeproofs`. Relaunch work happens on `relaunch/invariant-en
 Target category: **Cross-Protocol Consistency Infrastructure for agentic transactions**. Core thesis: individually valid protocol objects can compose into a globally inconsistent transaction.
 
 ## D-004 — Initial wedge
-**Status:** DECISION, REFINED BY D-013
+**Status:** DECISION, REFINED BY D-013 AND D-037
 Initial wedge: UCP ↔ AP2 composition. This is a wedge, not the permanent company boundary.
 
 ## D-005 — Strategic destination
-**Status:** DECISION
-Long-term product: **Cross-Protocol Consistency & Invariant Engine** with versioned invariant packs across protocols and business systems.
+**Status:** DECISION, REFINED BY D-037
+Long-term product: **Cross-Protocol Consistency & Invariant Engine** with versioned invariant packs across protocols and business systems, evolving into a transaction-integrity layer spanning authorization, enforcement and outcome resolution.
 
 ## D-006 — Deterministic decisions
 **Status:** DECISION
 Core invariant enforcement does not depend on an LLM. Primary states: PASS, WARN, BLOCK, UNKNOWN.
 
 ## D-007 — Invariant Packs are the moat hypothesis
-**Status:** HYPOTHESIS / STRATEGIC DIRECTION
-The generic comparison engine is not defensible. The moat hypothesis is a versioned, verified corpus of mappings, invariants, canonicalization rules, edge cases, fixtures and compatibility knowledge across protocol/provider pairs.
+**Status:** HYPOTHESIS / STRATEGIC DIRECTION, EXPANDED BY D-037
+The generic comparison engine is not defensible. The moat hypothesis is a versioned, verified corpus of mappings, invariants, canonicalization rules, evidence/resolver semantics, edge cases, fixtures and compatibility knowledge across protocol/provider/system boundaries.
 
 ## D-008 — Do not become a scanner/dashboard business
 **Status:** DECISION
@@ -75,12 +75,12 @@ A future executed-payment invariant requires provider/network evidence; missing 
 UCP Orders can legitimately evolve. Order invariants are lifecycle-aware; `current order == original checkout` is not a generic invariant.
 
 ## D-019 — Freeze company thesis separately from evolving pack research
-**Status:** DECISION
-`TIMEPROOFS_PRODUCT_CONSTITUTION.md` is canonical for company thesis. Protocol research may refine adapters, mappings, evidence and pack contents but cannot silently redefine the company. Frozen product model: `ProtocolObject → Binding → Invariant → Evidence → Decision`.
+**Status:** DECISION, EXPANDED BY D-037
+`TIMEPROOFS_PRODUCT_CONSTITUTION.md` is canonical for company category/constitution and `docs/product/PRODUCT_THESIS.md` is canonical for the product-level transaction-integrity thesis. Protocol research may refine adapters, mappings, evidence and pack contents but cannot silently redefine the company. Frozen product model: `ProtocolObject → Binding → Invariant → Evidence → Decision`.
 
 ## D-020 — Execute milestones in canonical order
 **Status:** DECISION, UPDATED THROUGH D-036
-`docs/startup/EXECUTION_PLAN.md` is the canonical implementation sequence. M0–M7, M2.1 and the pre-M8 World-Class Gate are complete. M8 local-first runtime enforcement is the active milestone; implementation begins from its frozen design.
+`docs/startup/EXECUTION_PLAN.md` is the canonical implementation sequence. M0–M7, M2.1 and the pre-M8 World-Class Gate are complete. M8 local-first runtime enforcement is the active milestone.
 
 ## D-021 — M1 complete; conservative seven-rule shortlist
 **Status:** DECISION
@@ -217,6 +217,33 @@ TimeProofs M8 returns an enforcement decision but MUST NOT execute or custody th
 M8 remains local-first with pinned versions, no `latest` semantics, no silent remote pack mutation and no mandatory TimeProofs cloud dependency.
 
 Public AgentReady cleanup is reclassified as pre-M9/public-relaunch work; real-release provenance controls remain release-time gates.
+
+## D-037 — Canonical product thesis is VERIFY → ENFORCE → RESOLVE across authorized vs executed reality
+**Status:** DECISION / CONSTITUTION-LEVEL PRODUCT DIRECTION
+Canonical product thesis is frozen in `docs/product/PRODUCT_THESIS.md`:
+
+> **TimeProofs is the transaction integrity layer between what autonomous agents were authorized to do and what external systems actually executed.**
+
+TimeProofs must not be redefined as a UCP/AP2 validator simply because UCP↔AP2 is the first pack.
+
+The strategic primitives are:
+- VERIFY — Is it valid?
+- ENFORCE — Can it run?
+- RESOLVE — Did it happen?
+
+VERIFY, ENFORCE and RESOLVE share the same transaction graph, provenance, bindings, invariants and evidence model; they are intended as one infrastructure, not unrelated products.
+
+The priority long-term boundary is `AUTHORIZED REALITY ↔ EXECUTED REALITY`, including PaymentMandate↔PSP/network execution, payment↔order, refund↔settlement and agent action↔authoritative business-system state.
+
+Outcome-resolution rule:
+
+> **Never retry an unknown side effect. Resolve it first.**
+
+A mature resolver should distinguish COMMITTED, NOT_COMMITTED and UNKNOWN from authoritative evidence. TimeProofs must not infer an outcome without evidence.
+
+The moat hypothesis expands from Invariant Packs alone to accumulated invariant + evidence + resolver semantics and compatibility history across independent systems.
+
+The thesis has explicit kill conditions: rethink it if cross-system inconsistency is not economically meaningful, individual protocol/provider owners absorb the whole relevant boundary, integration economics prevent accumulation, or willingness-to-pay remains absent despite meaningful transaction volume.
 
 ---
 Add new decisions sequentially. Never rewrite history to make it look cleaner; supersede/refine decisions explicitly.
