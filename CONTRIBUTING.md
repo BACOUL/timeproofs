@@ -1,74 +1,78 @@
-# Contributing
+# Contributing to TimeProofs
 
-Thank you for contributing to TimeProofs AgentReady.
+TimeProofs is cross-protocol consistency infrastructure for agentic transactions.
 
-Active direction:
+Read `AI_PROJECT_ENTRYPOINT.md` before changing product semantics or implementation.
 
-```txt
-TimeProofs AgentReady = pre-deployment CI gate for agent-facing OpenAPI and MCP tools.
-```
+## Contribution priorities
 
-## Contribution Priorities
+Useful contributions strengthen one of these surfaces:
 
-Good contributions strengthen one of these surfaces:
+- deterministic invariant evaluation;
+- UCP/AP2 and future protocol adapters;
+- evidence/provenance correctness;
+- versioned Invariant Packs and fixtures;
+- CLI / SDK / GitHub Action developer experience;
+- adversarial/security testing;
+- protocol compatibility research backed by primary sources;
+- reproducible performance and release engineering.
 
-- OpenAPI or MCP static scan reliability.
-- AgentReady CLI behavior.
-- GitHub Action wrapper behavior.
-- Stable rule codes AR001-AR010.
-- `agentready.json` v0.1 compatibility.
-- Documentation that helps teams use AgentReady as a CI Gate.
+## Product guardrails
 
-## Scope Guardrails
+Do not silently turn TimeProofs into:
 
-Do not add these without explicit approval:
+- a readiness score product;
+- a generic scanner/dashboard;
+- an MCP gateway;
+- an auth product;
+- an observability product;
+- a new universal agent protocol.
 
-- dashboard
-- Stripe or payment flow
-- backend
-- account system
-- runtime firewall
-- live API execution
-- live MCP execution
-- LLM calls during scans
-- legacy proof/timestamp/verify product surface
+Do not make a blocking invariant broader merely because it makes an implementation easier. Blocking semantics require the evidence, protocol/version scope and fixtures defined by the pack/Decision Log.
 
-Do not reintroduce:
+## Protocol changes
 
-- `selfhost/`
-- `sdk/timeproof.js`
-- `manifest.json`
-- `manifest.webmanifest`
+A protocol-dependent pull request should state:
+
+- exact upstream protocol/profile/version or source snapshot;
+- affected adapter/pack;
+- normative source;
+- whether PASS/BLOCK/UNKNOWN behavior changes;
+- new or updated fixtures;
+- migration/compatibility impact.
 
 ## Testing
 
-Run the relevant direct Node tests before opening a PR:
+Run:
 
-```txt
-node agentready-core/tests/run-agentready-core-tests.mjs
-node cli/tests/run-agentready-cli-tests.mjs
-node cli/tests/run-agentready-action-smoke-test.mjs
+```bash
+npm ci --ignore-scripts
+npm run test:timeproofs
 ```
 
-If a change touches commercial CI Gate behavior, re-run the bad/fixed fixtures with:
+The release-quality CI also tests Linux, macOS and Windows across supported Node versions.
 
-```txt
---min-score 75
---fail-on critical
-```
+## Security-sensitive changes
 
-## Pull Requests
+Read:
+
+- `docs/security/THREAT_MODEL.md`
+- `docs/security/SUPPLY_CHAIN.md`
+- `docs/startup/WORLD_CLASS_GATE.md`
+
+Do not log or persist real checkout proofs, payment credentials or merchant authorization material in tests/issues/PRs.
+
+## Pull requests
 
 PRs should state:
 
-- what changed;
-- whether scoring changed;
-- whether rule codes changed;
-- whether `agentready.json` compatibility changed;
+- problem and scope;
+- product/invariant semantics changed, if any;
+- compatibility impact;
+- security/privacy impact;
 - tests executed;
-- any remaining risk.
+- remaining limitations.
 
-## Mandatory Limitation
+## Legacy AgentReady
 
-TimeProofs AgentReady does not guarantee that an AI agent will never fail.
-It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.
+AgentReady-era code/docs are historical. Do not extend them as part of the TimeProofs relaunch unless the change is explicitly an archival/migration task.
