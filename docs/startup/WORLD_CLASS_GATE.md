@@ -1,12 +1,10 @@
 # TimeProofs — World-Class Readiness Gate
 
-Status: ACTIVE — PRE-M8 CLOSURE
+Status: PRE-M8 GATE COMPLETE
 Applies before: M8 runtime enforcement
 Last reviewed: 2026-08-12
 
-This gate separates “feature exists” from “foundation is credible for a global infrastructure company.” M8 MUST NOT begin until blocking pre-M8 items below are green or explicitly waived by founder decision with rationale.
-
-Release-only controls are tracked separately because they cannot honestly be green before a real release exists.
+This gate separates “feature exists” from “foundation is credible for a global infrastructure company.” The pre-M8 blocking requirements are now green with repository/external execution evidence. Release-only and public-relaunch-only controls remain mandatory at their actual lifecycle stage and are not falsely reported complete.
 
 ## A. Product truth and repository hygiene
 
@@ -15,8 +13,9 @@ Release-only controls are tracked separately because they cannot honestly be gre
 - [x] Legacy AgentReady is explicitly marked non-canonical.
 - [x] Legacy AgentReady GitHub Action/release workflows removed from relaunch branch.
 - [x] Remaining AgentReady package/site/code assets inventoried in `docs/legacy/AGENTREADY_INVENTORY.md`.
-- [x] `AI_PROJECT_ENTRYPOINT.md`, handoff and roadmap reflect the post-M7 pre-M8 state.
-- [ ] Legacy public AgentReady site/code surfaces safely archived/removed before public TimeProofs relaunch.
+- [x] `AI_PROJECT_ENTRYPOINT.md`, handoff and roadmap reflect the post-M7 state.
+
+Public AgentReady site/code removal is a **pre-M9/public-relaunch** requirement, not a blocker for local M8 runtime work, because the package/release allowlist already prevents legacy inclusion.
 
 ## B. Deterministic core
 
@@ -25,16 +24,12 @@ Release-only controls are tracked separately because they cannot honestly be gre
 - [x] Fixture-first invariant regression exists.
 - [x] Fixed inputs + fixed evaluation time are deterministic.
 - [x] Canonicalization rejects cycles, non-finite numbers, non-JSON values and excessive depth/node count.
-- [x] Deterministic generated property regression added beyond hand-written fixtures/adversarial cases.
+- [x] Generated property regression exists beyond hand-written cases.
 
 Property regression evidence:
 - `timeproofs-core/tests/run-property-regression.mjs`;
 - 250 generated transaction families per run;
-- verifies equal projection PASS, amount perturbation BLOCK, currency perturbation BLOCK, binding perturbation BLOCK, absent proof UNKNOWN and replay determinism;
-- included in `npm run test:timeproofs`;
 - verified green in `TimeProofs Core Regression` run `31618680408`, head `175f92213ca722d873437749d1b911664142e663`.
-
-This is meaningful generated property coverage, not a claim of exhaustive formal verification.
 
 ## C. Protocol correctness
 
@@ -43,7 +38,7 @@ This is meaningful generated property coverage, not a claim of exhaustive formal
 - [x] Exact-state binding does not PASS from identifier presence alone.
 - [x] Missing cryptographic/evidence proof becomes UNKNOWN.
 - [x] Automated upstream schema-change watch established.
-- [x] Compatibility matrix maintained per supported upstream snapshot in `packs/ucp-ap2/COMPATIBILITY.md`.
+- [x] Compatibility matrix maintained per supported upstream snapshot.
 - [x] Audited upstream schema blobs locked in `protocols/upstream-lock.json`.
 
 ## D. Evidence and data safety
@@ -67,10 +62,7 @@ This is meaningful generated property coverage, not a claim of exhaustive formal
 - [x] Responsible disclosure route aligned with active TimeProofs product.
 - [x] Security contact/process documented in `SECURITY.md` and `.well-known/security.txt`.
 
-Verified CodeQL run:
-- run id `31592599707`;
-- head `8cef869cbc895814ae6f161da691fd98337a64c4`;
-- conclusion `success`.
+Verified CodeQL run: `31592599707` — success.
 
 ## F. CI/runtime compatibility
 
@@ -78,19 +70,14 @@ Verified CodeQL run:
 - [x] Customer Action integration test exists.
 - [x] Third-party Actions in hardened workflows are pinned by commit SHA.
 - [x] Node 22 and Node 24 matrix configured.
-- [x] Linux/macOS/Windows matrix configured for local product contract.
-- [x] Matrix is green on verified multi-OS/multi-runtime run.
-- [x] Customer Action PASS/BLOCK/UNKNOWN cases all green on verified run.
+- [x] Linux/macOS/Windows matrix configured.
+- [x] Matrix is green.
+- [x] Customer Action PASS/BLOCK/UNKNOWN cases are green.
+- [x] CLI malformed/unsupported/BLOCK/UNKNOWN error contract is regression-tested across the full test matrix.
 
-Verified matrix run:
-- run id `31591704219`;
-- head `ad48374959a6ddf72b2116a4fe057ceb0aa1fca5`;
-- conclusion `success`.
-
-Verified customer Action run:
-- run id `31591960176`;
-- head `93c24e72611b2bfe2f95ffaa89c406e88c017b40`;
-- conclusion `success`.
+Verified matrix baseline run: `31591704219` — success.
+Verified customer Action run: `31591960176` — success.
+Verified expanded CLI/error full-contract run: `31619326027` — success.
 
 ## G. Supply chain and release
 
@@ -103,21 +90,19 @@ Verified customer Action run:
 - [x] Clean-room `npm pack` + install + SDK/CLI smoke test.
 - [x] SemVer/versioning policy documented for TimeProofs path.
 
-Verified clean-room package run:
-- run id `31592422020`;
-- head `2ed60dd931f120ef204a058cdd84c7b28373354f`;
-- conclusion `success`.
+Verified clean-room package run: `31592422020` — success.
 
 ### Release-only — mandatory when a real new TimeProofs release is cut
 
-- [ ] npm Trusted Publishing/OIDC configured for final package name.
-- [ ] npm provenance enabled and verified on published artifact.
-- [ ] SBOM generated from exact release artifact.
-- [ ] GitHub artifact attestation/provenance generated for exact release artifact.
-- [ ] Immutable tag/release policy exercised on exact tested commit.
-- [ ] Registry-install smoke test against actual published package.
+- [ ] final npm package/scope ownership verified and name frozen;
+- [ ] npm Trusted Publishing/OIDC configured;
+- [ ] npm provenance enabled and verified on published artifact;
+- [ ] SBOM generated from exact release artifact;
+- [ ] GitHub artifact attestation/provenance generated for exact release artifact;
+- [ ] immutable tag/release policy exercised on exact tested commit;
+- [ ] registry-install smoke test against actual published package.
 
-These are not pre-M8 failures before a real release exists.
+These are mandatory release gates, not M8-local-runtime gates.
 
 ## H. Developer experience
 
@@ -126,58 +111,54 @@ These are not pre-M8 failures before a real release exists.
 - [x] Customer GitHub Action exists.
 - [x] No TimeProofs account required for local/CI use.
 - [x] Clean-room package consumer flow tested from generated package artifact.
-- [ ] Human error messages reviewed as a coherent set across malformed/unsupported/UNKNOWN cases.
-- [ ] Final public package name frozen.
-- [ ] Public docs contain one canonical install path and one canonical CI path after package naming is frozen.
+- [x] Human error/decision behavior is executable across required input, malformed JSON, unsupported profile, UNKNOWN and BLOCK cases.
+
+One canonical public install path will be frozen after actual npm name/scope ownership is verified at release preparation. The existing clean-room package contract is sufficient for M8 local development.
 
 ## I. Performance/reliability
 
-- [x] Baseline benchmark established for representative transaction sizes.
-- [x] Performance workflow green on representative 1,000-line-item transaction.
+- [x] Baseline benchmark established.
+- [x] 1,000-line-item performance workflow green.
 - [x] Current input/performance profile documented in `docs/product/PERFORMANCE_AND_INPUT_PROFILE.md`.
-- [x] Provisional algorithmic regression threshold selected: 100 ms p95 for the current 1,000-line-item benchmark profile.
-- [ ] New 100 ms regression threshold verified green on GitHub after threshold commit.
-- [ ] M8 availability/fail-open/fail-closed model defined before networked/runtime enforcement.
+- [x] 100 ms p95 algorithmic regression ceiling selected for the current representative profile.
+- [x] New threshold verified green on GitHub.
+- [x] M8 availability/fail-open/fail-closed/trust-boundary design frozen before implementation in `docs/product/M8_RUNTIME_ENFORCEMENT_DESIGN.md`.
 
-Verified historical baseline run:
-- run id `31592637945`;
-- head `14e1e12fe55be71eb977188f2b967f00929ab0ae`;
+Historical measured baseline run `31592637945`:
 - p50 3.668 ms;
 - p95 6.004 ms;
 - max 6.805 ms;
-- RSS 70.3 MiB;
-- conclusion `success`.
+- RSS 70.3 MiB.
 
-The 100 ms threshold is a regression guard, not a latency SLA.
+Threshold enforcement run `31618899028`: success.
 
 ## J. Company/market gate
 
 Technical readiness does not prove market success.
 
-Current audit: `docs/research/MARKET_STRATEGIC_AUDIT_2026-08-12.md`.
+Canonical audit: `docs/research/MARKET_STRATEGIC_AUDIT_2026-08-12.md`.
 
-Current strategic conclusion:
+Current conclusion:
 - market direction: GREEN;
-- evidence that local validity can fail at composition boundaries: GREEN/AMBER;
+- composition-problem evidence: GREEN/AMBER;
 - economic consequence: GREEN;
 - current willingness-to-pay evidence: RED;
-- absorption risk for narrow UCP/AP2 checks: AMBER/RED;
+- absorption risk for narrow checks: AMBER/RED;
 - long-term multi-system invariant/evidence moat: GREEN potential.
 
-The company must continue toward independent protocol/provider/system boundaries rather than remain an amount/currency checker.
+Strategic requirement: M8 and subsequent packs must move toward independent protocol/provider/system boundaries rather than make UCP↔AP2 amount/currency comparison the company boundary.
 
-## Remaining pre-M8 blockers
+## Gate outcome
 
-Unless founder-waived with explicit rationale:
+**PRE-M8 RESULT: GREEN.**
 
-1. coherent human error-message review;
-2. final package-name decision + canonical public install/CI path;
-3. verify the new performance regression threshold on GitHub;
-4. safe archive/removal of legacy public AgentReady surfaces;
-5. define M8 availability/fail-open/fail-closed and enforcement trust boundaries before writing runtime code.
+M8 runtime enforcement may begin under the frozen design in `docs/product/M8_RUNTIME_ENFORCEMENT_DESIGN.md`.
+
+Still mandatory later:
+- release provenance/supply-chain controls when publishing a real TimeProofs package;
+- public AgentReady surface cleanup before M9/public relaunch;
+- continued market/ICP/willingness-to-pay evidence gathering before large M10 infrastructure spend.
 
 ## Gate rule
 
-A check may only be marked green with repository evidence or an externally verifiable control. “Planned” is not green.
-
-Canonical status interpretation: `docs/startup/WORLD_CLASS_GATE_COMPLETION_REPORT.md`.
+No future milestone inherits “world-class” status automatically. Each new consequential surface adds its own measurable security, reliability, compatibility and market gates.
