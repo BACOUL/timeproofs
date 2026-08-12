@@ -25,7 +25,16 @@ Release-only controls are tracked separately because they cannot honestly be gre
 - [x] Fixture-first invariant regression exists.
 - [x] Fixed inputs + fixed evaluation time are deterministic.
 - [x] Canonicalization rejects cycles, non-finite numbers, non-JSON values and excessive depth/node count.
-- [ ] Property/fuzz corpus expanded beyond hand-written adversarial cases.
+- [x] Deterministic generated property regression added beyond hand-written fixtures/adversarial cases.
+
+Property regression evidence:
+- `timeproofs-core/tests/run-property-regression.mjs`;
+- 250 generated transaction families per run;
+- verifies equal projection PASS, amount perturbation BLOCK, currency perturbation BLOCK, binding perturbation BLOCK, absent proof UNKNOWN and replay determinism;
+- included in `npm run test:timeproofs`;
+- verified green in `TimeProofs Core Regression` run `31618680408`, head `175f92213ca722d873437749d1b911664142e663`.
+
+This is meaningful generated property coverage, not a claim of exhaustive formal verification.
 
 ## C. Protocol correctness
 
@@ -125,36 +134,47 @@ These are not pre-M8 failures before a real release exists.
 
 - [x] Baseline benchmark established for representative transaction sizes.
 - [x] Performance workflow green on representative 1,000-line-item transaction.
-- [ ] Measured maximum supported input/performance profile documented for users.
-- [ ] Performance regression threshold decision made and, if justified, enforced.
+- [x] Current input/performance profile documented in `docs/product/PERFORMANCE_AND_INPUT_PROFILE.md`.
+- [x] Provisional algorithmic regression threshold selected: 100 ms p95 for the current 1,000-line-item benchmark profile.
+- [ ] New 100 ms regression threshold verified green on GitHub after threshold commit.
 - [ ] M8 availability/fail-open/fail-closed model defined before networked/runtime enforcement.
 
-Verified performance run:
+Verified historical baseline run:
 - run id `31592637945`;
 - head `14e1e12fe55be71eb977188f2b967f00929ab0ae`;
+- p50 3.668 ms;
+- p95 6.004 ms;
+- max 6.805 ms;
+- RSS 70.3 MiB;
 - conclusion `success`.
+
+The 100 ms threshold is a regression guard, not a latency SLA.
 
 ## J. Company/market gate
 
 Technical readiness does not prove market success.
 
-Before significant M8/M10 infrastructure spend, maintain current evidence for:
-- protocol adoption velocity;
-- competitor/standard absorption risk;
-- first ICP and economic buyer;
-- cost of cross-protocol inconsistency;
-- distribution path through protocol/dev ecosystems;
-- moat accumulation through packs/adapters/evidence knowledge.
+Current audit: `docs/research/MARKET_STRATEGIC_AUDIT_2026-08-12.md`.
+
+Current strategic conclusion:
+- market direction: GREEN;
+- evidence that local validity can fail at composition boundaries: GREEN/AMBER;
+- economic consequence: GREEN;
+- current willingness-to-pay evidence: RED;
+- absorption risk for narrow UCP/AP2 checks: AMBER/RED;
+- long-term multi-system invariant/evidence moat: GREEN potential.
+
+The company must continue toward independent protocol/provider/system boundaries rather than remain an amount/currency checker.
 
 ## Remaining pre-M8 blockers
 
 Unless founder-waived with explicit rationale:
 
-1. broader property/fuzz coverage;
-2. coherent human error-message review;
-3. final package-name decision + canonical public install/CI path;
-4. measured supported input/performance profile + performance-threshold decision;
-5. safe archive/removal of legacy public AgentReady surfaces.
+1. coherent human error-message review;
+2. final package-name decision + canonical public install/CI path;
+3. verify the new performance regression threshold on GitHub;
+4. safe archive/removal of legacy public AgentReady surfaces;
+5. define M8 availability/fail-open/fail-closed and enforcement trust boundaries before writing runtime code.
 
 ## Gate rule
 
