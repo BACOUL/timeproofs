@@ -1,162 +1,65 @@
-# TimeProofs AgentReady Roadmap
+# TimeProofs Roadmap
 
-Active source of truth:
+Canonical execution order is maintained in `docs/startup/EXECUTION_PLAN.md`.
+The readiness bar before runtime enforcement is maintained in `docs/startup/WORLD_CLASS_GATE.md`.
 
-```txt
-docs/agentready/AGENTREADY_MASTER_PLAN.md
-docs/agentready/AGENTREADY_EXECUTION_LEDGER.json
-```
+## Product direction
 
-If this roadmap conflicts with `AGENTREADY_MASTER_PLAN.md`, the master plan prevails.
+TimeProofs is cross-protocol consistency infrastructure for agentic transactions.
 
-`AGENTREADY_EXECUTION_LEDGER.json` is the canonical detailed execution register. Generated Markdown views must not be edited manually.
+The product expands through versioned invariant/evidence packs across protocol and business-system boundaries; it does not pivot into a scanner-score-dashboard business.
 
-Active direction:
+## Completed foundation
 
-```txt
-AgentReady is the shift-left CI gate for agent-facing contracts.
-```
+- M0 — product constitution / startup operating system
+- M1 — UCP/AP2 normative audit
+- M2 — canonical transaction model
+- M2.1 — provenance/evidence hardening
+- M3 — first UCP↔AP2 Invariant Pack specification
+- M4 — fixture-first regression contract
+- M5 — deterministic Verify engine
+- M6 — real UCP/AP2 adapters + local SDK/CLI
 
-The legacy proof-of-existence product is historical material only. It must not drive new roadmap work in this repository unless explicitly requested.
+## Active
 
-## Current Baseline
+### M7 — Customer CI / package contract
 
-Done:
+Current goals:
+- customer-facing GitHub Action;
+- versioned result contract;
+- safe/redacted CI output;
+- PASS/BLOCK/UNKNOWN end-to-end behavior;
+- stable exit-code semantics;
+- release/package separation from legacy AgentReady;
+- clean quickstart and release discipline.
 
-- CLI alpha merged.
-- OpenAPI and MCP static scanning available.
-- Commercial bad/fixed CI Gate behavior validated.
-- Stable rule codes AR001-AR010 added to findings and `agentready.json`.
-- GitHub Action wrapper added.
-- `agentready.json` spec v0.1 published and aligned with code.
-- `/agentready-ci` public page added.
-- Homepage repositioned around AgentReady CI Gate.
-- Self-service commercial and launch architecture documented.
-- CLI public distribution package preparation completed.
-- Versioned GitHub Action preparation completed.
-- Community release workflow prepared.
-- Community + Pro strategy rebaselined.
-- Legacy `selfhost/`, `sdk/`, `manifest.json`, and `manifest.webmanifest` removed.
+### World-Class Readiness Gate
 
-Community public publication remains blocked and has not occurred.
+Before M8, TimeProofs must demonstrate:
+- adversarial-input safety;
+- threat-model coverage;
+- deterministic multi-OS/runtime regression;
+- supply-chain hardening;
+- clean package/release provenance plan;
+- repository/product-truth hygiene;
+- developer quickstart from a clean consumer context;
+- performance baseline;
+- explicit remaining non-claims.
 
-## Locked Execution Plan
+## Next only after gate
 
-The operational source of truth for expected PR order is:
+### M8 — Enforce runtime
 
-```txt
-docs/agentready/SELF_SERVICE_EXECUTION_PLAN.md
-```
+Pre-commit control for consequential agentic transactions with explicit fail-open/fail-closed policy, latency budget, version pinning, rollback, runtime threat model and auditability.
 
-The PR numbers in that document are expected numbers. If GitHub assigns another number, the title and order remain the authority.
+### M9 — Relaunch website and documentation
 
-## Current Governance PR
+The site must be designed from TimeProofs-native product primitives (objects, bindings, invariants, evidence, decisions), benchmarked against leading global infrastructure products rather than generated from a generic SaaS template.
 
-```txt
-docs(project): add canonical AgentReady execution system
-```
+### M10 — Managed TimeProofs Cloud
 
-Planned branch:
+Only managed surfaces with real operational value: hosted enforcement, managed pack updates, evidence retention, private packs, organizational controls, connectors and enterprise deployment/SLA where justified.
 
-```txt
-docs-agentready-canonical-execution-system
-```
+## Rule
 
-Purpose:
-
-- represent all known approved work;
-- generate status, next action, next Codex prompt and prompt counts;
-- separate Codex tasks from Jeason, legal and external actions;
-- prevent silent strategy changes.
-
-## Publication Blocker PR After Governance Reconciliation
-
-```txt
-release(agentready): resolve Community publication blockers
-```
-
-Planned branch:
-
-```txt
-release-agentready-community-publication-blockers
-```
-
-Purpose:
-
-- resolve Community publication blockers: npm scope, license, ProofSpec references, publication policy, 2FA/trusted publishing, provenance, approval path;
-- preserve existing Community CLI, GitHub Action, scoring, rule codes, and `agentready.json` behavior;
-- do not publish the package without separate explicit authorization.
-
-If every blocker is `RESOLVED`, the next release PR may be `release(agentready): publish Community CLI and immutable release`.
-
-If any blocker remains open, the next authorized action is the owner or legal action named in `docs/agentready/COMMUNITY_PUBLICATION_BLOCKERS.md`.
-
-The versioned policy configuration PR remains planned after Community publication and engine quality gates allow it.
-
-## Current Product Sequence - Self-Service Launch
-
-1. Strategic rebaseline.
-2. Resolve Community publication blockers.
-3. Publish Community.
-4. GitHub Marketplace and onboarding.
-5. Engine benchmark.
-6. MVP Pro.
-7. Engine quality alignment.
-8. Licensing, Stripe, and automation.
-9. Site, legal, and Trust Center.
-10. Rule dictionary, badges, and integrations.
-11. Launch Community + Pro.
-12. Post-revenue Team and Agency.
-
-No paid plan should be displayed as available until its features and entitlements are implemented.
-
-## CI Gate Contract
-
-The core CI workflow is:
-
-```txt
-OpenAPI or MCP tools file
--> AgentReady CLI or GitHub Action
--> score + status + risk counts
--> rule codes AR001-AR010
--> agentready.json v0.1
--> PASS / FAIL policy decision
-```
-
-Recommended V1 policy:
-
-```txt
---min-score 75
---fail-on critical
-```
-
-## Do Not Build Yet
-
-- production Stripe payments
-- billing backend
-- account system
-- license service
-- dashboard or customer portal
-- runtime firewall
-- new proof-of-existence product surface
-- public safety guarantees
-
-These items are planned future implementation work, not part of docs-only PRs. They must be built in the order above with tests, legal readiness, privacy readiness, and launch QA.
-
-## Self-Service Commercial Direction
-
-AgentReady launch plans:
-
-- Community: 0 EUR.
-- Pro: 24 EUR HT/month or 240 EUR HT/year.
-- Team: POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT.
-- Agency: POST_REVENUE VISION — NOT AN INITIAL ENTITLEMENT.
-
-The prices are an initial product decision and may evolve before real Stripe activation.
-
-There is no manual review offer, mandatory contact-sales step, manual payment path, Team/Agency offer, or Enterprise plan at launch.
-
-## Mandatory Limitation
-
-TimeProofs AgentReady does not guarantee that an AI agent will never fail.
-It identifies structural risks that may cause AI agents to misuse APIs, tools or MCP servers.
+A milestone is not “world-class complete” because its happy path works. Feature completion and production-readiness evidence are separate gates.
