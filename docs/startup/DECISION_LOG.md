@@ -79,8 +79,8 @@ UCP Orders can legitimately evolve. Order invariants are lifecycle-aware; `curre
 `TIMEPROOFS_PRODUCT_CONSTITUTION.md` is canonical for company category/constitution and `docs/product/PRODUCT_THESIS.md` is canonical for the product-level transaction-integrity thesis. Protocol research may refine adapters, mappings, evidence and pack contents but cannot silently redefine the company. Frozen product model: `ProtocolObject → Binding → Invariant → Evidence → Decision`.
 
 ## D-020 — Execute milestones in canonical order
-**Status:** DECISION, UPDATED THROUGH D-039
-`docs/startup/EXECUTION_PLAN.md` is the canonical implementation sequence. M0–M7, M2.1, the pre-M8 World-Class Gate and the company-completeness audit are complete. M8 local-first runtime enforcement is the active milestone.
+**Status:** DECISION, UPDATED THROUGH D-040
+`docs/startup/EXECUTION_PLAN.md` is the canonical implementation sequence. M0–M7, M2.1, the pre-M8 World-Class Gate and the company-completeness/anti-omission design work are complete. M8 local-first runtime enforcement is the active milestone.
 
 ## D-021 — M1 complete; conservative seven-rule shortlist
 **Status:** DECISION
@@ -171,27 +171,30 @@ TimeProofs should monetize transaction integrity rather than seats/reports. Tech
 
 ## D-039 — Commercial baseline v0.1 is usage-led and distribution is code-first
 **Status:** OPERATING BASELINE / HYPOTHESIS TO VALIDATE
-Until superseded by market evidence, company/product planning uses this concrete modeling baseline:
+Until superseded by market evidence:
 - Community/local developer adoption: €0;
 - Production: €99/month, modeling 10,000 protected VERIFY/ENFORCE transactions included, then approximately €0.01/protected transaction;
-- RESOLVE: premium modeling envelope approximately €0.03–€0.10 per provider-specific resolution;
+- RESOLVE: approximately €0.03–€0.10 per provider-specific resolution modeling envelope;
 - Business: €499/month + usage baseline;
 - Enterprise: €15k–€25k annual minimum + usage baseline.
 
-These are NOT published or validated market prices. They exist so engineering and packaging optimize toward a coherent value metric rather than seats or arbitrary SaaS tiers.
+Primary distribution: GitHub → npm → problem-led docs → CI/GitHub Action → protocol communities → PSP/platform/runtime integrations → B2B2Developer partnerships.
 
-Primary distribution order is:
-1. GitHub;
-2. npm/package ecosystem;
-3. problem-led technical documentation;
-4. CI/GitHub Action;
-5. protocol communities (UCP/AP2/MCP/A2A/x402 and adjacent);
-6. PSP/platform/runtime integrations;
-7. B2B2Developer partnerships capable of distributing TimeProofs into many downstream transaction flows.
+## D-040 — Company anti-omission register and lifecycle operating architecture are mandatory
+**Status:** DECISION / COMPANY GOVERNANCE
+TimeProofs now maintains `docs/startup/COMPANY_GAP_REGISTER.md` as a permanent anti-omission register. Company/product requirements may not disappear because a milestone or chat changes.
 
-Paid ads are not a baseline acquisition channel. Selective outbound is acceptable for discovery, partnerships and high-value enterprise opportunities, but growth must not depend on continuous founder-led cold prospecting.
+The following canonical operating documents define the current design baseline:
+- `METERING_BILLING_ARCHITECTURE.md` — immutable billable-event identity, retry/dedupe, correction ledger, spend safety and charge semantics;
+- `PACK_GOVERNANCE_AND_COMPATIBILITY.md` — EXPERIMENTAL/CANDIDATE/STABLE/DEPRECATED/RETIRED lifecycle, immutable versions/digests, rollback and third-party trust boundary;
+- `INCIDENT_OBSERVABILITY_CONTINUITY.md` — severity model, false-block emergency, operational metrics and solo-founder recovery;
+- `PRIVACY_TRUST_ENTERPRISE_BOUNDARY.md` — privacy lifecycle, trust package, abuse model, enterprise procurement and liability baseline;
+- `PARTNERS_IP_MOAT_LOOP.md` — partner value, IP/licensing gate and privacy-safe moat telemetry loop;
+- `M9_WEBSITE_DOCS_VISION.md` — world-class public developer experience principles.
 
-Desired commercial funnel: `discover problem/code → install → local VERIFY → CI → production ENFORCE → paid usage → RESOLVE/provider expansion → enterprise controls`.
+Each item is assigned to a named lifecycle gate: NOW/M8/M9/PAID/ENTERPRISE/M10-SCALE/RELEASE. Design closure is not implementation proof: billing, contracts, hosted privacy controls, enterprise features and release attestations are implemented only when their named lifecycle gate becomes active.
+
+A future contributor may close a gap only by implementation/evidence, explicit decision, named deferral, or deliberate unsupported/out-of-scope status. Silent omission is prohibited.
 
 ---
 Add new decisions sequentially. Never rewrite history to make it look cleaner; supersede/refine decisions explicitly.
