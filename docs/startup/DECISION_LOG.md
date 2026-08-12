@@ -79,7 +79,7 @@ UCP Orders can legitimately evolve. Order invariants are lifecycle-aware; `curre
 `TIMEPROOFS_PRODUCT_CONSTITUTION.md` is canonical for company thesis. Protocol research may refine adapters, mappings, evidence and pack contents but cannot silently redefine the company. Frozen product model: `ProtocolObject → Binding → Invariant → Evidence → Decision`.
 
 ## D-020 — Execute milestones in canonical order
-**Status:** DECISION, UPDATED THROUGH D-034
+**Status:** DECISION, UPDATED THROUGH D-035
 `docs/startup/EXECUTION_PLAN.md` is the canonical implementation sequence. M0–M7 and M2.1 are complete. Current active work is World-Class Gate pre-M8 closure. M8 is not started.
 
 ## D-021 — M1 complete; conservative seven-rule shortlist
@@ -197,16 +197,29 @@ Release-time controls include:
 
 They become mandatory when cutting the first new TimeProofs release.
 
-## D-034 — M8 remains blocked until remaining pre-M8 quality items are closed or founder-waived
+## D-034 — Generated property testing and measured performance guard are part of pre-M8 quality
 **Status:** DECISION
-Before M8 runtime enforcement starts, close or explicitly waive with rationale:
-- broader property/fuzz coverage;
-- coherent human error-message review;
-- one canonical public install path and one canonical CI path after package naming is final;
-- measured input/performance limit documentation and performance-threshold decision;
-- safe archive/removal of legacy public AgentReady surfaces.
+The initial hand-written fixture/adversarial corpus is now supplemented by deterministic generated transaction families.
 
-CodeQL, cross-platform/runtime CI, customer Action integration, clean-room package testing, upstream schema watch and a representative performance baseline are already green. Canonical report: `docs/startup/WORLD_CLASS_GATE_COMPLETION_REPORT.md`.
+`run-property-regression.mjs` exercises 250 generated transaction families per run and checks projection equality, amount/currency/binding perturbations, absent-proof UNKNOWN behavior and fixed-input determinism. It is part of `npm run test:timeproofs` and passed `TimeProofs Core Regression` run `31618680408` on head `175f92213ca722d873437749d1b911664142e663`.
+
+The 1,000-line-item benchmark measured p95 6.004 ms in the verified baseline run. A deliberately generous 100 ms p95 regression ceiling is now enforced as an algorithmic guard, not a user-facing SLA. The new threshold passed workflow run `31618899028` on head `7e3cbbf948f6402bf24c8fc1791afd5393c93041`.
+
+## D-035 — Market audit says continue, but the moat must move beyond narrow UCP/AP2 checks
+**Status:** DECISION / STRATEGIC DIRECTION
+The 2026 market audit finds sufficient evidence to continue TimeProofs: UCP adoption is accelerating, AP2 remains active, and standards/community discussions document composition, cumulative-state, runtime and outcome-ownership gaps.
+
+However, narrow amount/currency checks have high standards-absorption risk and are not a durable moat.
+
+Priority strategic expansion after the initial wedge:
+1. approved PaymentMandate ↔ executed PSP/network outcome;
+2. checkout/payment ↔ committed order lifecycle;
+3. cumulative mandate constraints ↔ prior fulfilment state;
+4. cancellation/refund ↔ order/payment/provider state.
+
+The moat target is maintained cross-protocol/provider evidence and invariant knowledge, not generic verification logic. Current willingness-to-pay evidence remains weak and must be treated as the primary business risk.
+
+Canonical audit: `docs/research/MARKET_STRATEGIC_AUDIT_2026-08-12.md`.
 
 ---
 Add new decisions sequentially. Never rewrite history to make it look cleaner; supersede/refine decisions explicitly.
