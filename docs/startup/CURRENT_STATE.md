@@ -25,7 +25,7 @@ Initial wedge: UCP ↔ AP2 composition consistency. This is a beachhead, not the
 - Pre-M8 World-Class Gate: COMPLETE / GREEN
 - Company completeness + anti-omission architecture: COMPLETE AT DESIGN LEVEL
 - **M8 — Local-first runtime enforcement: COMPLETE**
-- **M8.1 — Authorized ↔ executed provider evidence: ACTIVE / FOUNDATION IMPLEMENTED**
+- **M8.1 — Authorized ↔ executed provider evidence: ACTIVE / TEST-PROOF HARNESS READY**
 - M9 — Public relaunch website/docs: NOT STARTED
 - M10 — Managed cloud: NOT STARTED / COMMERCIAL GATE REQUIRED
 
@@ -39,6 +39,7 @@ TimeProofs currently includes:
 - `verifyTransaction()` SDK;
 - `enforceTransaction()` SDK;
 - `verifyProviderExecution()` SDK;
+- Stripe test-only create/confirm/retrieve proof helpers;
 - CLI `timeproofs verify`;
 - GitHub Action VERIFY integration;
 - safe CI result projection;
@@ -74,7 +75,19 @@ Current output:
 - PASS / BLOCK / UNKNOWN;
 - execution state `EXECUTED_CONSISTENT`, `EXECUTED_INCONSISTENT`, `NOT_EXECUTED`, or `UNKNOWN`.
 
-A webhook notification alone is not treated as sufficient PASS evidence. The initial profile evaluates a durable supplied/retrieved PaymentIntent snapshot. Provider retrieval/authentication remains caller-owned.
+The Stripe profile accepts `automatic` and `automatic_async` capture semantics for the current exact-payment proof. Manual/partial capture remains UNKNOWN.
+
+A webhook notification alone is not treated as sufficient PASS evidence. The initial profile evaluates a durable supplied/retrieved PaymentIntent snapshot.
+
+Repository proof helpers now provide a test-mode-only path for:
+
+`create bound PaymentIntent → confirm → deliberately ignore confirmation outcome → retrieve PaymentIntent → verifyProviderExecution()`
+
+Safety properties:
+- only `sk_test_` / `rk_test_` keys are accepted;
+- any returned `livemode=true` PaymentIntent is rejected;
+- create and confirm use deterministic, distinct idempotency keys derived from the AP2 transaction id;
+- no Stripe key or client secret is emitted by the proof summary.
 
 ## M8 proof
 
@@ -101,23 +114,36 @@ The performance guards are engineering regression thresholds, not customer SLAs.
 ## M8.1 proof status
 
 Canonical gate/design: `docs/product/M8_1_PROVIDER_EVIDENCE_DESIGN.md`.
+Safe execution runbook: `docs/product/M8_1_STRIPE_TEST_PROOF_RUNBOOK.md`.
 
 Implemented foundation:
 - provider-neutral `executed_payment` canonical object;
 - Stripe PaymentIntent adapter;
 - TP-EV-001 deterministic evaluation;
 - versioned provider-evidence contract;
-- eight-case PASS/BLOCK/UNKNOWN fixture corpus;
-- SDK/package integration.
+- PASS/BLOCK/UNKNOWN fixture corpus including observed `automatic_async` semantics;
+- SDK/package integration;
+- test-only Stripe retrieval helper;
+- test-only Stripe create/confirm helpers with deterministic idempotency;
+- response-loss recovery proof script;
+- live-mode refusal guards;
+- mocked adversarial retrieval/write safety tests.
+
+A read-only observation against a real connected Stripe account exposed `capture_method=automatic_async`, which the initial fixture-only profile had not covered. No live object was modified and no live identifier is persisted as canonical fixture proof. The profile and regression corpus were corrected accordingly.
+
+`TimeProofs Core Regression` run `31693162790`: **SUCCESS**, six jobs green:
+- Ubuntu Node 22/24
+- macOS Node 22/24
+- Windows Node 22/24
 
 Still required before M8.1 is COMPLETE:
-- live Stripe test-mode retrieval proof;
+- execute the prepared Stripe **test-mode** create/confirm/retrieve proof against a real test account/key;
 - webhook-trigger → retrieve → evaluate walkthrough;
-- timeout/idempotency/retrieval recovery proof;
-- additional malformed/adversarial provider payload tests;
+- literal transport-failure/chaos recovery proof around confirmation with a known PaymentIntent ID;
+- additional hostile/malformed provider payload coverage where provider semantics warrant it;
 - external implementer/value evidence.
 
-Technical fixture proof must not be represented as authoritative live-provider proof.
+Technical fixture/mock proof must not be represented as authoritative live-provider proof.
 
 ## Business architecture baseline
 
@@ -139,7 +165,8 @@ Positive:
 - real composition/runtime problems are evidenced in AP2 discussions/issues;
 - agentic payment infrastructure is receiving major industry investment;
 - economic failures can touch money and irreversible state;
-- provider/version evidence knowledge can become cumulative.
+- provider/version evidence knowledge can become cumulative;
+- first real-provider observation already produced a concrete compatibility correction (`automatic_async`).
 
 Negative:
 - authorization/binding features are actively being absorbed by AP2/FIDO and major payment players;
@@ -205,4 +232,4 @@ Missing proof remains UNKNOWN.
 
 ## One-line status
 
-> **M0–M8 are complete. M8.1 now has a Stripe provider-evidence foundation and conditional market GO, but remains open until live test-mode evidence and external value proof exist.**
+> **M0–M8 are complete. M8.1 now has a Stripe provider-evidence foundation, real-provider compatibility feedback, a safe test-only response-loss proof harness and green cross-platform regression; it remains open until the real Stripe test-mode proof and external value evidence exist.**
