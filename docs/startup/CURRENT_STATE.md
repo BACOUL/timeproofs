@@ -25,7 +25,7 @@ Initial wedge: UCP ↔ AP2 composition consistency. This is a beachhead, not the
 - Pre-M8 World-Class Gate: COMPLETE / GREEN
 - Company completeness + anti-omission architecture: COMPLETE AT DESIGN LEVEL
 - **M8 — Local-first runtime enforcement: COMPLETE**
-- **M8.1 — Authorized ↔ executed provider evidence: ACTIVE / NEXT**
+- **M8.1 — Authorized ↔ executed provider evidence: ACTIVE / FOUNDATION IMPLEMENTED**
 - M9 — Public relaunch website/docs: NOT STARTED
 - M10 — Managed cloud: NOT STARTED / COMMERCIAL GATE REQUIRED
 
@@ -35,13 +35,15 @@ TimeProofs currently includes:
 - deterministic canonicalization/core;
 - UCP Checkout `2026-04-08` adapter;
 - AP2 PaymentMandate `mandate.payment.1` adapter;
+- Stripe PaymentIntent `2026-02-25.clover` evidence adapter for M8.1;
 - `verifyTransaction()` SDK;
 - `enforceTransaction()` SDK;
+- `verifyProviderExecution()` SDK;
 - CLI `timeproofs verify`;
 - GitHub Action VERIFY integration;
 - safe CI result projection;
 - allowlisted clean-room package build;
-- versioned Verify and Enforcement result contracts.
+- versioned Verify, Enforcement and Provider Evidence result contracts.
 
 ### VERIFY
 Returns PASS / WARN / BLOCK / UNKNOWN.
@@ -59,6 +61,20 @@ Any policy less restrictive than the default for BLOCK, UNKNOWN or runtime error
 M8 is **SDK-first** because runtime enforcement belongs immediately before a caller-owned consequential commit. CLI/Action remain Verify/adoption surfaces unless a concrete runtime integration later justifies an enforcement wrapper.
 
 TimeProofs does **not** execute or custody the external payment/side effect.
+
+### M8.1 PROVIDER EVIDENCE
+
+Initial provider profile:
+- Stripe PaymentIntent;
+- API profile `2026-02-25.clover`;
+- provider-stored AP2 binding via `metadata.timeproofs_ap2_transaction_id`;
+- invariant `TP-EV-001 EXECUTED_PAYMENT_MATCHES_APPROVED_MANDATE`.
+
+Current output:
+- PASS / BLOCK / UNKNOWN;
+- execution state `EXECUTED_CONSISTENT`, `EXECUTED_INCONSISTENT`, `NOT_EXECUTED`, or `UNKNOWN`.
+
+A webhook notification alone is not treated as sufficient PASS evidence. The initial profile evaluates a durable supplied/retrieved PaymentIntent snapshot. Provider retrieval/authentication remains caller-owned.
 
 ## M8 proof
 
@@ -82,25 +98,26 @@ Representative 1,000-line-item paired benchmark:
 
 The performance guards are engineering regression thresholds, not customer SLAs.
 
-## Current strategic priority — M8.1
+## M8.1 proof status
 
-The next important boundary is:
+Canonical gate/design: `docs/product/M8_1_PROVIDER_EVIDENCE_DESIGN.md`.
 
-`APPROVED AP2 PAYMENT MANDATE ↔ ACTUAL PSP/PROVIDER EXECUTION`
+Implemented foundation:
+- provider-neutral `executed_payment` canonical object;
+- Stripe PaymentIntent adapter;
+- TP-EV-001 deterministic evaluation;
+- versioned provider-evidence contract;
+- eight-case PASS/BLOCK/UNKNOWN fixture corpus;
+- SDK/package integration.
 
-This is strategically stronger than adding more narrow UCP/AP2 checks because it crosses independent system owners and begins accumulating provider-specific evidence semantics.
+Still required before M8.1 is COMPLETE:
+- live Stripe test-mode retrieval proof;
+- webhook-trigger → retrieve → evaluate walkthrough;
+- timeout/idempotency/retrieval recovery proof;
+- additional malformed/adversarial provider payload tests;
+- external implementer/value evidence.
 
-M8.1 must determine, conservatively and version-explicitly, what provider evidence is sufficient to say that an approved payment was:
-- executed consistently;
-- not executed;
-- inconsistent with authorization;
-- or still UNKNOWN.
-
-Missing provider evidence remains UNKNOWN.
-
-This work is the foundation for RESOLVE and the rule:
-
-> **Never retry an unknown side effect. Resolve it first.**
+Technical fixture proof must not be represented as authoritative live-provider proof.
 
 ## Business architecture baseline
 
@@ -114,24 +131,29 @@ Current operating hypothesis, not validated/published pricing:
 Primary distribution baseline:
 GitHub → npm → technical docs → CI/GitHub Action → protocol communities → provider/platform integrations → B2B2Developer partnerships.
 
-## Canonical company docs
+## Market Proof Gate — 2026-08-13
 
-- `docs/product/PRODUCT_THESIS.md`
-- `docs/startup/BUSINESS_ARCHITECTURE.md`
-- `docs/startup/COMPANY_COMPLETENESS_AUDIT.md`
-- `docs/startup/COMPANY_GAP_REGISTER.md`
-- `docs/startup/METERING_BILLING_ARCHITECTURE.md`
-- `docs/product/PACK_GOVERNANCE_AND_COMPATIBILITY.md`
-- `docs/startup/INCIDENT_OBSERVABILITY_CONTINUITY.md`
-- `docs/startup/PRIVACY_TRUST_ENTERPRISE_BOUNDARY.md`
-- `docs/startup/PARTNERS_IP_MOAT_LOOP.md`
-- `docs/product/M9_WEBSITE_DOCS_VISION.md`
+Verdict: **CONDITIONAL GO to M8.1**.
+
+Positive:
+- real composition/runtime problems are evidenced in AP2 discussions/issues;
+- agentic payment infrastructure is receiving major industry investment;
+- economic failures can touch money and irreversible state;
+- provider/version evidence knowledge can become cumulative.
+
+Negative:
+- authorization/binding features are actively being absorbed by AP2/FIDO and major payment players;
+- direct TimeProofs willingness-to-pay is still RED;
+- buy-vs-build and distribution remain AMBER;
+- current moat is still weak.
+
+No M10/cloud escalation is justified from this gate alone.
 
 ## Highest unresolved company risks
 
 1. willingness-to-pay;
 2. exact economic buyer;
-3. repeatable provider execution evidence pack;
+3. live repeatable provider execution evidence;
 4. distribution pull;
 5. RESOLVE unit economics;
 6. first meaningful PSP/platform partnership;
@@ -142,6 +164,7 @@ Technical readiness must not be confused with product-market fit.
 ## Lifecycle gates
 
 ### M9/public relaunch
+- demonstrate the provider boundary rather than only UCP/AP2 field checks;
 - remove/archive/redirect AgentReady public surfaces;
 - freeze package name/registry path;
 - finalize public support/deprecation/open-commercial boundary;
@@ -170,8 +193,9 @@ No major managed-cloud spend before material commercial validation.
 TimeProofs does not yet claim:
 - full SD-JWT signature/key-binding verification;
 - merchant authorization JWS verification;
-- provider/network execution evidence;
-- authoritative outcome resolution;
+- universal provider/network execution evidence;
+- settlement or refund finality from Stripe PaymentIntent;
+- authoritative cross-provider outcome resolution;
 - exactly-once side-effect execution;
 - hosted enforcement/SLA;
 - product-market fit;
@@ -181,4 +205,4 @@ Missing proof remains UNKNOWN.
 
 ## One-line status
 
-> **M0–M8 are complete with executable proof. The active strategic build is M8.1: prove the authorized AP2 mandate against actual PSP/provider execution, creating the first real foundation for RESOLVE and cross-provider moat accumulation.**
+> **M0–M8 are complete. M8.1 now has a Stripe provider-evidence foundation and conditional market GO, but remains open until live test-mode evidence and external value proof exist.**

@@ -1,12 +1,14 @@
 import { adaptUcpCheckout, UCP_CHECKOUT_ADAPTER } from '../adapters/ucp/checkout.js';
 import { adaptAp2PaymentMandate, AP2_PAYMENT_ADAPTER } from '../adapters/ap2/payment-mandate.js';
+import { adaptStripePaymentIntent, STRIPE_PAYMENT_INTENT_ADAPTER } from '../adapters/stripe/payment-intent.js';
 import { sha256Base64UrlString } from '../timeproofs-core/canonical.js';
-import { verifyTransactionGraph } from '../timeproofs-core/index.js';
+import { verifyTransactionGraph, verifyProviderExecutionGraph } from '../timeproofs-core/index.js';
 import { applyEnforcementPolicy, enforcementError, DEFAULT_FINANCIAL_POLICY, TIMEPROOFS_ENFORCEMENT_CONTRACT_VERSION } from './enforcement.js';
 
 export { applyEnforcementPolicy, DEFAULT_FINANCIAL_POLICY, TIMEPROOFS_ENFORCEMENT_CONTRACT_VERSION } from './enforcement.js';
 export const TIMEPROOFS_PACK = Object.freeze({ id: 'ucp-ap2', version: '0.1.0-spec' });
 export const TIMEPROOFS_RESULT_CONTRACT_VERSION = 'timeproofs.result.v0.1';
+export const TIMEPROOFS_PROVIDER_EVIDENCE_CONTRACT_VERSION = 'timeproofs.provider-evidence.v0.1';
 
 function verifyBinding(paymentObject, checkoutJwt, hashAlgorithm) {
   if (!checkoutJwt) return null;
@@ -72,4 +74,58 @@ export function enforceTransaction(input, { policy = DEFAULT_FINANCIAL_POLICY, c
     if (!captureErrors) throw error;
     return enforcementError(error, policy);
   }
+}
+
+export function verifyProviderExecution({
+  paymentMandate,
+  providerEvidence,
+  provider = 'stripe',
+  providerVersion = '2026-02-25.clover',
+  evaluatedAt = new Date().toISOString(),
+  sourceRefs = {},
+  bindingMetadataKey = 'timeproofs_ap2_transaction_id'
+}) {
+  if (provider !== 'stripe') {
+    const err = new Error(`Unsupported provider: ${provider}`);
+    err.code = 'UNSUPPORTED_PROVIDER';
+    throw err;
+  }
+  const paymentObject = adaptAp2PaymentMandate(paymentMandate, { observedAt: evaluatedAt, sourceRef: sourceRefs.paymentMandate ?? null });
+  const providerObject = adaptStripePaymentIntent(providerEvidence, {
+    apiVersion: providerVersion,
+    observedAt: evaluatedAt,
+    sourceRef: sourceRefs.providerEvidence ?? null,
+    bindingMetadataKey
+  });
+  const graph = { objects: [paymentObject, providerObject], context: { provider_profile: provider } };
+  const evaluationId = `eval:provider:${paymentObject.snapshot.digest.value.slice(0,12)}:${providerObject.snapshot.digest.value.slice(0,12)}`;
+  const evaluation = verifyProviderExecutionGraph(graph, { evaluationId });
+  return {
+    provider_evidence_contract_version: TIMEPROOFS_PROVIDER_EVIDENCE_CONTRACT_VERSION,
+    ...evaluation,
+    metadata: {
+      adapters: [AP2_PAYMENT_ADAPTER, STRIPE_PAYMENT_INTENT_ADAPTER].map(x => ({ id: x.id, version: x.version })),
+      provider,
+      provider_version: providerVersion,
+      evaluated_at: evaluatedAt
+    },
+    graph: {
+      graph_id: evaluationId.replace('eval:','graph:'),
+      evaluation_time: evaluatedAt,
+      objects: [paymentObject, providerObject],
+      bindings: [{
+        binding_id: 'binding:approved-payment-provider-execution',
+        from_object_id: paymentObject.object_id,
+        to_object_id: providerObject.object_id,
+        relation: 'PROVIDER_PAYMENT_REFERENCES_AP2_TRANSACTION',
+        basis: providerObject.canonical.authorization_reference_basis,
+        confidence: providerObject.canonical.authorization_reference === paymentObject.external_id ? 'PROVIDER_STORED_REFERENCE' : 'AMBIGUOUS',
+        evidence_ids: [],
+        valid_at: evaluatedAt,
+        pack_rule: 'TP-EV-001'
+      }],
+      evidence: [],
+      context: { provider_profile: provider }
+    }
+  };
 }

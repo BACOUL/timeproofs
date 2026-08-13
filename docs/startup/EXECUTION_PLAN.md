@@ -67,43 +67,80 @@ Canonical report: `docs/product/M8_COMPLETION_REPORT.md`.
 Operational contract: `docs/product/M8_RUNTIME_OPERATIONS.md`.
 
 ## M8.1 — Authorized ↔ executed provider evidence
-**Status: ACTIVE / NEXT BUILD**
+**Status: ACTIVE — FOUNDATION IMPLEMENTED / LIVE PROVIDER PROOF PENDING**
+
+### Market gate
+
+`docs/product/M8_1_PROVIDER_EVIDENCE_DESIGN.md` records the 2026-08-13 contradictory Market Proof Gate.
+
+Verdict: **CONDITIONAL GO to M8.1**.
+
+This does not validate product-market fit or authorize heavy cloud spend. Direct willingness-to-pay remains unproven.
 
 ### Strategic goal
+
 Cross the first independent-system boundary:
 
 **AP2 approved PaymentMandate ↔ actual PSP/provider execution outcome.**
 
 This is the first important step from pre-commit integrity into post-execution truth and provider-specific moat accumulation.
 
-### Required design before code
-1. choose the first provider based on evidence quality, integration simplicity, demand/distribution potential and solo-founder maintainability;
-2. identify authoritative provider objects/events for successful, failed, pending, reversed and ambiguous execution;
-3. define canonical ExecutedPayment/ProviderOutcome evidence object without coupling core to one PSP;
-4. specify exact amount/currency/payee/reference/authorization relationships that may become PASS/BLOCK/UNKNOWN;
-5. distinguish provider response, durable provider state and settlement truth;
-6. define retry/outcome semantics conservatively;
-7. document unsupported transformations such as partial capture, FX, tips, incremental authorization and split settlement;
-8. produce normative/provider references and fixtures before any BLOCK-capable invariant;
-9. preserve provider/version provenance and evidence timestamps;
-10. define which evidence can later support RESOLVE.
+### First provider profile
 
-### First candidate invariant
-`TP-EV-001 EXECUTED_PAYMENT_MATCHES_APPROVED_MANDATE`
+Selected: **Stripe PaymentIntent**.
 
-It MUST NOT PASS from an AP2 PaymentReceipt alone. Provider/network evidence is required. Missing or insufficient execution evidence returns UNKNOWN.
+Pinned profile:
+- provider `stripe`;
+- API `2026-02-25.clover`;
+- adapter `timeproofs.stripe.payment-intent@0.1.0`;
+- provider-stored AP2 reference `metadata.timeproofs_ap2_transaction_id`.
 
-### M8.1 exit criteria
-- first provider profile explicitly selected and version-scoped;
-- provider evidence adapter implemented;
-- canonical provider outcome/evidence semantics frozen;
-- PASS/BLOCK/UNKNOWN fixture corpus;
-- approved amount/currency/state binding verified against actual provider evidence;
-- ambiguous/pending outcome remains UNKNOWN;
-- retries are not authorized from UNKNOWN merely because an API call timed out;
-- tests and package integration green;
-- provider-specific assumptions documented;
-- no claim of universal PSP support.
+A webhook may trigger evaluation but does not itself create PASS. The profile evaluates a durable PaymentIntent snapshot.
+
+### Implemented foundation
+
+- canonical provider-neutral `executed_payment` object;
+- Stripe PaymentIntent adapter;
+- `TP-EV-001 EXECUTED_PAYMENT_MATCHES_APPROVED_MANDATE`;
+- SDK `verifyProviderExecution()`;
+- result contract `timeproofs.provider-evidence.v0.1`;
+- PASS/BLOCK/UNKNOWN execution-state model;
+- eight-case fixture corpus;
+- package allowlist + clean-room smoke coverage.
+
+### Frozen initial semantics
+
+- Stripe `succeeded` + exact bound amount/currency → PASS / `EXECUTED_CONSISTENT`;
+- Stripe `succeeded` + amount/currency mismatch → BLOCK / `EXECUTED_INCONSISTENT`;
+- Stripe `canceled` + zero received → PASS / `NOT_EXECUTED;
+- missing binding → UNKNOWN;
+- binding mismatch → BLOCK;
+- `processing` / `requires_]* ` → UNKNOWN;
+- manual/partial capture → UNKNOWN.
+
+### Explicit non-scope
+
+M8.1 v0.1 does not claim:
+- settlement finality;
+- refund/chargeback truth;
+- network clearing;
+- Connect payee identity;
+- partial capture;
+- incremental authorization;
+- FV/tips/split settlement;
+- exactly-once execution.
+
+### Remaining exit criteria
+
+Before M8.1 can be COMPLETE:
+
+1. exercise real Stripe test-mode retrieval with the pinned profile;
+2. prove webhook-trigger → retrieve PaymentIntent → evaluate;
+3. exercise timeout/retry/idempotency recovery without assuming failure;
+4. extend hostile/malformed provider evidence tests;
+5. preserve provider/version provenance through package/consumer flow;
+6. obtain external implementer/value evidence;
+7. keep all repository regression/package tests green.
 
 ## M8.2 — Outcome resolution primitive
 **Status: NOT STARTED**
@@ -112,7 +149,7 @@ After M8.1 establishes authoritative provider evidence semantics, implement the 
 
 `Did this side effect actually happen?`
 
-Target states may include COMMITTED / NOT_COMMITTED / UNKNOWN, but exact state machine is frozen only after M8.1 research.
+Target states may include COMMITTED / NOT_COMMITTED / UNKNOWN, but exact state machine is frozen only after M8.1 live provider research.
 
 Governing rule:
 > **Never retry an unknown side effect. Resolve it first.**
@@ -125,6 +162,7 @@ Canonical vision: `docs/product/M9_WEBSITE_DOCS_VISION.md`.
 M9 is intentionally not allowed to consume the majority of effort before the first provider execution boundary exists. Public presentation must show the differentiated TimeProofs thesis, not merely UCP/AP2 field verification.
 
 Before relaunch:
+- demonstrate the provider boundary with reproducible evidence;
 - archive/remove/redirect AgentReady public surfaces;
 - freeze package name/registry path;
 - finalize support/deprecation/open-commercial boundary;
@@ -132,7 +170,7 @@ Before relaunch:
 - final website/docs benchmark and design spec;
 - release provenance controls if publishing.
 
-## PAID Production Gate
+## PARD Production Gate
 Before charging managed production customers:
 - authoritative metering/billing ledger;
 - spend/abuse controls;

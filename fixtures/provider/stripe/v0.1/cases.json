@@ -1,0 +1,57 @@
+{
+  "profile": {
+    "provider": "stripe",
+    "provider_version": "2026-02-25.clover",
+    "binding_metadata_key": "timeproofs_ap2_transaction_id"
+  },
+  "cases": [
+    {
+      "name": "pass_succeeded_exact",
+      "payment_mandate": {"vct":"mandate.payment.1","transaction_id":"tx_m81_001","payee":{"id":"merchant_1"},"payment_amount":{"currency":"EUR","amount":76000},"payment_instrument":{"type":"card","id":"instrument_1"}},
+      "provider_evidence": {"id":"pi_m81_001","object":"payment_intent","amount":76000,"amount_received":76000,"currency":"eur","status":"succeeded","capture_method":"automatic","livemode":false,"latest_charge":"ch_m81_001","canceled_at":null,"metadata":{"timeproofs_ap2_transaction_id":"tx_m81_001"}},
+      "expected": {"decision":"PASS","reason_code":"EXECUTED_PAYMENT_MATCHES_APPROVED_MANDATE","execution_state":"EXECUTED_CONSISTENT"}
+    },
+    {
+      "name": "block_amount_mismatch",
+      "payment_mandate": {"vct":"mandate.payment.1","transaction_id":"tx_m81_001","payee":{"id":"merchant_1"},"payment_amount":{"currency":"EUR","amount":76000},"payment_instrument":{"type":"card","id":"instrument_1"}},
+      "provider_evidence": {"id":"pi_m81_001","object":"payment_intent","amount":76000,"amount_received":81000,"currency":"eur","status":"succeeded","capture_method":"automatic","livemode":false,"latest_charge":"ch_m81_001","canceled_at":null,"metadata":{"timeproofs_ap2_transaction_id":"tx_m81_001"}},
+      "expected": {"decision":"BLOCK","reason_code":"EXECUTED_PAYMENT_AMOUNT_MISMATCH","execution_state":"EXECUTED_INCONSISTENT"}
+    },
+    {
+      "name": "block_currency_mismatch",
+      "payment_mandate": {"vct":"mandate.payment.1","transaction_id":"tx_m81_001","payee":{"id":"merchant_1"},"payment_amount":{"currency":"EUR","amount":76000},"payment_instrument":{"type":"card","id":"instrument_1"}},
+      "provider_evidence": {"id":"pi_m81_001","object":"payment_intent","amount":76000,"amount_received":76000,"currency":"usd","status":"succeeded","capture_method":"automatic","livemode":false,"latest_charge":"ch_m81_001","canceled_at":null,"metadata":{"timeproofs_ap2_transaction_id":"tx_m81_001"}},
+      "expected": {"decision":"BLOCK","reason_code":"EXECUTED_PAYMENT_CURRENCY_MISMATCH","execution_state":"EXECUTED_INCONSISTENT"}
+    },
+    {
+      "name": "block_binding_mismatch",
+      "payment_mandate": {"vct":"mandate.payment.1","transaction_id":"tx_m81_001","payee":{"id":"merchant_1"},"payment_amount":{"currency":"EUR","amount":76000},"payment_instrument":{"type":"card","id":"instrument_1"}},
+      "provider_evidence": {"id":"pi_m81_001","object":"payment_intent","amount":76000,"amount_received":76000,"currency":"eur","status":"succeeded","capture_method":"automatic","livemode":false,"latest_charge":"ch_m81_001","canceled_at":null,"metadata":{"timeproofs_ap2_transaction_id":"tx_other"}},
+      "expected": {"decision":"BLOCK","reason_code":"PROVIDER_AUTHORIZATION_BINDING_MISMATCH","execution_state":"UNKNOWN"}
+    },
+    {
+      "name": "unknown_processing",
+      "payment_mandate": {"vct":"mandate.payment.1","transaction_id":"tx_m81_001","payee":{"id":"merchant_1"},"payment_amount":{"currency":"EUR","amount":76000},"payment_instrument":{"type":"card","id":"instrument_1"}},
+      "provider_evidence": {"id":"pi_m81_001","object":"payment_intent","amount":76000,"amount_received":0,"currency":"eur","status":"processing","capture_method":"automatic","livemode":false,"latest_charge":null,"canceled_at":null,"metadata":{"timeproofs_ap2_transaction_id":"tx_m81_001"}},
+      "expected": {"decision":"UNKNOWN","reason_code":"PROVIDER_EXECUTION_NOT_FINAL","execution_state":"UNKNOWN"}
+    },
+    {
+      "name": "pass_canceled_not_executed",
+      "payment_mandate": {"vct":"mandate.payment.1","transaction_id":"tx_m81_001","payee":{"id":"merchant_1"},"payment_amount":{"currency":"EUR","amount":76000},"payment_instrument":{"type":"card","id":"instrument_1"}},
+      "provider_evidence": {"id":"pi_m81_001","object":"payment_intent","amount":76000,"amount_received":0,"currency":"eur","status":"canceled","capture_method":"automatic","livemode":false,"latest_charge":null,"canceled_at":1723500000,"metadata":{"timeproofs_ap2_transaction_id":"tx_m81_001"}},
+      "expected": {"decision":"PASS","reason_code":"PROVIDER_PAYMENT_NOT_EXECUTED","execution_state":"NOT_EXECUTED"}
+    },
+    {
+      "name": "unknown_missing_binding",
+      "payment_mandate": {"vct":"mandate.payment.1","transaction_id":"tx_m81_001","payee":{"id":"merchant_1"},"payment_amount":{"currency":"EUR","amount":76000},"payment_instrument":{"type":"card","id":"instrument_1"}},
+      "provider_evidence": {"id":"pi_m81_001","object":"payment_intent","amount":76000,"amount_received":76000,"currency":"eur","status":"succeeded","capture_method":"automatic","livemode":false,"latest_charge":"ch_m81_001","canceled_at":null,"metadata":{}},
+      "expected": {"decision":"UNKNOWN","reason_code":"PROVIDER_AUTHORIZATION_BINDING_MISSING","execution_state":"UNKNOWN"}
+    },
+    {
+      "name": "unknown_manual_capture",
+      "payment_mandate": {"vct":"mandate.payment.1","transaction_id":"tx_m81_001","payee":{"id":"merchant_1"},"payment_amount":{"currency":"EUR","amount":76000},"payment_instrument":{"type":"card","id":"instrument_1"}},
+      "provider_evidence": {"id":"pi_m81_001","object":"payment_intent","amount":76000,"amount_received":0,"currency":"eur","status":"requires_capture","capture_method":"manual","livemode":false,"latest_charge":null,"canceled_at":null,"metadata":{"timeproofs_ap2_transaction_id":"tx_m81_001"}},
+      "expected": {"decision":"UNKNOWN","reason_code":"UNSUPPORTED_PROVIDER_CAPTURE_MODE","execution_state":"UNKNOWN"}
+    }
+  ]
+}

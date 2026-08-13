@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://timeproofs.io/schemas/timeproofs-provider-evidence.v0.1.schema.json",
+  "title": "TimeProofs Provider Evidence Result v0.1",
+  "type": "object",
+  "required": ["provider_evidence_contract_version","core_schema_version","evaluation_id","decision","execution_state","results","metadata","graph"],
+  "properties": {
+    "provider_evidence_contract_version": {"const":"timeproofs.provider-evidence.v0.1"},
+    "core_schema_version": {"type":"string"},
+    "evaluation_id": {"type":"string","minLength":1},
+    "decision": {"enum":["PASS","BLOCK","UNKNOWN"]},
+    "execution_state": {"enum":["EXECUTED_CONSISTENT","EXECUTED_INCONSISTENT","NOT_EXECUTED","UNKNOWN"]},
+    "results": {
+      "type":"array",
+      "minItems":1,
+      "items": {
+        "type":"object",
+        "required":["invariant_id","status","reason_code","message"],
+        "properties": {
+          "invariant_id":{"const":"TP-EV-001"},
+          "status":{"enum":["PASS","BLOCK","UNKNOWN"]},
+          "reason_code":{"type":"string"},
+          "message":{"type":"string"}
+        }
+      }
+    },
+    "metadata":{"type":"object"},
+    "graph":{"type":"object"}
+  },
+  "additionalProperties": true
+}
