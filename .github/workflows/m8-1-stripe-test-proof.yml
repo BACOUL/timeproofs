@@ -1,0 +1,58 @@
+name: TimeProofs M8.1 Stripe Test Proof
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - relaunch/invariant-engine
+    paths:
+      - '.github/workflows/m8-1-stripe-test-proof.yml'
+      - 'integrations/stripe/**'
+      - 'scripts/m8-1-stripe-test-proof.mjs'
+      - 'examples/m8-1/stripe/**'
+      - 'sdk/**'
+      - 'adapters/stripe/**'
+      - 'timeproofs-core/**'
+
+permissions:
+  contents: read
+
+jobs:
+  stripe-test-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY_TEST }}
+      TIMEPROOFS_AP2_MANDATE_FILE: examples/m8-1/stripe/payment-mandate.test.json
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install locked workspace
+        run: npm ci --ignore-scripts
+
+      - name: Guard Stripe test-mode secret
+        shell: bash
+        run: |
+          if [[ -z "${STRIPE_SECRET_KEY:-}" ]]; then
+            echo "STRIPE_SECRET_KEY_TEST is not configured for this repository."
+            exit 2
+          fi
+          case "$STRIPE_SECRET_KEY" in
+            sk_test_*|rk_test_*) ;;
+            *)
+              echo "Refusing to run: STRIPE_SECRET_KEY_TEST is not a Stripe test-mode key."
+              exit 3
+              ;;
+          esac
+
+      - name: Run M8.1 response-loss proof
+        run: npm run proof:m8-1:stripe-response-loss
