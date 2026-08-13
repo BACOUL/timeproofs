@@ -10,10 +10,13 @@ on:
       - '.github/workflows/m8-1-stripe-test-proof.yml'
       - 'integrations/stripe/**'
       - 'scripts/m8-1-stripe-test-proof.mjs'
+      - 'scripts/m8-1-stripe-response-loss-proof.mjs'
+      - 'scripts/m8-1-stripe-transport-ambiguity-proof.mjs'
       - 'examples/m8-1/stripe/**'
       - 'sdk/**'
       - 'adapters/stripe/**'
       - 'timeproofs-core/**'
+      - 'package.json'
 
 permissions:
   contents: read
@@ -25,6 +28,7 @@ jobs:
     env:
       STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY_TEST }}
       TIMEPROOFS_AP2_MANDATE_FILE: examples/m8-1/stripe/payment-mandate.test.json
+      TIMEPROOFS_AP2_TRANSPORT_MANDATE_FILE: examples/m8-1/stripe/payment-mandate.transport.test.json
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -57,3 +61,6 @@ jobs:
 
       - name: Run M8.1 response-loss proof
         run: npm run proof:m8-1:stripe-response-loss
+
+      - name: Run M8.1 transport ambiguity proof
+        run: npm run proof:m8-1:stripe-transport-ambiguity
