@@ -38,7 +38,8 @@ function providerEvidenceResult(graph){
   const versions=PROVIDER_SUPPORTED[provider];
   if(!versions||!versions.has(evidence.source?.provider_version))return result('TP-EV-001','UNKNOWN','UNSUPPORTED_PROVIDER_VERSION',`Unsupported provider profile ${provider??'missing'} ${evidence.source?.provider_version??'missing'}.`,'UNSUPPORTED_VERSION',{execution_state:'UNKNOWN'});
   const e=evidence.canonical||{},p=mandate.canonical||{};
-  if(e.capture_method && e.capture_method!=='automatic')return result('TP-EV-001','UNKNOWN','UNSUPPORTED_PROVIDER_CAPTURE_MODE','This provider profile does not yet prove manual/partial capture semantics.','UNSUPPORTED_TRANSFORMATION',{execution_state:'UNKNOWN',capture_method:e.capture_method});
+  const supportedCaptureModes=new Set(['automatic','automatic_async']);
+  if(e.capture_method && !supportedCaptureModes.has(e.capture_method))return result('TP-EV-001','UNKNOWN','UNSUPPORTED_PROVIDER_CAPTURE_MODE','This provider profile does not yet prove manual/partial capture semantics.','UNSUPPORTED_TRANSFORMATION',{execution_state:'UNKNOWN',capture_method:e.capture_method});
   if(!e.authorization_reference)return result('TP-EV-001','UNKNOWN','PROVIDER_AUTHORIZATION_BINDING_MISSING','Provider evidence is not bound to the approved AP2 mandate.','MISSING_EVIDENCE',{execution_state:'UNKNOWN',provider_payment_id:e.provider_payment_id??null});
   if(e.authorization_reference!==p.transaction_id)return result('TP-EV-001','BLOCK','PROVIDER_AUTHORIZATION_BINDING_MISMATCH','Provider evidence is bound to a different AP2 transaction.',null,{execution_state:'UNKNOWN',approved_transaction_id:p.transaction_id??null,provider_authorization_reference:e.authorization_reference,provider_payment_id:e.provider_payment_id??null});
   const status=e.provider_status;
