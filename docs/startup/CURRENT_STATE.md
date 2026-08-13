@@ -25,7 +25,7 @@ Initial wedge: UCP ↔ AP2 composition consistency. This is a beachhead, not the
 - Pre-M8 World-Class Gate: COMPLETE / GREEN
 - Company completeness + anti-omission architecture: COMPLETE AT DESIGN LEVEL
 - **M8 — Local-first runtime enforcement: COMPLETE**
-- **M8.1 — Authorized ↔ executed provider evidence: ACTIVE / TEST-PROOF HARNESS READY**
+- **M8.1 — Authorized ↔ executed provider evidence: ACTIVE / LIVE STRIPE TEST PROOF PASSED**
 - M9 — Public relaunch website/docs: NOT STARTED
 - M10 — Managed cloud: NOT STARTED / COMMERCIAL GATE REQUIRED
 
@@ -79,7 +79,7 @@ The Stripe profile accepts `automatic` and `automatic_async` capture semantics f
 
 A webhook notification alone is not treated as sufficient PASS evidence. The initial profile evaluates a durable supplied/retrieved PaymentIntent snapshot.
 
-Repository proof helpers now provide a test-mode-only path for:
+Repository proof helpers provide a test-mode-only path for:
 
 `create bound PaymentIntent → confirm → deliberately ignore confirmation outcome → retrieve PaymentIntent → verifyProviderExecution()`
 
@@ -136,14 +136,32 @@ A read-only observation against a real connected Stripe account exposed `capture
 - macOS Node 22/24
 - Windows Node 22/24
 
+### Real Stripe test-mode provider proof — PASSED
+
+`TimeProofs M8.1 Stripe Test Proof` run `31712667190`: **SUCCESS**.
+
+Observed proof:
+- Stripe secret passed the test-mode guard;
+- created and confirmed a Stripe test PaymentIntent;
+- `livemode=false`;
+- provider status `succeeded`;
+- observed capture method `automatic_async`;
+- confirmation result was deliberately ignored by the proof flow;
+- the PaymentIntent was re-retrieved by ID as durable provider evidence;
+- TimeProofs returned `PASS`;
+- execution state `EXECUTED_CONSISTENT`;
+- invariant `TP-EV-001`;
+- reason code `EXECUTED_PAYMENT_MATCHES_APPROVED_MANDATE`.
+
+This is the first authoritative live-provider test proof that TimeProofs can reconstruct an approved-to-executed payment outcome from durable provider state after the immediate confirmation result is intentionally discarded.
+
 Still required before M8.1 is COMPLETE:
-- execute the prepared Stripe **test-mode** create/confirm/retrieve proof against a real test account/key;
 - webhook-trigger → retrieve → evaluate walkthrough;
 - literal transport-failure/chaos recovery proof around confirmation with a known PaymentIntent ID;
 - additional hostile/malformed provider payload coverage where provider semantics warrant it;
 - external implementer/value evidence.
 
-Technical fixture/mock proof must not be represented as authoritative live-provider proof.
+The successful test-mode proof is technical provider validation, not product-market fit or willingness-to-pay validation.
 
 ## Business architecture baseline
 
@@ -166,7 +184,8 @@ Positive:
 - agentic payment infrastructure is receiving major industry investment;
 - economic failures can touch money and irreversible state;
 - provider/version evidence knowledge can become cumulative;
-- first real-provider observation already produced a concrete compatibility correction (`automatic_async`).
+- first real-provider observation produced a concrete compatibility correction (`automatic_async`);
+- first real Stripe test-mode create/confirm/retrieve proof passed end-to-end.
 
 Negative:
 - authorization/binding features are actively being absorbed by AP2/FIDO and major payment players;
@@ -180,7 +199,7 @@ No M10/cloud escalation is justified from this gate alone.
 
 1. willingness-to-pay;
 2. exact economic buyer;
-3. live repeatable provider execution evidence;
+3. repeatability across more provider/lifecycle scenarios;
 4. distribution pull;
 5. RESOLVE unit economics;
 6. first meaningful PSP/platform partnership;
@@ -232,4 +251,4 @@ Missing proof remains UNKNOWN.
 
 ## One-line status
 
-> **M0–M8 are complete. M8.1 now has a Stripe provider-evidence foundation, real-provider compatibility feedback, a safe test-only response-loss proof harness and green cross-platform regression; it remains open until the real Stripe test-mode proof and external value evidence exist.**
+> **M0–M8 are complete. M8.1 now has a successful real Stripe test-mode response-loss recovery proof (`PASS / EXECUTED_CONSISTENT`) plus green cross-platform regression; it remains open for webhook/transport-chaos proof and external value validation.**
