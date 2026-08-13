@@ -25,7 +25,8 @@ Initial wedge: UCP ↔ AP2 composition consistency. This is a beachhead, not the
 - Pre-M8 World-Class Gate: COMPLETE / GREEN
 - Company completeness + anti-omission architecture: COMPLETE AT DESIGN LEVEL
 - **M8 — Local-first runtime enforcement: COMPLETE**
-- **M8.1 — Authorized ↔ executed provider evidence: ACTIVE / LIVE STRIPE TEST PROOF PASSED**
+- **M8.1 — Authorized ↔ executed provider evidence: TECHNICAL PROOF COMPLETE / EXTERNAL VALUE EVIDENCE PENDING**
+- M8.2 — Outcome resolution primitive: NOT STARTED
 - M9 — Public relaunch website/docs: NOT STARTED
 - M10 — Managed cloud: NOT STARTED / COMMERCIAL GATE REQUIRED
 
@@ -40,6 +41,9 @@ TimeProofs currently includes:
 - `enforceTransaction()` SDK;
 - `verifyProviderExecution()` SDK;
 - Stripe test-only create/confirm/retrieve proof helpers;
+- authenticated Stripe webhook trigger verification using the raw request body;
+- webhook-trigger → retrieve PaymentIntent → provider-evidence evaluation orchestration;
+- deterministic transport-ambiguity recovery proof helper;
 - CLI `timeproofs verify`;
 - GitHub Action VERIFY integration;
 - safe CI result projection;
@@ -77,17 +81,25 @@ Current output:
 
 The Stripe profile accepts `automatic` and `automatic_async` capture semantics for the current exact-payment proof. Manual/partial capture remains UNKNOWN.
 
-A webhook notification alone is not treated as sufficient PASS evidence. The initial profile evaluates a durable supplied/retrieved PaymentIntent snapshot.
+A webhook notification alone is not treated as sufficient PASS evidence. The webhook surface verifies the Stripe signature against the raw request body, extracts the PaymentIntent identifier as a trigger, then retrieves durable provider state before evaluation. The webhook snapshot is explicitly not used as PASS evidence.
 
-Repository proof helpers provide a test-mode-only path for:
+Repository proof helpers provide test-mode-only paths for:
 
 `create bound PaymentIntent → confirm → deliberately ignore confirmation outcome → retrieve PaymentIntent → verifyProviderExecution()`
 
+and:
+
+`create bound PaymentIntent → confirm at Stripe → convert provider response into caller-visible transport-style failure → DO NOT RETRY → retrieve PaymentIntent → verifyProviderExecution()`
+
 Safety properties:
-- only `sk_test_` / `rk_test_` keys are accepted;
+- only `sk_test_` / `rk_test_` keys are accepted by proof write/retrieval helpers;
 - any returned `livemode=true` PaymentIntent is rejected;
 - create and confirm use deterministic, distinct idempotency keys derived from the AP2 transaction id;
-- no Stripe key or client secret is emitted by the proof summary.
+- no Stripe key or client secret is emitted by the proof summary;
+- webhook signatures require a `whsec_...` signing secret and a raw body;
+- stale or invalid webhook signatures are rejected;
+- non-PaymentIntent webhook events do not trigger provider retrieval;
+- no retry occurs before provider-state resolution in the transport-ambiguity proof.
 
 ## M8 proof
 
@@ -126,21 +138,19 @@ Implemented foundation:
 - test-only Stripe retrieval helper;
 - test-only Stripe create/confirm helpers with deterministic idempotency;
 - response-loss recovery proof script;
+- authenticated webhook trigger parser/verifier;
+- webhook-trigger → provider retrieval → evaluation path;
+- transport-ambiguity recovery proof script;
 - live-mode refusal guards;
-- mocked adversarial retrieval/write safety tests.
+- adversarial webhook/retrieval/write safety tests.
 
 A read-only observation against a real connected Stripe account exposed `capture_method=automatic_async`, which the initial fixture-only profile had not covered. No live object was modified and no live identifier is persisted as canonical fixture proof. The profile and regression corpus were corrected accordingly.
-
-`TimeProofs Core Regression` run `31693162790`: **SUCCESS**, six jobs green:
-- Ubuntu Node 22/24
-- macOS Node 22/24
-- Windows Node 22/24
 
 ### Real Stripe test-mode provider proof — PASSED
 
 `TimeProofs M8.1 Stripe Test Proof` run `31712667190`: **SUCCESS**.
 
-Observed proof:
+Observed response-loss proof:
 - Stripe secret passed the test-mode guard;
 - created and confirmed a Stripe test PaymentIntent;
 - `livemode=false`;
@@ -153,15 +163,46 @@ Observed proof:
 - invariant `TP-EV-001`;
 - reason code `EXECUTED_PAYMENT_MATCHES_APPROVED_MANDATE`.
 
-This is the first authoritative live-provider test proof that TimeProofs can reconstruct an approved-to-executed payment outcome from durable provider state after the immediate confirmation result is intentionally discarded.
+### Webhook trigger/retrieval contract — PASSED
 
-Still required before M8.1 is COMPLETE:
-- webhook-trigger → retrieve → evaluate walkthrough;
-- literal transport-failure/chaos recovery proof around confirmation with a known PaymentIntent ID;
-- additional hostile/malformed provider payload coverage where provider semantics warrant it;
-- external implementer/value evidence.
+The regression contract now verifies:
+- valid Stripe HMAC signature over the raw body;
+- multiple `v1` signature candidates;
+- replay/timestamp tolerance;
+- rejection of a re-serialized body whose bytes no longer match the signature;
+- a webhook PaymentIntent snapshot deliberately containing conflicting amount/currency data is ignored as PASS evidence;
+- provider truth is re-retrieved by PaymentIntent ID and evaluated instead;
+- non-PaymentIntent events do not cause provider retrieval.
 
-The successful test-mode proof is technical provider validation, not product-market fit or willingness-to-pay validation.
+### Transport ambiguity recovery — PASSED
+
+`TimeProofs M8.1 Stripe Test Proof` run `31735097007`: **SUCCESS**.
+
+Observed transport-ambiguity proof:
+- Stripe confirmation request completed against a test PaymentIntent;
+- the returned provider response was consumed and deliberately converted into a caller-visible transport-style failure;
+- `retry_before_resolution=false`;
+- TimeProofs retrieved the known PaymentIntent by ID before any retry;
+- Stripe reported `succeeded` with `automatic_async`;
+- TimeProofs returned `PASS / EXECUTED_CONSISTENT` under `TP-EV-001`.
+
+This is deterministic chaos injection around the caller/provider boundary. It proves the recovery rule under an ambiguous caller-visible outcome, but it is **not represented as a physical network outage**.
+
+### Regression after webhook/transport additions — PASSED
+
+`TimeProofs Core Regression` run `31735078880`: **SUCCESS**, six jobs green:
+- Ubuntu Node 22/24
+- macOS Node 22/24
+- Windows Node 22/24
+
+Technical M8.1 provider semantics are therefore established for the constrained Stripe profile. M8.1 remains commercially open because external implementer/value evidence has not yet been obtained.
+
+Still required before M8.1 is declared fully COMPLETE:
+- external implementer/value evidence from a team operating consequential agentic/payment flows;
+- additional provider payload/edge-case coverage when real provider behavior exposes new semantics;
+- a physical network/proxy failure experiment may be added later, but current documentation must not imply that the deterministic chaos proof was a literal network outage.
+
+The successful test-mode proofs are technical provider validation, not product-market fit or willingness-to-pay validation.
 
 ## Business architecture baseline
 
@@ -185,13 +226,14 @@ Positive:
 - economic failures can touch money and irreversible state;
 - provider/version evidence knowledge can become cumulative;
 - first real-provider observation produced a concrete compatibility correction (`automatic_async`);
-- first real Stripe test-mode create/confirm/retrieve proof passed end-to-end.
+- real Stripe test-mode response-loss and transport-ambiguity proofs passed end-to-end;
+- webhook-trigger → authoritative retrieval semantics are now regression-tested.
 
 Negative:
 - authorization/binding features are actively being absorbed by AP2/FIDO and major payment players;
 - direct TimeProofs willingness-to-pay is still RED;
 - buy-vs-build and distribution remain AMBER;
-- current moat is still weak.
+- current moat is still weak until provider/lifecycle knowledge and adoption accumulate.
 
 No M10/cloud escalation is justified from this gate alone.
 
@@ -199,11 +241,12 @@ No M10/cloud escalation is justified from this gate alone.
 
 1. willingness-to-pay;
 2. exact economic buyer;
-3. repeatability across more provider/lifecycle scenarios;
-4. distribution pull;
-5. RESOLVE unit economics;
-6. first meaningful PSP/platform partnership;
-7. exact open-source/commercial split before broad public release.
+3. external implementer adoption/value proof;
+4. repeatability across more provider/lifecycle scenarios;
+5. distribution pull;
+6. RESOLVE unit economics;
+7. first meaningful PSP/platform partnership;
+8. exact open-source/commercial split before broad public release.
 
 Technical readiness must not be confused with product-market fit.
 
@@ -243,6 +286,7 @@ TimeProofs does not yet claim:
 - settlement or refund finality from Stripe PaymentIntent;
 - authoritative cross-provider outcome resolution;
 - exactly-once side-effect execution;
+- physical-network-failure proof from the deterministic transport-chaos test;
 - hosted enforcement/SLA;
 - product-market fit;
 - validated willingness-to-pay or final published pricing.
@@ -251,4 +295,4 @@ Missing proof remains UNKNOWN.
 
 ## One-line status
 
-> **M0–M8 are complete. M8.1 now has a successful real Stripe test-mode response-loss recovery proof (`PASS / EXECUTED_CONSISTENT`) plus green cross-platform regression; it remains open for webhook/transport-chaos proof and external value validation.**
+> **M0–M8 are complete. M8.1 has established the constrained Stripe authorized→executed provider boundary with real test-mode response-loss recovery, authenticated webhook-trigger→retrieve semantics, deterministic transport-ambiguity recovery and green cross-platform regression; external implementer/value evidence remains the gate before M8.1 is fully COMPLETE.**
