@@ -1,173 +1,267 @@
 # TimeProofs Constitution
 
-Status: **FOUNDATIONAL / PROPOSED FOR TEMPORAL-EVIDENCE REBASELINE**
+Status: **FOUNDATIONAL / PROPOSED FOR AGENT TRUST-LAYER REBASELINE**
 
 Last reviewed: 2026-09-12
 
 This constitution defines the invariants that any future TimeProofs implementation must preserve. Product features, APIs, providers and cryptographic mechanisms may change; these rules may not be weakened silently.
 
-## 1. Temporal proof is not truth
+## 1. TimeProofs is a reliance-security layer, not a truth oracle
 
-TimeProofs proves temporal properties of artifacts, observations, states, versions and actions.
+TimeProofs evaluates what can be independently verified about the objects, states and authorities on which an AI agent relies, and whether that evidence satisfies an explicit policy for a specific intended use.
 
-It does not decide whether a proposition contained in those artifacts is true, credible, causal, lawful or justified.
+It does not decide whether every proposition contained in an object is factually true, credible, causal, lawful or epistemically sufficient.
 
-Truth/investigation reasoning belongs outside TimeProofs, including to systems such as SpiderEvidence.
+Investigation/truth reasoning belongs outside TimeProofs, including to systems such as SpiderEvidence.
 
-## 2. Every proof must state exactly what is proven
+## 2. `Safe to use` is always scoped
+
+No object is universally safe, trusted or good.
+
+A reliance decision must be bound to:
+
+- the exact object/state;
+- intended use or action class;
+- agent/actor where relevant;
+- policy version;
+- evaluation time/boundary;
+- required assurance dimensions.
+
+A low-risk use decision must never be silently reused for a higher-risk action.
+
+## 3. Authenticity is not truth
+
+TimeProofs must preserve these distinctions:
+
+```txt
+AUTHENTIC != TRUE
+SIGNED != CORRECT
+SOURCE_VERIFIED != CLAIM_VERIFIED
+PROVENANCE_KNOWN != TRUSTWORTHY_CONTENT
+```
+
+A genuine document can contain false information. A correctly signed API response can contain an error. A known source can be wrong.
+
+## 4. Every verdict must expose its proof dimensions
+
+A generic trust score is insufficient.
+
+Machine-readable output must expose, where applicable, distinct states for:
+
+- integrity;
+- source identity;
+- authenticity;
+- provenance;
+- temporal evidence;
+- freshness/currentness;
+- version/supersession;
+- revocation;
+- authorization/delegation;
+- conflicts;
+- verification availability;
+- policy fit.
+
+No scalar score may hide a blocking failure.
+
+## 5. Every proof must state exactly what is proven
 
 No output may use a generic `verified=true` when the actual claim is more specific.
 
-A receipt must identify the temporal claim being verified, such as:
+A receipt or assessment must identify the exact claim being verified, such as:
 
+- content digest matches;
+- source identity verified;
+- signature valid under profile P;
 - observed at;
 - existed before;
 - state observed at;
 - precedes/follows;
 - supersedes;
-- action bound to evidence context.
+- not revoked within a defined checked domain;
+- authorized for action class A under delegation D;
+- action bound to evidence context C.
 
 The proof semantics must be explicit and machine-readable.
 
-## 3. No invented precision
+## 6. No invented precision
 
-Time may be:
+Time, identity, provenance, version and authorization may each be exact, bounded, declared, independently attested, partial or unknown.
 
-- exact;
-- bounded;
-- independently anchored;
-- observer-declared;
-- approximate;
-- unknown.
-
-The system must not convert a weaker temporal statement into a stronger one.
+The system must not convert a weaker statement into a stronger one.
 
 Examples:
 
 ```txt
-EXISTED_BEFORE 14:32
-!=
-CREATED_AT 14:32
+EXISTED_BEFORE 14:32 != CREATED_AT 14:32
+OBSERVED_AT 14:32 != WAS_TRUE_AT 14:32
+NO_NEWER_VERSION_FOUND != CURRENT_VERSION
+NO_REVOCATION_FOUND != PROVEN_NOT_REVOKED
 ```
 
-and:
+## 7. Absence of proof is not proof of absence
 
-```txt
-OBSERVED_AT 14:32
-!=
-WAS_TRUE_AT 14:32
-```
+`NO_PROOF_FOUND`, `NOT_PROVEN`, inaccessible evidence or failed verification may never be rendered as proof that an artifact, state, revocation or event did not exist.
 
-## 4. Absence of proof is not proof of absence
+Negative claims require an explicit bounded observation domain with justified completeness.
 
-`NO_PROOF_FOUND`, `NOT_PROVEN`, inaccessible evidence or failed verification may never be rendered as proof that an artifact, state or event did not exist.
+## 8. Integrity is object-specific
 
-Any proof of non-occurrence would require an explicit bounded observation model with a justified completeness guarantee.
+A successful digest/signature check proves only the property defined by the relevant canonicalization and verification profile.
 
-## 5. Observation provenance is mandatory
+If the bytes, structured fields or rendered semantics can differ under another representation, that limitation must remain visible.
 
-An observation must preserve, where applicable:
+Canonicalization must be versioned.
+
+## 9. Source identity and acquisition provenance are mandatory where relevant
+
+An observation should preserve, where applicable:
 
 - observer identity or cryptographic identity;
+- claimed source identity;
 - acquisition method;
-- source locator or source identity;
-- artifact/state hash;
+- source locator;
+- artifact/state commitment;
 - observation time and its provenance;
 - software/component version;
-- relevant authentication or authorization context;
-- previous related proof object where applicable.
+- authentication/authorization context;
+- source attestation or session proof;
+- prior related proof object.
 
-A self-declared observation must remain distinguishable from an independently attested or source-attested observation.
+A self-declared observation must remain distinguishable from a source-attested observation.
 
-## 6. Independent time must remain distinguishable from caller time
+## 10. Independent time must remain distinguishable from caller time
 
 A timestamp supplied by a caller is evidence about what the caller declared, not independent temporal proof.
 
-Independent assurance requires a verifiable external mechanism such as a timestamp authority, transparency service, public anchor or another appropriately governed attestation source.
+Independent assurance requires a verifiable external mechanism appropriate to the claim.
 
-## 7. Proofs must be independently verifiable
+## 11. Freshness is policy-relative
 
-A `TemporalReceipt` must contain or reference sufficient verification material for another authorized machine to validate its claims without relying solely on a TimeProofs database response.
+No information is universally fresh.
 
-TimeProofs should minimize proprietary trust dependencies wherever technically and legally practical.
+Currentness must be evaluated against a policy appropriate to the resource and intended use.
 
-## 8. Receipts are immutable; interpretations are versioned
+The system must not represent an old observation as current merely because no newer proof exists.
+
+## 12. Version and supersession claims require a justified version domain
+
+TimeProofs may call an object `CURRENT_VERSION` only where the relevant version authority, source or policy makes that determination justifiable.
+
+Otherwise it must use weaker states such as:
+
+```txt
+NO_NEWER_VERSION_OBSERVED
+SUPERSESSION_UNKNOWN
+REVALIDATION_REQUIRED
+```
+
+## 13. Revocation claims require a checked revocation domain
+
+TimeProofs may represent `NOT_REVOKED` only when the relevant revocation mechanism/domain was successfully checked and the semantics justify the claim.
+
+If the mechanism is unavailable, incomplete or stale, output must degrade explicitly.
+
+## 14. Authorization is external authority, not model judgment
+
+An agent cannot grant itself authority merely by reasoning that an action is appropriate.
+
+Authorization/delegation evidence must be externally grounded, scoped and time-bounded where applicable.
+
+TimeProofs may verify authorization artifacts and their current status; it does not invent permissions.
+
+## 15. Proofs must be independently verifiable
+
+A `TimeProofsReceipt` should contain or reference sufficient verification material for another authorized machine to validate its claims without relying solely on a TimeProofs database response.
+
+TimeProofs should minimize proprietary trust dependencies wherever practical.
+
+## 16. Receipts are immutable; assessments are versioned
 
 Issued cryptographic receipts must not be silently rewritten.
 
-If metadata, assurance interpretation, revocation state or verification policy changes, a new versioned assessment must reference the original receipt rather than alter history.
+If metadata, revocation state, policy or verification interpretation changes, a new assessment must reference the original receipt rather than alter history.
 
-## 9. State history must not imply unobserved continuity
+## 17. State history must not imply unobserved continuity
 
 Two matching observations at T1 and T2 do not prove that no intermediate state existed.
 
-A checkpoint proves only the semantics supported by its observation/attestation path.
-
 Continuous-state claims require continuous or otherwise sufficient evidence under an explicit model.
 
-## 10. Temporal order must be evidence-backed
+## 18. Temporal order must be evidence-backed
 
 TimeProofs may infer `A PRECEDES B` only where the proof graph justifies that relation.
 
 Wall-clock values alone may be insufficient when clocks are untrusted, skewed or incomparable.
 
-Ordering may rely on signed sequence, transparency-log inclusion, causal chaining, trusted time anchors or other valid mechanisms. The mechanism and limitations must be exposed.
+## 19. Action-context binding is first-class
 
-## 11. Action-context binding is first-class
+When TimeProofs binds an agent action to evidence context, the receipt must identify the exact material dependencies and their reliance status at the action boundary.
 
-When TimeProofs binds an agent action to evidence context, the receipt must identify the exact states/artifacts relied on and their temporal proof status.
+It must remain possible to determine whether each dependency was:
 
-It must remain possible to determine whether a dependency was:
-
-- current under the applicable policy;
+- accepted under policy;
 - stale;
 - superseded;
 - revoked;
 - unverifiable;
+- conflict-bearing;
 - not revalidated within the required window.
 
 TimeProofs does not decide whether the action itself was substantively correct.
 
-## 12. Revalidation is policy-aware, not magical freshness
+## 20. Revalidation is explicit
 
-No data source is universally "fresh".
+TimeProofs must make clear what was rechecked, against which source or authority, at what time and under which policy.
 
-A revalidation result must be interpreted against an explicit freshness or validity policy appropriate to the resource and action.
+A partial revalidation must not masquerade as complete revalidation.
 
-The system must not represent an old observation as current merely because no newer receipt exists.
+## 21. Conflicting proofs are a valid result
 
-## 13. Cryptographic agility is mandatory
+If valid-looking evidence conflicts, TimeProofs must preserve the conflict rather than average it away.
 
-No hash algorithm, signature scheme, blockchain, timestamp authority, transparency log or protocol is constitutional.
+Canonical outcomes should include states such as:
+
+```txt
+CONFLICTING_PROOFS
+SOURCE_CONFLICT
+VERSION_CONFLICT
+AUTHORITY_CONFLICT
+```
+
+## 22. Cryptographic and provider agility are mandatory
+
+No hash algorithm, signature scheme, blockchain, timestamp authority, transparency log, identity provider or protocol is constitutional.
 
 Algorithms and providers must be versioned and replaceable.
 
-Deprecated or compromised mechanisms must be reclassified transparently rather than hidden.
+Deprecated or compromised mechanisms must be reclassified transparently.
 
-## 14. Provider and protocol neutrality
+## 23. Standards before invention
 
-TimeProofs may support RFC 3161, SCITT, transparency logs, OpenTimestamps, Sigstore/Rekor-style logs, source attestations, TLS/zk provenance systems and future standards.
+TimeProofs must use established, auditable standards and implementations where they satisfy the requirement.
 
-No single mechanism is the product identity.
+A new cryptographic primitive or protocol may be introduced only when a documented gap cannot be solved safely and interoperably with existing methods.
 
-The canonical model sits above these mechanisms.
-
-## 15. Privacy by construction
+## 24. Privacy by construction
 
 TimeProofs should prove as much as possible from commitments, hashes, selective disclosure and minimal metadata rather than requiring unnecessary raw-content retention.
 
-Sensitive content must not be published to public ledgers or transparency systems unless explicitly authorized and safe.
+Sensitive content must not be published to public ledgers/transparency systems unless explicitly authorized and safe.
 
-## 16. Verification failure must degrade safely
+## 25. Verification failure must degrade safely
 
-Failures such as unavailable anchors, expired certificates, revoked keys, unsupported algorithms, incomplete chains, source-authentication failures or inconsistent proofs must produce explicit degraded/failed states.
+Unavailable anchors, expired certificates, revoked keys, unsupported algorithms, incomplete chains, source-authentication failures, stale revocation data or inconsistent proofs must produce explicit degraded/failed states.
 
 They must never silently become success.
 
-## 17. Fork, replay and equivocation resistance must be testable
+## 26. Adversarial resistance must be testable
 
 The threat model must explicitly cover, at minimum:
 
+- content tampering;
+- canonicalization ambiguity;
+- source spoofing;
+- provenance substitution;
 - backdating;
 - replay of old valid state as current;
 - proof substitution;
@@ -179,34 +273,46 @@ The threat model must explicitly cover, at minimum:
 - clock skew/manipulation;
 - source-response forgery;
 - state/version rollback;
-- stale authorization;
-- partial verification masquerading as complete verification.
+- stale or forged authorization;
+- revocation hiding;
+- partial verification masquerading as complete verification;
+- policy downgrade;
+- trust-score laundering across use cases.
 
 Covered threats require reproducible adversarial tests.
 
-## 18. Machine-readable output is authoritative
+## 27. Machine-readable output is authoritative
 
-Human-readable prose may summarize results, but canonical proof state must be structured, versioned and machine-readable.
+Human-readable prose may summarize results, but canonical proof and reliance state must be structured, versioned and machine-readable.
 
-Agents must not need to parse natural-language prose to determine whether a temporal claim is proven, unproven, degraded or unverifiable.
+Agents must not need to parse natural-language prose to determine whether an object is acceptable, degraded, rejected or requires revalidation.
 
-## 19. Standards before invention
+## 28. Reliance decisions must explain themselves
 
-TimeProofs must use established, auditable standards and implementations where they satisfy the requirement.
+A verdict such as `TRUSTED_FOR_USE` or `DO_NOT_USE` must include:
 
-A new cryptographic primitive or protocol may be introduced only when a documented gap cannot be solved safely and interoperably with existing methods.
+- policy/intended use;
+- passed checks;
+- failed checks;
+- unknown checks;
+- blocking reasons;
+- evidence/proof references;
+- expiry/revalidation requirements;
+- limitations.
 
-## 20. SpiderEvidence interoperability preserves separation of concerns
+No opaque trust oracle is permitted.
 
-A TimeProofs receipt consumed by SpiderEvidence is temporal evidence, not an epistemic conclusion.
+## 29. SpiderEvidence interoperability preserves separation of concerns
 
-SpiderEvidence must verify the receipt and reason independently over its meaning.
+A TimeProofs assessment consumed by SpiderEvidence is evidence about integrity, provenance, source, authority, time or currentness — not an epistemic conclusion about the truth of the content.
 
-TimeProofs must not import SpiderEvidence conclusions as temporal facts without their own valid temporal proof basis.
+SpiderEvidence must verify TimeProofs receipts and reason independently.
 
-## 21. No superiority claim without benchmark evidence
+TimeProofs must not import SpiderEvidence conclusions as verified source facts without their own valid proof basis.
 
-TimeProofs may not claim to make agents safer, more reliable or more auditable merely because cryptographic receipts exist.
+## 30. No superiority claim without benchmark evidence
+
+TimeProofs may not claim to make agents safer, more reliable or more trustworthy merely because checks/receipts exist.
 
 Such claims require controlled comparison against strong current alternatives under matched model, task, information and budget conditions.
 
@@ -218,33 +324,32 @@ vs
 same qualified agent without TimeProofs
 ```
 
-## 22. Correct abstention is success
+## 31. Correct abstention is success
 
-When the available proof cannot establish a requested temporal relation, TimeProofs must say so.
+When evidence cannot establish a requested property or policy requirement, TimeProofs must say so.
 
 Valid outcomes include:
 
 ```txt
 PROVEN
 NOT_PROVEN
+INSUFFICIENT_EVIDENCE
 CONFLICTING_PROOFS
 VERIFICATION_UNAVAILABLE
 INSUFFICIENT_ASSURANCE
+REVALIDATION_REQUIRED
+SUPERSESSION_UNKNOWN
+REVOCATION_UNKNOWN
+SOURCE_UNVERIFIED
 ORDER_UNDETERMINED
 STATE_UNDERDETERMINED
 ```
 
-A forced definitive answer is a defect when proof is insufficient.
+A forced definitive answer is a defect when evidence is insufficient.
 
-## 23. Historical reconstruction must remain auditable
+## 32. Research targets are not product claims
 
-Where TimeProofs maintains version/state history, previous receipts and verification states must remain reconstructable.
-
-Supersession must not erase prior evidence.
-
-## 24. Research targets are not product claims
-
-Planned primitives such as `revalidate()`, `bindAction()` or cross-system proof composition are hypotheses until implemented and benchmarked.
+Planned primitives such as `assessForUse()`, `revalidate()`, `bindAction()` or cross-system proof composition are hypotheses until implemented and benchmarked.
 
 The public site, documentation and API must distinguish clearly among:
 
@@ -253,10 +358,10 @@ The public site, documentation and API must distinguish clearly among:
 - experimental;
 - planned.
 
-## 25. Final strategic boundary
+## 33. Final strategic boundary
 
 TimeProofs should become excellent at one specialized question:
 
-> **What can be independently proven about the temporal existence, observation, state, version and ordering of the information and actions on which AI agents rely?**
+> **Can an AI agent safely rely on this external object for this intended use, based on independently verifiable integrity, source, provenance, authority, version, revocation and temporal evidence?**
 
-It should not become a general investigation engine, an all-purpose governance platform or a universal trust score.
+It should not become a general investigation engine, an all-purpose governance platform or a universal truth score.
