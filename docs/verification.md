@@ -27,3 +27,20 @@ Public integration labels remain PLANNED for MCP, A2A, AP2, x401, SCITT and Agen
 No P0 observed in the tested sandbox flow. Production blockers: durable multi-instance storage, tenant isolation, distributed abuse protection, operational monitoring/backup and actual external acquisition validation. Mobile and file round-trip acceptance are outstanding release checks. No managed production readiness claim.
 
 Readiness: usable reference alpha for testing; production NO-GO. Current immutable preview remains the browser-tested source even if subsequent documentation-only commits generate additional previews.
+
+## English canonical preview — 2 October 2026
+
+Tested immutable preview: https://timeproofs-qh7hl5igq-jeason1.vercel.app/
+Deployment: dpl_HPzgThqQNkW35pw8u72aYhs3pfb6; source 9d1fa2870e33551c457d1e3d7342b812b181f437; target preview, READY.
+
+English content audit covered README, documentation, profiles, schemas/OpenAPI, examples, SDK/CLI, public tests, security/threat model, pricing, integrations and demo copy. LANGUAGE policy and root SECURITY.md are now included. The site uses lang=en and Content-Language: en; a French Accept-Language request still receives English. Technical identifiers and statuses are unchanged. No French translation or i18n dependency was added.
+
+All 31 automated checks and CLI demo passed. Deployed HTTP checks passed for home, health, profiles, demo stages 0/1/2, public Verify, tampered-amount rejection and OpenAPI language metadata. On the final layout preview, browser navigation passed for all ten public pages, the case viewer and all five profile detail pages. Purchase stage progression and independent Verify were rerun; changing the amount returns INVALID. A Developers code block overflow was observed and corrected with minimum grid child widths; final desktop page and profile overflow checks passed.
+
+Mobile acceptance remains NOT VERIFIED. The available browser has no viewport/device emulation API; DevTools shortcuts left the viewport at 1348 px. Responsive CSS was reviewed but is not a substitute for device testing. Download was clicked with a pre-registered listener, but the event timed out; export/import round-trip remains NOT VERIFIED.
+
+The designated project is timeproofs, not timeproofsv1. Site titles and the visible badge explicitly identify TimeProofs V2 Preview. The Vercel console project name has NOT been changed to timeproofs-v2-preview: connector tools expose no rename operation and project settings redirect to login. This is an outstanding identification task, not a completed rename.
+
+The production timeproofs-site deployment remains dpl_CPrPdmHeTyYZv6bXN2NvW5EkoVvx. No production promotion, custom domain or DNS write was performed. The timeproofs-v1 branch remains 696bbf21e987c226456636c2903a8de977aca845.
+
+No P0/P1 defect was observed in the tested reference flow. This is not production acceptance: mobile, file round-trip, project console naming and the existing managed-service production gaps remain open.
