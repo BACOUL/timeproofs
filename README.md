@@ -25,10 +25,12 @@ The signed sandbox purchase starts with Authority / Identity / Offer SATISFIED a
 
 ## SDK from source
 
-The npm registry release is **not published**. Install the branch directly:
+The npm registry release is **not published**. From the cloned repository, build a package and install it into your application:
 
 ```sh
-npm install git+https://github.com/BACOUL/timeproofs.git#timeproofs-v2
+npm pack
+# In your application directory, replace the path with your clone location:
+npm install /absolute/path/to/timeproofs/timeproofs-sdk-2.0.0-alpha.1.tgz
 ```
 
 ```js
