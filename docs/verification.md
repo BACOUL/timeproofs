@@ -1,5 +1,7 @@
 # Verification record — 2 October 2026
 
+**Current acceptance:** see [Alpha readiness](readiness.md). Earlier mobile and export/import gaps below are historical and superseded by the final acceptance appendix.
+
 Runtime tested: Node 24.19.0. CI matrix configured for Node 22 and 24; external execution not yet confirmed.
 
 - `npm run check`: PASS, 31 tests (30 core/conformance/adversarial checks plus SDK/HTTP/private-storage integration).
@@ -44,3 +46,19 @@ The designated project is timeproofs, not timeproofsv1. Site titles and the visi
 The production timeproofs-site deployment remains dpl_CPrPdmHeTyYZv6bXN2NvW5EkoVvx. No production promotion, custom domain or DNS write was performed. The timeproofs-v1 branch remains 696bbf21e987c226456636c2903a8de977aca845.
 
 No P0/P1 defect was observed in the tested reference flow. This is not production acceptance: mobile, file round-trip, project console naming and the existing managed-service production gaps remain open.
+
+## Final alpha acceptance — 2 October 2026
+
+Current readiness: **ALPHA READY for the sandbox reference**, production NO-GO. See [the full report](readiness.md).
+
+Final browser-tested release: https://timeproofs-amcadf7kc-jeason1.vercel.app/
+Deployment: dpl_FG2WENH35PRwqHqZ8SSyuAhFCPLF; source 42fb5085068d6a3af38fc766962aa23ce04df92e; READY, preview target.
+Matching isolated mobile QA deployment: dpl_EHwxVuR5PpyfvR6cDmJS299nFdCZ, source cd636a8ba674f0533cb1a967b60bd7f60f1f45a0, branch timeproofs-v2-mobile-qa. Product JS/CSS/core/API match the release; QA-only framing and harness remain separate.
+
+All 33 automated checks pass. Final release checks: 12 desktop views without horizontal overflow; 24 mobile page/width combinations without horizontal overflow or undersized primary/navigation targets; menu navigation and the full 3/5 → 4/5 → 5/5 → Verify at 375/390/430 px. Real browser attachment download from this final release, exact downloaded-file import and independent SATISFIED verification pass. Draft 2020-12 schema validation passes. Edited-file imports reject amount changes, signed evidence changes and missing merchant as INVALID; malformed JSON is rejected cleanly. Error recovery back to SATISFIED passes.
+
+Clean-installed SDK offline and deployed HTTP smoke pass; installed CLI profiles/demo/resolve/valid and tampered verification pass. Public HTTPS shallow clone → npm pack → empty-app install → installed demo also passes. Unverified direct npm Git shortcut was replaced with this verified installation path. Internal link check and API smoke evidence are recorded in the readiness report.
+
+Remaining P2: Vercel console rename, physical-device/Safari testing, npm registry release, independent outside-developer/timed visitor/paid-use validation. No P0/P1 remains in the tested alpha scope. No production/DNS/domain write occurred. Read-only checks confirm production timeproofs-site still uses dpl_CPrPdmHeTyYZv6bXN2NvW5EkoVvx and legacy timeproofs-v1 still points to 696bbf21e987c226456636c2903a8de977aca845.
+
+Documentation-only commits may generate newer previews; the immutable URL above remains the accepted application build.

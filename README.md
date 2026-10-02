@@ -91,3 +91,7 @@ SATISFIED means all declared requirements pass **under the verifier's explicit t
 ## Release status
 
 Reference alpha only. No billing, managed SLA, independently validated customer demand or production readiness claim. GitHub Actions is configured; local check results do not imply external CI has run. A separate Vercel preview is deployed from `timeproofs-v2`; it is not the production website. See [verification record](docs/verification.md) for tested capabilities and outstanding acceptance checks. Production promotion, domain and DNS changes are outside this release.
+
+## Alpha acceptance
+
+See [the alpha readiness report](docs/readiness.md) for the mobile matrix, real downloaded-file round-trip, tampering checks, installation evidence and remaining production boundaries.
