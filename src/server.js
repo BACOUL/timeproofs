@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import {timingSafeEqual,randomUUID} from 'node:crypto';
-import {EvidenceResolver,ProofCaseVerifier,profiles,adapters} from './core.js';
+import {EvidenceResolver,ProofCaseVerifier,profiles,adapters,validateProofCase} from './core.js';
 import {runDemo,demoVerify,fixture} from './demo.js';
 const ROOT=fileURLToPath(new URL('../public/',import.meta.url));
 const rates=new Map();
@@ -13,7 +13,8 @@ const productionResolver=envPolicy?new EvidenceResolver({policy:envPolicy}):null
 const MAX_BODY=256*1024;
 function send(res,code,value){res.writeHead(code,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(value));}
 function auth(req){const expected=process.env.TIMEPROOFS_API_KEY;const actual=req.headers.authorization;if(!expected||expected.length<32||typeof actual!=='string')return false;const a=Buffer.from(actual),b=Buffer.from('Bearer '+expected);return a.length===b.length&&timingSafeEqual(a,b);}
-async function json(req){if(req.headers['content-type']?.split(';')[0]!=='application/json')throw Object.assign(new Error('application/json required'),{status:415});let size=0,body='';for await(const chunk of req){size+=Buffer.byteLength(chunk);if(size>MAX_BODY)throw Object.assign(new Error('Request exceeds 256 KiB'),{status:413});body+=chunk;}try{return JSON.parse(body);}catch{throw Object.assign(new Error('Invalid JSON'),{status:400});}}
+async function bodyText(req){let size=0,body='';for await(const chunk of req){size+=Buffer.byteLength(chunk);if(size>MAX_BODY)throw Object.assign(new Error('Request exceeds 256 KiB'),{status:413});body+=chunk;}return body;}
+async function json(req){if(req.headers['content-type']?.split(';')[0]!=='application/json')throw Object.assign(new Error('application/json required'),{status:415});const body=await bodyText(req);try{return JSON.parse(body);}catch{throw Object.assign(new Error('Invalid JSON'),{status:400});}}
 const directory=()=>process.env.TIMEPROOFS_DATA_DIR||'.data';
 const validId=id=>/^TP-[0-9a-f-]{36}$/.test(id);
 async function save(proofCase){await mkdir(directory(),{recursive:true,mode:0o700});const destination=path.join(directory(),proofCase.id+'.json'),tmp=destination+'.'+randomUUID()+'.tmp';await writeFile(tmp,JSON.stringify(proofCase),{mode:0o600});await rename(tmp,destination);}
@@ -33,6 +34,13 @@ export async function handler(req,res){
  if(p==='/v1/adapters'&&req.method==='GET')return send(res,200,adapters.map(({verify,...metadata})=>metadata));
  if(p==='/v1/demo-policy'&&req.method==='GET')return send(res,200,fixture.policy);
  if(p==='/v1/demo'&&req.method==='POST'){const body=await json(req);if(Object.keys(body).some(k=>k!=='stage')||!Number.isInteger(body.stage)||body.stage<0||body.stage>2)return send(res,400,{error:'stage must be 0, 1 or 2'});return send(res,200,await runDemo(body.stage));}
+ if(p==='/v1/export'&&req.method==='POST'){
+ if(req.headers['content-type']?.split(';')[0]!=='application/x-www-form-urlencoded')return send(res,415,{error:'Form encoding required'});
+ const form=new URLSearchParams(await bodyText(req));if([...form.keys()].length!==1||!form.has('proofCase'))return send(res,400,{error:'Only proofCase is accepted'});
+ let proofCase;try{proofCase=JSON.parse(form.get('proofCase'));validateProofCase(proofCase);}catch{return send(res,400,{error:'Invalid Proof Case JSON'});}
+ if(['INVALID','UNSUPPORTED'].includes(demoVerify(proofCase).status))return send(res,400,{error:'Case does not pass sandbox integrity checks'});
+ res.writeHead(200,{'Content-Type':'application/json; charset=utf-8','Content-Disposition':'attachment; filename="TimeProofs-case.json"','Cache-Control':'no-store'});return res.end(JSON.stringify(proofCase,null,2));
+ }
  if(p==='/v1/verify'&&req.method==='POST'){const body=await json(req);if(Object.keys(body).some(k=>k!=='proofCase'))return send(res,400,{error:'Only proofCase is accepted; policy is owned by the verifier'});return send(res,200,demoVerify(body.proofCase));}
  if(p.startsWith('/v1/')){
  if(!productionResolver)return send(res,503,{error:'Private API not configured. Run self-host with TRUST_POLICY_FILE and a TIMEPROOFS_API_KEY of at least 32 characters.'});

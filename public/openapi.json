@@ -518,6 +518,56 @@
         }
       }
     },
+    "/v1/export": {
+      "post": {
+        "summary": "Download an unchanged sandbox Proof Case as a JSON attachment",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "proofCase": {
+                    "type": "string",
+                    "description": "Serialized ProofCase JSON, maximum encoded request size 256 KiB"
+                  }
+                },
+                "required": [
+                  "proofCase"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JSON file download; Content-Disposition attachment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProofCase"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid case or failed integrity checks"
+          },
+          "413": {
+            "description": "Request too large"
+          },
+          "415": {
+            "description": "Form encoding required"
+          },
+          "429": {
+            "description": "Rate limited"
+          }
+        }
+      }
+    },
     "/v1/demo-policy": {
       "get": {
         "summary": "Read independently pinned demo public keys",

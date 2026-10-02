@@ -20,6 +20,8 @@ test('SDK HTTP, durable cases, private access, sandbox verification and limits',
  assert.equal((await fetch(url+'/v1/demo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({stage:7})})).status,400);
  assert.equal((await fetch(url+'/v1/demo',{method:'POST',headers:{'Content-Type':'application/json'},body:'{"bad":'})).status,400);
  assert.equal((await fetch(url+'/v1/demo',{method:'POST',headers:{'Content-Type':'application/json'},body:' '.repeat(270000)})).status,413);
+ const exported=await fetch(url+'/v1/export',{method:'POST',body:new URLSearchParams({proofCase:JSON.stringify(final)})});assert.equal(exported.status,200);assert.match(exported.headers.get('content-disposition'),/^attachment;/);assert.deepEqual(await exported.json(),final);
+ const changed=structuredClone(final);changed.action.amount_minor='2900000';assert.equal((await fetch(url+'/v1/export',{method:'POST',body:new URLSearchParams({proofCase:JSON.stringify(changed)})})).status,400);
  const retrieved=JSON.parse(await import('node:fs/promises').then(fs=>fs.readFile(path.join(dir,'data',c.id+'.json'),'utf8')));assert.equal(retrieved.id,c.id);assert.equal(retrieved.resolution.satisfied,5);
  for(const route of ['/','/demo','/verify','/profiles/authorized_purchase/v1','/developers','/docs','/integrations','/pricing','/security','/about'])assert.equal((await fetch(url+route)).status,200);
  const headers=(await fetch(url+'/')).headers;assert.ok(headers.get('content-security-policy').includes("script-src 'self'"));
