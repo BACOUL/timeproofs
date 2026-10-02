@@ -21,7 +21,7 @@ async function load(id){if(!validId(id))throw Object.assign(new Error('Case not 
 const queues=new Map();
 async function serialized(id,work){const prior=queues.get(id)||Promise.resolve();const next=prior.catch(()=>{}).then(work);queues.set(id,next);try{return await next;}finally{if(queues.get(id)===next)queues.delete(id);}}
 export async function handler(req,res){
- res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','no-referrer');res.setHeader('X-Frame-Options','DENY');
+ res.setHeader('Content-Language','en');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','no-referrer');res.setHeader('X-Frame-Options','DENY');
  res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'");
  try{
  const url=new URL(req.url,'http://localhost'),p=decodeURIComponent(url.pathname);const ip=req.socket?.remoteAddress||'unknown';const now=Date.now();

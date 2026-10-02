@@ -4,6 +4,10 @@
 
 A deterministic proof orchestration reference: intended action → versioned profile → requirements → resolver → missing evidence requests → registered collectors → verification → portable Proof Case.
 
+## Canonical language
+
+English is the canonical language of TimeProofs V2. The public site defaults to English at `/`, regardless of browser language. Documentation, profiles, schemas, API/OpenAPI, SDK, CLI, examples, public tests, security, pricing and integration labels are maintained in English. Technical identifiers and statuses remain English in every future locale. No French translation or language negotiation is shipped. See [language policy](docs/language.md).
+
 ## Run the complete reference
 
 Node.js 22+; no runtime dependencies or paid API required.
@@ -74,7 +78,7 @@ The private API is disabled unless a trusted policy is configured. Create, appen
 
 ## Implementation boundary
 
-`authorized_purchase/v1` is a tested alpha reference. `fund_transfer/v1`, `contract_acceptance/v1`, `data_deletion/v1`, `agent_delegation/v1` are versioned drafts and resolve to UNSUPPORTED. JWT/JWS Ed25519 and a strict VC-JWT 1.1 subset are tested. MCP, A2A, AP2, SCITT, x401 and Agent Action Receipts are studied, not integrated.
+`authorized_purchase/v1` is a tested alpha reference. `fund_transfer/v1`, `contract_acceptance/v1`, `data_deletion/v1`, `agent_delegation/v1` are versioned drafts and resolve to UNSUPPORTED. JWT/JWS Ed25519 and a strict VC-JWT 1.1 subset are tested. MCP, A2A, AP2, SCITT, x401 and Agent Action Receipts are PLANNED, not integrated.
 
 SATISFIED means all declared requirements pass **under the verifier's explicit trust policy**. It does not mean the content is true, the action is legal or compliant, or a court will accept the dossier. Signatures authenticate claims, not events. The profile does not prove that undisclosed contradictory evidence does not exist.
 
@@ -84,4 +88,4 @@ SATISFIED means all declared requirements pass **under the verifier's explicit t
 
 ## Release status
 
-Reference alpha only. No billing, managed SLA, independently validated customer demand or production readiness claim. GitHub Actions is configured; local check results do not imply external CI has run. Vercel deployment remains pending explicit hosting approval after automatic review rejected the upload.
+Reference alpha only. No billing, managed SLA, independently validated customer demand or production readiness claim. GitHub Actions is configured; local check results do not imply external CI has run. A separate Vercel preview is deployed from `timeproofs-v2`; it is not the production website. See [verification record](docs/verification.md) for tested capabilities and outstanding acceptance checks. Production promotion, domain and DNS changes are outside this release.
