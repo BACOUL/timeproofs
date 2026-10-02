@@ -17,3 +17,11 @@ Local CPU measurement (200 warm sequential resolutions, fixture evidence, this t
 ## Required next checks
 
 Hosting approval → sandbox staging → browser desktop/mobile flow (resolve, collect twice, inspect/export, verify) → deployed health and bundled fixture checks → outside-developer reproduction → actual external issuer integration → paid-use validation. No billing or broad production claim before these gates.
+
+## Authorized staging attempt — 2 October 2026, 20:46 Paris
+
+The owner explicitly approved sharing timeproofs-v2 with Vercel for a separate preview only, with production/DNS/legacy unchanged. The deployment connector returned `McpServerError: Tool deploy_to_vercel not found`. No preview for the V2 branch was found in the existing TimeProofs Vercel projects. No CLI installation or existing CLI authentication is available. Browser fallback to the Vercel interface requires explicit permission under the browser tool rules and has not been performed.
+
+All 31 checks were rerun successfully. Public integration labels are PLANNED for MCP, A2A, AP2, x401, SCITT and Agent Action Receipts. No hosting setting, DNS, custom domain or legacy branch was changed.
+
+Readiness: local sandbox reference passes; staging/browser acceptance and managed-production readiness remain open. There is no deployed URL to report and no desktop/mobile browser PASS claim.
