@@ -1,0 +1,1 @@
+const frame=document.querySelector('#qa-frame'),width=document.querySelector('#qa-width'),page=document.querySelector('#qa-page');function show(){frame.style.width=width.value+'px';document.querySelector('#qa-current').textContent=width.value+'px · '+page.value;}width.onchange=show;page.onchange=()=>{frame.src=page.value;show();};

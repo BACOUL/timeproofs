@@ -21,8 +21,8 @@ async function load(id){if(!validId(id))throw Object.assign(new Error('Case not 
 const queues=new Map();
 async function serialized(id,work){const prior=queues.get(id)||Promise.resolve();const next=prior.catch(()=>{}).then(work);queues.set(id,next);try{return await next;}finally{if(queues.get(id)===next)queues.delete(id);}}
 export async function handler(req,res){
- res.setHeader('Content-Language','en');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','no-referrer');res.setHeader('X-Frame-Options','DENY');
- res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'");
+ res.setHeader('Content-Language','en');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','no-referrer');res.setHeader('X-Frame-Options','SAMEORIGIN');
+ res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'self'");
  try{
  const url=new URL(req.url,'http://localhost'),p=decodeURIComponent(url.pathname);const ip=req.socket?.remoteAddress||'unknown';const now=Date.now();
  if(p.startsWith('/v1/')){let bucket=rates.get(ip);if(!bucket||now>bucket.until){bucket={count:0,until:now+60000};rates.set(ip,bucket);}if(++bucket.count>60){res.setHeader('Retry-After','60');return send(res,429,{error:'Rate limit exceeded'});}if(rates.size>10000){for(const [key,value]of rates)if(now>value.until)rates.delete(key);if(rates.size>10000)return send(res,503,{error:'Server busy'});}}
@@ -46,7 +46,7 @@ export async function handler(req,res){
  return send(res,404,{error:'Route not found'});
  }
  if(req.method!=='GET'&&req.method!=='HEAD')return send(res,405,{error:'Method not allowed'});
- const assets={'/app.js':'app.js','/styles.css':'styles.css','/openapi.json':'openapi.json','/schemas/proof-case.json':'schemas/proof-case.json','/favicon.svg':'favicon.svg','/robots.txt':'robots.txt'};
+ const assets={'/__qa/mobile':'__qa-mobile.html','/__qa-mobile.js':'__qa-mobile.js','/__qa-mobile.css':'__qa-mobile.css','/app.js':'app.js','/styles.css':'styles.css','/openapi.json':'openapi.json','/schemas/proof-case.json':'schemas/proof-case.json','/favicon.svg':'favicon.svg','/robots.txt':'robots.txt'};
  const routes=['/','/developers','/profiles','/integrations','/docs','/demo','/verify','/pricing','/security','/about','/cases/demo'];
  if(!assets[p]&&!routes.includes(p)&&!profiles.some(x=>p==='/profiles/'+x.id))return send(res,404,{error:'Page not found'});
  const name=assets[p]||'index.html';const data=await readFile(path.join(ROOT,name));const type=name.endsWith('.js')?'text/javascript':name.endsWith('.css')?'text/css':name.endsWith('.json')?'application/json':name.endsWith('.svg')?'image/svg+xml':name.endsWith('.txt')?'text/plain':'text/html';res.writeHead(200,{'Content-Type':type+'; charset=utf-8','Cache-Control':'no-cache'});res.end(req.method==='HEAD'?undefined:data);
