@@ -1,0 +1,4 @@
+// External operator can schedule this probe; no unattended schedule created here.
+const base=process.argv[2]||'http://localhost:3000';
+const start=performance.now();
+try{const health=await fetch(base+'/healthz',{signal:AbortSignal.timeout(10000)});if(!health.ok)throw new Error('health HTTP '+health.status);const response=await fetch(base+'/v1/demo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({stage:2}),signal:AbortSignal.timeout(10000)});const result=await response.json();if(!response.ok||!result.verification?.valid)throw new Error('reference verification failed');console.log(JSON.stringify({healthy:true,latency_ms:Math.round(performance.now()-start),version:(await health.json()).version}));}catch(e){console.error(JSON.stringify({healthy:false,error:e.message}));process.exitCode=1;}

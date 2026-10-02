@@ -1,242 +1,87 @@
-# TimeProofs
+# TimeProofs V2
 
-**TimeProofs = the black box for AI actions.**
+**Autonomous agents act. TimeProofs determines what must be proven.**
 
-TimeProofs is a privacy-first traceability layer for observable AI actions. For each observable AI action, TimeProofs helps create a clear, signed and verifiable AI Action File. The company keeps that file wherever it wants. TimeProofs seals the file fingerprint, not sensitive action content.
+A deterministic proof orchestration reference: intended action → versioned profile → requirements → resolver → missing evidence requests → registered collectors → verification → portable Proof Case.
 
-Website: https://timeproofs.io  
-API: https://api.timeproofs.io  
-Status: V1 positioning in progress on top of the existing v0.2 proof-bundle primitives
+## Run the complete reference
 
-The first sellable product is **TimeProofs Action File v1**.
+Node.js 22+; no runtime dependencies or paid API required.
 
-## What TimeProofs is
-
-TimeProofs is the black box for AI actions.
-
-It gives companies a way to keep traceability evidence for important AI actions without sending the underlying action content to TimeProofs by default. The core idea is simple:
-
-1. An observable AI action happens.
-2. The company creates an AI Action File describing that action in its own environment.
-3. The company hashes that file locally.
-4. TimeProofs seals the file fingerprint.
-5. Later, anyone with the file can verify whether the file still matches the sealed fingerprint.
-
-TimeProofs is not a generic promise that every digital object is legally proven or compliant. It is a narrow, privacy-first proof layer for file integrity, timestamped traceability, and reconstruction of what happened around AI actions.
-
-## What an AI Action File is
-
-An AI Action File is a customer-owned traceability file for one observable AI action.
-
-It should be:
-
-- Clear enough for business, support, risk, legal, operations, and product teams to understand.
-- Structured enough for software, agents, and internal tools to generate and verify.
-- Portable enough to store in the company's own systems.
-- Signed or sealed in a way that makes later modification detectable.
-- Verifiable without sending sensitive action content to TimeProofs by default.
-
-An AI Action File may reference an AI system, agent, workflow, action type, timestamp, customer-owned evidence, technical logs, redaction notes, and internal IDs. The company decides what it stores in its own file. TimeProofs only needs the file fingerprint by default.
-
-## How it differs from logs
-
-Technical logs are still important. They help developers debug systems, monitor infrastructure, inspect errors, trace requests, and understand runtime behavior.
-
-TimeProofs does not replace technical logs.
-
-TimeProofs complements logs by creating a business-readable traceability file for an observable AI action. Logs can remain technical and system-specific. An AI Action File can summarize the action, point to supporting logs or internal evidence, and produce a portable record that non-engineering teams can understand and keep.
-
-The intended split is:
-
-- Logs: detailed technical observability and debugging.
-- AI Action File: customer-owned traceability record for one observable AI action.
-- TimeProofs Seal or proof: signed verification that a specific file fingerprint existed at a specific time.
-
-## Privacy model
-
-TimeProofs is privacy-first and hash-only by default.
-
-The expected V1 privacy flow is:
-
-1. The company creates the AI Action File locally in its own environment.
-2. The company stores the AI Action File wherever it wants: its evidence repository, ticketing system, document vault, data lake, CRM, legal archive, or internal storage.
-3. The company hashes the AI Action File locally.
-4. TimeProofs receives only the fingerprint by default.
-5. TimeProofs returns a signed receipt or proof for that fingerprint.
-6. Verification compares the local file fingerprint with the sealed fingerprint.
-
-Sensitive prompts, outputs, customer data, internal reasoning, personal data, business details, and action content should not be sent to TimeProofs by default. The company controls what it stores in its own AI Action Files.
-
-## Existing proof bundle compatibility
-
-The repository already contains useful proof-of-existence primitives. They remain important and must stay backward-compatible.
-
-Current v0.2 concepts:
-
-- Hash data locally with SHA-256.
-- Send only the hash to the TimeProofs API.
-- Receive a timestamped proof response.
-- Build or verify a `.tproof.json` proof bundle.
-- Verify a proof bundle cryptographically and, when needed, compare a local file hash against the proof hash.
-
-Existing `.tproof.json` proof bundles are not the same thing as future `.action.json` AI Action Files. They are compatible lower-level proof objects that can help seal or verify file fingerprints.
-
-### Current quick usage for proof bundles
-
-1. Compute a SHA-256 hash locally.
-2. POST it to `/api/timestamp`.
-3. Receive a stateless timestamp response.
-4. Build a `.tproof.json` bundle client-side.
-5. Verify the bundle with the SDK, CLI, browser verifier, or API route depending on the environment.
-
-Example timestamp response shape:
-
-```json
-{
-  "version": "timeproofs-0.2",
-  "hash": { "algorithm": "SHA-256", "value": "<hex>" },
-  "timestamp": {
-    "issuedAt": "2025-11-26T20:00:00.000Z",
-    "issuer": "https://api.timeproofs.io",
-    "nonce": "<random-id>"
-  },
-  "proof": {
-    "algo": "Ed25519",
-    "signature": "<hex>",
-    "publicKey": "<base64-or-omitted>",
-    "keyId": "tp-v0-2-main"
-  }
-}
+```sh
+git clone --branch timeproofs-v2 https://github.com/BACOUL/timeproofs.git
+cd timeproofs
+npm run check
+npm run demo
+npm start
+# http://localhost:3000/demo
 ```
 
-### Current API notes
+The signed sandbox purchase starts with Authority / Identity / Offer SATISFIED and Execution / Outcome MISSING. The resolver requests and receives two fixture artifacts, verifies issuer signatures and scope, binds the processor transaction to the merchant outcome, and returns 5/5 SATISFIED. No purchase, money transfer or external merchant call occurs. The cryptographic verification and deterministic decisions are real; the business events are fixtures.
 
-`POST /api/timestamp`
+## SDK from source
 
-Body:
+The npm registry release is **not published**. Install the branch directly:
 
-```json
-{ "hash": "<sha256-hex>" }
+```sh
+npm install git+https://github.com/BACOUL/timeproofs.git#timeproofs-v2
 ```
 
-Rules:
-
-- `hash` must be a 64-character SHA-256 hex string.
-- The server should never receive files or sensitive content, only the hash.
-
-`POST /api/verify`
-
-Current v0.2 verification is proof-bundle based. A hash alone is not enough in the stateless model. Verification needs the proof bundle fields such as hash, timestamp, canonical payload, issuer, nonce, and proof signature.
-
-The existing hash-only and proof-bundle primitives remain useful for future AI Action File work because an AI Action File can be hashed locally and its fingerprint can be sealed with the same privacy-first principle.
-
-### Current SDK notes
-
-JavaScript SDK helpers currently include:
-
-- `hashText`
-- `hashBytes`
-- `hashFile`
-- `timestamp`
-- `createBundle`
-- `verifyBundle`
-
-Typical existing proof-bundle flow:
-
-1. Hash data locally.
-2. Call `timestamp(hash)`.
-3. Build a `.tproof.json` bundle with `createBundle`.
-4. Store the bundle.
-5. Verify later with `verifyBundle`.
-
-Useful files:
-
-- `api-v02/worker.js`
-- `selfhost/server.js`
-- `sdk/timeproof.js`
-- `sdk/timeproofs-v02.js`
-- `sdk/hash.js`
-- `sdk/bundle.js`
-- `sdk/verify.js`
-- `sdk/verify-offline.js`
-- `openapi.yaml`
-- `proof-bundle.schema.json`
-- `spec/proof-bundle-v0.2.schema.json`
-- `examples/browser-basic.html`
-- `examples/demo.tproof.json`
-- `examples/sample-v0.2.tproof.json`
-
-These files should not be deleted or broken during the V1 repositioning.
-
-## Object model
-
-The V1 object boundaries are defined in [docs/objects-model.md](docs/objects-model.md). In short: AI Action File = business traceability file describing one observable AI action; Seal = cryptographic record proving that a canonical fingerprint was sealed at a specific time; Proof Bundle / `.tproof.json` = the existing lower-level technical proof format. `.action.json` is future product-level Action File work, while `.tproof.json` remains backward-compatible.
-
-## V1 roadmap
-
-The safe execution path is intentionally staged:
-
-1. Strategy: lock the product truth and positioning.
-2. Repository audit: map existing pages, verification flow, SDK, API routes, specs, and migration risks.
-3. README repositioning: make GitHub present the new TimeProofs V1 direction clearly.
-4. Homepage repositioning: update the public homepage around AI action traceability.
-5. Navigation, footer, and metadata alignment: align site-wide labels and SEO/social metadata.
-6. AI Action File / Seal / Proof Bundle object model: define each object before implementation.
-7. Action File specification: define the `.action.json` format, hashing rules, and canonicalization.
-8. Generator, seal, and verify flow: add focused tools only after the object model is accepted.
-9. Demo: show one observable AI action producing an AI Action File, local hash, seal, and verification.
-10. Pilot validation: validate the product with early users before full SaaS, dashboard, billing, or broad platform work.
-
-One PR should have one objective. Website changes, API behavior changes, SDK behavior changes, and dashboard work should stay in their own later PRs.
-
-## Proof limitations
-
-TimeProofs proves a narrow and useful fact: a specific file fingerprint was sealed at a specific time by a specific TimeProofs proof or receipt.
-
-TimeProofs does not prove that:
-
-- The AI was correct.
-- The content is true.
-- The action was complete, fair, lawful, or compliant.
-- The file contains all relevant context.
-- The full chain of custody is complete.
-- A court, regulator, insurer, auditor, customer, or partner will accept the file as sufficient proof.
-
-TimeProofs does not guarantee legal validity. TimeProofs does not provide full compliance certification. TimeProofs does not replace legal review, regulated audit, or technical logs.
-
-## Project structure
-
-Current repository areas:
-
-```text
-api-v02/worker.js
-selfhost/server.js
-sdk/
-spec/
-schemas/
-examples/
-v02/spec/
-index.html
-verify.html
-docs.html
-proofspec.html
-security.html
-privacy.html
-legal.html
-regulations.html
-use-cases.html
-about.html
-PRODUCT_STRATEGY.md
-ROADMAP.md
-AUDIT_CURRENT_REPO.md
+```js
+import { EvidenceResolver, ProofCaseVerifier } from '@timeproofs/sdk';
+const resolver = new EvidenceResolver({ policy: independentlyTrustedPolicy,
+  collectors: { execution: collectProcessorEvidence, outcome: collectMerchantEvidence } });
+const { evidence } = await resolver.collect({ profile: 'authorized_purchase/v1', action, evidence: initialEvidence });
+const proofCase = resolver.createCase({ profile: 'authorized_purchase/v1', action, evidence });
+const verification = new ProofCaseVerifier({ policy: independentlyTrustedPolicy }).verify(proofCase);
 ```
 
-## License
+TypeScript declarations are included. A collector is an explicitly registered asynchronous function returning a signed artifact. It is not an arbitrary URL supplied by an untrusted agent.
 
-See `LICENSE`.
+## Offline CLI
 
-## Maintainer
+```sh
+node bin/timeproofs.js profiles
+node bin/timeproofs.js demo
+node examples/purchase.js --export
+node bin/timeproofs.js verify purchase-case.json examples/demo-policy.json
+```
 
-TimeProofs is developed and maintained by Jeason Bacoul.
+Use a policy obtained independently of the case. Never trust issuer keys from an uploaded case. Public fixture policy is at `examples/demo-policy.json`; production requires your own pinned issuers.
 
-GitHub: https://github.com/BACOUL/timeproofs
+## HTTP / self-host
+
+```sh
+TRUST_POLICY_FILE=/secure/trusted-policy.json \
+TIMEPROOFS_API_KEY=<random-secret-at-least-32-characters> \
+TIMEPROOFS_DATA_DIR=/persistent/timeproofs \
+npm start
+```
+
+The private API is disabled unless a trusted policy is configured. Create, append and retrieve cases via the bearer-authenticated API. Atomic disk writes and per-case serialization support one process, one tenant. Configure a persistent volume. This storage implementation is not suitable for serverless private cases or multiple instances.
+
+- `POST /v1/resolve`
+- `GET /v1/profiles`
+- `GET /v1/profiles/:name/:version`
+- `POST /v1/cases`
+- `POST /v1/cases/:id/evidence`
+- `GET /v1/cases/:id`
+- `POST /v1/verify` — public sandbox policy
+- `POST /v1/verify-private` — private configured policy
+- `POST /v1/demo` — `{ "stage": 0 | 1 | 2 }`
+
+[OpenAPI 3.1](public/openapi.json) · [Architecture](docs/architecture.md) · [Gate evidence](docs/gates.md) · [Threat model](docs/security.md) · [Standards audit](docs/standards.md) · [Economics hypotheses](docs/economics.md).
+
+## Implementation boundary
+
+`authorized_purchase/v1` is a tested alpha reference. `fund_transfer/v1`, `contract_acceptance/v1`, `data_deletion/v1`, `agent_delegation/v1` are versioned drafts and resolve to UNSUPPORTED. JWT/JWS Ed25519 and a strict VC-JWT 1.1 subset are tested. MCP, A2A, AP2, SCITT, x401 and Agent Action Receipts are studied, not integrated.
+
+SATISFIED means all declared requirements pass **under the verifier's explicit trust policy**. It does not mean the content is true, the action is legal or compliant, or a court will accept the dossier. Signatures authenticate claims, not events. The profile does not prove that undisclosed contradictory evidence does not exist.
+
+## Legacy
+
+`timeproofs-v1` remains intact at `696bbf21e987c226456636c2903a8de977aca845`. This branch descends from that commit, replaces its active product tree, and preserves all ancestry. The default `timeproofs` branch and AgentReady are unchanged. No legacy Seal, Action File or proprietary receipt is the V2 conceptual model.
+
+## Release status
+
+Reference alpha only. No billing, managed SLA, independently validated customer demand or production readiness claim. GitHub Actions is configured; local check results do not imply external CI has run. Vercel deployment remains pending explicit hosting approval after automatic review rejected the upload.

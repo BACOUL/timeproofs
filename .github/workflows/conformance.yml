@@ -1,0 +1,23 @@
+name: V2 conformance
+on:
+  push:
+    branches: [timeproofs-v2]
+  pull_request:
+    branches: [timeproofs-v2]
+permissions:
+  contents: read
+jobs:
+  conformance:
+    strategy:
+      matrix:
+        node: [22, 24]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm ci
+      - run: npm run check
+      - run: npm run demo
+      - run: npm pack --dry-run

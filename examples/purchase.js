@@ -1,0 +1,14 @@
+import {writeFileSync} from 'node:fs';
+import {demoResolver,fixture,demoVerify} from '../src/demo.js';
+const resolver=demoResolver();
+const input={profile:'authorized_purchase/v1',action:fixture.action,evidence:fixture.evidence.slice(0,3)};
+const result=await resolver.collect(input);
+for(const r of result.before.requirements)console.log(`${r.label.padEnd(12)} ${r.status}`);
+console.log('\nAcquisition:',result.events);
+const proofCase=resolver.createCase({...input,evidence:result.evidence});
+console.log(`\nProof Case ${proofCase.id}\n${proofCase.resolution.satisfied}/${proofCase.resolution.total} requirements satisfied\nSTATUS: ${proofCase.resolution.status}`);
+const verification=demoVerify(proofCase);
+console.log('Independent verification:',verification.status,verification.valid);
+console.log('Sandbox signed fixtures. No real purchase or payment is executed.');
+if(process.argv.includes('--export'))writeFileSync('purchase-case.json',JSON.stringify(proofCase,null,2));
+if(!verification.valid)process.exitCode=1;
