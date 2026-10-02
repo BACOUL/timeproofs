@@ -52,4 +52,10 @@ There is no platform signing key for the case envelope. A dossier is a container
 6. Establish monitoring for health, error rate, latency, collection failures and quota abuse; never log tokens or raw sensitive evidence.
 7. Outside-developer reproduction and a real issuer integration; paid pilot acceptance before production SLA or billing.
 
-No production-readiness claim is made. Public deployment is pending after automated hosting review rejected the Vercel upload; the GitHub branch and local reference remain the concrete reviewable deliverable.
+No production-readiness claim is made. A separate public sandbox preview is deployed. See the verification record for the exact tested preview and remaining acceptance checks. Production domain and DNS are unchanged.
+
+## Imported case validation
+
+An import must include exactly version, id, profile, action, evidence and resolution. Missing envelope fields or malformed nested evidence are INVALID. Missing mandatory purchase action fields are INVALID. Removing an artifact from an already recorded SATISFIED case without recomputing the recorded resolution is INVALID. A newly resolved case with a genuinely missing artifact is INCOMPLETE. Changing signed content invalidates its signature; changing action scope invalidates the action binding.
+
+The case id is a local label, not a cryptographically signed identifier. Original issuer artifacts bind to the action, not to the case label. Cross-case replay of the same action remains an explicit limitation. No signature is added to the case envelope.

@@ -1,4 +1,4 @@
-export {EvidenceResolver,ProofCaseVerifier,profiles,getProfile,adapters,fingerprint} from '../src/core.js';
+export {EvidenceResolver,ProofCaseVerifier,profiles,getProfile,adapters,fingerprint,validateProofCase} from '../src/core.js';
 export class TimeProofs{
  constructor({baseUrl='http://localhost:3000',apiKey,fetch:fetcher=globalThis.fetch}={}){this.baseUrl=baseUrl.replace(/\/$/,'');this.apiKey=apiKey;this.fetch=fetcher;}
  async request(path,body){const response=await this.fetch(this.baseUrl+path,{method:body===undefined?'GET':'POST',headers:{'Content-Type':'application/json',...(this.apiKey?{Authorization:'Bearer '+this.apiKey}:{})},...(body===undefined?{}:{body:JSON.stringify(body)})});const value=await response.json();if(!response.ok)throw new Error(value.error||`HTTP ${response.status}`);return value;}

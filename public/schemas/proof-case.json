@@ -1,0 +1,334 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TimeProofs V2 Proof Case",
+  "$ref": "#/$defs/ProofCase",
+  "$defs": {
+    "IntendedAction": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "type": {
+          "const": "purchase"
+        },
+        "principal": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "agent": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "merchant": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "amount_minor": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]{0,17}$"
+        },
+        "offer_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "principal",
+        "agent",
+        "merchant",
+        "currency",
+        "amount_minor",
+        "offer_id"
+      ],
+      "additionalProperties": false
+    },
+    "Evidence": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "jwt",
+            "vc-jwt"
+          ]
+        },
+        "token": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32768
+        }
+      },
+      "required": [
+        "id",
+        "format",
+        "token"
+      ],
+      "additionalProperties": false
+    },
+    "ResolveInput": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "action": {
+          "$ref": "#/$defs/IntendedAction"
+        },
+        "evidence": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        }
+      },
+      "required": [
+        "profile",
+        "action"
+      ],
+      "additionalProperties": false
+    },
+    "ProofRequirement": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "dependsOn": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          }
+        },
+        "acceptedFormats": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          }
+        },
+        "acquisition": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "role",
+        "checks",
+        "dependsOn",
+        "acceptedFormats",
+        "acquisition"
+      ],
+      "additionalProperties": false
+    },
+    "ProofProfile": {
+      "type": "object",
+      "required": [
+        "id",
+        "version",
+        "status",
+        "requirements"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ProofRequirement"
+          }
+        }
+      }
+    },
+    "Resolution": {
+      "type": "object",
+      "required": [
+        "status",
+        "requirements",
+        "policyDigest",
+        "evaluatedAt"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "SATISFIED",
+            "INCOMPLETE",
+            "CONFLICT",
+            "INVALID",
+            "UNSUPPORTED"
+          ]
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "satisfied": {
+          "type": "integer"
+        },
+        "total": {
+          "type": "integer"
+        },
+        "missing": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "evidenceResults": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "policyDigest": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "evaluatedAt": {
+          "type": "integer"
+        }
+      }
+    },
+    "ProofCase": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "timeproofs.case/2"
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "profile": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "action": {
+          "$ref": "#/$defs/IntendedAction"
+        },
+        "evidence": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "resolution": {
+          "$ref": "#/$defs/Resolution"
+        }
+      },
+      "required": [
+        "version",
+        "id",
+        "profile",
+        "action",
+        "evidence",
+        "resolution"
+      ],
+      "additionalProperties": false
+    },
+    "Verification": {
+      "type": "object",
+      "required": [
+        "valid",
+        "status",
+        "reason"
+      ],
+      "properties": {
+        "valid": {
+          "type": "boolean"
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "recordedMatches": {
+          "type": "boolean"
+        },
+        "computed": {
+          "$ref": "#/$defs/Resolution"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        }
+      },
+      "required": [
+        "error"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

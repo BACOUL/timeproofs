@@ -74,7 +74,7 @@ The private API is disabled unless a trusted policy is configured. Create, appen
 - `POST /v1/verify-private` — private configured policy
 - `POST /v1/demo` — `{ "stage": 0 | 1 | 2 }`
 
-[OpenAPI 3.1](public/openapi.json) · [Architecture](docs/architecture.md) · [Gate evidence](docs/gates.md) · [Threat model](docs/security.md) · [Standards audit](docs/standards.md) · [Economics hypotheses](docs/economics.md).
+[Proof Case JSON Schema](public/schemas/proof-case.json) · [OpenAPI 3.1](public/openapi.json) · [Architecture](docs/architecture.md) · [Gate evidence](docs/gates.md) · [Threat model](docs/security.md) · [Standards audit](docs/standards.md) · [Economics hypotheses](docs/economics.md).
 
 ## Implementation boundary
 

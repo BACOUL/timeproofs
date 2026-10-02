@@ -50,3 +50,12 @@ test('expired historical case does not stay satisfied',()=>{const c=demoCase(2,(
 test('collector unavailable returns incomplete and structured acquisition failure',async()=>{const r=new EvidenceResolver({policy:fixture.policy,clock:()=>NOW,collectors:{execution:async()=>{throw new Error('secret should not appear');}}});const output=await r.collect({...input(),evidence:fixture.evidence.slice(0,3)});assert.equal(output.after.status,'INCOMPLETE');assert.equal(output.events[0].status,'COLLECTION_FAILED');assert.ok(!JSON.stringify(output.events).includes('secret'));});
 test('strict policy rejects private or ambiguous keys',()=>{const p=clone(fixture.policy);p.keys[0].jwk.d='secret';assert.throws(()=>new EvidenceResolver({policy:p}));const q=clone(fixture.policy);q.keys.push(q.keys[0]);assert.throws(()=>new EvidenceResolver({policy:q}));});
 test('profile is deeply immutable and fingerprint changes with evidence/action',()=>{assert.throws(()=>profiles[0].requirements[0].checks.push({}));assert.notEqual(fingerprint(fixture.action),fingerprint({...fixture.action,id:'other'}));});
+
+test('imported cases require every envelope field and reject extra root fields',()=>{
+ const complete=demoCase(2,()=>NOW);assert.equal(demoVerify(JSON.parse(JSON.stringify(complete)),()=>NOW).valid,true);
+ for(const field of ['version','id','profile','action','evidence','resolution']){const c=clone(complete);delete c[field];assert.equal(demoVerify(c,()=>NOW).status,'INVALID',field);}
+ const c=clone(complete);c.policy=clone(fixture.policy);assert.equal(demoVerify(c,()=>NOW).status,'INVALID');
+});
+test('case import rejects malformed nested shape and missing required action fields',()=>{
+ for(const mutate of [c=>c.evidence={},c=>c.evidence[0].token='',c=>c.evidence[0].injected=true,c=>delete c.action.amount_minor,c=>c.resolution.requirements={},c=>c.resolution.evaluatedAt='yesterday']){const c=demoCase(2,()=>NOW);mutate(c);assert.equal(demoVerify(c,()=>NOW).status,'INVALID');}
+});

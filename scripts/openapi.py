@@ -1,17 +1,17 @@
 import json
 sref=lambda name:{'$ref':'#/components/schemas/'+name}
 obj=lambda properties,required=None,additional=False:{'type':'object','properties':properties,'required':required or list(properties),'additionalProperties':additional}
-string={'type':'string'}
+string={'type':'string','minLength':1,'maxLength':512}
 action=obj({k:string for k in ['id','type','principal','agent','merchant','currency','amount_minor','offer_id']})
 action['properties']['amount_minor']={'type':'string','pattern':'^[1-9][0-9]{0,17}$'}
 action['properties']['type']={'const':'purchase'}
 action['properties']['currency']={'type':'string','pattern':'^[A-Z]{3}$'}
-evidence=obj({'id':string,'format':{'type':'string','enum':['jwt','vc-jwt']},'token':{'type':'string','maxLength':32768}})
+evidence=obj({'id':string,'format':{'type':'string','enum':['jwt','vc-jwt']},'token':{'type':'string','minLength':1,'maxLength':32768}})
 schemas={'IntendedAction':action,'Evidence':evidence,'ResolveInput':obj({'profile':string,'action':sref('IntendedAction'),'evidence':{'type':'array','maxItems':100,'items':sref('Evidence')}},['profile','action']),
  'ProofRequirement':obj({'id':string,'label':string,'role':string,'checks':{'type':'array','items':{'type':'object'}},'dependsOn':{'type':'array','items':string},'acceptedFormats':{'type':'array','items':string},'acquisition':{'type':'object'}}),
  'ProofProfile':{'type':'object','required':['id','version','status','requirements'],'properties':{'id':string,'version':string,'status':string,'requirements':{'type':'array','items':sref('ProofRequirement')}}},
  'Resolution':{'type':'object','required':['status','requirements','policyDigest','evaluatedAt'],'properties':{'status':{'enum':['SATISFIED','INCOMPLETE','CONFLICT','INVALID','UNSUPPORTED']},'requirements':{'type':'array','items':{'type':'object'}},'satisfied':{'type':'integer'},'total':{'type':'integer'},'missing':{'type':'array','items':{'type':'object'}},'evidenceResults':{'type':'array','items':{'type':'object'}},'policyDigest':string,'evaluatedAt':{'type':'integer'}}},
- 'ProofCase':obj({'version':{'const':'timeproofs.case/2'},'id':string,'profile':string,'action':sref('IntendedAction'),'evidence':{'type':'array','items':sref('Evidence')},'resolution':sref('Resolution')}),
+ 'ProofCase':obj({'version':{'const':'timeproofs.case/2'},'id':string,'profile':string,'action':sref('IntendedAction'),'evidence':{'type':'array','maxItems':100,'items':sref('Evidence')},'resolution':sref('Resolution')}),
  'Verification':{'type':'object','required':['valid','status','reason'],'properties':{'valid':{'type':'boolean'},'status':string,'reason':string,'recordedMatches':{'type':'boolean'},'computed':sref('Resolution')}},
  'Error':obj({'error':string})}
 paths={}
@@ -35,3 +35,8 @@ route('/v1/adapters','get','Read exact adapter capabilities and limits',{'type':
 route('/healthz','get','Reference health check',{'type':'object'})
 spec={'openapi':'3.1.0','info':{'title':'TimeProofs V2 Reference API','x-canonical-language':'en','version':'2.0.0-alpha.1','description':'Deterministic proof orchestration. SATISFIED is not truth, legality, compliance or legal admissibility. Private endpoints require a self-host trust policy and API key. Public preview only runs sandbox evidence.'},'servers':[{'url':'http://localhost:3000','description':'Local reference server'}],'paths':paths,'components':{'securitySchemes':{'apiKey':{'type':'http','scheme':'bearer'}},'schemas':schemas}}
 open('public/openapi.json','w').write(json.dumps(spec,indent=2)+'\n')
+
+from pathlib import Path
+Path('public/schemas').mkdir(exist_ok=True)
+case_schema={'$schema':'https://json-schema.org/draft/2020-12/schema','title':'TimeProofs V2 Proof Case','$ref':'#/$defs/ProofCase','$defs':schemas}
+Path('public/schemas/proof-case.json').write_text(json.dumps(case_schema,indent=2).replace('#/components/schemas/','#/$defs/')+'\n')

@@ -122,11 +122,22 @@ export class EvidenceResolver{
  createCase(input,id='TP-'+randomUUID()){return {version:'timeproofs.case/2',id,profile:input.profile,action:structuredClone(input.action),evidence:structuredClone(input.evidence||[]),resolution:this.resolve(input)};}
  addEvidence(proofCase,evidence){return this.createCase({profile:proofCase.profile,action:proofCase.action,evidence:[...proofCase.evidence,...evidence]},proofCase.id);}
 }
+export function validateProofCase(proofCase){
+ const fields=['version','id','profile','action','evidence','resolution'];
+ if(!proofCase||typeof proofCase!=='object'||Array.isArray(proofCase))throw new Error('Proof Case object required');
+ if(fields.some(key=>!Object.hasOwn(proofCase,key))||Object.keys(proofCase).some(key=>!fields.includes(key)))throw new Error('Proof Case fields do not match the schema');
+ if(proofCase.version!=='timeproofs.case/2'||!nonempty(proofCase.id)||!nonempty(proofCase.profile))throw new Error('Malformed Proof Case identifiers');
+ if(!Array.isArray(proofCase.evidence)||proofCase.evidence.length>100)throw new Error('Evidence array required, maximum 100 artifacts');
+ for(const e of proofCase.evidence){if(!e||typeof e!=='object'||Array.isArray(e)||Object.keys(e).some(key=>!['id','format','token'].includes(key))||!nonempty(e.id)||!['jwt','vc-jwt'].includes(e.format)||typeof e.token!=='string'||!e.token.length||e.token.length>32768)throw new Error('Malformed Evidence');}
+ const r=proofCase.resolution;
+ if(!r||typeof r!=='object'||Array.isArray(r)||!['SATISFIED','INCOMPLETE','CONFLICT','INVALID','UNSUPPORTED'].includes(r.status)||!Array.isArray(r.requirements)||!nonempty(r.policyDigest)||!Number.isSafeInteger(r.evaluatedAt))throw new Error('Malformed recorded Resolution');
+ return proofCase;
+}
 export class ProofCaseVerifier{
  constructor(options){this.resolver=new EvidenceResolver(options);}
  verify(proofCase){
  try{
- if(proofCase?.version!=='timeproofs.case/2'||!nonempty(proofCase.id))return {valid:false,status:'INVALID',reason:'Malformed Proof Case'};
+ validateProofCase(proofCase);
  const computed=this.resolver.resolve(proofCase);
  const recorded=proofCase.resolution;
  const matches=recorded && fingerprint({...recorded,evaluatedAt:0})===fingerprint({...computed,evaluatedAt:0}) && Number.isSafeInteger(recorded.evaluatedAt) && recorded.evaluatedAt<=computed.evaluatedAt;

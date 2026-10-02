@@ -18,3 +18,5 @@ export declare const profiles:ReadonlyArray<ProofProfile>;
 export declare const adapters:ReadonlyArray<EvidenceAdapter>;
 export declare function getProfile(id:string):ProofProfile|undefined;
 export declare function fingerprint(value:unknown):string;
+
+export declare function validateProofCase(proofCase:unknown):ProofCase;

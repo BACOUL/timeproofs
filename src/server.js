@@ -26,6 +26,7 @@ export async function handler(req,res){
  try{
  const url=new URL(req.url,'http://localhost'),p=decodeURIComponent(url.pathname);const ip=req.socket?.remoteAddress||'unknown';const now=Date.now();
  if(p.startsWith('/v1/')){let bucket=rates.get(ip);if(!bucket||now>bucket.until){bucket={count:0,until:now+60000};rates.set(ip,bucket);}if(++bucket.count>60){res.setHeader('Retry-After','60');return send(res,429,{error:'Rate limit exceeded'});}if(rates.size>10000){for(const [key,value]of rates)if(now>value.until)rates.delete(key);if(rates.size>10000)return send(res,503,{error:'Server busy'});}}
+ if(p==='/profiles/authorized-purchase-v1'&&(req.method==='GET'||req.method==='HEAD')){res.writeHead(308,{Location:'/profiles/authorized_purchase/v1'});return res.end();}
  if(p==='/healthz'&&req.method==='GET')return send(res,200,{status:'ok',version:'2.0.0-alpha.1',mode:'sandbox-reference',privateApi:!!productionResolver});
  if(p==='/v1/profiles'&&req.method==='GET')return send(res,200,profiles);
  if(p.startsWith('/v1/profiles/')&&req.method==='GET'){const profile=profiles.find(x=>x.id===p.slice(13));return send(res,profile?200:404,profile||{error:'Profile not found'});}
@@ -45,7 +46,7 @@ export async function handler(req,res){
  return send(res,404,{error:'Route not found'});
  }
  if(req.method!=='GET'&&req.method!=='HEAD')return send(res,405,{error:'Method not allowed'});
- const assets={'/app.js':'app.js','/styles.css':'styles.css','/openapi.json':'openapi.json','/favicon.svg':'favicon.svg','/robots.txt':'robots.txt'};
+ const assets={'/app.js':'app.js','/styles.css':'styles.css','/openapi.json':'openapi.json','/schemas/proof-case.json':'schemas/proof-case.json','/favicon.svg':'favicon.svg','/robots.txt':'robots.txt'};
  const routes=['/','/developers','/profiles','/integrations','/docs','/demo','/verify','/pricing','/security','/about','/cases/demo'];
  if(!assets[p]&&!routes.includes(p)&&!profiles.some(x=>p==='/profiles/'+x.id))return send(res,404,{error:'Page not found'});
  const name=assets[p]||'index.html';const data=await readFile(path.join(ROOT,name));const type=name.endsWith('.js')?'text/javascript':name.endsWith('.css')?'text/css':name.endsWith('.json')?'application/json':name.endsWith('.svg')?'image/svg+xml':name.endsWith('.txt')?'text/plain':'text/html';res.writeHead(200,{'Content-Type':type+'; charset=utf-8','Cache-Control':'no-cache'});res.end(req.method==='HEAD'?undefined:data);
